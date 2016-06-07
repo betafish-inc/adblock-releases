@@ -1,0 +1,145 @@
+[general]
+version = 3.0
+backgroundScripts += adblock-jquery.js
+  adblock-errorreporting.js
+  adblock-functions.js
+  adblock-survey.js
+  adblock-blockcount.js
+  adblock-stats.js
+  adblock-uninstall.js
+  adblock-malwarelist.js
+  adblock-idlehandler.js
+  adblock-settings.js
+  adblock-servermessages.js
+  adblock-background.js
+  adblock-adpsubscriptionadapter.js  
+  adblock-contextmenus.js
+  adblock-subscriptioninit.js
+  adblock-data-migrate.js
+  adblock-excludefilter.js
+  adblock-datacollection.js
+
+options = options.html
+testScripts += tests/example.js  tests/migrate_filter_lists.js
+browserAction = icons/ab-19.png icons/ab-38.png adblock-button-popup.html
+icons = icons/ab-16.png icons/ab-32.png icons/ab-48.png
+  icons/ab-64.png icons/ab-128.png
+permissions += idle
+  alarms
+optionalPermissions = management
+webAccessible = adblock-jquery-ui.custom.css
+  adblock-jquery-ui.override-page.css
+  icons/icon24.png
+  jquery-ui/css/images/ui-bg_flat_55_999999_40x100.png
+  jquery-ui/css/images/ui-bg_flat_75_aaaaaa_40x100.png
+  jquery-ui/css/images/ui-bg_glass_45_0078ae_1x400.png
+  jquery-ui/css/images/ui-bg_glass_55_f8da4e_1x400.png
+  jquery-ui/css/images/ui-bg_glass_75_79c9ec_1x400.png
+  jquery-ui/css/images/ui-bg_gloss-wave_50_38cfff_500x100.png
+  jquery-ui/css/images/ui-bg_gloss-wave_75_2191c0_500x100.png
+  jquery-ui/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png
+  jquery-ui/css/images/ui-icons_056b93_256x240.png
+  jquery-ui/css/images/ui-icons_d8e7f3_256x240.png
+
+[contentScripts]
+document_start += adblock-functions.js
+document_end += adblock-uiscripts-rightclick_hook.js adblock-notificationoverlay.js
+
+[mapping]
+CHANGELOG.txt = adblock-betafish/CHANGELOG.txt
+translators.json = adblock-betafish/translators.json
+adblock-jquery.js = adblock-betafish/jquery/jquery.min.js
+adblock-errorreporting.js = adblock-betafish/errorreporting.js
+adblock-jquery.cookie.js = adblock-betafish/jquery/jquery.cookie.js
+adblock-jquery-ui.js = adblock-betafish/jquery/jquery-ui.custom.min.js
+adblock-jquery-ui.custom.min.js = adblock-betafish/jquery/jquery-ui.custom.min.js
+adblock-jquery-ui.custom.css = adblock-betafish/jquery/css/jquery-ui.custom.css
+adblock-jquery-ui.override-page.css = adblock-betafish/jquery/css/override-page.css
+adblock-background.js = adblock-betafish/background.js
+adblock-adpsubscriptionadapter.js = adblock-betafish/adpsubscriptionadapter.js
+adblock-settings.js = adblock-betafish/settings.js
+adblock-servermessages.js = adblock-betafish/servermessages.js
+adblock-data-migrate.js = adblock-betafish/migrate_legacy_data.js
+qunit/tests/migrate_filter_lists.js = tests/migrate_filter_lists.js
+adblock-functions.js = adblock-betafish/functions.js
+adblock-bandaids.js = adblock-betafish/bandaids.js
+adblock-ytchannel.js = adblock-betafish/ytchannel.js
+adblock-stats.js = adblock-betafish/stats.js
+adblock-uninstall.js = adblock-betafish/uninstall.js
+adblock-survey.js = adblock-betafish/survey.js
+adblock-notificationoverlay.js = adblock-betafish/notificationoverlay.js
+adblock-datacollection.js = adblock-betafish/datacollection.js
+adblock-contextmenus.js = adblock-betafish/contextmenus.js
+adblock-idlehandler.js = adblock-betafish/idlehandler.js
+adblock-malwarelist.js = adblock-betafish/malwarelist.js
+adblock-excludefilter.js = adblock-betafish/excludefilter.js
+adblock-blockcount.js = adblock-betafish/blockcount.js
+adblock-subscriptioninit.js = adblock-betafish/subscriptioninit.js
+adblock-subscriptions.xml = adblock-betafish/subscriptions.xml
+options.html = adblock-betafish/options/index.html
+adblock-option-index.js = adblock-betafish/options/index.js
+adblock-option-options.css = adblock-betafish/options/options.css
+adblock-option-general.js = adblock-betafish/options/general.js
+adblock-option-general.html = adblock-betafish/options/general.html
+adblock-option-filters.js = adblock-betafish/options/filters.js
+adblock-option-filters.html = adblock-betafish/options/filters.html
+adblock-option-customize.js = adblock-betafish/options/customize.js
+adblock-option-customize.html = adblock-betafish/options/customize.html
+adblock-option-support.js = adblock-betafish/options/support.js
+adblock-option-support.html = adblock-betafish/options/support.html
+adblock-option-bug-report.js = adblock-betafish/options/bug-report.js
+adblock-option-bug-report.html = adblock-betafish/options/bug-report.html
+adblock-button-popup.html = adblock-betafish/button/popup.html
+adblock-button-popup.js = adblock-betafish/button/popup.js
+adblock-button-popup.css = adblock-betafish/button/popup.css
+adblock-adreport.html = adblock-betafish/pages/adreport.html
+adblock-adreport.js = adblock-betafish/pages/adreport.js
+adblock-uiscripts-load_jquery_ui.js = adblock-betafish/uiscripts/load_jquery_ui.js
+adblock-uiscripts-top_open_blacklist_ui.js = adblock-betafish/uiscripts/top_open_blacklist_ui.js
+adblock-uiscripts-top_open_whitelist_ui.js = adblock-betafish/uiscripts/top_open_whitelist_ui.js
+adblock-uiscripts-send_content_to_back.js = adblock-betafish/uiscripts/send_content_to_back.js
+adblock-uiscripts-blacklisting-overlay.js = adblock-betafish/uiscripts/blacklisting/overlay.js
+adblock-uiscripts-rightclick_hook.js = adblock-betafish/uiscripts/blacklisting/rightclick_hook.js
+adblock-uiscripts-blacklisting-clickwatcher.js = adblock-betafish/uiscripts/blacklisting/clickwatcher.js
+adblock-uiscripts-blacklisting-elementchain.js = adblock-betafish/uiscripts/blacklisting/elementchain.js
+adblock-uiscripts-blacklisting-blacklistui.js = adblock-betafish/uiscripts/blacklisting/blacklistui.js
+devtools.js = adblock-betafish/devtools.js
+qunit/tests/example.js = tests/example.js
+firstRun.html = adblock-firstRun.html
+firstRun.js = adblock-firstRun.js
+icons/ab-16.png = icons/adblock-16.png
+icons/ab-19.png = icons/adblock-19.png
+icons/ab-19.png = icons/adblock-19.png
+icons/ab-19-whitelisted.png = icons/adblock-19-whitelisted.png
+icons/ab-19-grayscale.png = icons/adblock-19-grayscale.png
+icons/ab-32.png = icons/adblock-32.png
+icons/ab-32.png = icons/adblock-32.png
+icons/ab-38.png = icons/adblock-38.png
+icons/ab-38.png = icons/adblock-38.png
+icons/ab-38.png = icons/adblock-38.png
+icons/ab-38-whitelisted.png = icons/adblock-38-whitelisted.png
+icons/ab-38-grayscale.png = icons/adblock-38-grayscale.png
+icons/ab-48.png = icons/adblock-48.png
+icons/ab-64.png = icons/adblock-64.png
+icons/ab-128.png = icons/adblock-128.png
+icons/logo.png = icons/logo.png
+icons/icon24.png = icons/icon24.png
+icons/facebook-sprite.png = icons/facebook-sprite.png
+icons/gplus-sprite.png = icons/gplus-sprite.png
+icons/twitter-sprite.png = icons/twitter-sprite.png
+icons/logo.png = icons/logo.png
+icons/loader.gif = icons/loader.gif
+jquery-ui/css/images/ui-bg_flat_55_999999_40x100.png = adblock-betafish/jquery/css/images/ui-bg_flat_55_999999_40x100.png
+jquery-ui/css/images/ui-bg_flat_75_aaaaaa_40x100.png = adblock-betafish/jquery/css/images/ui-bg_flat_75_aaaaaa_40x100.png
+jquery-ui/css/images/ui-bg_glass_45_0078ae_1x400.png = adblock-betafish/jquery/css/images/ui-bg_glass_45_0078ae_1x400.png
+jquery-ui/css/images/ui-bg_glass_55_f8da4e_1x400.png = adblock-betafish/jquery/css/images/ui-bg_glass_55_f8da4e_1x400.png
+jquery-ui/css/images/ui-bg_glass_75_79c9ec_1x400.png = adblock-betafish/jquery/css/images/ui-bg_glass_75_79c9ec_1x400.png
+jquery-ui/css/images/ui-bg_gloss-wave_50_38cfff_500x100.png = adblock-betafish/jquery/css/images/ui-bg_gloss-wave_50_38cfff_500x100.png
+jquery-ui/css/images/ui-bg_gloss-wave_75_2191c0_500x100.png = adblock-betafish/jquery/css/images/ui-bg_gloss-wave_75_2191c0_500x100.png
+jquery-ui/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png = adblock-betafish/jquery/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png
+jquery-ui/css/images/ui-icons_056b93_256x240.png = adblock-betafish/jquery/css/images/ui-icons_056b93_256x240.png
+jquery-ui/css/images/ui-icons_d8e7f3_256x240.png = adblock-betafish/jquery/css/images/ui-icons_d8e7f3_256x240.png
+
+[convert_js]
+lib/adblockplus.js -= lib/filterComposer.js lib/uninstall.js
+include.postload.js -= blockElement.postload.js composer.postload.js
