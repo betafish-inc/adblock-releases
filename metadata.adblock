@@ -1,5 +1,5 @@
 [general]
-version = 3.0.8
+version = 3.1
 backgroundScripts += adblock-jquery.js
   adblock-errorreporting.js
   adblock-functions.js
@@ -44,6 +44,7 @@ document_start += adblock-functions.js
 document_end += adblock-uiscripts-rightclick_hook.js adblock-notificationoverlay.js
 
 [mapping]
+punycode.min.js = adblock-betafish/punycode.min.js
 CHANGELOG.txt = adblock-betafish/CHANGELOG.txt
 translators.json = adblock-betafish/translators.json
 adblock-jquery.js = adblock-betafish/jquery/jquery.min.js
