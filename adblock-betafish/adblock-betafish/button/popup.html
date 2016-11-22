@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="stylesheet" href="adblock-button-popup.css"/>
+    <script src="lib/polyfills/promise.js"></script>
+    <script src="lib/polyfills/fetch.js"></script>
+    <script src="adblock-jquery.js"></script>
+    <script src="adblock-functions.js"></script>
+    <script src="ext/popup.js"></script>
+    <script src="i18n.js"></script>
+    <script src="adblock-button-popup.js"></script>
+  </head>
+  <body style="overflow:hidden;">
+    <div id="wrapper">
+      <div id="menu-items">
+        <div id="titletext">
+          <img src="icons/logo.png" class="logo" />
+          </div>
+
+        <!-- ************ Status messages and block counter *********** -->
+
+        <!-- ************ Status messages *********** -->
+
+        <div id="div_status_beta" class="menu-status" style="display:none;">
+            <span style="font-size: 12px;">
+               You are using AdBlock Beta!<br>
+               If you find a bug, please <a id="bugreport" href="#" >report it</a>!
+            </span>
+        </div>
+
+        <div id="block_counts" class="box" >
+            <a id="block_counts_help" style="float:right;" i18n="whats_this"
+              href="https://getadblock.com/gplus/v2.6-released/"></a>
+            <div i18n="blocked_ads" class="header"></div>
+            <div style="padding:2px 0px 0px 2px;">
+              <div i18n="blocked_n_on_this_page" i18n_replacement_el="page_blocked_count"></div>
+              <span class="block_count_number" id="page_blocked_count"></span>
+              <div i18n="blocked_n_in_total" i18n_replacement_el="total_blocked_count"></div>
+              <span class="block_count_number" id="total_blocked_count"></span>
+            </div>
+        </div>
+
+        <div id="div_status_whitelisted" class="menu-status-italic">
+          <span i18n="disabled_on_this_page"></span>
+        </div>
+
+        <div id="div_status_paused" class="menu-status-italic">
+          <span i18n="status_paused"></span>
+        </div>
+
+        <!-- ************ Standard menu entries *********** -->
+
+        <div i18n="undo_last_block" id="div_undo" class="menu-entry">
+        </div>
+
+        <div id="div_whitelist_channel" class="menu-entry">
+        </div>
+
+        <div id="separator0" class="separator"></div>
+
+        <div i18n="enable_adblock" id="div_enable_adblock_on_this_page" class="menu-entry">
+        </div>
+
+        <div i18n="pause_adblock" id="div_pause_adblock" class="menu-entry">
+        </div>
+
+        <div i18n="unpause_adblock" id="div_paused_adblock" class="menu-entry">
+        </div>
+
+        <div i18n="block_an_ad_on_this_page" id="div_blacklist" class="menu-entry">
+        </div>
+
+        <div i18n="dont_run_on_this_page" id="div_whitelist_page" class="menu-entry">
+        </div>
+
+        <div id="div_whitelist" class="menu-entry" i18n="dont_run_on_pages_on_domain">
+        </div>
+
+        <div id="separator3" class="separator"></div>
+
+        <div id="div_show_resourcelist">
+          <div id="div_show_resourcelist_start" i18n="show_resourcelist" class="menu-entry"></div>
+          <div id="new_resourcelist_explanation" class="info" i18n="new_resourcelist_explanation_win" style="display:none;">
+          </div>
+        </div>
+
+        <div id="div_report_an_ad" class="menu-entry" i18n="report_ad_on_page">
+        </div>
+
+        <div id="separator1" class="separator"></div>
+
+        <!-- **************** Extras ************** -->
+
+        <div i18n="options" id="div_options" class="menu-entry">
+        </div>
+
+        <div id="div_help_hide">
+          <div id="div_help_hide_start" i18n="hide_this_button" class="menu-entry"></div>
+          <div id="help_hide_explanation" class="info" i18n="chromebutton_how_to_hide2" style="display:none;">
+          </div>
+        </div>
+
+        <div class="separator" id="separator2"></div>
+
+      </div> <!-- menu-items-->
+
+      <div id="div_slideout" style="cursor: pointer;">
+        <div style="margin: 5px 0px;">
+          <a id="link_open" i18n="donate_to_adblock"></a>
+        </div>
+      </div>
+    </div> <!-- wrapper -->
+  </body>
+</html>
