@@ -169,33 +169,6 @@ parseUri.secondLevelDomainOnly = function(domain, keepDot)
   }
 };
 
-// Return |domain| encoded in Unicode
-getUnicodeDomain = function(domain)
-{
-  if (domain)
-  {
-    return punycode.toUnicode(domain);
-  }
-  else
-  {
-    return domain;
-  }
-}
-
-// Return |url| encoded in Unicode
-getUnicodeUrl = function(url)
-{
-  // URLs encoded in Punycode contain xn-- prefix
-  if (url && url.indexOf("xn--") > 0)
-  {
-    var parsed = parseUri(url);
-    // IDN domains have just hostnames encoded in punycode
-    parsed.href = parsed.href.replace(parsed.hostname, punycode.toUnicode(parsed.hostname));
-    return parsed.href;
-  }
-  return url;
-};
-
 // Inputs: key:string.
 // Returns value if key exists, else undefined.
 sessionstorage_get = function(key)

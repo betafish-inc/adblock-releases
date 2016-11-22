@@ -6,7 +6,9 @@ var run_bandaids = function()
   {
     apply_bandaid_for = "hotmail";
   }
-  else if (/getadblock\.com$/.test(document.location.hostname) && window.top === window.self)
+  else if (("getadblock.com" === document.location.hostname ||
+            "dev.getadblock.com" === document.location.hostname) &&
+           (window.top === window.self))
   {
     if (/\/question\/$/.test(document.location.pathname))
     {
@@ -102,27 +104,35 @@ var run_bandaids = function()
           BGcall("setSetting", "show_survey", !document.getElementById("enable_show_survey").checked, true);
         };
       }
-      if (document.getElementById("disableacceptableads"))
+      var aaElements = document.querySelectorAll("#disableacceptableads");
+      if (aaElements &&
+          aaElements.length)
       {
-        document.getElementById("disableacceptableads").onclick = function(event)
+        for (i = 0; i < aaElements.length; ++i)
         {
-          event.preventDefault();
-          BGcall("unsubscribe", {
-            id : "acceptable_ads",
-            del : false
-          }, function()
+          aaElements[i].onclick = function(event)
           {
-            BGcall("recordGeneralMessage", "disableacceptableads clicked", undefined, function()
-            {
-              BGcall("openTab", "options.html?tab=0&aadisabled=true");
-            });
-            // Rebuild the rules if running in Safari
-            if (SAFARI)
-            {
-              // TODO: handle this background page call
-              BGcall("update_subscriptions_now");
+            if (event.isTrusted === false) {
+              return;
             }
-          });
+            event.preventDefault();
+            BGcall("unsubscribe", {
+              id : "acceptable_ads",
+              del : false
+            }, function()
+            {
+              BGcall("recordGeneralMessage", "disableacceptableads clicked", undefined, function()
+              {
+                BGcall("openTab", "options.html?tab=0&aadisabled=true");
+              });
+              // Rebuild the rules if running in Safari
+              if (SAFARI)
+              {
+                // TODO: handle this background page call
+                BGcall("update_subscriptions_now");
+              }
+            });
+          }
         }
       }
     },

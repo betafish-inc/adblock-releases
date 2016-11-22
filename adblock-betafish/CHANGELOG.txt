@@ -2,6 +2,72 @@
 
 UNRELEASED:
 
+3.6.0:
+- Changed the 'Spread the word' link on the AdBlock menu to 'Donate to help support AdBlock!', and added message logging when the AdBlock popup menu is opened. (#190)
+- Updated Translations.
+
+3.5.0:
+- Fixed an issue with the YouTube channel white-list feature.  AdBlock now correctly handles YouTube channel names with special characters such as '#".  (#179)
+- Fixed an issue on the black list wizard.  The black list wizard now shows an error message when a user creates invalid filter list rule.  (#183)
+- Updated the 'stats' processing to store and retrieve the next ping time, ping count, and unique identifier to two different persisted storage areas.  (#182)
+
+3.4.0:
+- Fixed an issue with the lower section of the AdBlock Options page being hidden behind the footer. (#167)
+- Improved the security for the 'bandaids' processing on the getadblock.com/installed page by improving the host name check, and adding a check to click event for isTrusted.  (#170)
+- Updated the 'stats' processing to store the next ping time, ping count, and unique identifier to two different persisted storage areas.  (#174)
+
+3.3.2:
+- Removed all debug logging from the ping process. (#168)
+
+3.3.1:
+- Removed debug logging from the ping process. (#168)
+
+3.3.0:
+- Added all unique messages in the locale message files from the three variations of AdBlock (Chrome, Safari, Edge), so the locale files can be shared, and re-used by all of the various versions of AdBlock.  (#145)
+- Fixed the text description for the "Show All Request" AdBlock menu item. (#137)
+- Added logic to create and save the 'blockage_stats' object during installation.  (#141)
+- Removed extra 'descriptions' in the locale message.  (#148)
+- The extension will now recognize and process multiple links on our site (getadblock.com/installed) that can be used to disable Acceptable Ads.  (#159)
+- Added debug logic to the ping process to help diagnosis issues with the ping processing. (#150)
+- A GNU version 3 license file is included with the extension. (#140)
+- Added an option on the General tab of AdBlock options to enable / disable the AdBlock devtools panel. (#142)
+
+3.2.1:
+- Fixed issue with AdBlock icon display.  (#160)
+
+3.2.0:
+- Updated ABP Core 1.12.2 (#149)
+
+3.1.1:
+- Added a link to the Privacy Policy on the Options page. (#147)
+
+3.1:
+- Updated to ABP Core 1.12.1
+
+3.0.8:
+- Fixed a bug on the 'Options' page, 'Filter List' tab.  All of the checkboxes would be inadvertently checked when a user clicked the 'Update Now' button, or other similar actions.  (#129) 
+- Added any remaining localStorage keys to the debug data, to help resolve any data migration issues.  (#132).
+- Fixed a bug with the ping processing incorrectly sending the wrong value for the aa parameter.  (#134).
+
+3.0.7:
+- Fixed a bug on the 'Options' page.  Under certain circumstances the "Allow some non-intrusive advertising" option on the General tab was not being saved.  (#123)
+- Added a check for data on the error object in the Error Reporting logic.  (#126)
+
+3.0.4:
+- Fixed a bug on 'Options' page when the page was openned prior to the background page being initialized. (#112)
+- Fixed a bug when the AdBlock context menu option was enabled / disabled on the Options page.  (#111)
+- Fixed a bug on 'Report an Ad' page for non-English users reporting an ad on English site.  (#108)
+- Updated the descriptions for certain language specific filter lists to include 'EasyList'.  (#107)
+
+3.0.3:
+- Fixed a bug in the data migration logic.  (#114)
+
+3.0.2:
+- Fixed the 'bug report' link on the Support tab for non-English users.  (#105)
+
+3.0.1:
+- Added missing message entries, and removed obsolete entries. (#102)
+
 3.0:
 - Migrated AdBlock to use Adblock Plus (ABP)'s open-source core.
 
@@ -37,7 +103,7 @@ UNRELEASED:
 2.46:
  - Fixed a typo in the description of the AdBlock Warning Removal list, it should be a lowercased 'b' (#658).
  - Added a new parameter to the ping data to indicate if the advance setting is enabled (#660).
- - Fixed an issue with the blocking assistant on some sites (#644). 
+ - Fixed an issue with the blocking assistant on some sites (#644).
  - For Chrome users, modified the "/installed" logic to use the Chrome specific chrome.runtime.onInstalled API (#656).
  - For Safari users, AdBlock will now use the WebKit content blocking feature on new installations. (#619).
  - For Safari users, fix a bug with the "Undo my blocks on this domain" feature (#570).

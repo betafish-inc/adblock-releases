@@ -97,11 +97,6 @@ var getSubscriptionsMinusText = function()
       result[tempSub["id"]] = tempSub;
     }
   }
-  // Add the subscription info for the AB implemention of the malware filter list
-  if (malwareList)
-  {
-    result["malware"] = malwareList.getSubscription();
-  }
   return result;
 }
 
@@ -431,5 +426,10 @@ var abSubscriptionIdMap =
   {
     id : "icelandic", // Icelandic filters
     language : true,
+  },
+  "https://easylist-downloads.adblockplus.org/malwaredomains_full.txt" :
+  {
+    id : "malware", // Malware 
+    language : false,
   },
 };

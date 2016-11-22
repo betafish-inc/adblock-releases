@@ -100,7 +100,7 @@ CheckboxForFilterList.prototype = {
           var entry = filterListSections.language_filter_list.array[index];
           if (!entry.hasOwnProperty('label'))
           {
-            entry.label = translate('filter' + id);
+            entry.label = translateIDs(id);
           }
 
           var option = new OptionForFilterList(entry, index);
@@ -276,7 +276,7 @@ FilterListUtil.prepareSubscriptions = function (subs)
     }
 
     var entry          = subs[id];
-    entry.label        = translate('filter' + id);
+    entry.label        = translateIDs(id);
     entry.id           = id;
     var filterListType = FilterListUtil.getFilterListType(entry);
     filterListSections[filterListType].array.push(entry);
@@ -336,14 +336,14 @@ FilterListUtil.updateSubscriptionInfoForId = function (id)
   else if (subscription.downloadStatus && subscription.downloadStatus != 'synchronize_ok')
   {
     var map = {
-      synchronize_invalid_url: 'filters_subscription_lastDownload_invalidURL',
-      synchronize_connection_error: 'filters_subscription_lastDownload_connectionError',
-      synchronize_invalid_data: 'filters_subscription_lastDownload_invalidData',
-      synchronize_checksum_mismatch: 'filters_subscription_lastDownload_checksumMismatch',
+      synchronize_invalid_url: translate('ab_filters_subscription_lastDownload_invalidURL'),
+      synchronize_connection_error: translate('ab_filters_subscription_lastDownload_connectionError'),
+      synchronize_invalid_data: translate('ab_filters_subscription_lastDownload_invalidData'),
+      synchronize_checksum_mismatch: translate('ab_filters_subscription_lastDownload_checksumMismatch'),
     };
     if (subscription.downloadStatus in map)
     {
-      text = translate(map[subscription.downloadStatus]);
+      text = map[subscription.downloadStatus];
     }
     else
     {
@@ -411,31 +411,6 @@ FilterListUtil.updateCheckbox = function (filterList, id)
 
     // Force update current info label since status is already updated in the background.
     $('.subscription_info', $containingDiv).text(filterList.subscribed ? translate('fetchinglabel') : translate('unsubscribedlabel'));
-
-    // If the filter is of language list type, check if subscribed and checkbox visibility matches, if not, update visibility.
-    if ($containingDiv.parent().attr('id') === 'language_list' && filterList.subscribed !== $containingDiv.is(':visible'))
-    {
-      $containingDiv.toggle(500);
-      var index = checkbox.attr('id').split('_')[3];
-
-      // After updating visibility, update Language Selectbox too.
-      if (filterList.subscribed)
-      {
-        $('#language_select').find('option')[parseInt(index) + 1].remove();
-      } else
-      {
-        if (!filterList.label)
-        {
-          filterList.label = translate('filter' + id);
-        }
-
-        var newOption = new OptionForFilterList(filterList, index);
-        if (newOption)
-        {
-          LanguageSelectUtil.insertOption(newOption.get(), index);
-        }
-      }
-    }
   }
 };
 
@@ -573,12 +548,6 @@ SubscriptionUtil.subscribe = function (id, title)
     }
   }
 
-  if (id === 'malware')
-  {
-    backgroundPage.malwareList.changeSubscription({ subscribed: true });
-    return;
-  }
-
   FilterStorage.addSubscription(subscription);
   if (subscription instanceof DownloadableSubscription)
   {
@@ -610,11 +579,6 @@ SubscriptionUtil.unsubscribe = function (id)
   SubscriptionUtil._updateCacheValue(id);
   var subscription = FilterListUtil.cachedSubscriptions[id];
   subscription     = Subscription.fromURL(subscription.url);
-  if (id === 'malware')
-  {
-    backgroundPage.malwareList.changeSubscription({ subscribed: false });
-    return;
-  }
 
   setTimeout(function ()
   {
@@ -708,10 +672,9 @@ CustomFilterListUploadUtil._updateExistingFilterList = function (existingFilterL
   }
 
   var checkbox = $($containingDiv).find('input');
-
   if (!checkbox.is(':checked'))
   {
-    if (checkbox.attr('id').indexOf('language_filter_list') > 0)
+    if (checkbox.attr('id').indexOf('language_filter_list') >= 0)
     {
       LanguageSelectUtil.triggerChange(existingFilterList);
     }
@@ -769,9 +732,9 @@ CustomFilterListUploadUtil.bindControls = function ()
   });
 };
 
-function onFilterChange(action, item, param1, param2)
+function onFilterChangeHandler(action, item, param1, param2)
 {
-  var updateEntry = function (entry)
+  var updateEntry = function (entry, eventAction)
   {
     if (entry)
     {
@@ -785,11 +748,20 @@ function onFilterChange(action, item, param1, param2)
         }
       }
 
+      if (eventAction &&
+          eventAction === "subscription.added") {
+        FilterListUtil.cachedSubscriptions[entry.id].subscribed = true;
+      }
+      if (eventAction &&
+          eventAction === "subscription.removed") {
+        FilterListUtil.cachedSubscriptions[entry.id].subscribed = false;
+      }
+
       // Update checkbox according to the value of the subscribed field
       FilterListUtil.updateCheckbox(FilterListUtil.cachedSubscriptions[entry.id], entry.id);
 
-      // If entry is subscribed, update lastUpdate_failed_at and lastUpdate field
-      if (entry.subscribed)
+      // If sub is subscribed, update lastUpdate_failed_at or lastUpdate field
+      if (FilterListUtil.cachedSubscriptions[entry.id].subscribed)
       {
         FilterListUtil.updateSubscriptionInfoForId(entry.id);
       }
@@ -807,7 +779,7 @@ function onFilterChange(action, item, param1, param2)
       var updateItem = function (item, id)
       {
         item.id = id;
-        updateEntry(item);
+        updateEntry(item, action);
       };
 
       var id = backgroundPage.getIdFromURL(item.url);
@@ -839,7 +811,6 @@ function onFilterChange(action, item, param1, param2)
         }
       }
     }
-
     // If we didn't get an entry or id, loop through all of the subscriptions.
     var subs = backgroundPage.getAllSubscriptionsMinusText();
     var cachedSubscriptions = FilterListUtil.cachedSubscriptions;
@@ -851,9 +822,18 @@ function onFilterChange(action, item, param1, param2)
   }
 }
 
+function translateIDs(id) {
+  var translatedMsg = translate('filter_' + id);
+  translatedMsg = translatedMsg.trim()
+  if (translatedMsg != "" && translatedMsg.length > 0) {
+     return translatedMsg
+  } else {
+     return translate('filter' + id)
+  }
+}
+
 $(function ()
 {
-
   // Retrieves list of filter lists from the background.
   var subs = backgroundPage.getAllSubscriptionsMinusText();
 
@@ -870,7 +850,7 @@ $(function ()
   LanguageSelectUtil.init();
   CustomFilterListUploadUtil.bindControls();
 
-  FilterNotifier.addListener(onFilterChange);
+  FilterNotifier.addListener(onFilterChangeHandler);
 
   FilterListUtil.updateSubscriptionInfoAll();
 

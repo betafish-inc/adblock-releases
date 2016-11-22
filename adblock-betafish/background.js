@@ -24,6 +24,7 @@ var Prefs = require('prefs').Prefs;
 var Synchronizer = require('synchronizer').Synchronizer;
 var Utils = require('utils').Utils;
 var NotificationStorage = require('notification').Notification;
+var punycode = require("punycode");
 
 // TODO
 // Temporary...
@@ -735,6 +736,20 @@ var getDebugInfo = function (callback)
   {
     response.other_info.blockCounts = blockCounts.get();
   }
+  if (localStorage &&
+      localStorage.length) {
+    response.other_info.localStorageInfo = {};
+    response.other_info.localStorageInfo['length'] = localStorage.length;
+    var inx = 1;
+    for (var key in localStorage) {
+      response.other_info.localStorageInfo['key'+inx]= key;
+      inx++;
+    }
+  }
+  else
+  {
+    response.other_info.localStorageInfo = "no data";
+  }
 
   // Get total pings
   ext.storage.get('total_pings', function (storageResponse)
@@ -782,11 +797,6 @@ function updateFilterLists()
       Synchronizer.execute(subscription, true, true);
     }
   }
-
-  if (malwareList)
-  {
-    malwareList.checkFilterUpdates(true);
-  }
 }
 
 function getUserFilters()
@@ -817,11 +827,34 @@ function getUserFilters()
   return {filters: filters, exceptions: exceptions};
 }
 
+// Return |domain| encoded in Unicode
+getUnicodeDomain = function(domain)
+{
+  if (domain)
+  {
+    return punycode.toUnicode(domain);
+  }
+  else
+  {
+    return domain;
+  }
+}
+
+// Return |url| encoded in Unicode
+getUnicodeUrl = function(url)
+{
+  // URLs encoded in Punycode contain xn-- prefix
+  if (url && url.indexOf("xn--") > 0)
+  {
+    var parsed = parseUri(url);
+    parsed.href = parsed.href.replace(parsed.hostname, punycode.toUnicode(parsed.hostname));
+    return parsed.href;
+  }
+  return url;
+};
+
 // Remove comment when migration code is removed
 // STATS = STATS();
 // STATS.startPinging();
-
-// malwareList = new MalwareList();
-// malwareList.init();
 
 log('\n===FINISHED LOADING===\n\n');

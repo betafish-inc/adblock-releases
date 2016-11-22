@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="adblock-option-options.css" />
     <script src="lib/polyfills/promise.js"></script>
     <script src="lib/polyfills/fetch.js"></script>
-    <script src="lib/punycode.js"></script>
     <script src="ext/common.js"></script>
     <script src="ext/content.js"></script>
     <script src="i18n.js" charset="utf-8"></script>
@@ -43,14 +42,15 @@
       </ul>
     </div>
 
-       <div class="noticecontainer">
+    <div class="noticecontainer">
       <div class="notice" id="safari50_updatenotice" i18n="safari50_updatenotice" i18n_replacement_el="safari50_update_link"></div>
       <a id="safari50_update_link" href="https://www.apple.com/safari/" target="_blank"></a>
     </div>
 
     <footer>
-     <a class="link" id="paymentlink" i18n="pwyw" href="https://getadblock.com/pay/" target="_blank"></a>
-     <span id="version_number"></span>
+      <a id="privacypolicylink" href="https://getadblock.com/privacy" i18n="privacy_policy" target="_blank"></a>
+      <a class="link" id="paymentlink" i18n="pwyw" href="https://getadblock.com/pay/" target="_blank"></a>
+      <span id="version_number"></span>
     </footer>
   </body>
 </html>

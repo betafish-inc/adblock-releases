@@ -1,6 +1,21 @@
 // Store actual URL
 var url = document.location.href;
 
+// used to decode all encoded HTML  (convert '&' to &amp;)
+var parseElem = document.createElement('textarea');
+
+var parseChannelName = function(channelName) {
+  function fixedEncodeURIComponent (str) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+      return '%' + c.charCodeAt(0).toString(16);
+    });
+  }
+  parseElem.innerHTML = channelName;
+  channelName = parseElem.innerText;
+  // Remove whitespace, and encode
+  return fixedEncodeURIComponent(channelName.replace(/\s/g,""));
+};
+
 if (!/ab_channel/.test(url))
 {
   // Get name of the channel by using YouTube Data v3 API
@@ -84,6 +99,7 @@ if (!/ab_channel/.test(url))
   // channel is whitelisted by user)
   function updateURL(channelName, isChannel, shouldReload)
   {
+    channelName = parseChannelName(channelName);
     // Add the name of the channel to the end of URL
     if (isChannel)
     {

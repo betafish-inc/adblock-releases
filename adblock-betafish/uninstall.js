@@ -30,9 +30,11 @@ var uninstallInit = function()
           ext.storage.get("blockage_stats", function(data)
           {
             var url = uninstallURL;
-            if (data && data.start)
+            if (data && 
+                data.blockage_stats && 
+                data.blockage_stats.start)
             {
-              var installedDuration = (Date.now() - data.start);
+              var installedDuration = (Date.now() - data.blockage_stats.start);
               url = url + "&t=" + installedDuration;
             }
             var bc = Prefs.blocked_total;

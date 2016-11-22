@@ -29,7 +29,7 @@ $(function ()
     $('#enable_' + name).prop('checked', optionalSettings[name]);
   }
 
-  var abpPrefs = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup'];
+  var abpPrefs = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];
   for (var inx in abpPrefs) {
     var name = abpPrefs[inx];
     $('#prefs__' + name).prop('checked', backgroundPage.Prefs[name]);
@@ -57,6 +57,12 @@ $(function ()
     }
 
     var name = this.id.substring(7); // TODO: hack
+    // if the user enables/disables the context menu
+    // update the pages
+    if (name === 'shouldShowBlockElementMenu')
+    {
+      backgroundPage.updateButtonUIAndContextMenus();
+    }
     if (abpPrefs.indexOf(name) >= 0) {
       backgroundPage.Prefs[name] = isEnabled;
       return;
@@ -127,16 +133,17 @@ $(function ()
 var acceptableAdsClicked = function (isEnabled)
 {
   var subscription = Subscription.fromURL(Prefs.subscriptions_exceptionsurl);
-
-  // simulate a click on the AA Checkbox on the Filters tab
-  var $checkbox = $('#adblock_filter_list_0');
-  $checkbox.prop('checked', isEnabled);
-  $checkbox.trigger('change');
   if (isEnabled)
   {
+    FilterStorage.addSubscription(subscription);
+    if (subscription instanceof DownloadableSubscription)
+    {
+      Synchronizer.execute(subscription);
+    }
     $('#acceptable_ads_info').slideUp();
   } else
   {
+    FilterStorage.removeSubscription(subscription);
     $('#acceptable_ads_info').slideDown();
   }
 

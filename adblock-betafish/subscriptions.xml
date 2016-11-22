@@ -25,7 +25,7 @@
                 specialization="Greek"
                 url="https://www.void.gr/kargig/void-gr-filters.txt"
                 homepage="mailto:kargig at void.gr"
-                prefixes="hu"
+                prefixes="el"
                 author=""
                 requires="EasyList"
                 type="ads"/>
@@ -33,7 +33,7 @@
                 specialization="Hungarian"
                 url="https://raw.githubusercontent.com/szpeter80/hufilter/master/hufilter.txt"
                 homepage="mailto:pete at teamlupus.hu"
-                prefixes="el"
+                prefixes="hu"
                 author=""
                 requires="EasyList"
                 type="ads"/>
@@ -73,15 +73,6 @@
                 homepage="mailto:adblock at gardar.net"
                 prefixes="is"
                 author=""
-                requires="EasyList"
-                type="ads"/>
-  <subscription title="EasyList Latvian"
-                specialization="Latvian"
-                url="https://notabug.org/latvian-list/adblock-latvian/raw/master/lists/latvian-list.txt"
-                homepage="https://notabug.org/latvian-list/adblock-latvian"
-                prefixes="lv"
-                author=""
-                requires="EasyList"
                 type="ads"/>
   <subscription title="EasyList Polish+EasyList"
                 specialization="Polish"
@@ -104,5 +95,10 @@
                 homepage="http://www.fanboy.co.nz/"
                 prefixes="tr"
                 author="fanboy"
+                type="ads"/>
+  <subscription title="Malware"
+                specialization="Malware"
+                url="https://easylist-downloads.adblockplus.org/malwaredomains_full.txt"
+                homepage="http://malwaredomains.com/?page_id=2"
                 type="ads"/>
 </subscriptions>

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="adblock-option-options.css" />
     <script src="lib/polyfills/promise.js"></script>
     <script src="lib/polyfills/fetch.js"></script>
-    <script src="lib/punycode.js"></script>
     <script src="ext/common.js"></script>
     <script src="ext/content.js"></script>
     <script src="adblock-jquery.js"></script>
@@ -102,7 +101,7 @@
         max-width: 1000px;
         padding: 20px 20px 20px 0px;
       }
-      #step_report_DIV, #step_update_aa_DIV, #step_language_DIV, #step_update_filters_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_DIV, #step_malware_checking_DIV, #step_response_success, #step_response_error  {
+      #step_report_DIV, #step_update_aa_DIV, #step_language_DIV, #step_update_filters_DIV, #step_firefox_DIV, #step_flash_DIV, #step_everywhere_DIV, #step_response_success, #step_response_error  {
         position: relative;
         margin: 0px auto;
         max-width: 1000px;
@@ -121,7 +120,7 @@
         .social {
           display: none;
         }
-        #step_report_DIV, #step_update_aa_DIV, #step_update_filters_DIV, #step_disable_extensions_DIV, #step_language_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_div, #step_malware_checking_DIV, #step_response_success, #step_response_error  {
+        #step_report_DIV, #step_update_aa_DIV, #step_update_filters_DIV, #step_disable_extensions_DIV, #step_language_DIV, #step_firefox_DIV, #step_flash_DIV, #step_everywhere_div, #step_response_success, #step_response_error  {
           padding: 20px 20px 20px 0px;
         }
         #info {
@@ -231,34 +230,34 @@
           <select id="step_language_lang" style="margin-left: 6px;">
             <option disabled="disabled" selected="selected"></option>
             <option value="easylist;en" i18n="lang_english"></option>
-            <option value="easylist;easylist_plus_arabic;ar" i18n="filtereasylist_plus_arabic"></option>
-            <option value="easylist;easylist_plus_bulgarian;bg" i18n="filtereasylist_plus_bulgarian"></option>
-            <option value="chinese;zh" i18n="filterchinese"></option>
+            <option value="easylist_plus_arabic;ar" i18n="lang_arabic"></option>
+            <option value="easylist_plus_bulgarian;bg" i18n="lang_bulgarian"></option>
+            <option value="chinese;zh" i18n="lang_chinese"></option>
             <option value="czech;cs" i18n="lang_czech"></option>
             <option value="easylist;easylist_plus_spanish;es" i18n="lang_spanish"></option>
-            <option value="danish;da" i18n="filterdanish"></option>
-            <option value="easylist;dutch;nl" i18n="filterdutch"></option>
-            <option value="easylist;easylist_plus_estonian;et" i18n="filtereasylist_plus_estonian"></option>
-            <option value="easylist;easylist_plus_finnish;fi" i18n="filtereasylist_plus_finnish"></option>
-            <option value="easylist;easylist_plus_french;fr" i18n="filtereasylist_plus_french"></option>
-            <option value="easylist;easylist_plus_german;de" i18n="filtereasylist_plus_german"></option>
-            <option value="easylist;easylist_plus_greek;el" i18n="filtereasylist_plus_greek"></option>
-            <option value="hungarian;hu" i18n="filterhungarian"></option>
-            <option value="easylist;easylist_plus_indonesian;id" i18n="filtereasylist_plus_indonesian"></option>
-            <option value="icelandic;is" i18n="filtericelandic"></option>
-            <option value="israeli;he" i18n="filterisraeli"></option>
-            <option value="italian;it" i18n="filteritalian"></option>
-            <option value="japanese;ja" i18n="filterjapanese"></option>
-            <option value="easylist_plun_korean;ko" i18n="filtereasylist_plun_korean"></option>
-            <option value="easylist_plus_lithuania;lt" i18n="filtereasylist_plus_lithuania"></option>
-            <option value="easylist;easylist_plus_polish;pl" i18n="filtereasylist_plus_polish"></option>
-            <option value="easylist;easylist_plus_romanian;ro" i18n="filtereasylist_plus_romanian"></option>
-            <option value="latvian;lv" i18n="filterlatvian"></option>
-            <option value="easylist;russian;ru" i18n="lang_russian"></option>
+            <option value="danish;da" i18n="lang_danish"></option>
+            <option value="dutch;nl" i18n="lang_dutch"></option>
+            <option value="easylist;easylist_plus_estonian;et" i18n="lang_estonian"></option>
+            <option value="easylist;easylist_plus_finnish;fi" i18n="lang_finnish"></option>
+            <option value="easylist_plus_french;fr" i18n="lang_french"></option>
+            <option value="easylist_plus_german;de" i18n="lang_german"></option>
+            <option value="easylist;easylist_plus_greek;el" i18n="lang_greek"></option>
+            <option value="hungarian;hu" i18n="lang_hungarian"></option>
+            <option value="easylist_plus_indonesian;id" i18n="lang_indonesian"></option>
+            <option value="icelandic;is" i18n="lang_icelandic"></option>
+            <option value="israeli;he" i18n="lang_israeli"></option>
+            <option value="italian;it" i18n="lang_italian"></option>
+            <option value="japanese;ja" i18n="lang_japanese"></option>
+            <option value="easylist;easylist_plun_korean;ko" i18n="lang_korean"></option>
+            <option value="easylist_plus_lithuania;lt" i18n="lang_lithuania"></option>
+            <option value="easylist;easylist_plus_polish;pl" i18n="lang_polish"></option>
+            <option value="easylist_plus_romanian;ro" i18n="lang_romanian"></option>
+            <option value="latvian;lv" i18n="lang_latvian"></option>
+            <option value="russian;ru" i18n="lang_russian"></option>
             <option value="czech;sk" i18n="lang_slovak"></option>
-            <option value="swedish;sv" i18n="filterswedish"></option>
-            <option value="turkish;tr" i18n="filterturkish"></option>
-            <option value="easylist;russian;uk" i18n="lang_ukranian"></option>
+            <option value="swedish;sv" i18n="lang_swedish"></option>
+            <option value="turkish;tr" i18n="lang_turkish"></option>
+            <option value="russian;uk" i18n="lang_ukranian"></option>
             <option value="" i18n="other"></option>
           </select>
         </div>

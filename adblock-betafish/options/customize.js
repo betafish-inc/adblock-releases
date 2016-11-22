@@ -408,7 +408,9 @@ $(function ()
     $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));
   }
 
-  if (optionalSettings.show_advanced_options && !optionalSettings.safari_content_blocking)
+  if (optionalSettings &&
+      optionalSettings.show_advanced_options &&
+      !optionalSettings.safari_content_blocking)
   {
     $('#divExcludeFilters').show();
   }

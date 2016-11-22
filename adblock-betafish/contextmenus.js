@@ -95,7 +95,7 @@ if (!SAFARI)
         {
           allFrames: false,
           include: [
-            'lib/punycode.js',
+            'punycode.min.js',
             'adblock-jquery.js',
             'adblock-jquery-ui.js',
             'adblock-uiscripts-load_jquery_ui.js',
@@ -106,7 +106,7 @@ if (!SAFARI)
         {
           allFrames: false,
           include: [
-            'lib/punycode.js',
+            'punycode.min.js',
             'adblock-jquery.js',
             'adblock-jquery-ui.js',
             'adblock-uiscripts-load_jquery_ui.js',

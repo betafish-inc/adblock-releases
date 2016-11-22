@@ -106,12 +106,25 @@ MigrateLegacyData = (function()
       storage_set(key, undefined);
       migrateLog('migrated Legacy Blockage Stats');
     }
+    else
+    {
+      ext.storage.get(key, function(response) {
+        var blockage_stats = response.blockage_stats;
+        if (!blockage_stats)
+        {
+          data = {};
+          data.start = Date.now();
+          data.version = 1;
+          ext.storage.set(key, data);
+        }
+      });
+    }
   }
   // Convert legacy AdBlock Stats to ABP
   function migrateLegacyStats()
   {
     var pingDelay = 1;
-    var keys = ["userid", "total_pings", "next_ping_time"];
+    var keys = [STATS.userIDStorageKey, STATS.totalPingStorageKey, STATS.nextPingTimeStorageKey];
     var types = ["string", "number", "number"];
 
     for (var i = 0; i < keys.length; i++)
@@ -120,7 +133,7 @@ MigrateLegacyData = (function()
       var data = storage_get(key);
       if (data)
       {
-        // Storge the old data in the new location
+        // Store the old data in the new location
         if (typeof data === types[i])
         {
           ext.storage.set(key, data);
@@ -136,8 +149,6 @@ MigrateLegacyData = (function()
     // pingDelay is set to 1 when there is no data to be migrated (new user)
     window.setTimeout(function()
     {
-      malwareList = new MalwareList();
-      malwareList.init();
       STATS.startPinging();
       uninstallInit();
     }, pingDelay);
@@ -223,12 +234,15 @@ MigrateLegacyData = (function()
   }
 
   // Convert legacy AdBlock FilterLists to ABP Subscriptions
-  function migrateLegacyFilterLists()
+  function migrateLegacyFilterLists(callback)
   {
     var mySubs = storage_get('filter_lists');
     if (!mySubs || mySubs.length < 1)
     {
       SubscriptionInit.init();
+      if (callback) {
+        callback();
+      }
       return;
     }
 
@@ -242,20 +256,18 @@ MigrateLegacyData = (function()
       for (var id in mySubs)
       {
         var sub = mySubs[id];
-        if (sub.subscribed && sub.url && (id !== "malware"))
+        if (sub.subscribed && sub.url)
         {
           subscriptions.push(Subscription.fromURL(sub.url));
-        }
-        if (id === "malware" &&
-            !sub.subscribed)
-        {
-          ext.storage.set("malware_list", {subscribed: false});
         }
       }
       storage_set('filter_lists', undefined);
       storage_set('last_subscriptions_check', undefined);
       migrateLog('Done migrating subscriptions.  Migrated count: ', subscriptions.length);
       SubscriptionInit.init();
+      if (callback) {
+        callback();
+      }
       return subscriptions;
     });
   }
@@ -276,7 +288,6 @@ MigrateLegacyData = (function()
     });
     custom = originalFilterArray.join('\n');
     var response = parseFilters(custom);
-
     if (response && response.filters)
     {
       for (var i = 0; i < response.filters.length; i++)
@@ -288,6 +299,7 @@ MigrateLegacyData = (function()
         }
       }
       migrateLog('Migrated custom filters, count: ', response.filters.length);
+      storage_set('custom_filters', undefined);
     }
     if (response &&
         response.errors &&
@@ -311,7 +323,6 @@ MigrateLegacyData = (function()
       migrateLog(errorMsg);
       ext.storage.set('custom_filters_errors', errorMsg);
     }
-    storage_set('custom_filters', undefined);
   }
 
   // Convert exclude / disable filters
@@ -342,18 +353,33 @@ MigrateLegacyData = (function()
     storage_set(key, undefined);
   }
 
+  function migrateMalware()
+  {
+    ext.storage.get("malware_list", function(response)
+    {
+      if (response &&
+          response.malware_list) {
+        ext.storage.remove("malware_list");
+        if (response.malware_list.subscribed === true) {
+          var malwareSub = Subscription.fromURL("https://easylist-downloads.adblockplus.org/malwaredomains_full.txt");
+          FilterStorage.addSubscription(malwareSub);
+          if (malwareSub instanceof DownloadableSubscription)
+          {
+            Synchronizer.execute(malwareSub);
+          }
+        }
+      }
+    });
+  }
+
   function init()
   {
-    var onFilterAction = function(action)
+    var onFilterAction = function()
     {
-      if (action == "load")
-      {
-        FilterNotifier.removeListener(onFilterAction);
-        filtersLoaded = true;
-        migrateLegacyCustomFilters();
-        migrateLegacyCustomFilterCount();
-        migrateLegacyExcludeFilters();
-      }
+      migrateLegacyCustomFilters();
+      migrateLegacyCustomFilterCount();
+      migrateLegacyExcludeFilters();
+      migrateMalware();
     };
 
     var onPrefsLoaded = function()
@@ -362,8 +388,7 @@ MigrateLegacyData = (function()
       migrateLegacySettings();
     };
 
-    migrateLegacyFilterLists();
-    FilterNotifier.addListener(onFilterAction);
+    migrateLegacyFilterLists(onFilterAction);
     Prefs.untilLoaded.then(onPrefsLoaded);
     migrateLegacyStats();
   }
