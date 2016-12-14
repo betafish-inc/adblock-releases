@@ -21,6 +21,11 @@ var recordAdreportMessage = function(msg) {
   recordMessageWithUserID(msg, 'adreport');
 };
 
+// Log an 'surveys' related message on GAB log server.
+var recordAdreportMessage = function(msg) {
+  recordMessageWithUserID(msg, 'surveys');
+};
+
 // Log a message on GAB log server. The user's userid will be prepended to the
 // message.
 // If callback() is specified, call callback() after logging has completed
@@ -32,7 +37,7 @@ var recordMessageWithUserID = function(msg, queryType, callback)
   }
 
   // Include user ID in message
-  var fullUrl = 'https://log.getadblock.com/record_log.php?type=' + queryType + '&message=' + encodeURIComponent(STATS.userId() + ' ' + msg);
+  var fullUrl = 'https://log.getadblock.com/record_log.php?type=' + queryType + '&message=' + encodeURIComponent(STATS.userId() + ' f:' + STATS.flavor + ' o:' + STATS.os + ' ' + msg);
   sendMessageToLogServer(fullUrl, callback);
 };
 

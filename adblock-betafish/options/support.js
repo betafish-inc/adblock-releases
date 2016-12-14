@@ -63,11 +63,7 @@ $(document).ready(function ()
       if (theDebugInfo.custom_filters)
       {
         content.push('=== Custom Filters ===');
-        for (var filter in theDebugInfo.custom_filters)
-        {
-          content.push(theDebugInfo.custom_filters[filter]);
-        }
-
+        content.push(theDebugInfo.custom_filters);
         content.push('');
       }
 

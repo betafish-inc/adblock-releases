@@ -715,7 +715,7 @@ var getDebugInfo = function (callback)
   var userFilters = getUserFilters();
   if (userFilters && userFilters.filters && userFilters.filters.length)
   {
-    response.custom_filters = userFilters.filters;
+    response.custom_filters = userFilters.filters.join("\n");
   }
 
   // Get settings

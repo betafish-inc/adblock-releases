@@ -5,7 +5,6 @@ STATS = (function()
   var userIDStorageKey = "userid";
   var totalPingStorageKey = "total_pings";
   var nextPingTimeStorageKey = "next_ping_time";
-
   var stats_url = "https://ping.getadblock.com/stats/";
 
   var FiftyFiveMinutes = 3300000;
@@ -151,7 +150,6 @@ STATS = (function()
         ov : osVersion,
         ad: getSettings().show_advanced_options ? '1': '0',
         l : determineUserLanguage(),
-        st : SURVEY.types(),
         pc : total_pings,
         cb : getSettings().safari_content_blocking ? '1' : '0',
       };
@@ -174,7 +172,11 @@ STATS = (function()
         data["aa"] = 'u';
       }
       data["dc"] = dataCorrupt ? '1' : '0';
-      callbackFN(data);
+      SURVEY.types(function(response)
+      {
+          data["st"] = response;
+          callbackFN(data);
+      });
     });
   };
   // Tell the server we exist.

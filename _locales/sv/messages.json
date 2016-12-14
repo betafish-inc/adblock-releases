@@ -1,4 +1,8 @@
 {
+  "description":{
+    "message":"Det mest populära Chrome-tillägget, med över 40 miljoner användare!  Blockerar reklamtillägg över hela webben.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "description2":{
     "message":"Det mest populära Chrome-tillägget, med över 40 miljoner användare!  Blockerar reklamtillägg över hela webben.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
@@ -31,10 +35,6 @@
     "message":"AdBlock-alternativ",
     "description":"Title for the options page"
   },
-  "chromebutton_how_to_hide2":{
-    "message":"Du kan dölja knappen genom att högerklicka på den och välja 'Dölj knapp'. Visa den igen under chrome:\/\/chrome\/extensions.",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
-  },
   "operabutton_how_to_hide2":{
     "message":"Om du vill dölja knappen, gå till 'opera:\/\/extensions' och markera alternativet \"Dölj verktygsfältet\". Du kan visa den igen genom att avmarkera alternativet.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
@@ -42,10 +42,6 @@
   "safaributton_how_to_hide2":{
     "message":"Om du vill dölja knappen, högerklicka på Safaris verktygsfält och välj \"Anpassa verktygsfältet\". Dra sedan AdBlock-knappen bort från verktygsfältet. Du kan visa den igen genom att dra den tillbaka in i verktygsfältet.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
-  },
-  "ff_button_how_to_hide":{
-    "message":"Högerklicka och välj Ta bort från verktygsfältet, för att dölja knappen. Du kan visa den igen, från Firefox-menyn -> Anpassa.",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
   "sliderexplanation":{
     "message":"Dra i skjutreglaget tills reklamen är korrekt blockerad, och sidan förövrigt ser använbar ut.",
@@ -357,22 +353,6 @@
   },
   "filterantisocial":{
     "message":"Antisocial filterlista (tar bort knappar för sociala medier)",
-    "description":"Name of the filter list"
-  },
-  "filterannoyances":{
-    "message":"Fanboy's Annoyances (tar bort störande innehåll från webben)",
-    "description":"Name of the filter list"
-  },
-  "filterwarning_removal":{
-    "message":"Anti-AdBlocklista (tar bort meddelanden om att använda AdBlock)",
-    "description":"Name of the filter list"
-  },
-  "filteradblock_custom":{
-    "message":"AdBlock-anpassat filter",
-    "description":"A filter list"
-  },
-  "filtereasylist":{
-    "message":"EasyList",
     "description":"A filter list"
   },
   "filterrussian":{
@@ -381,7 +361,7 @@
   },
   "filterczech":{
     "message":"Tjeckiska och Slovakiska",
-    "description":"Language names for a filter list"
+    "description":"A filter list"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (Integritetsskydd)",
@@ -523,10 +503,6 @@
     "message":"Nej",
     "description":"A negative response to a question"
   },
-  "disableforchromestepone":{
-    "message":"Öppna <a href='#'>Tillägg<\/a>",
-    "description":"Step 1 for disabling Chrome extensions"
-  },
   "clickdisableotherextensions":{
     "message":"<b>ELLER<\/b>klicka bara på denna knapp, så sköter vi allt ovanstående: <a>Inaktivera alla andra tillägg<\/a>",
     "description":"On the ad report page, an alternative way to disable other extensions"
@@ -553,87 +529,167 @@
   },
   "lang_english":{
     "message":"Engelska",
-    "description":"language"
-  },
-  "filtereasylist_plus_bulgarian":{
-    "message":"Bulgariska",
-    "description":"language"
-  },
-  "filterchinese":{
-    "message":"Kinesiska",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_czech":{
     "message":"Tjeckiska",
-    "description":"language"
+    "description":"Language name"
   },
-  "filterdanish":{
-    "message":"Danska",
-    "description":"language"
-  },
-  "filterdutch":{
-    "message":"Nederländska",
-    "description":"language"
-  },
-  "filtereasylist_plus_finnish":{
-    "message":"Finska",
-    "description":"language"
-  },
-  "filtereasylist_plus_french":{
-    "message":"Franska",
-    "description":"language"
-  },
-  "filtereasylist_plus_german":{
-    "message":"Tyska",
-    "description":"language"
-  },
-  "filtereasylist_plus_greek":{
-    "message":"Grekiska",
-    "description":"language"
-  },
-  "filterhungarian":{
-    "message":"Ungerska",
-    "description":"language"
-  },
-  "filterisraeli":{
-    "message":"Hebreiska",
-    "description":"language"
-  },
-  "filteritalian":{
-    "message":"Italienska",
-    "description":"language"
-  },
-  "filterjapanese":{
-    "message":"Japanska",
-    "description":"language"
-  },
-  "filtereasylist_plun_korean":{
-    "message":"Koreanska",
-    "description":"language"
-  },
-  "filtereasylist_plus_polish":{
-    "message":"Polska",
-    "description":"language"
-  },
-  "filtereasylist_plus_romanian":{
-    "message":"Rumänska",
-    "description":"language"
+  "lang_spanish":{
+    "message":"Spanska",
+    "description":"Language name"
   },
   "lang_russian":{
     "message":"Ryska",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_slovak":{
     "message":"Slovakiska",
-    "description":"language"
-  },
-  "filtereasylist_plus_spanish":{
-    "message":"Spanska",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_ukranian":{
     "message":"Ukrainska",
-    "description":"language"
+    "description":"Language name"
+  },
+  "lang_bulgarian":{
+    "message":"Bulgariska",
+    "description":"Language name"
+  },
+  "lang_chinese":{
+    "message":"Kinesiska",
+    "description":"Language name"
+  },
+  "lang_danish":{
+    "message":"Danska",
+    "description":"Language name"
+  },
+  "lang_dutch":{
+    "message":"Nederländska",
+    "description":"Language name"
+  },
+  "lang_finnish":{
+    "message":"Finska",
+    "description":"Language name"
+  },
+  "lang_french":{
+    "message":"Franska",
+    "description":"Language name"
+  },
+  "lang_german":{
+    "message":"Tyska",
+    "description":"Language name"
+  },
+  "lang_greek":{
+    "message":"Grekiska",
+    "description":"Language name"
+  },
+  "lang_hungarian":{
+    "message":"Ungerska",
+    "description":"Language name"
+  },
+  "lang_indonesian":{
+    "message":"Indonesiska",
+    "description":"Language name"
+  },
+  "lang_israeli":{
+    "message":"Hebreiska",
+    "description":"Language name"
+  },
+  "lang_italian":{
+    "message":"Italienska",
+    "description":"Language name"
+  },
+  "lang_japanese":{
+    "message":"Japanska",
+    "description":"Language name"
+  },
+  "lang_korean":{
+    "message":"Koreanska",
+    "description":"Language name"
+  },
+  "lang_polish":{
+    "message":"Polska",
+    "description":"Language name"
+  },
+  "lang_romanian":{
+    "message":"Rumänska",
+    "description":"Language name"
+  },
+  "lang_latvian":{
+    "message":"Lettiska",
+    "description":"Language name"
+  },
+  "lang_swedish":{
+    "message":"Svenska",
+    "description":"Language name"
+  },
+  "lang_turkish":{
+    "message":"Turkiska",
+    "description":"Language name"
+  },
+  "filtereasylist_plus_bulgarian":{
+    "message":"Bulgariska",
+    "description":"A filter list"
+  },
+  "filterchinese":{
+    "message":"Kinesiska",
+    "description":"A filter list"
+  },
+  "filterdanish":{
+    "message":"Danska",
+    "description":"A filter list"
+  },
+  "filterdutch":{
+    "message":"Nederländska",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_finnish":{
+    "message":"Finska",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_french":{
+    "message":"Franska",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_german":{
+    "message":"Tyska",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_greek":{
+    "message":"Grekiska",
+    "description":"A filter list"
+  },
+  "filterhungarian":{
+    "message":"Ungerska",
+    "description":"A filter list"
+  },
+  "filterisraeli":{
+    "message":"Hebreiska",
+    "description":"A filter list"
+  },
+  "filteritalian":{
+    "message":"Italienska",
+    "description":"A filter list"
+  },
+  "filterjapanese":{
+    "message":"Japanska",
+    "description":"A filter list"
+  },
+  "filtereasylist_plun_korean":{
+    "message":"Koreanska",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_polish":{
+    "message":"Polska",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_romanian":{
+    "message":"Rumänska",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_spanish":{
+    "message":"Spanska",
+    "description":"A filter list"
   },
   "other":{
     "message":"Annat",
@@ -699,30 +755,6 @@
     "message":"Finns reklamtillägget i den webbläsaren också?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
-  "ff_checkinchrometitle":{
-    "message":"Kolla in Chrome",
-    "description":"Tell a user to see if a reported ad also appears in Chrome"
-  },
-  "ff_checkinchrome_1":{
-    "message":"Installera Chrome, om du inte har det.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_2":{
-    "message":"Installera AdBlock för Chrome, om du inte har det.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_3":{
-    "message":"Prenumerera på samma filterlistor som du har här, i Chrome.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_4":{
-    "message":"Gå till sidan med reklamtillägget, i Chrome.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_5":{
-    "message":"Ser du reklamtillägget i Chrome också?",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
   "refusetocheck":{
     "message":"Jag vill inte leka testpilot just nu",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -736,10 +768,6 @@
         "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
       }
     }
-  },
-  "reporttous2":{
-    "message":"Om du kan läsa\/skriva engelska, kan du rapportera reklamtillägget till oss <a>in the issue tracker<\/a>.",
-    "description":"NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us <a>in the issue tracker<\/a>.'"
   },
   "fixityourself":{
     "message":"OK, du kan fortfarande blockera reklamen själv på 'Alternativ-sidan'. Tack!",
@@ -836,10 +864,6 @@
   "disabled_by_filter_lists":{
     "message":"Ledsen, men AdBlock är inaktiverat på den här sidan av en av dina filterlistor.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
-  },
-  "status_disabled":{
-    "message":"AdBlock fungerar inte på den här domänen.",
-    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank"
   },
   "dont_run_on_pages_on_domain":{
     "message":"Undanta denna domän",
@@ -1003,10 +1027,6 @@
       }
     }
   },
-  "dropboxerrorforfilters":{
-    "message":"Du har uppnått storleksgränsen för Dropbox. Ta bort några poster från dina anpassade eller inaktiverade filter och försök igen.",
-    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
-  },
   "languagedropdowndescription":{
     "message":"Lägg till filter för andra språk: ",
     "description":"Dropdown list for language-specific filters"
@@ -1018,10 +1038,6 @@
   "selectlanguage":{
     "message":"-- Välj språk --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
-  },
-  "allow_whitelisting_youtube_channels":{
-    "message":"Tillåt vitlistning av specifika YouTube-kanaler",
-    "description":"Checkbox on the 'General' tab of the Options page"
   },
   "whitelist_youtube_channel":{
     "message":"Vitlista $name$",
@@ -1064,10 +1080,6 @@
         "example":"<a>here<\/a>"
       }
     }
-  },
-  "ff_adblock_outdated":{
-    "message":"Du använder en gammal version av AdBlock. Klicka på Firefox menyknapp och välj \"Tillägg\". Klicka sedan på kugghjulet (Verktyg för alla tillägg) och välj \"Sök efter uppdateringar\".",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"AdBlock Support",
@@ -1121,10 +1133,6 @@
     "message":"Har vårt team begärt någon felinformation? Klicka <a href='#' id='debug'> här<\/a> för det!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
-  "bugreport":{
-    "message":"Varför inte skicka en <a> felrapport<\/a>?",
-    "description":"Link to send a bug report on the Support tab of the options"
-  },
   "supportsite":{
     "message":"Låt oss veta, på vår <a>support-sida<\/a>!",
     "description":"Link to the support site on the Support tab of the options"
@@ -1132,5 +1140,21 @@
   "ad_report_please":{
     "message":"Om du ser en annons, skicka inte en felrapport. Rapportera ett <a>reklamtillägg<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "headertype":{
+    "message":"Typ",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"sida",
+    "description":"A resource type"
+  },
+  "buttonsubmit":{
+    "message":"Skicka",
+    "description":"Button to send a form."
   }
 }

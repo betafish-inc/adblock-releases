@@ -1,4 +1,8 @@
 {
+  "description":{
+    "message":"Nejpopulárnější rozšíření pro Chrome s více než 40 miliony uživateli! Blokujeme reklamy na celém webu.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "description2":{
     "message":"Nejpopulárnější rozšíření pro Chrome s více než 40 miliony uživateli! Blokujeme reklamy na celém webu.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
@@ -31,10 +35,6 @@
     "message":"AdBlock Nastavení",
     "description":"Title for the options page"
   },
-  "chromebutton_how_to_hide2":{
-    "message":"Chcete-li skrýt tlačítko, klikněte na něj pravým tlačítkem myši a vyberte příkaz Skrýt tlačítko. Můžete jej opět zobrazit zde chrome:\/\/chrome\/extensions.",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
-  },
   "operabutton_how_to_hide2":{
     "message":"Pro skrytí tlačítka přejděte na adresu opera:\/\/extensions a zaškrtněte 'Skrýt z panelu nástrojů'. Můžete jej znovu zobrazit odškrtnutím tohoto tlačítka.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
@@ -42,10 +42,6 @@
   "safaributton_how_to_hide2":{
     "message":"Pro skrytí tlačítka klikněte pravým tlačítkem na nástroje Safari a vyberte Upravit panel nástrojů, poté táhněte s AdBlock tlačítkem pryč z panelu nástrojů. Můžete jej znovu zobrazit táhnutím zpět do panelu nástrojů.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
-  },
-  "ff_button_how_to_hide":{
-    "message":"Pro skrytí tlačítka, klepněte pravým tlačítkem myši a zvolte Skrýt tlačítko. Můžete jej znovu vyvolat pod Firefox menu > Customize",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
   "sliderexplanation":{
     "message":"Nastavte posuvník tak, aby reklama na stránce byla blokována a zbytek stránky stále vypadal uspokojivě.",
@@ -353,22 +349,6 @@
   },
   "filterantisocial":{
     "message":"Anti-sociální filtr (odstraní tlačítka na sociální sítě)",
-    "description":"Name of the filter list"
-  },
-  "filterannoyances":{
-    "message":"Fanboy's Annoyances (odstraní otravnosti na webu)",
-    "description":"Name of the filter list"
-  },
-  "filterwarning_removal":{
-    "message":"Odstranění varování při používání AdBlocku na některých serverech",
-    "description":"Name of the filter list"
-  },
-  "filteradblock_custom":{
-    "message":"AdBlock filtry",
-    "description":"A filter list"
-  },
-  "filtereasylist":{
-    "message":"EasyList",
     "description":"A filter list"
   },
   "filterrussian":{
@@ -377,7 +357,7 @@
   },
   "filterczech":{
     "message":"Česky a Slovensky",
-    "description":"Language names for a filter list"
+    "description":"A filter list"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (ochrana soukromí)",
@@ -515,10 +495,6 @@
     "message":"Ne",
     "description":"A negative response to a question"
   },
-  "disableforchromestepone":{
-    "message":"Otevřít <a href='#'>panel rozšíření<\/a>",
-    "description":"Step 1 for disabling Chrome extensions"
-  },
   "clickdisableotherextensions":{
     "message":"<b>NEBO<\/b>, prostě klikněte na toto tlačítko a my vše uděláme za Vás: <a>Zakázat všechna ostatní rozšíření<\/a>",
     "description":"On the ad report page, an alternative way to disable other extensions"
@@ -545,87 +521,167 @@
   },
   "lang_english":{
     "message":"Angličtina",
-    "description":"language"
-  },
-  "filtereasylist_plus_bulgarian":{
-    "message":"Bulharština",
-    "description":"language"
-  },
-  "filterchinese":{
-    "message":"Čínština",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_czech":{
     "message":"Čeština",
-    "description":"language"
+    "description":"Language name"
   },
-  "filterdanish":{
-    "message":"Dánština",
-    "description":"language"
-  },
-  "filterdutch":{
-    "message":"Holandština",
-    "description":"language"
-  },
-  "filtereasylist_plus_finnish":{
-    "message":"Finština",
-    "description":"language"
-  },
-  "filtereasylist_plus_french":{
-    "message":"Francouzština",
-    "description":"language"
-  },
-  "filtereasylist_plus_german":{
-    "message":"Němčina",
-    "description":"language"
-  },
-  "filtereasylist_plus_greek":{
-    "message":"Řečtina",
-    "description":"language"
-  },
-  "filterhungarian":{
-    "message":"Maďarština",
-    "description":"language"
-  },
-  "filterisraeli":{
-    "message":"Hebrejština",
-    "description":"language"
-  },
-  "filteritalian":{
-    "message":"Italština",
-    "description":"language"
-  },
-  "filterjapanese":{
-    "message":"Japonština",
-    "description":"language"
-  },
-  "filtereasylist_plun_korean":{
-    "message":"Korejština",
-    "description":"language"
-  },
-  "filtereasylist_plus_polish":{
-    "message":"Polština",
-    "description":"language"
-  },
-  "filtereasylist_plus_romanian":{
-    "message":"Rumunština",
-    "description":"language"
+  "lang_spanish":{
+    "message":"Španělština",
+    "description":"Language name"
   },
   "lang_russian":{
     "message":"Ruština",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_slovak":{
     "message":"Slovenština",
-    "description":"language"
-  },
-  "filtereasylist_plus_spanish":{
-    "message":"Španělština",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_ukranian":{
     "message":"Ukrajinština",
-    "description":"language"
+    "description":"Language name"
+  },
+  "lang_bulgarian":{
+    "message":"Bulharština",
+    "description":"Language name"
+  },
+  "lang_chinese":{
+    "message":"Čínština",
+    "description":"Language name"
+  },
+  "lang_danish":{
+    "message":"Dánština",
+    "description":"Language name"
+  },
+  "lang_dutch":{
+    "message":"Holandština",
+    "description":"Language name"
+  },
+  "lang_finnish":{
+    "message":"Finština",
+    "description":"Language name"
+  },
+  "lang_french":{
+    "message":"Francouzština",
+    "description":"Language name"
+  },
+  "lang_german":{
+    "message":"Němčina",
+    "description":"Language name"
+  },
+  "lang_greek":{
+    "message":"Řečtina",
+    "description":"Language name"
+  },
+  "lang_hungarian":{
+    "message":"Maďarština",
+    "description":"Language name"
+  },
+  "lang_indonesian":{
+    "message":"Indonéština",
+    "description":"Language name"
+  },
+  "lang_israeli":{
+    "message":"Hebrejština",
+    "description":"Language name"
+  },
+  "lang_italian":{
+    "message":"Italština",
+    "description":"Language name"
+  },
+  "lang_japanese":{
+    "message":"Japonština",
+    "description":"Language name"
+  },
+  "lang_korean":{
+    "message":"Korejština",
+    "description":"Language name"
+  },
+  "lang_polish":{
+    "message":"Polština",
+    "description":"Language name"
+  },
+  "lang_romanian":{
+    "message":"Rumunština",
+    "description":"Language name"
+  },
+  "lang_latvian":{
+    "message":"Lotyština",
+    "description":"Language name"
+  },
+  "lang_swedish":{
+    "message":"Švédština",
+    "description":"Language name"
+  },
+  "lang_turkish":{
+    "message":"Turečtina",
+    "description":"Language name"
+  },
+  "filtereasylist_plus_bulgarian":{
+    "message":"Bulharština",
+    "description":"A filter list"
+  },
+  "filterchinese":{
+    "message":"Čínština",
+    "description":"A filter list"
+  },
+  "filterdanish":{
+    "message":"Dánština",
+    "description":"A filter list"
+  },
+  "filterdutch":{
+    "message":"Holandština",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_finnish":{
+    "message":"Finština",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_french":{
+    "message":"Francouzština",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_german":{
+    "message":"Němčina",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_greek":{
+    "message":"Řečtina",
+    "description":"A filter list"
+  },
+  "filterhungarian":{
+    "message":"Maďarština",
+    "description":"A filter list"
+  },
+  "filterisraeli":{
+    "message":"Hebrejština",
+    "description":"A filter list"
+  },
+  "filteritalian":{
+    "message":"Italština",
+    "description":"A filter list"
+  },
+  "filterjapanese":{
+    "message":"Japonština",
+    "description":"A filter list"
+  },
+  "filtereasylist_plun_korean":{
+    "message":"Korejština",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_polish":{
+    "message":"Polština",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_romanian":{
+    "message":"Rumunština",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_spanish":{
+    "message":"Španělština",
+    "description":"A filter list"
   },
   "other":{
     "message":"Jiný",
@@ -691,30 +747,6 @@
     "message":"Zobrazuje se reklama také v uvedeném prohlížeči?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
-  "ff_checkinchrometitle":{
-    "message":"Zkontrolujte v Chrome",
-    "description":"Tell a user to see if a reported ad also appears in Chrome"
-  },
-  "ff_checkinchrome_1":{
-    "message":"Nainstalujte Google Chrome, jestli jej ještě nemáte.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_2":{
-    "message":"Nainstalujte AdBlock pro Chrome, jestli jej ještě nemáte.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_3":{
-    "message":"V Chrome se přihlašte k těm stejným filtrům jako zde.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_4":{
-    "message":"V Chrome načtěte stránku s reklamami.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_5":{
-    "message":"Zobrazila se reklama v Chrome také?",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
   "refusetocheck":{
     "message":"Nechci to takhle kontrolovat",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -728,10 +760,6 @@
         "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
       }
     }
-  },
-  "reporttous2":{
-    "message":"Pokud umíte anglicky, můžete nám reklamu nahlásit <a>na seznam problémů<\/a>.",
-    "description":"NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us <a>in the issue tracker<\/a>.'"
   },
   "fixityourself":{
     "message":"OK, můžete si zablokovat tuto reklamu pouze pro sebe v Nastavení na záložce Vlastní filtr. Díky!",
@@ -828,10 +856,6 @@
   "disabled_by_filter_lists":{
     "message":"Promiňte, ale AdBlock je na této stránce zakázán jedním z vašich seznamů filtrů.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
-  },
-  "status_disabled":{
-    "message":"AdBlock nelze spustit na této doméně.",
-    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank"
   },
   "dont_run_on_pages_on_domain":{
     "message":"Nespouštět na stránkách na této doméně",
@@ -995,10 +1019,6 @@
       }
     }
   },
-  "dropboxerrorforfilters":{
-    "message":"Překročili jste limit velikosti Dropboxu. Prosíme, odstraňte některé položky z Vašeho vlastního, či zakázaného filtru a zkuste to znovu.",
-    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
-  },
   "languagedropdowndescription":{
     "message":"Přidat filtry pro jiný jazyk: ",
     "description":"Dropdown list for language-specific filters"
@@ -1010,10 +1030,6 @@
   "selectlanguage":{
     "message":" -- Zvolte jazyk -- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
-  },
-  "allow_whitelisting_youtube_channels":{
-    "message":"Povolit odblokování specifických YouTube kanálů",
-    "description":"Checkbox on the 'General' tab of the Options page"
   },
   "whitelist_youtube_channel":{
     "message":"Povolit $name$ kanál",
@@ -1056,10 +1072,6 @@
         "example":"<a>here<\/a>"
       }
     }
-  },
-  "ff_adblock_outdated":{
-    "message":"Používáte zastaralou verzi AdBlocku. Prosím, klikněte na tlačítko menu ve Firefoxu a vyberte Doplňky. Poté na stránce Doplňky klikněte na ikonku ozubeného kolečka a zvolte \"Vyhledat aktualizace\".",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"Podpora AdBlock",
@@ -1113,10 +1125,6 @@
     "message":"Požádal náš tým o nějaké ladící informace? Klikněte <a href='#' id='debug'>zde<\/a>!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
-  "bugreport":{
-    "message":"Proč nám nepošlete <a>bug report<\/a>?",
-    "description":"Link to send a bug report on the Support tab of the options"
-  },
   "supportsite":{
     "message":"Dejte nám vědět na našich <a>stránkách podpory<\/a>!",
     "description":"Link to the support site on the Support tab of the options"
@@ -1124,5 +1132,21 @@
   "ad_report_please":{
     "message":"Jestli vidíte reklamu, neposílejte hlášení o chybě, pošlete <a>hlášení o reklamě<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "headertype":{
+    "message":"Typ",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"rámec",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"stránka",
+    "description":"A resource type"
+  },
+  "buttonsubmit":{
+    "message":"Odeslat",
+    "description":"Button to send a form."
   }
 }

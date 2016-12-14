@@ -65,7 +65,7 @@ $(document).ready(function ()
     debugInfo                = {};
     debugInfo.filter_lists   = JSON.stringify(theDebugInfo.subscriptions, null, '\t');
     debugInfo.other_info     = JSON.stringify(theDebugInfo.other_info, null, '\t');
-    debugInfo.custom_filters = JSON.stringify(theDebugInfo.custom_filters, null, '\t');
+    debugInfo.custom_filters = theDebugInfo.custom_filters;
     debugInfo.settings       = JSON.stringify(theDebugInfo.settings, null, '\t');
     debugInfo.language       = determineUserLanguage();
 

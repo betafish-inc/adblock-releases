@@ -1,6 +1,14 @@
 {
+  "description":{
+    "message":"Die beliebteste Chrome-Erweiterung, mit über 40 Millionen Nutzern!  Entfernt Werbung im ganzen Internet.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "description2":{
     "message":"Die beliebteste Chrome-Erweiterung, mit über 40 Millionen Nutzern!  Entfernt Werbung im ganzen Internet.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
+  "description_edge":{
+    "message":"AdBlock. Der #1 Ad-Blocker mit über 200 Millionen Downloads. Werbung im gesamten Netz blockieren.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -32,7 +40,7 @@
     "description":"Title for the options page"
   },
   "chromebutton_how_to_hide2":{
-    "message":"Um den Button zu verbergen, klicken Sie mit einem Rechtsklick auf den Button und wählen Sie 'Schaltfläche verbergen'. Der Button kann unter chrome:\/\/chrome\/extensions wieder aktiviert werden.",
+    "message":"Klicken Sie mit der rechten Maustaste auf den AdBlock Button und wählen Sie 'Im Chrome-Menü ausblenden'. Um den Button wieder anzuzeigen, öffnen Sie das Chrome-Menü, klicken Sie mit der rechten Maustaste auf den AdBlock Button und wählen Sie 'In Symbolleiste behalten'.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2":{
@@ -42,10 +50,6 @@
   "safaributton_how_to_hide2":{
     "message":"Um den Button auszublenden klicken Sie mit einem Rechtsklick auf die Safari Symbolleiste, klicken auf \"Symbolleiste anpassen ...\" und ziehen dann den AdBlock Button aus der Symbolleiste. Um den Button wieder einzublenden ziehen Sie den Button einfach wieder zurück auf die Symbolleiste.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
-  },
-  "ff_button_how_to_hide":{
-    "message":"Um den Button zu verbergen, klicken Sie mit einem Rechtsklick auf den Button und wählen Sie 'Aus Symbolleiste entfernen'. Der Button kann unter Firefox Menü -> Anpassen wieder aktiviert werden.",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
   "sliderexplanation":{
     "message":"Verschieben Sie den Regler so lange nach rechts, bis die Werbung komplett entfernt ist und der restliche Teil der Seite noch normal aussieht.",
@@ -243,6 +247,10 @@
     "message":"ClickToFlash Kompatibilitätsmodus aktivieren",
     "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
   },
+  "safaricontentblocking":{
+    "message":"Safari Content Blocking aktivieren",
+    "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
+  },
   "debuginlogoption":{
     "message":"Debug-Berichte in der Fehlerkonsole anzeigen (verlangsamt AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -315,6 +323,22 @@
     "message":"Abrufen... bitte warten.",
     "description":"Status label"
   },
+  "ab_filters_subscription_lastDownload_invalidURL":{
+    "message":"Fehler, keine gültige Adresse",
+    "description":"message on the filter tab - Message when you subscribe to a non-list URL"
+  },
+  "ab_filters_subscription_lastDownload_connectionError":{
+    "message":"Fehler, Download fehlgeschlagen",
+    "description":"message on the filter tab - Generic filter list download error message"
+  },
+  "ab_filters_subscription_lastDownload_invalidData":{
+    "message":"Fehler, keine gültige Filterliste",
+    "description":"message on the filter tab - Invalid filter list file"
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch":{
+    "message":"Fehler, Prüfsummenkonflikt",
+    "description":"message on the filter tab"
+  },
   "invalidListUrl":{
     "message":"Ungültige Filterlistenadresse. Dieser Filterlisteneintrag wird gelöscht.",
     "description":"Message when you subscribe to a non-list URL"
@@ -357,35 +381,47 @@
   },
   "filterantisocial":{
     "message":"Antisocial Filterliste (entfernt Buttons von sozialen Netzwerken)",
-    "description":"Name of the filter list"
+    "description":"A filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (entfernt störende\/lästige Inhalte auf Webseiten)",
-    "description":"Name of the filter list"
+    "message":"Fanboy's Annoyances (entfernt Pop-Ups innerhalb der Seite, Social Media und zugehörige Widgets, und andere Beeinträchtigungen)",
+    "description":"A filter list"
   },
   "filterwarning_removal":{
-    "message":"AdBlock Warnhinweis Liste (entfernt Hinweise über die Verwendung von AdBlock)",
-    "description":"Name of the filter list"
+    "message":"'Adblock Warning Removal'-Filterliste (entfernt Warnungen über die Benutzung von Werbe-Blockern)",
+    "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
   },
   "filteracceptable_ads":{
-    "message":"Acceptable Ads",
+    "message":"Akzeptable Werbung",
     "description":"A filter list"
   },
   "filteradblock_custom":{
-    "message":"AdBlock-Standardfilter",
+    "message":"Benutzerdefinierte AdBlock Filter",
     "description":"A filter list"
   },
   "filtereasylist":{
     "message":"EasyList",
     "description":"A filter list"
   },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite (empfohlen)",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"russisch und ukrainisch",
     "description":"Language names for a filter list"
   },
+  "filter_russian":{
+    "message":"Russisch & Ukrainisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterczech":{
     "message":"tschechisch und slowakisch",
-    "description":"Language names for a filter list"
+    "description":"A filter list"
+  },
+  "filter_czech":{
+    "message":"Tschechisch & Slowakisch + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (Privatsphärenschutz)",
@@ -395,6 +431,10 @@
     "message":"Indonesisch",
     "description":"A filter list"
   },
+  "filter_easylist_plus_indonesian":{
+    "message":"Indonesisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtermalware":{
     "message":"Malware-Schutz",
     "description":"A filter list"
@@ -402,6 +442,10 @@
   "filterlatvian":{
     "message":"Lettisch",
     "description":"A filter list"
+  },
+  "filter_latvian":{
+    "message":"Lettisch + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterswedish":{
     "message":"Schwedisch",
@@ -470,6 +514,18 @@
   "filtersavewarning":{
     "message":"Achtung: Sollten Sie hier einen Fehler machen, können viele andere Filter sowie die Filter der Filterlisten beschädigt werden!<br\/>Lesen Sie zuerst das <a>Filtersyntax-Tutorial<\/a>, um zu lernen, wie man eigene Black- und Whitelistfilter erstellt und hinzufügt.",
     "description":"Warning when blacklisting manually"
+  },
+  "migration_error_message":{
+    "message":"Wir haben einige Fehler in Ihren benutzerdefinierten Filtern gefunden. Die Nachrichten sind unten aufgelistet.",
+    "description":"Warning when adding custom filters manually"
+  },
+  "delete_migration_error_messages":{
+    "message":"Meldungen löschen",
+    "description":"Button to delete error messages when adding custom filters manually"
+  },
+  "contentblockingwarning":{
+    "message":"Hinweis: Whitelisting (Werbung zulassen auf) einer Seite oder Webseite wird nicht unterstützt wenn Safari Content Blocking aktiviert ist.",
+    "description":"Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
   },
   "savebutton":{
     "message":"Speichern",
@@ -568,7 +624,7 @@
     "description":"Instruction on ad report page"
   },
   "disableforchromestepone":{
-    "message":"Öffnen Sie die <a href='#'>Erweiterungen-Seite<\/a>",
+    "message":"Öffnen Sie die <a href='#'> Erweiterungen Seite<\/a>.",
     "description":"Step 1 for disabling Chrome extensions"
   },
   "clickdisableotherextensions":{
@@ -613,103 +669,243 @@
   },
   "lang_english":{
     "message":"englisch",
-    "description":"language"
-  },
-  "filtereasylist_plus_bulgarian":{
-    "message":"bulgarisch",
-    "description":"language"
-  },
-  "filterchinese":{
-    "message":"chinesisch",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_czech":{
     "message":"tschechisch",
-    "description":"language"
+    "description":"Language name"
   },
-  "filterdanish":{
-    "message":"dänisch",
-    "description":"language"
-  },
-  "filterdutch":{
-    "message":"niederländisch",
-    "description":"language"
-  },
-  "filtereasylist_plus_finnish":{
-    "message":"finnisch",
-    "description":"language"
-  },
-  "filtereasylist_plus_french":{
-    "message":"französisch",
-    "description":"language"
-  },
-  "filtereasylist_plus_german":{
-    "message":"deutsch",
-    "description":"language"
-  },
-  "filtereasylist_plus_greek":{
-    "message":"griechisch",
-    "description":"language"
-  },
-  "filterhungarian":{
-    "message":"ungarisch",
-    "description":"language"
-  },
-  "filterisraeli":{
-    "message":"israelisch",
-    "description":"language"
-  },
-  "filteritalian":{
-    "message":"italienisch",
-    "description":"language"
-  },
-  "filterjapanese":{
-    "message":"japanisch",
-    "description":"language"
-  },
-  "filtereasylist_plun_korean":{
-    "message":"koreanisch",
-    "description":"language"
-  },
-  "filtereasylist_plus_polish":{
-    "message":"polnisch",
-    "description":"language"
-  },
-  "filtereasylist_plus_romanian":{
-    "message":"rumänisch",
-    "description":"language"
+  "lang_spanish":{
+    "message":"spanisch",
+    "description":"Language name"
   },
   "lang_russian":{
     "message":"russisch",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_slovak":{
     "message":"slowakisch",
-    "description":"language"
-  },
-  "filtereasylist_plus_spanish":{
-    "message":"spanisch",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_ukranian":{
     "message":"ukrainisch",
-    "description":"language"
+    "description":"Language name"
+  },
+  "lang_arabic":{
+    "message":"Arabisch",
+    "description":"Language name"
+  },
+  "lang_bulgarian":{
+    "message":"bulgarisch",
+    "description":"Language name"
+  },
+  "lang_chinese":{
+    "message":"chinesisch",
+    "description":"Language name"
+  },
+  "lang_danish":{
+    "message":"dänisch",
+    "description":"Language name"
+  },
+  "lang_dutch":{
+    "message":"niederländisch",
+    "description":"Language name"
+  },
+  "lang_estonian":{
+    "message":"Estnisch",
+    "description":"Language name"
+  },
+  "lang_finnish":{
+    "message":"finnisch",
+    "description":"Language name"
+  },
+  "lang_french":{
+    "message":"französisch",
+    "description":"Language name"
+  },
+  "lang_german":{
+    "message":"deutsch",
+    "description":"Language name"
+  },
+  "lang_greek":{
+    "message":"griechisch",
+    "description":"Language name"
+  },
+  "lang_hungarian":{
+    "message":"ungarisch",
+    "description":"Language name"
+  },
+  "lang_indonesian":{
+    "message":"Indonesisch",
+    "description":"Language name"
+  },
+  "lang_icelandic":{
+    "message":"Isländisch",
+    "description":"Language name"
+  },
+  "lang_israeli":{
+    "message":"israelisch",
+    "description":"Language name"
+  },
+  "lang_italian":{
+    "message":"italienisch",
+    "description":"Language name"
+  },
+  "lang_japanese":{
+    "message":"japanisch",
+    "description":"Language name"
+  },
+  "lang_korean":{
+    "message":"koreanisch",
+    "description":"Language name"
+  },
+  "lang_lithuania":{
+    "message":"Litauisch",
+    "description":"Language name"
+  },
+  "lang_polish":{
+    "message":"polnisch",
+    "description":"Language name"
+  },
+  "lang_romanian":{
+    "message":"rumänisch",
+    "description":"Language name"
+  },
+  "lang_latvian":{
+    "message":"Lettisch",
+    "description":"Language name"
+  },
+  "lang_swedish":{
+    "message":"Schwedisch",
+    "description":"Language name"
+  },
+  "lang_turkish":{
+    "message":"Türkisch",
+    "description":"Language name"
+  },
+  "filtereasylist_plus_bulgarian":{
+    "message":"bulgarisch",
+    "description":"A filter list"
+  },
+  "filter_easylist_plus_bulgarian":{
+    "message":"Bulgarisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterchinese":{
+    "message":"chinesisch",
+    "description":"A filter list"
+  },
+  "filter_chinese":{
+    "message":"Chinesisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterdanish":{
+    "message":"dänisch",
+    "description":"A filter list"
+  },
+  "filterdutch":{
+    "message":"niederländisch",
+    "description":"A filter list"
+  },
+  "filter_dutch":{
+    "message":"Niederländisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_finnish":{
+    "message":"finnisch",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_french":{
+    "message":"französisch",
+    "description":"A filter list"
+  },
+  "filter_easylist_plus_french":{
+    "message":"Französisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_german":{
+    "message":"deutsch",
+    "description":"A filter list"
+  },
+  "filter_easylist_plus_german":{
+    "message":"Deutsch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_greek":{
+    "message":"griechisch",
+    "description":"A filter list"
+  },
+  "filterhungarian":{
+    "message":"ungarisch",
+    "description":"A filter list"
+  },
+  "filterisraeli":{
+    "message":"israelisch",
+    "description":"A filter list"
+  },
+  "filter_israeli":{
+    "message":"Hebräisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filteritalian":{
+    "message":"italienisch",
+    "description":"A filter list"
+  },
+  "filter_italian":{
+    "message":"Italienisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterjapanese":{
+    "message":"japanisch",
+    "description":"A filter list"
+  },
+  "filtereasylist_plun_korean":{
+    "message":"koreanisch",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_polish":{
+    "message":"polnisch",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_romanian":{
+    "message":"rumänisch",
+    "description":"A filter list"
+  },
+  "filter_easylist_plus_romanian":{
+    "message":"Rumänisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_spanish":{
+    "message":"spanisch",
+    "description":"A filter list"
   },
   "filtereasylist_plus_arabic":{
     "message":"Arabisch",
-    "description":"language"
+    "description":"A filter list"
+  },
+  "filter_easylist_plus_arabic":{
+    "message":"Arabisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_arabic_plus_french":{
+    "message":"Arabisch + Französisch + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_estonian":{
     "message":"Estnisch",
-    "description":"language"
+    "description":"A filter list"
   },
   "filtericelandic":{
     "message":"Isländisch",
-    "description":"language"
+    "description":"A filter list"
   },
   "filtereasylist_plus_lithuania":{
     "message":"Litauisch",
-    "description":"language"
+    "description":"A filter list"
+  },
+  "filter_easylist_plus_lithuania":{
+    "message":"Litauisch + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "other":{
     "message":"nichtgelistete Sprache",
@@ -785,30 +981,6 @@
     "message":"Erscheint die Werbung auch in diesem Browser?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
-  "ff_checkinchrometitle":{
-    "message":"In Google Chrome überprüfen",
-    "description":"Tell a user to see if a reported ad also appears in Chrome"
-  },
-  "ff_checkinchrome_1":{
-    "message":"Installieren Sie Google Chrome falls Sie es noch nicht installiert haben.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_2":{
-    "message":"Installieren Sie AdBlock für Chrome falls Sie es noch nicht installiert haben.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_3":{
-    "message":"Abonnieren Sie in Google Chrome die gleichen Filterlisten wie hier.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_4":{
-    "message":"Laden Sie die Seite mit Werbung in Google Chrome.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_5":{
-    "message":"Wird die Werbung auch in Google Chrome angezeigt?",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
   "refusetocheck":{
     "message":"Nicht überprüfen",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -822,10 +994,6 @@
         "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
       }
     }
-  },
-  "reporttous2":{
-    "message":"Falls Sie Englisch sprechen, können Sie uns die Werbung in unserem <a>Issue Tracker<\/a> melden.",
-    "description":"NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us <a>in the issue tracker<\/a>.'"
   },
   "fixityourself":{
     "message":"Sie können die Werbung auch im Tab 'Anpassen' der AdBlock-Einstellungen entfernen. Danke!",
@@ -891,6 +1059,10 @@
     "message":"seite",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"WebSocket",
+    "description":"A resource type"
+  },
   "typeunknown":{
     "message":"unbekannt",
     "description":"A resource type"
@@ -923,10 +1095,6 @@
     "message":"AdBlock ist durch eine Ihrer Filterlisten auf dieser Seite deaktiviert.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
   },
-  "status_disabled":{
-    "message":"AdBlock kann auf dieser Domain nicht ausgeführt werden.",
-    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank"
-  },
   "dont_run_on_pages_on_domain":{
     "message":"AdBlock auf Seiten dieser Domain deaktivieren",
     "description":"Menu entry to open the whitelist wizard"
@@ -951,6 +1119,26 @@
     "message":"AdBlock pausieren",
     "description":"Menu entry to pause AdBlock"
   },
+  "safaricontentblockingpausemessage":{
+    "message":"Um AdBlock mit aktiviertem Content Blocking zu pausieren, klicken Sie bitte auf Safari (in der Menüleiste) > Einstellungen ... > Erweiterungen > AdBlock, und entfernen Sie den Haken unter \"AdBlock aktivieren\".",
+    "description":"Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled"
+  },
+  "safaricontentblockinglimitexceeded":{
+    "message":"Die Zahl der Filterlistenregeln überschreitet das Limit von 50.000 und wurde automatisch reduziert. Bitte deaktivieren Sie einige Filterlisten oder deaktivieren Sie Safari Content Blocking!",
+    "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled"
+  },
+  "browserestartrequired":{
+    "message":"Bitte starten Sie Safari neu damit Content Blocking vollständig deaktiviert werden kann.",
+    "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
+  },
+  "safarinotificationtitle":{
+    "message":"Content Blocking Filterlimit überschritten",
+    "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules"
+  },
+  "safarinotificationbody":{
+    "message":"Bitte deaktivieren Sie einige Filterlisten. Mehr Informationen dazu finden Sie in den AdBlock-Einstellungen.",
+    "description":"Body of a notification shown to Safari Content Blocking users with too many filter list rules"
+  },
   "undo_last_block":{
     "message":"Selbst erstellte Filter für diese Domain wieder entfernen",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard"
@@ -971,9 +1159,17 @@
     "message":"Teilen Sie es mit ihren Freunden!",
     "description":"Text of a share link"
   },
+  "donate_to_adblock":{
+    "message":"Sie lieben AdBlock? Erwägen Sie eine Spende!",
+    "description":"Text of a donate link in the toolbar button menu"
+  },
   "pwyw":{
     "message":"Zahlen Sie, was Sie möchten!",
     "description":"Text of a payment request link"
+  },
+  "privacy_policy":{
+    "message":"Datenschutzbestimmungen",
+    "description":"Link to AdBlock's privacy policy"
   },
   "translator_credit":{
     "message":"Übersetzung von:",
@@ -1067,6 +1263,10 @@
     "message":"Anzahl geblockter Werbung im AdBlock Menü anzeigen",
     "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
   },
+  "show_devtools_panel":{
+    "message":"'AdBlock'-Konsole in den Entwicklertools anzeigen",
+    "description":"Label for checkbox letting user choose whether the AdBlock tab should show in the developer tools window"
+  },
   "adblockinglist":{
     "message":"Filterlisten für Werbung",
     "description":"List for subscribed ad blocking fiters"
@@ -1093,25 +1293,25 @@
       }
     }
   },
-  "dropboxerrorforfilters":{
-    "message":"Sie haben die Dateigrößenbeschränkung von Dropbox überschritten. Bitte entfernen Sie einige Einträge aus Ihrer benutzerdefinierten Filterliste, und versuchen Sie es erneut.",
-    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
-  },
   "languagedropdowndescription":{
     "message":"Filterlisten für andere Sprachen hinzufügen: ",
     "description":"Dropdown list for language-specific filters"
   },
+  "how":{
+    "message":"Wie?",
+    "description":"Text of a link pointing to instructions on how to do something"
+  },
   "whats_this":{
-    "message":"Was ist das?",
+    "message":"Mehr Informationen",
     "description":"Text of a link pointing to the explanation of a new feature"
   },
   "selectlanguage":{
     "message":"-- Sprache auswählen --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
   },
-  "allow_whitelisting_youtube_channels":{
-    "message":"Zulassen von Werbung auf bestimmten YouTube-Kanälen aktivieren",
-    "description":"Checkbox on the 'General' tab of the Options page"
+  "one_moment_all_youtube_channels":{
+    "message":"Einen Augenblick bitte während wir alle Ihre Abonnements sammeln",
+    "description":"Alert message displayed when whitelisting all subscribed YouTube channels"
   },
   "whitelist_youtube_channel":{
     "message":"Werbung auf $name$ Kanal zulassen",
@@ -1154,10 +1354,6 @@
         "example":"<a>here<\/a>"
       }
     }
-  },
-  "ff_adblock_outdated":{
-    "message":"Sie verwenden eine veraltete Version von AdBlock. Bitte öffnen Sie das Firefox-Menü und wählen Sie Add-ons. Anschließend klicken Sie auf der Seite des Add-on Managers auf das Zahnradsymbol (Tools für alle Add-ons) und wählen \"Auf Updates überprüfen\" um AdBlock zu aktualisieren.",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"AdBlock Support",
@@ -1212,7 +1408,7 @@
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
-    "message":"Senden Sie uns einen <a>Fehlerbericht<\/a>.",
+    "message":"Warum senden Sie uns nicht einfach einen <a>Fehlerbericht<\/a>?",
     "description":"Link to send a bug report on the Support tab of the options"
   },
   "supportsite":{
@@ -1223,16 +1419,192 @@
     "message":"Sollten Sie Werbung angezeigt bekommen, senden Sie bitte keinen Fehlerbericht sondern <a>melden Sie Werbung hier<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
+  "resourceblocktitle":{
+    "message":"Alle Ressourcen",
+    "description":"Resource list page name"
+  },
+  "headerresource":{
+    "message":"Ressource",
+    "description":"Resource list page: title of a column"
+  },
+  "headertype":{
+    "message":"Typ",
+    "description":"Resource list page: title of a column"
+  },
+  "headerfilter":{
+    "message":"Zutreffender Filter",
+    "description":"Resource list page: title of a column"
+  },
+  "show_resourcelist":{
+    "message":"Zeige alle Anfragen",
+    "description":"Menu entry to open the resource list page"
+  },
+  "new_resourcelist_explanation_win":{
+    "message":"Um alle Anfragen anzuzeigen, klicken Sie per Rechtsklick auf die Seite, wählen Sie \"Untersuchen\" (Strg + Umschalt + I), und wählen Sie dann den 'AdBlock'-Tab.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+  },
+  "new_resourcelist_explanation_osx":{
+    "message":"Um alle Anfragen anzuzeigen, klicken Sie per Rechtsklick auf die Seite, wählen Sie \"Untersuchen\" (Option+ Cmd + I), und wählen Sie dann den 'AdBlock'-Tab.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+  },
+  "noresourcessend2":{
+    "message":"Etwas ist schief gelaufen. Es wurden keine Ressourcen übermittelt. Diese Seite wird sich nun schließen. Versuchen Sie die Webseite neu zu laden.",
+    "description":"Resource list page: error message"
+  },
+  "resourcedomain":{
+    "message":"Geladen auf der Seite mit dieser Domain:\n$domain$",
+    "description":"Resource list page: text shown when hovering over an item in the third-party column",
+    "placeholders":{
+      "domain":{
+        "content":"$1",
+        "example":"example.com"
+      }
+    }
+  },
+  "filterorigin":{
+    "message":"Filterherkunft:\n$list$",
+    "description":"Resource list page: tooltip of matching filter, telling which filter list contains the filter",
+    "placeholders":{
+      "list":{
+        "content":"$1",
+        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
+  },
+  "typeselector":{
+    "message":"Selektor",
+    "description":"A resource type"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"seite",
+    "description":"A resource type"
+  },
+  "topframe":{
+    "message":"Top-Frame",
+    "description":"Resource list page: frame type"
+  },
+  "subframe":{
+    "message":"Subframe",
+    "description":"Resource list page: frame type"
+  },
+  "frametype":{
+    "message":"Frame-Typ:",
+    "description":"Resource list page: followed by frame type (e.g. top frame, subframe)"
+  },
+  "framedomain":{
+    "message":"Frame-Domain: ",
+    "description":"Resource list page: domain name of the frame"
+  },
+  "frameurl":{
+    "message":"Frame-URL: ",
+    "description":"Resource list page: full URL of the frame"
+  },
+  "legend":{
+    "message":"Legende: ",
+    "description":"Resource list page: followed by color codes for various resource statuses (e.g. blocked, whitelisted, hidden)"
+  },
+  "blockedresource":{
+    "message":"Blockierte Ressource",
+    "description":"Resource list page: resource status"
+  },
+  "whitelistedresource":{
+    "message":"Ressource mit Ausnahmeregel",
+    "description":"Resource list page: resource status"
+  },
+  "hiddenelement":{
+    "message":"Ausgeblendetes Element",
+    "description":"Resource list page: resource status"
+  },
+  "thirdparty":{
+    "message":"Drittanbieter",
+    "description":"Resource list page: column title telling if the resource originates from a different domain"
+  },
   "acceptableadsdisable_done":{
-    "message":"Acceptable Ads ist ausgeschaltet.",
+    "message":"Die \"Akzeptable Werbung\"-Filterliste ist nicht länger abonniert.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_how_to_reenable":{
-    "message":"Du kannst dies jederzeit mit einem Klick auf die \"Einige nicht aufdringliche Werbung zulassen\" Checkbox unten wieder einschalten.",
+    "message":"Sie können dies wieder aktivieren und die Webseiten die Sie mögen unterstützen indem Sie weiter unten \"Einige nicht aufdringliche Werbung zulassen\" aktivieren.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
-  "acceptableadsdisable_please_reenable":{
-    "message":"Die Acceptable Ads Option erlaubt es Dir Webseiten zu unterstützen, welche sich verpflichtet haben Dir weniger aufdringliche Werbung anzuzeigen.",
-    "description":"Message shown to users after disabling Acceptable Ads via update page."
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"Die \"Akzeptable Werbung\" Filterliste wurde deaktiviert das Sie Safari Content Blocking aktiviert haben. Sie können jeweils nur eines von beidem aktivieren. (<a>Warum?<\/a>)",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"Safari Content Blocking wurde deaktiviert da Sie ausgewählt haben nicht aufdringliche Werbung zuzulassen. Sie können jeweils nur eines von beidem aktivieren. (<a>Warum?<\/a>)",
+    "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
+  },
+  "adreport_laststep":{
+    "message":"Letzter Schritt: Melden Sie uns das Problem.",
+    "description":"Heading on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
+  },
+  "adreport_name":{
+    "message":"Name",
+    "description":"Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email":{
+    "message":"E-Mail-Adresse",
+    "description":"Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
+  "adreport_email_privacy":{
+    "message":"Wir werden Sie nur im Falle von fehlenden Informationen kontaktieren.",
+    "description":"Let the user know that their email address won't be used for reasons other than contacting them about their bug or ad report."
+  },
+  "adreport_location":{
+    "message":"Wo ist genau auf dieser Seite ist die Werbung? Wie sieht sie aus?",
+    "description":"Question on the ad report page asking the user to describe the ad and its location on a webpage."
+  },
+  "adreport_screen_cap_upload":{
+    "message":"Screenshot anhängen:",
+    "description":"Label next to a file upload button."
+  },
+  "buttonsubmit":{
+    "message":"Senden",
+    "description":"Button to send a form."
+  },
+  "adreport_missing_info":{
+    "message":"Erforderliche Informationen fehlen oder sind ungültig.  Bitte beantworten sie die Fragen die rot umrahmt sind.",
+    "description":"Error message shown when the user doesn't enter anything in some of the text fields."
+  },
+  "adreport_response_invalid_file":{
+    "message":"Datei ist keine Bilddatei. Bitte laden Sie eine Datei hoch die mit .png, .gif, oder .jpg endet.",
+    "description":"Error message shown when the user uploads an invalid file type."
+  },
+  "adreport_response_large_file":{
+    "message":"Datei ist zu groß. Bitte stellen Sie sicher, dass Ihre Datei kleiner als 10 MB ist.",
+    "description":"Error message shown when the user tries to upload a large image file."
+  },
+  "adreport_response_save_error":{
+    "message":"Speichern der hochgeladenen Datei fehlgeschlagen.",
+    "description":"Error message shown when the server could not save an attached file."
+  },
+  "adreport_response_file_name":{
+    "message":"Der Dateiname ist zu lang. Bitte geben Sie Ihrer Datei einen kürzeren Namen.",
+    "description":"Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
+  },
+  "adreport_server_response_error_msg":{
+    "message":"Bei der Bearbeitung Ihrer Anfrage ist ein Fehler aufgetreten.",
+    "description":"Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
+  },
+  "adreport_server_response_error__manual_msg_step1":{
+    "message":"Bitte besuchen Sie <a>unsere Support-Seite<\/a>.",
+    "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "custom_filters_migration_error_message_part1":{
+    "message":"Anzahl an Fehlern in den benutzerdefinierten Filtern: ",
+    "description":"Part one of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part2":{
+    "message":"Die folgenden Nachrichten wurden während der Migration von benutzerdefinierter Filter erzeugt (ignorieren Sie die Zeilennummern): ",
+    "description":"Part two of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3":{
+    "message":"Originaleintrag: ",
+    "description":"Part three of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
   }
 }

@@ -505,7 +505,7 @@ backgroundPage.getDebugInfo(function (info) {
   debugInfo                = {};
   debugInfo.filter_lists   = JSON.stringify(info.subscriptions, null, '\t');
   debugInfo.other_info     = JSON.stringify(info.other_info, null, '\t');
-  debugInfo.custom_filters = JSON.stringify(info.custom_filters, null, '\t');
+  debugInfo.custom_filters = info.custom_filters;
   debugInfo.settings       = JSON.stringify(info.settings, null, '\t');
   debugInfo.language       = determineUserLanguage();
 });

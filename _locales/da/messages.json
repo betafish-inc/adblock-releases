@@ -1,4 +1,8 @@
 {
+  "description":{
+    "message":"Den mest populære udvidelse til Chrome, med over 40 millioner brugere! Blokerer reklamer overalt på internettet.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "description2":{
     "message":"Den mest populære udvidelse til Chrome, med over 40 millioner brugere! Blokerer reklamer overalt på internettet.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
@@ -30,10 +34,6 @@
   "optionstitle":{
     "message":"AdBlock-indstillinger",
     "description":"Title for the options page"
-  },
-  "chromebutton_how_to_hide2":{
-    "message":"For at skjule knappen skal du højreklikke på den og vælge 'Skjul knap'. Du kan få den frem igen ved at gå til chrome:\/\/chrome\/extensions.",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2":{
     "message":"For at skjule knappen, gå til opera:\/\/extensions og markér 'Skjul i værktøjslinjen'. Du kan vise det igen ved at afmarkére denne mulighed.",
@@ -335,22 +335,6 @@
   },
   "filterantisocial":{
     "message":"Antisocial-filterliste (fjerner sociale medierknapper)",
-    "description":"Name of the filter list"
-  },
-  "filterannoyances":{
-    "message":"Fanboy's Annoyances (fjerner irritationer på nettet)",
-    "description":"Name of the filter list"
-  },
-  "filterwarning_removal":{
-    "message":"AdBlock-deaktiveringsadvarselsliste (fjerner meddelelser om at bruge AdBlock)",
-    "description":"Name of the filter list"
-  },
-  "filteradblock_custom":{
-    "message":"AdBlock-brugerdefinerede filtre",
-    "description":"A filter list"
-  },
-  "filtereasylist":{
-    "message":"EasyList",
     "description":"A filter list"
   },
   "filterrussian":{
@@ -359,7 +343,7 @@
   },
   "filterczech":{
     "message":"Tjekkisk og slovakisk",
-    "description":"Language names for a filter list"
+    "description":"A filter list"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (beskyttelse af privatliv)",
@@ -485,10 +469,6 @@
     "message":"Nej",
     "description":"A negative response to a question"
   },
-  "disableforchromestepone":{
-    "message":"Åben siden for <a href='#'>udvidelser<\/a>",
-    "description":"Step 1 for disabling Chrome extensions"
-  },
   "disableforchromeandsafaristeptwo":{
     "message":"Fjern krydset i 'Aktivér'-feltet ud for alle udvidelser <b>bortset fra<\/b> AdBlock. <b>Lad AdBlock forblive aktiveret<\/b>.",
     "description":"Step 2 for disabling Chrome and Safari extensions"
@@ -503,87 +483,167 @@
   },
   "lang_english":{
     "message":"Engelsk",
-    "description":"language"
-  },
-  "filtereasylist_plus_bulgarian":{
-    "message":"Bulgarsk",
-    "description":"language"
-  },
-  "filterchinese":{
-    "message":"Kinesisk",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_czech":{
     "message":"Tjekkisk",
-    "description":"language"
+    "description":"Language name"
   },
-  "filterdanish":{
-    "message":"Dansk",
-    "description":"language"
-  },
-  "filterdutch":{
-    "message":"Hollandsk",
-    "description":"language"
-  },
-  "filtereasylist_plus_finnish":{
-    "message":"Finsk",
-    "description":"language"
-  },
-  "filtereasylist_plus_french":{
-    "message":"Fransk",
-    "description":"language"
-  },
-  "filtereasylist_plus_german":{
-    "message":"Tysk",
-    "description":"language"
-  },
-  "filtereasylist_plus_greek":{
-    "message":"Græsk",
-    "description":"language"
-  },
-  "filterhungarian":{
-    "message":"Ungarsk",
-    "description":"language"
-  },
-  "filterisraeli":{
-    "message":"Hebræisk",
-    "description":"language"
-  },
-  "filteritalian":{
-    "message":"Italiensk",
-    "description":"language"
-  },
-  "filterjapanese":{
-    "message":"Japansk",
-    "description":"language"
-  },
-  "filtereasylist_plun_korean":{
-    "message":"Koreansk",
-    "description":"language"
-  },
-  "filtereasylist_plus_polish":{
-    "message":"Polsk",
-    "description":"language"
-  },
-  "filtereasylist_plus_romanian":{
-    "message":"Romænsk",
-    "description":"language"
+  "lang_spanish":{
+    "message":"Spansk",
+    "description":"Language name"
   },
   "lang_russian":{
     "message":"Russisk",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_slovak":{
     "message":"Slovakisk",
-    "description":"language"
-  },
-  "filtereasylist_plus_spanish":{
-    "message":"Spansk",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_ukranian":{
     "message":"Ukrainsk",
-    "description":"language"
+    "description":"Language name"
+  },
+  "lang_bulgarian":{
+    "message":"Bulgarsk",
+    "description":"Language name"
+  },
+  "lang_chinese":{
+    "message":"Kinesisk",
+    "description":"Language name"
+  },
+  "lang_danish":{
+    "message":"Dansk",
+    "description":"Language name"
+  },
+  "lang_dutch":{
+    "message":"Hollandsk",
+    "description":"Language name"
+  },
+  "lang_finnish":{
+    "message":"Finsk",
+    "description":"Language name"
+  },
+  "lang_french":{
+    "message":"Fransk",
+    "description":"Language name"
+  },
+  "lang_german":{
+    "message":"Tysk",
+    "description":"Language name"
+  },
+  "lang_greek":{
+    "message":"Græsk",
+    "description":"Language name"
+  },
+  "lang_hungarian":{
+    "message":"Ungarsk",
+    "description":"Language name"
+  },
+  "lang_indonesian":{
+    "message":"Indonesisk",
+    "description":"Language name"
+  },
+  "lang_israeli":{
+    "message":"Hebræisk",
+    "description":"Language name"
+  },
+  "lang_italian":{
+    "message":"Italiensk",
+    "description":"Language name"
+  },
+  "lang_japanese":{
+    "message":"Japansk",
+    "description":"Language name"
+  },
+  "lang_korean":{
+    "message":"Koreansk",
+    "description":"Language name"
+  },
+  "lang_polish":{
+    "message":"Polsk",
+    "description":"Language name"
+  },
+  "lang_romanian":{
+    "message":"Romænsk",
+    "description":"Language name"
+  },
+  "lang_latvian":{
+    "message":"Lettisk",
+    "description":"Language name"
+  },
+  "lang_swedish":{
+    "message":"Svensk",
+    "description":"Language name"
+  },
+  "lang_turkish":{
+    "message":"Tyrkisk",
+    "description":"Language name"
+  },
+  "filtereasylist_plus_bulgarian":{
+    "message":"Bulgarsk",
+    "description":"A filter list"
+  },
+  "filterchinese":{
+    "message":"Kinesisk",
+    "description":"A filter list"
+  },
+  "filterdanish":{
+    "message":"Dansk",
+    "description":"A filter list"
+  },
+  "filterdutch":{
+    "message":"Hollandsk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_finnish":{
+    "message":"Finsk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_french":{
+    "message":"Fransk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_german":{
+    "message":"Tysk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_greek":{
+    "message":"Græsk",
+    "description":"A filter list"
+  },
+  "filterhungarian":{
+    "message":"Ungarsk",
+    "description":"A filter list"
+  },
+  "filterisraeli":{
+    "message":"Hebræisk",
+    "description":"A filter list"
+  },
+  "filteritalian":{
+    "message":"Italiensk",
+    "description":"A filter list"
+  },
+  "filterjapanese":{
+    "message":"Japansk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plun_korean":{
+    "message":"Koreansk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_polish":{
+    "message":"Polsk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_romanian":{
+    "message":"Romænsk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_spanish":{
+    "message":"Spansk",
+    "description":"A filter list"
   },
   "other":{
     "message":"Andet",
@@ -645,30 +705,6 @@
     "message":"Vises reklamen også i den browser?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
-  "ff_checkinchrometitle":{
-    "message":"Tjek i Chrome",
-    "description":"Tell a user to see if a reported ad also appears in Chrome"
-  },
-  "ff_checkinchrome_1":{
-    "message":"Installér Chrome, hvis du ikke har det.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_2":{
-    "message":"Installér AdBlock til Chrome, hvis du ikke har det.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_3":{
-    "message":"I Chrome, abonnér på de samme filterlister som du har her.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_4":{
-    "message":"I Chrome, indlæs siden med annoncen.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_5":{
-    "message":"Er reklamen også vist i Chrome?",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
   "refusetocheck":{
     "message":"Jeg ønsker ikke at undersøge dette",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -682,10 +718,6 @@
         "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
       }
     }
-  },
-  "reporttous2":{
-    "message":"Du kan rapportere reklamen til os <a>i issue trackereren (engelsk)<\/a>.",
-    "description":"NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us <a>in the issue tracker<\/a>.'"
   },
   "fixityourself":{
     "message":"OK, du kan stadig blokere reklamen for dig selv på siden Indstillinger. Tak!",
@@ -782,10 +814,6 @@
   "disabled_by_filter_lists":{
     "message":"Beklager, AdBlock er slået fra på denne side via et af dine filterlister.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
-  },
-  "status_disabled":{
-    "message":"AdBlock kan ikke benyttes på dette domæne.",
-    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank"
   },
   "dont_run_on_pages_on_domain":{
     "message":"Benyt ikke på sider, på dette domæne",
@@ -947,10 +975,6 @@
     "message":" --Vælg sprog-- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
   },
-  "allow_whitelisting_youtube_channels":{
-    "message":"Tillad whitelisting af bestemte YouTube-kanaler",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "whitelist_youtube_channel":{
     "message":"Whitelist kanalen $name$",
     "description":"Entry in the AdBlock menu, when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
@@ -1045,10 +1069,6 @@
     "message":"Har vores hold spurgt efter debug-info? Klik <a href='#' id='debug'>her<\/a> for at få det!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
-  "bugreport":{
-    "message":"Hvorfor ikke sende os en <a>fejlrapport<\/a>?",
-    "description":"Link to send a bug report on the Support tab of the options"
-  },
   "supportsite":{
     "message":"Lad os få det at vide på vores <a>supportside<\/a>!",
     "description":"Link to the support site on the Support tab of the options"
@@ -1056,5 +1076,17 @@
   "ad_report_please":{
     "message":"Hvis du ser en reklame, skal du ikke lave en fejlrapport, men en <a>annoncerapport<\/a> istedet!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "headertype":{
+    "message":"Type",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"side",
+    "description":"A resource type"
   }
 }

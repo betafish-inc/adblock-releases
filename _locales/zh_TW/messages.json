@@ -1,4 +1,8 @@
 {
+  "description":{
+    "message":"最受歡迎的 Chrome 擴充，有超過四千萬名的用戶正在用 AdBlock 阻擋網頁上的廣告",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "description2":{
     "message":"最受歡迎的 Chrome 擴充，有超過四千萬名的用戶正在用 AdBlock 阻擋網頁上的廣告",
     "description":"Extension description in manifest. Should not exceed 132 characters."
@@ -31,10 +35,6 @@
     "message":"AdBlock 選項",
     "description":"Title for the options page"
   },
-  "chromebutton_how_to_hide2":{
-    "message":"如要隱藏按鈕，請按滑鼠右鍵並選擇隱藏按鈕。在 chrome:\/\/chrome\/extensions 下，你可以再次顯示它。",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
-  },
   "operabutton_how_to_hide2":{
     "message":"如需隱藏按鈕，請到  opera:\/\/extensions 並且點選 『從工具列上隱藏』選項。 你可以取消該選項以顯示該按鈕",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
@@ -42,10 +42,6 @@
   "safaributton_how_to_hide2":{
     "message":"如需隱藏此按鈕，請到  opera:\/\/extensions 並且點選 『從工具列上隱藏』選項。 你可以取消該選項以再次顯示此按鈕",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
-  },
-  "ff_button_how_to_hide":{
-    "message":"若要隱藏按鈕，請在上面按右鍵，從工具列中選擇刪除。 你可以在 Firefox功能表-> 自訂 中將它再次顯示。",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
   "sliderexplanation":{
     "message":"滑動控制器直到頁面上的廣告已被正確地阻擋。",
@@ -349,14 +345,6 @@
   },
   "filterantisocial":{
     "message":"反社群網站過濾器  （社群網站的按鈕會被自動過濾掉）",
-    "description":"Name of the filter list"
-  },
-  "filteradblock_custom":{
-    "message":"AdBlock 自訂過濾清單",
-    "description":"A filter list"
-  },
-  "filtereasylist":{
-    "message":"EasyList",
     "description":"A filter list"
   },
   "filterrussian":{
@@ -365,7 +353,7 @@
   },
   "filterczech":{
     "message":"捷克和斯洛伐克",
-    "description":"Language names for a filter list"
+    "description":"A filter list"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (隱私保護)",
@@ -499,10 +487,6 @@
     "message":"否",
     "description":"A negative response to a question"
   },
-  "disableforchromestepone":{
-    "message":"打開 <a href='#'> 擴充功能分頁 <\/a>",
-    "description":"Step 1 for disabling Chrome extensions"
-  },
   "clickdisableotherextensions":{
     "message":"<b> 或者 <\/b>, 按下此按鈕以便完成上述所有操作: <a> 停用所有擴充 <\/a>",
     "description":"On the ad report page, an alternative way to disable other extensions"
@@ -529,87 +513,167 @@
   },
   "lang_english":{
     "message":"英文",
-    "description":"language"
-  },
-  "filtereasylist_plus_bulgarian":{
-    "message":"保加利亞文",
-    "description":"language"
-  },
-  "filterchinese":{
-    "message":"中文",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_czech":{
     "message":"捷克文",
-    "description":"language"
+    "description":"Language name"
   },
-  "filterdanish":{
-    "message":"丹麥文",
-    "description":"language"
-  },
-  "filterdutch":{
-    "message":"荷蘭文",
-    "description":"language"
-  },
-  "filtereasylist_plus_finnish":{
-    "message":"芬蘭文",
-    "description":"language"
-  },
-  "filtereasylist_plus_french":{
-    "message":"法文",
-    "description":"language"
-  },
-  "filtereasylist_plus_german":{
-    "message":"德文",
-    "description":"language"
-  },
-  "filtereasylist_plus_greek":{
-    "message":"希臘文",
-    "description":"language"
-  },
-  "filterhungarian":{
-    "message":"匈牙利文",
-    "description":"language"
-  },
-  "filterisraeli":{
-    "message":"希伯來文",
-    "description":"language"
-  },
-  "filteritalian":{
-    "message":"義大利文",
-    "description":"language"
-  },
-  "filterjapanese":{
-    "message":"日文",
-    "description":"language"
-  },
-  "filtereasylist_plun_korean":{
-    "message":"韓文",
-    "description":"language"
-  },
-  "filtereasylist_plus_polish":{
-    "message":"波蘭文",
-    "description":"language"
-  },
-  "filtereasylist_plus_romanian":{
-    "message":"羅馬尼亞文",
-    "description":"language"
+  "lang_spanish":{
+    "message":"西班牙文",
+    "description":"Language name"
   },
   "lang_russian":{
     "message":"俄文",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_slovak":{
     "message":"斯洛伐克文",
-    "description":"language"
-  },
-  "filtereasylist_plus_spanish":{
-    "message":"西班牙文",
-    "description":"language"
+    "description":"Language name"
   },
   "lang_ukranian":{
     "message":"烏克蘭文",
-    "description":"language"
+    "description":"Language name"
+  },
+  "lang_bulgarian":{
+    "message":"保加利亞文",
+    "description":"Language name"
+  },
+  "lang_chinese":{
+    "message":"中文",
+    "description":"Language name"
+  },
+  "lang_danish":{
+    "message":"丹麥文",
+    "description":"Language name"
+  },
+  "lang_dutch":{
+    "message":"荷蘭文",
+    "description":"Language name"
+  },
+  "lang_finnish":{
+    "message":"芬蘭文",
+    "description":"Language name"
+  },
+  "lang_french":{
+    "message":"法文",
+    "description":"Language name"
+  },
+  "lang_german":{
+    "message":"德文",
+    "description":"Language name"
+  },
+  "lang_greek":{
+    "message":"希臘文",
+    "description":"Language name"
+  },
+  "lang_hungarian":{
+    "message":"匈牙利文",
+    "description":"Language name"
+  },
+  "lang_indonesian":{
+    "message":"印尼文",
+    "description":"Language name"
+  },
+  "lang_israeli":{
+    "message":"希伯來文",
+    "description":"Language name"
+  },
+  "lang_italian":{
+    "message":"義大利文",
+    "description":"Language name"
+  },
+  "lang_japanese":{
+    "message":"日文",
+    "description":"Language name"
+  },
+  "lang_korean":{
+    "message":"韓文",
+    "description":"Language name"
+  },
+  "lang_polish":{
+    "message":"波蘭文",
+    "description":"Language name"
+  },
+  "lang_romanian":{
+    "message":"羅馬尼亞文",
+    "description":"Language name"
+  },
+  "lang_latvian":{
+    "message":"拉脫維亞文",
+    "description":"Language name"
+  },
+  "lang_swedish":{
+    "message":"瑞典文",
+    "description":"Language name"
+  },
+  "lang_turkish":{
+    "message":"土耳其文",
+    "description":"Language name"
+  },
+  "filtereasylist_plus_bulgarian":{
+    "message":"保加利亞文",
+    "description":"A filter list"
+  },
+  "filterchinese":{
+    "message":"中文",
+    "description":"A filter list"
+  },
+  "filterdanish":{
+    "message":"丹麥文",
+    "description":"A filter list"
+  },
+  "filterdutch":{
+    "message":"荷蘭文",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_finnish":{
+    "message":"芬蘭文",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_french":{
+    "message":"法文",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_german":{
+    "message":"德文",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_greek":{
+    "message":"希臘文",
+    "description":"A filter list"
+  },
+  "filterhungarian":{
+    "message":"匈牙利文",
+    "description":"A filter list"
+  },
+  "filterisraeli":{
+    "message":"希伯來文",
+    "description":"A filter list"
+  },
+  "filteritalian":{
+    "message":"義大利文",
+    "description":"A filter list"
+  },
+  "filterjapanese":{
+    "message":"日文",
+    "description":"A filter list"
+  },
+  "filtereasylist_plun_korean":{
+    "message":"韓文",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_polish":{
+    "message":"波蘭文",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_romanian":{
+    "message":"羅馬尼亞文",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_spanish":{
+    "message":"西班牙文",
+    "description":"A filter list"
   },
   "other":{
     "message":"其他",
@@ -663,18 +727,6 @@
       }
     }
   },
-  "ff_checkinchrometitle":{
-    "message":"在 Chrome 中檢查",
-    "description":"Tell a user to see if a reported ad also appears in Chrome"
-  },
-  "ff_checkinchrome_1":{
-    "message":"如果您沒有Chrome，請安裝Chrome",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_2":{
-    "message":"如果您沒有安裝 Chrome版的 AdBlock，請安裝它",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
   "refusetocheck":{
     "message":"我不想檢查這個",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -688,10 +740,6 @@
         "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
       }
     }
-  },
-  "reporttous2":{
-    "message":"您可以在<a>問題追蹤頁面<\/a>回報廣告。",
-    "description":"NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us <a>in the issue tracker<\/a>.'"
   },
   "fixityourself":{
     "message":"您還是可以在「黑名單」頁面中手動阻擋此廣告。",
@@ -784,10 +832,6 @@
   "disabled_by_filter_lists":{
     "message":"抱歉, 因為你的一個過濾清單，AdBlock 在這個頁面被關閉",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
-  },
-  "status_disabled":{
-    "message":"AdBlock不能在這個網域使用。",
-    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank"
   },
   "dont_run_on_pages_on_domain":{
     "message":"不在這個網域的頁面使用",
@@ -943,10 +987,6 @@
       }
     }
   },
-  "dropboxerrorforfilters":{
-    "message":"你已經到達了 Dropbox 空間限制。 請在您的過濾清單中移除一些項目並再試一次",
-    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
-  },
   "languagedropdowndescription":{
     "message":"替其他語言新增過濾清單 ",
     "description":"Dropdown list for language-specific filters"
@@ -1025,10 +1065,6 @@
     "message":"我們的研發團隊有像您索取除錯資訊(debug info) ?  <a href='#' id='debug'>點我<\/a>取得這些資訊 ！",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
-  "bugreport":{
-    "message":"何不<a>回報bug<\/a>給我們",
-    "description":"Link to send a bug report on the Support tab of the options"
-  },
   "supportsite":{
     "message":"請來我們的<a>技術與支援網站<\/a>讓我們聆聽您的意見！",
     "description":"Link to the support site on the Support tab of the options"
@@ -1036,5 +1072,17 @@
   "ad_report_please":{
     "message":"如果你看到了廣告，請<a>回報廣告<\/a>而不是回報bug",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "headertype":{
+    "message":"類型",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"page",
+    "description":"A resource type"
   }
 }
