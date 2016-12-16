@@ -93,9 +93,11 @@ SURVEY = (function() {
           chrome.notifications.onClicked.removeListener(notificationClicked);
           chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
           chrome.notifications.onClosed.removeListener(closedClicked);
-          recordGeneralMessage("notification clicked sid: " + surveyData.survey_id);
           if (notificationId === lastNotificationID && surveyData.notification_options.clicked_url) {
+            recordGeneralMessage("notification clicked sid: " + surveyData.survey_id);
             openTab("https://getadblock.com/" + surveyData.notification_options.clicked_url);
+          } else {
+            recordGeneralMessage("notification clicked no URL to open sid: " + surveyData.survey_id);
           }
         };
         var buttonNotificationClicked = function(notificationId, buttonIndex) {
@@ -138,6 +140,13 @@ SURVEY = (function() {
         chrome.notifications.onClosed.addListener(closedClicked);
         // show the notification to the user.
         chrome.notifications.create(lastNotificationID, notificationOptions, function(id) {
+          if (chrome.runtime.lastError) {
+            recordGeneralMessage("error, survey not shown, type:notification sid: " + surveyData.survey_id);
+            chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
+            chrome.notifications.onClicked.removeListener(notificationClicked);
+            chrome.notifications.onClosed.removeListener(closedClicked);
+            return;
+          }
           recordGeneralMessage("survey shown, type:notification sid: " + surveyData.survey_id);
         });
       });
@@ -160,20 +169,27 @@ SURVEY = (function() {
               return;
             }
             surveyData.block_count_limit = Number(surveyData.block_count_limit);
-            getBlockCountOnActiveTab(function(blockedPerPage) {
-              if (blockedPerPage >= surveyData.block_count_limit) {
-                getActiveTab(function(tab) {
-                  if (tab && validTab(tab)) {
-                    showNotificationIfAllowed(tab);
+            chrome.idle.queryState(60, function(state) {
+              if (state === "active") {
+                getBlockCountOnActiveTab(function(blockedPerPage) {
+                  if (blockedPerPage >= surveyData.block_count_limit) {
+                    getActiveTab(function(tab) {
+                      if (tab && validTab(tab)) {
+                        showNotificationIfAllowed(tab);
+                      } else {
+                        // We didn't find an appropriate tab
+                        retryInFiveMinutes();
+                      }
+                    });
                   } else {
-                    // We didn't find an appropriate tab
                     retryInFiveMinutes();
                   }
-                });
+                }); // end getBlockCountOnActiveTab
               } else {
+                // browser is idle or locked
                 retryInFiveMinutes();
               }
-            });
+            }); // end chrome.idle.queryState
           }
         });
     }
