@@ -1,5 +1,6 @@
 [general]
-version = 3.8.2
+author = Michael Gundlach
+version = 3.8.4
 backgroundScripts += adblock-jquery.js
   adblock-errorreporting.js
   adblock-functions.js
@@ -41,6 +42,7 @@ webAccessible = adblock-jquery-ui.custom.css
 
 [contentScripts]
 document_start += adblock-functions.js
+  adblock-bandaids.js
 document_end += adblock-uiscripts-rightclick_hook.js adblock-notificationoverlay.js
 
 [mapping]

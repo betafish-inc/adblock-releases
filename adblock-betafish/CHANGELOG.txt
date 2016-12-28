@@ -2,6 +2,10 @@
 
 UNRELEASED:
 
+3.8.4:
+- Updated translations.
+- Updated 'bandaids' processing to help block ads on certain web sites. (#205)
+
 3.8.2:
 - Updated the donate to us link on the AdBlock menu.  (#204)
 
@@ -68,7 +72,7 @@ UNRELEASED:
 - Added a check for data on the error object in the Error Reporting logic.  (#126)
 
 3.0.4:
-- Fixed a bug on 'Options' page when the page was openned prior to the background page being initialized. (#112)
+- Fixed a bug on 'Options' page when the page was opened prior to the background page being initialized. (#112)
 - Fixed a bug when the AdBlock context menu option was enabled / disabled on the Options page.  (#111)
 - Fixed a bug on 'Report an Ad' page for non-English users reporting an ad on English site.  (#108)
 - Updated the descriptions for certain language specific filter lists to include 'EasyList'.  (#107)
@@ -100,7 +104,7 @@ UNRELEASED:
 
 2.48:
 - Updated Translations.
-- Updated the placehodler text in the "Show ads on web page or domain" example URL (#669).
+- Updated the placeholder text in the "Show ads on web page or domain" example URL (#669).
 - Removed duplicate logic on the General tab of the AdBlock Options page (#671).
 - Migrated links to the new AdBlock help site (#632).
 - Updated the "Report an Ad" and "Bug Report" pages to use the new AdBlock help site (#632).
@@ -175,7 +179,7 @@ UNRELEASED:
  - Added the total block count and the AdBlock custom filter list update timestamp to the un-install URL to help determine why users are un-installing after just a few minutes of use. (621)
  - Added the ping count to the ping data. (#618)
  - Removed the 'View the Resource' page. (#614)
- - Added formatting lines for the debug informating for Tender support tickets. (#613)
+ - Added formatting lines for the debug information for Tender support tickets. (#613)
  - Removed a site specific 'bandaid' for 'thepiratebay'.  (#593)
 
 2.37.3:
@@ -206,7 +210,7 @@ UNRELEASED:
 2.36:
 - Added an if check to verify that domain is not undefined when processing URLs. (#579)
 - Changed the order of evaluation in the Survey processing. (#576)
-- Update the JavaScript error processing to include the stack trace information if it doesn't include an HTTP URL. (#575)
+- Update the JavaScript error processing to include the stack trace information if it doesn't't include an HTTP URL. (#575)
 - Updated the white-list filters for showing ads on Google Search when the 'show Google ads' option is enabled. (#573)
 - Removed Disconnect search code from AdBlock. (#568)
 - Update the height of the Subscribe popup. (#491)
@@ -342,14 +346,14 @@ UNRELEASED:
 - Fixed a bug in the Safari extension when a windows was closed (#428)
 
 2.16:
-- AdBlock now uses the YouTube API to retreive the channel name when users have the Whitelist a YouTube Channel feature enabled. (#392)
+- AdBlock now uses the YouTube API to retrieve the channel name when users have the Whitelist a YouTube Channel feature enabled. (#392)
 - The 'Filter syntax tutorial' link on the AdBlock options / Customize tab now checks if the generated URL is valid. (#394)
 - Added a check for chrome.runtime.onMessage API, since it isn't available in Chrome 25 and older versions. (#395)
 - Added an option to the General options tab to not display the ads block counter on the AdBlock popup menu.
   The option to display the # of ads block was moved from the AdBlock popup menu to the General tab as well. (#401)
 - Added logic to set focus on new tabs open by AdBlock (for example, the options pages), when the Chrome is running in incognito mode. (#405)
 - On the 'Report an Ad' page, all of the questions are now bolded. (#416)
-- Reformated the text and fixed typos in the change log. (#418)
+- Reformatted the text and fixed typos in the change log. (#418)
 - Modified several JavaScript throws statements to now use an Error object. (#420)
 
 2.15:
@@ -789,7 +793,7 @@ UNRELEASED:
 
 2.3.18: Fix broken signup for subscriptions
 
-2.3.17: Internal code shufflins
+2.3.17: Internal code shuffling
 
 2.3.16: Fix opt-in to Google search ads when using Google Instant
 

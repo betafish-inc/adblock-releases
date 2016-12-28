@@ -542,27 +542,6 @@ if (!SAFARI)
     }
   };
 
-  var runBandaids = function (tabUrl, tabId)
-  {
-    var hostname = parseUri(tabUrl).hostname;
-    if (/.*\.mail\.live\.com/i.test(hostname) || /.*\.mastertoons\.com/i.test(hostname) || hostname === 'getadblock.com' || hostname === 'dev.getadblock.com'
-        || /.*\.mobilmania\.cz/i.test(hostname) || /.*\.zive\.cz/i.test(hostname) || /.*\.doupe\.cz/i.test(hostname) || /.*\.e15\.cz/i.test(hostname)
-        || /.*\.sportrevue\.cz/i.test(hostname) || /.*\.autorevue\.cz/i.test(hostname))
-    {
-      chrome.tabs.executeScript(tabId,
-      {
-        file: 'adblock-bandaids.js',
-        runAt: 'document_start',
-      }, function ()
-      {
-        if (chrome.runtime.lastError)
-        {
-          return;
-        }
-      });
-    }
-  };
-
   chrome.tabs.onCreated.addListener(function (tab)
   {
     if (chrome.runtime.lastError)
@@ -578,7 +557,6 @@ if (!SAFARI)
       if (tabs && tabs.url && tabs.id)
       {
         runChannelWhitelist(tabs.url, tabs.id);
-        runBandaids(tabs.url, tabs.id);
       }
     });
   });
@@ -600,7 +578,6 @@ if (!SAFARI)
         if (tabs && tabs.url && tabs.id)
         {
           runChannelWhitelist(tabs.url, tabs.id);
-          runBandaids(tabs.url, tabs.id);
         }
       });
     }
