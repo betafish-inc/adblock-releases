@@ -1,10 +1,14 @@
 {
   "description":{
-    "message":"De populairste Chrome extensie met meer dan 40 miljoen gebruikers! Blokkeert advertenties op het internet.",
+    "message":"De populairste Chrome extensie met meer dan 40 miljoen gebruikers! Blokkeert advertenties over heel het web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "description2":{
     "message":"De populairste Chrome extensie met meer dan 40 miljoen gebruikers! Blokkeert advertenties op het internet.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
+  "description_edge":{
+    "message":"AdBlock. De #1 advertentieblokkerende extensie met meer dan 200 miljoen downloads. Blokkeert advertenties over heel het web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -34,6 +38,10 @@
   "optionstitle":{
     "message":"AdBlock Opties",
     "description":"Title for the options page"
+  },
+  "chromebutton_how_to_hide2":{
+    "message":"Klik met de rechtermuisknop op de AdBlock knop en selecteer 'Verbergen in Chrome-menu'. Om het te laten zien, klik in het Chrome-menu met de rechtermuisknop op de AdBlock knop en selecteer 'In werkbalk houden'.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2":{
     "message":"Om deze knop te verbergen, ga naar opera:\/\/extensions en selecteer de optie 'Verberg van knoppenbalk'. Je kan de knop opnieuw weergeven door deze optie te deselecteren.",
@@ -160,7 +168,7 @@
     "description":"Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change":{
-    "message":"Versleep de balk hieronder om aan te geven waar precies AdBlock niets moet doen.",
+    "message":"Versleep de balk hieronder om aan te geven op welke pagina's AdBlock niets moet doen.",
     "description":"Instructions for how to use the whitelister slider controls. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2":{
@@ -315,6 +323,22 @@
     "message":"Ophalen... even geduld aub.",
     "description":"Status label"
   },
+  "ab_filters_subscription_lastDownload_invalidURL":{
+    "message":"Mislukt, geen geldig adres",
+    "description":"message on the filter tab - Message when you subscribe to a non-list URL"
+  },
+  "ab_filters_subscription_lastDownload_connectionError":{
+    "message":"Mislukt, fout bij downloaden",
+    "description":"message on the filter tab - Generic filter list download error message"
+  },
+  "ab_filters_subscription_lastDownload_invalidData":{
+    "message":"Mislukt, geen lijst met geldige filters",
+    "description":"message on the filter tab - Invalid filter list file"
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch":{
+    "message":"Mislukt, controlesom komt niet overeen",
+    "description":"message on the filter tab"
+  },
   "invalidListUrl":{
     "message":"Ongeldige URL naar de filter. Deze filter zal verwijdert worden",
     "description":"Message when you subscribe to a non-list URL"
@@ -356,7 +380,7 @@
     "description":"Option on the 'Filter lists' tab of the Options page"
   },
   "filterantisocial":{
-    "message":"Antisocial filter (verwijdert social media knoppen)",
+    "message":"Antisociale filter (verwijdert sociale media knoppen)",
     "description":"A filter list"
   },
   "filterannoyances":{
@@ -364,16 +388,40 @@
     "description":"A filter list"
   },
   "filterwarning_removal":{
-    "message":"AdBlock Waarschuwing Verwijder Lijst (verwijdert waarschuwingen over het gebruik van ad blockers)",
+    "message":"AdBlock Waarschuwing Verwijder Lijst (verwijdert waarschuwingen over het gebruik van ad-blockers)",
     "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filteracceptable_ads":{
+    "message":"Aanvaardbare Advertenties",
+    "description":"A filter list"
+  },
+  "filteradblock_custom":{
+    "message":"AdBlock custom filters",
+    "description":"A filter list"
+  },
+  "filtereasylist":{
+    "message":"EasyList",
+    "description":"A filter list"
+  },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite (aanbevolen)",
+    "description":"A filter list"
   },
   "filterrussian":{
     "message":"Russisch en Oekraïens",
     "description":"Language names for a filter list"
   },
+  "filter_russian":{
+    "message":"Russisch & Oekraïens + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterczech":{
     "message":"Tsjechisch en Slowaaks",
     "description":"A filter list"
+  },
+  "filter_czech":{
+    "message":"Tsjechisch & Slowaaks + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (privacybescherming)",
@@ -383,6 +431,10 @@
     "message":"Indonesisch",
     "description":"A filter list"
   },
+  "filter_easylist_plus_indonesian":{
+    "message":"Indonesisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtermalware":{
     "message":"Malware bescherming",
     "description":"A filter list"
@@ -390,6 +442,10 @@
   "filterlatvian":{
     "message":"Lets",
     "description":"A filter list"
+  },
+  "filter_latvian":{
+    "message":"Lets + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterswedish":{
     "message":"Zweeds",
@@ -459,6 +515,14 @@
     "message":"Pas op: als je hier een fout maakt kunnen de andere filters, inclusief de officiële, onbruikbaar worden!<br\/>Lees de <a>filter syntaxis uitleg (Engelstalig)<\/a> voor meer informatie over het maken van filters.",
     "description":"Warning when blacklisting manually"
   },
+  "migration_error_message":{
+    "message":"We hebben enkele fouten gevonden in je aangepaste filters. De berichten zijn hieronder weergeven.",
+    "description":"Warning when adding custom filters manually"
+  },
+  "delete_migration_error_messages":{
+    "message":"Verwijder berichten",
+    "description":"Button to delete error messages when adding custom filters manually"
+  },
   "contentblockingwarning":{
     "message":"Opmerking: Het whitelisten (toelaten van advertenties) op een pagina of website is niet ondersteund met Safari Inhoud Blokkering geactiveerd.",
     "description":"Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
@@ -480,7 +544,7 @@
     "description":"Introduction of the ad reporting page"
   },
   "adreportvoluntary":{
-    "message":"Het melden van advertenties is vrijwillig. Het helpt andere mensen doordat de onderhouders van de filters deze advertentie dan kunnen blokkeren voor iedereen. Als je niet het gevoel hebt dat je iemand wil helpen, is dat ok. Sluit deze pagina en <a>blokkeer de advertentie<\/a> dan gewoon voor jezelf.",
+    "message":"Het melden van advertenties is vrijwillig. Het helpt andere mensen doordat de onderhouders van de filters deze advertentie dan kunnen blokkeren voor iedereen. Als je niet het gevoel hebt dat je iemand wil helpen, is dat ok. Sluit deze pagina en <a>blokkeer de advertentie<\/a> dan alleen voor jezelf.",
     "description":"Introduction of the ad reporting page"
   },
   "malwarenotificationcheckboxmessage":{
@@ -723,9 +787,17 @@
     "message":"Bulgaars",
     "description":"A filter list"
   },
+  "filter_easylist_plus_bulgarian":{
+    "message":"Bulgaars + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterchinese":{
     "message":"Chinees",
     "description":"A filter list"
+  },
+  "filter_chinese":{
+    "message":"Chinees + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterdanish":{
     "message":"Deens",
@@ -735,6 +807,10 @@
     "message":"Nederlands",
     "description":"A filter list"
   },
+  "filter_dutch":{
+    "message":"Nederlands + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_finnish":{
     "message":"Fins",
     "description":"A filter list"
@@ -743,9 +819,17 @@
     "message":"Frans",
     "description":"A filter list"
   },
+  "filter_easylist_plus_french":{
+    "message":"Frans + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_german":{
     "message":"Duits",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_german":{
+    "message":"Duits + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_greek":{
     "message":"Grieks",
@@ -759,9 +843,17 @@
     "message":"Hebreeuws",
     "description":"A filter list"
   },
+  "filter_israeli":{
+    "message":"Hebreeuws + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filteritalian":{
     "message":"Italiaans",
     "description":"A filter list"
+  },
+  "filter_italian":{
+    "message":"Italiaans + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterjapanese":{
     "message":"Japans",
@@ -779,6 +871,10 @@
     "message":"Roemeens",
     "description":"A filter list"
   },
+  "filter_easylist_plus_romanian":{
+    "message":"Roemeens + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_spanish":{
     "message":"Spaans",
     "description":"A filter list"
@@ -786,6 +882,14 @@
   "filtereasylist_plus_arabic":{
     "message":"Arabisch",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_arabic":{
+    "message":"Arabisch + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_arabic_plus_french":{
+    "message":"Arabisch + Frans + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_estonian":{
     "message":"Estlands",
@@ -798,6 +902,10 @@
   "filtereasylist_plus_lithuania":{
     "message":"Litouws",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_lithuania":{
+    "message":"Litouws + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "other":{
     "message":"Anders",
@@ -951,6 +1059,10 @@
     "message":"pagina",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"websocket",
+    "description":"A resource type"
+  },
   "typeunknown":{
     "message":"onbekend",
     "description":"A resource type"
@@ -1047,9 +1159,17 @@
     "message":"Help ons om dit te verspreiden!",
     "description":"Text of a share link"
   },
+  "donate_to_adblock":{
+    "message":"Hou je van AdBlock? Overweeg een donatie!",
+    "description":"Text of a donate link in the toolbar button menu"
+  },
   "pwyw":{
     "message":"Betaal wat je wil!",
     "description":"Text of a payment request link"
+  },
+  "privacy_policy":{
+    "message":"Privacybeleid",
+    "description":"Link to AdBlock's privacy policy"
   },
   "translator_credit":{
     "message":"Vertaling door",
@@ -1143,6 +1263,10 @@
     "message":"Toon het aantal geblokkeerde advertenties in het AdBlock menu",
     "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
   },
+  "show_devtools_panel":{
+    "message":"Toon het 'AdBlock' menu bij de developer tools",
+    "description":"Label for checkbox letting user choose whether the AdBlock tab should show in the developer tools window"
+  },
   "adblockinglist":{
     "message":"Advertentie Blokkerende Filters",
     "description":"List for subscribed ad blocking fiters"
@@ -1184,6 +1308,22 @@
   "selectlanguage":{
     "message":"-- Selecteer Taal --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Sta het uitsluiten toe van specifieke YouTube-kanalen (vereist het opnieuw opstarten van uw browser)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "whitelist_all_youtube_channels":{
+    "message":"Sluit alle kanalen van YouTube uit waarop u geabonneerd bent",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
+  "one_moment_all_youtube_channels":{
+    "message":"Even geduld terwijl we al je abonnementen verzamelen",
+    "description":"Alert message displayed when whitelisting all subscribed YouTube channels"
+  },
+  "all_youtube_channels_complete":{
+    "message":"Al je YouTube kanaal abonnementen zijn uitgesloten",
+    "description":"Alert message displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
   "whitelist_youtube_channel":{
     "message":"Sluit $name$'s kanaal uit",
@@ -1478,5 +1618,13 @@
   "adreport_server_response_error__manual_msg_step2":{
     "message":"En maak handmatig een ticket aan. Kopieer en plak de onderstaande gegevens in de \"Fill in any details you think will help us understand your issue\" sectie.",
     "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "custom_filters_migration_error_message_part1":{
+    "message":"Aantal fouten in de gepersonaliseerde filters: ",
+    "description":"Part one of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3":{
+    "message":"Originele invoer: ",
+    "description":"Part three of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
   }
 }

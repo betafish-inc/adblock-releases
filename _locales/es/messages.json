@@ -7,6 +7,10 @@
     "message":"¡La extensión más popular de Chrome, con más de 40 millones de usuarios! Bloquea anuncios de todo internet.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
+  "description_edge":{
+    "message":"AdBlock. El bloqueador de publicidad número uno con más de 200 millones de descargas. Bloquea la publicidad en toda la web.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "adblock_click_for_details":{
     "message":"AdBlock - Haz click para más detalles",
     "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button."
@@ -319,6 +323,22 @@
     "message":"Recibiendo... Por favor, espera.",
     "description":"Status label"
   },
+  "ab_filters_subscription_lastDownload_invalidURL":{
+    "message":"Falló, dirección no válida",
+    "description":"message on the filter tab - Message when you subscribe to a non-list URL"
+  },
+  "ab_filters_subscription_lastDownload_connectionError":{
+    "message":"Falló, no se pudo descargar",
+    "description":"message on the filter tab - Generic filter list download error message"
+  },
+  "ab_filters_subscription_lastDownload_invalidData":{
+    "message":"Falló, lista de filtros no válida",
+    "description":"message on the filter tab - Invalid filter list file"
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch":{
+    "message":"Falló, la suma de comprobación no coincide",
+    "description":"message on the filter tab"
+  },
   "invalidListUrl":{
     "message":"URL de lista inválida. Será eliminada.",
     "description":"Message when you subscribe to a non-list URL"
@@ -371,13 +391,37 @@
     "message":"Adblock Warning Removal list (elimina los mensajes de alerta sobre el uso de bloqueadores de publicidad)",
     "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
   },
+  "filteracceptable_ads":{
+    "message":"Anuncios Aceptables",
+    "description":"A filter list"
+  },
+  "filteradblock_custom":{
+    "message":"Filtros personalizados de AdBlock",
+    "description":"A filter list"
+  },
+  "filtereasylist":{
+    "message":"EasyList",
+    "description":"A filter list"
+  },
+  "filtereasylist_lite":{
+    "message":"EasyList ligera (recomendado)",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"Ruso y ucraniano",
     "description":"Language names for a filter list"
   },
+  "filter_russian":{
+    "message":"Ruso y Ucraniano + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterczech":{
     "message":"Checo y Eslovaco",
     "description":"A filter list"
+  },
+  "filter_czech":{
+    "message":"Checo y Eslovaco + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (protección de la privacidad)",
@@ -387,6 +431,10 @@
     "message":"Indonesio",
     "description":"A filter list"
   },
+  "filter_easylist_plus_indonesian":{
+    "message":"Indonesio + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtermalware":{
     "message":"Protección contra software malicioso",
     "description":"A filter list"
@@ -394,6 +442,10 @@
   "filterlatvian":{
     "message":"Letón",
     "description":"A filter list"
+  },
+  "filter_latvian":{
+    "message":"Lituano + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterswedish":{
     "message":"Sueco",
@@ -462,6 +514,14 @@
   "filtersavewarning":{
     "message":"Ten cuidado: ¡si cometes un error muchos filtros, incluyendo los oficiales, podrían estropearse también!<br\/>Lee el <a>tutorial de la sintaxis de filtros<\/a> para aprender como añadir filtros avanzados a la lista negra y blanca.",
     "description":"Warning when blacklisting manually"
+  },
+  "migration_error_message":{
+    "message":"Hemos detectado errores en tus filtros personalizados. A continuación se muestran los mensajes.",
+    "description":"Warning when adding custom filters manually"
+  },
+  "delete_migration_error_messages":{
+    "message":"Eliminar mensajes",
+    "description":"Button to delete error messages when adding custom filters manually"
   },
   "contentblockingwarning":{
     "message":"Nota: Añadir a la lista blanca una página o sitio (permitir los anuncios en ella) no es posible teniendo activado el Bloqueador de Contenidos de Safari.",
@@ -727,9 +787,17 @@
     "message":"Búlgaro",
     "description":"A filter list"
   },
+  "filter_easylist_plus_bulgarian":{
+    "message":"Búlgaro + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterchinese":{
     "message":"Chino",
     "description":"A filter list"
+  },
+  "filter_chinese":{
+    "message":"Chino + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterdanish":{
     "message":"Danés",
@@ -739,6 +807,10 @@
     "message":"Holandés",
     "description":"A filter list"
   },
+  "filter_dutch":{
+    "message":"Holandés + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_finnish":{
     "message":"Finlandés",
     "description":"A filter list"
@@ -747,9 +819,17 @@
     "message":"Francés",
     "description":"A filter list"
   },
+  "filter_easylist_plus_french":{
+    "message":"Francés + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_german":{
     "message":"Alemán",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_german":{
+    "message":"Alemán + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_greek":{
     "message":"Griego",
@@ -763,9 +843,17 @@
     "message":"Hebreo",
     "description":"A filter list"
   },
+  "filter_israeli":{
+    "message":"Hebreo + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filteritalian":{
     "message":"Italiano",
     "description":"A filter list"
+  },
+  "filter_italian":{
+    "message":"Italiano + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterjapanese":{
     "message":"Japonés",
@@ -783,6 +871,10 @@
     "message":"Rumano",
     "description":"A filter list"
   },
+  "filter_easylist_plus_romanian":{
+    "message":"Rumano + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_spanish":{
     "message":"Español",
     "description":"A filter list"
@@ -790,6 +882,14 @@
   "filtereasylist_plus_arabic":{
     "message":"Árabe",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_arabic":{
+    "message":"Árabe + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_arabic_plus_french":{
+    "message":"Árabe + Francés + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_estonian":{
     "message":"Estonio",
@@ -802,6 +902,10 @@
   "filtereasylist_plus_lithuania":{
     "message":"Lituano",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_lithuania":{
+    "message":"Lituano + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "other":{
     "message":"Otro",
@@ -955,6 +1059,10 @@
     "message":"página",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"websocket",
+    "description":"A resource type"
+  },
   "typeunknown":{
     "message":"desconocido",
     "description":"A resource type"
@@ -1051,9 +1159,17 @@
     "message":"¡Ayuda a correr la voz!",
     "description":"Text of a share link"
   },
+  "donate_to_adblock":{
+    "message":"¿Te encanta AdBlock? ¡Considera hacer una donación!",
+    "description":"Text of a donate link in the toolbar button menu"
+  },
   "pwyw":{
     "message":"¡Paga lo que quieras!",
     "description":"Text of a payment request link"
+  },
+  "privacy_policy":{
+    "message":"Política de privacidad",
+    "description":"Link to AdBlock's privacy policy"
   },
   "translator_credit":{
     "message":"Los créditos por la traducción son para:",
@@ -1147,6 +1263,10 @@
     "message":"Mostrar número de anuncios bloqueados en el menú de AdBlock",
     "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
   },
+  "show_devtools_panel":{
+    "message":"Mostrar el panel \"AdBlock\" en las herramientas para desarrolladores",
+    "description":"Label for checkbox letting user choose whether the AdBlock tab should show in the developer tools window"
+  },
   "adblockinglist":{
     "message":"Lista de filtros de bloqueo de publicidad",
     "description":"List for subscribed ad blocking fiters"
@@ -1188,6 +1308,22 @@
   "selectlanguage":{
     "message":" -- Seleccionar idioma -- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Permitir listas blancas de canales específicos de YouTube (requiere reiniciar el navegador)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "whitelist_all_youtube_channels":{
+    "message":"Incluir en la lista blanca todos los canales de YouTube suscritos",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
+  "one_moment_all_youtube_channels":{
+    "message":"Un momento mientras recogemos todas tus suscripciones",
+    "description":"Alert message displayed when whitelisting all subscribed YouTube channels"
+  },
+  "all_youtube_channels_complete":{
+    "message":"Todas tus suscripciones a canales de YouTube se incluyeron en la lista blanca",
+    "description":"Alert message displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
   "whitelist_youtube_channel":{
     "message":"No se bloquean anuncios en el canal $name$",
@@ -1314,6 +1450,14 @@
   "show_resourcelist":{
     "message":"Mostrar todas las solicitudes",
     "description":"Menu entry to open the resource list page"
+  },
+  "new_resourcelist_explanation_win":{
+    "message":"Para ver todas las consultas, haz clic derecho en la página y selecciona \"Inspeccionar\" (Ctrl+Shift+I), a continuación, selecciona la pestaña \"AdBlock\".",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+  },
+  "new_resourcelist_explanation_osx":{
+    "message":"Para ver todas las consultas, haz clic derecho en la página y selecciona \"Inspeccionar\" (Alt+cmd+i), a continuación, selecciona la pestaña \"AdBlock\".",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
   },
   "noresourcessend2":{
     "message":"Algo ha salido mal. No se ha enviado ningún recurso. Esta página ahora se cerrará. Intenta volver a cargar la página web.",
@@ -1482,5 +1626,17 @@
   "adreport_server_response_error__manual_msg_step2":{
     "message":"Y crea manualmente un tique. Copia y pega la información que aparece a continuación en la sección \"Fill in any details you think will help us understand your issue\".",
     "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "custom_filters_migration_error_message_part1":{
+    "message":"Número de errores en los filtros personalizados: ",
+    "description":"Part one of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part2":{
+    "message":"Los siguiente mensajes se generaron durante la migración de los filtros personalizados (ignora los números de línea): ",
+    "description":"Part two of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3":{
+    "message":"Entrada original: ",
+    "description":"Part three of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
   }
 }

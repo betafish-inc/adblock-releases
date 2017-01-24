@@ -319,6 +319,22 @@
     "message":"Actualizando... por favor aguarde.",
     "description":"Status label"
   },
+  "ab_filters_subscription_lastDownload_invalidURL":{
+    "message":"Falhou, não um endereço válido",
+    "description":"message on the filter tab - Message when you subscribe to a non-list URL"
+  },
+  "ab_filters_subscription_lastDownload_connectionError":{
+    "message":"Falhou, transferência inválida",
+    "description":"message on the filter tab - Generic filter list download error message"
+  },
+  "ab_filters_subscription_lastDownload_invalidData":{
+    "message":"Falhou, não é uma lista de filtros válida",
+    "description":"message on the filter tab - Invalid filter list file"
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch":{
+    "message":"Falhou, correspondência do checksum",
+    "description":"message on the filter tab"
+  },
   "invalidListUrl":{
     "message":"URL de lista inválido. Vai ser apagado.",
     "description":"Message when you subscribe to a non-list URL"
@@ -371,13 +387,37 @@
     "message":"Lista de Remoção de Avisos Adblock (remove avisos acerca do uso de bloqueadores de anúncios)",
     "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
   },
+  "filteracceptable_ads":{
+    "message":"Anúncios Aceitáveis",
+    "description":"A filter list"
+  },
+  "filteradblock_custom":{
+    "message":"Filtros personalizados do AdBlock",
+    "description":"A filter list"
+  },
+  "filtereasylist":{
+    "message":"EasyList",
+    "description":"A filter list"
+  },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite (recomendado)",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"Russo e Ucraniano",
     "description":"Language names for a filter list"
   },
+  "filter_russian":{
+    "message":"Russo e Ucraniano + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterczech":{
     "message":"Checo e Eslovaco",
     "description":"A filter list"
+  },
+  "filter_czech":{
+    "message":"Checo e Eslovaco + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (protecção da privacidade)",
@@ -387,6 +427,10 @@
     "message":"Indonésio",
     "description":"A filter list"
   },
+  "filter_easylist_plus_indonesian":{
+    "message":"Indonésio + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtermalware":{
     "message":"Proteção contra malware",
     "description":"A filter list"
@@ -394,6 +438,10 @@
   "filterlatvian":{
     "message":"Letão",
     "description":"A filter list"
+  },
+  "filter_latvian":{
+    "message":"Letão + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterswedish":{
     "message":"Sueco",
@@ -462,6 +510,10 @@
   "filtersavewarning":{
     "message":"Tenha cuidado: se cometer um erro aqui, muitos dos outros filtros, incluindo os oficiais, vão deixar de funcionar!<br\/>Leia o <a>tutorial da sintaxe de filtros<\/a> para aprender a adicionar avançadas listas negras e listas brancas manualmente.",
     "description":"Warning when blacklisting manually"
+  },
+  "delete_migration_error_messages":{
+    "message":"Eliminar mensagens",
+    "description":"Button to delete error messages when adding custom filters manually"
   },
   "contentblockingwarning":{
     "message":"Nota: Colocar na lista branca (permitir anúncios) numa página ou num site não é compatível com o Bloqueio de Conteúdos do Safari ativado.",
@@ -727,9 +779,17 @@
     "message":"Búlgaro",
     "description":"A filter list"
   },
+  "filter_easylist_plus_bulgarian":{
+    "message":"Búlgaro + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterchinese":{
     "message":"Chinês",
     "description":"A filter list"
+  },
+  "filter_chinese":{
+    "message":"Chinês + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterdanish":{
     "message":"Dinamarquês",
@@ -739,6 +799,10 @@
     "message":"Holandês",
     "description":"A filter list"
   },
+  "filter_dutch":{
+    "message":"Holandês + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_finnish":{
     "message":"Finlandês",
     "description":"A filter list"
@@ -747,9 +811,17 @@
     "message":"Francês",
     "description":"A filter list"
   },
+  "filter_easylist_plus_french":{
+    "message":"Francês + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_german":{
     "message":"Alemão",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_german":{
+    "message":"Alemão + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_greek":{
     "message":"Grego",
@@ -763,9 +835,17 @@
     "message":"Hebraico",
     "description":"A filter list"
   },
+  "filter_israeli":{
+    "message":"Hebraico + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filteritalian":{
     "message":"Italiano",
     "description":"A filter list"
+  },
+  "filter_italian":{
+    "message":"Italiano + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterjapanese":{
     "message":"Japonês",
@@ -783,6 +863,10 @@
     "message":"Romêno",
     "description":"A filter list"
   },
+  "filter_easylist_plus_romanian":{
+    "message":"Romeno + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_spanish":{
     "message":"Espanhol",
     "description":"A filter list"
@@ -790,6 +874,14 @@
   "filtereasylist_plus_arabic":{
     "message":"Árabe",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_arabic":{
+    "message":"Árabe + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_arabic_plus_french":{
+    "message":"Árabe + Francês + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_estonian":{
     "message":"Estoniano",
@@ -955,6 +1047,10 @@
     "message":"página",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"websocket",
+    "description":"A resource type"
+  },
   "typeunknown":{
     "message":"desconhecido",
     "description":"A resource type"
@@ -1051,9 +1147,17 @@
     "message":"Ajude a espalhar a palavra!",
     "description":"Text of a share link"
   },
+  "donate_to_adblock":{
+    "message":"Ama o AdBlock? Considere doar!",
+    "description":"Text of a donate link in the toolbar button menu"
+  },
   "pwyw":{
     "message":"Pague o que quiser!",
     "description":"Text of a payment request link"
+  },
+  "privacy_policy":{
+    "message":"Política de privacidade",
+    "description":"Link to AdBlock's privacy policy"
   },
   "translator_credit":{
     "message":"Crédito pela tradução vai para:",
