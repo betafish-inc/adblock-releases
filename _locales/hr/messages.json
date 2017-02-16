@@ -7,6 +7,10 @@
     "message":"Najpopularnije Chrome proširenje, sa preko 40 milijuna korisnika! Blokira reklame na cijelom internetu.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
+  "description_edge":{
+    "message":"AdBlock. #1 bloker oglasa s više od 200 milijuna preuzimanja. Blokira oglase na cijelom webu.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "adblock_click_for_details":{
     "message":"AdBlock - kliknite za detalje",
     "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button."
@@ -319,6 +323,22 @@
     "message":"Dobavljam... molim pričekajte.",
     "description":"Status label"
   },
+  "ab_filters_subscription_lastDownload_invalidURL":{
+    "message":"Neuspješno, nije valjana adresa",
+    "description":"message on the filter tab - Message when you subscribe to a non-list URL"
+  },
+  "ab_filters_subscription_lastDownload_connectionError":{
+    "message":"Neuspješno, greška preuzimanja",
+    "description":"message on the filter tab - Generic filter list download error message"
+  },
+  "ab_filters_subscription_lastDownload_invalidData":{
+    "message":"Neuspješno, nije valjana lista filtera",
+    "description":"message on the filter tab - Invalid filter list file"
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch":{
+    "message":"Neuspješno, pogrešna provjera veličine",
+    "description":"message on the filter tab"
+  },
   "invalidListUrl":{
     "message":"Nepravilna lista URL. Bit će obrisana.",
     "description":"Message when you subscribe to a non-list URL"
@@ -371,13 +391,37 @@
     "message":"AdBlock lista uklanjanja upozorenja (uklanja upozorenja o korištenju blokera oglasa)",
     "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
   },
+  "filteracceptable_ads":{
+    "message":"Prihvatljivi oglasi",
+    "description":"A filter list"
+  },
+  "filteradblock_custom":{
+    "message":"AdBlock prilagođeni filteri",
+    "description":"A filter list"
+  },
+  "filtereasylist":{
+    "message":"EasyList",
+    "description":"A filter list"
+  },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite (preporučeno)",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"Ruski i ukrajinski",
     "description":"Language names for a filter list"
   },
+  "filter_russian":{
+    "message":"Ruski i ukrajinski + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterczech":{
     "message":"Češki i slovački",
     "description":"A filter list"
+  },
+  "filter_czech":{
+    "message":"Češki i slovački + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (zaštita privatnosti)",
@@ -387,6 +431,10 @@
     "message":"Indonezijski",
     "description":"A filter list"
   },
+  "filter_easylist_plus_indonesian":{
+    "message":"Indonezijski + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtermalware":{
     "message":"Zaštita od zločudnog softvera",
     "description":"A filter list"
@@ -394,6 +442,10 @@
   "filterlatvian":{
     "message":"Latvijski",
     "description":"A filter list"
+  },
+  "filter_latvian":{
+    "message":"Latvijski + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterswedish":{
     "message":"Švedski",
@@ -462,6 +514,14 @@
   "filtersavewarning":{
     "message":"Budite oprezni: ako ovdje napravite pogrešku mnogo drugih filtera, uključujući službene, se može pokvariti!<br\/>Pročitajte <a>sintaksni vodič za filtere<\/a> kako bi naučili dodavati napredne filtere zabranjujućih i dopuštajućih lista.",
     "description":"Warning when blacklisting manually"
+  },
+  "migration_error_message":{
+    "message":"Našli smo neke greške u prilagođenim filterima. Pogledajte poruke ispod.",
+    "description":"Warning when adding custom filters manually"
+  },
+  "delete_migration_error_messages":{
+    "message":"Obriši poruke",
+    "description":"Button to delete error messages when adding custom filters manually"
   },
   "contentblockingwarning":{
     "message":"Napomena: Dodavanjem na listu dopuštenog (dopuštanje oglasa) stranice nije podržano sa blokiranjem sadržaja za Safari.",
@@ -727,9 +787,17 @@
     "message":"Bugarski",
     "description":"A filter list"
   },
+  "filter_easylist_plus_bulgarian":{
+    "message":"Bugarski + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterchinese":{
     "message":"Kineski",
     "description":"A filter list"
+  },
+  "filter_chinese":{
+    "message":"Kineski + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterdanish":{
     "message":"Danski",
@@ -739,6 +807,10 @@
     "message":"Nizozemski",
     "description":"A filter list"
   },
+  "filter_dutch":{
+    "message":"Nizozemski + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_finnish":{
     "message":"Finski",
     "description":"A filter list"
@@ -747,9 +819,17 @@
     "message":"Francuski",
     "description":"A filter list"
   },
+  "filter_easylist_plus_french":{
+    "message":"Francuski + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_german":{
     "message":"Njemački",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_german":{
+    "message":"Njemački + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_greek":{
     "message":"Grčki",
@@ -763,9 +843,17 @@
     "message":"Hebrejski",
     "description":"A filter list"
   },
+  "filter_israeli":{
+    "message":"Hebrejski + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filteritalian":{
     "message":"Talijanski",
     "description":"A filter list"
+  },
+  "filter_italian":{
+    "message":"Talijanski + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterjapanese":{
     "message":"Japanski",
@@ -783,6 +871,10 @@
     "message":"Rumunjski",
     "description":"A filter list"
   },
+  "filter_easylist_plus_romanian":{
+    "message":"Rumunjski + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_spanish":{
     "message":"Španjolski",
     "description":"A filter list"
@@ -790,6 +882,14 @@
   "filtereasylist_plus_arabic":{
     "message":"Arapski",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_arabic":{
+    "message":"Arapski + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_arabic_plus_french":{
+    "message":"Arapski + francuski + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_estonian":{
     "message":"Estonski",
@@ -802,6 +902,10 @@
   "filtereasylist_plus_lithuania":{
     "message":"Litvanski",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_lithuania":{
+    "message":"Litvanski + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "other":{
     "message":"Drugi",
@@ -955,6 +1059,10 @@
     "message":"stranica",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"websocket",
+    "description":"A resource type"
+  },
   "typeunknown":{
     "message":"nepoznato",
     "description":"A resource type"
@@ -1051,9 +1159,17 @@
     "message":"Pomozite proširiti ideju!",
     "description":"Text of a share link"
   },
+  "donate_to_adblock":{
+    "message":"Volite AdBlock? Razmislite o doniranju!",
+    "description":"Text of a donate link in the toolbar button menu"
+  },
   "pwyw":{
     "message":"Plati koliko želiš!",
     "description":"Text of a payment request link"
+  },
+  "privacy_policy":{
+    "message":"Pravila o privatnosti",
+    "description":"Link to AdBlock's privacy policy"
   },
   "translator_credit":{
     "message":"Zasluga za prijevod:",
@@ -1147,6 +1263,10 @@
     "message":"Pokaži broj blokiranih reklama na AdBlock izborniku",
     "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
   },
+  "show_devtools_panel":{
+    "message":"Prikaži \"AdBlock\" ploču u razvojnim alatima",
+    "description":"Label for checkbox letting user choose whether the AdBlock tab should show in the developer tools window"
+  },
   "adblockinglist":{
     "message":"Liste filtera blokiranih reklama",
     "description":"List for subscribed ad blocking fiters"
@@ -1188,6 +1308,22 @@
   "selectlanguage":{
     "message":"-- Odaberite jezik --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Omogući dodavanje na listu dopuštenog određenih YouTube kanala (potrebno je ponovo pokrenuti preglednik)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "whitelist_all_youtube_channels":{
+    "message":"Dopusti reklame na svim pretplaćenim YouTube kanalima",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
+  "one_moment_all_youtube_channels":{
+    "message":"Trenutak dok skupimo sve vaše pretplate",
+    "description":"Alert message displayed when whitelisting all subscribed YouTube channels"
+  },
+  "all_youtube_channels_complete":{
+    "message":"Na svim vašim pretplaćenim YouTube kanalima su dopušteni oglasi",
+    "description":"Alert message displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
   "whitelist_youtube_channel":{
     "message":"Dopusti $name$ kanal",
@@ -1314,6 +1450,14 @@
   "show_resourcelist":{
     "message":"Pokaži sve zahtjeve",
     "description":"Menu entry to open the resource list page"
+  },
+  "new_resourcelist_explanation_win":{
+    "message":"Kako bi prikazali sve zahtjeve, desni klik na stranici, odaberite 'Pregledati' (Ctrl + Shift + I), zatim odaberite 'AdBlock' karticu.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+  },
+  "new_resourcelist_explanation_osx":{
+    "message":"Kako bi prikazali sve zahtjeve, desni klik na stranici, odaberite 'Pregledati' (opcija + Cmd + I), zatim odaberite 'AdBlock' karticu.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
   },
   "noresourcessend2":{
     "message":"Nešto je pošlo krivo. Resursi nisu poslani. Stranica će se sada zatvoriti. Pokušajte ponovno pokrenuti stranicu.",
@@ -1447,6 +1591,10 @@
     "message":"Zaboravili ste prikvačiti snimak zaslona! Ne možemo Vam pomoći ako ne vidimo o kakvom se oglasu radi.",
     "description":"Error message shown when the user doesn't attach a screenshot to an ad report."
   },
+  "adreport_response_success":{
+    "message":"Sve je spremno! Javit ćemo Vam se što je prije moguće. U međuvremenu, potražite poruku e-pošte od AdBlock-a. Naći ćete link na Vaš zahtjev na našoj web-lokaciji pomoći, uz prijedloge samopomoći dok Vam se ne javimo.",
+    "description":"Shown when a ticket has been sumbitted to AdBlock's support site successfully."
+  },
   "adreport_response_invalid_file":{
     "message":"To nije slikovna datoteka. Molimo pošaljite .png, .gif, ili .jpg datoteku.",
     "description":"Error message shown when the user uploads an invalid file type."
@@ -1478,5 +1626,17 @@
   "adreport_server_response_error__manual_msg_step2":{
     "message":"I ručno napravite prijavnicu, kopirajte i zalijepite informacije ispod u sekciju \"Fill in any details you think will help us understand your issue\".",
     "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "custom_filters_migration_error_message_part1":{
+    "message":"Broj pogrešaka prilagođenih filtera: ",
+    "description":"Part one of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part2":{
+    "message":"Sljedeće poruke su generirane tijekom migracije prilagođenih filtera (zanemarite brojeve redaka): ",
+    "description":"Part two of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3":{
+    "message":"Izvorna stavka: ",
+    "description":"Part three of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
   }
 }

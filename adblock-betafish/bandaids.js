@@ -7,62 +7,11 @@
 
 
 var scriptlets = [];
-var isNotHTML = function() {
-    'use strict';
-
-    var doc = document;
-    if ( doc instanceof HTMLDocument === false ) {
-        if (
-            doc instanceof XMLDocument === false ||
-            doc.createElement('div') instanceof HTMLDivElement === false
-        ) {
-            return true;
-        }
-    }
-    if ( (doc.contentType || '').lastIndexOf('image/', 0) === 0 ) {
-        return true;
-    }
-    return false;
-};
-
-/*******************************************************************************
-    Instart Logic buster v1
-    https://github.com/uBlockOrigin/uAssets/issues/227
-**/
-
-var instartLogicBusterV1 = function() {
-        var magic = String.fromCharCode(Date.now() % 26 + 97) +
-                    Math.floor(Math.random() * 982451653 + 982451653).toString(36);
-        Object.defineProperty(window, 'I10C', {
-            set: function() {
-                throw new Error(magic);
-            }
-        });
-        var oe = window.error;
-        window.onerror = function(msg, src, line, col, error) {
-            if ( msg.indexOf(magic) !== -1 ) {
-                return true;
-            }
-            if ( oe instanceof Function ) {
-                return oe(msg, src, line, col, error);
-            }
-        }.bind();
-      	var z = window.console;
-        var y = z.log;
-        var dummy;
-      	window.console.log = function log(a) {
-      		if ( a instanceof HTMLElement ) {
-      			dummy = a.id != Date.now();
-      		}
-      		y.apply(z, arguments);
-      	}.bind(z);
-};
 
 /*******************************************************************************
     Instart Logic buster: v2
     https://github.com/uBlockOrigin/uAssets/issues/227#issuecomment-268409666
 **/
-
 var instartLogicBusterV2 = function() {
         var magic = String.fromCharCode(Date.now() % 26 + 97) +
                     Math.floor(Math.random() * 982451653 + 982451653).toString(36);
@@ -142,22 +91,75 @@ var instartLogicBusterV2 = function() {
         }.bind();
 };
 
+var instartLogicBusterV3 = function() {
+  (function() {
+    var mutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+    var abCreateElement = document.createElement;
+    document.createElement = function() {
+      var args = Array.prototype.slice.call(arguments);
+      if (args &&
+          args.length &&
+          typeof args[0] === "string" &&
+          args[0].toUpperCase() === "IFRAME") {
+        var result = abCreateElement.apply(this, args);
+        var observer = new mutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.target.locat1on) {
+              mutation.target.parentNode.removeChild(mutation.target);
+            } else if (mutation.target &&
+                       mutation.target.id &&
+                       mutation.target.parentNode &&
+                       (mutation.target.id.indexOf("ads") > -1 ||
+                        mutation.target.id.indexOf("google") > -1 ||
+                        mutation.target.id.indexOf("pfwidget") > -1 ||
+                        mutation.target.id.indexOf("tead") > -1 ||
+                        mutation.target.id.indexOf("express") > -1 ||
+                        mutation.target.id.indexOf("zbi") > -1 ||
+                        mutation.target.id.indexOf("fb_xdm_frame") > -1)) {
+              mutation.target.parentNode.removeChild(mutation.target);
+            } else if (mutation.target &&
+                       mutation.target.parentNode &&
+                       (mutation.target.class === "SYNAPIFR" ||
+                        mutation.target.id === "SYNAPIFR")) {
+              mutation.target.parentNode.removeChild(mutation.target);
+            } else if (mutation.target &&
+                       mutation.target.parentNode &&
+                       mutation.target.parentNode.id &&
+                       mutation.target.parentNode.id.indexOf("igloo") > -1) {
+              mutation.target.parentNode.removeChild(mutation.target);
+            }
+          });
+        });
+        observer.observe(result, {
+          'attributes': true
+        });
+        return result;
+      } else {
+        return abCreateElement.apply(this, args);
+      }
+    }
+  })();
+};
+
+
 /*******************************************************************************
     Collate and add scriptlets to document.
 **/
-var instartLogicBusterV1DomainsRegEx = new RegExp("(^|\.)(baltimoresun\.com|boston\.com|capitalgazette\.com|carrollcountytimes\.com|celebuzz\.com|chicagotribune\.com|courant\.com|dailypress\.com|deathandtaxesmag\.com|gamerevolution\.com|gofugyourself\.com|hearthhead\.com|infinitiev\.com|mcall\.com|nasdaq\.com|orlandosentinel\.com|ranker\.com|sandiegouniontribune\.com|saveur\.com|sherdog\.com|spin\.com|sporcle\.com|stereogum\.com|sun-sentinel\.com|thefrisky\.com|thesuperficial\.com|timeanddate\.com|tmn\.today|vancouversun\.com|vibe\.com|weather\.com|wowhead\.com)$");
 
 var instartLogicBusterV2DomainsRegEx = new RegExp("(^|\.)(calgaryherald\.com|edmontonjournal\.com|leaderpost\.com|montrealgazette\.com|ottawacitizen\.com|theprovince\.com|thestarphoenix\.com|windsorstar\.com)$");
+
+var instartLogicBusterV3DomainsRegEx = new RegExp("(^|\.)(baltimoresun\.com|boston\.com|chicagotribune\.com|capitalgazette\.com|carrollcountytimes\.com|celebuzz\.com|chicagotribune\.com|courant\.com|dailypress\.com|deathandtaxesmag\.com|gamerevolution\.com|gofugyourself\.com|hearthhead\.com|mcall\.com|nasdaq\.com|orlandosentinel\.com|sandiegouniontribune\.com|saveur\.com|sherdog\.com|spin\.com|sporcle\.com|stereogum\.com|sun-sentinel\.com|thefrisky\.com|thesuperficial\.com|timeanddate\.com|tmn\.today|vancouversun\.com|vibe\.com|weather\.com|wowhead\.com)$");
+
 
 (function() {
     'use strict';
 
     var scriptText = [];
-    if (instartLogicBusterV1DomainsRegEx.test(window.location.hostname) === true ) {
-      scriptText.push('(' + instartLogicBusterV1.toString() + ')();');
-    }
     if (instartLogicBusterV2DomainsRegEx.test(window.location.hostname) === true ) {
       scriptText.push('(' + instartLogicBusterV2.toString() + ')();');
+    }
+    if (instartLogicBusterV3DomainsRegEx.test(window.location.hostname) === true ) {
+      scriptText.push('(' + instartLogicBusterV3.toString() + ')();');
     }
 
     if ( scriptText.length === 0 ) { return; }
@@ -183,11 +185,7 @@ var run_bandaids = function()
 {
   // Tests to determine whether a particular bandaid should be applied
   var apply_bandaid_for = "";
-  if (instartLogicBusterV2DomainsRegEx.test(window.location.hostname) === true )
-  {
-    apply_bandaid_for = "instartLogicBusterV1";
-  }
-  else if (/facebook\.com/.test(document.location.hostname))
+  if (/facebook\.com/.test(document.location.hostname))
   {
     apply_bandaid_for = "facebook";
   }
@@ -380,8 +378,8 @@ var run_bandaids = function()
       var streamSelector = 'div[id^="topnews_main_stream"]';
       var storySelector = 'div[id^="hyperfeed_story_id"]';
       var searchedNodes = [{
-          'selector' : '.userContentWrapper div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
-          'content'  : {
+          'selector': '.fbUserContent div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
+          'content': {
               'af':      ['Geborg'],
               'ar':      ['إعلان مُموَّل'],
               'as':      ['পৃষ্ঠপোষকতা কৰা'],
@@ -429,8 +427,8 @@ var run_bandaids = function()
               'zh-Hant': ['贊助']
           }
       }, {
-          'selector' : '.userContentWrapper > div > div > span',
-          'content'  : {
+          'selector': '.fbUserContent > div > div > span',
+          'content': {
               'af':        ['Voorgestelde Plasing'],
               'ar':        ['منشور مقترح'],
               'as':        ['পৰামৰ্শিত প\'ষ্ট'],
@@ -478,15 +476,15 @@ var run_bandaids = function()
               'zh-Hant':   ['推薦帖子', '推薦貼文']
           }
       }, {
-          'selector' : '.userContentWrapper > div > div > div:not(.userContent)',
-          'exclude'  : function(node) {
+          'selector': '.fbUserContent > div > div > div:not(.userContent)',
+          'exclude': function(node) {
               if(!node) {
                   return true;
               }
 
               return (node.children && node.children.length);
           },
-          'content'  : {
+          'content': {
               'af':        ['Popular Live Video'],
               'ar':        ['مباشر رائج'],
               'as':        ['Popular Live Video'],
@@ -621,27 +619,6 @@ var run_bandaids = function()
           });
       }
     },
-    instartLogicBusterV1: function() {
-      var mutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-      function process(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.addedNodes.length > 0) {
-            for (var addedNode of mutation.addedNodes) {
-                console.log("addedNode", addedNode.src)
-                if (addedNode.src && addedNode.src.indexOf("data:text/html") > -1){
-                  addedNode.parentNode.removeChild(addedNode);
-                }
-            }
-          }
-        });
-      }
-      var observer = new mutationObserver(process);
-
-      observer.observe(document.querySelector('body'), {
-          'childList': true,
-          'subtree': true
-      });
-    }
   }; // end bandaids
 
   if (apply_bandaid_for)

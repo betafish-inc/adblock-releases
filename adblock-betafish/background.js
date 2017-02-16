@@ -727,6 +727,7 @@ var getDebugInfo = function (callback)
   {
     response.other_info.localStorageInfo = "no data";
   }
+  response.other_info.is_adblock_paused = adblockIsPaused();
 
   // Get total pings
   ext.storage.get('total_pings', function (storageResponse)
