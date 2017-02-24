@@ -51,6 +51,10 @@
     "message":"Чтобы скрыть кнопку, щелкните правой кнопкой мыши по панели инструментов Safari и выберите Настроить панель инструментов, а затем перетащите кнопку AdBlock с панели инструментов. Вы можете показать её снова, перетащив обратно на панель инструментов.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
+  "ff_button_how_to_hide":{
+    "message":"Чтобы скрыть кнопку, щелкните правой кнопкой мыши и выберите Удалить в панели инструментов.  Вы можете отобразить её снова, используя меню Firefox -> Customize.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
+  },
   "sliderexplanation":{
     "message":"Сдвигайте ползунок до тех пор, пока реклама не будет заблокирована правильно, а заблокированный элемент выглядит пригодным.",
     "description":"Blacklister slider page message"
@@ -390,10 +394,6 @@
   "filterwarning_removal":{
     "message":"Список Предупреждений об удалении AdBlock (удаляет предупреждения об использовании блокировщика рекламы)",
     "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
-  },
-  "filteracceptable_ads":{
-    "message":"Приемлемая реклама",
-    "description":"A filter list"
   },
   "filteradblock_custom":{
     "message":"Пользовательские фильтры AdBlock",
@@ -980,6 +980,30 @@
   "checkinfirefox_5":{
     "message":"Реклама появляется в этом браузере тоже?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
+  },
+  "ff_checkinchrometitle":{
+    "message":"Проверить в Chrome",
+    "description":"Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_1":{
+    "message":"Установить Chrome, если у Вас нет его.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_2":{
+    "message":"Установить AdBlock для Chrome, если у Вас нет его.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_3":{
+    "message":"В Chrome подпишитесь на те же списки фильтров, как и здесь.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_4":{
+    "message":"В Chrome загрузите страницу с рекламой.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_5":{
+    "message":"Реклама появляется в Chrome тоже?",
+    "description":"Instruction for how to check Chrome for a reported ad"
   },
   "refusetocheck":{
     "message":"Я не хочу проверять это",

@@ -1,165 +1,178 @@
-// instartLogicBusterV1 & instartLogicBusterV2 in this file based on code from uBO-Extra GPLv3.
+// WebSocket wrapper in this file based on code from uBO-Extra GPLv3.
 // https://github.com/gorhill/uBO-Extra/blob/master/contentscript.js
 //
 // PornHub - related code in this file based on code from uBlockOrigin GPLv3.
 // and available at https://github.com/uBlockOrigin/uAssets/blob/master/filters/filters.txt
 // and https://github.com/uBlockOrigin/uAssets/blob/master/filters/resources.txt
 
-
 var scriptlets = [];
+var hostname = window.location.hostname;
+var contentScriptSecret = String.fromCharCode(Date.now() % 26 + 97) +
+        Math.floor(Math.random() * 982451653 + 982451653).toString(36);
 
-/*******************************************************************************
-    Instart Logic buster: v2
-    https://github.com/uBlockOrigin/uAssets/issues/227#issuecomment-268409666
-**/
-var instartLogicBusterV2 = function() {
-        var magic = String.fromCharCode(Date.now() % 26 + 97) +
-                    Math.floor(Math.random() * 982451653 + 982451653).toString(36);
-        window.I10C = new Proxy({}, {
-            get: function(target, name) {
-                switch ( name ) {
-                case 'CanRun':
-                    return function() {
-                        return false;
-                    };
-                case 'HtmlStreaming':
-                    return {
-                        InsertTags: function(a, b) {
-                            document.write(b);
-                        },
-                        InterceptNode: function() {
-                        },
-                        PatchBegin: function() {
-                        },
-                        PatchEnd: function() {
-                        },
-                        PatchInit: function() {
-                        },
-                        ReloadWithNoHtmlStreaming: function() {
-                        },
-                        RemoveTags: function() {
-                        },
-                        UpdateAttributes: function() {
-                        }
-                    };
-                default:
-                    if ( target[name] === undefined ) {
-                        throw new Error(magic);
-                    }
-                    return target[name];
-                }
-            },
-            set: function(target, name, value) {
-                switch ( name ) {
-                case 'CanRun':
-                    break;
-                default:
-                    target[name] = value;
-                }
-            }
-        });
-        window.INSTART = new Proxy({}, {
-            get: function(target, name) {
-                switch ( name ) {
-                case 'Init':
-                    return function() {
-                    };
-                default:
-                    if ( target[name] === undefined ) {
-                        throw new Error(magic);
-                    }
-                    return target[name];
-                }
-            },
-            set: function(target, name, value) {
-                switch ( name ) {
-                case 'Init':
-                    break;
-                default:
-                    target[name] = value;
-                }
-            }
-        });
-        var oe = window.error;
-        window.onerror = function(msg, src, line, col, error) {
-            if ( msg.indexOf(magic) !== -1 ) {
-                return true;
-            }
-            if ( oe instanceof Function ) {
-                return oe(msg, src, line, col, error);
-            }
-        }.bind();
-};
+var abort = (function() {
+    'use strict';
 
-var instartLogicBusterV3 = function() {
-  (function() {
-    var mutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-    var abCreateElement = document.createElement;
-    document.createElement = function() {
-      var args = Array.prototype.slice.call(arguments);
-      if (args &&
-          args.length &&
-          typeof args[0] === "string" &&
-          args[0].toUpperCase() === "IFRAME") {
-        var result = abCreateElement.apply(this, args);
-        var observer = new mutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.target.locat1on) {
-              mutation.target.parentNode.removeChild(mutation.target);
-            } else if (mutation.target &&
-                       mutation.target.id &&
-                       mutation.target.parentNode &&
-                       (mutation.target.id.indexOf("ads") > -1 ||
-                        mutation.target.id.indexOf("google") > -1 ||
-                        mutation.target.id.indexOf("pfwidget") > -1 ||
-                        mutation.target.id.indexOf("tead") > -1 ||
-                        mutation.target.id.indexOf("express") > -1 ||
-                        mutation.target.id.indexOf("zbi") > -1 ||
-                        mutation.target.id.indexOf("fb_xdm_frame") > -1)) {
-              mutation.target.parentNode.removeChild(mutation.target);
-            } else if (mutation.target &&
-                       mutation.target.parentNode &&
-                       (mutation.target.class === "SYNAPIFR" ||
-                        mutation.target.id === "SYNAPIFR")) {
-              mutation.target.parentNode.removeChild(mutation.target);
-            } else if (mutation.target &&
-                       mutation.target.parentNode &&
-                       mutation.target.parentNode.id &&
-                       mutation.target.parentNode.id.indexOf("igloo") > -1) {
-              mutation.target.parentNode.removeChild(mutation.target);
-            }
-          });
-        });
-        observer.observe(result, {
-          'attributes': true
-        });
-        return result;
-      } else {
-        return abCreateElement.apply(this, args);
-      }
+    var doc = document;
+    if (doc instanceof HTMLDocument === false) {
+        if (doc instanceof XMLDocument === false ||
+            doc.createElement('div') instanceof HTMLDivElement === false) {
+            return true;
+        }
     }
-  })();
-};
+    if ((doc.contentType || '').lastIndexOf('image/', 0) === 0 ) {
+        return true;
+    }
+    return false;
+})();
 
+if ( !abort ) {
+    if (hostname === '') {
+        hostname = (function() {
+            var win = window, hn = '', max = 10;
+            try {
+                for (;;) {
+                    hn = win.location.hostname;
+                    if ( hn !== '' ) { return hn; }
+                    if ( win.parent === win ) { break; }
+                    win = win.parent;
+                    if ( !win ) { break; }
+                    if ( (max -= 1) === 0 ) { break; }
+                }
+            } catch(ex) {
+            }
+            return hn;
+        })();
+    }
+    // Don't inject if document is from local network.
+    abort = /^192\.168\.\d+\.\d+$/.test(hostname);
+}
+
+var webSocketWrapper = function(secret) {
+        var RealWebSocket = window.WebSocket,
+            closeWebSocket = Function.prototype.call.bind(RealWebSocket.prototype.close),
+            addEventListener = self.addEventListener.bind(window),
+            removeEventListener = self.removeEventListener.bind(window),
+            dispatchEvent = self.dispatchEvent.bind(window);
+
+        var queryContentScript = function(websocket, url) {
+            var uid = secret + Math.floor(Math.random() * 982451653 + 982451653).toString(36);
+            var handler = function(ev) {
+                removeEventListener(ev.type, handler);
+                if ( ev.detail === 'nope' ) { websocket.close(); }
+            };
+            addEventListener(uid, handler);
+            dispatchEvent(new CustomEvent(secret, {
+                detail: { what: 'websocket', sender: uid, url: url }
+            }));
+        };
+
+        var WrappedWebSocket = function(url) {
+            var surl = url.toString(),
+                dummy = url.toString();
+            // Throw correct exceptions if the constructor is used improperly.
+            if ( this instanceof WrappedWebSocket === false ) {
+                return RealWebSocket();
+            }
+            if ( arguments.length < 1 ) {
+                return new RealWebSocket();
+            }
+            var websocket = arguments.length === 1 ?
+                new RealWebSocket(surl) :
+                new RealWebSocket(surl, arguments[1]);
+            queryContentScript(websocket, surl);
+            return websocket;
+        };
+
+        WrappedWebSocket.prototype = RealWebSocket.prototype;
+        window.WebSocket = WrappedWebSocket.bind(window);
+
+        Object.defineProperties(window.WebSocket, {
+            CONNECTING: { value: RealWebSocket.CONNECTING, enumerable: true },
+            OPEN: { value: RealWebSocket.OPEN, enumerable: true },
+            CLOSING: { value: RealWebSocket.CLOSING, enumerable: true },
+            CLOSED: { value: RealWebSocket.CLOSED, enumerable: true },
+            name: { value: 'WebSocket' },
+            prototype: { value: RealWebSocket.prototype }
+        });
+    };
 
 /*******************************************************************************
     Collate and add scriptlets to document.
 **/
 
-var instartLogicBusterV2DomainsRegEx = new RegExp("(^|\.)(calgaryherald\.com|edmontonjournal\.com|leaderpost\.com|montrealgazette\.com|ottawacitizen\.com|theprovince\.com|thestarphoenix\.com|windsorstar\.com)$");
+var instartLogicBusterV2DomainsRegEx = new RegExp("(^|\.)(calgaryherald\.com|edmontonjournal\.com|edmunds\.com|financialpost\.com|leaderpost\.com|montrealgazette\.com|nationalpost\.com|ottawacitizen\.com|theprovince\.com|thestarphoenix\.com|windsorstar.com)$");
 
-var instartLogicBusterV3DomainsRegEx = new RegExp("(^|\.)(baltimoresun\.com|boston\.com|chicagotribune\.com|capitalgazette\.com|carrollcountytimes\.com|celebuzz\.com|chicagotribune\.com|courant\.com|dailypress\.com|deathandtaxesmag\.com|gamerevolution\.com|gofugyourself\.com|hearthhead\.com|mcall\.com|nasdaq\.com|orlandosentinel\.com|sandiegouniontribune\.com|saveur\.com|sherdog\.com|spin\.com|sporcle\.com|stereogum\.com|sun-sentinel\.com|thefrisky\.com|thesuperficial\.com|timeanddate\.com|tmn\.today|vancouversun\.com|vibe\.com|weather\.com|wowhead\.com)$");
-
+var instartLogicBusterV3DomainsRegEx = new RegExp("(^|\.)(pcmag\.com|baltimoresun\.com|boston\.com|capitalgazette\.com|carrollcountytimes\.com|celebuzz\.com|celebslam\.com|chicagotribune\.com|computershopper\.com|courant\.com|dailypress\.com|deathandtaxesmag\.com|extremetech\.com|gamerevolution\.com|geek\.com|gofugyourself\.com|hearthhead\.com|infinitiev\.com|lolking.net|mcall\.com|mmo-champion\.com|nasdaq\.com|orlandosentinel\.com|pcmag\.com|ranker\.com|sandiegouniontribune\.com|saveur\.com|sherdog\.com|spin\.com|sporcle\.com|stereogum\.com|sun-sentinel\.com|thefrisky\.com|thesuperficial\.com|timeanddate\.com|tmn\.today|twincities\.com|vancouversun\.com|vibe\.com|weather\.com|wowhead\.com)$");
 
 (function() {
     'use strict';
 
+    if ( abort ) {
+      return;
+    }
+
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=129353
+    // Trap calls to WebSocket constructor, and expose websocket-based network
+    // requests to AdBlock
+
+    // Fix won't be applied on older versions of Chromium.
+    if ( window.WebSocket instanceof Function === false ) {
+      return;
+    }
+
+    // Only for dynamically created frames and http/https documents.
+    if ( /^(https?:|about:)/.test(window.location.protocol) !== true ) {
+      return;
+    }
+
+    var doc = document;
+    var parent = doc.head || doc.documentElement;
+    if ( parent === null ) {
+      return;
+    }
+
+    // Websocket-attempt handler.
+    self.addEventListener(contentScriptSecret, function(ev) {
+        var details = ev.detail || {};
+        if ( details.what !== 'websocket' ) {
+          return;
+        }
+        var onResponseReceived = function(sender, ok) {
+            this.onload = this.onerror = null;
+            dispatchEvent(new CustomEvent(sender, { detail: ok ? '' : 'nope' }));
+        };
+        var elem;
+        var internalURL = window.location.origin + '?';
+        //  Not a real fix, rather a mitigation to the issue until a long-term
+        //  solution is implemented (possibly cross-extensions messaging).
+        //  Try to find an actual image already present in the document.
+        if ( (elem = document.querySelector('link[href*="favicon"]')) ) {
+            internalURL += 'r=' + encodeURIComponent(elem.href) + '&';
+        } else if ( (elem = document.querySelector('img[src]')) ) {
+            if ( typeof elem.src === 'string' && elem.src !== '' ) {
+                internalURL += 'r=' + encodeURIComponent(elem.src) + '&';
+            }
+        } else if ( (elem = document.querySelector('input[type="image"]')) ) {
+            if ( typeof elem.src === 'string' && elem.src !== '' ) {
+                internalURL += 'r=' + encodeURIComponent(elem.src) + '&';
+            }
+        }
+        internalURL +=
+            'url=' + encodeURIComponent(details.url) +
+            '&abfix=f41665f3028c7fd10eecf573336216d3';
+        var img = new Image();
+        img.src = internalURL;
+        img.onload = onResponseReceived.bind(img, details.sender, true);
+        img.onerror = onResponseReceived.bind(img, details.sender, false);
+    });
+
     var scriptText = [];
     if (instartLogicBusterV2DomainsRegEx.test(window.location.hostname) === true ) {
-      scriptText.push('(' + instartLogicBusterV2.toString() + ')();');
+      scriptText.push('(' + webSocketWrapper.toString() + ')("' + contentScriptSecret + '");');
     }
-    if (instartLogicBusterV3DomainsRegEx.test(window.location.hostname) === true ) {
-      scriptText.push('(' + instartLogicBusterV3.toString() + ')();');
+    else if (instartLogicBusterV3DomainsRegEx.test(window.location.hostname) === true ) {
+      scriptText.push('(' + webSocketWrapper.toString() + ')("' + contentScriptSecret + '");');
     }
 
     if ( scriptText.length === 0 ) { return; }
