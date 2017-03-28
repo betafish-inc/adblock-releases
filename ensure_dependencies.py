@@ -70,24 +70,22 @@ class Mercurial():
         subprocess.check_call(['hg', 'update', '--repository', repo, '--quiet', '--check', '--rev', rev])
 
     def ignore(self, target, repo):
+        config_path = os.path.join(repo, '.hg', 'hgrc')
+        ignore_file = os.path.join('.hg', 'dependencies')
+        ignore_path = os.path.join(repo, ignore_file)
 
-        if not self.istype(target):
+        config = RawConfigParser()
+        config.read(config_path)
 
-            config_path = os.path.join(repo, '.hg', 'hgrc')
-            ignore_path = os.path.abspath(os.path.join(repo, '.hg', 'dependencies'))
+        if not config.has_section('ui'):
+            config.add_section('ui')
 
-            config = RawConfigParser()
-            config.read(config_path)
+        config.set('ui', 'ignore.dependencies', ignore_file)
+        with open(config_path, 'w') as stream:
+            config.write(stream)
 
-            if not config.has_section('ui'):
-                config.add_section('ui')
-
-            config.set('ui', 'ignore.dependencies', ignore_path)
-            with open(config_path, 'w') as stream:
-                config.write(stream)
-
-            module = os.path.relpath(target, repo)
-            _ensure_line_exists(ignore_path, module)
+        module = os.path.relpath(target, repo)
+        _ensure_line_exists(ignore_path, module)
 
     def postprocess_url(self, url):
         return url
@@ -220,7 +218,7 @@ def read_deps(repodir):
                 if spec:
                     result[key] = spec
         return result
-    except IOError, e:
+    except IOError as e:
         if e.errno != errno.ENOENT:
             raise
         return None
@@ -332,7 +330,7 @@ def resolve_deps(repodir, level=0, self_update=True, overrideroots=None, skipdep
         try:
             with io.open(source, 'rb') as handle:
                 sourcedata = handle.read()
-        except IOError, e:
+        except IOError as e:
             if e.errno != errno.ENOENT:
                 raise
             logging.warning("File %s doesn't exist, skipping self-update" % source)
@@ -355,6 +353,7 @@ def resolve_deps(repodir, level=0, self_update=True, overrideroots=None, skipdep
 
 def _ensure_line_exists(path, pattern):
     with open(path, 'a+') as f:
+        f.seek(0, os.SEEK_SET)
         file_content = [l.strip() for l in f.readlines()]
         if not pattern in file_content:
             file_content.append(pattern)

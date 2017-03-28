@@ -1087,6 +1087,10 @@
     "message":"sayfa",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"websocket",
+    "description":"A resource type"
+  },
   "typeunknown":{
     "message":"bilinmeyen",
     "description":"A resource type"
@@ -1182,6 +1186,10 @@
   "spread_the_word":{
     "message":"Lütfen AdBlock'u daha fazla kişiye ulaştırmama yardım edin!",
     "description":"Text of a share link"
+  },
+  "donate_to_adblock":{
+    "message":"AdBlock'u beğeniyor musun? Bağış yapmak isteyebilirsin!",
+    "description":"Text of a donate link in the toolbar button menu"
   },
   "pwyw":{
     "message":"İstediğiniz kadar ödeyin!",
@@ -1332,6 +1340,18 @@
   "allow_whitelisting_youtube_channels":{
     "message":"Belirli Youtube kanalları için beyaz listeye izin ver (tarayıcınızı yeniden başlatmayı gerektirir)",
     "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "whitelist_all_youtube_channels":{
+    "message":"Takip edilen tüm YouTube kanallarını izin verilenlere ekle",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
+  "one_moment_all_youtube_channels":{
+    "message":"YouTube takip bilgilerini alırken lütfen biraz bekleyin",
+    "description":"Alert message displayed when whitelisting all subscribed YouTube channels"
+  },
+  "all_youtube_channels_complete":{
+    "message":"Takip ettiğiniz tüm YouTube kanalları izin verilenlere eklendi",
+    "description":"Alert message displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
   "whitelist_youtube_channel":{
     "message":"Bu kanala izin verin : $name$",
@@ -1598,6 +1618,10 @@
   "adreport_missing_screenshot":{
     "message":"Ekran görüntüsü eklemeyi unuttun! Bildirdiğin reklamları görmeden yardım edemeyiz.",
     "description":"Error message shown when the user doesn't attach a screenshot to an ad report."
+  },
+  "adreport_response_success":{
+    "message":"Her şey hazır! En kısa zamanda rtibat halinde olacağız. Arada bir AdBlock'tan gelecek mail için postana bak. Yardım sitemizde size hemen geri dönemeyeceğimiz durumlarda kendi kendine yardım önerileri bulacaksınız.",
+    "description":"Shown when a ticket has been sumbitted to AdBlock's support site successfully."
   },
   "adreport_response_invalid_file":{
     "message":"Bu görüntü dosyası değil. Lütfen .png, .gif, veya .jpg uzantılı dosya yükle.",
