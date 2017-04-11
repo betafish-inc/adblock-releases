@@ -1,14 +1,11 @@
-// WebSocket wrapper in this file based on code from uBO-Extra GPLv3.
+  // WebSocket wrapper in this file based on code from uBO-Extra GPLv3.
 // https://github.com/gorhill/uBO-Extra/blob/master/contentscript.js
 //
 // PornHub - related code in this file based on code from uBlockOrigin GPLv3.
 // and available at https://github.com/uBlockOrigin/uAssets/blob/master/filters/filters.txt
 // and https://github.com/uBlockOrigin/uAssets/blob/master/filters/resources.txt
 
-var scriptlets = [];
 var hostname = window.location.hostname;
-var contentScriptSecret = String.fromCharCode(Date.now() % 26 + 97) +
-        Math.floor(Math.random() * 982451653 + 982451653).toString(36);
 
 var abort = (function() {
     'use strict';
@@ -25,6 +22,7 @@ var abort = (function() {
     }
     return false;
 })();
+
 
 if ( !abort ) {
     if (hostname === '') {
@@ -48,62 +46,84 @@ if ( !abort ) {
     abort = /^192\.168\.\d+\.\d+$/.test(hostname);
 }
 
-var webSocketWrapper = function(secret) {
-        var RealWebSocket = window.WebSocket,
-            closeWebSocket = Function.prototype.call.bind(RealWebSocket.prototype.close),
-            addEventListener = self.addEventListener.bind(window),
-            removeEventListener = self.removeEventListener.bind(window),
-            dispatchEvent = self.dispatchEvent.bind(window);
-
-        var queryContentScript = function(websocket, url) {
-            var uid = secret + Math.floor(Math.random() * 982451653 + 982451653).toString(36);
-            var handler = function(ev) {
-                removeEventListener(ev.type, handler);
-                if ( ev.detail === 'nope' ) { websocket.close(); }
-            };
-            addEventListener(uid, handler);
-            dispatchEvent(new CustomEvent(secret, {
-                detail: { what: 'websocket', sender: uid, url: url }
-            }));
-        };
-
-        var WrappedWebSocket = function(url) {
-            var surl = url.toString(),
-                dummy = url.toString();
-            // Throw correct exceptions if the constructor is used improperly.
-            if ( this instanceof WrappedWebSocket === false ) {
-                return RealWebSocket();
+var instartLogicBusterV3 = function() {
+  (function() {
+    document.cookie = "morphi10c=1;max-age=86400";
+    var mutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+    DOMParser.prototype.parseFromString = function() { };
+    document.createRange = function() { };
+    var abCreateElement = document.createElement;
+    var abCreateElementNS = document.createElementNS;
+    var addEmptyAccessors = function(newElement, args) {
+      var abAddEventListener = newElement.addEventListener;
+      newElement.addEventListener = function() {
+        var eventArgs = Array.prototype.slice.call(arguments);
+        if (eventArgs &&
+            eventArgs.length &&
+            typeof eventArgs[0] === "string" &&
+            (eventArgs[0].toUpperCase() !== "ERROR")) {
+          abAddEventListener.apply(this, eventArgs);
+        }
+      };
+    };
+    var addObserver = function(newElement) {
+        var observer = new mutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.target &&
+                       mutation.target.id &&
+                       mutation.target.parentNode &&
+                       (mutation.target.id.indexOf("_ads") > -1 ||
+                        mutation.target.id.indexOf("google") > -1 ||
+                        mutation.target.id.indexOf("zbi") > -1 ||
+                        mutation.target.id.indexOf("fb_xdm_frame") > -1)) {
+              mutation.target.parentNode.removeChild(mutation.target);
             }
-            if ( arguments.length < 1 ) {
-                return new RealWebSocket();
-            }
-            var websocket = arguments.length === 1 ?
-                new RealWebSocket(surl) :
-                new RealWebSocket(surl, arguments[1]);
-            queryContentScript(websocket, surl);
-            return websocket;
-        };
-
-        WrappedWebSocket.prototype = RealWebSocket.prototype;
-        window.WebSocket = WrappedWebSocket.bind(window);
-
-        Object.defineProperties(window.WebSocket, {
-            CONNECTING: { value: RealWebSocket.CONNECTING, enumerable: true },
-            OPEN: { value: RealWebSocket.OPEN, enumerable: true },
-            CLOSING: { value: RealWebSocket.CLOSING, enumerable: true },
-            CLOSED: { value: RealWebSocket.CLOSED, enumerable: true },
-            name: { value: 'WebSocket' },
-            prototype: { value: RealWebSocket.prototype }
+          });
+        });
+        observer.observe(newElement, {
+          'attributes': true
         });
     };
+    var checkIfFrame = function(newElement, args) {
+      if (args &&
+          args.length &&
+          typeof args[0] === "string" &&
+          (args[0].toUpperCase() === "IFRAME" ||
+           args[0].toUpperCase() === "DIV")) {
+        addObserver(newElement);
+      }
+      if (args &&
+          args.length > 1 &&
+          typeof args[1] === "string" &&
+          (args[1].toUpperCase() === "IFRAME" ||
+           args[1].toUpperCase() === "DIV")) {
+        addObserver(newElement);
+      }
+    };
+    document.createElement = function() {
+      var args = Array.prototype.slice.call(arguments);
+      var newElement = abCreateElement.apply(this, args);
+      addEmptyAccessors(newElement, args);
+      checkIfFrame(newElement, args);
+      return newElement;
+    };
+    document.createElementNS = function() {
+      var args = Array.prototype.slice.call(arguments);
+      var newElement = abCreateElementNS.apply(this, args);
+      addEmptyAccessors(newElement, args);
+      checkIfFrame(newElement, args);
+      return newElement;
+    };
+  })();
+};
 
 /*******************************************************************************
     Collate and add scriptlets to document.
 **/
 
-var instartLogicBusterV2DomainsRegEx = new RegExp("(^|\.)(calgaryherald\.com|edmontonjournal\.com|edmunds\.com|financialpost\.com|leaderpost\.com|montrealgazette\.com|nationalpost\.com|ottawacitizen\.com|theprovince\.com|thestarphoenix\.com|windsorstar.com)$");
+var instartLogicBusterV2DomainsRegEx = /(^|\.)(calgaryherald\.com|edmontonjournal\.com|edmunds\.com|financialpost\.com|leaderpost\.com|montrealgazette\.com|nationalpost\.com|ottawacitizen\.com|theprovince\.com|thestarphoenix\.com|windsorstar.com)$/;
 
-var instartLogicBusterV3DomainsRegEx = new RegExp("(^|\.)(pcmag\.com|baltimoresun\.com|boston\.com|capitalgazette\.com|carrollcountytimes\.com|celebuzz\.com|celebslam\.com|chicagotribune\.com|computershopper\.com|courant\.com|dailypress\.com|deathandtaxesmag\.com|extremetech\.com|gamerevolution\.com|geek\.com|gofugyourself\.com|hearthhead\.com|infinitiev\.com|lolking.net|mcall\.com|mmo-champion\.com|nasdaq\.com|orlandosentinel\.com|pcmag\.com|ranker\.com|sandiegouniontribune\.com|saveur\.com|sherdog\.com|spin\.com|sporcle\.com|stereogum\.com|sun-sentinel\.com|thefrisky\.com|thesuperficial\.com|timeanddate\.com|tmn\.today|twincities\.com|vancouversun\.com|vibe\.com|weather\.com|wowhead\.com)$");
+var instartLogicBusterV1DomainsRegEx = /(^|\.)(baltimoresun\.com|boston\.com|capitalgazette\.com|carrollcountytimes\.com|celebuzz\.com|celebslam\.com|chicagotribune\.com|computershopper\.com|courant\.com|dailypress\.com|deathandtaxesmag\.com|extremetech\.com|gamerevolution\.com|geek\.com|gofugyourself\.com|hearthhead\.com|infinitiev\.com|lolking.net|mcall\.com|mmo-champion\.com|nasdaq\.com|orlandosentinel\.com|pcmag\.com|ranker\.com|sandiegouniontribune\.com|saveur\.com|sherdog\.com|\.spin\.com|sporcle\.com|stereogum\.com|sun-sentinel\.com|thefrisky\.com|thesuperficial\.com|timeanddate\.com|tmn\.today|twincities\.com|vancouversun\.com|vibe\.com|weather\.com)$/;
 
 (function() {
     'use strict';
@@ -132,47 +152,12 @@ var instartLogicBusterV3DomainsRegEx = new RegExp("(^|\.)(pcmag\.com|baltimoresu
       return;
     }
 
-    // Websocket-attempt handler.
-    self.addEventListener(contentScriptSecret, function(ev) {
-        var details = ev.detail || {};
-        if ( details.what !== 'websocket' ) {
-          return;
-        }
-        var onResponseReceived = function(sender, ok) {
-            this.onload = this.onerror = null;
-            dispatchEvent(new CustomEvent(sender, { detail: ok ? '' : 'nope' }));
-        };
-        var elem;
-        var internalURL = window.location.origin + '?';
-        //  Not a real fix, rather a mitigation to the issue until a long-term
-        //  solution is implemented (possibly cross-extensions messaging).
-        //  Try to find an actual image already present in the document.
-        if ( (elem = document.querySelector('link[href*="favicon"]')) ) {
-            internalURL += 'r=' + encodeURIComponent(elem.href) + '&';
-        } else if ( (elem = document.querySelector('img[src]')) ) {
-            if ( typeof elem.src === 'string' && elem.src !== '' ) {
-                internalURL += 'r=' + encodeURIComponent(elem.src) + '&';
-            }
-        } else if ( (elem = document.querySelector('input[type="image"]')) ) {
-            if ( typeof elem.src === 'string' && elem.src !== '' ) {
-                internalURL += 'r=' + encodeURIComponent(elem.src) + '&';
-            }
-        }
-        internalURL +=
-            'url=' + encodeURIComponent(details.url) +
-            '&abfix=f41665f3028c7fd10eecf573336216d3';
-        var img = new Image();
-        img.src = internalURL;
-        img.onload = onResponseReceived.bind(img, details.sender, true);
-        img.onerror = onResponseReceived.bind(img, details.sender, false);
-    });
-
     var scriptText = [];
-    if (instartLogicBusterV2DomainsRegEx.test(window.location.hostname) === true ) {
-      scriptText.push('(' + webSocketWrapper.toString() + ')("' + contentScriptSecret + '");');
+    if (instartLogicBusterV2DomainsRegEx.test(hostname) === true ) {
+      scriptText.push('(' + instartLogicBusterV3.toString() + ')();');
     }
-    else if (instartLogicBusterV3DomainsRegEx.test(window.location.hostname) === true ) {
-      scriptText.push('(' + webSocketWrapper.toString() + ')("' + contentScriptSecret + '");');
+    else if (instartLogicBusterV1DomainsRegEx.test(hostname) === true ) {
+      scriptText.push('(' + instartLogicBusterV3.toString() + ')();');
     }
 
     if ( scriptText.length === 0 ) { return; }
@@ -391,7 +376,7 @@ var run_bandaids = function()
       var streamSelector = 'div[id^="topnews_main_stream"]';
       var storySelector = 'div[id^="hyperfeed_story_id"]';
       var searchedNodes = [{
-          'selector': '.fbUserContent div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
+          'selector': '.userContentWrapper div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
           'content': {
               'af':      ['Geborg'],
               'ar':      ['إعلان مُموَّل'],
@@ -407,6 +392,7 @@ var run_bandaids = function()
               'cs':      ['Sponzorováno'],
               'cx':      ['Giisponsoran'],
               'cy':      ['Noddwyd'],
+              'da':      ['Sponsoreret'],
               'de':      ['Gesponsert'],
               'el':      ['Χορηγούμενη'],
               'en':      ['Sponsored'],
@@ -440,7 +426,7 @@ var run_bandaids = function()
               'zh-Hant': ['贊助']
           }
       }, {
-          'selector': '.fbUserContent > div > div > span',
+          'selector': '.userContentWrapper > div > div > span',
           'content': {
               'af':        ['Voorgestelde Plasing'],
               'ar':        ['منشور مقترح'],
@@ -455,6 +441,7 @@ var run_bandaids = function()
               'cs':        ['Navrhovaný příspěvek'],
               'cx':        ['Gisugyot nga Pagpatik'],
               'cy':        ['Neges a Awgrymir'],
+              'da':        ['Foreslået opslag'],
               'de':        ['Vorgeschlagener Beitrag'],
               'el':        ['Προτεινόμενη δημοσίευση'],
               'en':        ['Suggested Post'],
@@ -489,7 +476,7 @@ var run_bandaids = function()
               'zh-Hant':   ['推薦帖子', '推薦貼文']
           }
       }, {
-          'selector': '.fbUserContent > div > div > div:not(.userContent)',
+          'selector': '.userContentWrapper > div > div > div:not(.userContent)',
           'exclude': function(node) {
               if(!node) {
                   return true;
@@ -507,9 +494,10 @@ var run_bandaids = function()
               'bs':        ['Video Siaran Langsung Populer'],
               'ca':        ['Video Siaran Langsung Populer'],
               'cs':        ['Populární živé vysílání'],
+              'da':        ['Populær livevideo'],
               'de':        ['Beliebtes Live-Video'],
               'en':        ['Popular Live Video'],
-              'es':        ['Vídeo en directo popular'],
+              'es':        ['Vídeo en directo popular', 'Video en vivo popular'],
               'fr':        ['Vidéo en direct populaire'],
               'hi':        ['लोकप्रिय लाइव वीडियो'],
               'it':        ['Video in diretta popolare'],
