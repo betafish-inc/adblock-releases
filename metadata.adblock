@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.9.3
+version = 3.11.1
 backgroundScripts += adblock-jquery.js
   adblock-errorreporting.js
   adblock-functions.js
@@ -16,7 +16,7 @@ backgroundScripts += adblock-jquery.js
   adblock-subscriptioninit.js
   adblock-data-migrate.js
   adblock-excludefilter.js
-  adblock-datacollection.js
+  adblock-datacollection.v2.js
 
 options = options.html
 testScripts += tests/example.js  tests/migrate_filter_lists.js
@@ -70,7 +70,7 @@ adblock-stats.js = adblock-betafish/stats.js
 adblock-uninstall.js = adblock-betafish/uninstall.js
 adblock-survey.js = adblock-betafish/survey.js
 adblock-notificationoverlay.js = adblock-betafish/notificationoverlay.js
-adblock-datacollection.js = adblock-betafish/datacollection.js
+adblock-datacollection.v2.js = adblock-betafish/datacollection.v2.js
 adblock-contextmenus.js = adblock-betafish/contextmenus.js
 adblock-idlehandler.js = adblock-betafish/idlehandler.js
 adblock-excludefilter.js = adblock-betafish/excludefilter.js

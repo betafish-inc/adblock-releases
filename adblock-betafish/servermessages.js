@@ -68,17 +68,50 @@ var sendMessageToLogServer = function(fullUrl, callback)
   $.ajax({
     type : 'GET',
     url : fullUrl,
-    success : function()
+    success: function (text, status, xhr)
     {
       if (callback)
       {
-        callback();
+        callback(text, status, xhr);
       }
     },
-
-    error : function(e)
+    error : function(xhr, textStatus, errorThrown)
     {
-      log('message server returned error: ', e.status);
+      log('message server returned error: ', textStatus, errorThrown);
+      if (callback)
+      {
+        callback(errorThrown, textStatus, xhr);
+      }
+    },
+  });
+};
+
+var postFilterStatsToLogServer = function(data, callback)
+{
+  if (!data)
+  {
+    return;
+  }
+  var payload = {'event':  'filter_stats', 'payload': data };
+  $.ajax({
+    jsonp: false,
+    type: 'POST',
+    url: "https://log.getadblock.com/v2/record_log.php",
+    data: JSON.stringify(payload),
+    success: function (text, status, xhr)
+    {
+      if (typeof callback === "function")
+      {
+        callback(text, status, xhr);
+      }
+    },
+    error : function(xhr, textStatus, errorThrown)
+    {
+      log('message server returned error: ', textStatus, errorThrown);
+      if (callback)
+      {
+        callback(errorThrown, textStatus, xhr);
+      }
     },
   });
 };

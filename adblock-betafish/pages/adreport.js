@@ -318,22 +318,16 @@ $(function () {
 
                   var alertDisplayed = false;
                   alert(translate('disableotherextensionscomplete'));
-                  chrome.runtime.onMessage.addListener(
-                                function (request, sender, sendResponse) {
-                                  if (!alertDisplayed && request.command === 'reloadcomplete') {
-                                    alertDisplayed = true;
-                                    alert(translate('tabreloadcomplete'));
+                  backgroundPage.reloadTab(parseInt(tabId), function() {
+                    alertDisplayed = true;
+                    alert(translate('tabreloadcomplete'));
 
-                                    // we're done, redisplay the Yes/No
-                                    // buttons
-                                    $('#step_disable_extensions')
-                                        .fadeIn()
-                                        .css('display', 'block');
-                                    sendResponse({});
-                                  }
-                                }
-                            );
-                  backgroundPage.reloadTab(parseInt(tabId));
+                    // we're done, redisplay the Yes/No
+                    // buttons
+                    $('#step_disable_extensions')
+                        .fadeIn()
+                        .css('display', 'block');
+                  });
                 }); // end of chrome.management.getAll()
               } else {
                 $('#OtherExtensions')

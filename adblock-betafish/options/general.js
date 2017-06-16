@@ -78,15 +78,15 @@ $(function ()
     }
     // if the user enables/disable data collection
     // start or end the data collection process
-    if (name === 'data_collection')
+    if (name === 'data_collection_v2')
     {
       if (isEnabled)
       {
-        backgroundPage.DataCollection.start();
+        backgroundPage.DataCollectionV2.start();
       }
       else
       {
-        backgroundPage.DataCollection.end();
+        backgroundPage.DataCollectionV2.end();
       }
     }
     // if the user enables/disable YouTube Channel hiding
