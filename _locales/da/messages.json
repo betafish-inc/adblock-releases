@@ -56,7 +56,7 @@
     "description":"Blacklister attribute choosing page message"
   },
   "blacklisternotsure":{
-    "message":"<b>Ikke sikker?<\/b> klik blot 'Blokér!' nedenfor.",
+    "message":"Ikke sikker? klik blot 'Blokér!' nedenfor.",
     "description":"Blacklister attribute choosing page message"
   },
   "blacklisterthefilter":{
@@ -104,7 +104,7 @@
     }
   },
   "blacklistersinglematch":{
-    "message":"Det blev kun fundet <b>1<\/b> gang på siden.",
+    "message":"Det blev kun fundet 1 gang på siden.",
     "description":"Tells the user only one match was found"
   },
   "blacklistermatches":{
@@ -144,7 +144,7 @@
     "description":"Back to previous wizard page button"
   },
   "findingads":{
-    "message":"Finder reklamer...<br\/><br\/><i>Det tager kun et øjeblik.<\/i>",
+    "message":"Finder reklamer...\n\nDet tager kun et øjeblik.",
     "description":"When you press ctrl-shift-K the blacklister searches for ads"
   },
   "blockanadtitle":{
@@ -314,11 +314,11 @@
     "description":"Title of the filter list tab"
   },
   "filterlistlink":{
-    "message":"Abonnér ikke på flere end du behøver -- hvert abonnement sløver en lille bitte smule. Credits og flere lister kan findes <a>her (engelsk)<\/a>.",
+    "message":"Abonnér ikke på flere end du behøver -- hvert abonnement sløver en lille bitte smule. Credits og flere lister kan findes [[her (engelsk)]].",
     "description":"Explanation of the filter lists"
   },
   "updatenowmessage2":{
-    "message":"Jeg henter automatisk opdateringer; du kan også <a>opdatere nu<\/a>",
+    "message":"Jeg henter automatisk opdateringer; du kan også [[opdatere nu]]",
     "description":"Update filters text + button"
   },
   "orenteraurl":{
@@ -426,7 +426,7 @@
     "description":"Subtitle on the 'Customize' tab"
   },
   "filtersavewarning":{
-    "message":"Vær varsom: hvis du laver en fejl her, kan en stor del af disse og de officielle filtre blive ubrugelige!<br\/>Læs <a>filtersyntaksguiden (engelsk)<\/a> for at lære hvordan man tilføjer avancerede blacklist og whitelist filtre.",
+    "message":"Vær varsom: hvis du laver en fejl her, kan en stor del af disse og de officielle filtre blive ubrugelige!\nLæs [[filtersyntaksguiden (engelsk)]] for at lære hvordan man tilføjer avancerede blacklist og whitelist filtre.",
     "description":"Warning when blacklisting manually"
   },
   "savebutton":{
@@ -442,7 +442,7 @@
     "description":"Title of the ad report page"
   },
   "malwarewarning":{
-    "message":"Din computer kan være inficeret med malware.  Klik <a>her<\/a> for mere information.",
+    "message":"Din computer kan være inficeret med malware.  Klik [[her]] for mere information.",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
   },
   "malwarenotfound":{
@@ -450,7 +450,7 @@
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
   "clickupdatefilters":{
-    "message":"Klik på denne: <a>Opdatér mine filtre!<\/a>",
+    "message":"Klik på denne: [[Opdatér mine filtre!]]",
     "description":"Instruction on ad report page"
   },
   "reloadadpage":{
@@ -470,7 +470,7 @@
     "description":"A negative response to a question"
   },
   "disableforchromeandsafaristeptwo":{
-    "message":"Fjern krydset i 'Aktivér'-feltet ud for alle udvidelser <b>bortset fra<\/b> AdBlock. <b>Lad AdBlock forblive aktiveret<\/b>.",
+    "message":"Fjern krydset i 'Aktivér'-feltet ud for alle udvidelser bortset fra AdBlock. Lad AdBlock forblive aktiveret.",
     "description":"Step 2 for disabling Chrome and Safari extensions"
   },
   "disableforsafaristepone":{
@@ -657,16 +657,6 @@
     "message":"eller AdBlock til Chrome",
     "description":"Used for placeholder in checkinfirefox_2 string"
   },
-  "nodefaultfilter1":{
-    "message":"Vi har i øjeblikket ikke et standardfilter for det valgte sprog.<br\/>Prøv venligst at finde en passende liste, der understøtter sproget $link$ eller bloker reklamen bare for dig selv under 'Tilpas'-fanen.",
-    "description":"Instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same text as the name of the 'Customize' tab.",
-    "placeholders":{
-      "link":{
-        "content":"<a id='link'><\/a>",
-        "example":"<a>here<\/a>"
-      }
-    }
-  },
   "retryaftersubscribe":{
     "message":"Abonnér til denne filterliste, og prøv så igen: $list_title$",
     "description":"Instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
@@ -678,24 +668,12 @@
     }
   },
   "checkinfirefoxtitle":{
-    "message":"Tjek i Firefox $chrome$",
-    "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome",
-    "placeholders":{
-      "chrome":{
-        "content":"<span id='chrome1'><\/span>",
-        "example":"'or Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
-      }
-    }
+    "message":"Tjek i Firefox ",
+    "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome"
   },
   "checkinfirefox_1":{
-    "message":"Installér Firefox $chrome$ hvis du ikke har det.",
-    "description":"instruction for how to check Firefox\/Chrome for a reported ad",
-    "placeholders":{
-      "chrome":{
-        "content":"<span id='chrome2'><\/span>",
-        "example":"'or Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
-      }
-    }
+    "message":"Installér Firefox hvis du ikke har det.",
+    "description":"instruction for how to check Firefox\/Chrome for a reported ad"
   },
   "checkinfirefox_4":{
     "message":"I den browser skal du indlæse siden med reklamen.",
@@ -738,8 +716,8 @@
     "description":"Telling the user to report an ad to a filter list maintainer",
     "placeholders":{
       "link":{
-        "content":"$1",
-        "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
+        "content":"[[]]",
+        "example":"The link could point to a filter list's forum, or to the email address of a filter list maintainer. For example, forums.lanik.us or someguy@list.com."
       }
     }
   },
@@ -748,7 +726,7 @@
     "description":"Telling users who won't report an ad to us how to handle it for themselves"
   },
   "adblock_outdated_chrome":{
-    "message":"Du bruger en gammel version af AdBlock. Gå venligst til <a href='#'>siden for udvidelser<\/a>, aktiver 'Udviklertilstand' og klik på 'Opdater udvidelser nu'",
+    "message":"Du bruger en gammel version af AdBlock. Gå venligst til [[siden for udvidelser]], aktiver 'Udviklertilstand' og klik på 'Opdater udvidelser nu'",
     "description":"Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome:\/\/chrome\/extensions\/'"
   },
   "block_an_ad_on_this_page":{
@@ -916,7 +894,7 @@
     "description":"Caption for the whitelist wizard slider that modifies the path part of a URL"
   },
   "show_ads_except_for":{
-    "message":"Vis rekamer <i>overalt<\/i> undtagen disse domæner...",
+    "message":"Vis rekamer overalt undtagen disse domæner...",
     "description":"Section title for blacklisting section of Customize tab"
   },
   "only_block_ads_on_these_sites":{
@@ -928,7 +906,7 @@
     "description":"Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters":{
-    "message":"Advarsel: på alle andre sider vil reklamer blive vist!<br>Dette overskriver alle andre filtre for disse sider.",
+    "message":"Advarsel: på alle andre sider vil reklamer blive vist!\nDette overskriver alle andre filtre for disse sider.",
     "description":"Message on the 'Customize' tab of the options page, explaining the danger of adding a blacklisting filter"
   },
   "storage_quota_exceeded":{
@@ -936,7 +914,7 @@
     "description":"Message shown when the user uses more storage than allowed by the browser"
   },
   "safari50_updatenotice":{
-    "message":"Du benytter en gammel version af Safari. Hent den seneste version for og benytte AdBlock-værktøjslinjen, for at afbryde AdBlock midlertidigt, godkende hjemmesider, og rapportere reklamer. <a>Opdatér nu<\/a>.",
+    "message":"Du benytter en gammel version af Safari. Hent den seneste version for og benytte AdBlock-værktøjslinjen, for at afbryde AdBlock midlertidigt, godkende hjemmesider, og rapportere reklamer. [[Opdatér nu]].",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
   },
   "firefox_explanation":{
@@ -952,7 +930,7 @@
     "description":"Shown below the 'Blocked ads:' message. Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
     "placeholders":{
       "count":{
-        "content":"<a>123<\/a>",
+        "content":"[[123]]",
         "example":"The number of ads blocked. Do not make any changes to this placeholder when translating."
       }
     }
@@ -962,7 +940,7 @@
     "description":"Shown below the 'Blocked ads:' message. Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
     "placeholders":{
       "count":{
-        "content":"<a>123,456<\/a>",
+        "content":"[[123,456]]",
         "example":"The number of ads blocked. Do not make any changes to this placeholder when translating."
       }
     }
@@ -1031,16 +1009,6 @@
     "message":"her",
     "description":"This message is injected in other strings as a link\/button"
   },
-  "update_available":{
-    "message":"Der er en ny opdatering til AdBlock! Tjek det ud $here$.<br>OBS: Hvis du vil installere opdateringer automatisk, skal du klikke på Safari > Indstillinger > Udvidelser > Opdateringer og markere 'Installér automatisk nye opdateringer'.",
-    "description":"On the Options > Support page, shows when there are updates available for AdBlock",
-    "placeholders":{
-      "here":{
-        "content":"<a id='here'><\/a>",
-        "example":"<a>here<\/a>"
-      }
-    }
-  },
   "adblocksupport":{
     "message":"AdBlock-support",
     "description":"Title of the support tab"
@@ -1058,7 +1026,7 @@
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
   "whatsnew":{
-    "message":"Hvad er der af nye ting i den seneste udgivelse? Tjek <a style='cursor:pointer;'>ændringsloggen<\/a> ud.",
+    "message":"Hvad er der af nye ting i den seneste udgivelse? Tjek [[ændringsloggen]] ud.",
     "description":"Link to display the changelog on the Support tab of the options"
   },
   "englishonly":{
@@ -1082,23 +1050,19 @@
     "description":"Subtitle on the Support tab of the options"
   },
   "sourcecode":{
-    "message":"Kildekoden er <a>frit tilgængelig<\/a>!",
+    "message":"Kildekoden er [[frit tilgængelig]]!",
     "description":"Link to the source code of AdBlock on the Support tab of the options"
   },
-  "contributors":{
-    "message":"Vi har også en <a>side<\/a> til at hjælpe dig med at finde ud af folkene bag AdBlock!",
-    "description":"Link to the contributors page on the Support tab of the options"
-  },
   "debuginfo":{
-    "message":"Har vores hold spurgt efter debug-info? Klik <a href='#' id='debug'>her<\/a> for at få det!",
+    "message":"Har vores hold spurgt efter debug-info? Klik [[her]] for at få det!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "supportsite":{
-    "message":"Lad os få det at vide på vores <a>supportside<\/a>!",
+    "message":"Lad os få det at vide på vores [[supportside]]!",
     "description":"Link to the support site on the Support tab of the options"
   },
   "ad_report_please":{
-    "message":"Hvis du ser en reklame, skal du ikke lave en fejlrapport, men en <a>annoncerapport<\/a> istedet!",
+    "message":"Hvis du ser en reklame, skal du ikke lave en fejlrapport, men en [[annoncerapport]] istedet!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
   "headertype":{

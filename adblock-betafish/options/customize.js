@@ -187,7 +187,7 @@ $(function ()
     }
 
     var filterErrorMessage = '';
-    $('#messageBlacklist').html(filterErrorMessage);
+    $('#messageBlacklist').text(filterErrorMessage);
     $('#messageBlacklist').hide();
     var result = parseFilter(blacklist);
 
@@ -195,7 +195,7 @@ $(function ()
     {
       $('#btnAddBlacklist').prop('disabled', true);
       filterErrorMessage = translate('customfilterserrormessage', [$('#txtBlacklist').val(), result.error]);
-      $('#messageBlacklist').html(filterErrorMessage);
+      $('#messageBlacklist').text(filterErrorMessage);
       $('#messageBlacklist').show();
       return;
     }

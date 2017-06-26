@@ -8,8 +8,6 @@
   <head>
     <title i18n="adblockreportinganad"></title>
     <link rel="stylesheet" href="adblock-option-options.css" />
-    <script src="lib/polyfills/promise.js"></script>
-    <script src="lib/polyfills/fetch.js"></script>
     <script src="ext/common.js"></script>
     <script src="ext/content.js"></script>
     <script src="adblock-jquery.js"></script>
@@ -147,7 +145,7 @@
     <!--STEP 0-->
     <div id="info">
       <p i18n="adreportintro"></p>
-      <p i18n="adreportvoluntary"></p>
+      <p i18n="adreportvoluntary" i18n_replacement_el="adreportvoluntaryLink"> <a id="adreportvoluntaryLink" href="http://help.getadblock.com/support/solutions/articles/6000061202" target="_blank"> </a> </p>
     </div>
 
     <!--STEP 2: update filters-->
@@ -155,10 +153,9 @@
       <div class="section" id="step_update_filters_DIV">
         <h2 i18n="updateyourlists"></h2>
         <ol>
-          <li i18n="clickupdatefilters" i18n_replacement_el="UpdateFilters"></li>
+          <li i18n="clickupdatefilters" i18n_replacement_el="UpdateFilters"> <input type="button" value="Update my filters!" id="UpdateFilters" > </input> </li>
           <li i18n="reloadadpage" class="afterFilterUpdate"></li>
         </ol>
-        <input type="button" value="Update my filters!" id="UpdateFilters" />
         <span i18n="adstillappear" class="afterFilterUpdate" style="margin-left: 19px;"></span><br/>
         <div id="step_update_filters" class="form afterFilterUpdate">
           <input type="radio" id="step_update_filters_yes" name="step_update_filters" disabled="disabled" />
@@ -174,10 +171,9 @@
       <div class="section" id="step_update_aa_DIV">
         <h2 i18n="disableaa"></h2>
         <ol>
-          <li i18n="clickdisableaa" i18n_replacement_el="DisableAA"></li>
+          <li i18n="clickdisableaa" i18n_replacement_el="DisableAA"> <input type="button" value="Unsubscribe to Acceptable Ads" id="DisableAA" > </input> </li>
           <li i18n="reloadadpage" class="afterDisableAA"></li>
         </ol>
-        <input type="button" value="Unsubscribe to Acceptable Ads" id="DisableAA" />
         <span i18n="adstillappear" class="afterDisableAA" style="margin-left: 19px;"></span><br/>
         <div id="step_update_aa" class="form afterDisableAA">
           <input type="radio" id="step_update_aa_yes" name="step_update_aa" disabled="disabled" />
@@ -193,14 +189,14 @@
       <div class="section" id="step_disable_extensions_DIV">
         <h2 i18n="disableallextensions"></h2>
         <div class="chrome_only">
-        <ol>
-          <li i18n="disableforchromestepone"></li>
-          <li i18n="disableforchromeandsafaristeptwo"></li>
-          <li i18n="reloadadpage"></li>
-        </ol>
+          <ol>
+            <li i18n="disableforchromestepone" i18n_replacement_el="disableExtensionsLink" > <a id="disableExtensionsLink" href='#'> </a> </li>
+            <li i18n="disableforchromeandsafaristeptwo"></li>
+            <li i18n="reloadadpage"></li>
+          </ol>
         <div style="margin: 15px 0px 15px 19px;">
-          <div i18n="clickdisableotherextensions" i18n_replacement_el="OtherExtensions"></div>
-          <input type="button" value="Disable other extensions!" id="OtherExtensions" />
+          <div i18n="clickdisableotherextensions" i18n_replacement_el="OtherExtensions"> <input type="button" value="Disable other extensions!" id="OtherExtensions" > </input> </div>
+          
         </div>
         </div>
         <div class="safari_only">
@@ -307,6 +303,7 @@
         <h2 i18n="adreport_laststep"></h2>
         <span class="redText" style="margin-left: 15px;">* Required information</span>
         <div class="form" id="step_report">
+          <span class="missingInfoMessage" i18n="adreport_missing_screenshot" id="adreport_missing_screenshot"></span>
           <p class="missingInfoMessage" i18n="adreport_missing_info" id="adreport_missing_info"></p>
           <label for="step_report_name" ><span i18n="adreport_name"></span><span class="redText">&nbsp;*</span></label><br/>
           <input type="text" id="step_report_name" size="35" /><br/>
@@ -351,7 +348,7 @@
     </div>
 
     <div class="result">
-      <div id="checkupdate"></div>
+      <div id="checkupdate" class="adblock-preserve-whitespace" >  <a id="checkupdatelink" target="_blank"> </a>  </div>
       <div id="checkupdatelink_DIV">
         <a id="checkupdatelink" href="https://adblockplus.org/acceptable-ads" target="_blank"></a>
       </div>

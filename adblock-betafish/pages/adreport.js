@@ -11,6 +11,7 @@ var options = parseUri.parseSearch(document.location.search);
 var tabId = options.tabId.replace(/[^0-9]/g, '');
 var extensionsDisabled = [];
 var subscriptionsNodes = [];
+var unsubscribedDefaultFilters = [];
 var contact = '';
 var updateFiltersClicked = false;
 
@@ -31,7 +32,6 @@ $(function () {
   });
 
   // Get the list of all unsubscribed default filters
-  var unsubscribedDefaultFilters = [];
   var subs = backgroundPage.getAllSubscriptionsMinusText();
   for (var id in subs) {
     if (!subs[id].subscribed && !subs[id].user_submitted) {
@@ -342,42 +342,33 @@ $(function () {
   // if the user clicks an item
   $('#step_language_lang')
         .change(function () {
-          var $selected = $('#step_language_lang option:selected');
+          var selected = $('#step_language_lang option:selected');
           $('#step_language')
-              .html("<span class='answer'>" + $selected.text() + '</span>');
+              .html("<span class='answer'>" + selected.text() + '</span>');
           $('#step_language span')
-              .attr('chosen', $selected.attr('i18n'));
-          if ($selected.text() == translate('other'))
-          {
-            $('#checkupdate')
-                .html(translate('nodefaultfilter1'));
-            $('#link')
-                .html(translate('here'))
-                .attr('href', 'https://adblockplus.org/en/subscriptions');
-            recordMessage("language");
+              .attr('chosen', selected.attr('i18n'));
+          if (selected.text() == translate('other')) {
+            if (!$('#checkupdate').get(0).firstChild) {
+              log("returning, no first child found", $(this).attr("i18n"));
+              return;
+            }
+            if (!$('#checkupdate').get(0).lastChild) {
+              log("returning, no last child found", $(this).attr("i18n"));
+              return;
+            }
+            var rawMessageText = translate('nodefaultfilter1');
+            var messageSplit = splitMessageWithReplacementText(rawMessageText);
+            $('#checkupdate').get(0).firstChild.nodeValue = messageSplit.anchorPrefixText;
+            $('#checkupdate').get(0).lastChild.nodeValue = messageSplit.anchorPostfixText;
+            $('#checkupdatelink').text(translate('here')).attr('href', 'https://adblockplus.org/en/subscriptions');
             return;
           }
-          else
-          {
-            var requiredLists = $selected.attr('value')
-                .split(';');
-            for (var i = 0; i < requiredLists.length - 1; i++)
-            {
-              // If the user selected English, but they're subscribed to
-              // language specific filter list that includes Easylist
-              // continue...
-              if ($selected.text() == translate('lang_english') &&
-                  requiredLists[i].indexOf('easylist') >= 0)
-              {
-                continue;
-              }
-              if (unsubscribedDefaultFilters[requiredLists[i]])
-              {
-                $('#checkupdate')
-                    .text(translate('retryaftersubscribe', [translate('filter' + requiredLists[i])]));
-                recordMessage("language");
-                return;
-              }
+          var requiredLists = selected.attr('value').split(';');
+          for (var i = 0; i < requiredLists.length - 1; i++) {
+            if (unsubscribedDefaultFilters[requiredLists[i]]) {
+              $('#checkupdate')
+                  .text(translate('retryaftersubscribe', [translate('filter' + requiredLists[i])]));
+              return;
             }
           }
 
@@ -407,15 +398,26 @@ $(function () {
   $('#step_firefox_yes')
         .click(function () {
           recordMessage("filterlistproblem");
+          // TODO - remove .html
           $('#step_firefox')
               .html("<span class='answer' chosen='yes'>" + translate('yes') + '</span>');
           if (/^mailto\:/.test(contact))
               contact = contact.replace(' at ', '@');
-          var reportLink = "<a href='" + contact + "'>" + contact.replace(/^mailto\:/, '') + '</a>';
-          $('#checkupdate')
-              .html(translate('reportfilterlistproblem', [reportLink]));
-          $('#privacy')
-              .show();
+          if (!$('#checkupdate').get(0).firstChild) {
+               log("returning, no first child found", $(this).attr("i18n"));
+               return;
+            }
+            if (!$('#checkupdate').get(0).lastChild) {
+               log("returning, no last child found", $(this).attr("i18n"));
+               return;
+            }
+            var rawMessageText = translate('reportfilterlistproblem');
+            var messageSplit = splitMessageWithReplacementText(rawMessageText);
+            $('#checkupdate').get(0).firstChild.nodeValue = messageSplit.anchorPrefixText;
+            $('#checkupdate').get(0).lastChild.nodeValue = messageSplit.anchorPostfixText;
+            $('#checkupdatelink').prop('href', contact);
+            $('#checkupdatelink').text(contact.replace(/^mailto\:/, ''));
+            $('#privacy').show();
         });
 
   $('#step_firefox_no')
@@ -570,7 +572,7 @@ function sendReport() {
     location: $location.val(),
     filter: $filter.val(),
     debug: debugInfo,
-    url: '',
+    url: ''
   };
 
   var domain = '';
@@ -651,6 +653,7 @@ function sendReport() {
     $('#debug-info')
         .val(createReadableReport(reportData));
     $.ajax({
+      jsonp: false,
       url: 'https://getadblock.com/freshdesk/adReport.php',
       data: formdata,
       contentType: false,
@@ -659,7 +662,6 @@ function sendReport() {
       {
         $('#step_report_submit')
             .prop('disabled', true);
-
         // if a ticket was created, the response should contain a ticket
         // id #
         if (text)

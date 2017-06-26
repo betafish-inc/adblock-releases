@@ -249,29 +249,27 @@ var confirmRemovalOfCustomFiltersOnHost = function (host, activeTab)
 // Reload already opened tab
 // Input:
 // tabId: integer - id of the tab which should be reloaded
-reloadTab = function (tabId)
-{
-  var listener = function (tabId, changeInfo, tab)
-  {
-    if (changeInfo.status === 'complete' && tab.status === 'complete')
-    {
-      setTimeout(function ()
-      {
-        chrome.runtime.sendMessage(
-        {
-          command: 'reloadcomplete',
-        });
-        chrome.tabs.onUpdated.removeListener(listener);
-      }, 2000);
-    }
-  };
+var reloadTab = function(tabId, callback) {
+  var localCallback = callback;
+  var listener = function (tabId, changeInfo, tab) {
+      if (changeInfo.status === 'complete' &&
+          tab.status === 'complete') {
+        setTimeout(function () {
+            chrome.tabs.sendMessage(tabId, { command: 'reloadcomplete' });
+            if (typeof localCallback === "function") {
+              localCallback(tab);
+            }
+            chrome.tabs.onUpdated.removeListener(listener);
+          }, 2000);
+      }
+    };
 
-  chrome.tabs.reload(tabId,
-  {
-    bypassCache: true,
-  }, function ()
-  {
-    chrome.tabs.onUpdated.addListener(listener);
+  if (typeof tabId === 'string') {
+    tabId = parseInt(tabId);
+  }
+  chrome.tabs.onUpdated.addListener(listener);
+  chrome.tabs.reload(tabId, { bypassCache: true }, function () {
+
   });
 };
 

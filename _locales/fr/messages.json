@@ -68,7 +68,7 @@
     "description":"Blacklister attribute choosing page message"
   },
   "blacklisternotsure":{
-    "message":"<b>Vous ne savez pas ?<\/b> Appuyez simplement sur \"Bloquer\" ci-dessous.",
+    "message":"Vous ne savez pas ? Cliquez simplement sur \"Bloquer\" ci-dessous.",
     "description":"Blacklister attribute choosing page message"
   },
   "blacklisterthefilter":{
@@ -116,7 +116,7 @@
     }
   },
   "blacklistersinglematch":{
-    "message":"Ceci s'applique à <b>1<\/b> élément sur cette page.",
+    "message":"Ceci s'applique à 1 élément sur cette page.",
     "description":"Tells the user only one match was found"
   },
   "blacklistermatches":{
@@ -156,7 +156,7 @@
     "description":"Back to previous wizard page button"
   },
   "findingads":{
-    "message":"Recherche des pubs...<br\/><br\/><i>Cela peut prendre un moment.<\/i>",
+    "message":"Recherche des pubs...\n\nCela peut prendre un moment.",
     "description":"When you press ctrl-shift-K the blacklister searches for ads"
   },
   "blockanadtitle":{
@@ -364,11 +364,11 @@
     "description":"Title of the filter list tab"
   },
   "filterlistlink":{
-    "message":"Trop de filtres activés ralentissent la navigation, choisissez donc uniquement ceux qui vous sont utiles !<br\/>Les crédits et autres listes se trouvent <a>ici<\/a>.",
+    "message":"Trop de filtres activés ralentissent la navigation, choisissez donc uniquement ceux qui vous sont utiles !\nLes crédits et autres listes se trouvent [[ici]].",
     "description":"Explanation of the filter lists"
   },
   "updatenowmessage2":{
-    "message":"Les listes seront mises à jour automatiquement. Vous pouvez aussi les <a>mettre à jour maintenant<\/a>",
+    "message":"Les listes seront mises à jour automatiquement. Vous pouvez aussi les [[mettre à jour maintenant]]",
     "description":"Update filters text + button"
   },
   "orenteraurl":{
@@ -516,7 +516,7 @@
     "description":"Subtitle on the 'Customize' tab"
   },
   "filtersavewarning":{
-    "message":"Attention : faire une erreur ici peut entraîner un mauvais fonctionnement des filtres officiels.<br\/>Consultez le <a>tutoriel de syntaxe<\/a> pour apprendre à ajouter des filtres avancés.",
+    "message":"Attention : faire une erreur ici peut entraîner un mauvais fonctionnement des filtres officiels.\nConsultez le [[tutoriel de syntaxe]] pour apprendre à ajouter des filtres avancés.",
     "description":"Warning when blacklisting manually"
   },
   "migration_error_message":{
@@ -548,7 +548,7 @@
     "description":"Introduction of the ad reporting page"
   },
   "adreportvoluntary":{
-    "message":"Signaler des publicités est purement volontaire. En le faisant, vous aidez les autres utilisateurs en permettant aux listes de filtres de bloquer cette pub pour tout le monde. Si toutefois vous ne vous sentez pas particulièrement altruiste en ce moment, ce n'est pas grave. Vous pouvez fermer cette page et uniquement <a>bloquer cette pub<\/a> pour vous-même.",
+    "message":"Signaler des publicités est purement volontaire. En le faisant, vous aidez les autres utilisateurs en permettant aux listes de filtres de [[bloquer cette pub]] pour tout le monde. Si toutefois vous ne vous sentez pas particulièrement altruiste en ce moment, ce n'est pas grave. Vous pouvez fermer cette page et uniquement bloquer cette pub pour vous-même.",
     "description":"Introduction of the ad reporting page"
   },
   "malwarenotificationcheckboxmessage":{
@@ -572,7 +572,7 @@
     "description":"Section header on the ad report page"
   },
   "malwarewarning":{
-    "message":"Votre ordinateur semble être infecté par des logiciels malveillants. Cliquez <a>ici<\/a> pour davantage d'informations.",
+    "message":"Votre ordinateur semble être infecté par des logiciels malveillants. Cliquez [[ici]] pour davantage d'informations.",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
   },
   "malwarenotfound":{
@@ -584,7 +584,7 @@
     "description":"Section header on the ad report page"
   },
   "clickdisableaa":{
-    "message":"Cliquez ici : <a>Désactiver les Publicités Acceptables<\/a>",
+    "message":"Cliquez ici : [[Désactiver les Publicités Acceptables]]",
     "description":"Instruction on ad report page"
   },
   "aamessageadreport":{
@@ -595,12 +595,16 @@
     "message":"En savoir plus sur le programme Publicités Acceptables.",
     "description":"Acceptable Ads link message on ad report page"
   },
+  "adreportthanks":{
+    "message":"Merci !",
+    "description":"Message to the user thanking them for sharing the URL with us."
+  },
   "updateyourlists":{
     "message":"Vérifiez que vos filtres sont à jour :",
     "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
-    "message":"Cliquez ici : <a>Mettre à jour mes filtres !<\/a>",
+    "message":"Cliquez ici : [[Mettre à jour mes filtres]] !",
     "description":"Instruction on ad report page"
   },
   "reloadadpage":{
@@ -628,11 +632,11 @@
     "description":"Instruction on ad report page"
   },
   "disableforchromestepone":{
-    "message":"Ouvrez <a href='#'>la page des extensions<\/a>.",
+    "message":"Ouvrez [[la page des extensions]].",
     "description":"Step 1 for disabling Chrome extensions"
   },
   "clickdisableotherextensions":{
-    "message":"<b>SOIT<\/b>, cliquez simplement sur ce bouton pour faire toutes les étapes ci-dessus: <a>Désactiver toutes les autres extensions<\/a>",
+    "message":"SOIT, cliquez simplement sur ce bouton pour faire toutes les étapes ci-dessus: [[Désactiver toutes les autres extensions]]",
     "description":"On the ad report page, an alternative way to disable other extensions"
   },
   "disableotherextensionscomplete":{
@@ -652,7 +656,7 @@
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "disableforchromeandsafaristeptwo":{
-    "message":"Décochez la case 'Activée' à côté de chaque extension <b>à part<\/b> AdBlock. <b>Gardez AdBlock activé<\/b>.",
+    "message":"Décochez la case \"Activée\" à côté de chaque extension à part AdBlock. Gardez AdBlock activé.",
     "description":"Step 2 for disabling Chrome and Safari extensions"
   },
   "disableforsafaristepone":{
@@ -915,23 +919,9 @@
     "message":"Autre",
     "description":"Multiple choice option"
   },
-  "orchrome":{
-    "message":"ou Chrome",
-    "description":"Used for placeholder in checkinfirefoxtitle and checkinfirefox_1 strings"
-  },
-  "oradblockforchrome":{
-    "message":"ou AdBlock pour Chrome",
-    "description":"Used for placeholder in checkinfirefox_2 string"
-  },
   "nodefaultfilter1":{
-    "message":"Nous n'avons pas de liste de filtres pour cette langue.<br\/>Essayez de trouver une liste appropriée qui supporte cette langue $link$ ou bloquez cette publicité pour vous-même dans l'onglet \"Personnaliser\".",
-    "description":"Instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same text as the name of the 'Customize' tab.",
-    "placeholders":{
-      "link":{
-        "content":"<a id='link'><\/a>",
-        "example":"<a>here<\/a>"
-      }
-    }
+    "message":"Nous n'avons pas de liste de filtres pour cette langue.\nEssayez de [[trouver une liste appropriée qui supporte cette langue]] ou bloquez cette publicité pour vous-même dans le menu AdBlock.",
+    "description":"Instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same text as the name of the 'Customize' tab."
   },
   "retryaftersubscribe":{
     "message":"Abonnez-vous à cette liste de filtres, et réessayez : $list_title$",
@@ -944,34 +934,28 @@
     }
   },
   "checkinfirefoxtitle":{
-    "message":"Vérifier dans Firefox $chrome$",
-    "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome",
-    "placeholders":{
-      "chrome":{
-        "content":"<span id='chrome1'><\/span>",
-        "example":"'or Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
-      }
-    }
+    "message":"Vérifier dans Firefox",
+    "description":"Tell a user to see if a reported ad also appears in Firefox"
+  },
+  "checkinfirefoxorchrometitle":{
+    "message":"Vérifier dans Firefox ou Chrome",
+    "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome"
   },
   "checkinfirefox_1":{
-    "message":"Installez Firefox $chrome$ si vous ne l'avez pas.",
-    "description":"instruction for how to check Firefox\/Chrome for a reported ad",
-    "placeholders":{
-      "chrome":{
-        "content":"<span id='chrome2'><\/span>",
-        "example":"'or Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
-      }
-    }
+    "message":"Installez Firefox si vous ne l'avez pas.",
+    "description":"instruction for how to check Firefox for a reported ad"
+  },
+  "checkinfirefoxorchrome_1":{
+    "message":"Installez Firefox ou Chrome si vous ne l'avez pas.",
+    "description":"instruction for how to check Firefox or Chrome for a reported ad"
   },
   "checkinfirefox_2":{
-    "message":"Installez Adblock Plus pour Firefox $chrome$ si vous ne l'avez pas.",
-    "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'.",
-    "placeholders":{
-      "chrome":{
-        "content":"<span id='adblockforchrome'><\/span>",
-        "example":"'or AdBlock for Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
-      }
-    }
+    "message":"Installez Adblock Plus pour Firefox si vous ne l'avez pas.",
+    "description":"Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefoxorchrome_2":{
+    "message":"Installez Adblock Plus pour Firefox ou AdBlock pour Chrome si vous ne l'avez pas.",
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
   },
   "checkinfirefox_3":{
     "message":"Dans ce navigateur, abonnez-vous aux mêmes listes de filtres que vous avez ici.",
@@ -1018,8 +1002,8 @@
     "description":"Telling the user to report an ad to a filter list maintainer",
     "placeholders":{
       "link":{
-        "content":"$1",
-        "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
+        "content":"[[]]",
+        "example":"The link could point to a filter list's forum, or to the email address of a filter list maintainer. For example, forums.lanik.us or someguy@list.com."
       }
     }
   },
@@ -1028,7 +1012,7 @@
     "description":"Telling users who won't report an ad to us how to handle it for themselves"
   },
   "adblock_outdated_chrome":{
-    "message":"Vous utilisez une version obsolète d'AdBlock. Merci d'aller sur <a href='#'>la page des extensions<\/a>, activer le 'Mode développeur' et cliquer sur 'Mettre à jour les extensions maintenant'",
+    "message":"Vous utilisez une version obsolète d'AdBlock. Merci d'aller sur [[la page des extensions]], activer le \"Mode développeur\" et cliquer sur \"Mettre à jour les extensions maintenant\"",
     "description":"Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome:\/\/chrome\/extensions\/'"
   },
   "block_an_ad_on_this_page":{
@@ -1232,7 +1216,7 @@
     "description":"Caption for the whitelist wizard slider that modifies the path part of a URL"
   },
   "show_ads_except_for":{
-    "message":"Afficher les publicités <i>partout<\/i> sauf sur ces domaines...",
+    "message":"Afficher les publicités partout sauf sur ces domaines...",
     "description":"Section title for blacklisting section of Customize tab"
   },
   "only_block_ads_on_these_sites":{
@@ -1244,7 +1228,7 @@
     "description":"Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters":{
-    "message":"Attention : vous verrez les pubs sur tous les autres sites !<br>Ceci annule tous les autres filtres pour ces sites.",
+    "message":"Attention : vous verrez les pubs sur tous les autres sites !\nCeci annule tous les autres filtres pour ces sites.",
     "description":"Message on the 'Customize' tab of the options page, explaining the danger of adding a blacklisting filter"
   },
   "storage_quota_exceeded":{
@@ -1252,7 +1236,7 @@
     "description":"Message shown when the user uses more storage than allowed by the browser"
   },
   "safari50_updatenotice":{
-    "message":"Vous utilisez une ancienne version de Safari. Merci de mettre à jour vers la dernière version afin de pouvoir utiliser le bouton de la barre d'outils pour désactiver AdBlock, autoriser des sites web, ou rapporter des pubs. <a>Mettre à jour maintenant<\/a>.",
+    "message":"Vous utilisez une ancienne version de Safari. Merci de mettre à jour vers la dernière version afin de pouvoir utiliser le bouton de la barre d'outils pour désactiver AdBlock, autoriser des sites web, ou rapporter des pubs. [[Mettre à jour maintenant]].",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
   },
   "firefox_explanation":{
@@ -1268,7 +1252,7 @@
     "description":"Shown below the 'Blocked ads:' message. Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
     "placeholders":{
       "count":{
-        "content":"<a>123<\/a>",
+        "content":"[[123]]",
         "example":"The number of ads blocked. Do not make any changes to this placeholder when translating."
       }
     }
@@ -1278,7 +1262,7 @@
     "description":"Shown below the 'Blocked ads:' message. Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
     "placeholders":{
       "count":{
-        "content":"<a>123,456<\/a>",
+        "content":"[[123,456]]",
         "example":"The number of ads blocked. Do not make any changes to this placeholder when translating."
       }
     }
@@ -1308,7 +1292,7 @@
     "description":"List for custom filters the user subscribed to"
   },
   "customfilterserrormessage":{
-    "message":"Le filtre suivant :<br\/> $filter$ <br\/> est erroné : <br\/> $message$",
+    "message":"Le filtre suivant :\n $filter$ \n est erroné : \n $message$",
     "description":"Error message when there is an issue with a custom filter on the 'Customize' tab of the Options page",
     "placeholders":{
       "filter":{
@@ -1386,14 +1370,12 @@
     "description":"This message is injected in other strings as a link\/button"
   },
   "update_available":{
-    "message":"Il y a une mise à jour pour AdBlock ! Cliquez $here$ pour mettre à jour. <br>Note: si vous souhaitez recevoir des mises à jour automatiquement, il suffit de cliquer sur Safari > Préférences > Extensions > Mises à jour <br>et cocher l'option \"Installer automatiquement\".",
-    "description":"On the Options > Support page, shows when there are updates available for AdBlock",
-    "placeholders":{
-      "here":{
-        "content":"<a id='here'><\/a>",
-        "example":"<a>here<\/a>"
-      }
-    }
+    "message":"Il y a une mise à jour pour AdBlock ! Cliquez [[ici]] pour mettre à jour.\nNote : si vous souhaitez recevoir des mises à jour automatiquement, il suffit de cliquer sur Safari (dans la barre des menus) > Préférences > Extensions\net cocher l'option \"Automatiquement mettre à jour les extensions de la galerie Safari\".",
+    "description":"On the Options > Support page, shown when there is an update available for AdBlock on Safari"
+  },
+  "ff_adblock_outdated":{
+    "message":"Vous utilisez une version obsolète d'AdBlock. Cliquez sur le menu Firefox et sélectionnez Modules. Ensuite, sur la page des modules, cliquez sur l'icône d'engrenage (Outils pour tous les modules) et choisissez \"Rechercher des mises à jour\".",
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"Support AdBlock",
@@ -1412,7 +1394,7 @@
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
   "whatsnew":{
-    "message":"Quoi de neuf dans la dernière version ? Découvrez-le dans <a style='cursor:pointer;'>les notes de version<\/a> !",
+    "message":"Quoi de neuf dans la dernière version ? Découvrez-le dans [[les notes de version]] !",
     "description":"Link to display the changelog on the Support tab of the options"
   },
   "englishonly":{
@@ -1436,27 +1418,27 @@
     "description":"Subtitle on the Support tab of the options"
   },
   "sourcecode":{
-    "message":"Le code source est <a>disponible librement<\/a> !",
+    "message":"Le code source est [[disponible librement]] !",
     "description":"Link to the source code of AdBlock on the Support tab of the options"
   },
   "contributors":{
-    "message":"Nous avons également une <a>page<\/a> sur laquelle vous pouvez trouver les contributeurs AdBlock !",
+    "message":"Nous avons également une page sur laquelle vous pouvez trouver les [[contributeurs AdBlock]] !",
     "description":"Link to the contributors page on the Support tab of the options"
   },
   "debuginfo":{
-    "message":"Notre équipe vous a demandé des infos de débogage ? Cliquez <a href='#' id='debug'>ici<\/a> pour cela !",
+    "message":"Notre équipe vous a demandé des infos de débogage ? Cliquez [[ici]] pour cela !",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
-    "message":"Pourquoi ne pas nous envoyer un <a>rapport de bogue<\/a> ?",
+    "message":"Pourquoi ne pas nous envoyer un [[rapport de bogue]] ?",
     "description":"Link to send a bug report on the Support tab of the options"
   },
   "supportsite":{
-    "message":"Faites-le nous savoir sur notre <a>site de support<\/a> !",
+    "message":"Faites-le nous savoir sur notre [[site de support]] !",
     "description":"Link to the support site on the Support tab of the options"
   },
   "ad_report_please":{
-    "message":"Si vous voyez une publicité sur un site, n'envoyez pas un rapport de bogue, mais <a>signalez-nous la publicité<\/a> !",
+    "message":"Si vous voyez une publicité sur un site, n'envoyez pas un rapport de bogue, mais [[signalez-nous la publicité]] !",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
   "resourceblocktitle":{
@@ -1572,11 +1554,11 @@
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptable_ads_content_blocking_disbled_message":{
-    "message":"Vous avez été désabonné de la liste de filtres Publicités Acceptables parce que vous avez activé le Blocage de Contenu Safari. Vous ne pouvez pas activer les deux à la fois. (<a>Pourquoi ?<\/a>)",
+    "message":"Vous avez été désabonné de la liste de filtres Publicités Acceptables parce que vous avez activé le Blocage de Contenu Safari. Vous ne pouvez pas activer les deux à la fois. ([[Pourquoi ?]])",
     "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
   },
   "content_blocking_acceptable_ads_disbled_message":{
-    "message":"Le Blocage de Contenu Safari a été désactivé car vous avez choisi d'autoriser les publicités non-intrusives. Vous ne pouvez pas activer les deux à la fois. (<a>Pourquoi ?<\/a>)",
+    "message":"Le Blocage de Contenu Safari a été désactivé car vous avez choisi d'autoriser les publicités non-intrusives. Vous ne pouvez pas activer les deux à la fois. ([[Pourquoi ?]])",
     "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
   },
   "adreport_laststep":{
@@ -1648,7 +1630,7 @@
     "description":"Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
   },
   "adreport_server_response_error__manual_msg_step1":{
-    "message":"Merci d'aller sur <a>notre site de support<\/a>.",
+    "message":"Merci d'aller sur [[notre site de support]].",
     "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
   },
   "adreport_server_response_error__manual_msg_step2":{

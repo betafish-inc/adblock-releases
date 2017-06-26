@@ -2,8 +2,21 @@
 
 UNRELEASED:
 
+3.13.0:
+- Updated Translations.
+- Removed HTML tags from all locale files. (#233)
+
+3.12.0:
+- Modified the data collection process to not collect data when AdBlock is paused.
+- Modified the data collection process to only collect data from HTTP(S) URLs.
+- Modified the data collection to include an indicator that the user has custom filters.
+- Updated the opt in data collection process to version 3.
+
+3.11.2:
+- Moved the new 'data collection' option up on the Options page. (#231)
+
 3.11.1:
-- Changed the method of sending the filter list data to a post. (##230)
+- Changed the method of sending the filter list data to a post. (#230)
 
 3.11.0:
 - Fixed an issue on the 'Report an Ad' page when AdBlock attempts to automatically reload the page.

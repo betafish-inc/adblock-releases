@@ -13,7 +13,7 @@
 
   var webRequestListener = function(details)
   {
-    if (details.url && details.type === "main_frame")
+    if (details.url && details.type === "main_frame" && !adblockIsPaused())
     {
       var domain = parseUri(details.url).host;
       if (!dataCollectionCache.domains[domain]) {
@@ -26,7 +26,7 @@
 
   var filterListener = function(item, newValue, oldValue, page)
   {
-    if (getSettings().data_collection_v2)
+    if (getSettings().data_collection_v2 && !adblockIsPaused())
     {
       var filter = item;
       if (filter && filter.text && (typeof filter.text === 'string') && page.url)
@@ -91,7 +91,7 @@
       {
         idleHandler.scheduleItemOnce(function()
         {
-          if (getSettings().data_collection_v2 && Object.keys(dataCollectionCache.domains).length > 0)
+          if (getSettings().data_collection_v2 && Object.keys(dataCollectionCache.filters).length > 0)
           {
             var subscribedSubs = [];
             var subs = getAllSubscriptionsMinusText();
@@ -100,8 +100,11 @@
                 subscribedSubs.push(subs[id].url);
               }
             }
+            if (getUserFilters().filters) {
+              subscribedSubs.push("customlist");
+            }
             var data = {
-              version:                 "2",
+              version:                 "3",
               addonName:               require("info").addonName,
               addonVersion:            require("info").addonVersion,
               application:             require("info").application,
@@ -165,7 +168,7 @@
         });
       }, HOUR_IN_MS);
       FilterNotifier.on("filter.hitCount", filterListener);
-      chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["<all_urls>"],types: ["main_frame"] });
+      chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["http://*/*", "https://*/*"],types: ["main_frame"] });
     }
   });// End of then
 
@@ -175,7 +178,7 @@
     dataCollectionCache.filters = {};
     dataCollectionCache.domains = {};
     FilterNotifier.on("filter.hitCount", filterListener);
-    chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["<all_urls>"],types: ["main_frame"] });
+    chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["http://*/*", "https://*/*"],types: ["main_frame"] });
   };
   returnObj.end = function()
   {

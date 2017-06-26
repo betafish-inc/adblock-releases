@@ -331,7 +331,7 @@ FilterListUtil.updateSubscriptionInfoForId = function (id)
   }
   if (Synchronizer.isExecuting(subscription.url))
   {
-    text = translate('filters_subscription_lastDownload_inProgress');
+    text = translate('fetchinglabel');
   }
   else if (subscription.downloadStatus && subscription.downloadStatus != 'synchronize_ok')
   {
