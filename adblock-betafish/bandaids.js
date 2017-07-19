@@ -46,6 +46,14 @@ if ( !abort ) {
     abort = /^192\.168\.\d+\.\d+$/.test(hostname);
 }
 
+var getAdblockDomain = function() {
+  adblock_installed = true;
+};
+
+var getAdblockDomainWithUserID = function(userid) {
+  adblock_userid = userid;
+};
+
 var instartLogicBusterV3 = function() {
   (function() {
     document.cookie = "morphi10c=1;max-age=86400";
@@ -158,6 +166,21 @@ var instartLogicBusterV1DomainsRegEx = /(^|\.)(baltimoresun\.com|boston\.com|cap
     }
     else if (instartLogicBusterV1DomainsRegEx.test(hostname) === true ) {
       scriptText.push('(' + instartLogicBusterV3.toString() + ')();');
+    }
+    else if ('getadblock.com' === document.location.hostname ||
+        'dev.getadblock.com' === document.location.hostname) {
+      scriptText.push('(' + getAdblockDomain.toString() + ')();');
+      chrome.storage.local.get('userid', function (response) {
+        var adblock_user_id = response['userid'];
+        var elem = document.createElement('script');
+        var scriptToInject = '(' + getAdblockDomainWithUserID.toString() + ')(\'' + adblock_user_id + '\');' +
+        '(' + cleanup.toString() + ')();';
+        elem.appendChild(document.createTextNode(scriptToInject));
+        try {
+            (document.head || document.documentElement).appendChild(elem);
+        } catch(ex) {
+        }
+      });
     }
 
     if ( scriptText.length === 0 ) { return; }
@@ -376,14 +399,20 @@ var run_bandaids = function()
       var streamSelector = 'div[id^="topnews_main_stream"]';
       var storySelector = 'div[id^="hyperfeed_story_id"]';
       var searchedNodes = [{
-          'selector': '.userContentWrapper div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
+          // Sponsored
+          'selector': [
+              '.userContentWrapper div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
+              '.fbUserContent div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)'
+          ],
           'content': {
               'af':      ['Geborg'],
+              'am':      ['የተከፈለበት ማስታወቂያ'],
               'ar':      ['إعلان مُموَّل'],
               'as':      ['পৃষ্ঠপোষকতা কৰা'],
               'ay':      ['Yatiyanaka'],
               'az':      ['Sponsor dəstəkli'],
               'be':      ['Рэклама'],
+              'bg':      ['Спонсорирано'],
               'br':      ['Paeroniet'],
               'bs':      ['Sponzorirano'],
               'bn':      ['সৌজন্যে'],
@@ -395,11 +424,12 @@ var run_bandaids = function()
               'da':      ['Sponsoreret'],
               'de':      ['Gesponsert'],
               'el':      ['Χορηγούμενη'],
-              'en':      ['Sponsored'],
+              'en':      ['Sponsored', 'Chartered'],
               'es':      ['Publicidad', 'Patrocinado'],
               'fr':      ['Commandité', 'Sponsorisé'],
               'gx':      ['Χορηγούμενον'],
               'hi':      ['प्रायोजित'],
+              'hu':      ['Hirdetés'],
               'id':      ['Bersponsor'],
               'it':      ['Sponsorizzata'],
               'ja':      ['広告'],
@@ -407,10 +437,13 @@ var run_bandaids = function()
               'kk':      ['Демеушілік көрсеткен'],
               'km':      ['បានឧបត្ថម្ភ'],
               'lo':      ['ໄດ້ຮັບການສະໜັບສະໜູນ'],
+              'mk':      ['Спонзорирано'],
               'ml':      ['സ്പോൺസർ ചെയ്തത്'],
+              'mn':      ['Ивээн тэтгэсэн'],
               'mr':      ['प्रायोजित'],
               'ms':      ['Ditaja'],
               'ne':      ['प्रायोजित'],
+              'nl':      ['Gesponsord'],
               'or':      ['ପ୍ରଯୋଜିତ'],
               'pa':      ['ਸਰਪ੍ਰਸਤੀ ਪ੍ਰਾਪਤ'],
               'pl':      ['Sponsorowane'],
@@ -421,18 +454,31 @@ var run_bandaids = function()
               'so':      ['La maalgeliyey'],
               'sv':      ['Sponsrad'],
               'te':      ['స్పాన్సర్ చేసినవి'],
+              'th':      ['ได้รับการสนับสนุน'],
               'tr':      ['Sponsorlu'],
+              'tz':      ['ⵉⴷⵍ'],
+              'uk':      ['Реклама'],
+              'ur':      ['تعاون کردہ'],
+              'vi':      ['Được tài trợ'],
               'zh-Hans': ['赞助内容'],
               'zh-Hant': ['贊助']
           }
       }, {
-          'selector': '.userContentWrapper > div > div > span',
+          // Suggested Post
+          'selector': [
+              '.userContentWrapper > div > div > span',
+              '.userContentWrapper > div > div > div > div > div > div > div > div > div > div > span',
+              '.fbUserContent > div > div > span',
+              '.fbUserContent > div > div > div > div > div > div > div > div > div > div > span'
+          ],
           'content': {
               'af':        ['Voorgestelde Plasing'],
+              'am':        ['የሚመከር ልጥፍ'],
               'ar':        ['منشور مقترح'],
               'as':        ['পৰামৰ্শিত প\'ষ্ট'],
               'az':        ['Təklif edilən yazılar'],
               'be':        ['Прапанаваны допіс'],
+              'bg':        ['Предложена публикация'],
               'bn':        ['প্রস্তাবিত পোস্ট'],
               'br':        ['Embannadenn aliet'],
               'bs':        ['Predloženi sadržaj'],
@@ -444,11 +490,12 @@ var run_bandaids = function()
               'da':        ['Foreslået opslag'],
               'de':        ['Vorgeschlagener Beitrag'],
               'el':        ['Προτεινόμενη δημοσίευση'],
-              'en':        ['Suggested Post'],
+              'en':        ['Suggested Post', 'Reccomended fer ye eye'],
               'es':        ['Publicación sugerida'],
               'fr':        ['Publication suggérée'],
               'gx':        ['Παϱαινουμένη Ἔκϑεσις'],
               'hi':        ['सुझाई गई पोस्ट'],
+              'hu':        ['Ajánlott bejegyzés'],
               'it':        ['Post consigliato'],
               'id':        ['Saran Kiriman'],
               'ja':        ['おすすめの投稿'],
@@ -456,11 +503,14 @@ var run_bandaids = function()
               'kk':        ['Ұсынылған жазба'],
               'km':        ['ការប្រកាសដែលបានណែនាំ'],
               'ko':        ['추천 게시물'],
-              'lo':        ['ໂພສຕ໌ແນະນຳ'],
+              'lo':        ['ໂພສຕ໌ແນະນຳ', 'ຜູ້ສະໜັບສະໜູນ'],
+              'mk':        ['Предложена објава'],
               'ml':        ['നിർദ്ദേശിച്ച പോ‌സ്റ്റ്'],
+              'mn':        ['Санал болгосон нийтлэл'],
               'mr':        ['सुचवलेली पोस्ट'],
               'ms':        ['Kiriman Dicadangkan'],
               'ne':        ['सुझाव गरिएको पोस्ट'],
+              'nl':        ['Voorgesteld bericht'],
               'or':        ['ପ୍ରସ୍ତାବିତ ପୋଷ୍ଟ'],
               'pa':        ['ਸੁਝਾਈ ਗਈ ਪੋਸਟ'],
               'pl':        ['Proponowany post'],
@@ -471,12 +521,21 @@ var run_bandaids = function()
               'so':        ['Bandhig la soo jeediye'],
               'sv':        ['Föreslaget inlägg'],
               'te':        ['సూచింపబడిన పోస్ట్'],
+              'th':        ['โพสต์ที่แนะนำ'],
               'tr':        ['Önerilen Gönderiler', 'Önerilen Gönderi'],
+              'tz':        ['ⵜⴰⵥⵕⵉⴳⵜ ⵉⵜⵜⵓⵙⵓⵎⵔⵏ'],
+              'uk':        ['Рекомендований допис'],
+              'ur':        ['تجویز کردہ مراسلہ'],
+              'vi':        ['Bài viết được đề xuất'],
               'zh-Hans':   ['推荐帖子'],
               'zh-Hant':   ['推薦帖子', '推薦貼文']
           }
       }, {
-          'selector': '.userContentWrapper > div > div > div:not(.userContent)',
+          // Popular Live Video                                                      // A Video You May Like
+          'selector': [
+              '.userContentWrapper > div > div > div:not(.userContent)',
+              '.fbUserContent > div > div > div:not(.userContent)'
+          ],
           'exclude': function(node) {
               if(!node) {
                   return true;
@@ -485,45 +544,55 @@ var run_bandaids = function()
               return (node.children && node.children.length);
           },
           'content': {
-              'af':        ['Popular Live Video'],
-              'ar':        ['مباشر رائج'],
-              'as':        ['Popular Live Video'],
-              'az':        ['Popular Live Video'],
-              'bn':        ['জনপ্রিয় লাইভ ভিডিও'],
-              'br':        ['Video Siaran Langsung Populer'],
-              'bs':        ['Video Siaran Langsung Populer'],
-              'ca':        ['Video Siaran Langsung Populer'],
-              'cs':        ['Populární živé vysílání'],
-              'da':        ['Populær livevideo'],
-              'de':        ['Beliebtes Live-Video'],
-              'en':        ['Popular Live Video'],
-              'es':        ['Vídeo en directo popular', 'Video en vivo popular'],
-              'fr':        ['Vidéo en direct populaire'],
-              'hi':        ['लोकप्रिय लाइव वीडियो'],
-              'it':        ['Video in diretta popolare'],
-              'id':        ['Video Siaran Langsung Populer'],
-              'ja':        ['人気ライブ動画'],
-              'jv':        ['Video Siaran Langsung Populer'],
-              'kk':        ['Popular Live Video'],
-              'km':        ['Popular Live Video'],
-              'ko':        ['인기 라이브 방송'],
-              'lo':        ['Popular Live Video'],
-              'ml':        ['ജനപ്രിയ Live വീഡിയോ'],
-              'mr':        ['प्रसिद्ध थेट व्हिडिओ'],
-              'ms':        ['Video Live Popular'],
-              'ne':        ['Popular Live Video'],
-              'or':        ['Popular Live Video'],
-              'pa':        ['ਪ੍ਰਸਿੱਧ ਲਾਈਵ ਵੀਡੀਓਜ਼'],
-              'pl':        ['Popularna transmisja wideo na żywo'],
-              'pt':        ['Vídeo em direto popular', 'Vídeo ao vivo popular'],
-              'ru':        ['Популярный прямой эфир'],
-              'sa':        ['Popular Live Video'],
-              'si':        ['Popular Live Video'],
-              'so':        ['Popular Live Video'],
-              'te':        ['ప్రసిద్ధ ప్రత్యక్ష ప్రసార వీడియో'],
-              'tr':        ['Popular Live Video'],
-              'zh-Hans':   ['热门直播视频'],
-              'zh-Hant':   ['熱門直播視訊', '熱門直播視像']
+              'af':        ['Popular Live Video',                                    '\'n Video waarvan jy dalk sal hou'],
+              'ar':        ['مباشر رائج'                                            ,'فيديو قد يعجبك'],
+              'as':        ['Popular Live Video',                                    'আপুনি ভাল পাব পৰা এটা ভিডিঅ\''],
+              'az':        ['Popular Live Video',                                    'Bu video sənin xoşuna gələ bilər'],
+              'bg':        ['Популярно видео на живо',                               'Видео, което е възможно да харесате'],
+              'bn':        ['জনপ্রিয় লাইভ ভিডিও',                                     'আপনার পছন্দ হতে পারে এমন একটি ভিডিও'],
+              'br':        ['Video Siaran Langsung Populer',                         'Sebuah Video yang Mungkin Anda Suka'],
+              'bs':        ['Video Siaran Langsung Populer',                         'Sebuah Video yang Mungkin Anda Suka'],
+              'ca':        ['Video Siaran Langsung Populer',                         'Sebuah Video yang Mungkin Anda Suka'],
+              'cs':        ['Populární živé vysílání',                               'Video, které by se vám mohlo líbit'],
+              'cx':        ['Popular Live Video',                                    'Usa ka Video nga Mahimong Ganahan Ka'],
+              'da':        ['Populær livevideo',                                     'En video, du måske vil synes godt om'],
+              'de':        ['Beliebtes Live-Video',                                  'Ein Video, das dir gefallen könnte'],
+              'en':        ['Popular Live Video',                                    'A Video You May Like'],
+              'es':        ['Vídeo en directo popular', 'Video en vivo popular',     'Un video que te puede gustar', 'Un vídeo que te puede gustar'],
+              'fr':        ['Vidéo en direct populaire',                             'Une vidéo que vous pourriez aimer'],
+              'hi':        ['लोकप्रिय लाइव वीडियो',                                     'वह वीडियो जो आपको पसंद हो सकता है'],
+              'hu':        ['Népszerű élő videó',                                    'Egy videó, amely esetleg tetszik neked'],
+              'it':        ['Video in diretta popolare',                             'Un video che potrebbe piacerti'],
+              'id':        ['Video Siaran Langsung Populer',                         'Sebuah Video yang Mungkin Anda Suka'],
+              'ja':        ['人気ライブ動画',                                         'おすすめの動画'],
+              'jv':        ['Video Siaran Langsung Populer',                         'Video sing Menawa Sampeyan Seneng'],
+              'kk':        ['Popular Live Video',                                    'A Video You May Like'],
+              'km':        ['Popular Live Video',                                    'វីដេអូ​ដែល​អ្នក​ប្រហែល​ជាចូលចិត្ត'],
+              'ko':        ['인기 라이브 방송',                                       '회원님이 좋아할 만한 동영상'],
+              'lo':        ['Popular Live Video',                                    'A Video You May Like'],
+              'mk':        ['Popular Live Video',                                    'Видео кое можеби ќе ти се допадне'],
+              'ml':        ['ജനപ്രിയ Live വീഡിയോ',                             'നിങ്ങൾക്ക് ഇഷ്‌ടമാകാനിടയുള്ള ‌വീഡിയോ'],
+              'mn':        ['Popular Live Video',                                    'Танд таалагдаж магадгүй бичлэг'],
+              'mr':        ['प्रसिद्ध थेट व्हिडिओ',                                        'एक व्हिडिओ जो कदाचित आपल्याला आवडू शकतो'],
+              'ms':        ['Video Live Popular',                                    'Video Yang Anda Mungkin Suka'],
+              'ne':        ['Popular Live Video',                                    'तपाईंले मन पराउन सक्ने भिडियो'],
+              'nl':        ['Populaire livevideo',                                   'Een video die je misschien leuk vindt', 'Een video die je wellicht leuk vindt'],
+              'or':        ['Popular Live Video',                                    'ଏକ ଭିଡିଓ ଆପଣ ହୁଏତ ଲାଇକ୍ କରିପାରନ୍ତି'],
+              'pa':        ['ਪ੍ਰਸਿੱਧ ਲਾਈਵ ਵੀਡੀਓਜ਼',                                      'ਕੋਈ ਵੀਡੀਓ ਜੋ ਸ਼ਾਇਦ ਤੁਹਾਨੂੰ ਪਸੰਦ ਹੋਵੇ'],
+              'pl':        ['Popularna transmisja wideo na żywo',                    'Film, który może Ci się spodobać'],
+              'pt':        ['Vídeo em direto popular', 'Vídeo ao vivo popular',      'Um vídeo de que talvez gostes', 'Um vídeo que você talvez curta'],
+              'ru':        ['Популярный прямой эфир',                                'Вам может понравиться это видео'],
+              'sa':        ['Popular Live Video',                                    'A Video You May Like'],
+              'si':        ['Popular Live Video',                                    'ඔබ කැමති විය හැකි වීඩියෝවක්'],
+              'so':        ['Popular Live Video',                                    'A Video You May Like'],
+              'te':        ['ప్రసిద్ధ ప్రత్యక్ష ప్రసార వీడియో',                            'మీకు నచ్చే వీడియో'],
+              'th':        ['Popular Live Video',                                    'วิดีโอที่คุณอาจจะถูกใจ'],
+              'tr':        ['Popular Live Video',                                    'Hoşuna Gidebilecek Bir Video'],
+              'uk':        ['Popular Live Video',                                    'Відео, яке може вам сподобатися'],
+              'ur':        ['Popular Live Video',                                    'ویڈیو جو شائد آپ کو پسند آئے'],
+              'vi':        ['Video trực tiếp phổ biến',                              'Một video bạn có thể thích'],
+              'zh-Hans':   ['热门直播视频',                                           '猜你喜欢'],
+              'zh-Hant':   ['熱門直播視訊', '熱門直播視像',                            '你可能會喜歡的影片', '你可能會喜歡的影片']
           }
       }];
 
@@ -562,21 +631,24 @@ var run_bandaids = function()
           var nodes;
           var nodeContent;
 
-          var h;
-          var i;
-          var j;
-          for(h = 0; h < searchedNodes.length; h++) {
-              nodes = story.querySelectorAll(searchedNodes[h].selector);
-              for(i = 0; i < nodes.length; i++) {
-                  nodeContent = nodes[i][nodeContentKey];
-                  if(nodeContent) {
-                      for(j = 0; j < searchedNodes[h].content.length; j++) {
-                          if(searchedNodes[h].exclude && searchedNodes[h].exclude(nodes[i])) {
-                             continue;
-                          }
+          var typeIterator;
+          var selectorIterator;
+          var nodeIterator;
+          var targetIterator;
+          for(typeIterator = 0; typeIterator < searchedNodes.length; typeIterator++) {
+              for(selectorIterator = 0; selectorIterator < searchedNodes[typeIterator].selector.length; selectorIterator++) {
+                  nodes = story.querySelectorAll(searchedNodes[typeIterator].selector[selectorIterator]);
+                  for(nodeIterator = 0; nodeIterator < nodes.length; nodeIterator++) {
+                      nodeContent = nodes[nodeIterator][nodeContentKey];
+                      if(nodeContent) {
+                          for(targetIterator = 0; targetIterator < searchedNodes[typeIterator].content.length; targetIterator++) {
+                              if(searchedNodes[typeIterator].exclude && searchedNodes[typeIterator].exclude(nodes[nodeIterator])) {
+                                  continue;
+                              }
 
-                          if(nodeContent.trim() == searchedNodes[h].content[j]) {
-                              return true;
+                              if(nodeContent.trim() == searchedNodes[typeIterator].content[targetIterator]) {
+                                  return true;
+                              }
                           }
                       }
                   }
