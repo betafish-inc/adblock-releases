@@ -1,6 +1,4 @@
-  // WebSocket wrapper in this file based on code from uBO-Extra GPLv3.
-// https://github.com/gorhill/uBO-Extra/blob/master/contentscript.js
-//
+
 // PornHub - related code in this file based on code from uBlockOrigin GPLv3.
 // and available at https://github.com/uBlockOrigin/uAssets/blob/master/filters/filters.txt
 // and https://github.com/uBlockOrigin/uAssets/blob/master/filters/resources.txt
@@ -45,14 +43,6 @@ if ( !abort ) {
     // Don't inject if document is from local network.
     abort = /^192\.168\.\d+\.\d+$/.test(hostname);
 }
-
-var getAdblockDomain = function() {
-  adblock_installed = true;
-};
-
-var getAdblockDomainWithUserID = function(userid) {
-  adblock_userid = userid;
-};
 
 var instartLogicBusterV3 = function() {
   (function() {
@@ -125,18 +115,27 @@ var instartLogicBusterV3 = function() {
   })();
 };
 
-/*******************************************************************************
-    Collate and add scriptlets to document.
-**/
-
 var instartLogicBusterV2DomainsRegEx = /(^|\.)(calgaryherald\.com|edmontonjournal\.com|edmunds\.com|financialpost\.com|leaderpost\.com|montrealgazette\.com|nationalpost\.com|ottawacitizen\.com|theprovince\.com|thestarphoenix\.com|windsorstar.com)$/;
 
 var instartLogicBusterV1DomainsRegEx = /(^|\.)(baltimoresun\.com|boston\.com|capitalgazette\.com|carrollcountytimes\.com|celebuzz\.com|celebslam\.com|chicagotribune\.com|computershopper\.com|courant\.com|dailypress\.com|deathandtaxesmag\.com|extremetech\.com|gamerevolution\.com|geek\.com|gofugyourself\.com|hearthhead\.com|infinitiev\.com|lolking.net|mcall\.com|mmo-champion\.com|nasdaq\.com|orlandosentinel\.com|pcmag\.com|ranker\.com|sandiegouniontribune\.com|saveur\.com|sherdog\.com|\.spin\.com|sporcle\.com|stereogum\.com|sun-sentinel\.com|thefrisky\.com|thesuperficial\.com|timeanddate\.com|tmn\.today|twincities\.com|vancouversun\.com|vibe\.com|weather\.com)$/;
+
+var getAdblockDomain = function() {
+  adblock_installed = true;
+};
+
+var getAdblockDomainWithUserID = function(userid) {
+  adblock_userid = userid;
+};
 
 (function() {
     'use strict';
 
     if ( abort ) {
+      return;
+    }
+
+    // Only for dynamically created frames and http/https documents.
+    if ( /^(https?:|about:)/.test(window.location.protocol) !== true ) {
       return;
     }
 
@@ -149,11 +148,6 @@ var instartLogicBusterV1DomainsRegEx = /(^|\.)(baltimoresun\.com|boston\.com|cap
       return;
     }
 
-    // Only for dynamically created frames and http/https documents.
-    if ( /^(https?:|about:)/.test(window.location.protocol) !== true ) {
-      return;
-    }
-
     var doc = document;
     var parent = doc.head || doc.documentElement;
     if ( parent === null ) {
@@ -161,6 +155,16 @@ var instartLogicBusterV1DomainsRegEx = /(^|\.)(baltimoresun\.com|boston\.com|cap
     }
 
     var scriptText = [];
+
+    // Have the script tag remove itself once executed (leave a clean
+    // DOM behind).
+    var cleanup = function() {
+        var c = document.currentScript, p = c && c.parentNode;
+        if ( p ) {
+            p.removeChild(c);
+        }
+    };
+
     if (instartLogicBusterV2DomainsRegEx.test(hostname) === true ) {
       scriptText.push('(' + instartLogicBusterV3.toString() + ')();');
     }
@@ -181,25 +185,18 @@ var instartLogicBusterV1DomainsRegEx = /(^|\.)(baltimoresun\.com|boston\.com|cap
         } catch(ex) {
         }
       });
+      return;
     }
 
     if ( scriptText.length === 0 ) { return; }
 
-    // Have the script tag remove itself once executed (leave a clean
-    // DOM behind).
-    var cleanup = function() {
-        var c = document.currentScript, p = c && c.parentNode;
-        if ( p ) {
-            p.removeChild(c);
-        }
-    };
     scriptText.push('(' + cleanup.toString() + ')();');
     var elem = document.createElement('script');
     elem.appendChild(document.createTextNode(scriptText.join('\n')));
     try {
         (document.head || document.documentElement).appendChild(elem);
     } catch(ex) {
-    }
+    }    
 })();
 
 var run_bandaids = function()
@@ -401,8 +398,8 @@ var run_bandaids = function()
       var searchedNodes = [{
           // Sponsored
           'selector': [
-              '.userContentWrapper div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
-              '.fbUserContent div > span > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)'
+              '.userContentWrapper span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
+              '.fbUserContent span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)'
           ],
           'content': {
               'af':      ['Geborg'],

@@ -2,6 +2,16 @@
 
 UNRELEASED:
 
+3.15.0:
+- Updated Translations.
+- Updated 'bandaids' processing to help block ads on certain web sites. (#235)
+- Updated to ABP Core 1.13.3 (#235)
+- Fixed the link to our documentation about block counts. (#235)
+- Removed an obsolete test module. (#235)
+- Removed obsolete code related to version check. (#235)
+- Fixed an issue with the updated localized messages on the 'Report an Ad' page. (#235)
+
+
 3.14.0:
 - Updated Translations.
 - Updated 'bandaids' processing to help block ads on certain web sites. (#237)
@@ -269,7 +279,7 @@ UNRELEASED:
 2.36:
 - Added an if check to verify that domain is not undefined when processing URLs. (#579)
 - Changed the order of evaluation in the Survey processing. (#576)
-- Update the JavaScript error processing to include the stack trace information if it doesn't't't include an HTTP URL. (#575)
+- Update the JavaScript error processing to include the stack trace information if it doesn't include an HTTP URL. (#575)
 - Updated the white-list filters for showing ads on Google Search when the 'show Google ads' option is enabled. (#573)
 - Removed Disconnect search code from AdBlock. (#568)
 - Update the height of the Subscribe popup. (#491)
@@ -364,7 +374,7 @@ UNRELEASED:
 - Added additional CSS to whitelist/blacklist dialogs to avoid display issues on some websites. (#460)
 - Removed an unnecessary call to sendResponse. (#484)
 - For Chrome users, added a user confirmation prompt when subscribing to a new filter lists using the ABP syntax. (#486)
-- Fixed an issue when the request URL didn't't contain a '.' (#500)
+- Fixed an issue when the request URL didn't contain a '.' (#500)
 - Updated the Chrome web store description.(#501)
 
 2.20.1:
@@ -396,7 +406,7 @@ UNRELEASED:
 - Added the list of hiding rules to the AdBlock 'Show the Resources list' page for Safari users. (#408)
 
 2.16.3:
-- Added the saving of the malware filter list (same as other filter lists), so that the extension doesn't't need to do a request when the browser starts up.(#432)
+- Added the saving of the malware filter list (same as other filter lists), so that the extension doesn't need to do a request when the browser starts up.(#432)
 
 2.16.2:
 - Added control logic to the getting of the malware filter lists (#430)
@@ -597,7 +607,7 @@ UNRELEASED:
 - Added and updated filter lists based on user's localization, added Malware and Antisocial filter list
 - Added RTL function for Arabic and Hebrew users
 - Added language: Norwegian
-- Bugfix: blocked ad count doesn't't carry over into new, blank tabs
+- Bugfix: blocked ad count doesn't carry over into new, blank tabs
 
 2.6.8: Removed crowdfunding message from AdBlock button
 
@@ -694,7 +704,7 @@ UNRELEASED:
 
 2.5.29: Small domain parsing change (famlam), stop using beforeload in Chrome 17+, get rid of 'blocked by third party extension' iframes
 
-2.5.28: Button popup wasn't't showing for Chrome 16 users who hadn't set any settings (jaysoffian)
+2.5.28: Button popup wasn't showing for Chrome 16 users who hadn't set any settings (jaysoffian)
 
 2.5.27: Fix some websites broken by injecting a LINK tag
 

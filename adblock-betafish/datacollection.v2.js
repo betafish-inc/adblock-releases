@@ -29,7 +29,7 @@
     if (getSettings().data_collection_v2 && !adblockIsPaused())
     {
       var filter = item;
-      if (filter && filter.text && (typeof filter.text === 'string') && page.url)
+      if (filter && filter.text && (typeof filter.text === 'string') && page && page.url)
       {
         var domain = parseUri(page.url).host;
         if (!domain)

@@ -259,10 +259,6 @@
     "message":"Näytä virheilmoitukset Virhekonsolissa (hidastaa AdBlockin toimintaa)",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
-  "datacollectionoption":{
-    "message":"Salli AdBlockin kerätä nimettömiä tietoja suodatinlistojen käytöstä ja datasta",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "updatedrightnow":{
     "message":"päivitetty juuri nyt",
     "description":"Label for subscription"
@@ -572,7 +568,7 @@
     "description":"Section header on the ad report page"
   },
   "malwarewarning":{
-    "message":"Tietokoneesi voi olla haittaohjelman saastuttama. Klikkaa <a>tästä<\/a> saadaksesi lisätietoja.",
+    "message":"Tietokoneesi voi olla haittaohjelman saastuttama. Klikkaa [[tästä]] saadaksesi lisätietoja.",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
   },
   "malwarenotfound":{
@@ -595,12 +591,16 @@
     "message":"Lisätietoja hyväksyttävistä mainoksista.",
     "description":"Acceptable Ads link message on ad report page"
   },
+  "adreportthanks":{
+    "message":"Kiitos!",
+    "description":"Message to the user thanking them for sharing the URL with us."
+  },
   "updateyourlists":{
     "message":"Varmista, että suodatinlistasi ovat ajan tasalla:",
     "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
-    "message":"Klikkaa tästä: <a>Päivitä suodattimeni!<\/a>",
+    "message":"Klikkaa tästä: [[Päivitä suodattimeni!]]",
     "description":"Instruction on ad report page"
   },
   "reloadadpage":{
@@ -656,7 +656,7 @@
     "description":"Step 2 for disabling Chrome and Safari extensions"
   },
   "disableforsafaristepone":{
-    "message":"Klikkaa Safari-valikkoa &rarr; Asetukset &rarr; Lisäosat.",
+    "message":"Klikkaa Safari-valikkoa > Asetukset > Lisäosat.",
     "description":"Step 1 for disabling Safari extensions"
   },
   "reenableadsonebyone":{
@@ -915,14 +915,6 @@
     "message":"Muu",
     "description":"Multiple choice option"
   },
-  "orchrome":{
-    "message":"tai Chrome",
-    "description":"Used for placeholder in checkinfirefoxtitle and checkinfirefox_1 strings"
-  },
-  "oradblockforchrome":{
-    "message":"tai AdBlock Chromelle",
-    "description":"Used for placeholder in checkinfirefox_2 string"
-  },
   "retryaftersubscribe":{
     "message":"Ota suodatinlista käyttöön, ja yritä sitten uudestaan: $list_title$",
     "description":"Instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
@@ -935,14 +927,26 @@
   },
   "checkinfirefoxtitle":{
     "message":"Tarkista Firefoxissa ",
+    "description":"Tell a user to see if a reported ad also appears in Firefox"
+  },
+  "checkinfirefoxorchrometitle":{
+    "message":"Tarkista Firefoxissa tai Chromessa",
     "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome"
   },
   "checkinfirefox_1":{
     "message":"Asenna Firefox jos sinulla ei ole sitä.",
-    "description":"instruction for how to check Firefox\/Chrome for a reported ad"
+    "description":"instruction for how to check Firefox for a reported ad"
+  },
+  "checkinfirefoxorchrome_1":{
+    "message":"Asenna Firefox tai Chrome, mikäli sinulla ei ole sitä.",
+    "description":"instruction for how to check Firefox or Chrome for a reported ad"
   },
   "checkinfirefox_2":{
     "message":"Asenna AdBlock Plus Firefoxille jos sinulla ei ole sitä.",
+    "description":"Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefoxorchrome_2":{
+    "message":"Asenna Adblock Plus Firefoxille tai AdBlock Chromelle, jos sinulla ei ole sitä.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
   },
   "checkinfirefox_3":{
@@ -999,10 +1003,6 @@
     "message":"OK, voit edelleen estää mainoksen vain itsellesi Asetukset-sivulla. Kiitos!",
     "description":"Telling users who won't report an ad to us how to handle it for themselves"
   },
-  "adblock_outdated_chrome":{
-    "message":"Käytät vanhaa versiota AdBlockista. Siirry <a href='#'>lisäosasivulle<\/a>, ota 'Kehittäjätila' käyttöön ja klikkaa 'Päivitä lisäosat nyt'",
-    "description":"Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome:\/\/chrome\/extensions\/'"
-  },
   "block_an_ad_on_this_page":{
     "message":"Estä mainos tällä sivulla",
     "description":"Toolbar button menu entry and context menu entry"
@@ -1057,6 +1057,10 @@
   },
   "typepage":{
     "message":"sivu",
+    "description":"A resource type"
+  },
+  "typewebsocket":{
+    "message":"websocketti",
     "description":"A resource type"
   },
   "typeunknown":{
@@ -1150,10 +1154,6 @@
   "hide_this_button":{
     "message":"Piilota tämä painike",
     "description":"Toolbar button menu entry to hide the AdBlock button"
-  },
-  "spread_the_word":{
-    "message":"Auta välittämään sanaa!",
-    "description":"Text of a share link"
   },
   "donate_to_adblock":{
     "message":"Rakastatko AdBlockeria? Harkitse lahjoittamista!",
@@ -1345,39 +1345,13 @@
       }
     }
   },
-  "latest_version":{
-    "message":"AdBlock on ajan tasalla!",
-    "description":"On the Options > Support page, shows when there are no updates available for AdBlock"
-  },
   "here":{
     "message":"tästä",
     "description":"This message is injected in other strings as a link\/button"
   },
-  "update_available":{
-    "message":"AdBlock-päivitys on saatavilla! Klikkaa $here$ päivittääksesi.<br> Huomaa: Jos haluat saada päivitykset automaattisesti, klikkaa Safari > Asetukset > Lisäosat > Päivitykset<br> ja merkitse kohta 'Asenna päivitykset automaattisesti'.",
-    "description":"On the Options > Support page, shows when there are updates available for AdBlock",
-    "placeholders":{
-      "here":{
-        "content":"<a id='here'><\/a>",
-        "example":"<a>here<\/a>"
-      }
-    }
-  },
   "adblocksupport":{
     "message":"AdBlock-tuki",
     "description":"Title of the support tab"
-  },
-  "checkforupdates":{
-    "message":"Tarkistetaan päivityksiä (kestää vain muutaman sekunnin)...",
-    "description":"Displayed when AdBlock is checking the newest available version"
-  },
-  "somethingwentwrong":{
-    "message":"Jokin meni vikaan tarkistettaessa päivityksiä.",
-    "description":"Displayed when AdBlock is checking the newest available version and an error occurs"
-  },
-  "checkinternetconnection":{
-    "message":"Ilmoittaaksesi mainoksesta sinun täytyy olla yhteydessä internetiin.",
-    "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
   "whatsnew":{
     "message":"Mitä uutta uusimmassa versiossa? Katso [[muutosloki]]!",
@@ -1445,6 +1419,10 @@
   },
   "new_resourcelist_explanation_win":{
     "message":"Näyttääksesi kaikki pyynnöt, paina oikeaa hiiren painiketta sivulla, valitse 'Tarkista' (Ctrl+Shift+I), ja valitse 'AdBlock' välilehti.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+  },
+  "new_resourcelist_explanation_osx":{
+    "message":"Näyttääksesi kaikki pyynnöt, paina oikeaa hiiren painiketta sivulla, valitse 'Tarkista' (Option+Cmd+I), ja valitse 'AdBlock' välilehti.",
     "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
   },
   "noresourcessend2":{
@@ -1532,11 +1510,11 @@
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptable_ads_content_blocking_disbled_message":{
-    "message":"Me lopetimme Hyväksyttävät mainokset -tilauksesi, koska otit käyttöön Safarin sisällön eston. Voit vain käyttää toista. (<a>Miksi?<\/a>)",
+    "message":"Me lopetimme Hyväksyttävät mainokset -tilauksesi, koska otit käyttöön Safarin sisällön eston. Voit vain käyttää toista. ([[Miksi?]])",
     "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
   },
   "content_blocking_acceptable_ads_disbled_message":{
-    "message":"Me otimme käyttöön Safarin sisällön eston, koska päätit sallia noninvasiiviset mainokset. Voit vain valita toisen. (<a>Miksi?<\/a>)",
+    "message":"Me otimme käyttöön Safarin sisällön eston, koska päätit sallia noninvasiiviset mainokset. Voit vain valita toisen. ([[Miksi?]])",
     "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
   },
   "adreport_laststep":{

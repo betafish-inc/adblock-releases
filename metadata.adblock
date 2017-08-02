@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.14.0
+version = 3.15.0
 backgroundScripts += adblock-jquery.js
   adblock-errorreporting.js
   adblock-functions.js
@@ -19,7 +19,7 @@ backgroundScripts += adblock-jquery.js
   adblock-datacollection.v2.js
 
 options = options.html
-testScripts += tests/example.js  tests/migrate_filter_lists.js
+testScripts += tests/example.js
 browserAction = icons/ab-16.png icons/ab-19.png icons/ab-20.png icons/ab-32.png icons/ab-38.png icons/ab-40.png adblock-button-popup.html
 icons = icons/ab-16.png icons/ab-32.png icons/ab-48.png
   icons/ab-64.png icons/ab-128.png
@@ -62,7 +62,6 @@ adblock-adpsubscriptionadapter.js = adblock-betafish/adpsubscriptionadapter.js
 adblock-settings.js = adblock-betafish/settings.js
 adblock-servermessages.js = adblock-betafish/servermessages.js
 adblock-data-migrate.js = adblock-betafish/migrate_legacy_data.js
-qunit/tests/migrate_filter_lists.js = tests/migrate_filter_lists.js
 adblock-functions.js = adblock-betafish/functions.js
 adblock-bandaids.js = adblock-betafish/bandaids.js
 adblock-ytchannel.js = adblock-betafish/ytchannel.js

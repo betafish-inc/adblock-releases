@@ -51,6 +51,10 @@
     "message":"ボタンを非表示にするには、Safariのツールバーを右クリックして 'ツールバーのカスタマイズ' を選択し、ツールバーからAdBlockボタンをドラッグします。 再度ツールバーにドラッグして表示することができます。",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
+  "ff_button_how_to_hide":{
+    "message":"ボタンを非表示にするには、右クリックしてツールバーから 削除 を選択します。Firefox メニューボタン > カスタマイズ から再度表示させることができます。",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
+  },
   "sliderexplanation":{
     "message":"スライダーを広告が見えなくなるまでスライドをしてください。",
     "description":"Blacklister slider page message"
@@ -255,10 +259,6 @@
     "message":"デバック情報を更新履歴に表示(AdBlockの動作が重くなります)",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
-  "datacollectionoption":{
-    "message":"AdBlockが匿名フィルタリストの使用状況やデータを収集することを許可する",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "updatedrightnow":{
     "message":"アップデートされました",
     "description":"Label for subscription"
@@ -360,11 +360,11 @@
     "description":"Title of the filter list tab"
   },
   "filterlistlink":{
-    "message":"必要以上に登録をしないでください。追加する度に重くなりますので！リストの作成者、その他のリストは[[こちら]]。",
+    "message":"追加するたびに動作が遅くなるので必要以上に登録しないでください。リストの作成者、その他のリストは [[こちら]]。",
     "description":"Explanation of the filter lists"
   },
   "updatenowmessage2":{
-    "message":"自動的にアップデートを取得します。[[今すぐアップデート]]することも可能です。",
+    "message":"自動的にアップデートを取得します。 [[今すぐアップデート]] することも可能です。",
     "description":"Update filters text + button"
   },
   "orenteraurl":{
@@ -512,7 +512,7 @@
     "description":"Subtitle on the 'Customize' tab"
   },
   "filtersavewarning":{
-    "message":"警告： ここで作成したフィルターに問題がある場合、公式フィルターを含む他のフィルターが破損する場合があります。\nブラックリスト、ホワイトリストの詳細な記法は[[こちら（英語）]]です。",
+    "message":"警告： ここで作成したフィルタに問題がある場合、公式フィルタを含む他のフィルタが破損する恐れがあります。\n高度なブラックリストおよびホワイトリストを追加する方法については [[フィルタ構文チュートリアル]] をご覧ください。",
     "description":"Warning when blacklisting manually"
   },
   "migration_error_message":{
@@ -544,7 +544,7 @@
     "description":"Introduction of the ad reporting page"
   },
   "adreportvoluntary":{
-    "message":"広告の報告は任意です。 フィルタリストのメンテナーが広告をブロックできるようにすることで、他の人のお役に立てます。 利他的権利を感じていないのであれば問題ありません。 このページを閉じ、[[広告をブロック]]してください。",
+    "message":"広告の報告は任意です。フィルタリストのメンテナーが広告をブロックできるようにすることで、他の人のお役に立てます。利他的権利を感じていないのであれば問題ありません。このページを閉じ、[[広告をブロック]] してください。",
     "description":"Introduction of the ad reporting page"
   },
   "malwarenotificationcheckboxmessage":{
@@ -568,7 +568,7 @@
     "description":"Section header on the ad report page"
   },
   "malwarewarning":{
-    "message":"お使いのコンピュータはマルウェアに感染している可能性があります。 詳細については、[[こちら]]をクリックしてください。",
+    "message":"お使いのコンピュータはマルウェアに感染している可能性があります。詳細については [[こちら]] をクリックしてください。",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
   },
   "malwarenotfound":{
@@ -590,6 +590,10 @@
   "aalinkadreport":{
     "message":"Acceptable Adsプログラムについての詳細は、こちらをご覧ください。",
     "description":"Acceptable Ads link message on ad report page"
+  },
+  "adreportthanks":{
+    "message":"ありがとうございます！",
+    "description":"Message to the user thanking them for sharing the URL with us."
   },
   "updateyourlists":{
     "message":"フィルタリストが最新であるかどうかの確認：",
@@ -624,7 +628,7 @@
     "description":"Instruction on ad report page"
   },
   "disableforchromestepone":{
-    "message":"[[拡張機能ページ]]を開きます。",
+    "message":"[[拡張機能ページ]] を開きます。",
     "description":"Step 1 for disabling Chrome extensions"
   },
   "clickdisableotherextensions":{
@@ -650,10 +654,6 @@
   "disableforchromeandsafaristeptwo":{
     "message":"AdBlock 以外の全ての拡張機能の隣にある「有効」チェックボックスのチェックを外してください。  AdBlock は有効のままにしてください。",
     "description":"Step 2 for disabling Chrome and Safari extensions"
-  },
-  "disableforsafaristepone":{
-    "message":"Safari のメニュー&rarr; 設定 &rarr; 拡張機能をクリックしてください。",
-    "description":"Step 1 for disabling Safari extensions"
   },
   "reenableadsonebyone":{
     "message":"完璧です！ では、どの拡張機能が原因であるかを見てみましょう。 各拡張機能を1つずつ実行し有効にしていきます。 広告を復活させてしまうような拡張機能は、広告を取り除くためにアンインストールする必要があります。",
@@ -911,13 +911,9 @@
     "message":"その他",
     "description":"Multiple choice option"
   },
-  "orchrome":{
-    "message":"または Chrome",
-    "description":"Used for placeholder in checkinfirefoxtitle and checkinfirefox_1 strings"
-  },
-  "oradblockforchrome":{
-    "message":"または Chrome 用 AdBlock",
-    "description":"Used for placeholder in checkinfirefox_2 string"
+  "nodefaultfilter1":{
+    "message":"その言語に対応するデフォルトフィルタリストはありません。\n[[この言語に対応する適切なリストを検索してみる]] か、ご自身の AdBlock メニューからこの広告をブロックしてください。",
+    "description":"Instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same text as the name of the 'Customize' tab."
   },
   "retryaftersubscribe":{
     "message":"このフィルターリストを適用し、ページを更新して要素が消去できたか確認してください。 $list_title$",
@@ -931,14 +927,26 @@
   },
   "checkinfirefoxtitle":{
     "message":"Firefoxでも表示されるかどうかをチェックしてください ",
+    "description":"Tell a user to see if a reported ad also appears in Firefox"
+  },
+  "checkinfirefoxorchrometitle":{
+    "message":"Firefox や Chrome で確認",
     "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome"
   },
   "checkinfirefox_1":{
     "message":"Firefoxをお持ちではない場合は  インストールしてください。",
-    "description":"instruction for how to check Firefox\/Chrome for a reported ad"
+    "description":"instruction for how to check Firefox for a reported ad"
+  },
+  "checkinfirefoxorchrome_1":{
+    "message":"Firefox もしくは Chrome をお持ちでない場合はインストールしてください。",
+    "description":"instruction for how to check Firefox or Chrome for a reported ad"
   },
   "checkinfirefox_2":{
     "message":"Firefox 用のAdblock Plusがない場合は、インストールしてください。",
+    "description":"Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefoxorchrome_2":{
+    "message":"Firefox 用の Adblock Plus、もしくは Chrome 用の AdBlock をお持ちでない場合はインストールしてください。",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
   },
   "checkinfirefox_3":{
@@ -952,6 +960,30 @@
   "checkinfirefox_5":{
     "message":"Firefoxでも広告は表示されますか？",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
+  },
+  "ff_checkinchrometitle":{
+    "message":"Chrome で確認",
+    "description":"Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_1":{
+    "message":"Chrome をお持ちではない場合はインストールしてください。",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_2":{
+    "message":"Chrome 用の AdBlock をお持ちでない場合は、インストールしてください。",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_3":{
+    "message":"Chrome で、ここで使用しているのと同じフィルタリストを登録してください。",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_4":{
+    "message":"Chrome で、広告ページを読み込んでください。",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_5":{
+    "message":"Chrome でも広告は表示されますか？",
+    "description":"Instruction for how to check Chrome for a reported ad"
   },
   "refusetocheck":{
     "message":"これを確認したくありません。",
@@ -970,10 +1002,6 @@
   "fixityourself":{
     "message":"設定ページを使って自分で広告をブロックします！",
     "description":"Telling users who won't report an ad to us how to handle it for themselves"
-  },
-  "adblock_outdated_chrome":{
-    "message":"古いバージョンの AdBlock を使用しています。 [[拡張機能ページ]] を開き、「デベロッパーモード」を有効にし、「今すぐ拡張機能をアップデート」をクリックしてください。",
-    "description":"Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome:\/\/chrome\/extensions\/'"
   },
   "block_an_ad_on_this_page":{
     "message":"このページにある広告をブロック",
@@ -1127,10 +1155,6 @@
     "message":"ボタンを隠す",
     "description":"Toolbar button menu entry to hide the AdBlock button"
   },
-  "spread_the_word":{
-    "message":"周りに広める",
-    "description":"Text of a share link"
-  },
   "donate_to_adblock":{
     "message":"AdBlockをお気に召しましたか？ ぜひ寄付をお願いします！",
     "description":"Text of a donate link in the toolbar button menu"
@@ -1196,7 +1220,7 @@
     "description":"Message shown when the user uses more storage than allowed by the browser"
   },
   "safari50_updatenotice":{
-    "message":"あなたは古いバージョンのSafariを使用しています。AdBlockの全機能を利用していただくには最新バージョンが必要です。[[今すぐアップデート]].",
+    "message":"あなたは古いバージョンの Safari を使用しています。AdBlock の全機能を利用していただくには最新バージョンが必要です。[[今すぐアップデート]]",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
   },
   "firefox_explanation":{
@@ -1321,10 +1345,6 @@
       }
     }
   },
-  "latest_version":{
-    "message":"AdBlock は最新版です！",
-    "description":"On the Options > Support page, shows when there are no updates available for AdBlock"
-  },
   "here":{
     "message":"こちら",
     "description":"This message is injected in other strings as a link\/button"
@@ -1333,20 +1353,8 @@
     "message":"AdBlock サポート",
     "description":"Title of the support tab"
   },
-  "checkforupdates":{
-    "message":"アップデートを確認中 (数秒しかからないはずです)...",
-    "description":"Displayed when AdBlock is checking the newest available version"
-  },
-  "somethingwentwrong":{
-    "message":"アップデートを確認中に不具合が発生しました。",
-    "description":"Displayed when AdBlock is checking the newest available version and an error occurs"
-  },
-  "checkinternetconnection":{
-    "message":"広告を報告するには、インターネットに接続されていなければなりません。",
-    "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
-  },
   "whatsnew":{
-    "message":"最新リリースの新機能については、[[変更履歴]]をご確認ください！",
+    "message":"最新リリースの新機能については [[変更履歴]] をご確認ください。",
     "description":"Link to display the changelog on the Support tab of the options"
   },
   "englishonly":{
@@ -1373,20 +1381,24 @@
     "message":"ソースコードは [[自由に入手できます]]！",
     "description":"Link to the source code of AdBlock on the Support tab of the options"
   },
+  "contributors":{
+    "message":"[[AdBlockの支援者]] を見つけるのに役立つページもあります！",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
   "debuginfo":{
-    "message":"私たちのチームがデバッグ情報をいくらか要求しましたか？ それについては [[こちら]]をクリック！",
+    "message":"デバッグ情報の提供を求められましたか？ [[こちら]] をクリックしてデバッグ情報を表示します。",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
-    "message":"できれば、[[バグ報告]]していただけませんか？",
+    "message":"よろしければ [[バグ報告]] していただけませんか？",
     "description":"Link to send a bug report on the Support tab of the options"
   },
   "supportsite":{
-    "message":"[[サポートサイト]]でお知らせください！",
+    "message":"[[サポートサイト]] でお知らせください。",
     "description":"Link to the support site on the Support tab of the options"
   },
   "ad_report_please":{
-    "message":"広告を見つけたら、バグ報告ではなく、[[広告報告]]をしてください！",
+    "message":"広告を見かけた場合は、バグ報告ではなく [[広告の報告]] を行ってください。",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
   "resourceblocktitle":{
@@ -1549,6 +1561,10 @@
     "message":"スクリーンショットの添付をお忘れです！ 報告する広告を見られなければ、お手伝いすることができません。",
     "description":"Error message shown when the user doesn't attach a screenshot to an ad report."
   },
+  "adreport_response_success":{
+    "message":"すべて完了しました！早急に取り掛かります。その間、AdBlockからのメールをお待ちください。すぐに返答ができない場合には、セルフヘルプのサジェストに沿って、チケットのリンクを受け取ることができます。",
+    "description":"Shown when a ticket has been sumbitted to AdBlock's support site successfully."
+  },
   "adreport_response_invalid_file":{
     "message":"画像ファイルではありません。 .png、.gif、または.jpgファイルをアップロードしてください。",
     "description":"Error message shown when the user uploads an invalid file type."
@@ -1574,7 +1590,7 @@
     "description":"Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
   },
   "adreport_server_response_error__manual_msg_step1":{
-    "message":"[[サポート ウェブサイト]]にアクセスしてください。",
+    "message":"[[サポート ウェブサイト]] にアクセスしてください。",
     "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
   },
   "adreport_server_response_error__manual_msg_step2":{

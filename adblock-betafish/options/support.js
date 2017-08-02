@@ -1,31 +1,6 @@
 $(document).ready(function ()
 {
 
-  // Check for updates
-  $('#checkupdate').html(translate('checkforupdates'));
-  if (!SAFARI)
-  {
-    chrome.runtime.requestUpdateCheck(function (response)
-    {
-      if (response === 'no_update')
-      {
-        $('#checkupdate').html(translate('latest_version')).show();
-      } else if (response === 'update_available')
-      {
-        $('#checkupdate').html(translate('adblock_outdated_chrome')).show().find('a').click(function ()
-        {
-          if (OPERA)
-          {
-            chrome.tabs.create({ url: 'opera://extensions/' });
-          } else
-          {
-            chrome.tabs.create({ url: 'chrome://extensions/' });
-          }
-        });
-      }
-    });
-  }
-
   if (navigator.language.substring(0, 2) != 'en')
   {
     $('.english-only').css('display', 'inline');

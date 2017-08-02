@@ -486,7 +486,6 @@ var readfile = function (file)
 };
 
 // BETA CODE
-
 if (!SAFARI && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
 {
   // Display beta page after each update for beta-users only
@@ -495,6 +494,68 @@ if (!SAFARI && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
     if (details.reason === 'update' || details.reason === 'install')
     {
       ext.pages.open('https://getadblock.com/beta');
+    }
+  });
+}
+
+if (chrome.runtime.id)
+{
+  var getUpdatedURL = function() {
+    var updatedURL = 'https://getadblock.com/update/?u=' + STATS.userId();
+    updatedURL = updatedURL + '&bc=' + Prefs.blocked_total;
+    updatedURL = updatedURL + '&v=' + chrome.runtime.getManifest().version;
+    return updatedURL;
+  };
+  var waitForUserAction = function() {
+    openUpdatedPage();
+  };
+  var waitForActiveState = function(newState) {
+    if (newState === 'active') {
+      openUpdatedPage();
+    }
+  };
+  var openUpdatedPage = function() {
+    chrome.tabs.onCreated.removeListener(waitForUserAction);
+    chrome.idle.onStateChanged.removeListener(waitForActiveState);
+    var updatedURL = getUpdatedURL();
+    chrome.tabs.create({ url: updatedURL }, function(tab) {
+      // if we couldn't open a tab to '/updated_tab', send a message
+      if (chrome.runtime.lastError || !tab) {
+        log("failed to open expired page")
+        if (chrome.runtime.lastError && chrome.runtime.lastError.message) {
+          recordErrorMessage('updated_tab_failed_to_open' + chrome.runtime.lastError.message);
+        } else {
+          recordErrorMessage('updated_tab_failed_to_open');
+        }
+        chrome.tabs.onCreated.removeListener(waitForUserAction);
+        chrome.tabs.onCreated.addListener(waitForUserAction);
+        chrome.idle.onStateChanged.removeListener(waitForActiveState);
+        chrome.idle.onStateChanged.addListener(waitForActiveState);
+        return;
+      }
+    });
+  };
+  var showUpdatedPageIfActive = function() {
+    chrome.idle.queryState(60, function(state) {
+      if (state === "active") {
+        openUpdatedPage();
+      } else {
+        chrome.idle.onStateChanged.removeListener(waitForActiveState);
+        chrome.idle.onStateChanged.addListener(waitForActiveState);
+        chrome.tabs.onCreated.removeListener(waitForUserAction);
+        chrome.tabs.onCreated.addListener(waitForUserAction);
+      }
+    });
+  };
+  // Display updated page after each update
+  chrome.runtime.onInstalled.addListener(function (details)
+  {
+    if (details.reason === 'update' && 
+        chrome.runtime.getManifest().version === "3.15.0" && 
+        chrome.i18n.getUILanguage().startsWith('en') &&
+        chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
+    {
+      showUpdatedPageIfActive();
     }
   });
 }

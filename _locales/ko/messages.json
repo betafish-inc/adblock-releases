@@ -1,10 +1,14 @@
 {
   "description":{
-    "message":"4천만명 이상의 선택을 받은 가장 유명한 Chrome 확장 프로그램! 웹상의 광고를 차단할 수 있습니다.",
+    "message":"4천만 명 이상의 선택을 받은 가장 유명한 Chrome 확장 프로그램! 웹상의 광고를 차단할 수 있습니다.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "description2":{
-    "message":"4천만명 이상의 선택을 받은 가장 유명한 Chrome 확장 프로그램! 웹상의 광고를 차단할 수 있습니다.",
+    "message":"4천만 명 이상의 선택을 받은 가장 유명한 Chrome 확장 프로그램! 웹상의 광고를 차단할 수 있습니다.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
+  "description_edge":{
+    "message":"AdBlock. 2억 회 이상 다운로드된 1위 광고 차단기. 인터넷의 모든 광고를 차단하세요.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -20,7 +24,7 @@
     "description":"OK button"
   },
   "reportpubliclyavailable":{
-    "message":"참고: 여러분께서 제공하신 정보는 공개되어질 수 있습니다. 내용 작성 시 개인정보에 대해 유의하시기 바랍니다. ",
+    "message":"참고: 제공된 정보가 공개될 수 있습니다. 내용 작성 시 개인정보를 유의하시기 바랍니다",
     "description":"Ad report page string, when you're about to submit a report"
   },
   "buttonblockit":{
@@ -32,7 +36,7 @@
     "description":"Edit filter manually button"
   },
   "optionstitle":{
-    "message":"AdBlock - 애드블록 옵션",
+    "message":"AdBlock 설정",
     "description":"Title for the options page"
   },
   "chromebutton_how_to_hide2":{
@@ -40,27 +44,35 @@
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2":{
-    "message":"버튼을 보이지 않게 하려면 opera:\/\/extensions 에 접속하여 'Hide from toolbar' 옵션을 체크하십시오. 해당 옵션에 대한 체크를 해제하므로써 다시 보이도록 설정할 수 있습니다.",
+    "message":"버튼을 보이지 않게 하려면 opera:\/\/extensions에 들어가 '툴바에서 숨기기'를 체크하세요. 체크를 풀어 다시 보이도록 할 수 있습니다.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
   },
   "safaributton_how_to_hide2":{
     "message":"버튼을 보이지 않게 하려면 Safari의 툴바를 오른쪽 클릭한 후 툴바 사용자 설정을 들어간 뒤, AdBlock 버튼을 툴바 바깥으로 드래그하세요. 툴바 안으로 드래그하여 다시 보이도록 할 수 있습니다.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
+  "ff_button_how_to_hide":{
+    "message":"버튼을 보이지 않게 하려면 오른쪽 클릭 후 툴바에서 제거를 선택하세요. Firefox 메뉴 -> 사용자 설정에서 다시 보이게 할 수 있습니다.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
+  },
   "sliderexplanation":{
     "message":"웹 페이지의 광고가 정확히 숨겨지고 페이지가 정확히 보여질 때까지 슬라이더를 움직이세요.",
     "description":"Blacklister slider page message"
   },
   "slidertitle":{
-    "message":"1단계 : 숨기려는 요소 선택",
+    "message":"1단계: 차단하려는 요소 선택",
     "description":"Blacklister slider page title"
   },
   "blacklisteroptions1":{
-    "message":"광고를 숨기기 위해 필요한 속성을 지정하십시오.",
+    "message":"이 페이지에 방문할 때마다 보이는 광고를 선택하세요.",
+    "description":"Blacklister attribute choosing page message"
+  },
+  "blacklisternotsure":{
+    "message":"확실치 않다면 '추가' 버튼을 누르세요.",
     "description":"Blacklister attribute choosing page message"
   },
   "blacklisterthefilter":{
-    "message":"다음 필터는 옵션 페이지에서 변경할 수 있습니다.",
+    "message":"필터는 설정 페이지에서 변경할 수 있습니다.",
     "description":"Blacklister attribute choosing page message"
   },
   "blacklisteroptionstitle":{
@@ -72,7 +84,7 @@
     "description":"Warning if the user hasn't specified a filter"
   },
   "blacklistereditfilter":{
-    "message":"필터를 알맞게 입력한 후 확인을 누르십시오.",
+    "message":"필터를 알맞게 입력한 후 확인을 누르세요",
     "description":"Text if the user wants to manually edit a filter. 'OK' is the standard javascript popup button text."
   },
   "blacklistereditinvalid1":{
@@ -86,15 +98,15 @@
     }
   },
   "blacklisterblockedelement":{
-    "message":"숨겨진 요소 :",
+    "message":"숨겨진 요소:",
     "description":"Tells the user what the blocked element is on the slider page"
   },
   "blacklisterwarningnofilter":{
-    "message":"경고 : 필터가 지정되지 않았습니다!",
+    "message":"경고: 필터가 지정되지 않았습니다!",
     "description":"Warns the user that no filter was specified"
   },
   "blacklisterblocksalloftype":{
-    "message":"주의 : 이 필터는 $elementtype$ 요소를 모두 숨깁니다!",
+    "message":"주의 : 이 필터는 페이지의 $elementtype$ 요소를 모두 숨깁니다!",
     "description":"Warns the user that all elements of type X will be blocked",
     "placeholders":{
       "elementtype":{
@@ -102,6 +114,10 @@
         "example":"DIV"
       }
     }
+  },
+  "blacklistersinglematch":{
+    "message":"현재 페이지에서 1개 요소와 일치합니다.",
+    "description":"Tells the user only one match was found"
   },
   "blacklistermatches":{
     "message":"현재 페이지에서 $matchcount$개 요소와 일치합니다.",
@@ -114,7 +130,7 @@
     }
   },
   "blacklisterattrwillbe":{
-    "message":"$attribute$ : $value$",
+    "message":"$attribute$ 속성은 $value$일 것입니다",
     "description":"Checkbox label",
     "placeholders":{
       "attribute":{
@@ -128,7 +144,7 @@
     }
   },
   "blacklistertype":{
-    "message":"형식",
+    "message":"유형",
     "description":"node name is called 'Type'"
   },
   "buttonlooksgood":{
@@ -139,20 +155,24 @@
     "message":"뒤로",
     "description":"Back to previous wizard page button"
   },
+  "findingads":{
+    "message":"광고를 찾는 중...\n\n잠시만 기다려주세요.",
+    "description":"When you press ctrl-shift-K the blacklister searches for ads"
+  },
   "blockanadtitle":{
-    "message":"요소 숨김 마법사",
+    "message":"광고 차단하기",
     "description":"Title of the first two dialogs of the blacklister"
   },
   "clickthead":{
-    "message":"숨기려는 광고를 클릭하십시오.",
+    "message":"숨기려는 광고를 클릭하세요.",
     "description":"When you have to click the ad to continue"
   },
   "adblock_wont_run_on_pages_matching":{
-    "message":"다음 사이트를 허용합니다.",
+    "message":"다음와 일치하는 페이지는 AdBlock이 동작하지 않을 것입니다:",
     "description":"Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change":{
-    "message":"슬라이더를 움직여 광고 허용 사이트의 범위를 조절하십시오.",
+    "message":"슬라이더를 움직여 AdBlock이 동작하지 않을 페이지의 범위를 조절할 수 있습니다.",
     "description":"Instructions for how to use the whitelister slider controls. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2":{
@@ -160,11 +180,11 @@
     "description":"The title of the whitelister dialog"
   },
   "buttonexclude":{
-    "message":"허용",
+    "message":"예외",
     "description":"Button for excluding a domain in the whitelister dialog"
   },
   "reloadpageafterwhitelist":{
-    "message":"페이지를 다시 로드합니다.",
+    "message":"페이지를 새로고침 합니다.",
     "description":"Checkbox on whitelist wizard"
   },
   "wizardcantrunonframesets":{
@@ -186,15 +206,15 @@
     "description":"abp: link subscriber title"
   },
   "subscribingfinished":{
-    "message":"완료됨!",
+    "message":"완료!",
     "description":"abp: link subscriber result"
   },
   "subscribingfailed":{
-    "message":"실패함",
+    "message":"실패!",
     "description":"abp: link subscriber result"
   },
   "optionsversion":{
-    "message":"$version$ 버전",
+    "message":"버전 $version$",
     "description":"Version number",
     "placeholders":{
       "version":{
@@ -216,7 +236,7 @@
     "description":"A tab on the options page"
   },
   "generaloptions":{
-    "message":"일반 옵션",
+    "message":"일반 설정",
     "description":"Title of first tab page"
   },
   "betalabel":{
@@ -240,7 +260,7 @@
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "datacollectionoption":{
-    "message":"AdBlock이 필터 목록 이용 현황 및 데이터를 익명으로 수집하도록 허용",
+    "message":"AdBlock이 필터 목록 사용 데이터와 필터 목록에 의해 차단된 콘텐츠의 정보를 익명으로 수집하도록 허용합니다",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
@@ -248,7 +268,7 @@
     "description":"Label for subscription"
   },
   "updatedsecondsago":{
-    "message":"$seconds$초 전에 업데이트됨",
+    "message":"$seconds$초 전 업데이트됨",
     "description":"Label for subscription",
     "placeholders":{
       "seconds":{
@@ -258,7 +278,7 @@
     }
   },
   "updatedminutesago":{
-    "message":"$minutes$분 전에 업데이트됨",
+    "message":"$minutes$분 전 업데이트됨",
     "description":"Label for subscription",
     "placeholders":{
       "minutes":{
@@ -268,7 +288,7 @@
     }
   },
   "updatedhoursago":{
-    "message":"$hours$시간 전에 업데이트됨",
+    "message":"$hours$시간 전 업데이트됨",
     "description":"Label for subscription",
     "placeholders":{
       "hours":{
@@ -278,7 +298,7 @@
     }
   },
   "updateddaysago":{
-    "message":"$days$일 전에 업데이트됨",
+    "message":"$days$일 전 업데이트됨",
     "description":"Label for subscription",
     "placeholders":{
       "days":{
@@ -288,51 +308,75 @@
     }
   },
   "updatedminuteago":{
-    "message":"1분 전에 업데이트됨",
+    "message":"1분 전 업데이트됨",
     "description":"Label for subscription"
   },
   "updatedhourago":{
-    "message":"1시간 전에 업데이트됨",
+    "message":"1시간 전 업데이트됨",
     "description":"Label for subscription"
   },
   "updateddayago":{
-    "message":"1일 전에 업데이트됨",
+    "message":"1일 전 업데이트됨",
     "description":"Label for subscription"
   },
   "unsubscribedlabel":{
-    "message":"구독 중지",
+    "message":"구독 중지됨",
     "description":"Status label"
   },
   "fetchinglabel":{
-    "message":"구독 필터를 가져오는 중이니 잠시만 기다려주십시오...",
+    "message":"가져오는 중... 잠시만 기다려주세요.",
     "description":"Status label"
   },
+  "ab_filters_subscription_lastDownload_invalidURL":{
+    "message":"실패, 유효한 주소가 아닙니다",
+    "description":"message on the filter tab - Message when you subscribe to a non-list URL"
+  },
+  "ab_filters_subscription_lastDownload_connectionError":{
+    "message":"실패, 다운로드를 실패했습니다",
+    "description":"message on the filter tab - Generic filter list download error message"
+  },
+  "ab_filters_subscription_lastDownload_invalidData":{
+    "message":"실패, 유효한 필터 목록이 아닙니다",
+    "description":"message on the filter tab - Invalid filter list file"
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch":{
+    "message":"실패, 체크섬이 맞지 않습니다",
+    "description":"message on the filter tab"
+  },
   "invalidListUrl":{
-    "message":"올바르지 않은 URL은 삭제됩니다.",
+    "message":"올바르지 않은 목록 URL이며 삭제될 것입니다.",
     "description":"Message when you subscribe to a non-list URL"
   },
   "failedtofetchfilter":{
-    "message":"구독 필터를 가져오는데 실패했습니다!",
+    "message":"이 필터를 가져오지 못했습니다!",
     "description":"Error messagebox"
   },
   "removefromlist":{
-    "message":"제거",
+    "message":"목록에서 제거",
     "description":"Label to remove a custom filter"
   },
   "you_know_thats_a_bad_idea_right":{
-    "message":"과도하게 많은 구독 필터를 애드블록에 추가하면 인터넷 성능이 저하될 수 있습니다.",
+    "message":"필터를 구독할수록 AdBlock의 속도는 느려집니다. 과도하게 많은 구독 필터를 사용하면 브라우저가 작동을 중지할 수도 있습니다. 그래도 구독하려면 확인을 누르세요.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
   "filterstabtitle":{
-    "message":"구독 필터 목록",
+    "message":"필터 목록 구독",
     "description":"Title of the filter list tab"
   },
+  "filterlistlink":{
+    "message":"필요한 것들만 구독하세요. 필터 하나를 추가할 때마다 페이지를 불러오는 속도가 살짝살짝씩 느려집니다! 공헌자와 보다 많은 목록을 [[여기]]서 확인하실 수 있습니다.",
+    "description":"Explanation of the filter lists"
+  },
+  "updatenowmessage2":{
+    "message":"자동으로 업데이트됩니다. [[바로 업데이트]] 또한 가능합니다.",
+    "description":"Update filters text + button"
+  },
   "orenteraurl":{
-    "message":"구독 필터의 URL : ",
+    "message":"구독 필터의 URL:",
     "description":"Link for custom subscription"
   },
   "subscribebutton":{
-    "message":"추가",
+    "message":"구독",
     "description":"Subscribe to a list button"
   },
   "showlinkstolists2":{
@@ -351,29 +395,61 @@
     "message":"Adblock 경고 제거 목록 (광고 차단 프로그램 이용 경고 메시지 제거)",
     "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
   },
+  "filteracceptable_ads":{
+    "message":"허용될만한 광고",
+    "description":"A filter list"
+  },
+  "filteradblock_custom":{
+    "message":"AdBlock 사용자 필터",
+    "description":"A filter list"
+  },
+  "filtereasylist":{
+    "message":"EasyList",
+    "description":"A filter list"
+  },
+  "filtereasylist_lite":{
+    "message":"EasyList 라이트 (추천)",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"러시아어와 우크라이나어",
     "description":"Language names for a filter list"
+  },
+  "filter_russian":{
+    "message":"러시아어 & 우크라이나어 + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterczech":{
     "message":"체코어와 스로바키아어",
     "description":"A filter list"
   },
+  "filter_czech":{
+    "message":"체코어 & 슬로바키아어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasyprivacy":{
-    "message":"EasyPrivacy",
+    "message":"EasyPrivacy (개인정보 보호)",
     "description":"A filter list"
   },
   "filtereasylist_plus_indonesian":{
     "message":"인도네시아어",
     "description":"A filter list"
   },
+  "filter_easylist_plus_indonesian":{
+    "message":"인도네시아어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtermalware":{
-    "message":"악성 코드로부터 보호",
+    "message":"악성 프로그램으로부터 보호",
     "description":"A filter list"
   },
   "filterlatvian":{
     "message":"라트비아어",
     "description":"A filter list"
+  },
+  "filter_latvian":{
+    "message":"라트비아어 + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterswedish":{
     "message":"스웨덴어",
@@ -384,35 +460,35 @@
     "description":"A filter list"
   },
   "blacklistclickmessage":{
-    "message":"광고를 차단하기 위해 문맥 메뉴로 광고 영역을 숨기거나 사용자 필터를 직접 추가하십시오.",
+    "message":"이 페이지에서 광고를 수동으로 차단할 수 있습니다. 숨길 광고를 오른쪽 클릭해서 차단할 수도 있습니다.",
     "description":"Message at the top of the blacklist options tab"
   },
   "tabcustomizetitle":{
-    "message":"사용자 필터 관리",
+    "message":"AdBlock 사용자 지정 설정",
     "description":"Title of the customize tab"
   },
   "filterlistsrock":{
-    "message":"사용자가 지정한 필터로 광고를 차단\/허용할 수 있습니다.",
+    "message":"필터 목록은 웹상의 대다수 광고를 차단합니다. 여기서는 다음 기능을 사용할 수 있습니다.",
     "description":"Header text on the Customize tab. 'Filter lists' should be the same text as the name of the 'Filter lists' tab."
   },
   "blockmoreads":{
-    "message":"차단 필터 추가",
+    "message":"더 많은 광고 차단:",
     "description":"Section header on the 'Customize' tab"
   },
   "stop_blocking_ads":{
-    "message":"허용 필터 추가",
+    "message":"광고 차단 중단:",
     "description":"Section header on the 'Customize' tab"
   },
   "linkblockadbyurl":{
-    "message":"차단 필터",
+    "message":"URL로 광고 차단하기",
     "description":"Link on the 'Customize' tab"
   },
   "linkhidesection":{
-    "message":"요소 숨김 필터",
+    "message":"웹페이지 부분 숨김",
     "description":"Link on the 'Customize' tab"
   },
   "linkunblock":{
-    "message":"사이트\/페이지 허용 필터",
+    "message":"웹페이지 또는 도메인 광고 허용",
     "description":"Link on the 'Customize' tab"
   },
   "blockurlwithtext":{
@@ -424,23 +500,35 @@
     "description":"Message of the css-hiding area"
   },
   "excludedomainorurl":{
-    "message":"광고를 차단하지 않을 사이트 또는 페이지의 URL을 입력하십시오.",
+    "message":"광고를 아무것도 차단하지 않을 도메인 또는 URL을 입력하세요",
     "description":"Message of the exclude area"
   },
   "blockdomain":{
-    "message":"[옵션] 지정된 사이트에만 적용",
+    "message":"지정된 페이지의 도메인에만 적용",
     "description":"Message of the url and css -blocking area"
   },
   "manualfilteredit":{
-    "message":"사용자 필터 목록",
+    "message":"필터를 수동으로 수정하기:",
     "description":"Subtitle on the 'Customize' tab"
   },
   "manualexcludefilteredit":{
     "message":"비활성 필터 편집:",
     "description":"Subtitle on the 'Customize' tab"
   },
+  "filtersavewarning":{
+    "message":"주의: 여기서 실수한다면 공식 필터를 포함한 다른 필터들이 제대로 동작하지 않을 수 있습니다!\n고급 차단 및 허용 목록을 추가하는 방법을 알아보려면 [[필터 문법 튜토리얼]]을 참고하시기 바랍니다.",
+    "description":"Warning when blacklisting manually"
+  },
+  "migration_error_message":{
+    "message":"사용자 필터에서 오류를 발견했습니다. 아래의 메시지를 확인하세요.",
+    "description":"Warning when adding custom filters manually"
+  },
+  "delete_migration_error_messages":{
+    "message":"메시지 삭제",
+    "description":"Button to delete error messages when adding custom filters manually"
+  },
   "contentblockingwarning":{
-    "message":"참고: 웹 페이지 또는 사이트 광고 허용 기능은 Safari 콘텐츠 차단이 켜져있지 있으면 지원되지 않습니다.",
+    "message":"참고: 웹페이지 또는 사이트 광고 허용 기능은 Safari 콘텐츠 차단이 켜져 있으면 지원되지 않습니다.",
     "description":"Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
   },
   "savebutton":{
@@ -448,7 +536,7 @@
     "description":"Save button"
   },
   "savereminder":{
-    "message":"저장하는 것을 잊지마십시오!",
+    "message":"저장하는 것을 잊지 마세요!",
     "description":"Reminder to press save"
   },
   "adblockreportinganad":{
@@ -459,48 +547,68 @@
     "message":"웹 페이지에서 광고를 발견했나요? 보고할 곳을 찾는 걸 도와드리겠습니다!",
     "description":"Introduction of the ad reporting page"
   },
+  "adreportvoluntary":{
+    "message":"광고 보고는 광고 차단 필터를 만드는 관리자 및 필터를 구독하는 다른 이들에게 도움을 줄 수 있는 자발적 행위입니다. 다른 이들에게 정보를 제공하고 않고 싶다면 이 페이지를 닫은 후 [[광고 숨기기]] 기능을 이용해주세요.",
+    "description":"Introduction of the ad reporting page"
+  },
   "malwarenotificationcheckboxmessage":{
-    "message":"AdBlock이 맬웨어를 탐지하였을 때 알려드릴까요?",
+    "message":"AdBlock이 악성 프로그램을 탐지하였을 때 알려드릴까요?",
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock이 맬웨어를 제공하고 있는 것으로 알려진 사이트에서 다운로드를 차단하였습니다.",
+    "message":"AdBlock이 악성 프로그램을 제공하고 있는 것으로 알려진 사이트에서 다운로드를 차단했습니다.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
-    "message":"맬웨어에 대해 자세히 알아보기",
+    "message":"악성 프로그램에 대해 자세히 알아보기",
     "description":"Button on the malware notification that opens a page about malware on our website. Message should be under 45 characters!"
   },
   "malwarenotificationdisablethesemessages":{
-    "message":"이런 종류의 알람 끄기",
+    "message":"이런 종류의 알림 끄기",
     "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
   "malwarecheck":{
-    "message":"광고를 띄울 수 있는 맬웨어 확인:",
+    "message":"광고를 띄울 수 있는 악성 프로그램 확인:",
     "description":"Section header on the ad report page"
   },
+  "malwarewarning":{
+    "message":"컴퓨터가 악성 프로그램에 감염되었을 수 있습니다. [[여기]]를 클릭하여 자세히 알아보세요.",
+    "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
+  },
   "malwarenotfound":{
-    "message":"맬웨어가 탐지되지 않았습니다.",
+    "message":"악성 프로그램이 탐지되지 않았습니다.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
   "disableaa":{
-    "message":"용인되는 광고 필터 확인:",
+    "message":"허용할만한 광고 필터 확인:",
     "description":"Section header on the ad report page"
   },
+  "clickdisableaa":{
+    "message":"[[허용될만한 광고 끄기]] 버튼을 클릭하세요.",
+    "description":"Instruction on ad report page"
+  },
   "aamessageadreport":{
-    "message":"이런 광고들을 보지 않기를 원하신다면 용인되는 광고 필터 목록을 끌 수 있습니다.",
+    "message":"이런 광고들을 보지 않기를 원하신다면 허용할만한 광고 필터 목록을 끌 수 있습니다.",
     "description":"Acceptable Ads message on ad report page"
   },
   "aalinkadreport":{
-    "message":"용인되는 광고 프로그램에 대해 자세히 알아보세요.",
+    "message":"허용할만한 광고 프로그램에 대해 자세히 알아보세요.",
     "description":"Acceptable Ads link message on ad report page"
+  },
+  "adreportthanks":{
+    "message":"감사합니다!",
+    "description":"Message to the user thanking them for sharing the URL with us."
   },
   "updateyourlists":{
     "message":"필터가 최신 상태인지 확인하세요:",
     "description":"Section header on the ad report page"
   },
+  "clickupdatefilters":{
+    "message":"[[내 필터 업데이트!]] 버튼을 클릭하세요.",
+    "description":"Instruction on ad report page"
+  },
   "reloadadpage":{
-    "message":"광고가 있는 웹 페이지를 새로 고치십시오.",
+    "message":"광고가 있는 페이지를 새로 고치세요.",
     "description":"Instruction on ad report page"
   },
   "adstillappear":{
@@ -512,7 +620,7 @@
     "description":"A positive response to a question"
   },
   "no":{
-    "message":"아니오",
+    "message":"아니요",
     "description":"A negative response to a question"
   },
   "adalreadyblocked":{
@@ -522,6 +630,14 @@
   "disableallextensions":{
     "message":"AdBlock 외 모든 확장 프로그램 비활성화:",
     "description":"Instruction on ad report page"
+  },
+  "disableforchromestepone":{
+    "message":"[[확장 프로그램 페이지]]를 여세요.",
+    "description":"Step 1 for disabling Chrome extensions"
+  },
+  "clickdisableotherextensions":{
+    "message":"또는, [[다른 모든 확장 프로그램 끄기]] 버튼을 눌러 단계들을 자동으로 수행하게 할 수 있습니다",
+    "description":"On the ad report page, an alternative way to disable other extensions"
   },
   "disableotherextensionscomplete":{
     "message":"다른 모든 확장 프로그램을 사용 중지했습니다. 광고가 있는 페이지가 곧 새로고침 되니 잠시만 기다려주세요.",
@@ -539,12 +655,16 @@
     "message":"완료했습니다! 광고가 있는 페이지를 새로고침 했습니다. 페이지를 확인하여 광고가 사라졌는지 확인하세요. 확인 후 이 페이지로 다시 돌아와 아래에 있는 질문에 답해주시기 바랍니다.",
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
+  "disableforchromeandsafaristeptwo":{
+    "message":"AdBlock을 제외한 모든 확장 프로그램의 \"사용 설정됨\" 체크박스를 해제하세요. 오직 AdBlock만 사용하게 해두세요.",
+    "description":"Step 2 for disabling Chrome and Safari extensions"
+  },
   "disableforsafaristepone":{
-    "message":"Safari menu &rarr; Preferences &rarr; Extensions 클릭.",
+    "message":"Safari 메뉴 > 환경설정 > 확장 프로그램을 클릭하세요.",
     "description":"Step 1 for disabling Safari extensions"
   },
   "reenableadsonebyone":{
-    "message":"좋아요! 이제 어떤 확장 프로그램이 문제인지 찾아봅시다. 확장 프로그램을 각자 하나하나 켜세요. 광고를 다시 띄우게 하는 확장 프로그램을 삭제하셔야 합니다.",
+    "message":"좋아요! 이제 어떤 확장 프로그램이 문제인지 찾아봅시다. 확장 프로그램을 하나하나씩 켜서 확인해보세요. 광고를 다시 띄우게 하는 확장 프로그램을 삭제하셔야 합니다.",
     "description":"Tells the user to reenable the extensions one by one"
   },
   "correctfilters":{
@@ -563,6 +683,10 @@
     "message":"체코어",
     "description":"Language name"
   },
+  "lang_spanish":{
+    "message":"스페인어",
+    "description":"Language name"
+  },
   "lang_russian":{
     "message":"러시아어",
     "description":"Language name"
@@ -575,13 +699,113 @@
     "message":"우크라이나어",
     "description":"Language name"
   },
+  "lang_arabic":{
+    "message":"아랍어",
+    "description":"Language name"
+  },
+  "lang_bulgarian":{
+    "message":"불가리아어",
+    "description":"Language name"
+  },
+  "lang_chinese":{
+    "message":"중국어",
+    "description":"Language name"
+  },
+  "lang_danish":{
+    "message":"덴마크어",
+    "description":"Language name"
+  },
+  "lang_dutch":{
+    "message":"네덜란드어",
+    "description":"Language name"
+  },
+  "lang_estonian":{
+    "message":"에스토니아어",
+    "description":"Language name"
+  },
+  "lang_finnish":{
+    "message":"핀란드어",
+    "description":"Language name"
+  },
+  "lang_french":{
+    "message":"프랑스어",
+    "description":"Language name"
+  },
+  "lang_german":{
+    "message":"독일어",
+    "description":"Language name"
+  },
+  "lang_greek":{
+    "message":"그리스어",
+    "description":"Language name"
+  },
+  "lang_hungarian":{
+    "message":"헝가리어",
+    "description":"Language name"
+  },
+  "lang_indonesian":{
+    "message":"인도네시아어",
+    "description":"Language name"
+  },
+  "lang_icelandic":{
+    "message":"아이슬란드어",
+    "description":"Language name"
+  },
+  "lang_israeli":{
+    "message":"히브리어",
+    "description":"Language name"
+  },
+  "lang_italian":{
+    "message":"이탈리아어",
+    "description":"Language name"
+  },
+  "lang_japanese":{
+    "message":"일본어",
+    "description":"Language name"
+  },
+  "lang_korean":{
+    "message":"한국어",
+    "description":"Language name"
+  },
+  "lang_lithuania":{
+    "message":"리투아니아어",
+    "description":"Language name"
+  },
+  "lang_polish":{
+    "message":"폴란드어",
+    "description":"Language name"
+  },
+  "lang_romanian":{
+    "message":"루마니아어",
+    "description":"Language name"
+  },
+  "lang_latvian":{
+    "message":"라트비아어",
+    "description":"Language name"
+  },
+  "lang_swedish":{
+    "message":"스웨덴어",
+    "description":"Language name"
+  },
+  "lang_turkish":{
+    "message":"터키어",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"불가리아어",
     "description":"A filter list"
   },
+  "filter_easylist_plus_bulgarian":{
+    "message":"불가리아어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterchinese":{
     "message":"중국어",
     "description":"A filter list"
+  },
+  "filter_chinese":{
+    "message":"중국어 + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterdanish":{
     "message":"덴마크어",
@@ -591,6 +815,10 @@
     "message":"네덜란드어",
     "description":"A filter list"
   },
+  "filter_dutch":{
+    "message":"네덜란드어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_finnish":{
     "message":"핀란드어",
     "description":"A filter list"
@@ -599,9 +827,17 @@
     "message":"프랑스어",
     "description":"A filter list"
   },
+  "filter_easylist_plus_french":{
+    "message":"프랑스어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_german":{
     "message":"독일어",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_german":{
+    "message":"독일어 + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_greek":{
     "message":"그리스어",
@@ -615,9 +851,17 @@
     "message":"히브리어",
     "description":"A filter list"
   },
+  "filter_israeli":{
+    "message":"히브리어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filteritalian":{
     "message":"이탈리아어",
     "description":"A filter list"
+  },
+  "filter_italian":{
+    "message":"이탈리아어 + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterjapanese":{
     "message":"일본어",
@@ -635,6 +879,10 @@
     "message":"루마니아어",
     "description":"A filter list"
   },
+  "filter_easylist_plus_romanian":{
+    "message":"루마니아어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_spanish":{
     "message":"스페인어",
     "description":"A filter list"
@@ -642,6 +890,14 @@
   "filtereasylist_plus_arabic":{
     "message":"아랍어",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_arabic":{
+    "message":"아랍어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_arabic_plus_french":{
+    "message":"아랍어 + 프랑스어 + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_estonian":{
     "message":"에스토니아어",
@@ -655,12 +911,20 @@
     "message":"리투아니아어",
     "description":"A filter list"
   },
+  "filter_easylist_plus_lithuania":{
+    "message":"리투아니아어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "other":{
     "message":"기타 언어",
     "description":"Multiple choice option"
   },
+  "nodefaultfilter1":{
+    "message":"아직 이 언어의 기본 필터 목록이 없습니다.\n[[해당 언어를 지원하는 적합한 목록]]을 찾아보거나, AdBlock 메뉴에서 광고를 스스로 차단할 수 있습니다.",
+    "description":"Instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same text as the name of the 'Customize' tab."
+  },
   "retryaftersubscribe":{
-    "message":"$list_title$를 구독한 후 웹 페이지를 다시 열어보십시오.",
+    "message":"$list_title$ 필터를 구독한 후 다시 시도해보세요.",
     "description":"Instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
     "placeholders":{
       "list_title":{
@@ -669,24 +933,72 @@
       }
     }
   },
+  "checkinfirefoxtitle":{
+    "message":"Firefox에서 확인하기",
+    "description":"Tell a user to see if a reported ad also appears in Firefox"
+  },
+  "checkinfirefoxorchrometitle":{
+    "message":"Firefox 또는 Chrome에서 확인하기",
+    "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome"
+  },
+  "checkinfirefox_1":{
+    "message":"Firefox가 없다면 먼저 설치하시기 바랍니다.",
+    "description":"instruction for how to check Firefox for a reported ad"
+  },
+  "checkinfirefoxorchrome_1":{
+    "message":"Firefox 또는 Chrome이 없다면 먼저 설치하시기 바랍니다.",
+    "description":"instruction for how to check Firefox or Chrome for a reported ad"
+  },
+  "checkinfirefox_2":{
+    "message":"Adblock Plus for Firefox가 없다면 먼저 설치하시기 바랍니다.",
+    "description":"Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefoxorchrome_2":{
+    "message":"Adblock Plus for Firefox 또는 Chrome용 AdBlock을 설치하시기 바랍니다.",
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
   "checkinfirefox_3":{
     "message":"그 웹 브라우저에서 이 웹 브라우저와 똑같은 필터들을 구독하세요.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
   "checkinfirefox_4":{
-    "message":"브라우져를 통해 광고가 노출된 사이트에 접속하십시오.",
+    "message":"그 웹 브라우저를 통해 광고가 있는 해당 페이지에 접속하세요.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
   "checkinfirefox_5":{
-    "message":"광고가 브라우져를 통해 노출되어있습니까?",
+    "message":"그 웹 브라우저에서도 광고가 있나요?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
+  },
+  "ff_checkinchrometitle":{
+    "message":"Chrome에서 확인하기",
+    "description":"Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_1":{
+    "message":"Chrome이 없다면 먼저 설치하시기 바랍니다.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_2":{
+    "message":"Chrome용 AdBlock이 없다면 먼저 설치하시기 바랍니다.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_3":{
+    "message":"Chrome에서 여기에서 사용하고 있는 필터와 동일한 필터를 구독하시기 바랍니다.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_4":{
+    "message":"Chrome에서 광고가 있는 페이지를 여시기 바랍니다.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_5":{
+    "message":"Chrome에서도 광고가 보이나요?",
+    "description":"Instruction for how to check Chrome for a reported ad"
   },
   "refusetocheck":{
     "message":"체크하지 않음",
     "description":"User is telling us they don't wish to investigate something for us"
   },
   "reportfilterlistproblem":{
-    "message":"이것은 구독 필터의 문제이며, 그것을 신고해주십시오 : $link$",
+    "message":"구독 필터의 문제입니다, 해당 필터의 관리자에게 신고해주세요: $link$",
     "description":"Telling the user to report an ad to a filter list maintainer",
     "placeholders":{
       "link":{
@@ -696,7 +1008,7 @@
     }
   },
   "fixityourself":{
-    "message":"옵션 페이지에 이 광고를 차단할 수 있는 필터를 추가할 수 있습니다. 고맙습니다!",
+    "message":"설정 페이지에서 이 광고를 스스로 차단할 수 있습니다. 감사합니다!",
     "description":"Telling users who won't report an ad to us how to handle it for themselves"
   },
   "block_an_ad_on_this_page":{
@@ -704,11 +1016,11 @@
     "description":"Toolbar button menu entry and context menu entry"
   },
   "block_this_ad":{
-    "message":"마우스 커서가 위치해 있는 광고 숨기기",
+    "message":"이 광고 차단하기",
     "description":"Context and popup menu entry"
   },
   "typehiding":{
-    "message":"숨겨진 요소",
+    "message":"숨겨짐",
     "description":"A resource type"
   },
   "typescript":{
@@ -720,11 +1032,11 @@
     "description":"A resource type"
   },
   "typestylesheet":{
-    "message":"스타일시트",
+    "message":"스타일 정의",
     "description":"A resource type"
   },
   "typeobject":{
-    "message":"객체",
+    "message":"상호 객체",
     "description":"A resource type"
   },
   "typesubdocument":{
@@ -740,11 +1052,11 @@
     "description":"A resource type"
   },
   "typeother":{
-    "message":"other",
+    "message":"기타",
     "description":"A resource type"
   },
   "typepopup":{
-    "message":"popup",
+    "message":"팝업",
     "description":"A resource type"
   },
   "typemedia":{
@@ -755,8 +1067,12 @@
     "message":"페이지",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"웹소켓",
+    "description":"A resource type"
+  },
   "typeunknown":{
-    "message":"기타",
+    "message":"알 수 없음",
     "description":"A resource type"
   },
   "close":{
@@ -764,7 +1080,7 @@
     "description":"Generic message for buttons that close a view or window"
   },
   "loading":{
-    "message":"로딩 중...",
+    "message":"불러오는 중...",
     "description":"Generic message displayed during processes that take some time"
   },
   "flashads":{
@@ -772,27 +1088,27 @@
     "description":"Title of the final ad report question if the ad didn't appear in Firefox"
   },
   "cantblockflashwarning":{
-    "message":"플래시 게임의 광고 또는 비디오 내부와 시작하기 전에 광고와 같이 다른 플러그인에 광고가 존재합니까?",
+    "message":"비디오가 시작하기 전 또는 내부, 혹은 Flash 게임과 같은 다른 플러그인에 광고가 존재합니까?",
     "description":"Text of the final ad report question"
   },
   "cantblockflash":{
-    "message":"플래시나 다른 플러그인의 내부 광고 차단 기능은 아직 지원하지 않습니다. 브라우저와 웹키트에서 그 기능을 지원하기를 기다리고 있습니다.",
+    "message":"Flash나 다른 플러그인의 내부 광고 차단 기능은 아직 지원되지 않습니다. 저희는 웹 브라우저와 WebKit에서 그 기능을 지원하기를 기다리고 있습니다.",
     "description":"Result of the final ad report question"
   },
   "cleanuplist2":{
-    "message":"위 목록 삭제",
+    "message":"목록 비우기",
     "description":"Option at the bottom of the 'Customize' options tab"
   },
   "disabled_by_filter_lists":{
-    "message":"죄송합니다. 구독 필터에 의해 허용된 페이지입니다.",
+    "message":"죄송합니다, 구독된 필터에 의해 허용된 페이지입니다.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
   },
   "dont_run_on_pages_on_domain":{
-    "message":"사이트 허용",
+    "message":"이 도메인에서 사용 중지",
     "description":"Menu entry to open the whitelist wizard"
   },
   "disabled_on_this_page":{
-    "message":"허용된 페이지",
+    "message":"이 페이지에서는 AdBlock이 꺼져 있습니다.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
   },
   "enable_adblock":{
@@ -800,15 +1116,15 @@
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
   },
   "status_paused":{
-    "message":"사용 중지됨.",
+    "message":"AdBlock 일시 중지됨.",
     "description":"Message shown in toolbar button when AdBlock is paused"
   },
   "unpause_adblock":{
-    "message":"AdBlock 작동 유지",
+    "message":"AdBlock 일시 중지 해제",
     "description":"Link text to unpause AdBlock, displayed immediately after 'AdBlock is paused'"
   },
   "pause_adblock":{
-    "message":"사용 중지",
+    "message":"AdBlock 일시 중지",
     "description":"Menu entry to pause AdBlock"
   },
   "safaricontentblockingpausemessage":{
@@ -840,23 +1156,27 @@
     "description":"Menu entry to whitelist a page"
   },
   "options":{
-    "message":"옵션",
+    "message":"설정",
     "description":"The text of the link on chrome:\/\/chrome\/extensions that gets you to the Options page for an extension"
   },
   "hide_this_button":{
     "message":"툴바 버튼 숨기기",
     "description":"Toolbar button menu entry to hide the AdBlock button"
   },
-  "spread_the_word":{
-    "message":"SNS를 통해 공유하기",
-    "description":"Text of a share link"
+  "donate_to_adblock":{
+    "message":"AdBlock이 마음에 드시나요? 저희를 후원해주세요!",
+    "description":"Text of a donate link in the toolbar button menu"
   },
   "pwyw":{
-    "message":"자발적 기부",
+    "message":"자발적 후원",
     "description":"Text of a payment request link"
   },
+  "privacy_policy":{
+    "message":"개인정보 보호정책",
+    "description":"Link to AdBlock's privacy policy"
+  },
   "translator_credit":{
-    "message":"한국어 번역 공헌자 :",
+    "message":"한국어 번역자:",
     "description":"Will be followed by a list of translator names (separate string)"
   },
   "tabsupport":{
@@ -872,35 +1192,47 @@
     "description":"option on the 'General' tab"
   },
   "advanced_options2":{
-    "message":"고급사용자 옵션 보기",
+    "message":"고급 사용자를 위한 고급 설정 보기",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "work_around_hulu_problems":{
-    "message":"Hulu.com 동영장 재생 안되는 문제 해결 (브라우져 재시작 필요함)",
+    "message":"Hulu.com 동영상이 재생 안 되는 문제 해결 시도 (브라우저 재시작 필요함)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."
   },
   "modifydomain":{
-    "message":"사이트 : ",
+    "message":"사이트:",
     "description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"
   },
   "modifypath":{
-    "message":"페이지 : ",
+    "message":"페이지:",
     "description":"Caption for the whitelist wizard slider that modifies the path part of a URL"
   },
+  "show_ads_except_for":{
+    "message":"이 도메인을 제외한 곳의 모든 광고 허용...",
+    "description":"Section title for blacklisting section of Customize tab"
+  },
   "only_block_ads_on_these_sites":{
-    "message":"지정된 사이트를 제외한 모든 사이트의 광고 허용",
+    "message":"이 사이트에서만 광고 차단:",
     "description":"Label for textbox where user enters a list of sites on Customize tab"
   },
   "format_site1_site2_site3":{
     "message":"형식 : ~site1.com|~site2.com|~news.site3.org",
     "description":"Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
+  "warning_overrules_filters":{
+    "message":"주의: 해당 사이트 이외의 광고는 허용됩니다!\n이 설정은 개별 사이트 필터 설정보다 우선됩니다.",
+    "description":"Message on the 'Customize' tab of the options page, explaining the danger of adding a blacklisting filter"
+  },
   "storage_quota_exceeded":{
-    "message":"AdBlock 이 허용하는 저장공간을 초과했습니다. 일부 필터 목록을 삭제해주시기 바랍니다.",
+    "message":"AdBlock에게 허용되는 저장 공간이 초과되었습니다. 일부 필터 목록을 구독 해지해주시기 바랍니다.",
     "description":"Message shown when the user uses more storage than allowed by the browser"
   },
+  "safari50_updatenotice":{
+    "message":"구 버전의 Safari를 사용하고 계십니다. AdBlock을 일시 정지할 수 있는 AdBlock 툴바 버튼, 웹사이트 허용 목록, 그리고 광고 리포트 기능을 사용하려면 지금 [[최신 버전으로 업그레이드]]하세요.",
+    "description":"A message shown to Safari 5.0 users urging them to upgrade"
+  },
   "firefox_explanation":{
-    "message":"이 질문은 여러분의 리포트를 접수할 사람을 가려내기 위함입니다. 답변이 정확하지 않을 시 엉뚱한 사람에게 리포트가 전달될 수 있고, 따라서 처리되지 않을 수 있게 됩니다.",
+    "message":"이 질문은 보고를 접수할 사람을 가려내기 위함입니다. 이 답변이 정확하지 않을 시 엉뚱한 사람에게 보고가 전달될 수 있고, 따라서 처리되지 않을 수 있습니다.",
     "description":"Explanation of the Check-in-Firefox or Chrome step in the ad reporter"
   },
   "blocked_ads":{
@@ -908,7 +1240,7 @@
     "description":"Title for popup menu section showing number of ads blocked"
   },
   "blocked_n_on_this_page":{
-    "message":"이 페이지에서 $count$",
+    "message":"이 페이지에서 $count$개",
     "description":"Shown below the 'Blocked ads:' message. Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
     "placeholders":{
       "count":{
@@ -918,7 +1250,7 @@
     }
   },
   "blocked_n_in_total":{
-    "message":"총 $count$",
+    "message":"총 $count$개",
     "description":"Shown below the 'Blocked ads:' message. Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
     "placeholders":{
       "count":{
@@ -935,6 +1267,10 @@
     "message":"AdBlock 메뉴에 차단된 광고 개수 보이기",
     "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
   },
+  "show_devtools_panel":{
+    "message":"개발자 도구에 'AdBlock' 패널 표시",
+    "description":"Label for checkbox letting user choose whether the AdBlock tab should show in the developer tools window"
+  },
   "adblockinglist":{
     "message":"광고 차단 필터 목록",
     "description":"List for subscribed ad blocking fiters"
@@ -947,8 +1283,22 @@
     "message":"사용자 설정 필터 목록",
     "description":"List for custom filters the user subscribed to"
   },
+  "customfilterserrormessage":{
+    "message":"다음 필터:\n $filter$ \n 에 오류가 있습니다: \n $message$",
+    "description":"Error message when there is an issue with a custom filter on the 'Customize' tab of the Options page",
+    "placeholders":{
+      "filter":{
+        "content":"$1",
+        "example":"@@.ad"
+      },
+      "message":{
+        "content":"$2",
+        "example":"invalid filter"
+      }
+    }
+  },
   "languagedropdowndescription":{
-    "message":"다른 언어로 필터 추가: ",
+    "message":"다른 언어 필터 추가: ",
     "description":"Dropdown list for language-specific filters"
   },
   "how":{
@@ -956,12 +1306,28 @@
     "description":"Text of a link pointing to instructions on how to do something"
   },
   "whats_this":{
-    "message":"이게 뭐죠?",
+    "message":"이게 무엇인가요?",
     "description":"Text of a link pointing to the explanation of a new feature"
   },
   "selectlanguage":{
     "message":" -- 언어 선택 -- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"특정 YouTube 채널을 허용 목록에 등록 (브라우저 재시작 필요)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "whitelist_all_youtube_channels":{
+    "message":"모든 Youtube 구독 채널을 허용 목록에 등록",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
+  "one_moment_all_youtube_channels":{
+    "message":"구독 목록을 모으는 동안 잠시 기다려주세요",
+    "description":"Alert message displayed when whitelisting all subscribed YouTube channels"
+  },
+  "all_youtube_channels_complete":{
+    "message":"모든 YouTube 구독 채널이 허용 목록에 등록되었습니다.",
+    "description":"Alert message displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
   "whitelist_youtube_channel":{
     "message":"$name$ 채널 광고 허용",
@@ -974,7 +1340,7 @@
     }
   },
   "confirm_undo_custom_filters":{
-    "message":"$host$ 에서 생성한 $count$ 개의 차단내역을 삭제하시겠습니까?",
+    "message":"$host$에서 생성한 차단 내역 $count$개를 삭제하시겠습니까?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",
     "placeholders":{
       "count":{
@@ -987,29 +1353,17 @@
       }
     }
   },
-  "latest_version":{
-    "message":"AdBlock은 현재 최신버젼입니다!",
-    "description":"On the Options > Support page, shows when there are no updates available for AdBlock"
-  },
   "here":{
     "message":"여기",
     "description":"This message is injected in other strings as a link\/button"
   },
   "adblocksupport":{
-    "message":"AdBlock 지원 방법",
+    "message":"AdBlock 지원",
     "description":"Title of the support tab"
   },
-  "checkforupdates":{
-    "message":"업데이트 확인 중(몇 초 이내에 곧 끝납니다)...",
-    "description":"Displayed when AdBlock is checking the newest available version"
-  },
-  "somethingwentwrong":{
-    "message":"업데이트 확인 중 문제가 발생했습니다.",
-    "description":"Displayed when AdBlock is checking the newest available version and an error occurs"
-  },
-  "checkinternetconnection":{
-    "message":"광고리포트를 전송하시려면 인터넷에 접속되어있어야 합니다.",
-    "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  "whatsnew":{
+    "message":"최신 버전에서 새로 나온 기능이 궁금하신가요? [[변경이력]]을 확인해보세요!",
+    "description":"Link to display the changelog on the Support tab of the options"
   },
   "englishonly":{
     "message":"영문 전용",
@@ -1028,8 +1382,32 @@
     "description":"Subtitle on the Support tab of the options"
   },
   "questionoridea":{
-    "message":"질문 또는 제안할 게 있나요?",
+    "message":"질문 또는 제안할 것이 있나요?",
     "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"소스 코드는 [[무료로 배포]]됩니다!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"AdBlock을 만드는 사람을 소개하는 [[페이지]] 또한 확인하실 수 있습니다!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"저희 팀으로부터 디버그 정보를 요청받으셨나요? [[여기]]를 클릭해주세요.",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"문제가 생겼나요? [[버그 리포트]]로 알려주세요.",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"[[고객지원 사이트]]를 통해 알려주시기 바랍니다!",
+    "description":"Link to the support site on the Support tab of the options"
+  },
+  "ad_report_please":{
+    "message":"혹시 차단되어야 할 광고가 보여지고 있다면 버그 리포트 대신 [[광고 리포트]]를 해주시기 바랍니다.",
+    "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
   "resourceblocktitle":{
     "message":"전체 자원",
@@ -1051,8 +1429,16 @@
     "message":"전체 요청 보이기",
     "description":"Menu entry to open the resource list page"
   },
+  "new_resourcelist_explanation_win":{
+    "message":"모든 요청을 표시하려면 마우스 오른쪽 단추로 '페이지 검사'(Ctrl+Shift+I)를 선택한 다음 'AdBlock' 탭을 선택하세요.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+  },
+  "new_resourcelist_explanation_osx":{
+    "message":"모든 요청을 표시하려면 마우스 오른쪽 단추로 '페이지 검사'(Option+Cmd+I)를 선택한 다음 'AdBlock' 탭을 선택하세요.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+  },
   "noresourcessend2":{
-    "message":"무언가 잘못되었습니다. 자원이 전송되지 않았으며 이 페이지는 곧 닫힙니다. 웹 사이트를 새로고침 해보세요.",
+    "message":"무언가 잘못되었습니다. 자원이 전송되지 않았으며 이 페이지는 곧 닫힙니다. 웹사이트를 새로고침 해보세요.",
     "description":"Resource list page: error message"
   },
   "resourcedomain":{
@@ -1077,6 +1463,14 @@
   },
   "typeselector":{
     "message":"선택자",
+    "description":"A resource type"
+  },
+  "typesub_frame":{
+    "message":"프레임",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"페이지",
     "description":"A resource type"
   },
   "topframe":{
@@ -1120,12 +1514,20 @@
     "description":"Resource list page: column title telling if the resource originates from a different domain"
   },
   "acceptableadsdisable_done":{
-    "message":"더 이상 용인되는 광고 필터 목록을 구독하지 않습니다.",
+    "message":"더 이상 허용할만한 광고 필터 목록을 구독하지 않습니다.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_how_to_reenable":{
-    "message":"\"비침입형 광고 허용\"을 눌러 좋아하는 사이트를 지원하실 수 있습니다.",
+    "message":"\"비침입형 광고 허용\"을 눌러 좋아하는 사이트를 후원하실 수 있습니다.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"Safari 콘텐츠 차단 설정이 켜져 있어 허용될만한 광고 구독을 해지했습니다. 둘 중 단 하나의 설정만 켤 수 있습니다. ([[어째서인가요?]])",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"허용될만한 광고를 허용하기 위해 Safari의 콘텐츠 차단 기능을 껐습니다. 둘 중 단 하나의 설정만 켤 수 있습니다. ([[어째서인가요?]])",
+    "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
   },
   "adreport_laststep":{
     "message":"마지막 단계: 문제 보고하기.",
@@ -1155,6 +1557,10 @@
     "message":"\"광고 숨기기\" 마법사를 통하여 필터를 만들었다면 다음 상자에 붙여넣기 하세요:",
     "description":"Optional question on the ad report page when the ad needs to be reported to AdBlock."
   },
+  "buttonsubmit":{
+    "message":"제출",
+    "description":"Button to send a form."
+  },
   "adreport_missing_info":{
     "message":"필요한 정보가 입력되지 않았거나 올바르지 않습니다. 붉게 표시된 곳을 다시 확인해주세요.",
     "description":"Error message shown when the user doesn't enter anything in some of the text fields."
@@ -1162,6 +1568,10 @@
   "adreport_missing_screenshot":{
     "message":"스크린샷이 첨부되어 있지 않습니다! 보고하는 광고를 볼 수 없다면 도움을 드릴 수 없습니다.",
     "description":"Error message shown when the user doesn't attach a screenshot to an ad report."
+  },
+  "adreport_response_success":{
+    "message":"모두 완료되었습니다! 곧 저희 측에서 연락하도록 하겠습니다. 그동안 AdBlock에서 온 이메일을 확인해주시기 바랍니다. 고객지원 사이트에서 온 티켓의 링크가 첨부되어 있습니다. 저희가 즉시 답변을 할 수 없을 경우를 대비한 몇 가지 자조 제안이 있습니다.",
+    "description":"Shown when a ticket has been sumbitted to AdBlock's support site successfully."
   },
   "adreport_response_invalid_file":{
     "message":"이미지 파일이 아닙니다. .png, .gif, 또는 .jpg 파일을 업로드하세요.",
@@ -1187,8 +1597,24 @@
     "message":"요청을 처리하던 중 오류가 발생했습니다.",
     "description":"Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
   },
+  "adreport_server_response_error__manual_msg_step1":{
+    "message":"[[고객지원 사이트]]를 방문해주세요.",
+    "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
   "adreport_server_response_error__manual_msg_step2":{
     "message":"\"수동으로 티켓을 만든 후 아래에 있는 정보를 복사 후 \"Fill in any details you think will help us understand your issue\" 항목에 붙여넣어주세요.",
     "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "custom_filters_migration_error_message_part1":{
+    "message":"사용자 필터 오류 수: ",
+    "description":"Part one of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part2":{
+    "message":"사용자 필터를 옮기는 동안 다음 메시지가 발생했습니다 (줄 번호는 무시하세요): ",
+    "description":"Part two of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3":{
+    "message":"기존 항목: ",
+    "description":"Part three of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
   }
 }
