@@ -9,11 +9,19 @@
   },
   "description_edge":{
     "message":"AdBlock. Το #1 εργαλείο αποκλεισμού διαφημίσεων με πάνω από 200 εκατομμύρια λήψεις. Μπλοκάρει αγγελίες σε όλο τον ιστό.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
+    "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
+  },
+  "description_yt":{
+    "message":"Εργαλείο αποκλεισμού διαφημίσεων YouTube™ από το AdBlock, την πιο δημoφιλή επέκταση Chrome με 60 εκατομμύρια χρήστες παγκοσμίως",
+    "description":"Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
+  },
+  "name_adblock_on_youtube":{
+    "message":"AdBlock στο YouTube™",
+    "description":"Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - κλικ για λεπτομέρειες",
-    "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button."
+    "description":"Tooltip on the AdBlock button, to help users understand that they can click the button to access more options."
   },
   "buttoncancel":{
     "message":"Άκυρο",
@@ -25,7 +33,7 @@
   },
   "reportpubliclyavailable":{
     "message":"Σημείωση: η αναφορά σας μπορεί να γίνει δημόσια. Έχετέ το κατά νου πριν συμπεριλάβετε οποιαδήποτε ιδιωτική πληροφορία.",
-    "description":"Ad report page string, when you're about to submit a report"
+    "description":"Ad report page string, when you're about to submit a report."
   },
   "buttonblockit":{
     "message":"Μπλοκάρετέ το!",
@@ -33,11 +41,15 @@
   },
   "buttonedit":{
     "message":"Επεξεργασία",
-    "description":"Edit filter manually button"
+    "description":"Edit filter(s) manually button"
   },
   "optionstitle":{
     "message":"Επιλογές του AdBlock",
-    "description":"Title for the options page"
+    "description":"Title for the Options page"
+  },
+  "optionstitle_yt":{
+    "message":"Επιλογές AdBlock στο YouTube™",
+    "description":"Title for the Options page for the 'AdBlock on YouTube' extension."
   },
   "chromebutton_how_to_hide2":{
     "message":"Κάντε δεξιό κλικ στο κουμπί AdBlock και επιλέξτε \"Απόκρυψη στο μενού του Chrome\". Για να το δείτε, κάντε κλικ στο μενού του Chrome, κάντε δεξιό κλικ στο κουμπί AdBlock και επιλέξτε 'Διατήρηση στη γραμμή εργαλείων'.",
@@ -57,27 +69,27 @@
   },
   "sliderexplanation":{
     "message":"Σύρετε τον δείκτη ώσπου η διαφήμιση να μπλοκαριστεί σωστά στην σελίδα, και το μπλοκαρισμένο στοιχείο να φαίνεται εντάξει.",
-    "description":"Blacklister slider page message"
+    "description":"'Block an ad' wizard usage explanation"
   },
   "slidertitle":{
     "message":"Βήμα 1ο: Επιλέξτε τι θα μπλοκάρετε",
-    "description":"Blacklister slider page title"
+    "description":"'Block an ad' wizard title"
   },
   "blacklisteroptions1":{
     "message":"Τι νομίζετε ότι θα ισχύει σε αυτήν την διαφήμιση κάθε φορά που θα επισκέπτεστε αυτήν τη σελίδα;",
-    "description":"Blacklister attribute choosing page message"
+    "description":"'Block an ad' wizard attribute choice page"
   },
   "blacklisternotsure":{
     "message":"Δεν είστε σίγουρος; Απλώς πατήστε 'Μπλοκάρετέ το!' παρακάτω.",
-    "description":"Blacklister attribute choosing page message"
+    "description":"'Block an ad' wizard attribute choice page"
   },
   "blacklisterthefilter":{
     "message":"Το φίλτρο, το οποίο μπορεί να αλλαχθεί στη σελίδα επιλογών:",
-    "description":"Blacklister attribute choosing page message"
+    "description":"'Block an ad' wizard attribute choice page"
   },
   "blacklisteroptionstitle":{
     "message":"Τελευταίο βήμα: Τι καθιστά αυτό διαφήμιση;",
-    "description":"Blacklister options page title"
+    "description":"'Block an ad' wizard title"
   },
   "blacklisternofilter":{
     "message":"Δεν προσδιορίστηκε φίλτρο!",
@@ -85,11 +97,11 @@
   },
   "blacklistereditfilter":{
     "message":"Παρακαλούμε πληκτρολογήστε σωστά το φίλτρο παρακάτω και πατήστε OK",
-    "description":"Text if the user wants to manually edit a filter. 'OK' is the standard javascript popup button text."
+    "description":"Text if the user wants to manually edit a filter. 'OK' is the standard JavaScript popup button text."
   },
   "blacklistereditinvalid1":{
     "message":"Το φίλτρο δεν είναι έγκυρο: $exception$",
-    "description":"Messagebox if the manually edited filter is invalid. Error messages are not translated.",
+    "description":"Alert if the manually edited filter is invalid. Error messages are not translated.",
     "placeholders":{
       "exception":{
         "content":"$1",
@@ -99,15 +111,15 @@
   },
   "blacklisterblockedelement":{
     "message":"Μπλοκαρισμένο στοιχείο:",
-    "description":"Tells the user what the blocked element is on the slider page"
+    "description":"Tells the user what the blocked element is on the 'Block an ad' wizard."
   },
   "blacklisterwarningnofilter":{
     "message":"Προσοχή: Δεν προσδιορίστηκε φίλτρο!",
-    "description":"Warns the user that no filter was specified"
+    "description":"Warns the user that nothing will be blocked."
   },
   "blacklisterblocksalloftype":{
     "message":"Προσοχή: αυτό το φίλτρο μπλοκάρει όλα τα στοιχεία τύπου $elementtype$ στη σελίδα!",
-    "description":"Warns the user that all elements of type X will be blocked",
+    "description":"Warns the user that all elements of type X will be blocked.",
     "placeholders":{
       "elementtype":{
         "content":"$1",
@@ -131,7 +143,7 @@
   },
   "blacklisterattrwillbe":{
     "message":"$attribute$ θα είναι $value$",
-    "description":"Checkbox label",
+    "description":"Checkbox label for attributes in 'Block an ad' wizard.",
     "placeholders":{
       "attribute":{
         "content":"$1",
@@ -145,55 +157,55 @@
   },
   "blacklistertype":{
     "message":"Τύπος",
-    "description":"node name is called 'Type'"
+    "description":"node name is called 'Type' (HTML tag)"
   },
   "buttonlooksgood":{
     "message":"Φαίνεται εντάξει",
-    "description":"Looks good button"
+    "description":"Confirmation button after user chose what to block on the page"
   },
   "buttonback":{
     "message":"Πίσω",
-    "description":"Back to previous wizard page button"
+    "description":"Back to previous page button"
   },
   "findingads":{
     "message":"Αναζήτηση διαφημίσεων...\n\nΑυτό θα πάρει μερικά δευτερόλεπτα.",
-    "description":"When you press ctrl-shift-K the blacklister searches for ads"
+    "description":"'Block an ad' wizard loading message"
   },
   "blockanadtitle":{
     "message":"Μπλοκάρισμα μιας διαφήμισης",
-    "description":"Title of the first two dialogs of the blacklister"
+    "description":"Title of the first two dialogs of the 'Block an ad' wizard"
   },
   "clickthead":{
     "message":"Κάντε κλικ στη διαφήμιση, και θα σας καθοδηγήσω στο μπλοκάρισμα της.",
-    "description":"When you have to click the ad to continue"
+    "description":"User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching":{
     "message":"Το AdBlock δεν θα λειτουργεί σε σελίδες που αντιστοιχούν σε:",
-    "description":"Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
+    "description":"Message displayed when the whitelist wizard will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change":{
     "message":"Μπορείτε να σύρετε παρακάτω για να αλλάξετε ακριβώς σε ποιες σελίδες δεν θα τρέχει το AdBlock.",
-    "description":"Instructions for how to use the whitelister slider controls. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
+    "description":"Whitelist slider usage instructions. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2":{
     "message":"Να μην λειτουργεί το AdBlock σε...",
-    "description":"The title of the whitelister dialog"
+    "description":"The title of the whitelist wizard (Don't run on this page\/pages on this domain)"
   },
   "buttonexclude":{
     "message":"Εξαίρεση",
-    "description":"Button for excluding a domain in the whitelister dialog"
+    "description":"Button for excluding a domain in the whitelist wizard"
   },
   "reloadpageafterwhitelist":{
     "message":"Ανανέωση της σελίδας.",
-    "description":"Checkbox on whitelist wizard"
+    "description":"Checkbox in the whitelist wizard"
   },
   "wizardcantrunonframesets":{
     "message":"Αυτό το χαρακτηριστικό του AdBlock δεν λειτουργεί σε αυτή την ιστοσελίδα, επειδή χρησιμοποιεί παρωχημένη τεχνολογία. Μπορείτε να αποκλείσετε ή να επιτρέψετε πόρους χειροκίνητα στην καρτέλα 'Προσαρμογή' της σελίδας επιλογών.",
-    "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
+    "description":"Alert shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
   "subscribeconfirm":{
     "message":"Είστε βέβαιοι ότι θέλετε να εγγραφείτε στη λίστα φίλτρου $title$;",
-    "description":"Prompt question before subscribing to the filter list",
+    "description":"Prompt question before subscribing to a filter list",
     "placeholders":{
       "title":{
         "content":"$1",
@@ -207,11 +219,11 @@
   },
   "subscribingfinished":{
     "message":"Ολοκληρώθηκε!",
-    "description":"abp: link subscriber result"
+    "description":"abp: link subscriber successful result"
   },
   "subscribingfailed":{
     "message":"Απέτυχε!",
-    "description":"abp: link subscriber result"
+    "description":"abp: link subscriber unsuccessful result"
   },
   "optionsversion":{
     "message":"ΕΚΔΟΣΗ $version$",
@@ -219,53 +231,53 @@
     "placeholders":{
       "version":{
         "content":"$1",
-        "example":"2.0.9"
+        "example":"3.9.2"
       }
     }
   },
   "tabgeneral":{
     "message":"ΓΕΝΙΚΑ",
-    "description":"A tab on the options page"
+    "description":"A tab on the Options page"
   },
   "tabfilterlists":{
     "message":"ΛΙΣΤΕΣ ΦΙΛΤΡΩΝ",
-    "description":"A tab on the options page"
+    "description":"A tab on the Options page"
   },
   "tabcustomize":{
     "message":"ΠΡΟΣΑΡΜΟΓΗ",
-    "description":"A tab on the options page"
+    "description":"A tab on the Options page"
   },
   "generaloptions":{
     "message":"Γενικές επιλογές",
-    "description":"Title of first tab page"
+    "description":"Title of the first Options page tab"
   },
   "betalabel":{
     "message":"Δοκιμαστική",
-    "description":"Label for beta features in AdBlock Options"
+    "description":"Label for experimental features in AdBlock Options"
   },
   "showcontextmenus2":{
     "message":"Προσθήκη στοιχείων στο μενού του δεξιού κλικ",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
-  "disableyoutubestreamingads":{
-    "message":"Ενεργοποίηση της λειτουργίας συμβατότητας του ClickToFlash",
-    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+    "description":"Checkbox on the 'General' tab of the Options page."
   },
   "safaricontentblocking":{
     "message":"Ενεργοποίηση αποκλεισμού περιεχομένου Safari",
     "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
   },
   "debuginlogoption":{
-    "message":"Εμφάνιση στοιχείων αποσφαλμάτωσης στο αρχείο κονσόλας (καθυστερεί το AdBlock)",
+    "message":"Εμφάνιση στοιχείων αποσφαλμάτωσης στο αρχείο κονσόλας (καθυστερεί την επέκταση)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption":{
+    "message":"Να επιτρέπεται στο AdBlock να συλλέγει ανώνυμα δεδομένα χρήσης φίλτρου λίστας και πληροφορίες σχετικά με το αποκλεισμένο περιεχόμενο από λίστες φίλτρων",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
     "message":"ανανεώθηκε μόλις τώρα",
-    "description":"Label for subscription"
+    "description":"Label for filter list subscription"
   },
   "updatedsecondsago":{
     "message":"ανανεώθηκε πριν $seconds$ δευτερόλεπτα",
-    "description":"Label for subscription",
+    "description":"Label for filter list subscription",
     "placeholders":{
       "seconds":{
         "content":"$1",
@@ -275,7 +287,7 @@
   },
   "updatedminutesago":{
     "message":"ανανεώθηκε πριν $minutes$ λεπτά",
-    "description":"Label for subscription",
+    "description":"Label for filter list subscription",
     "placeholders":{
       "minutes":{
         "content":"$1",
@@ -285,7 +297,7 @@
   },
   "updatedhoursago":{
     "message":"ανανεώθηκε πριν $hours$ ώρες",
-    "description":"Label for subscription",
+    "description":"Label for filter list subscription",
     "placeholders":{
       "hours":{
         "content":"$1",
@@ -295,7 +307,7 @@
   },
   "updateddaysago":{
     "message":"ανανεώθηκε πριν $days$ μέρες",
-    "description":"Label for subscription",
+    "description":"Label for filter list subscription",
     "placeholders":{
       "days":{
         "content":"$1",
@@ -305,39 +317,39 @@
   },
   "updatedminuteago":{
     "message":"ανανεώθηκε πριν 1 λεπτό",
-    "description":"Label for subscription"
+    "description":"Label for filter list subscription"
   },
   "updatedhourago":{
     "message":"ανανεώθηκε πριν 1 ώρα",
-    "description":"Label for subscription"
+    "description":"Label for filter list subscription"
   },
   "updateddayago":{
     "message":"ανανεώθηκε πριν 1 μέρα",
-    "description":"Label for subscription"
+    "description":"Label for filter list subscription"
   },
   "unsubscribedlabel":{
     "message":"Αναίρεση εγγραφής",
-    "description":"Status label"
+    "description":"Status label when unselecting a filter list"
   },
   "fetchinglabel":{
     "message":"Ανάκτηση... Παρακαλώ περιμένετε.",
-    "description":"Status label"
+    "description":"Status label when selecting a new filter list"
   },
   "ab_filters_subscription_lastDownload_invalidURL":{
     "message":"Απέτυχε, δεν είναι μια έγκυρη διεύθυνση",
-    "description":"message on the filter tab - Message when you subscribe to a non-list URL"
+    "description":"Filter lists tab of the Options page: Message when you subscribe to a non-list URL."
   },
   "ab_filters_subscription_lastDownload_connectionError":{
     "message":"Απέτυχε, αποτυχία λήψης",
-    "description":"message on the filter tab - Generic filter list download error message"
+    "description":"Filter lists tab of the Options page: Generic filter list download error message."
   },
   "ab_filters_subscription_lastDownload_invalidData":{
     "message":"Απέτυχε, δεν είναι μια έγκυρη λίστα φίλτρων",
-    "description":"message on the filter tab - Invalid filter list file"
+    "description":"Filter lists tab of the Options page: Invalid filter list file."
   },
   "ab_filters_subscription_lastDownload_checksumMismatch":{
     "message":"Απέτυχε, ασυμφωνία επαληθευτικού αθροίσματος",
-    "description":"message on the filter tab"
+    "description":"Filter lists tab of the Options page: Corrupted filter list file."
   },
   "invalidListUrl":{
     "message":"Μη έγκυρη διεύθυνση URL λίστας. Θα διαγραφεί.",
@@ -345,39 +357,43 @@
   },
   "failedtofetchfilter":{
     "message":"Σφάλμα στην ανάκτηση αυτού του φίλτρου!",
-    "description":"Error messagebox"
+    "description":"Error alert when subscribing to a filter list"
   },
   "removefromlist":{
     "message":"Αφαίρεση από τη λίστα",
-    "description":"Label to remove a custom filter"
+    "description":"Label to remove a custom filter list"
   },
   "you_know_thats_a_bad_idea_right":{
     "message":"Όσο περισσότερα φίλτρα χρησιμοποιείτε,τόσο πιο αργά τρέχει το AdBlock. Χρησιμοποιώντας πολλά φίλτρα μπορεί ακόμα και να κολλήσει ο περιηγητής σας σε μερικές ιστοσελίδες. Πάτησε OK για να εγγραφείτε σε αυτή τη λίστα φίλτρων όπως και να έχει.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"Το AdBlock δεν μπλοκάρει τις διαφημίσεις εάν απενεργοποιήσετε όλες τις λίστες φίλτρων. Εναλλακτικά, σας προτείνουμε να θέσετε το AdBlock σε παύση. Αναίρεση εγγραφής από τη λίστα ούτως ή άλλως;",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Εγγραφείτε σε λίστες φίλτρων",
-    "description":"Title of the filter list tab"
+    "description":"Title of the Filter lists tab of the Options page"
   },
   "filterlistlink":{
     "message":"Μην εγγραφείτε σε περισσότερα φίλτρα από όσα χρειάζεστε -- το καθένα σας καθυστερεί και από λίγο! \nΕύσημα και περισσότερες λίστες μπορούν να βρεθούν [[εδώ]].",
-    "description":"Explanation of the filter lists"
+    "description":"Filter lists tab explanation and link to filter list credits."
   },
   "updatenowmessage2":{
     "message":"Θα κάνω ενημερώσεις αυτόματα. Μπορείτε επίσης να [[ενημερώσετε τώρα]]",
-    "description":"Update filters text + button"
+    "description":"Update filters text and button"
   },
   "orenteraurl":{
     "message":"ή εισάγετε μια διεύθυνση URL σελίδας φίλτρων:",
-    "description":"Link for custom subscription"
+    "description":"Text box to enter a link to a custom filter list"
   },
   "subscribebutton":{
     "message":"Εγγραφή",
-    "description":"Subscribe to a list button"
+    "description":"Subscribe to a filter list button"
   },
   "showlinkstolists2":{
     "message":"Εμφάνιση συνδέσμων στις λίστες φίλτρων",
-    "description":"Option on the 'Filter lists' tab of the Options page"
+    "description":"Label to display filter list links"
   },
   "filterantisocial":{
     "message":"Λίστα φίλτρου Antisocial (αφαιρεί τα κουμπιά κοινωνικής δικτύωσης)",
@@ -457,51 +473,51 @@
   },
   "blacklistclickmessage":{
     "message":"Κάντε δεξί κλικ σε μια διαφήμιση για να την μπλοκάρετε -- ή κάντε το εδώ χειροκίνητα.",
-    "description":"Message at the top of the blacklist options tab"
+    "description":"'Hide a section of a webpage' part on the Customize tab of the Options page."
   },
   "tabcustomizetitle":{
     "message":"Προσαρμόστε το AdBlock",
-    "description":"Title of the customize tab"
+    "description":"Title of the Customize tab of the Options page"
   },
   "filterlistsrock":{
     "message":"Οι λίστες φίλτρων μπλοκάρουν τις περισσότερες διαφημίσεις στον ιστό. Μπορείτε επίσης:",
-    "description":"Header text on the Customize tab. 'Filter lists' should be the same text as the name of the 'Filter lists' tab."
+    "description":"Header text on the Customize tab"
   },
   "blockmoreads":{
     "message":"Να μπλοκάρετε κι άλλες διαφημίσεις:",
-    "description":"Section header on the 'Customize' tab"
+    "description":"Subtitle on the 'Customize' tab"
   },
   "stop_blocking_ads":{
     "message":"Να σταματήσετε το μπλοκάρισμα διαφημίσεων:",
-    "description":"Section header on the 'Customize' tab"
+    "description":"Subtitle on the 'Customize' tab"
   },
   "linkblockadbyurl":{
     "message":"Μπλοκάρισμα μιας διαφήμισης από την διεύθυνση URL",
-    "description":"Link on the 'Customize' tab"
+    "description":"Link label on the 'Customize' tab"
   },
   "linkhidesection":{
     "message":"Απόκρυψη μιας περιοχής της ιστοσελίδας",
-    "description":"Link on the 'Customize' tab"
+    "description":"Link label on the 'Customize' tab"
   },
   "linkunblock":{
     "message":"Εμφάνιση διαφημίσεων σε μια ιστοσελίδα ή τομέα",
-    "description":"Link on the 'Customize' tab"
+    "description":"Link label on the 'Customize' tab"
   },
   "blockurlwithtext":{
     "message":"Μπλοκάρετε URL διευθύνσεις με αυτό το κείμενο",
-    "description":"Message of the url-blocking area"
+    "description":"Message of the URL-blocking section (Block an ad by its URL) on the Customize tab"
   },
   "csstomatch":{
     "message":"CSS για ταίριασμα",
-    "description":"Message of the css-hiding area"
+    "description":"Message of the CSS-hiding section (Hide a section of a webpage) on the Customize tab"
   },
   "excludedomainorurl":{
     "message":"Ο τομέας ή η URL διεύθυνση όπου το AdBlock δε θα μπλοκάρει τίποτα",
-    "description":"Message of the exclude area"
+    "description":"Message of the exclude section (Show ads on a webpage or domain) on the Customize tab"
   },
   "blockdomain":{
     "message":"Τομέας της σελίδας για εφαρμογή",
-    "description":"Message of the url and css -blocking area"
+    "description":"Message of the URL and CSS blocking sections"
   },
   "manualfilteredit":{
     "message":"Επεξεργαστείτε χειροκίνητα τα φίλτρα σας:",
@@ -513,11 +529,19 @@
   },
   "filtersavewarning":{
     "message":"ΠΡΟΣΟΧΗ: αν κάνετε ένα λάθος εδώ, πολλά άλλα φίλτρα, συμπεριλαμβανομένων των επίσημων, μπορεί να πάθουν ζημιά! \nΔιαβάστε τις[[ οδηγίες για σύνταξη φίλτρων]] για να μάθετε πώς να προσθέσετε προηγμένες μαύρες και λευκές λίστες φίλτρων.",
-    "description":"Warning when blacklisting manually"
+    "description":"Warning when manually editing filters."
+  },
+  "filtersavewarning_ytadblock_1":{
+    "message":"Να είστε προσεκτικοί: αν κάνετε κάποιο λάθος εδώ, το AdBlock στο YouTube™ θα μπορούσε να σταματήσει να λειτουργεί σωστά.",
+    "description":"First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
+  },
+  "filtersavewarning_ytadblock_2":{
+    "message":"Διαβάστε τον [[οδηγό σύνταξης φίλτρου]] για να μάθετε πώς να προσθέσετε φίλτρα λευκής λίστας.",
+    "description":"Second part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
   },
   "migration_error_message":{
     "message":"Έχουμε βρεί κάποια λάθη στα προσαρμοσμένα φίλτρα σας. Δείτε παρακάτω για τα μηνύματα.",
-    "description":"Warning when adding custom filters manually"
+    "description":"Error when adding custom filters manually"
   },
   "delete_migration_error_messages":{
     "message":"Διαγραφή μηνυμάτων",
@@ -533,7 +557,7 @@
   },
   "savereminder":{
     "message":"Μην ξεχάσετε να αποθηκεύσετε!",
-    "description":"Reminder to press save"
+    "description":"Reminder to click 'Save'"
   },
   "adblockreportinganad":{
     "message":"AdBlock - Αναφορά μιας διαφήμισης",
@@ -549,15 +573,15 @@
   },
   "malwarenotificationcheckboxmessage":{
     "message":"Να σας ειδοποιεί το AdBlock όταν ανιχνεύει κακόβουλο λογισμικό;",
-    "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
+    "description":"Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
     "message":"Το AdBlock έχει μπλοκάρει μια λήψη από μια τοποθεσία που είναι γνωστό ότι φιλοξενεί κακόβουλο λογισμικό.",
-    "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
+    "description":"Notification when a potential malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
     "message":"Μάθετε περισσότερα για το κακόβουλο λογισμικό",
-    "description":"Button on the malware notification that opens a page about malware on our website. Message should be under 45 characters!"
+    "description":"Button on the malware notification that opens a page about malware on the AdBlock website. Message should be under 45 characters!"
   },
   "malwarenotificationdisablethesemessages":{
     "message":"Απενεργοποιήστε αυτές τις ειδοποιήσεις",
@@ -621,7 +645,7 @@
   },
   "adalreadyblocked":{
     "message":"Εξαιρετικά! Είστε έτοιμοι.",
-    "description":"On the ad report page, telling a user there is nothing to do"
+    "description":"On the ad report page, telling the user there is nothing to do as the ad they were seeing is now blocked."
   },
   "disableallextensions":{
     "message":"Απενεργοποίηση όλων των επεκτάσεων εκτός από το AdBlock:",
@@ -659,13 +683,21 @@
     "message":"Κάντε κλικ στο μενού Safari > Προτιμήσεις > Επεκτάσεις.",
     "description":"Step 1 for disabling Safari extensions"
   },
+  "disableforedgestepone":{
+    "message":"Κάντε κλικ στο μενού περισσότερα (...) και επιλέξτε το Επεκτάσεις.",
+    "description":"Step 1 for disabling Edge extensions"
+  },
+  "disableforedgesteptwo":{
+    "message":"Για κάθε επέκταση εκτός του AdBlock, κάντε κλικ στο εικονίδιο γραναζιού και κάντε κλικ στο κουμπί εναλλαγής για να το αλλάξετε σε Ανενεργό.",
+    "description":"Step 2 for disabling Edge extensions"
+  },
   "reenableadsonebyone":{
     "message":"Εξαιρετικά! Τώρα ας μάθουμε ποια επέκταση είναι η αιτία. Ενεργοποίηση κάθε επέκτασης μία προς μία. Η επέκταση που φέρνει πίσω την διαφήμιση είναι αυτή που πρέπει να καταργήσετε για να απαλλαγείτε από τις διαφημίσεις.",
-    "description":"Tells the user to reenable the extensions one by one"
+    "description":"Tells the user to re-enable the extensions one by one"
   },
   "correctfilters":{
     "message":"Βεβαιωθείτε ότι χρησιμοποιείτε το σωστό φίλτρο γλώσσας:",
-    "description":"On the ad report page, label describing having the right set of filters"
+    "description":"On the ad report page, label describing having the right filter lists enabled"
   },
   "pagelanguagecheck":{
     "message":"Σε τι γλώσσα είναι αυτή η σελίδα;",
@@ -887,10 +919,6 @@
     "message":"Αραβικά",
     "description":"A filter list"
   },
-  "filter_easylist_plus_arabic":{
-    "message":"Αραβικά + EasyList",
-    "description":"A filter list combined with EasyList"
-  },
   "filter_easylist_plus_arabic_plus_french":{
     "message":"Αραβικά + Γαλλικά + EasyList",
     "description":"A filter list combined with EasyList"
@@ -917,7 +945,7 @@
   },
   "nodefaultfilter1":{
     "message":"Δεν έχουμε μια προεπιλεγμένη λίστα φίλτρων για αυτήν τη γλώσσα. Παρακαλούμε [[προσπαθείστε να βρείτε μια κατάλληλη λίστα που υποστηρίζει αυτή τη γλώσσα]] ή αποκλείστε αυτή την διαφήμιση για εσάς από το μενού του AdBlock.",
-    "description":"Instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same text as the name of the 'Customize' tab."
+    "description":"Instructions on ad report page pointing users to EasyList subscriptions list."
   },
   "retryaftersubscribe":{
     "message":"Εγγραφείτε σε αυτή τη λίστα φίλτρων, και μετά ξαναπροσπαθήστε: $list_title$",
@@ -925,7 +953,7 @@
     "placeholders":{
       "list_title":{
         "content":"$1",
-        "example":"French filters"
+        "example":"French"
       }
     }
   },
@@ -1013,7 +1041,7 @@
   },
   "block_this_ad":{
     "message":"Μπλοκάρισμα αυτής της διαφήμισης",
-    "description":"Context and popup menu entry"
+    "description":"Toolbar button menu entry and context menu entry"
   },
   "typehiding":{
     "message":"απόκρυψη",
@@ -1093,11 +1121,15 @@
   },
   "cleanuplist2":{
     "message":"Καθαρίστε αυτή τη λίστα",
-    "description":"Option at the bottom of the 'Customize' options tab"
+    "description":"Label at the bottom of the 'Customize' tab of the Options page"
   },
   "disabled_by_filter_lists":{
     "message":"Συγνώμη, το AdBlock απενεργοποιήθηκε σε αυτήν την σελίδα λόγω μιας από τις λίστες φίλτρων σας.",
-    "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
+    "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
+  },
+  "disabled_by_filter_lists_yt":{
+    "message":"Συγνώμη, το AdBlock στο YouTube™ απενεργοποιήθηκε σε αυτήν την σελίδα λόγω μιας από τις επιλογές σας.",
+    "description":"Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
   },
   "dont_run_on_pages_on_domain":{
     "message":"Εκτός λειτουργίας σε σελίδες αυτού του τομέα",
@@ -1107,53 +1139,69 @@
     "message":"Το AdBlock είναι απενεργοποιημένο σε αυτήν την σελίδα.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
   },
+  "disabled_on_this_channel":{
+    "message":"Έχετε επιτρέψει τις διαφημίσεις σε αυτό το κανάλι.",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
+  },
   "enable_adblock":{
     "message":"Ενεργοποίηση του AdBlock σε αυτή τη σελίδα",
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
   },
+  "enable_adblock_on_this_channel":{
+    "message":"Αποκλεισμός διαφημίσεων σε αυτό το κανάλι",
+    "description":"Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
+  },
   "status_paused":{
     "message":"Το AdBlock είναι σε παύση.",
-    "description":"Message shown in toolbar button when AdBlock is paused"
+    "description":"Message shown in toolbar button when AdBlock is not running"
   },
   "unpause_adblock":{
     "message":"Αναίρεση παύσης του AdBlock",
-    "description":"Link text to unpause AdBlock, displayed immediately after 'AdBlock is paused'"
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
   "pause_adblock":{
     "message":"Παύση του AdBlock",
-    "description":"Menu entry to pause AdBlock"
+    "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "unpause_adblocking":{
+    "message":"Αναίρεση παύσης αποκλεισμού διαφημίσεων",
+    "description":"Menu entry to unpause the extension (start blocking ads again)"
+  },
+  "pause_adblocking":{
+    "message":"Παύση αποκλεισμού διαφημίσεων",
+    "description":"Menu entry to pause the extension (stop blocking ads)"
   },
   "safaricontentblockingpausemessage":{
     "message":"Για παύση του AdBlock με ενεργοποιημένο αποκλεισμό περιεχομένου Safari, παρακαλούμε επιλέξτε Safari (στο μενού) > Προτιμήσεις > Επεκτάσεις > AdBlock, και αποεπιλέξτε το 'Ενεργοποίηση AdBlock'.",
-    "description":"Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled"
+    "description":"Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled."
   },
   "safaricontentblockinglimitexceeded":{
     "message":"Ο αριθμός των κανόνων στη λίστα φίλτρου υπερβαίνει το όριο των 50.000, και έχει μειωθεί αυτόματα. Παρακαλώ αναιρέστε την εγγραφή σας από μερικές λίστες φίλτρων ή απενεργοποιήστε τον Αποκλεισμό Περιεχομένου Safari!",
-    "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled"
+    "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled."
   },
   "browserestartrequired":{
     "message":"Παρακαλούμε κάντε επανεκκίνηση το Safari για να ολοκληρώσετε την απενεργοποίηση φραγής περιεχομένου.",
-    "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
+    "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch."
   },
   "safarinotificationtitle":{
     "message":"Υπέρβαση ορίου κανόνων αποκλεισμού περιεχομένου",
-    "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules"
+    "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules."
   },
   "safarinotificationbody":{
     "message":"Παρακαλούμε απενεργοποιήστε ορισμένες λίστες φίλτρων. Περισσότερες πληροφορίες στις επιλογές του AdBlock.",
-    "description":"Body of a notification shown to Safari Content Blocking users with too many filter list rules"
+    "description":"Body of a notification shown to Safari Content Blocking users with too many filter list rules."
   },
   "undo_last_block":{
     "message":"Αναίρεση των μπλοκ μου σε αυτόν τον τομέα",
-    "description":"Menu entry to let the user cancel the result of running the blacklist wizard"
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
     "message":"Εκτός λειτουργίας σε αυτή τη σελίδα",
-    "description":"Menu entry to whitelist a page"
+    "description":"Menu entry to whitelist the current page"
   },
   "options":{
     "message":"Επιλογές",
-    "description":"The text of the link on chrome:\/\/chrome\/extensions that gets you to the Options page for an extension"
+    "description":"The text of the link on chrome:\/\/chrome\/extensions that takes you to the Options page"
   },
   "hide_this_button":{
     "message":"Απόκρυψη του κουμπιού",
@@ -1162,6 +1210,14 @@
   "donate_to_adblock":{
     "message":"Αγαπάτε το AdBlock; Εξετάστε τη δωρεά!",
     "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"Βοήθεια και σχόλια",
+    "description":"Text of a help link in the toolbar button menu"
+  },
+  "donate_to_youtube_adblock":{
+    "message":"Το αγαπάτε; Εξετάστε τη δωρεά!",
+    "description":"Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
   },
   "pwyw":{
     "message":"ΠΛΗΡΩΣΤΕ ΟΤΙ ΘΕΛΕΤΕ!",
@@ -1173,11 +1229,11 @@
   },
   "translator_credit":{
     "message":"Ευχαριστούμε για την βοήθεια στην μετάφραση τους:",
-    "description":"Will be followed by a list of translator names (separate string)"
+    "description":"This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
   },
   "tabsupport":{
     "message":"ΥΠΟΣΤΗΡΙΞΗ",
-    "description":"A tab on the options page"
+    "description":"A tab on the Options page"
   },
   "report_ad_on_page":{
     "message":"Αναφέρετε μια διαφήμιση σε αυτή τη σελίδα",
@@ -1185,7 +1241,7 @@
   },
   "acceptableadsoption":{
     "message":"Να επιτρέπονται μερικές μη-παρεμβατικές διαφημίσεις",
-    "description":"option on the 'General' tab"
+    "description":"Checkbox on the 'General' tab of the Options page to enable the Acceptable Ads filter list"
   },
   "advanced_options2":{
     "message":"Είμαι ένας έμπειρος χρήστης, δείξε μου επιλογές για προχωρημένους",
@@ -1205,7 +1261,7 @@
   },
   "show_ads_except_for":{
     "message":"Εμφάνιση διαφημίσεων παντού εκτός από αυτούς τους τομείς...",
-    "description":"Section title for blacklisting section of Customize tab"
+    "description":"Section title for the whitelisting section of Customize tab"
   },
   "only_block_ads_on_these_sites":{
     "message":"Μπλοκάρισμα διαφημίσεων μόνο σε αυτές τις ιστοσελίδες:",
@@ -1217,11 +1273,11 @@
   },
   "warning_overrules_filters":{
     "message":"Προσοχή: σε όλες τις άλλες ιστοσελίδες θα βλέπετε διαφημίσεις!\nΑυτό υπερισχύει όλων των άλλων φίλτρων για αυτές τις ιστοσελίδες.",
-    "description":"Message on the 'Customize' tab of the options page, explaining the danger of adding a blacklisting filter"
+    "description":"Message on the 'Customize' tab of the options page, explaining the danger of adding a whitelist filter for all websites with only some exceptions."
   },
   "storage_quota_exceeded":{
     "message":"Ξεπεράσατε το όριο αποθήκευσης που το AdBlock μπορεί να κάνει χρήση. Παρακαλούμε αναιρέστε την εγγραφή σας από μερικές λίστες φίλτρων.",
-    "description":"Message shown when the user uses more storage than allowed by the browser"
+    "description":"Message shown when the user uses more storage than allowed by the browser."
   },
   "safari50_updatenotice":{
     "message":"Χρησιμοποιείτε μια παλιά έκδοση του Safari. Αποκτήστε την τελευταία έκδοση για να χρησιμοποιήσετε το κουμπί AdBlock της γραμμής εργαλείων για παύση του AdBlock, ιστοσελίδες στη λευκή λίστα, και να αναφέρετε τις διαφημίσεις. [[Αναβάθμιση τώρα]].",
@@ -1229,11 +1285,11 @@
   },
   "firefox_explanation":{
     "message":"Ο σκοπός αυτής της ερώτησης είναι να καθοριστεί ποιος πρέπει να λάβει την αναφορά σας. Αν δεν απαντήσετε σωστά σε αυτή την ερώτηση, η αναφορά θα αποσταλεί σε λάθος άνθρωπους, έτσι ώστε να μπορεί να αγνοηθεί.",
-    "description":"Explanation of the Check-in-Firefox or Chrome step in the ad reporter"
+    "description":"Explanation of the 'Check in Firefox or Chrome' step on the ad report page"
   },
   "blocked_ads":{
     "message":"Μπλοκαρισμένες διαφημίσεις:",
-    "description":"Title for popup menu section showing number of ads blocked"
+    "description":"Title for toolbar icon menu section showing number of ads blocked"
   },
   "blocked_n_on_this_page":{
     "message":"$count$ σε αυτή τη σελίδα",
@@ -1241,7 +1297,7 @@
     "placeholders":{
       "count":{
         "content":"[[123]]",
-        "example":"The number of ads blocked. Do not make any changes to this placeholder when translating."
+        "example":"123"
       }
     }
   },
@@ -1251,33 +1307,53 @@
     "placeholders":{
       "count":{
         "content":"[[123,456]]",
-        "example":"The number of ads blocked. Do not make any changes to this placeholder when translating."
+        "example":"123,456"
       }
     }
   },
   "show_on_adblock_button":{
     "message":"Εμφάνιση αριθμού μπλοκαρισμένων διαφημίσεων στο κουμπί AdBlock",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+    "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
   },
   "show_on_adblock_menu":{
     "message":"Εμφάνιση αριθμού μπλοκαρισμένων διαφημίσεων στο μενού του AdBlock",
-    "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
+    "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "show_on_button":{
+    "message":"Εμφάνιση αριθμού μπλοκαρισμένων διαφημίσεων στο κουμπί",
+    "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_menu":{
+    "message":"Εμφάνιση αριθμού μπλοκαρισμένων διαφημίσεων στο μενού",
+    "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "block_ads_on_youtube":{
+    "message":"Αφαίρεση διαφημίσεων στο YouTube™",
+    "description":"Label for checkbox letting user choose whether to block ads on youtube.com"
+  },
+  "block_privacy_on_youtube":{
+    "message":"Προστασία προσωπικών δεδομένων στο YouTube™",
+    "description":"Checkbox letting user choose whether to block privacy-related requests on youtube.com"
+  },
+  "block_annonyances_on_youtube":{
+    "message":"Αφαίρεση ενοχλήσεων στο YouTube™",
+    "description":"Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
   },
   "show_devtools_panel":{
     "message":"Εμφάνιση πίνακα 'AdBlock' στα εργαλεία προγραμματιστή",
-    "description":"Label for checkbox letting user choose whether the AdBlock tab should show in the developer tools window"
+    "description":"Checkbox letting user choose whether the AdBlock tab should be displayed in the developer tools window"
   },
   "adblockinglist":{
     "message":"Λίστες φίλτρων μπλοκαρίσματος διαφημίσεων",
-    "description":"List for subscribed ad blocking fiters"
+    "description":"Subtitle on the Filter lists tab: List of filter lists to block ads."
   },
   "otherfilters":{
     "message":"Άλλες λίστες φίλτρων",
-    "description":"List for other filters the user subscribed to"
+    "description":"Subtitle on the Filter lists tab: List of filter lists to block other elements that are not ads."
   },
   "customfilters":{
     "message":"Προσαρμοσμένες λίστες φίλτρων",
-    "description":"List for custom filters the user subscribed to"
+    "description":"Subtitle on the Filter lists tab: Section for adding your own filter lists."
   },
   "customfilterserrormessage":{
     "message":"Το παρακάτω φίλτρο: \n $filter$ \n έχει ένα σφάλμα: \n $message$",
@@ -1295,7 +1371,7 @@
   },
   "languagedropdowndescription":{
     "message":"Προσθέστε φίλτρα για άλλη γλώσσα: ",
-    "description":"Dropdown list for language-specific filters"
+    "description":"Dropdown list for language-specific filter lists"
   },
   "how":{
     "message":"Πώς;",
@@ -1307,27 +1383,31 @@
   },
   "selectlanguage":{
     "message":" -- Επιλέξτε γλώσσα -- ",
-    "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
+    "description":"First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
   "allow_whitelisting_youtube_channels":{
-    "message":"Να επιτρέπεται η λευκή λίστα συγκεκριμένων καναλιών στο YouTube (απαιτεί επανεκκίνηση του περιηγητή σας)",
+    "message":"Να επιτρέπεται η λευκή λίστα συγκεκριμένων καναλιών στο YouTube™ (απαιτεί επανεκκίνηση του περιηγητή σας)",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "whitelist_all_youtube_channels":{
-    "message":"Στην λευκή λίστα όλα τα συνδρομητικά κανάλια YouTube",
-    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+    "message":"Στην λευκή λίστα όλα τα συνδρομητικά κανάλια YouTube™",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled."
   },
   "one_moment_all_youtube_channels":{
     "message":"Περιμένετε λίγο καθώς συγκεντρώνουμε όλες τις συνδρομές σας",
-    "description":"Alert message displayed when whitelisting all subscribed YouTube channels"
+    "description":"Alert displayed when whitelisting all subscribed YouTube channels"
   },
   "all_youtube_channels_complete":{
-    "message":"Όλα τα συνδρομητικά σας κανάλια YouTube μπήκαν στη λευκή λίστα",
-    "description":"Alert message displayed after the whitelisting of all subscribed YouTube channels has been completed"
+    "message":"Όλα τα συνδρομητικά σας κανάλια YouTube™ μπήκαν στη λευκή λίστα",
+    "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
+  },
+  "allow_ads_all_youtube_channels":{
+    "message":"Να επιτρέπονται οι διαφημίσεις σε όλα τα συνδρομητικά κανάλια YouTube™",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
   },
   "whitelist_youtube_channel":{
     "message":"Στη λευκή λίστα το κανάλι $name$",
-    "description":"Entry in the AdBlock menu, when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
+    "description":"Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
     "placeholders":{
       "name":{
         "content":"$1",
@@ -1335,17 +1415,21 @@
       }
     }
   },
+  "whitelist_youtube_channel_v2":{
+    "message":"Να επιτρέπονται οι διαφημίσεις στο κανάλι YouTube™:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
+  },
   "confirm_undo_custom_filters":{
     "message":"Είστε βέβαιοι ότι θέλετε να καταργήσετε τα $count$ μπλοκ που έχετε δημιουργήσει στο $host$;",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",
     "placeholders":{
       "count":{
         "content":"$1",
-        "example":"The number of custom blocks for a domain."
+        "example":"12"
       },
       "host":{
         "content":"$2",
-        "example":"code.google.ph, ph.msn.com, stackoverflow.com"
+        "example":"stackoverflow.com"
       }
     }
   },
@@ -1355,39 +1439,43 @@
   },
   "adblocksupport":{
     "message":"Υποστήριξη AdBlock",
-    "description":"Title of the support tab"
+    "description":"Title of the Support tab of the Options page"
   },
   "whatsnew":{
     "message":"Τι νέο υπάρχει στην τελευταία έκδοση; Δείτε το [[αρχείο αλλαγών]]!",
-    "description":"Link to display the changelog on the Support tab of the options"
+    "description":"Link to display the changelog on the Support tab"
   },
   "englishonly":{
     "message":"Μόνο Αγγλικά",
-    "description":"Lets the user know that a link\/page is available in English only"
+    "description":"Lets the user know that a link\/page is only available in English."
   },
   "foundbug":{
     "message":"Βρήκατε σφάλμα;",
-    "description":"Subtitle on the Support tab of the options"
+    "description":"Subtitle on the Support tab"
   },
   "adblockupdates":{
     "message":"Ενημερώσεις AdBlock",
-    "description":"Subtitle on the Support tab of the options"
+    "description":"Subtitle on the Support tab"
+  },
+  "ytadblockupdates":{
+    "message":"Ενημερώσεις AdBlock στο YouTube™",
+    "description":"Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
   },
   "whatmakesadblocktick":{
     "message":"Θέλετε να δείτε τι κάνει το AdBlock να ξεχωρίζει;",
-    "description":"Subtitle on the Support tab of the options"
+    "description":"Subtitle on the Support tab. This section contains links to the AdBlock source code and contributors. In this context, 'tick' can be replaced with the word 'work'."
   },
   "questionoridea":{
     "message":"Έχετε μια ερώτηση ή νέα ιδέα;",
-    "description":"Subtitle on the Support tab of the options"
+    "description":"Subtitle on the Support tab"
   },
   "sourcecode":{
     "message":"Ο πηγαίος κώδικας είναι [[ελεύθερα διαθέσιμος]]!",
-    "description":"Link to the source code of AdBlock on the Support tab of the options"
+    "description":"Link to the source code of AdBlock on the Support tab"
   },
   "contributors":{
     "message":"Επίσης, έχουμε μια σελίδα για να σας βοηθήσει να μάθετε τους [[ανθρώπους πίσω από το AdBlock]]!",
-    "description":"Link to the contributors page on the Support tab of the options"
+    "description":"Link to the contributors page on the Support tab"
   },
   "debuginfo":{
     "message":"Έχει ζητήσει η ομάδα μας κάποιες πληροφορίες εντοπισμού σφαλμάτων; Κάντε κλικ [[εδώ]] για αυτό!",
@@ -1395,15 +1483,15 @@
   },
   "bugreport":{
     "message":"Γιατί δεν μας στέλνετε μια [[αναφορά σφάλματος]];",
-    "description":"Link to send a bug report on the Support tab of the options"
+    "description":"Link to send a bug report on the Support tab"
   },
   "supportsite":{
     "message":"Ενημερώστε μας στην [[ιστοσελίδα υποστήριξης]]!",
-    "description":"Link to the support site on the Support tab of the options"
+    "description":"Link to the support site on the Support tab"
   },
   "ad_report_please":{
     "message":"Αν βλέπετε μια διαφήμιση, μην κάνετε αναφορά σφάλματος, κάντε μια [[αναφορά διαφήμισης]]!",
-    "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+    "description":"Link to the ad report page on AdBlock's help site. This is found on the Support tab of the options."
   },
   "resourceblocktitle":{
     "message":"Όλοι οι πόροι",
@@ -1427,11 +1515,11 @@
   },
   "new_resourcelist_explanation_win":{
     "message":"Για να εμφανίσετε όλα τα αιτήματα, κάντε δεξί κλικ στη σελίδα, επιλέξτε 'Έλεγχος' (Ctrl+Shift+I), στη συνέχεια επιλέξτε την καρτέλα 'AdBlock'.",
-    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+ (Windows)"
   },
   "new_resourcelist_explanation_osx":{
     "message":"Για να εμφανίσετε όλα τα αιτήματα, κάντε δεξί κλικ στη σελίδα, επιλέξτε 'Έλεγχος' (Option+Cmd+I), στη συνέχεια επιλέξτε την καρτέλα 'AdBlock'.",
-    "description":"Message explaining how to access the resource list page on AdBlock 3.0+"
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+ (Mac)"
   },
   "noresourcessend2":{
     "message":"Κάτι πήγε λάθος. Κανένας πόρος δεν έχει αποσταλεί. Αυτή η σελίδα θα κλείσει τώρα. Δοκιμάστε να φορτώσετε ξανά την ιστοσελίδα.",
@@ -1479,7 +1567,7 @@
   },
   "frametype":{
     "message":"Τύπος πλαισίου: ",
-    "description":"Resource list page: followed by frame type (e.g. top frame, subframe)"
+    "description":"Resource list page: followed by frame type (top frame, subframe)"
   },
   "framedomain":{
     "message":"Πλαίσιο τομέα: ",
@@ -1491,7 +1579,7 @@
   },
   "legend":{
     "message":"Υπόμνημα: ",
-    "description":"Resource list page: followed by color codes for various resource statuses (e.g. blocked, whitelisted, hidden)"
+    "description":"Resource list page: followed by color codes for various resource statuses (blocked, whitelisted, hidden)"
   },
   "blockedresource":{
     "message":"Αποκλεισμένος πόρος",
@@ -1511,11 +1599,19 @@
   },
   "acceptableadsdisable_done":{
     "message":"Δεν είστε πλέον συνδρομητής στη λίστα φίλτρου αποδεκτών διαφημίσεων.",
-    "description":"Message shown to users after disabling Acceptable Ads via update page."
+    "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
   "acceptableadsdisable_how_to_reenable":{
     "message":"Μπορείτε να το ενεργοποιήσετε ξανά παρακάτω και να υποστηρίζετε τις ιστοσελίδες που αγαπάτε επιλέγοντας \"Να επιτρέπονται ορισμένες μη-παρεμβατικές διαφημίσεις\".",
-    "description":"Message shown to users after disabling Acceptable Ads via update page."
+    "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"Το AdBlock χρησιμοποιεί την EasyList για τον αποκλεισμό διαφημίσεων στις περισσότερες ιστοσελίδες.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"Σας συνιστούμε να το διατηρήσετε ενεργό. Εάν κάνατε αναίρεση εγγραφής κατά λάθος, παρακαλώ επιλέξτε την \"EasyList\" τώρα για να μπλοκάρονται περισσότερες διαφημίσεις.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
   },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Αναιρέσαμε την εγγραφή σας από τις αποδεκτές διαφημίσεις, διότι έχετε ενεργοποιήσει την Φραγή Περιεχομένου Safari. Μπορείτε να επιλέξετε μόνο ένα κάθε φορά. ([[Γιατί;]])",
@@ -1527,7 +1623,7 @@
   },
   "adreport_laststep":{
     "message":"Τελευταίο βήμα: αναφέρετε το πρόβλημα σε εμάς.",
-    "description":"Heading on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
+    "description":"Subtitle on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
   },
   "adreport_name":{
     "message":"Ποιό είναι το όνομά σας;",
@@ -1603,14 +1699,14 @@
   },
   "custom_filters_migration_error_message_part1":{
     "message":"Μέτρηση σφαλμάτων προσαρμοσμένων φίλτρων: ",
-    "description":"Part one of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+    "description":"Part one of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
   },
   "custom_filters_migration_error_message_part2":{
     "message":"Δημιουργήθηκαν τα ακόλουθα μηνύματα κατά τη μετεγκατάσταση προσαρμοσμένου φίλτρου (αγνοήστε τους αριθμούς γραμμών): ",
-    "description":"Part two of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+    "description":"Part two of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
   },
   "custom_filters_migration_error_message_part3":{
     "message":"Αρχική εγγραφή: ",
-    "description":"Part three of a message shown to users on the 'Customize' tab after invalid custom filters have been migrated"
+    "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
   }
 }

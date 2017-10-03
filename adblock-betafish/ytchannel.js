@@ -31,7 +31,7 @@ if (!/ab_channel/.test(url))
         // Got name of the channel
         if (json.items[0])
         {
-          updateURL(json.items[0].snippet.title, true, false);
+          updateURL(json.items[0].snippet.title, true);
         }
       }
     }
@@ -49,7 +49,7 @@ if (!/ab_channel/.test(url))
         // Got name of the channel
         if (json.items[0])
         {
-          updateURL(json.items[0].snippet.channelTitle, false, false);
+          updateURL(json.items[0].snippet.channelTitle, false);
         }
       }
     }
@@ -65,7 +65,7 @@ if (!/ab_channel/.test(url))
         if (channelNameElement)
         {
           var channelName = document.querySelector("span .qualified-channel-title-text > a").textContent;
-          updateURL(channelName, true, true);
+          updateURL(channelName, true);
         }
       }, true);
       // Spfdone event doesn't fire, when you access YT user directly
@@ -75,7 +75,7 @@ if (!/ab_channel/.test(url))
         if (channelNameElement)
         {
           var channelName = channelNameElement.textContent;
-          updateURL(channelName, true, true);
+          updateURL(channelName, true);
         }
       }, true);
     }
@@ -97,7 +97,7 @@ if (!/ab_channel/.test(url))
   // &channel=nameofthechannel
   // - reload the page, so AdBlock can properly whitelist the page (just if
   // channel is whitelisted by user)
-  function updateURL(channelName, isChannel, shouldReload)
+  function updateURL(channelName, isChannel)
   {
     channelName = parseChannelName(channelName);
     // Add the name of the channel to the end of URL
@@ -111,16 +111,13 @@ if (!/ab_channel/.test(url))
     }
     window.history.replaceState(null, null, updatedUrl);
     // Reload page from cache, just if it should be whitelisted
-    if (shouldReload)
+    BGcall("pageIsWhitelisted", function(whitelisted)
     {
-      BGcall("pageIsWhitelisted", function(whitelisted)
+      if (whitelisted)
       {
-        if (whitelisted)
-        {
-          document.location.reload(false);
-        }
-      });
-    }
+        window.location.reload(false);
+      }
+    });
   }
 }
 

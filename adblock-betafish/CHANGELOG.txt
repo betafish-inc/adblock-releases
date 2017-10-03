@@ -2,6 +2,28 @@
 
 UNRELEASED:
 
+3.17.0:
+- Updated translations
+- Show the /update page to non-English users that didn't see the 3.16 update. (#265)
+- Fixed a typo in the unsubscribe warning cookie on the Filter Lists tab of the AdBlock options page. (#267)
+
+3.16.0:
+- Fixed an issue with the 'pause' feature. (#262)
+- Updated translations
+- Updated the success message on the the Bug Report page. (#242)
+- Removed Safari specific messages that are no longer used. (#236)
+- Fixed an issue with some of the language filter list subscriptions that do not use the combined EasyList lists. (#188)
+- Fixed an is use with the "undo my blocks on this domain" menu refreshing the wrong tab. (#243)
+- Updated 'bandaids' processing to help block ads on certain web sites. (#250)
+- Fixed an issue with the YouTube white-list channel feature (#244)
+- Removed unnecessary code on the Customize tab. (#184)
+- Removed the language specific filter list - Liste AR & EasyList, and will use Liste AR + Liste FR + EasyList instead. (#196)
+- Added the locale to the /installed query string to help show the page in the correct language. (#260)
+- Added a warning message to the Filter Lists tab on the Options page when the user un-subscribes to EasyList and / or all filter lists. (#259)
+- Fixed the warning message on the Filter Lists tab on the Options page when the user subscribes to several filter lists. (#259)
+- Changed all hard coded links in AdBlock from HTTP to HTTPS (SSL) (when possible).  (#261)
+- Show the /update page to non-English users. (#264)
+
 3.15.0:
 - Updated Translations.
 - Updated 'bandaids' processing to help block ads on certain web sites. (#235)

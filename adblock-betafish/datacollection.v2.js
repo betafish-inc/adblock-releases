@@ -100,7 +100,7 @@
                 subscribedSubs.push(subs[id].url);
               }
             }
-            if (getUserFilters().filters) {
+            if (getUserFilters()) {
               subscribedSubs.push("customlist");
             }
             var data = {

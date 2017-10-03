@@ -1,5 +1,6 @@
 ﻿
 // Adapters & helpers to add the legacy AB 'id' to the ABP subscriptions
+// Also adds the 'language' and 'hidden' properties
 
 // Get the URL for the corresponding ID
 var getUrlFromId = function(id)
@@ -85,14 +86,16 @@ var getSubscriptionsMinusText = function()
       // Since FilterStorage.subscriptions only contains subscribed FilterLists,
       // add the 'subscribed' property
       tempSub['subscribed'] = true;
-      // Add the language property
+      // Add the language and hidden properties
       if (tempSub.url in abpSubscriptionIdMap)
       {
         tempSub.language = abpSubscriptionIdMap[tempSub.url].language;
+        tempSub.hidden = abpSubscriptionIdMap[tempSub.url].hidden;
       }
       else if (tempSub.url in abSubscriptionIdMap)
       {
         tempSub.language = abSubscriptionIdMap[tempSub.url].language;
+        tempSub.hidden = abSubscriptionIdMap[tempSub.url].hidden;
       }
       result[tempSub["id"]] = tempSub;
     }
@@ -116,6 +119,7 @@ var getAllSubscriptionsMinusText = function()
       userSubs[id]['url'] = url;
       userSubs[id]['user_submitted'] = false;
       userSubs[id]['language'] = abSubscriptionIdMap[url]['language'];
+      userSubs[id]['hidden'] = abSubscriptionIdMap[url]['hidden'];
     }
   }
   for (var url in abpSubscriptionIdMap)
@@ -129,6 +133,7 @@ var getAllSubscriptionsMinusText = function()
       userSubs[id]['url'] = url;
       userSubs[id]['user_submitted'] = false;
       userSubs[id]['language'] = abpSubscriptionIdMap[url]['language'];
+      userSubs[id]['hidden'] = abpSubscriptionIdMap[url]['hidden'];
     }
   }
   return userSubs;
@@ -149,60 +154,77 @@ var getIdFromURL = function(url)
 
 // A collection of unique ABP specific FilterList
 // Only includes Filter Lists that are not in the AB collection
+// Properties:  id       -unique identifier for the filter list
+//              language -bool that indicates whether or not the filter list
+//                        is language-specific (and should be included in the
+//                        language drop-down)
+//              hidden   -bool that indicates whether or not the filter list 
+//                        should be hidden from the default options on the 
+//                        Filter List tab (currently only used to hide language
+//                        filter lists from the language drop-down)
 var abpSubscriptionIdMap =
 {
   "https://easylist-downloads.adblockplus.org/abpindo+easylist.txt" :
   {
     id : "easylist_plus_indonesian", // Additional Indonesian filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/bulgarian_list+easylist.txt" :
   {
     id : "easylist_plus_bulgarian", // Additional Bulgarian filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt" :
   {
     id : "chinese", // Additional Chinese filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistczechslovak+easylist.txt" :
   {
     id : "czech", // Additional Czech and Slovak filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistdutch+easylist.txt" :
   {
     id : "dutch", // Additional Dutch filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistgermany+easylist.txt" :
   {
     id : "easylist_plus_german", // Additional German filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistitaly+easylist.txt" :
   {
     id : "italian", // Italian filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistlithuania+easylist.txt" :
   {
     id : "easylist_plus_lithuania", // Lithuania filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/latvianlist+easylist.txt" :
   {
     id : "latvian", // Latvian filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/liste_ar+liste_fr+easylist.txt" :
@@ -210,226 +232,276 @@ var abpSubscriptionIdMap =
     id : "easylist_plus_arabic_plus_french", // Additional Arabic & French
                                               // filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/liste_fr+easylist.txt" :
   {
     id : "easylist_plus_french", // Additional French filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/rolist+easylist.txt" :
   {
     id : "easylist_plus_romanian", // Additional Romanian filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/ruadlist+easylist.txt" :
   {
     id : "russian", // Additional Russian filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easyprivacy+easylist.txt" :
   {
     id : "easyprivacy", // EasyPrivacy
     language : false,
+    hidden : false,
   },
 
   "http://adblock.dk/block.csv" :
   {
     id : "danish", // danish
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistspanish.txt" :
   {
     id : "easylist_plus_spanish", // Spanish
     language : true,
+    hidden : false,
   },
 
   "https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt" :
   {
     id : "easylist_plus_polish", // Polish
     language : true,
+    hidden : false,
   },
 };
 
+// Properties:  id       -unique identifier for the filter list
+//              language -bool that indicates whether or not the filter list
+//                        is language-specific (and should be included in the
+//                        language drop-down)
+//              hidden   -bool that indicates whether or not the filter list 
+//                        should be hidden from the default options on the 
+//                        Filter List tab (currently only used to hide 
+//                        discontinued language filter lists from the language 
+//                        drop-down)
 var abSubscriptionIdMap =
 {
   "https://cdn.adblockcdn.com/filters/adblock_custom.txt" :
   {
     id : "adblock_custom", // AdBlock custom filters
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/easylist.txt" :
   {
     id : "easylist", // EasyList
     language : false,
+    hidden : false,
   },
 
   "http://stanev.org/abp/adblock_bg.txt" :
   {
-    id : "easylist_plus_bulgarian", // Additional Bulgarian filters
-    language : true,
+    id : "easylist_plus_bulgarian_old", // Additional Bulgarian filters
+    language : true, // discontinued language list
+    hidden : true,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistdutch.txt" :
   {
-    id : "dutch", // Additional Dutch filters
-    language : true,
+    id : "dutch_old", // Additional Dutch filters
+    language : true, // discontinued language list
+    hidden : true,
   },
 
   "http://adb.juvander.net/Finland_adb.txt" :
   {
     id : "easylist_plus_finnish",
     language : true,
+    hidden : false,
   },
 
   "https://easylist-downloads.adblockplus.org/liste_fr.txt" :
   {
-    id : "easylist_plus_french", // Additional French filters
-    language : true,
+    id : "easylist_plus_french_old", // Additional French filters
+    language : true, // discontinued language list
+    hidden : true,
   },
 
   "https://easylist-downloads.adblockplus.org/easylistgermany.txt" :
   {
-    id : "easylist_plus_german", // Additional German filters
-    language : true,
+    id : "easylist_plus_german_old", // Additional German filters
+    language : true, // discontinued language list
+    hidden : true,
   },
 
   "https://www.void.gr/kargig/void-gr-filters.txt" :
   {
     id : "easylist_plus_greek", // Additional Greek filters
     language : true,
+    hidden : false,
   },
 
   "https://raw.githubusercontent.com/heradhis/indonesianadblockrules/master/subscriptions/abpindo.txt" :
   {
-    id : "easylist_plus_indonesian", // Additional Indonesian filters
-    language : true,
+    id : "easylist_plus_indonesian_old", // Additional Indonesian filters
+    language : true, // discontinued language list
+    hidden : true,
   },
 
   "https://www.certyficate.it/adblock/adblock.txt" :
   {
-    id : "easylist_plus_polish", // Additional Polish filters
-    language : true,
+    id : "easylist_plus_polish_old", // Additional Polish filters
+    language : true, // discontinued language list
+    hidden : true,
   },
 
   "http://www.zoso.ro/pages/rolist.txt" :
   {
-    id : "easylist_plus_romanian", // Additional Romanian filters
-    language : true,
+    id : "easylist_plus_romanian_old", // Additional Romanian filters
+    language : true, // discontinued language list
+    hidden : true,
   },
   "https://easylist-downloads.adblockplus.org/advblock.txt" :
   {
-    id : "russian", // Additional Russian filters
-    language : true,
+    id : "russian_old", // Additional Russian filters
+    language : true, // discontinued language list
+    hidden : true,
   },
   "https://easylist-downloads.adblockplus.org/easylistchina.txt" :
   {
-    id : "chinese", // Additional Chinese filters
-    language : true,
+    id : "chinese_old", // Additional Chinese filters
+    language : true, // discontinued language list
+    hidden : true,
   },
   "https://raw.github.com/tomasko126/easylistczechandslovak/master/filters.txt" :
   {
-    id : "czech", // Additional Czech and Slovak filters
-    language : true,
+    id : "czech_old", // Additional Czech and Slovak filters
+    language : true, // discontinued language list
+    hidden : true,
   },
   "http://adblock.schack.dk/block.txt" :
   {
-    id : "danish", // Danish filters
-    language : true,
+    id : "danish_old", // Danish filters
+    language : true, // discontinued language list
+    hidden : true,
   },
   "https://raw.githubusercontent.com/szpeter80/hufilter/master/hufilter.txt" :
   {
     id : "hungarian", // Hungarian filters
     language : true,
+    hidden : false,
   },
   "https://easylist-downloads.adblockplus.org/israellist+easylist.txt" :
   {
     id : "israeli", // Israeli filters
     language : true,
+    hidden : false,
   },
   "https://easylist-downloads.adblockplus.org/easylistitaly.txt" :
   {
-    id : "italian", // Italian filters
-    language : true,
+    id : "italian_old", // Italian filters
+    language : true, // discontinued language list
+    hidden : true,
   },
   "https://raw.githubusercontent.com/k2jp/abp-japanese-filters/master/abpjf.txt" :
   {
     id : "japanese", // Japanese filters
     language : true,
+    hidden : false,
   },
   "https://secure.fanboy.co.nz/fanboy-korean.txt" :
   {
     id : "easylist_plun_korean", // Korean filters
     language : true,
+    hidden : false,
   },
   "https://notabug.org/latvian-list/adblock-latvian/raw/master/lists/latvian-list.txt" :
   {
-    id : "latvian", // Latvian filters
-    language : true,
+    id : "latvian_old", // Latvian filters
+    language : true, // discontinued language list
+    hidden : true,
   },
   "http://fanboy.co.nz/fanboy-swedish.txt" :
   {
     id : "swedish", // Swedish filters
     language : true,
+    hidden : false,
   },
   "http://fanboy.co.nz/fanboy-turkish.txt" :
   {
     id : "turkish", // Turkish filters
     language : true,
+    hidden : false,
   },
   "https://easylist-downloads.adblockplus.org/easyprivacy.txt" :
   {
     id : "easyprivacy", // EasyPrivacy
     language : false,
+    hidden : false,
   },
   "https://easylist-downloads.adblockplus.org/fanboy-social.txt" :
   {
     id : "antisocial", // Antisocial
     language : false,
+    hidden : false,
   },
   "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt" :
   {
     id : "annoyances", // Fanboy's Annoyances
     language : false,
+    hidden : false,
   },
   "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt" :
   {
     id : "warning_removal", // AdBlock warning removal
     language : false,
+    hidden : false,
   },
   "https://easylist-downloads.adblockplus.org/exceptionrules.txt" :
   {
     id : "acceptable_ads", // Acceptable Ads
     language : false,
+    hidden : false,
   },
   "http://gurud.ee/ab.txt" :
   {
     id : "easylist_plus_estonian", // Estonian filters
     language : true,
+    hidden : false,
   },
   "http://margevicius.lt/easylistlithuania.txt" :
   {
-    id : "easylist_plus_lithuania", // Lithuania filters
-    language : true,
+    id : "easylist_plus_lithuania_old", // Lithuania filters
+    language : true, // discontinued language list
+    hidden : true,
   },
   "https://easylist-downloads.adblockplus.org/Liste_AR.txt" :
   {
     id : "easylist_plus_arabic", // Arabic filters
     language : true,
+    hidden : true,
   },
   "http://adblock.gardar.net/is.abp.txt" :
   {
     id : "icelandic", // Icelandic filters
     language : true,
+    hidden : false,
   },
   "https://easylist-downloads.adblockplus.org/malwaredomains_full.txt" :
   {
     id : "malware", // Malware 
     language : false,
+    hidden : false,
   },
 };

@@ -398,8 +398,7 @@ var run_bandaids = function()
       var searchedNodes = [{
           // Sponsored
           'selector': [
-              '.userContentWrapper span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
-              '.fbUserContent span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)'
+              '.fbUserPost span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)'
           ],
           'content': {
               'af':      ['Geborg'],
@@ -414,6 +413,7 @@ var run_bandaids = function()
               'bs':      ['Sponzorirano'],
               'bn':      ['সৌজন্যে'],
               'ca':      ['Patrocinat'],
+              'cb':      ['پاڵپشتیکراو'],
               'co':      ['Spunsurizatu'],
               'cs':      ['Sponzorováno'],
               'cx':      ['Giisponsoran'],
@@ -422,8 +422,18 @@ var run_bandaids = function()
               'de':      ['Gesponsert'],
               'el':      ['Χορηγούμενη'],
               'en':      ['Sponsored', 'Chartered'],
+              'eo':      ['Reklamo'],
               'es':      ['Publicidad', 'Patrocinado'],
+              'et':      ['Sponsitud'],
+              'eu':      ['Babestua'],
+              'fa':      ['دارای پشتیبانی مالی'],
+              'fi':      ['Sponsoroitu'],
+              'fo':      ['Stuðlað'],
               'fr':      ['Commandité', 'Sponsorisé'],
+              'fy':      ['Sponsore'],
+              'ga':      ['Urraithe'],
+              'gl':      ['Patrocinado'],
+              'gn':      ['Oñepatrosinapyre'],
               'gx':      ['Χορηγούμενον'],
               'hi':      ['प्रायोजित'],
               'hu':      ['Hirdetés'],
@@ -444,6 +454,7 @@ var run_bandaids = function()
               'or':      ['ପ୍ରଯୋଜିତ'],
               'pa':      ['ਸਰਪ੍ਰਸਤੀ ਪ੍ਰਾਪਤ'],
               'pl':      ['Sponsorowane'],
+              'ps':      ['تمويل شوي'],
               'pt':      ['Patrocinado'],
               'ru':      ['Реклама'],
               'sa':      ['प्रायोजितः |'],
@@ -452,6 +463,7 @@ var run_bandaids = function()
               'sv':      ['Sponsrad'],
               'te':      ['స్పాన్సర్ చేసినవి'],
               'th':      ['ได้รับการสนับสนุน'],
+              'tl':      ['May Sponsor'],
               'tr':      ['Sponsorlu'],
               'tz':      ['ⵉⴷⵍ'],
               'uk':      ['Реклама'],
@@ -463,10 +475,7 @@ var run_bandaids = function()
       }, {
           // Suggested Post
           'selector': [
-              '.userContentWrapper > div > div > span',
-              '.userContentWrapper > div > div > div > div > div > div > div > div > div > div > span',
-              '.fbUserContent > div > div > span',
-              '.fbUserContent > div > div > div > div > div > div > div > div > div > div > span'
+              '.fbUserPost div > div > span > span'
           ],
           'content': {
               'af':        ['Voorgestelde Plasing'],
@@ -480,6 +489,7 @@ var run_bandaids = function()
               'br':        ['Embannadenn aliet'],
               'bs':        ['Predloženi sadržaj'],
               'ca':        ['Publicació suggerida'],
+              'cb':        ['بابەتی پێشنیارکراو'],
               'co':        ['Posti cunsigliati'],
               'cs':        ['Navrhovaný příspěvek'],
               'cx':        ['Gisugyot nga Pagpatik'],
@@ -487,9 +497,19 @@ var run_bandaids = function()
               'da':        ['Foreslået opslag'],
               'de':        ['Vorgeschlagener Beitrag'],
               'el':        ['Προτεινόμενη δημοσίευση'],
-              'en':        ['Suggested Post', 'Reccomended fer ye eye'],
+              'en':        ['Suggested Post', 'Recommended fer ye eye'],
+              'eo':        ['Proponita afiŝo'],
               'es':        ['Publicación sugerida'],
+              'et':        ['Soovitatud postitus'],
+              'eu':        ['Iradokitako argitalpena'],
+              'fa':        ['پست پیشنهادی'],
+              'fi':        ['Ehdotettu julkaisu'],
+              'fo':        ['Viðmælt uppslag'],
               'fr':        ['Publication suggérée'],
+              'fy':        ['Oanrikkemandearre berjocht'],
+              'ga':        ['Postáil Mholta'],
+              'gl':        ['Publicación suxerida'],
+              'gn':        ['Ojeikuaaukáva iporãva ojehecha'],
               'gx':        ['Παϱαινουμένη Ἔκϑεσις'],
               'hi':        ['सुझाई गई पोस्ट'],
               'hu':        ['Ajánlott bejegyzés'],
@@ -511,6 +531,7 @@ var run_bandaids = function()
               'or':        ['ପ୍ରସ୍ତାବିତ ପୋଷ୍ଟ'],
               'pa':        ['ਸੁਝਾਈ ਗਈ ਪੋਸਟ'],
               'pl':        ['Proponowany post'],
+              'ps':        ['وړاندیز شوې ځړونه'],
               'pt':        ['Publicação sugerida'],
               'ru':        ['Рекомендуемая публикация'],
               'sa':        ['उपॆक्षित प्रकटनं'],
@@ -519,6 +540,7 @@ var run_bandaids = function()
               'sv':        ['Föreslaget inlägg'],
               'te':        ['సూచింపబడిన పోస్ట్'],
               'th':        ['โพสต์ที่แนะนำ'],
+              'tl':        ['Iminungkahing Post'],
               'tr':        ['Önerilen Gönderiler', 'Önerilen Gönderi'],
               'tz':        ['ⵜⴰⵥⵕⵉⴳⵜ ⵉⵜⵜⵓⵙⵓⵎⵔⵏ'],
               'uk':        ['Рекомендований допис'],
@@ -530,8 +552,7 @@ var run_bandaids = function()
       }, {
           // Popular Live Video                                                      // A Video You May Like
           'selector': [
-              '.userContentWrapper > div > div > div:not(.userContent)',
-              '.fbUserContent > div > div > div:not(.userContent)'
+              '.fbUserPost div > div > div:not(.userContent)'
           ],
           'exclude': function(node) {
               if(!node) {
@@ -541,7 +562,7 @@ var run_bandaids = function()
               return (node.children && node.children.length);
           },
           'content': {
-              'af':        ['Popular Live Video',                                    '\'n Video waarvan jy dalk sal hou'],
+              'af':        ['Popular Live Video', 'Gewilde Live Video',              '\'n Video waarvan jy dalk sal hou'],
               'ar':        ['مباشر رائج'                                            ,'فيديو قد يعجبك'],
               'as':        ['Popular Live Video',                                    'আপুনি ভাল পাব পৰা এটা ভিডিঅ\''],
               'az':        ['Popular Live Video',                                    'Bu video sənin xoşuna gələ bilər'],
@@ -556,6 +577,7 @@ var run_bandaids = function()
               'de':        ['Beliebtes Live-Video',                                  'Ein Video, das dir gefallen könnte'],
               'en':        ['Popular Live Video',                                    'A Video You May Like'],
               'es':        ['Vídeo en directo popular', 'Video en vivo popular',     'Un video que te puede gustar', 'Un vídeo que te puede gustar'],
+              'fi':        ['Suosittu live-video'],
               'fr':        ['Vidéo en direct populaire',                             'Une vidéo que vous pourriez aimer'],
               'hi':        ['लोकप्रिय लाइव वीडियो',                                     'वह वीडियो जो आपको पसंद हो सकता है'],
               'hu':        ['Népszerű élő videó',                                    'Egy videó, amely esetleg tetszik neked'],
@@ -590,6 +612,52 @@ var run_bandaids = function()
               'vi':        ['Video trực tiếp phổ biến',                              'Một video bạn có thể thích'],
               'zh-Hans':   ['热门直播视频',                                           '猜你喜欢'],
               'zh-Hant':   ['熱門直播視訊', '熱門直播視像',                            '你可能會喜歡的影片', '你可能會喜歡的影片']
+          }
+      }, {
+        // Popular Across Facebook
+          'selector': [
+              '.fbUserPost > div > div > div'
+          ],
+          'content': {
+              'af':        ['Oral op Facebook gewild'],
+              'ar':        ['رائج على فيسبوك'],
+              'az':        ['Feysbukda məşhur'],
+              'bs':        ['Populer Lintas Facebook'],
+              'ca':        ['Populer Lintas Facebook'],
+              'cb':        ['Popular Across Facebook', '‎Popular Across Facebook‎'],
+              'cs':        ['Populární na Facebooku'],
+              'cx':        ['Sikat sa Kinatibuk-an sa Facebook'],
+              'da':        ['Populært på Facebook'],
+              'de':        ['Beliebt auf Facebook'],
+              'en':        ['Popular Across Facebook'],
+              'eo':        ['Popular Across Facebook'],
+              'es':        ['Popular en Facebook'],
+              'et':        ['Popular Across Facebook'],
+              'eu':        ['Popular Across Facebook'],
+              'fa':        ['داستان پرطرفدار در فیس‌بوک'],
+              'fi':        ['Suosittua Facebookissa'],
+              'fo':        ['Popular Across Facebook'],
+              'fr':        ['Populaire sur Facebook'],
+              'fy':        ['Popular Across Facebook'],
+              'ga':        ['Popular Across Facebook'],
+              'gl':        ['Popular Across Facebook'],
+              'gn':        ['Ojehechavéva Facebook-pe'],
+              'id':        ['Populer Lintas Facebook'],
+              'ja':        ['Facebookで人気'],
+              'jv':        ['Populer Ing Facebook'],
+              'ko':        ['Facebook에서 인기 있는 콘텐츠'],
+              'ms':        ['Terkenal Diseluruh Facebook'],
+              'pl':        ['Popularne na Facebooku'],
+              'ps':        ['Popular Across Facebook', '‎Popular Across Facebook‎'],
+              'pt':        ['Populares em todo o Facebook', 'Conteúdos populares no Facebook'],
+              'nl':        ['Populair op Facebook'],
+              'ru':        ['Популярно на Facebook'],
+              'sv':        ['Populärt på Facebook'],
+              'tl':        ['Sikat sa Facebook'],
+              'ur':        ['پورے Facebook میں مقبول'],
+              'vi':        ['Phổ biến trên Facebook'],
+              'zh-Hans':   ['Facebook 大热门'],
+              'zh-Hant':   ['廣受 Facebook 用戶歡迎']
           }
       }];
 

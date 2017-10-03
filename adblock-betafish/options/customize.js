@@ -5,6 +5,11 @@ function cleanCustomFilter(filters)
   // Remove the global pause white-list item if adblock is paused
   if (backgroundPage.adblockIsPaused())
   {
+    var index = filters.indexOf("@@");
+    if (index >= 0)
+    {
+      filters.splice(index, 1);
+    }
     var index = filters.indexOf("@@^$document");
     if (index >= 0)
     {
@@ -20,10 +25,10 @@ function onFilterChange(action, item, param1, param2)
     ($('#txtFiltersAdvanced').prop('disabled') === true))
   {
     var userFilters = backgroundPage.getUserFilters();
-    if (userFilters.filters &&
-      userFilters.filters.length)
+    if (userFilters &&
+      userFilters.length)
     {
-      originalCustomFilters = cleanCustomFilter(userFilters.filters);
+      originalCustomFilters = cleanCustomFilter(userFilters);
       $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));
     }
   }
@@ -341,6 +346,7 @@ $(function ()
     {
       if (backgroundPage.adblockIsPaused())
       {
+        customFiltersArray.push("@@");
         customFiltersArray.push("@@^$document");
       }
       for (var i = 0; (i < customFiltersArray.length); i++)
@@ -401,10 +407,10 @@ $(function ()
   });
 
   var userFilters = backgroundPage.getUserFilters();
-  if (userFilters.filters &&
-    userFilters.filters.length)
+  if (userFilters &&
+    userFilters.length)
   {
-    originalCustomFilters = cleanCustomFilter(userFilters.filters);
+    originalCustomFilters = cleanCustomFilter(userFilters);
     $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));
   }
 

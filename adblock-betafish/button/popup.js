@@ -12,6 +12,7 @@ var getDecodedHostname = require('url').getDecodedHostname;
 // the current tab
 var page = null;
 var pageInfo = null;
+var activeTab = null;
 $(function ()
 {
   localizePage();
@@ -129,7 +130,7 @@ $(function ()
     });
 
     // Store info about active tab
-    var activeTab = safari.application.activeBrowserWindow.activeTab;
+    activeTab = safari.application.activeBrowserWindow.activeTab;
   }
 
   // We need to reload popover in Safari, so that we could
@@ -154,8 +155,7 @@ $(function ()
   // Click handlers
   $('#bugreport').click(function ()
   {
-    var out = BG.makeReport();
-    var supportURL = 'http://support.getadblock.com/discussion/new' + '?category_id=problems&discussion[body]=' + out;
+    var supportURL = 'https://help.getadblock.com/support/tickets/new';
     ext.pages.open(supportURL);
     closeAndReloadPopup();
   });
@@ -201,6 +201,10 @@ $(function ()
   $('#div_undo').click(function ()
   {
     var host = parseUri(page.unicodeUrl).host;
+    if (!SAFARI)
+    {
+      activeTab = page;
+    }
     BG.confirmRemovalOfCustomFiltersOnHost(host, activeTab);
     closeAndReloadPopup();
   });

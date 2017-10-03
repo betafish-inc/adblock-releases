@@ -138,7 +138,7 @@ $(function () {
   $languageOptions[0].selected = true;
 
   // add the link to the anchor in "adreport2"
-  $('a', '#info').attr('href', 'http://help.getadblock.com/support/solutions/articles/6000061202').attr('target', '_blank');
+  $('a', '#info').attr('href', 'https://help.getadblock.com/support/solutions/articles/6000061202').attr('target', '_blank');
 
   $('#step_update_filters_DIV').show();
 
@@ -384,12 +384,6 @@ $(function () {
               .html(translate('checkinfirefox_2'));
           $('#checkinfirefox')
               .html(translate('checkinfirefoxtitle'));
-          if (SAFARI) {
-            $('#chrome1, #chrome2')
-                .html(translate('orchrome'));
-            $('#adblockforchrome')
-                .html(translate('oradblockforchrome'));
-          }
         });
 
   // STEP 6: also in Firefox

@@ -3,7 +3,7 @@ var uninstallInit = function()
   if (chrome.runtime.setUninstallURL)
   {
     var Prefs = require('prefs').Prefs;
-    STATS.userIdPromise().then(function(userID)
+    STATS.untilLoaded(function(userID)
     {
       var uninstallURL = "https://getadblock.com/uninstall/?u=" + userID;
       // if the start property of blockCount exists (which is the AdBlock
@@ -30,8 +30,8 @@ var uninstallInit = function()
           ext.storage.get("blockage_stats", function(data)
           {
             var url = uninstallURL;
-            if (data && 
-                data.blockage_stats && 
+            if (data &&
+                data.blockage_stats &&
                 data.blockage_stats.start)
             {
               var installedDuration = (Date.now() - data.blockage_stats.start);

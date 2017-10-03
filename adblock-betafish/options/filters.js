@@ -74,21 +74,31 @@ CheckboxForFilterList.prototype = {
     {
       var parent  = $(this).parent();
       var checked = $(this).is(':checked');
-      $('.remove_filterList', parent).css('display', checked ? 'none' : 'inline');
       var id = parent.attr('name');
       if (checked)
       {
+        if (!SubscriptionUtil.validateOverSubscription())
+        {
+          $(this).prop('checked', false);
+          return;
+        }
         $('.subscription_info', parent).text(translate('fetchinglabel'));
         SubscriptionUtil.subscribe(id);
         FilterListUtil.cachedSubscriptions[id].subscribed = true;
       } else
       {
+        if (!SubscriptionUtil.validateUnderSubscription())
+        {
+          $(this).prop('checked', true);
+          return;
+        }
         SubscriptionUtil.unsubscribe(id, false);
         $('.subscription_info', parent).text(translate('unsubscribedlabel'));
         FilterListUtil.cachedSubscriptions[id].subscribed    = false;
         FilterListUtil.cachedSubscriptions[id].lastDownload  = -1;
         FilterListUtil.cachedSubscriptions[id]._lastDownload = -1;
       }
+      $('.remove_filterList', parent).css('display', checked ? 'none' : 'inline');
 
       if (parent.attr('class').indexOf('language_filter_list') > -1)
       {
@@ -155,6 +165,7 @@ function OptionForFilterList(filterList, index)
   this._option = $('<option>', {
     value: filterList.id,
     text: filterList.label || filterList.title,
+    hidden: filterList.hidden,
   }).data('index', index);
 }
 
@@ -498,7 +509,7 @@ function SubscriptionUtil()
 // filter lists.
 SubscriptionUtil.validateOverSubscription = function ()
 {
-  if ($(':checked', '#filter_list_subscriptions').length <= 6)
+  if ($('.subscription :checked').length <= 6)
   {
     return true;
   }
@@ -520,16 +531,37 @@ SubscriptionUtil.validateOverSubscription = function ()
   return confirm(translate('you_know_thats_a_bad_idea_right'));
 };
 
+// Returns true if the user knows what they are doing, unsubscribing from
+// all filter lists.
+SubscriptionUtil.validateUnderSubscription = function ()
+{
+  if ($('.subscription :checked').length >= 1)
+  {
+    return true;
+  }
+
+  if (optionalSettings &&
+      optionalSettings.show_advanced_options)
+  {
+    // In case of an advanced user, only warn once every 30 minutes, even
+    // if the options page wasn't open all the time. 30 minutes = 1/48 day
+    if ($.cookie('noUnderSubscriptionWarning'))
+    {
+      return true;
+    } else
+    {
+      $.cookie('noUnderSubscriptionWarning', 'true', { expires: (1 / 48) });
+    }
+  }
+
+  return confirm(translate('unsubscribe_from_all_confirmation'));
+};
+
 // Subscribe to the filter list with the given |id|.
 // Input:
 //   id:string - Id of the filter list to be subscribed to.
 SubscriptionUtil.subscribe = function (id, title)
 {
-  if (!SubscriptionUtil.validateOverSubscription())
-  {
-    return;
-  }
-
   SubscriptionUtil._updateCacheValue(id);
   var subscription = FilterListUtil.cachedSubscriptions[id];
   if (subscription) {
@@ -568,6 +600,11 @@ SubscriptionUtil.subscribe = function (id, title)
       backgroundPage.updateFilterLists();
     }
   }
+
+  if (id === 'easylist')
+  {
+    $('#easylist_info').slideUp();
+  }
 };
 
 // Unsubscribe to the filter list with the given |id|.
@@ -598,6 +635,11 @@ SubscriptionUtil.unsubscribe = function (id)
     {
       backgroundPage.updateFilterLists();
     }
+  }
+
+  if (id === 'easylist')
+  {
+    $('#easylist_info').slideDown();
   }
 };
 
@@ -631,11 +673,10 @@ function CustomFilterListUploadUtil()
 //   subscribeTo:string - The id of the custom filter list.
 CustomFilterListUploadUtil._performUpload = function (url, subscribeTo, title)
 {
-  SubscriptionUtil.subscribe(subscribeTo);
   var entry                                    = {
     id: subscribeTo,
     url: url,
-    subscribed: true,
+    subscribed: false,
     user_submitted: true,
     label: '',
     title: title,
@@ -823,12 +864,17 @@ function onFilterChangeHandler(action, item, param1, param2)
 }
 
 function translateIDs(id) {
-  var translatedMsg = translate('filter_' + id);
-  translatedMsg = translatedMsg.trim()
-  if (translatedMsg != "" && translatedMsg.length > 0) {
-     return translatedMsg
+  if (id.endsWith('_old')) {
+    var trimmedID = id.split(/_old$/)[0];
+    return translate('filter' + trimmedID);
   } else {
-     return translate('filter' + id)
+    var translatedMsg = translate('filter_' + id);
+    translatedMsg = translatedMsg.trim()
+    if (translatedMsg != "" && translatedMsg.length > 0) {
+       return translatedMsg
+    } else {
+       return translate('filter' + id)
+    }
   }
 }
 

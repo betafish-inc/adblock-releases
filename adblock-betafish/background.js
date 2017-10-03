@@ -53,14 +53,14 @@ var tryToUnwhitelist = function (url)
 {
   url = url.replace(/#.*$/, ''); // Whitelist ignores anchors
   var customFilters = getUserFilters();
-  if (!customFilters || !customFilters.filters || !customFilters.filters.length === 0)
+  if (!customFilters || !customFilters.length === 0)
   {
     return false;
   }
 
-  for (var i = 0; i < customFilters.filters.length; i++)
+  for (var i = 0; i < customFilters.length; i++)
   {
-    var text = customFilters.filters[i];
+    var text = customFilters[i];
     var whitelist = text.search(/@@\*\$document,domain=\~/);
 
     // Blacklist site, which is whitelisted by global @@*&document,domain=~
@@ -130,17 +130,16 @@ var addCustomFilter = function (filterText)
 var removeCustomFilter = function (host)
 {
   var customFilters = getUserFilters();
-  if (!customFilters || !customFilters.filters || !customFilters.filters.length === 0)
+  if (!customFilters || !customFilters.length === 0)
   {
     return false;
   }
 
-  var customFiltersArr = customFilters.filters;
   var identifier = host;
 
-  for (var i = 0; i < customFiltersArr.length; i++)
+  for (var i = 0; i < customFilters.length; i++)
   {
-    var entry = customFiltersArr[i];
+    var entry = customFilters[i];
 
     // If the identifier is at the start of the entry
     // then delete it.
@@ -239,7 +238,7 @@ var confirmRemovalOfCustomFiltersOnHost = function (host, activeTab)
   removeCustomFilterForHost(host);
   if (!SAFARI)
   {
-    chrome.tabs.reload();
+    chrome.tabs.reload(activeTab.id);
   } else
   {
     activeTab.url = activeTab.url;
@@ -429,7 +428,8 @@ var pageIsWhitelisted = function(sender)
 // Returns: undefined if newValue was specified, otherwise it returns true
 // if paused, false otherwise.
 var pausedKey = 'paused';
-var pausedFilterText = '@@^$document';
+var pausedFilterText1 = '@@';  // white-list all blocking requests regardless of frame / document, but still allows element hiding
+var pausedFilterText2 = '@@^$document';  // white-list all documents, which prevents element hiding
 var adblockIsPaused = function (newValue)
 {
   if (newValue === undefined)
@@ -438,14 +438,17 @@ var adblockIsPaused = function (newValue)
   }
 
   // Add a filter to white list every page.
-  var result = parseFilter(pausedFilterText);
+  var result1 = parseFilter(pausedFilterText1);
+  var result2 = parseFilter(pausedFilterText2);
   if (newValue === true)
   {
-    FilterStorage.addFilter(result.filter);
+    FilterStorage.addFilter(result1.filter);
+    FilterStorage.addFilter(result2.filter);
     ext.storage.set(pausedKey, true);
   } else
   {
-    FilterStorage.removeFilter(result.filter);
+    FilterStorage.removeFilter(result1.filter);
+    FilterStorage.removeFilter(result2.filter);
     ext.storage.remove(pausedKey);
   }
 
@@ -498,64 +501,121 @@ if (!SAFARI && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
   });
 }
 
+var updateStorageKey = 'last_known_version';
 if (chrome.runtime.id)
 {
-  var getUpdatedURL = function() {
-    var updatedURL = 'https://getadblock.com/update/?u=' + STATS.userId();
+  var updateTabRetryCount = 0;
+  var getUpdatedURL = function()
+  {
+    var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent(chrome.runtime.getManifest().version) + '/?u=' + STATS.userId();
     updatedURL = updatedURL + '&bc=' + Prefs.blocked_total;
-    updatedURL = updatedURL + '&v=' + chrome.runtime.getManifest().version;
+    updatedURL = updatedURL + '&rt=' + updateTabRetryCount;
     return updatedURL;
   };
-  var waitForUserAction = function() {
-    openUpdatedPage();
-  };
-  var waitForActiveState = function(newState) {
-    if (newState === 'active') {
-      openUpdatedPage();
-    }
-  };
-  var openUpdatedPage = function() {
+
+  var waitForUserAction = function()
+  {
     chrome.tabs.onCreated.removeListener(waitForUserAction);
-    chrome.idle.onStateChanged.removeListener(waitForActiveState);
+    setTimeout(function ()
+    {
+      updateTabRetryCount++;
+      openUpdatedPage();
+    }, 10000); // 10 seconds
+  };
+
+  var openUpdatedPage = function()
+  {
     var updatedURL = getUpdatedURL();
-    chrome.tabs.create({ url: updatedURL }, function(tab) {
+    chrome.tabs.create({ url: updatedURL }, function(tab)
+    {
       // if we couldn't open a tab to '/updated_tab', send a message
-      if (chrome.runtime.lastError || !tab) {
-        log("failed to open expired page")
-        if (chrome.runtime.lastError && chrome.runtime.lastError.message) {
+      if (chrome.runtime.lastError || !tab)
+      {
+        if (chrome.runtime.lastError && chrome.runtime.lastError.message)
+        {
           recordErrorMessage('updated_tab_failed_to_open' + chrome.runtime.lastError.message);
-        } else {
+        }
+        else
+        {
           recordErrorMessage('updated_tab_failed_to_open');
         }
         chrome.tabs.onCreated.removeListener(waitForUserAction);
         chrome.tabs.onCreated.addListener(waitForUserAction);
-        chrome.idle.onStateChanged.removeListener(waitForActiveState);
-        chrome.idle.onStateChanged.addListener(waitForActiveState);
         return;
       }
-    });
-  };
-  var showUpdatedPageIfActive = function() {
-    chrome.idle.queryState(60, function(state) {
-      if (state === "active") {
-        openUpdatedPage();
-      } else {
-        chrome.idle.onStateChanged.removeListener(waitForActiveState);
-        chrome.idle.onStateChanged.addListener(waitForActiveState);
-        chrome.tabs.onCreated.removeListener(waitForUserAction);
-        chrome.tabs.onCreated.addListener(waitForUserAction);
+      if (updateTabRetryCount > 0)
+      {
+        recordGeneralMessage('updated_tab_retry_success_count_' + updateTabRetryCount);
       }
     });
   };
-  // Display updated page after each update
+
+  var shouldShowUpdate = function()
+  {
+    var checkQueryState = function()
+    {
+      chrome.idle.queryState(60, function(state)
+      {
+        if (state === "active")
+        {
+          STATS.untilLoaded(function()
+          {
+            openUpdatedPage();
+          });
+        }
+        else
+        {
+          chrome.tabs.onCreated.removeListener(waitForUserAction);
+          chrome.tabs.onCreated.addListener(waitForUserAction);
+        }
+      });
+    }; // end of checkQueryState
+
+    var checkInstallType = function()
+    {
+      chrome.management.getSelf(function(info)
+      {
+        if (info && info.installType !== "admin")
+        {
+          checkQueryState();
+        }
+        else if (info && info.installType === "admin")
+        {
+          recordGeneralMessage('update_tab_not_shown_admin_user');
+        }
+      });
+    }; // end of checkInstallType
+
+    var lastKnownVersion = localStorage.getItem(updateStorageKey);
+    localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
+    Prefs.untilLoaded.then(function()
+    {
+      // show /update to users that:
+      //  - non-English users and ..
+      //  - suppress_first_run_page set and the previous version was 3.16 or ..
+      //  - lastKnownVersion is null / undefined, which means the didn't get the 3.16.0 release
+      if (((Prefs.suppress_first_run_page &&
+            lastKnownVersion === '3.16.0') ||
+           !lastKnownVersion) &&
+          !chrome.i18n.getUILanguage().startsWith('en'))
+      {
+        checkInstallType();
+      }
+    }); // end of Prefs.untilLoaded
+  }; // end of shouldShowUpdate
+
+  // Display updated page after update
   chrome.runtime.onInstalled.addListener(function (details)
   {
-    if (details.reason === 'update' && 
-        chrome.runtime.getManifest().version === "3.15.0" && 
-        chrome.i18n.getUILanguage().startsWith('en') &&
+    if (details.reason === 'update' &&
+        chrome.runtime.getManifest().version === "3.17.0" &&
         chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
     {
-      showUpdatedPageIfActive();
+      shouldShowUpdate();
+    }
+    if (details.reason === 'install')
+    {
+      localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
     }
   });
 }
@@ -749,9 +809,9 @@ var getDebugInfo = function (callback)
   response.subscriptions = subscriptionInfo;
 
   var userFilters = getUserFilters();
-  if (userFilters && userFilters.filters && userFilters.filters.length)
+  if (userFilters && userFilters.length)
   {
-    response.custom_filters = userFilters.filters.join("\n");
+    response.custom_filters = userFilters.join("\n");
   }
 
   // Get settings
@@ -852,16 +912,11 @@ function getUserFilters()
     for (var j = 0; j < subscription.filters.length; j++)
     {
       var filter = subscription.filters[j];
-      if (filter instanceof WhitelistFilter &&  /^@@\|\|([^\/:]+)\^\$document$/.test(filter.text))
-      {
-        exceptions.push(RegExp.$1);
-      } else {
-        filters.push(filter.text);
-      }
+      filters.push(filter.text);
     }
   }
 
-  return {filters: filters, exceptions: exceptions};
+  return filters;
 }
 
 // Return |domain| encoded in Unicode
@@ -893,5 +948,3 @@ getUnicodeUrl = function(url)
 // Remove comment when migration code is removed
 // STATS = STATS();
 // STATS.startPinging();
-
-log('\n===FINISHED LOADING===\n\n');

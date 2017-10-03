@@ -76,47 +76,45 @@ STATS = (function()
   };
 
   // Give the user a userid if they don't have one yet.
-  var checkUserId = function()
-  {
-    var userIDPromise = new Promise(function(resolve)
-    {
-      ext.storage.get(STATS.userIDStorageKey, function(response)
-      {
-        var localuserid = storage_get(STATS.userIDStorageKey);
-        if (!response[STATS.userIDStorageKey] && !localuserid)
-        {
-          STATS.firstRun = true;
-          var time_suffix = (Date.now()) % 1e8; // 8 digits from end of
-                                                // timestamp
-          var alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
-          var result = [];
-          for (var i = 0; i < 8; i++)
-          {
-            var choice = Math.floor(Math.random() * alphabet.length);
-            result.push(alphabet[choice]);
-          }
-          user_ID = result.join('') + time_suffix;
-          // store in redudant locations
-          ext.storage.set(STATS.userIDStorageKey, user_ID);
-          storage_set(STATS.userIDStorageKey, user_ID);
-        }
-        else
-        {
-          user_ID = response[STATS.userIDStorageKey] || localuserid;
-          if (!response[STATS.userIDStorageKey] && localuserid)
-          {
-            ext.storage.set(STATS.userIDStorageKey, user_ID);
-          }
-          if (response[STATS.userIDStorageKey] && !localuserid)
-          {
-            storage_set(STATS.userIDStorageKey, user_ID);
-          }
-        }
-        resolve(user_ID);
-      });
-    });
-    return userIDPromise;
-  };
+  function readUserIDPromisified() {
+    return new Promise(
+      function (resolve, reject) {
+        ext.storage.get(STATS.userIDStorageKey,
+          (response) => {
+            var localuserid = storage_get(STATS.userIDStorageKey);
+            if (!response[STATS.userIDStorageKey] && !localuserid)
+            {
+              STATS.firstRun = true;
+              var time_suffix = (Date.now()) % 1e8; // 8 digits from end of
+                                                    // timestamp
+              var alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+              var result = [];
+              for (var i = 0; i < 8; i++)
+              {
+                var choice = Math.floor(Math.random() * alphabet.length);
+                result.push(alphabet[choice]);
+              }
+              user_ID = result.join('') + time_suffix;
+              // store in redudant locations
+              ext.storage.set(STATS.userIDStorageKey, user_ID);
+              storage_set(STATS.userIDStorageKey, user_ID);
+            }
+            else
+            {
+              user_ID = response[STATS.userIDStorageKey] || localuserid;
+              if (!response[STATS.userIDStorageKey] && localuserid)
+              {
+                ext.storage.set(STATS.userIDStorageKey, user_ID);
+              }
+              if (response[STATS.userIDStorageKey] && !localuserid)
+              {
+                storage_set(STATS.userIDStorageKey, user_ID);
+              }
+            }
+            resolve(user_ID);
+          });
+        });
+  }
 
   ext.onMessage.addListener(function(message, sender, sendResponse)
   {
@@ -124,7 +122,7 @@ STATS = (function()
     {
       return;
     }
-    checkUserId().then(function(userID)
+    readUserIDPromisified().then(function(userID)
     {
       sendResponse(userID);
     });
@@ -365,7 +363,15 @@ STATS = (function()
     os : os,
     osVersion : osVersion,
     statsUrl : stats_url,
-    userIdPromise : checkUserId,
+    untilLoaded : function(callback)
+    {
+      readUserIDPromisified().then(function(userID) {
+        if (typeof callback === 'function')
+        {
+          callback(userID);
+        }
+      });
+    },
     // Ping the server when necessary.
     startPinging : function()
     {
@@ -382,7 +388,7 @@ STATS = (function()
         });
       };
 
-      checkUserId().then(function(userID)
+      readUserIDPromisified().then(function(userID)
       {
         // Do 'stuff' when we're first installed...
         // - send a message
