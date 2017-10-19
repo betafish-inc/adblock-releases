@@ -71,6 +71,8 @@ function getSubscriptions()
   {
     var acceptableAdsSubscription = Subscription.fromURL("https://cdn.adblockcdn.com/filters/adblock_custom.txt");
     subscriptions.push(acceptableAdsSubscription);
+    var nominersSubscription = Subscription.fromURL("https://cdn.adblockcdn.com/filters/nominers.txt");
+    subscriptions.push(nominersSubscription);
   }
 
   // Add any AB specific default langugae subscriptions

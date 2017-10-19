@@ -466,8 +466,10 @@ ext.storage.get(pausedKey, function (response)
       if (action == 'load')
       {
         FilterNotifier.removeListener(pauseHandler);
-        var result = parseFilter(pausedFilterText);
-        FilterStorage.removeFilter(result.filter);
+        var result1 = parseFilter(pausedFilterText1);
+        var result2 = parseFilter(pausedFilterText2);
+        FilterStorage.removeFilter(result1.filter);
+        FilterStorage.removeFilter(result2.filter);
         ext.storage.remove(pausedKey);
       }
     };
@@ -502,123 +504,13 @@ if (!SAFARI && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
 }
 
 var updateStorageKey = 'last_known_version';
-if (chrome.runtime.id)
+chrome.runtime.onInstalled.addListener(function (details)
 {
-  var updateTabRetryCount = 0;
-  var getUpdatedURL = function()
+  if (details.reason === 'update' || details.reason === 'install')
   {
-    var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent(chrome.runtime.getManifest().version) + '/?u=' + STATS.userId();
-    updatedURL = updatedURL + '&bc=' + Prefs.blocked_total;
-    updatedURL = updatedURL + '&rt=' + updateTabRetryCount;
-    return updatedURL;
-  };
-
-  var waitForUserAction = function()
-  {
-    chrome.tabs.onCreated.removeListener(waitForUserAction);
-    setTimeout(function ()
-    {
-      updateTabRetryCount++;
-      openUpdatedPage();
-    }, 10000); // 10 seconds
-  };
-
-  var openUpdatedPage = function()
-  {
-    var updatedURL = getUpdatedURL();
-    chrome.tabs.create({ url: updatedURL }, function(tab)
-    {
-      // if we couldn't open a tab to '/updated_tab', send a message
-      if (chrome.runtime.lastError || !tab)
-      {
-        if (chrome.runtime.lastError && chrome.runtime.lastError.message)
-        {
-          recordErrorMessage('updated_tab_failed_to_open' + chrome.runtime.lastError.message);
-        }
-        else
-        {
-          recordErrorMessage('updated_tab_failed_to_open');
-        }
-        chrome.tabs.onCreated.removeListener(waitForUserAction);
-        chrome.tabs.onCreated.addListener(waitForUserAction);
-        return;
-      }
-      if (updateTabRetryCount > 0)
-      {
-        recordGeneralMessage('updated_tab_retry_success_count_' + updateTabRetryCount);
-      }
-    });
-  };
-
-  var shouldShowUpdate = function()
-  {
-    var checkQueryState = function()
-    {
-      chrome.idle.queryState(60, function(state)
-      {
-        if (state === "active")
-        {
-          STATS.untilLoaded(function()
-          {
-            openUpdatedPage();
-          });
-        }
-        else
-        {
-          chrome.tabs.onCreated.removeListener(waitForUserAction);
-          chrome.tabs.onCreated.addListener(waitForUserAction);
-        }
-      });
-    }; // end of checkQueryState
-
-    var checkInstallType = function()
-    {
-      chrome.management.getSelf(function(info)
-      {
-        if (info && info.installType !== "admin")
-        {
-          checkQueryState();
-        }
-        else if (info && info.installType === "admin")
-        {
-          recordGeneralMessage('update_tab_not_shown_admin_user');
-        }
-      });
-    }; // end of checkInstallType
-
-    var lastKnownVersion = localStorage.getItem(updateStorageKey);
     localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
-    Prefs.untilLoaded.then(function()
-    {
-      // show /update to users that:
-      //  - non-English users and ..
-      //  - suppress_first_run_page set and the previous version was 3.16 or ..
-      //  - lastKnownVersion is null / undefined, which means the didn't get the 3.16.0 release
-      if (((Prefs.suppress_first_run_page &&
-            lastKnownVersion === '3.16.0') ||
-           !lastKnownVersion) &&
-          !chrome.i18n.getUILanguage().startsWith('en'))
-      {
-        checkInstallType();
-      }
-    }); // end of Prefs.untilLoaded
-  }; // end of shouldShowUpdate
-
-  // Display updated page after update
-  chrome.runtime.onInstalled.addListener(function (details)
-  {
-    if (details.reason === 'update' &&
-        chrome.runtime.getManifest().version === "3.17.0" &&
-        chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
-    {
-      shouldShowUpdate();
-    }
-    if (details.reason === 'install')
-    {
-      localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
-    }
-  });
-}
+  }
+});
 
 var openTab = function (url)
 {

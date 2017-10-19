@@ -12,7 +12,7 @@
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
   },
   "description_yt":{
-    "message":"Блокировщик рекламы только для YouTube на базе AdBlock, популярного расширения Chrome с 60 миллионами пользователей по всему миру",
+    "message":"Блокировщик рекламы только для YouTube™ на базе AdBlock, популярного расширения Chrome с 60 миллионами пользователей по всему миру",
     "description":"Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
   },
   "name_adblock_on_youtube":{
@@ -48,7 +48,7 @@
     "description":"Title for the Options page"
   },
   "optionstitle_yt":{
-    "message":"Параметры AdBlock на YouTube",
+    "message":"Параметры AdBlock на YouTube™",
     "description":"Title for the Options page for the 'AdBlock on YouTube' extension."
   },
   "chromebutton_how_to_hide2":{
@@ -367,6 +367,10 @@
     "message":"Чем больше списков фильтров Вы используете, тем медленнее работает AdBlock. Использование слишком большого количества списков может привести даже к сбою браузера на некоторых веб-сайтах. Нажмите OK, чтобы подписаться на этот список в любом случае.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"AdBlock не сможет блокировать рекламу, если вы отключите все списки фильтров. Мы рекомендуем вместо этого приостановку AdBlock. Отказаться от подписки на этот список любом случае?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Подписка на списки фильтров",
     "description":"Title of the Filter lists tab of the Options page"
@@ -528,7 +532,7 @@
     "description":"Warning when manually editing filters."
   },
   "filtersavewarning_ytadblock_1":{
-    "message":"Осторожно: Если вы сделаете ошибку здесь, AdBlock на YouTube может перестать работать правильно.",
+    "message":"Осторожно: Если вы сделаете ошибку здесь, AdBlock на YouTube™ может перестать работать правильно.",
     "description":"First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
   },
   "filtersavewarning_ytadblock_2":{
@@ -1207,6 +1211,10 @@
     "message":"Нравится AdBlock? Подумайте о пожертвовании!",
     "description":"Text of a donate link in the toolbar button menu"
   },
+  "help_and_feedback":{
+    "message":"Справка и обратная связь",
+    "description":"Text of a help link in the toolbar button menu"
+  },
   "donate_to_youtube_adblock":{
     "message":"Нравится AdBlock? Подумайте о пожертвовании!",
     "description":"Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
@@ -1320,15 +1328,15 @@
     "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
   "block_ads_on_youtube":{
-    "message":"Убрать рекламу на YouTube",
+    "message":"Убрать рекламу на YouTube™",
     "description":"Label for checkbox letting user choose whether to block ads on youtube.com"
   },
   "block_privacy_on_youtube":{
-    "message":"Защитить мою конфиденциальность на YouTube",
+    "message":"Защитить мою конфиденциальность на YouTube™",
     "description":"Checkbox letting user choose whether to block privacy-related requests on youtube.com"
   },
   "block_annonyances_on_youtube":{
-    "message":"Убрать анонсы на YouTube",
+    "message":"Убрать анонсы на YouTube™",
     "description":"Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
   },
   "show_devtools_panel":{
@@ -1378,11 +1386,11 @@
     "description":"First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
   "allow_whitelisting_youtube_channels":{
-    "message":"Разрешить белый список конкретных каналов YouTube (требуется перезагрузка вашего браузера)",
+    "message":"Разрешить белый список конкретных каналов YouTube™ (требуется перезагрузка вашего браузера)",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "whitelist_all_youtube_channels":{
-    "message":"Белый список всех подписанных каналов YouTube",
+    "message":"Белый список всех подписанных каналов YouTube™",
     "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled."
   },
   "one_moment_all_youtube_channels":{
@@ -1390,7 +1398,7 @@
     "description":"Alert displayed when whitelisting all subscribed YouTube channels"
   },
   "all_youtube_channels_complete":{
-    "message":"Все Ваши подписки на каналы YouTube были внесены в белый список",
+    "message":"Все Ваши подписки на каналы YouTube™ были внесены в белый список",
     "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
   "allow_ads_all_youtube_channels":{
@@ -1450,7 +1458,7 @@
     "description":"Subtitle on the Support tab"
   },
   "ytadblockupdates":{
-    "message":"Обновления AdBlock на YouTube",
+    "message":"Обновления AdBlock на YouTube™",
     "description":"Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
   },
   "whatmakesadblocktick":{
@@ -1596,6 +1604,22 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"Вы можете снова включить это и поддерживать веб-сайты, которые Вы любите, выбрав «Разрешить некоторую ненавязчивую рекламу» ниже.",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlock использует EasyList для блокировки рекламы на большинстве сайтов.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"Мы рекомендуем держать его включенным. Если вы случайно отказались от подписки, выберите «EasyList», чтобы заблокировать больше рекламы.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock использует EasyList Lite или EasyList для блокировки рекламы на большинстве сайтов.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"Мы рекомендуем держать его включенным. Если вы случайно отказались от подписки, выберите \"EasyList Lite\" или «EasyList», чтобы заблокировать больше рекламы.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
   },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Мы отписали Вас от Приемлемой Рекламы, потому что Вы включили Блокировку Содержимого в Safari. Одновременно можно выбрать только одно. ([[Почему?]])",

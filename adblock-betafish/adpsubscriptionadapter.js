@@ -158,8 +158,8 @@ var getIdFromURL = function(url)
 //              language -bool that indicates whether or not the filter list
 //                        is language-specific (and should be included in the
 //                        language drop-down)
-//              hidden   -bool that indicates whether or not the filter list 
-//                        should be hidden from the default options on the 
+//              hidden   -bool that indicates whether or not the filter list
+//                        should be hidden from the default options on the
 //                        Filter List tab (currently only used to hide language
 //                        filter lists from the language drop-down)
 var abpSubscriptionIdMap =
@@ -289,10 +289,10 @@ var abpSubscriptionIdMap =
 //              language -bool that indicates whether or not the filter list
 //                        is language-specific (and should be included in the
 //                        language drop-down)
-//              hidden   -bool that indicates whether or not the filter list 
-//                        should be hidden from the default options on the 
-//                        Filter List tab (currently only used to hide 
-//                        discontinued language filter lists from the language 
+//              hidden   -bool that indicates whether or not the filter list
+//                        should be hidden from the default options on the
+//                        Filter List tab (currently only used to hide
+//                        discontinued language filter lists from the language
 //                        drop-down)
 var abSubscriptionIdMap =
 {
@@ -500,7 +500,13 @@ var abSubscriptionIdMap =
   },
   "https://easylist-downloads.adblockplus.org/malwaredomains_full.txt" :
   {
-    id : "malware", // Malware 
+    id : "malware", // Malware
+    language : false,
+    hidden : false,
+  },
+  "https://cdn.adblockcdn.com/filters/nominers.txt" :
+  {
+    id : "bitcoin_mining_protection", // Cryptocurrency (Bitcoin) Mining Protection
     language : false,
     hidden : false,
   },

@@ -394,11 +394,16 @@ var run_bandaids = function()
       // The following code is from :
       // https://greasyfork.org/en/scripts/22210-facebook-unsponsored
       var streamSelector = 'div[id^="topnews_main_stream"]';
-      var storySelector = 'div[id^="hyperfeed_story_id"]';
+      var storySelectors = [
+          'div[id^="hyperfeed_story_id"]',
+          'div[data-ownerid^="hyperfeed_story_id"]'
+      ];
       var searchedNodes = [{
           // Sponsored
           'selector': [
-              '.fbUserPost span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)'
+              '.fbUserPost span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
+              '.fbUserStory span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)',
+              '.fbUserContent span > div > a:not([title]):not([role]):not(.UFICommentActorName):not(.uiLinkSubtle):not(.profileLink)'
           ],
           'content': {
               'af':      ['Geborg'],
@@ -475,7 +480,9 @@ var run_bandaids = function()
       }, {
           // Suggested Post
           'selector': [
-              '.fbUserPost div > div > span > span'
+              '.fbUserPost div > div > span > span',
+              '.fbUserStory div > div > span > span',
+              '.fbUserContent div > div > span > span'
           ],
           'content': {
               'af':        ['Voorgestelde Plasing'],
@@ -552,7 +559,9 @@ var run_bandaids = function()
       }, {
           // Popular Live Video                                                      // A Video You May Like
           'selector': [
-              '.fbUserPost div > div > div:not(.userContent)'
+              '.fbUserPost div > div > div:not(.userContent)',
+              '.fbUserStory div > div > div:not(.userContent)',
+              '.fbUserContent div > div > div:not(.userContent)'
           ],
           'exclude': function(node) {
               if(!node) {
@@ -616,7 +625,9 @@ var run_bandaids = function()
       }, {
         // Popular Across Facebook
           'selector': [
-              '.fbUserPost > div > div > div'
+              '.fbUserPost > div > div > div',
+              '.fbUserStory > div > div > div',
+              '.fbUserContent > div > div > div'
           ],
           'content': {
               'af':        ['Oral op Facebook gewild'],
@@ -643,6 +654,7 @@ var run_bandaids = function()
               'gl':        ['Popular Across Facebook'],
               'gn':        ['Ojehechavéva Facebook-pe'],
               'id':        ['Populer Lintas Facebook'],
+              'it':        ['Popolare su Facebook'],
               'ja':        ['Facebookで人気'],
               'jv':        ['Populer Ing Facebook'],
               'ko':        ['Facebook에서 인기 있는 콘텐츠'],
@@ -658,6 +670,40 @@ var run_bandaids = function()
               'vi':        ['Phổ biến trên Facebook'],
               'zh-Hans':   ['Facebook 大热门'],
               'zh-Hant':   ['廣受 Facebook 用戶歡迎']
+          }
+      }, {
+          // Page Stories You May Like
+          'selector': [
+              'div[title] > div > div > div > div'
+          ],
+          'content': {
+              'ar':        ['أحداث الصفحات التي قد تعجبك'],
+              'cb':        ['سەرهاتەکانی پەڕە کە ڕەنگە بەدڵت بن'],
+              'de':        ['Seitenmeldungen, die dir gefallen könnten'],
+              'en':        ['Page Stories You May Like'],
+              'es':        ['Historias de páginas que te pueden gustar'],
+              'fa':        ['داستان‌های صفحه‌ای که شاید بپسندید'],
+              'fr':        ['Actualités de Pages à voir'],
+              'it':        ['Notizie interessanti delle Pagine che ti piacciono'],
+              'ja':        ['おすすめのページストーリー'],
+              'ko':        ['회원님이 좋아할 만한 페이지 소식'],
+              'pl':        ['Zdarzenia stron, które mogą Ci się spodobać'],
+              'pt':        ['Histórias da Página que você talvez curta'],
+              'ru':        ['Новости Страниц, которые могут вам понравиться'],
+              'tr':        ['Beğenebileceğin Sayfa Haberleri'],
+              'ur':        ['صفحہ کی کہانیاں جو شاید آپ کو پسند آئیں'],
+              'vi':        ['Tin bài bạn có thể thích'],
+              'zh-Hans':   ['猜你喜欢'],
+              'zh-Hant':   ['你可能會喜歡的粉絲專頁動態', '你可能會喜歡的專頁動態']
+          }
+      }, {
+          // Suggestions From Related Pages
+          'selector': [
+              'div > div > span'
+          ],
+          'content': {
+            'en':          ['Suggestions From Related Pages'],
+            'vi':          ['Thêm đề xuất từ các Trang liên quan']
           }
       }];
 
@@ -731,15 +777,19 @@ var run_bandaids = function()
               return;
           }
 
-          var stories = stream.querySelectorAll(storySelector);
-          if(!stories.length) {
-              return;
-          }
-
           var i;
-          for(i = 0; i < stories.length; i++) {
-              if(isSponsored(stories[i])) {
-                  block(stories[i]);
+          var j;
+          var stories;
+          for(i = 0; i < storySelectors.length; i++) {
+              stories = stream.querySelectorAll(storySelectors[i]);
+              if(!stories.length) {
+                  return;
+              }
+
+              for(j = 0; j < stories.length; j++) {
+                  if(isSponsored(stories[j])) {
+                      block(stories[j]);
+                  }
               }
           }
       }

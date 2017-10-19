@@ -367,6 +367,10 @@
     "message":"使用越多的过滤列表，AdBlock 越慢。过多的过滤列表甚至会使浏览器在部分网站崩溃。点击“确认”继续订阅此列表。",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"如果您禁用了所有的过滤列表，AdBlock将无法屏蔽广告。这种情况下我们建议您直接暂停AdBlock。您确定要取消订阅该列表吗？",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"订阅过滤列表",
     "description":"Title of the Filter lists tab of the Options page"
@@ -1207,6 +1211,10 @@
     "message":"喜欢AdBlock吗？请考虑捐赠！",
     "description":"Text of a donate link in the toolbar button menu"
   },
+  "help_and_feedback":{
+    "message":"帮助和反馈",
+    "description":"Text of a help link in the toolbar button menu"
+  },
   "donate_to_youtube_adblock":{
     "message":"喜欢AdBlock on YouTube™吗？请考虑捐赠！",
     "description":"Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
@@ -1596,6 +1604,22 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"您可以通过勾选下面的“允许一些非侵入式广告”来重新启用它并支持一些您喜爱的网站。",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlock使用EasyList来屏蔽大多数网站上的广告。",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"我们建议保留它。如果您是不小心取消订阅的，请勾选\"EasyList\"来屏蔽更多的广告。",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock使用EasyList Lite或EasyList来屏蔽大多数网站上的广告。",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"我们建议保留它。如果您是不小心取消订阅的，请勾选\"EasyList Lite\"或\"EasyList\"来屏蔽更多的广告。",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
   },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"因为您开启了Safari内容屏蔽，我们为您取消订阅了可接受广告列表。这两者您只能选择其一。([[为什么?]])",
