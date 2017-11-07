@@ -124,10 +124,10 @@ if (!/ab_channel/.test(url))
 // Reload the stylesheet when we recieve a message from the background page to do so.
 function onMessage(msg)
 {
-  if (msg.type == "reloadStyleSheet" &&
-      window.updateStylesheet)
+  if (msg.type == "reloadStyleSheet")
   {
-    window.updateStylesheet();
+    elemhide = new ElemHide();
+    elemhide.apply();
   }
 }
-ext.onMessage.addListener(onMessage);
+chrome.runtime.onMessage.addListener(onMessage);

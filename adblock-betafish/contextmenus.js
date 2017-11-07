@@ -1,3 +1,4 @@
+const {checkWhitelisted} = require("whitelisting");
 
 var updateButtonUIAndContextMenus = function ()
 {

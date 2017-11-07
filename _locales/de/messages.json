@@ -11,6 +11,10 @@
     "message":"AdBlock. Der #1 Ad-Blocker mit über 200 Millionen Downloads. Werbung im gesamten Netz blockieren.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
   },
+  "description_yt":{
+    "message":"Der einzige YouTube™-Werbung-Blocker von AdBlock, die beliebteste Chrome-Erweiterung mit 60 Millionen weltweiten Nutzern",
+    "description":"Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
+  },
   "name_adblock_on_youtube":{
     "message":"AdBlock on YouTube™",
     "description":"Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
@@ -42,6 +46,10 @@
   "optionstitle":{
     "message":"AdBlock-Einstellungen",
     "description":"Title for the Options page"
+  },
+  "optionstitle_yt":{
+    "message":"AdBlock auf YouTube™ Einstellungen",
+    "description":"Title for the Options page for the 'AdBlock on YouTube' extension."
   },
   "chromebutton_how_to_hide2":{
     "message":"Klicken Sie mit der rechten Maustaste auf den AdBlock Button und wählen Sie 'Im Chrome-Menü ausblenden'. Um den Button wieder anzuzeigen, öffnen Sie das Chrome-Menü, klicken Sie mit der rechten Maustaste auf den AdBlock Button und wählen Sie 'In Symbolleiste behalten'.",
@@ -255,6 +263,14 @@
     "message":"Safari Content Blocking aktivieren",
     "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
   },
+  "debuginlogoption":{
+    "message":"Zeige die Debug-Statements im Konsolen-Log (verlangsamt die Erweiterung)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption":{
+    "message":"AdBlock erlauben anonyme Nutzungsdaten über Filterlisten und Informationen über die von Filterlisten blockierten Inhalte zu sammeln",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
   "updatedrightnow":{
     "message":"jetzt aktualisiert",
     "description":"Label for filter list subscription"
@@ -351,6 +367,10 @@
     "message":"Je mehr Filterlisten Sie abonnieren, desto langsamer läuft AdBlock. Zuviele Filterlistenabonnements können sogar zum Browsercrash auf einigen Seiten führen. Klicken Sie auf OK, um diese Liste trotzdem zu abonnieren.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"AdBlock kann keine Werbung entfernen wenn Sie alle Filterlisten deaktivieren. Wir empfehlen stattdessen AdBlock zu pausieren. Diese Filterliste trotzdem deaktivieren?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Filterlisten abonnieren",
     "description":"Title of the Filter lists tab of the Options page"
@@ -435,6 +455,10 @@
     "message":"Malware-Schutz",
     "description":"A filter list"
   },
+  "filterbitcoin_mining_protection":{
+    "message":"Kryptowährung (Bitcoin) Mining Schutz-Liste",
+    "description":"A filter list"
+  },
   "filterlatvian":{
     "message":"Lettisch",
     "description":"A filter list"
@@ -510,6 +534,14 @@
   "filtersavewarning":{
     "message":"Achtung: Sollten Sie hier einen Fehler machen, können viele andere Filter sowie die Filter der Filterlisten beschädigt werden!\nLesen Sie zuerst das [[Filtersyntax-Tutorial]], um zu lernen, wie man eigene Black- und Whitelistfilter erstellt und hinzufügt.",
     "description":"Warning when manually editing filters."
+  },
+  "filtersavewarning_ytadblock_1":{
+    "message":"Achtung: Falls Sie hier einen Fehler machen kann AdBlock auf YouTube™ möglicherweise nicht mehr ordnungsgemäß funktionieren.",
+    "description":"First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
+  },
+  "filtersavewarning_ytadblock_2":{
+    "message":"Lesen Sie das [[Filter Syntax Tutorial]] um zu erfahren wie man Whitelist Filter hinzufügt.",
+    "description":"Second part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
   },
   "migration_error_message":{
     "message":"Wir haben einige Fehler in Ihren benutzerdefinierten Filtern gefunden. Die Nachrichten sind unten aufgelistet.",
@@ -587,6 +619,10 @@
     "message":"Erfahren Sie mehr über das \"Akzeptable Werbung-Programm\".",
     "description":"Acceptable Ads link message on ad report page"
   },
+  "adreportthanks":{
+    "message":"Vielen Dank!",
+    "description":"Message to the user thanking them for sharing the URL with us."
+  },
   "updateyourlists":{
     "message":"Stellen Sie sicher, dass Ihre Filterlisten auf aktuellem Stand sind:",
     "description":"Section header on the ad report page"
@@ -650,6 +686,14 @@
   "disableforsafaristepone":{
     "message":"Klicken Sie auf Safari (Menübar) > Einstellungen ... > Erweiterungen.",
     "description":"Step 1 for disabling Safari extensions"
+  },
+  "disableforedgestepone":{
+    "message":"Klicken Sie auf den Menü Button(...) und wählen Sie Erweiterungen.",
+    "description":"Step 1 for disabling Edge extensions"
+  },
+  "disableforedgesteptwo":{
+    "message":"Klicken Sie für jede Erweiterung außer AdBlock auf das Zahnrad-Symbol und schalten Sie die Erweiterung aus.",
+    "description":"Step 2 for disabling Edge extensions"
   },
   "reenableadsonebyone":{
     "message":"Gut! Lassen Sie uns nun herausfinden welche Erweiterung das Problem verursacht. Aktivieren Sie eine Erweiterung nach der anderen. Die Erweiterung die die Werbung wieder erscheinen lässt muss deinstalliert werden um die Werbung endgültig zu entfernen.",
@@ -903,6 +947,10 @@
     "message":"nichtgelistete Sprache",
     "description":"Multiple choice option"
   },
+  "nodefaultfilter1":{
+    "message":"Wir haben leider keine Standard-Filterliste für diese Sprache. Bitte [[versuchen Sie eine geeignete Liste zu finden, die diese Sprache unterstützt]] oder blockieren Sie diese Werbeanzeige über das AdBlock-Menü.",
+    "description":"Instructions on ad report page pointing users to EasyList subscriptions list."
+  },
   "retryaftersubscribe":{
     "message":"Bitte abonnieren Sie diese Filterliste und versuchen Sie es erneut: $list_title$",
     "description":"Instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
@@ -917,13 +965,25 @@
     "message":"In Firefox überprüfen",
     "description":"Tell a user to see if a reported ad also appears in Firefox"
   },
+  "checkinfirefoxorchrometitle":{
+    "message":"In Firefox oder Chrome überprüfen",
+    "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome"
+  },
   "checkinfirefox_1":{
     "message":"Installieren Sie Firefox, falls Sie es noch nicht installiert haben.",
     "description":"instruction for how to check Firefox for a reported ad"
   },
+  "checkinfirefoxorchrome_1":{
+    "message":"Installieren Sie Firefox oder Chrome, falls Sie es noch nicht installiert haben.",
+    "description":"instruction for how to check Firefox or Chrome for a reported ad"
+  },
   "checkinfirefox_2":{
     "message":"Installieren Sie Adblock Plus für Firefox, falls Sie es noch nicht installiert haben.",
     "description":"Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefoxorchrome_2":{
+    "message":"Installieren Sie Adblock Plus für Firefox oder AdBlock für Chrome, falls Sie es noch nicht installiert haben.",
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
   },
   "checkinfirefox_3":{
     "message":"Abonnieren Sie in diesem Browser dieselben Filterlisten, die Sie hier abonniert haben.",
@@ -1071,6 +1131,10 @@
     "message":"AdBlock ist durch eine Ihrer Filterlisten auf dieser Seite deaktiviert.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
   },
+  "disabled_by_filter_lists_yt":{
+    "message":"AdBlock auf YouTube™ ist auf dieser Seite durch eine Ihrer Einstellungen deaktiviert.",
+    "description":"Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+  },
   "dont_run_on_pages_on_domain":{
     "message":"AdBlock auf Seiten dieser Domain deaktivieren",
     "description":"Menu entry to open the whitelist wizard"
@@ -1079,9 +1143,17 @@
     "message":"AdBlock ist auf dieser Seite deaktiviert.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
   },
+  "disabled_on_this_channel":{
+    "message":"Sie haben Werbung erlaubt auf diesem Kanal.",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
+  },
   "enable_adblock":{
     "message":"AdBlock auf dieser Seite aktivieren",
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
+  },
+  "enable_adblock_on_this_channel":{
+    "message":"Werbung auf diesem Kanal blockieren",
+    "description":"Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
   },
   "status_paused":{
     "message":"AdBlock ist pausiert.",
@@ -1094,6 +1166,14 @@
   "pause_adblock":{
     "message":"AdBlock pausieren",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "unpause_adblocking":{
+    "message":"Werbeblocker wieder aktivieren",
+    "description":"Menu entry to unpause the extension (start blocking ads again)"
+  },
+  "pause_adblocking":{
+    "message":"Werbeblocker anhalten",
+    "description":"Menu entry to pause the extension (stop blocking ads)"
   },
   "safaricontentblockingpausemessage":{
     "message":"Um AdBlock mit aktiviertem Content Blocking zu pausieren, klicken Sie bitte auf Safari (in der Menüleiste) > Einstellungen ... > Erweiterungen > AdBlock, und entfernen Sie den Haken unter \"AdBlock aktivieren\".",
@@ -1134,6 +1214,14 @@
   "donate_to_adblock":{
     "message":"Sie lieben AdBlock? Erwägen Sie eine Spende!",
     "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"Hilfe und Feedback",
+    "description":"Text of a help link in the toolbar button menu"
+  },
+  "donate_to_youtube_adblock":{
+    "message":"Sie lieben AdBlock? Erwägen Sie eine Spende!",
+    "description":"Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
   },
   "pwyw":{
     "message":"Zahlen Sie, was Sie möchten!",
@@ -1235,6 +1323,26 @@
     "message":"Anzahl geblockter Werbung im AdBlock Menü anzeigen",
     "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
+  "show_on_button":{
+    "message":"Anzahl geblockter Werbung am AdBlock Button anzeigen",
+    "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_menu":{
+    "message":"Anzahl geblockter Werbung im AdBlock Menü anzeigen",
+    "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "block_ads_on_youtube":{
+    "message":"Werbung auf YouTube™ entfernen",
+    "description":"Label for checkbox letting user choose whether to block ads on youtube.com"
+  },
+  "block_privacy_on_youtube":{
+    "message":"Meine Privatsphäre auf YouTube™ schützen",
+    "description":"Checkbox letting user choose whether to block privacy-related requests on youtube.com"
+  },
+  "block_annonyances_on_youtube":{
+    "message":"Lästige Inhalte auf YouTube™ entfernen",
+    "description":"Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
+  },
   "show_devtools_panel":{
     "message":"'AdBlock'-Konsole in den Entwicklertools anzeigen",
     "description":"Checkbox letting user choose whether the AdBlock tab should be displayed in the developer tools window"
@@ -1281,9 +1389,25 @@
     "message":"-- Sprache auswählen --",
     "description":"First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Werbung auf einzelnen YouTube™ Kanälen erlauben (erfordert einen Neustart Ihres Browsers)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "whitelist_all_youtube_channels":{
+    "message":"Werbung auf allen abonnierten YouTube™ Kanälen zulassen",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled."
+  },
   "one_moment_all_youtube_channels":{
     "message":"Einen Augenblick bitte während wir alle Ihre Abonnements sammeln",
     "description":"Alert displayed when whitelisting all subscribed YouTube channels"
+  },
+  "all_youtube_channels_complete":{
+    "message":"Werbung ist nun auf allen von Ihnen abonnierten YouTube™ Kanälen zugelassen",
+    "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
+  },
+  "allow_ads_all_youtube_channels":{
+    "message":"Werbung auf allen abonnierten YouTube™ Kanälen zulassen",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
   },
   "whitelist_youtube_channel":{
     "message":"Werbung auf $name$ Kanal zulassen",
@@ -1294,6 +1418,10 @@
         "example":"Name of channel"
       }
     }
+  },
+  "whitelist_youtube_channel_v2":{
+    "message":"Werbung erlauben auf diesem YouTube™ Kanal:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters":{
     "message":"Sind Sie sicher, dass Sie $count$ Filter entfernen wollen, die Sie für $host$ erstellt haben?",
@@ -1333,6 +1461,10 @@
     "message":"AdBlock Updates",
     "description":"Subtitle on the Support tab"
   },
+  "ytadblockupdates":{
+    "message":"AdBlock auf YouTube™ Neuigkeiten",
+    "description":"Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
+  },
   "whatmakesadblocktick":{
     "message":"Wollen Sie wissen wer und was hinter AdBlock steckt?",
     "description":"Subtitle on the Support tab. This section contains links to the AdBlock source code and contributors. In this context, 'tick' can be replaced with the word 'work'."
@@ -1344,6 +1476,10 @@
   "sourcecode":{
     "message":"Der Quellcode ist [[frei verfügbar]].",
     "description":"Link to the source code of AdBlock on the Support tab"
+  },
+  "contributors":{
+    "message":"Wir haben ausserdem eine Seite auf der Sie mehr erfahren können über die [[Mitwirkenden hinter AdBlock]]!",
+    "description":"Link to the contributors page on the Support tab"
   },
   "debuginfo":{
     "message":"Hat unser Team Sie nach Debug-Informationen gefragt? Klicken Sie [[hier]] um die Informationen anzuzeigen.",
@@ -1473,6 +1609,22 @@
     "message":"Sie können dies wieder aktivieren und die Webseiten die Sie mögen unterstützen indem Sie weiter unten \"Einige nicht aufdringliche Werbung zulassen\" aktivieren.",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
+  "easylist_disable_done":{
+    "message":"AdBlock verwendet EasyList um Werbung auf den meisten Webseiten zu entfernen.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"Wir empfehlen diese Liste aktiviert zu lassen. Falls Sie die Liste versehentlich deaktiviert haben, aktivieren Sie bitte jetzt \"EasyList\" um mehr Werbung zu blockieren.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock verwendet EasyList Lite oder EasyList um Werbung auf den meisten Webseiten zu entfernen.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"Wir empfehlen diese Liste aktiviert zu lassen. Falls Sie die Liste versehentlich deaktiviert haben, aktivieren Sie bitte jetzt \"EasyList Lite\" oder \"EasyList\" um mehr Werbung zu blockieren.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Die \"Akzeptable Werbung\" Filterliste wurde deaktiviert das Sie Safari Content Blocking aktiviert haben. Sie können jeweils nur eines von beidem aktivieren. ([[Warum?]])",
     "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
@@ -1505,6 +1657,10 @@
     "message":"Screenshot anhängen:",
     "description":"Label next to a file upload button."
   },
+  "adreport_filter":{
+    "message":"Falls Sie einen funktionierenden Filter mit dem \"Werbung entfernen\" Assistent erstellt haben, kopieren Sie den Filter bitte im folgenden Feld:",
+    "description":"Optional question on the ad report page when the ad needs to be reported to AdBlock."
+  },
   "buttonsubmit":{
     "message":"Senden",
     "description":"Button to send a form."
@@ -1512,6 +1668,14 @@
   "adreport_missing_info":{
     "message":"Erforderliche Informationen fehlen oder sind ungültig.  Bitte beantworten sie die Fragen die rot umrahmt sind.",
     "description":"Error message shown when the user doesn't enter anything in some of the text fields."
+  },
+  "adreport_missing_screenshot":{
+    "message":"Sie haben vergessen einen Screenshot anzuhängen. Wir können Ihnen leider nicht helfen ohne die gemeldete Werbeanzeige(n) zu sehen.",
+    "description":"Error message shown when the user doesn't attach a screenshot to an ad report."
+  },
+  "adreport_response_success":{
+    "message":"Fertig! Wir werden Sie so schnell wie möglich kontaktieren. In der Zwischenzeit überprüfen Sie bitte ob Sie eine Email von AdBlock erhalten haben. In dieser Email finden Sie einen Link zu Ihrem Ticket auf unserer Hilfeseite, zusammen mit Ratschlägen wie Sie einige Probleme selbst lösen können falls wir uns nicht schnell genug bei Ihnen melden können.",
+    "description":"Shown when a ticket has been sumbitted to AdBlock's support site successfully."
   },
   "adreport_response_invalid_file":{
     "message":"Datei ist keine Bilddatei. Bitte laden Sie eine Datei hoch die mit .png, .gif, oder .jpg endet.",
@@ -1529,12 +1693,20 @@
     "message":"Der Dateiname ist zu lang. Bitte geben Sie Ihrer Datei einen kürzeren Namen.",
     "description":"Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
   },
+  "adreport_all_debug_info":{
+    "message":"Die folgende Informationen werden ebenso in Ihrem Bericht mitgesendet.",
+    "description":"Shows the user the debug information that will be sent along with their report."
+  },
   "adreport_server_response_error_msg":{
     "message":"Bei der Bearbeitung Ihrer Anfrage ist ein Fehler aufgetreten.",
     "description":"Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
   },
   "adreport_server_response_error__manual_msg_step1":{
     "message":"Bitte besuchen Sie [[unsere Support-Seite]].",
+    "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "adreport_server_response_error__manual_msg_step2":{
+    "message":"Erstellen Sie bitte ein Ticket und kopieren Sie die Informationen in das folgende \"Fill in any details you think will help us understand your issue\"-Feld.",
     "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
   },
   "custom_filters_migration_error_message_part1":{

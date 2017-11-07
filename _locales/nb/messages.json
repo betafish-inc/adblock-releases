@@ -355,6 +355,10 @@
     "message":"Antisosial filterliste (tar bort knapper for sosiale media)",
     "description":"A filter list"
   },
+  "filterwarning_removal":{
+    "message":"Adblock liste for fjerning av advarsel (fjerner advarsler om bruk av filtre)",
+    "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
   "filterrussian":{
     "message":"Russisk og ukrainsk",
     "description":"Language names for a filter list"
@@ -447,6 +451,10 @@
     "message":"Vær forsiktig: hvis du gjør en feil her kan mange andre filtere, inkludert de offisielle, bli ødelagt!\nLes [[filtersyntax-veiledningen]] for å lære hvordan du kan legge til avanserte svarteliste- og hvitelistefiltere.",
     "description":"Warning when manually editing filters."
   },
+  "contentblockingwarning":{
+    "message":"Merk: Hvitlisting (tillater annonser på) en side eller webområde støttes ikke med Safari når innholdsblokkering er aktivert.",
+    "description":"Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
+  },
   "savebutton":{
     "message":"Lagre",
     "description":"Save button"
@@ -459,9 +467,17 @@
     "message":"AdBlock - Rapporter en annonse",
     "description":"Title of the ad report page"
   },
+  "adreportintro":{
+    "message":"Fant en annonse på en webside? Vi vil hjelpe deg å finne det rette stedet å rapportere det til!",
+    "description":"Introduction of the ad reporting page"
+  },
   "malwarenotificationcheckboxmessage":{
     "message":"Skal AdBlock varsle deg når skadelig programvare oppdages?",
     "description":"Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
+  },
+  "malwarenotificationmessage":{
+    "message":"AdBlock har blokkert en nedlasting fra et område kjent for malware.",
+    "description":"Notification when a potential malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
     "message":"Lær mer om skadelig programvare",
@@ -471,6 +487,10 @@
     "message":"Skru av disse varslene",
     "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
+  "malwarecheck":{
+    "message":"Sjekk for malware som kan injisere annonser:",
+    "description":"Section header on the ad report page"
+  },
   "malwarewarning":{
     "message":"Datamaskinen din kan være infisert av skadevare. Klikk [[her]] for mer informasjon.",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
@@ -478,6 +498,22 @@
   "malwarenotfound":{
     "message":"Vi kan ikke finne skadevare vi kjenner igjen.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
+  },
+  "disableaa":{
+    "message":"Sjekk Akseptabel Annonser filtre:",
+    "description":"Section header on the ad report page"
+  },
+  "aamessageadreport":{
+    "message":"Hvis du ikke vil se annonser som dette, kan du la Akseptabel Annonser filterlisten deaktivert.",
+    "description":"Acceptable Ads message on ad report page"
+  },
+  "aalinkadreport":{
+    "message":"Finn ut mer om Akseptabel Annonse programmet.",
+    "description":"Acceptable Ads link message on ad report page"
+  },
+  "updateyourlists":{
+    "message":"Sørg for at filterlistene dine er oppdatert:",
+    "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
     "message":"Trykk her: [[Oppdater filtere!]]",
@@ -499,9 +535,21 @@
     "message":"Nei",
     "description":"A negative response to a question"
   },
+  "adalreadyblocked":{
+    "message":"Utmerket! Du er klar.",
+    "description":"On the ad report page, telling the user there is nothing to do as the ad they were seeing is now blocked."
+  },
+  "disableallextensions":{
+    "message":"Slå av alle utvidelser, utenom AdBlock:",
+    "description":"Instruction on ad report page"
+  },
   "clickdisableotherextensions":{
     "message":"ELLER så kan du bare klikke på denne knappen, så fikser vi alt: [[Deaktiver alle andre utvidelser]]",
     "description":"On the ad report page, an alternative way to disable other extensions"
+  },
+  "disableotherextensionscomplete":{
+    "message":"Vi har deaktivert alle andre utvidelser. Nå vil vi oppdatere siden med annonsen. Vennligst vent ett sekund.",
+    "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "enableotherextensionscomplete":{
     "message":"De tidligere deaktiverte utvidelsene har blitt aktivert igjen.",
@@ -511,6 +559,10 @@
     "message":"Åpne utvidelses-siden for å aktivere utvidelser som har vært deaktivert.",
     "description":"On the ad report page, alert notifying users that they will need to manually reenable the extensions"
   },
+  "tabreloadcomplete":{
+    "message":"Ferdig! Vi oppdaterte siden med annonsen. Sjekk siden om annonsen er borte. Deretter kom tilbake til denne siden og besvare spørsmålet nedenfor.",
+    "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
+  },
   "disableforchromeandsafaristeptwo":{
     "message":"Fjern krysset ved Aktiver ved alle utvidelser unntatt for AdBlock. La AdBlock være aktivert.",
     "description":"Step 2 for disabling Chrome and Safari extensions"
@@ -518,6 +570,14 @@
   "disableforsafaristepone":{
     "message":"Klikk på Safari-menyen > Innstillinger > Utvidelser.",
     "description":"Step 1 for disabling Safari extensions"
+  },
+  "reenableadsonebyone":{
+    "message":"Utmerket! Nå la oss finne ut hvilke utvidelser som er årsaken. Gå og aktivere hver utvidelse enkeltvis. Utvidelsen som bringer tilbake den annonsen(e) er det du trenger å avinstallere for å kvitte deg med annonsene.",
+    "description":"Tells the user to re-enable the extensions one by one"
+  },
+  "correctfilters":{
+    "message":"Kontroller at du bruker riktig språk filter(e):",
+    "description":"On the ad report page, label describing having the right filter lists enabled"
   },
   "pagelanguagecheck":{
     "message":"Hvilket språk er siden skrevet på?",
@@ -547,6 +607,10 @@
     "message":"Ukrainsk",
     "description":"Language name"
   },
+  "lang_arabic":{
+    "message":"Arabisk",
+    "description":"Language name"
+  },
   "lang_bulgarian":{
     "message":"Bulgarsk",
     "description":"Language name"
@@ -561,6 +625,10 @@
   },
   "lang_dutch":{
     "message":"Nederlandsk",
+    "description":"Language name"
+  },
+  "lang_estonian":{
+    "message":"Estonesisk",
     "description":"Language name"
   },
   "lang_finnish":{
@@ -587,6 +655,10 @@
     "message":"Indonesisk",
     "description":"Language name"
   },
+  "lang_icelandic":{
+    "message":"Islandsk",
+    "description":"Language name"
+  },
   "lang_israeli":{
     "message":"Hebraisk",
     "description":"Language name"
@@ -601,6 +673,10 @@
   },
   "lang_korean":{
     "message":"Koreansk",
+    "description":"Language name"
+  },
+  "lang_lithuania":{
+    "message":"Litauisk",
     "description":"Language name"
   },
   "lang_polish":{
@@ -685,6 +761,22 @@
   },
   "filtereasylist_plus_spanish":{
     "message":"Spansk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_arabic":{
+    "message":"Arabisk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_estonian":{
+    "message":"Estonesisk",
+    "description":"A filter list"
+  },
+  "filtericelandic":{
+    "message":"Islandsk",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_lithuania":{
+    "message":"Litauisk",
     "description":"A filter list"
   },
   "other":{
@@ -875,6 +967,22 @@
     "message":"Sett AdBlock på pause",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
   },
+  "safaricontentblockingpausemessage":{
+    "message":"For å pause AdBlock med innholdsblokkering aktivert, Velg Safari (i menylinjen) > innstillinger > utvidelser > AdBlock, og fjern krysset \"Aktiver AdBlock.",
+    "description":"Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled."
+  },
+  "safaricontentblockinglimitexceeded":{
+    "message":"Antall filter lister overskrider grensen på 50 000, og er automatisk redusert. Vennligst fjern noen filterlister eller deaktivere Safari innholdsblokkering!",
+    "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled."
+  },
+  "safarinotificationtitle":{
+    "message":"Innholds blokkering regelen er overskredet",
+    "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules."
+  },
+  "safarinotificationbody":{
+    "message":"Deaktiver noen filterlister. Mer informasjon i AdBlock's alternativer.",
+    "description":"Body of a notification shown to Safari Content Blocking users with too many filter list rules."
+  },
   "undo_last_block":{
     "message":"Angre all blokkering på dette domene",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
@@ -1017,6 +1125,10 @@
     "message":"Legg til filter for et annet språk: ",
     "description":"Dropdown list for language-specific filter lists"
   },
+  "how":{
+    "message":"Hvordan?",
+    "description":"Text of a link pointing to instructions on how to do something"
+  },
   "whats_this":{
     "message":"Hva er dette?",
     "description":"Text of a link pointing to the explanation of a new feature"
@@ -1097,9 +1209,53 @@
     "message":"Hvis du ser en annonse, ikke send en feilrapport. Send en [[annonserapport]] i stedet!",
     "description":"Link to the ad report page on AdBlock's help site. This is found on the Support tab of the options."
   },
+  "resourceblocktitle":{
+    "message":"Alle ressurser",
+    "description":"Resource list page name"
+  },
+  "headerresource":{
+    "message":"Ressurs",
+    "description":"Resource list page: title of a column"
+  },
   "headertype":{
     "message":"Type",
     "description":"Resource list page: title of a column"
+  },
+  "headerfilter":{
+    "message":"Matchende filtre",
+    "description":"Resource list page: title of a column"
+  },
+  "show_resourcelist":{
+    "message":"Vis alle forespørsler",
+    "description":"Menu entry to open the resource list page"
+  },
+  "noresourcessend2":{
+    "message":"No gikk galt. Ingen elementer har blitt sendt. Denne siden vil nå lukkes. Prøv å last inn på nytt.",
+    "description":"Resource list page: error message"
+  },
+  "resourcedomain":{
+    "message":"Lastet fra siden med domene:\n$domain$",
+    "description":"Resource list page: text shown when hovering over an item in the third-party column",
+    "placeholders":{
+      "domain":{
+        "content":"$1",
+        "example":"example.com"
+      }
+    }
+  },
+  "filterorigin":{
+    "message":"Filteropprinnelse:\n$list$",
+    "description":"Resource list page: tooltip of matching filter, telling which filter list contains the filter",
+    "placeholders":{
+      "list":{
+        "content":"$1",
+        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
+  },
+  "typeselector":{
+    "message":"velger",
+    "description":"A resource type"
   },
   "typesub_frame":{
     "message":"ramme",
@@ -1108,5 +1264,61 @@
   "typemain_frame":{
     "message":"side",
     "description":"A resource type"
+  },
+  "topframe":{
+    "message":"Topprammen",
+    "description":"Resource list page: frame type"
+  },
+  "subframe":{
+    "message":"Underramme",
+    "description":"Resource list page: frame type"
+  },
+  "frametype":{
+    "message":"Rammetype: ",
+    "description":"Resource list page: followed by frame type (top frame, subframe)"
+  },
+  "framedomain":{
+    "message":"Ramme domene: ",
+    "description":"Resource list page: domain name of the frame"
+  },
+  "frameurl":{
+    "message":"Ramme Lenke: ",
+    "description":"Resource list page: full URL of the frame"
+  },
+  "legend":{
+    "message":"Forklaring: ",
+    "description":"Resource list page: followed by color codes for various resource statuses (blocked, whitelisted, hidden)"
+  },
+  "blockedresource":{
+    "message":"Blokkerte ressurs",
+    "description":"Resource list page: resource status"
+  },
+  "whitelistedresource":{
+    "message":"Hvitelistede ressurser",
+    "description":"Resource list page: resource status"
+  },
+  "hiddenelement":{
+    "message":"Skjult element",
+    "description":"Resource list page: resource status"
+  },
+  "thirdparty":{
+    "message":"Tredjepart",
+    "description":"Resource list page: column title telling if the resource originates from a different domain"
+  },
+  "acceptableadsdisable_done":{
+    "message":"Du abonnerer ikke på filterlisten Akseptabel Annonser.",
+    "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "acceptableadsdisable_how_to_reenable":{
+    "message":"Du kan aktivere dette alternativet og støtte nettsteder du elsker ved å velge \"Tilatt noen ikke-påtrengende reklamer\" nedenfor.",
+    "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "adreport_name":{
+    "message":"Hva er ditt navn?",
+    "description":"Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email":{
+    "message":"Hva er din e-postadresse?",
+    "description":"Label for a textbox where the user enters their email address to submit a bug or ad report."
   }
 }

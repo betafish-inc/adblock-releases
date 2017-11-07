@@ -63,6 +63,10 @@
     "message":"您認為下列哪個規則會在瀏覽頁面時阻擋此廣告？",
     "description":"'Block an ad' wizard attribute choice page"
   },
+  "blacklisternotsure":{
+    "message":"不確定？直接點選下方的 「阻擋」。",
+    "description":"'Block an ad' wizard attribute choice page"
+  },
   "blacklisterthefilter":{
     "message":"即將套用的規則，仍可在選項中編輯：",
     "description":"'Block an ad' wizard attribute choice page"
@@ -107,6 +111,10 @@
       }
     }
   },
+  "blacklistersinglematch":{
+    "message":"頁面上只有 1 個匹配項目被阻擋。",
+    "description":"Tells the user only one match was found"
+  },
   "blacklistermatches":{
     "message":"頁面上有 $matchcount$ 個匹配項目被阻擋。",
     "description":"Tells the user multiple matches were found",
@@ -142,6 +150,10 @@
   "buttonback":{
     "message":"返回",
     "description":"Back to previous page button"
+  },
+  "findingads":{
+    "message":"正在尋找廣告...\n\n這只需要一點時間。",
+    "description":"'Block an ad' wizard loading message"
   },
   "blockanadtitle":{
     "message":"阻擋廣告",
@@ -231,6 +243,10 @@
     "message":"在右鍵清單中顯示",
     "description":"Checkbox on the 'General' tab of the Options page."
   },
+  "safaricontentblocking":{
+    "message":"啟用 Safari 內容阻擋",
+    "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
+  },
   "updatedrightnow":{
     "message":"剛剛更新",
     "description":"Label for filter list subscription"
@@ -315,6 +331,14 @@
     "message":"訂閱過濾清單",
     "description":"Title of the Filter lists tab of the Options page"
   },
+  "filterlistlink":{
+    "message":"請不要訂閱過多清單，每新增一個清單都會讓瀏覽器的速度降低！更多詳細資訊和過濾清單可在[[這裡]]找到。",
+    "description":"Filter lists tab explanation and link to filter list credits."
+  },
+  "updatenowmessage2":{
+    "message":"AdBlock會自動取得更新。 您也可以[[現在馬上更新]]",
+    "description":"Update filters text and button"
+  },
   "orenteraurl":{
     "message":"或輸入過濾清單網址：",
     "description":"Text box to enter a link to a custom filter list"
@@ -323,8 +347,24 @@
     "message":"訂閱",
     "description":"Subscribe to a filter list button"
   },
+  "showlinkstolists2":{
+    "message":"顯示過濾清單的網址",
+    "description":"Label to display filter list links"
+  },
   "filterantisocial":{
     "message":"反社群網站過濾器  （社群網站的按鈕會被自動過濾掉）",
+    "description":"A filter list"
+  },
+  "filterwarning_removal":{
+    "message":"Adblock Warning Removal 清單 (移除使用廣告攔截的警告)",
+    "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filteracceptable_ads":{
+    "message":"可接受廣告",
+    "description":"A filter list"
+  },
+  "filtereasylist":{
+    "message":"EasyList",
     "description":"A filter list"
   },
   "filterrussian":{
@@ -415,6 +455,10 @@
     "message":"編輯被停用的清單：",
     "description":"Subtitle on the 'Customize' tab"
   },
+  "filtersavewarning":{
+    "message":"小心: 如果在這裡的設定出錯，包含官方的過濾清單，可能會失效！\n參閱[[過濾規則語法教學]]來正確地添加進階黑名單、白名單規則。",
+    "description":"Warning when manually editing filters."
+  },
   "savebutton":{
     "message":"儲存",
     "description":"Save button"
@@ -427,9 +471,17 @@
     "message":"AdBlock - 廣告回報",
     "description":"Title of the ad report page"
   },
+  "adreportintro":{
+    "message":"在網頁上發現一則廣告？我們會幫你找到正確的地方來回報它 ！",
+    "description":"Introduction of the ad reporting page"
+  },
   "malwarenotificationcheckboxmessage":{
     "message":"在 AdBlock 檢測到惡意軟體時發出通知",
     "description":"Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
+  },
+  "malwarenotificationmessage":{
+    "message":"AdBlock 已阻止一個檔案從惡意網站下載。",
+    "description":"Notification when a potential malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
     "message":"瞭解更多惡意軟體的相關資訊",
@@ -439,9 +491,25 @@
     "message":"停用這些通知",
     "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
+  "malwarecheck":{
+    "message":"檢查可能內藏廣告的惡意軟體︰",
+    "description":"Section header on the ad report page"
+  },
   "malwarenotfound":{
     "message":"沒有偵測到已知的惡意軟體",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
+  },
+  "disableaa":{
+    "message":"檢查可接受廣告篩選器:",
+    "description":"Section header on the ad report page"
+  },
+  "adreportthanks":{
+    "message":"謝謝您！",
+    "description":"Message to the user thanking them for sharing the URL with us."
+  },
+  "clickupdatefilters":{
+    "message":"點選: [[更新過濾清單！]]",
+    "description":"Instruction on ad report page"
   },
   "reloadadpage":{
     "message":"重新載入出現廣告的頁面。",
@@ -459,6 +527,10 @@
     "message":"否",
     "description":"A negative response to a question"
   },
+  "clickdisableotherextensions":{
+    "message":" 或者 , 按下此按鈕以便完成上述所有操作: [[ 停用所有擴充 ]]",
+    "description":"On the ad report page, an alternative way to disable other extensions"
+  },
   "enableotherextensionscomplete":{
     "message":"所有先前停用的擴充已重新啟用",
     "description":"On the ad report page, alert notifying users that we've re-enabled extensions that were previously disabled"
@@ -466,6 +538,10 @@
   "manuallyenableotherextensions":{
     "message":"請至擴充頁面來啟用您以前曾經停用的擴充",
     "description":"On the ad report page, alert notifying users that they will need to manually reenable the extensions"
+  },
+  "disableforchromeandsafaristeptwo":{
+    "message":"除了 AdBlock 維持勾選以外，取消所有其他擴充的『啟用』核取方塊",
+    "description":"Step 2 for disabling Chrome and Safari extensions"
   },
   "disableforsafaristepone":{
     "message":"選擇 Safari 選單 > 設定 > 擴充",
@@ -599,6 +675,10 @@
     "message":"中文",
     "description":"A filter list"
   },
+  "filter_chinese":{
+    "message":"中文 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterdanish":{
     "message":"丹麥文",
     "description":"A filter list"
@@ -614,6 +694,10 @@
   "filtereasylist_plus_french":{
     "message":"法文",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_french":{
+    "message":"法文 + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_german":{
     "message":"德文",
@@ -684,6 +768,14 @@
         "example":"French"
       }
     }
+  },
+  "checkinfirefoxtitle":{
+    "message":"在 Firefox中檢查 ",
+    "description":"Tell a user to see if a reported ad also appears in Firefox"
+  },
+  "checkinfirefox_1":{
+    "message":"如果您尚未安裝的話，請先安裝 Firefox",
+    "description":"instruction for how to check Firefox for a reported ad"
   },
   "ff_checkinchrometitle":{
     "message":"在 Chrome 中檢查",
@@ -847,6 +939,10 @@
     "message":"想付多少，就付多少！",
     "description":"Text of a payment request link"
   },
+  "privacy_policy":{
+    "message":"隱私權政策",
+    "description":"Link to AdBlock's privacy policy"
+  },
   "translator_credit":{
     "message":"翻譯貢獻:",
     "description":"This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
@@ -858,6 +954,10 @@
   "report_ad_on_page":{
     "message":"回報這個頁面的廣告",
     "description":"Entry in the AdBlock button menu"
+  },
+  "acceptableadsoption":{
+    "message":"允許部分非侵入式廣告",
+    "description":"Checkbox on the 'General' tab of the Options page to enable the Acceptable Ads filter list"
   },
   "advanced_options2":{
     "message":"我是進階玩家，請顯示進階選項",
@@ -875,6 +975,10 @@
     "message":"頁面:",
     "description":"Caption for the whitelist wizard slider that modifies the path part of a URL"
   },
+  "show_ads_except_for":{
+    "message":"顯示廣告 在所有網站 除了這些網域...",
+    "description":"Section title for the whitelisting section of Customize tab"
+  },
   "only_block_ads_on_these_sites":{
     "message":"只在以下網站啟用:",
     "description":"Label for textbox where user enters a list of sites on Customize tab"
@@ -886,6 +990,10 @@
   "storage_quota_exceeded":{
     "message":"你超出了 AdBlock 能使用的儲存空間。 請取消訂閱一些清單!",
     "description":"Message shown when the user uses more storage than allowed by the browser."
+  },
+  "safari50_updatenotice":{
+    "message":"你正在使用舊版的 Safari，請 [[升級您的瀏覽器 ]] 以便使用在工具列按鈕中暫停 AdBlock，白名單，回報廣告等等最新的功能。",
+    "description":"A message shown to Safari 5.0 users urging them to upgrade"
   },
   "blocked_ads":{
     "message":"被阻擋的廣告：",
@@ -911,6 +1019,10 @@
       }
     }
   },
+  "show_on_adblock_button":{
+    "message":"在 AdBlock 按鈕上顯示阻擋的廣告數量",
+    "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
   "show_on_adblock_menu":{
     "message":"在選單中顯示 AdBlock 阻擋了多少廣告",
     "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
@@ -927,9 +1039,27 @@
     "message":"自訂過濾清單",
     "description":"Subtitle on the Filter lists tab: Section for adding your own filter lists."
   },
+  "customfilterserrormessage":{
+    "message":"以下過濾器 \n $filter$ \n 有錯誤訊息：\n $message$",
+    "description":"Error message when there is an issue with a custom filter on the 'Customize' tab of the Options page",
+    "placeholders":{
+      "filter":{
+        "content":"$1",
+        "example":"@@.ad"
+      },
+      "message":{
+        "content":"$2",
+        "example":"invalid filter"
+      }
+    }
+  },
   "languagedropdowndescription":{
     "message":"替其他語言新增過濾清單 ",
     "description":"Dropdown list for language-specific filter lists"
+  },
+  "how":{
+    "message":"怎麼做？",
+    "description":"Text of a link pointing to instructions on how to do something"
   },
   "whats_this":{
     "message":"這是？",
@@ -946,6 +1076,10 @@
   "adblocksupport":{
     "message":"AdBlock 支援與協助",
     "description":"Title of the Support tab of the Options page"
+  },
+  "whatsnew":{
+    "message":"在新版中有哪些新功能？ 請參考 [[更新日誌]]！",
+    "description":"Link to display the changelog on the Support tab"
   },
   "englishonly":{
     "message":"僅限英文",
@@ -967,6 +1101,38 @@
     "message":"有任何問題或者是新的點子？",
     "description":"Subtitle on the Support tab"
   },
+  "sourcecode":{
+    "message":"原始碼是[[ 開源的 ]]！",
+    "description":"Link to the source code of AdBlock on the Support tab"
+  },
+  "debuginfo":{
+    "message":"我們的研發團隊有像您索取除錯資訊(debug info) ?  [[點我]]取得這些資訊 ！",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "supportsite":{
+    "message":"請來我們的[[技術與支援網站]]讓我們聆聽您的意見！",
+    "description":"Link to the support site on the Support tab"
+  },
+  "ad_report_please":{
+    "message":"如果你看到了廣告，請[[回報廣告]]而不是回報bug",
+    "description":"Link to the ad report page on AdBlock's help site. This is found on the Support tab of the options."
+  },
+  "resourceblocktitle":{
+    "message":"所有資源",
+    "description":"Resource list page name"
+  },
+  "headerresource":{
+    "message":"資源",
+    "description":"Resource list page: title of a column"
+  },
+  "headertype":{
+    "message":"類型",
+    "description":"Resource list page: title of a column"
+  },
+  "typeselector":{
+    "message":"選取器",
+    "description":"A resource type"
+  },
   "typesub_frame":{
     "message":"frame",
     "description":"A resource type"
@@ -974,5 +1140,81 @@
   "typemain_frame":{
     "message":"page",
     "description":"A resource type"
+  },
+  "topframe":{
+    "message":"頂端框架",
+    "description":"Resource list page: frame type"
+  },
+  "legend":{
+    "message":"圖例: ",
+    "description":"Resource list page: followed by color codes for various resource statuses (blocked, whitelisted, hidden)"
+  },
+  "blockedresource":{
+    "message":"已阻擋的資源",
+    "description":"Resource list page: resource status"
+  },
+  "whitelistedresource":{
+    "message":"已允許的資源",
+    "description":"Resource list page: resource status"
+  },
+  "hiddenelement":{
+    "message":"隱藏元素",
+    "description":"Resource list page: resource status"
+  },
+  "thirdparty":{
+    "message":"第三方",
+    "description":"Resource list page: column title telling if the resource originates from a different domain"
+  },
+  "adreport_laststep":{
+    "message":"最後一步驟：向我們回報問題",
+    "description":"Subtitle on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
+  },
+  "adreport_name":{
+    "message":"請輸入您的名稱：",
+    "description":"Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email":{
+    "message":"請輸入您的電子郵件地址：",
+    "description":"Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
+  "adreport_email_privacy":{
+    "message":"我們只會在需要詳細資訊時聯絡您。",
+    "description":"Let the user know that their email address won't be used for reasons other than contacting them about their bug or ad report."
+  },
+  "adreport_location":{
+    "message":"請描述廣告位於頁面中的確切位置及其長相：",
+    "description":"Question on the ad report page asking the user to describe the ad and its location on a webpage."
+  },
+  "adreport_screen_cap_upload":{
+    "message":"附上螢幕截圖",
+    "description":"Label next to a file upload button."
+  },
+  "buttonsubmit":{
+    "message":"送出",
+    "description":"Button to send a form."
+  },
+  "adreport_missing_info":{
+    "message":"必填資訊為空或不符。請修改標記紅框的格子。",
+    "description":"Error message shown when the user doesn't enter anything in some of the text fields."
+  },
+  "adreport_missing_screenshot":{
+    "message":"您忘了附上截圖！我們在無法在找不到廣告的情況下幫助您。",
+    "description":"Error message shown when the user doesn't attach a screenshot to an ad report."
+  },
+  "adreport_response_invalid_file":{
+    "message":"這個檔案不是圖片。請上傳 .png、.gif 或 .jpg 的檔案。",
+    "description":"Error message shown when the user uploads an invalid file type."
+  },
+  "adreport_response_large_file":{
+    "message":"檔案大小太大。請確認檔案小於 10 MB。",
+    "description":"Error message shown when the user tries to upload a large image file."
+  },
+  "adreport_response_save_error":{
+    "message":"儲存上傳的檔案時發生錯誤。",
+    "description":"Error message shown when the server could not save an attached file."
+  },
+  "adreport_response_file_name":{
+    "message":"檔案名稱過長。請使用簡短的檔案名稱。",
+    "description":"Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
   }
 }

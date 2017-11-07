@@ -367,6 +367,10 @@
     "message":"Cuantas más listas de filtros uses, más lentamente se ejecutará AdBlock. Utilizar demasiadas listas podría incluso llegar a hacer que el navegador se cerrase inesperadamente en determinados sitios web. Pulsa 'De acuerdo' para ser suscriptor de esta lista de todas formas.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"AdBlock no puede bloquear anuncios si deshabilita todas las listas de filtros. Recomendamos pausar AdBlock en su lugar. ¿Desea anular su suscripción a esta lista?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Suscribirse a listas de filtros",
     "description":"Title of the Filter lists tab of the Options page"
@@ -449,6 +453,10 @@
   },
   "filtermalware":{
     "message":"Protección contra software malicioso",
+    "description":"A filter list"
+  },
+  "filterbitcoin_mining_protection":{
+    "message":"Lista de protección minera de criptomoneda (Bitcoin)",
     "description":"A filter list"
   },
   "filterlatvian":{
@@ -1135,9 +1143,17 @@
     "message":"AdBlock está desactivado en esta página.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
   },
+  "disabled_on_this_channel":{
+    "message":"Ha permitido anuncios en este canal.",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
+  },
   "enable_adblock":{
     "message":"Habilitar AdBlock en esta página",
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
+  },
+  "enable_adblock_on_this_channel":{
+    "message":"Bloquear anuncios en este canal",
+    "description":"Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
   },
   "status_paused":{
     "message":"AdBlock está pausado.",
@@ -1198,6 +1214,10 @@
   "donate_to_adblock":{
     "message":"¿Te encanta AdBlock? ¡Considera hacer una donación!",
     "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"Ayuda y comentarios",
+    "description":"Text of a help link in the toolbar button menu"
   },
   "donate_to_youtube_adblock":{
     "message":"¿Te encanta AdBlock para YouTube? ¡Considera hacer una donación!",
@@ -1385,6 +1405,10 @@
     "message":"Todas tus suscripciones a canales de YouTube™ se incluyeron en la lista blanca",
     "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
+  "allow_ads_all_youtube_channels":{
+    "message":"Permitir anuncios en todos los canales de YouTube™ suscritos",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
   "whitelist_youtube_channel":{
     "message":"No se bloquean anuncios en el canal $name$",
     "description":"Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
@@ -1394,6 +1418,10 @@
         "example":"Name of channel"
       }
     }
+  },
+  "whitelist_youtube_channel_v2":{
+    "message":"Permitir anuncios en el canal de YouTube™:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters":{
     "message":"¿Estás seguro de que quieres eliminar los $count$ bloqueos que has creado para $host$?",
@@ -1580,6 +1608,22 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"Puedes volver a activar esto y ayudar a los sitios que te gustan seleccionando \"Permitir alguna publidad no intrusiva\".",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlock utiliza EasyList para bloquear anuncios en la mayoría de los sitios web.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"Recomendamos mantenerlo activado. Si ha cancelado la suscripción por accidente, seleccione \"EasyList\" para bloquear más anuncios.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock utiliza EasyList Lite o EasyList para bloquear anuncios en la mayoría de los sitios web.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"Recomendamos mantenerlo activado. Si ha cancelado la suscripción por accidente, seleccione \"EasyList Lite\" o \"EasyList\" para bloquear más anuncios.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
   },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Hemos eliminado tu suscripción a Anuncios Aceptables ya que tienes activado el Bloqueador de Contenidos de Safari. Sólo puedes tener una de las dos opciones activada a la vez. ([[¿Por qué?]])",

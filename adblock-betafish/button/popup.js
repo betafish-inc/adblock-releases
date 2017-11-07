@@ -74,6 +74,16 @@ $(function ()
       });
     }
 
+    // Show survey link until it is clicked.
+    $("#survey_link_div").
+    toggle(!info.settings.survey_1_link_clicked && chrome.i18n.getUILanguage().startsWith('en')).
+    click(function() {
+        BG.setSetting('survey_1_link_clicked', true);
+        ext.pages.open($('#survey_link').attr("href"));
+        $(this).hide();
+        closeAndReloadPopup();
+    });
+
     var host = parseUri(page.unicodeUrl).host;
     var advancedOption = info.settings.show_advanced_options;
     var eligibleForUndo = !paused && (info.disabledSite || !info.whitelisted);
