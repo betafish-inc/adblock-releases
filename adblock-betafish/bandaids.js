@@ -44,81 +44,6 @@ if ( !abort ) {
     abort = /^192\.168\.\d+\.\d+$/.test(hostname);
 }
 
-var instartLogicBusterV3 = function() {
-  (function() {
-    document.cookie = "morphi10c=1;max-age=86400";
-    var mutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-    DOMParser.prototype.parseFromString = function() { };
-    document.createRange = function() { };
-    var abCreateElement = document.createElement;
-    var abCreateElementNS = document.createElementNS;
-    var addEmptyAccessors = function(newElement, args) {
-      var abAddEventListener = newElement.addEventListener;
-      newElement.addEventListener = function() {
-        var eventArgs = Array.prototype.slice.call(arguments);
-        if (eventArgs &&
-            eventArgs.length &&
-            typeof eventArgs[0] === "string" &&
-            (eventArgs[0].toUpperCase() !== "ERROR")) {
-          abAddEventListener.apply(this, eventArgs);
-        }
-      };
-    };
-    var addObserver = function(newElement) {
-        var observer = new mutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.target &&
-                       mutation.target.id &&
-                       mutation.target.parentNode &&
-                       (mutation.target.id.indexOf("_ads") > -1 ||
-                        mutation.target.id.indexOf("google") > -1 ||
-                        mutation.target.id.indexOf("zbi") > -1 ||
-                        mutation.target.id.indexOf("fb_xdm_frame") > -1)) {
-              mutation.target.parentNode.removeChild(mutation.target);
-            }
-          });
-        });
-        observer.observe(newElement, {
-          'attributes': true
-        });
-    };
-    var checkIfFrame = function(newElement, args) {
-      if (args &&
-          args.length &&
-          typeof args[0] === "string" &&
-          (args[0].toUpperCase() === "IFRAME" ||
-           args[0].toUpperCase() === "DIV")) {
-        addObserver(newElement);
-      }
-      if (args &&
-          args.length > 1 &&
-          typeof args[1] === "string" &&
-          (args[1].toUpperCase() === "IFRAME" ||
-           args[1].toUpperCase() === "DIV")) {
-        addObserver(newElement);
-      }
-    };
-    document.createElement = function() {
-      var args = Array.prototype.slice.call(arguments);
-      var newElement = abCreateElement.apply(this, args);
-      addEmptyAccessors(newElement, args);
-      checkIfFrame(newElement, args);
-      return newElement;
-    };
-    document.createElementNS = function() {
-      var args = Array.prototype.slice.call(arguments);
-      var newElement = abCreateElementNS.apply(this, args);
-      addEmptyAccessors(newElement, args);
-      checkIfFrame(newElement, args);
-      return newElement;
-    };
-  })();
-};
-
-var instartLogicBusterV2DomainsRegEx = /(^|\.)(calgaryherald\.com|edmontonjournal\.com|edmunds\.com|financialpost\.com|leaderpost\.com|montrealgazette\.com|nationalpost\.com|ottawacitizen\.com|theprovince\.com|thestarphoenix\.com|windsorstar.com)$/;
-
-var instartLogicBusterV1DomainsRegEx = /(^|\.)(baltimoresun\.com|boston\.com|capitalgazette\.com|carrollcountytimes\.com|celebuzz\.com|celebslam\.com|chicagotribune\.com|computershopper\.com|courant\.com|dailypress\.com|deathandtaxesmag\.com|extremetech\.com|gamerevolution\.com|geek\.com|gofugyourself\.com|hearthhead\.com|infinitiev\.com|lolking.net|mcall\.com|mmo-champion\.com|nasdaq\.com|orlandosentinel\.com|pcmag\.com|ranker\.com|sandiegouniontribune\.com|saveur\.com|sherdog\.com|\.spin\.com|sporcle\.com|stereogum\.com|sun-sentinel\.com|thefrisky\.com|thesuperficial\.com|timeanddate\.com|tmn\.today|twincities\.com|vancouversun\.com|vibe\.com|weather\.com)$/;
-
 var getAdblockDomain = function() {
   adblock_installed = true;
 };
@@ -127,15 +52,177 @@ var getAdblockDomainWithUserID = function(userid) {
   adblock_userid = userid;
 };
 
+// instartLogicBusterV1 consists of code borrowed from
+// https://github.com/gorhill/uBO-Extra which is licensed
+// under the GNU General Public License v3.0
+var instartLogicBusterV1 = function() {
+  (function() {
+    var magic = String.fromCharCode(Date.now() % 26 + 97) +
+                Math.floor(Math.random() * 982451653 + 982451653).toString(36),
+        targets = [ 'atob', 'console.error', 'INSTART', 'performance', 'require' ],
+        reScriptText = /\b(?:Instart-|I10C|IXC_|INSTART)/,
+        reScriptSrc = /\babd.*?\/instart.js/;
+    var validate = function() {
+        var script = document.currentScript;
+        if ( script instanceof HTMLScriptElement === false ) { return; }
+        if ( script.src === '' ) {
+            if ( reScriptText.test(script.textContent) ) {
+                throw new ReferenceError(magic);
+            }
+        } else if ( reScriptSrc.test(script.src) ) {
+            throw new ReferenceError(magic);
+        }
+    };
+    var makeGetterSetter = function(owner, prop) {
+        var value = owner[prop];
+        return {
+            get: function() {
+                validate();
+                return value;
+            },
+            set: function(a) {
+                validate();
+                value = a;
+            }
+        };
+    };
+    var i = targets.length,
+        owner, target, chain, prop;
+    while ( i-- ) {
+        owner = window;
+        target = targets[i];
+        chain = target.split('.');
+        for (;;) {
+            prop = chain.shift();
+            if ( chain.length === 0 ) { break; }
+            owner = owner[prop];
+        }
+        Object.defineProperty(owner, prop, makeGetterSetter(owner, prop));
+    }
+    var oe = window.onerror;
+    window.onerror = function(msg) {
+        if ( typeof msg === 'string' && msg.indexOf(magic) !== -1 ) {
+            return true;
+        }
+        if ( oe instanceof Function ) {
+            return oe.apply(this, arguments);
+        }
+    }.bind();
+  })();
+};
+
+// instartLogicBusterV2 consists of code borrowed from
+// https://github.com/gorhill/uBO-Extra which is licensed
+// under the GNU General Public License v3.0
+var instartLogicBusterV2 = function() {
+  (function(){
+    var magic = String.fromCharCode(Date.now() % 26 + 97) +
+                Math.floor(Math.random() * 982451653 + 982451653).toString(36);
+    var makeNanovisorProxy = function() {
+        return new Proxy({}, {
+            get: function(target, name) {
+                switch ( name ) {
+                case 'HtmlStreaming':
+                    return {
+                        InsertTags: function(a, b) {
+                            document.write(b); // jshint ignore:line
+                        },
+                        InterceptNode: function() {
+                        },
+                        PatchBegin: function() {
+                        },
+                        PatchEnd: function() {
+                        },
+                        PatchInit: function() {
+                        },
+                        ReloadWithNoHtmlStreaming: function() {
+                            window.location.reload(true);
+                        },
+                        RemoveTags: function() {
+                        },
+                        UpdateAttributes: function() {
+                        }
+                    };
+                default:
+                    return target[name];
+                }
+            },
+            set: function(target, name, value) {
+                switch ( name ) {
+                case 'CanRun':
+                    target.CanRun = function() {
+                        return false;
+                    };
+                    break;
+                default:
+                    target[name] = value;
+                }
+            }
+        });
+    };
+    var instartInit;
+    window.I10C = window.I11C = makeNanovisorProxy();
+    window.INSTART = new Proxy({}, {
+        get: function(target, name) {
+            switch ( name ) {
+            case 'Init':
+                return function(a) {
+                    if (
+                        a instanceof Object &&
+                        typeof a.nanovisorGlobalNameSpace === 'string' &&
+                        a.nanovisorGlobalNameSpace !== ''
+                    ) {
+                        window[a.nanovisorGlobalNameSpace] = makeNanovisorProxy();
+                    }
+                    a.enableHtmlStreaming = false;
+                    a.enableQSCallDiffComputationConfig = false;
+                    a.enableQuerySelectorMonitoring = false;
+                    a.serveNanovisorSameDomain = false;
+                    a.virtualDomains = 0;
+                    a.virtualizeDomains = [];
+                    instartInit(a);
+                };
+            default:
+                if ( target[name] === undefined ) {
+                    throw new Error(magic);
+                }
+                return target[name];
+            }
+        },
+        set: function(target, name, value) {
+            switch ( name ) {
+            case 'Init':
+                instartInit = value;
+                break;
+            default:
+                target[name] = value;
+            }
+        }
+    });
+    var oe = window.error;
+    window.onerror = function(msg, src, line, col, error) {
+        if ( msg.indexOf(magic) !== -1 ) {
+            return true;
+        }
+        if ( oe instanceof Function ) {
+            return oe(msg, src, line, col, error);
+        }
+    }.bind();
+  })();
+};
+
+/*******************************************************************************
+    Collate and add scriptlets to document.
+**/
+
+var instartLogicBusterV2DomainsRegEx = /(^|\.)(calgaryherald\.com|edmontonjournal\.com|edmunds\.com|financialpost\.com|leaderpost\.com|montrealgazette\.com|nationalpost\.com|ottawacitizen\.com|theprovince\.com|thestarphoenix\.com|windsorstar\.com)$/;
+
+var instartLogicBusterV1DomainsRegEx = /(^|\.)(afterellen\.com|baltimoresun\.com|boston\.com|calgaryherald\.com|calgarysun\.com|capitalgazette\.com|carrollcountytimes\.com|cattime\.com|chicagotribune\.com|chowhound\.com|chroniclelive\.co\.uk|citypaper\.com|cnet\.com|comingsoon\.net|computershopper\.com|courant\.com|craveonline\.com|csgoutpost\.com|ctnow\.com|cycleworld\.com|dailydot\.com|dailypress\.com|dayzdb\.com|deathandtaxesmag\.com|delmartimes\.net|dogtime\.com|dotaoutpost\.com|download.cnet\.com|edmontonjournal\.com|edmontonsun\.com|edmunds\.com|esohead\.com|everydayhealth\.com|everquest.allakhazam\.com|extremetech\.com|fieldandstream\.com|financialpost\.com|focus.de|gamerevolution\.com|geek\.com|gofugyourself\.com|growthspotter\.com|hearthhead\.com|hockeysfuture\.com|hoylosangeles\.com|ibtimes\.com|infinitiev\.com|lajollalight\.com|leaderpost\.com|legacy\.com|lifewire\.com|livescience\.com|lolking\.net|mcall\.com|mamaslatinas\.com|metacritic\.com|metrolyrics\.com|mmo-champion\.com|momtastic\.com|montrealgazette\.com|msn\.com|musicfeeds.com.au|mustangandfords\.com|nasdaq\.com|nationalpost\.com|newsarama\.com|orlandosentinel\.com|ottawacitizen\.com|ottawasun\.com|pcmag\.com|playstationlifestyle\.net|popphoto\.com|popsci\.com|ranchosantafereview\.com|ranker\.com|realclearpolitics\.com|realitytea\.com|redeyechicago\.com|sandiegouniontribune\.com|saveur\.com|seattlepi\.com|sherdog\.com|slate\.com|southflorida\.com|space\.com|spin\.com|sporcle\.com|sportingnews\.com|stereogum\.com|sun-sentinel\.com|superherohype\.com|tf2outpost\.com|thebalance\.com|thefashionspot\.com|theprovince\.com|thespruce\.com|thestarphoenix\.com|thoughtco\.com|timeanddate\.com|tomshardware\.co\.uk|tomshardware\.com|tomshardware\.de|tomshardware\.fr|torontosun\.com|totalbeauty\.com|trustedreviews\.com|tv\.com|twincities\.com|vancouversun\.com|vibe\.com|washingtonpost\.com|wikia\.com|windsorstar\.com|winnipegsun\.com|wowhead\.com|wrestlezone\.com|zam\.com)$/;
+
 (function() {
     'use strict';
 
     if ( abort ) {
-      return;
-    }
-
-    // Only for dynamically created frames and http/https documents.
-    if ( /^(https?:|about:)/.test(window.location.protocol) !== true ) {
       return;
     }
 
@@ -148,13 +235,16 @@ var getAdblockDomainWithUserID = function(userid) {
       return;
     }
 
+    // Only for dynamically created frames and http/https documents.
+    if ( /^(https?:|about:)/.test(window.location.protocol) !== true ) {
+      return;
+    }
+
     var doc = document;
     var parent = doc.head || doc.documentElement;
     if ( parent === null ) {
       return;
     }
-
-    var scriptText = [];
 
     // Have the script tag remove itself once executed (leave a clean
     // DOM behind).
@@ -165,27 +255,27 @@ var getAdblockDomainWithUserID = function(userid) {
         }
     };
 
+    var scriptText = [];
     if (instartLogicBusterV2DomainsRegEx.test(hostname) === true ) {
-      scriptText.push('(' + instartLogicBusterV3.toString() + ')();');
+      scriptText.push('(' + instartLogicBusterV2.toString() + ')();');
     }
-    else if (instartLogicBusterV1DomainsRegEx.test(hostname) === true ) {
-      scriptText.push('(' + instartLogicBusterV3.toString() + ')();');
+    if (instartLogicBusterV1DomainsRegEx.test(hostname) === true ) {
+      scriptText.push('(' + instartLogicBusterV1.toString() + ')();');
     }
-    else if ('getadblock.com' === document.location.hostname ||
+    if ('getadblock.com' === document.location.hostname ||
         'dev.getadblock.com' === document.location.hostname) {
-      scriptText.push('(' + getAdblockDomain.toString() + ')();');
       chrome.storage.local.get('userid', function (response) {
         var adblock_user_id = response['userid'];
         var elem = document.createElement('script');
-        scriptText.push('(' + getAdblockDomainWithUserID.toString() + ')(\'' + adblock_user_id + '\');' +
-        '(' + cleanup.toString() + ')();');
-        elem.appendChild(document.createTextNode(scriptText.join('\n')));
+        var scriptToInject = '(' + getAdblockDomain.toString() + ')();' +
+            '(' + getAdblockDomainWithUserID.toString() + ')(\'' + adblock_user_id + '\');' +
+            '(' + cleanup.toString() + ')();';
+        elem.appendChild(document.createTextNode(scriptToInject));
         try {
             (document.head || document.documentElement).appendChild(elem);
         } catch(ex) {
         }
       });
-      return;
     }
 
     if ( scriptText.length === 0 ) { return; }

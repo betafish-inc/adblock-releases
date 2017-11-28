@@ -263,6 +263,14 @@
     "message":"Schakel Safari Materiaalblokkering in",
     "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
   },
+  "debuginlogoption":{
+    "message":"Toon debug resultaten in de Console Logs (dit vertraagt AdBlock)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption":{
+    "message":"Sta AdBlock toe om anonieme gebruiksinformatie over de filters en over de geblokkeerde inhoud te verzamelen",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
   "updatedrightnow":{
     "message":"zojuist bijgewerkt",
     "description":"Label for filter list subscription"
@@ -359,6 +367,10 @@
     "message":"Hoe meer filters je gebruikt, hoe langzamer AdBlock wordt. Teveel filters kunnen zelfs je browser laten crashen. Klik op OK om je toch aan te melden voor deze filter.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"AdBlock kan geen advertenties blokkeren als je alle filters uitgeschakeld hebt. We raden je aan om AdBlock in plaats daarvan te pauzeren. Jezelf toch nog uitschrijven uit deze lijst?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Aanmelden voor officiële filters",
     "description":"Title of the Filter lists tab of the Options page"
@@ -408,7 +420,7 @@
     "description":"A filter list"
   },
   "filtereasylist_lite":{
-    "message":"EasyList Lite (aanbevolen)",
+    "message":"EasyList Lite",
     "description":"A filter list"
   },
   "filterrussian":{
@@ -441,6 +453,10 @@
   },
   "filtermalware":{
     "message":"Malware bescherming",
+    "description":"A filter list"
+  },
+  "filterbitcoin_mining_protection":{
+    "message":"Cryptocurrency (Bitcoin) Mining Beschermingslijst",
     "description":"A filter list"
   },
   "filterlatvian":{
@@ -518,6 +534,14 @@
   "filtersavewarning":{
     "message":"Pas op: als je hier een fout maakt kunnen de andere filters, inclusief de officiële, onbruikbaar worden!\nLees de [[filter syntaxis uitleg (Engelstalig)]] voor meer informatie over het maken van filters.",
     "description":"Warning when manually editing filters."
+  },
+  "filtersavewarning_ytadblock_1":{
+    "message":"Let op: als je hier een fout maakt, zou AdBlock kunnen stoppen met functioneren op YouTube™.",
+    "description":"First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
+  },
+  "filtersavewarning_ytadblock_2":{
+    "message":"Lees de [[filter syntaxis tutorial]] om te leren hoe je whitelist filters kan toevoegen.",
+    "description":"Second part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
   },
   "migration_error_message":{
     "message":"We hebben enkele fouten gevonden in je aangepaste filters. De berichten zijn hieronder weergeven.",
@@ -635,6 +659,10 @@
     "message":"Open de [[extensies pagina]].",
     "description":"Step 1 for disabling Chrome extensions"
   },
+  "clickdisableotherextensions":{
+    "message":"OF, klik gewoon op deze knop om alle bovenstaande handelingen uit te voeren: [[Alle andere extensies uitschakelen]]",
+    "description":"On the ad report page, an alternative way to disable other extensions"
+  },
   "disableotherextensionscomplete":{
     "message":"We hebben alle andere extensies uitgeschakeld. We zullen nu de pagina met de advertentie herladen. Eventjes geduld aub.",
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
@@ -654,6 +682,10 @@
   "disableforsafaristepone":{
     "message":"Klik op het Safari menu > Voorkeuren > Extensies.",
     "description":"Step 1 for disabling Safari extensions"
+  },
+  "disableforedgestepone":{
+    "message":"Klik op het Meer menu (...) en selecteer Extensies.",
+    "description":"Step 1 for disabling Edge extensions"
   },
   "reenableadsonebyone":{
     "message":"Geweldig! Laten we nu op zoek gaan naar welke extensie de oorzaak is. Controleer elke extensie en schakel deze een voor een in. De extensie die de advertentie(s) terugbrengt, is degene die je moet verwijderen om van de advertenties af te komen.",
@@ -933,6 +965,10 @@
     "message":"Installeer Firefox of Chrome als je dit nog niet hebt.",
     "description":"instruction for how to check Firefox or Chrome for a reported ad"
   },
+  "checkinfirefoxorchrome_2":{
+    "message":"Installeer AdBlock Plus voor Firefox of AdBlock voor Chrome als je dit niet hebt.",
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
   "checkinfirefox_3":{
     "message":"Abonneer je in die browser op dezelfde filters als in deze browser.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
@@ -1087,9 +1123,17 @@
     "message":"AdBlock is uitgeschakeld voor deze pagina.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
   },
+  "disabled_on_this_channel":{
+    "message":"Je hebt advertenties toegestaan op dit kanaal.",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
+  },
   "enable_adblock":{
     "message":"Activeer AdBlock voor deze pagina",
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
+  },
+  "enable_adblock_on_this_channel":{
+    "message":"Blokkeer advertenties op dit kanaal",
+    "description":"Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
   },
   "status_paused":{
     "message":"AdBlock is gepauzeerd.",
@@ -1151,6 +1195,10 @@
     "message":"Hou je van AdBlock? Overweeg een donatie!",
     "description":"Text of a donate link in the toolbar button menu"
   },
+  "help_and_feedback":{
+    "message":"Help en Feedback",
+    "description":"Text of a help link in the toolbar button menu"
+  },
   "donate_to_youtube_adblock":{
     "message":"Hou je van AdBlock op YouTube? Overweeg een donatie!",
     "description":"Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
@@ -1170,6 +1218,14 @@
   "tabsupport":{
     "message":"Ondersteuning",
     "description":"A tab on the Options page"
+  },
+  "tabtranslations":{
+    "message":"Vertalingen",
+    "description":"A tab on the Options page"
+  },
+  "translators":{
+    "message":"Leer meer over hoe je kan helpen met het vertalen van AdBlock [[here]]",
+    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
   },
   "report_ad_on_page":{
     "message":"Rapporteer een advertentie op deze pagina",
@@ -1247,6 +1303,14 @@
     "message":"Toon het aantal geblokkeerde advertenties in het AdBlock menu",
     "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
+  "show_on_button":{
+    "message":"Toon het aantal geblokkeerde advertenties op de knop",
+    "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_menu":{
+    "message":"Toon het aantal geblokkeerde advertenties in het menu",
+    "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
   "block_ads_on_youtube":{
     "message":"Verwijder advertenties op YouTube™",
     "description":"Label for checkbox letting user choose whether to block ads on youtube.com"
@@ -1254,6 +1318,10 @@
   "block_privacy_on_youtube":{
     "message":"Bescherm mijn privacy op YouTube™",
     "description":"Checkbox letting user choose whether to block privacy-related requests on youtube.com"
+  },
+  "block_annonyances_on_youtube":{
+    "message":"Verwijder ergernissen op YouTube™",
+    "description":"Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
   },
   "show_devtools_panel":{
     "message":"Toon het 'AdBlock' menu bij de developer tools",
@@ -1364,6 +1432,10 @@
   "adblockupdates":{
     "message":"AdBlock updates",
     "description":"Subtitle on the Support tab"
+  },
+  "ytadblockupdates":{
+    "message":"AdBlock op YouTube™ updates",
+    "description":"Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
   },
   "whatmakesadblocktick":{
     "message":"Wil je zien hoe AdBlock werkt?",
@@ -1504,6 +1576,18 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"Je kan dit weer activeren en de websites die je vaak bezoekt ondersteunen door het selectievakje 'Laat sommige, niet-opdringerige advertenties toe' weer aan te vinken.",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_lite_or_easylist":{
+    "message":"We raden je aan om je te abonneren op \"EasyList Lite\" of \"EasyList\", maar niet op beiden tegelijk.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlock gebruikt EasyList om advertenties te blokkeren op de meeste websites.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock gebruikt EasyList Lite of EasyList om advertenties te blokkeren op de meeste websites.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
   },
   "content_blocking_acceptable_ads_disbled_message":{
     "message":"We hebben Safari Content Blocking uitgeschakeld omdat je opteerde om niet-opdringerige advertenties toe te staan. Je kan slechts 1 van deze 2 opties tegelijk selecteren. ([[Waarom?]])",

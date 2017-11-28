@@ -25,6 +25,7 @@ var Synchronizer = require('synchronizer').Synchronizer;
 var Utils = require('utils').Utils;
 var NotificationStorage = require('notification').Notification;
 var punycode = require("punycode");
+const {RegExpFilter} = require("filterClasses");
 
 // TODO
 // Temporary...

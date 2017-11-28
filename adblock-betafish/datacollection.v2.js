@@ -1,8 +1,11 @@
 ﻿DataCollectionV2 = (function()
 {
 
-"use strict";
-
+  "use strict";
+  const {extractHostFromFrame} = require("url");
+  const {RegExpFilter,
+         WhitelistFilter,
+         ElemHideFilter} = require("filterClasses");
   var HOUR_IN_MS = 1000 * 60 * 60;
   var TIME_LAST_PUSH_KEY = "timeLastPush";
 
@@ -10,6 +13,73 @@
   var dataCollectionCache = {};
   dataCollectionCache.filters = {};
   dataCollectionCache.domains = {};
+
+  var handleTabUpdated = function(tabId, changeInfo, tabInfo)
+  {
+    if (chrome.runtime.lastError)
+    {
+      return;
+    }
+    if (!tabInfo || !tabInfo.url)
+    {
+      return;
+    }
+    let url = parseUri(tabInfo.url);
+    if (url.protocol !== "http:" && url.protocol !== "https:")
+    {
+      return;
+    }
+    if (getSettings().data_collection_v2 && !adblockIsPaused() && changeInfo.status === 'loading'  )
+    {
+      chrome.tabs.executeScript(tabId,
+      {
+          file: 'adblock-datacollection-contentscript.js',
+          allFrames: true,
+          runAt: 'document_idle'
+      }, function()
+      {
+        if (chrome.runtime.lastError)
+        {
+          return;
+        }
+      });
+    }
+  };
+
+  var addMessageListener = function()
+  {
+    port.on("datacollection.elementHide", (message, sender) =>
+    {
+      if (getSettings().data_collection_v2 && !adblockIsPaused())
+      {
+        var selectors = message.selectors;
+        var filters = message.filters;
+        var docDomain = extractHostFromFrame(sender.frame);
+
+        for (let subscription of FilterStorage.subscriptions)
+        {
+          if (subscription.disabled)
+            continue;
+
+          for (let filter of subscription.filters)
+          {
+            // We only know the exact filter in case of element hiding emulation.
+            // For regular element hiding filters, the content script only knows
+            // the selector, so we have to find a filter that has an identical
+            // selector and is active on the domain the match was reported from.
+            let isActiveElemHideFilter = filter instanceof ElemHideFilter &&
+                                         selectors.includes(filter.selector) &&
+                                         filter.isActiveOnDomain(docDomain);
+
+            if (isActiveElemHideFilter || filters.includes(filter.text))
+            {
+              addFilterToCache(filter, sender.page);
+            }
+          }
+        }
+      }
+    });
+  };
 
   var webRequestListener = function(details)
   {
@@ -24,11 +94,8 @@
     }
   };
 
-  var filterListener = function(item, newValue, oldValue, page)
+  var addFilterToCache = function(filter, page)
   {
-    if (getSettings().data_collection_v2 && !adblockIsPaused())
-    {
-      var filter = item;
       if (filter && filter.text && (typeof filter.text === 'string') && page && page.url)
       {
         var domain = parseUri(page.url).host;
@@ -74,6 +141,13 @@
           });
         }
       }
+  };
+
+  var filterListener = function(item, newValue, oldValue, page)
+  {
+    if (getSettings().data_collection_v2 && !adblockIsPaused())
+    {
+      addFilterToCache(item, page);
     }
     else
     {
@@ -104,7 +178,7 @@
               subscribedSubs.push("customlist");
             }
             var data = {
-              version:                 "3",
+              version:                 "4",
               addonName:               require("info").addonName,
               addonVersion:            require("info").addonVersion,
               application:             require("info").application,
@@ -169,6 +243,8 @@
       }, HOUR_IN_MS);
       FilterNotifier.on("filter.hitCount", filterListener);
       chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["http://*/*", "https://*/*"],types: ["main_frame"] });
+      chrome.tabs.onUpdated.addListener(handleTabUpdated);
+      addMessageListener();
     }
   });// End of then
 
@@ -179,13 +255,16 @@
     dataCollectionCache.domains = {};
     FilterNotifier.on("filter.hitCount", filterListener);
     chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["http://*/*", "https://*/*"],types: ["main_frame"] });
+    chrome.tabs.onUpdated.addListener(handleTabUpdated);
+    addMessageListener();
   };
   returnObj.end = function()
   {
     dataCollectionCache = {};
     FilterNotifier.off("filter.hitCount", filterListener);
     chrome.webRequest.onBeforeRequest.removeListener(webRequestListener);
-    ext.storage.remove(TIME_LAST_PUSH_KEY)
+    ext.storage.remove(TIME_LAST_PUSH_KEY);
+    chrome.tabs.onUpdated.removeListener(handleTabUpdated);
   };
   returnObj.getCache = function()
   {

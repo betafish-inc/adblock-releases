@@ -2,6 +2,18 @@
 
 UNRELEASED:
 
+3.21.0:
+- Removed the menu option for a user survey. (#280)
+- Updated the logic for the optional filter list data collection to include hiding filters.  (#279)
+- Updated translations
+
+3.20.0:
+- Updated 'bandaids' processing to help block ads on certain web sites. (#278)
+- Updated translations
+
+3.19.1:
+- Fixed an issue with the 'Enable AdBlock on this page' AdBlock menu item. (#277)
+
 3.19.0:
 - Updated translations
 - Updated to ABP Core 1.13.4 (#275)
@@ -16,7 +28,7 @@ UNRELEASED:
 
 3.17.0:
 - Updated translations
-- Show the /update page to non-English users that didn't see the 3.16 update. (#265)
+- Show the /update page to non-English users that did not see the 3.16 update. (#265)
 - Fixed a typo in the unsubscribe warning cookie on the Filter Lists tab of the AdBlock options page. (#267)
 
 3.16.0:
@@ -313,7 +325,7 @@ UNRELEASED:
 2.36:
 - Added an if check to verify that domain is not undefined when processing URLs. (#579)
 - Changed the order of evaluation in the Survey processing. (#576)
-- Update the JavaScript error processing to include the stack trace information if it doesn't include an HTTP URL. (#575)
+- Update the JavaScript error processing to include the stack trace information if it does not include an HTTP URL. (#575)
 - Updated the white-list filters for showing ads on Google Search when the 'show Google ads' option is enabled. (#573)
 - Removed Disconnect search code from AdBlock. (#568)
 - Update the height of the Subscribe popup. (#491)
@@ -408,7 +420,7 @@ UNRELEASED:
 - Added additional CSS to whitelist/blacklist dialogs to avoid display issues on some websites. (#460)
 - Removed an unnecessary call to sendResponse. (#484)
 - For Chrome users, added a user confirmation prompt when subscribing to a new filter lists using the ABP syntax. (#486)
-- Fixed an issue when the request URL didn't contain a '.' (#500)
+- Fixed an issue when the request URL does not contain a '.' (#500)
 - Updated the Chrome web store description.(#501)
 
 2.20.1:
@@ -440,7 +452,7 @@ UNRELEASED:
 - Added the list of hiding rules to the AdBlock 'Show the Resources list' page for Safari users. (#408)
 
 2.16.3:
-- Added the saving of the malware filter list (same as other filter lists), so that the extension doesn't need to do a request when the browser starts up.(#432)
+- Added the saving of the malware filter list (same as other filter lists), so that the extension does not need to do a request when the browser starts up.(#432)
 
 2.16.2:
 - Added control logic to the getting of the malware filter lists (#430)
@@ -641,7 +653,7 @@ UNRELEASED:
 - Added and updated filter lists based on user's localization, added Malware and Antisocial filter list
 - Added RTL function for Arabic and Hebrew users
 - Added language: Norwegian
-- Bugfix: blocked ad count doesn't carry over into new, blank tabs
+- Bugfix: blocked ad count does not carry over into new, blank tabs
 
 2.6.8: Removed crowdfunding message from AdBlock button
 
@@ -738,7 +750,7 @@ UNRELEASED:
 
 2.5.29: Small domain parsing change (famlam), stop using beforeload in Chrome 17+, get rid of 'blocked by third party extension' iframes
 
-2.5.28: Button popup wasn't showing for Chrome 16 users who hadn't set any settings (jaysoffian)
+2.5.28: Button popup was not showing for Chrome 16 users who had not set any settings (jaysoffian)
 
 2.5.27: Fix some websites broken by injecting a LINK tag
 
@@ -798,7 +810,7 @@ UNRELEASED:
 
 2.4.34: Don't break the toolbar button
 
-2.4.33: Store data in Safari settings instead of localStorage, so Safari doesn't wipe it out after Private Browsing
+2.4.33: Store data in Safari settings instead of localStorage, so Safari does not wipe it out after Private Browsing
 
 2.4.32: Fix critical bug breaking Safari after Private Browsing, remove dead Norwegian list (famlam), new jQuery version (famlam)
 
@@ -922,7 +934,7 @@ UNRELEASED:
 
 2.3.5: Try yet again to get the mac-specific Hide Button message correct
 
-2.3.4: Fix a bug: whitelisting a page wasn't updating the toolbar icon immediately (famlam)
+2.3.4: Fix a bug: whitelisting a page was not updating the toolbar icon immediately (famlam)
 
 2.3.3: Show hide button message on install page too
 
@@ -982,11 +994,11 @@ UNRELEASED:
 
 2.2.8: Use less memory in Chrome (famlam)
 
-2.2.7: Vastly simplified mechanism for dealing with ads in Chrome that load before the filter engine is in place (famlam).  Also, we're now at 18 languages -- see http://bit.ly/AdBlockTranslations for the list and for credits!
+2.2.7: Vastly simplified mechanism for dealing with ads in Chrome that load before the filter engine is in place (famlam).  Also, we are now at 18 languages -- see http://bit.ly/AdBlockTranslations for the list and for credits!
 
 2.2.6: Memory and speed improvements (famlam)
 
-2.2.5: Don't let users try to block the BODY tag
+2.2.5: Do not let users try to block the BODY tag
 
 2.2.4: typo
 
@@ -1036,13 +1048,13 @@ UNRELEASED:
 
 2.0.24: Support object-subrequest a little better.  Ask for fewer ad reports to hopefully improve the signal to noise ratio.
 
-2.0.23: Ignore certain filters that Webkit doesn't parse properly
+2.0.23: Ignore certain filters that Webkit does not parse properly
 
 2.0.22: Fix some Safari issues causing ads to slip through, and improve Chrome and Safari memory usage.
 
 2.0.21: Many bugfixes and small improvements by Famlam; read the full list at adblockforchrome.googlecode.com under Source -> Changes
 
-2.0.20: Chrome shouldn't emulate true blocking in subframes because each one costs a fixed amount of RAM and some pages have *lots* of subframes.
+2.0.20: Chrome should not emulate true blocking in subframes because each one costs a fixed amount of RAM and some pages have *lots* of subframes.
 
 2.0.19: Revert messed up grayscale icon for Safari toolbar
 
@@ -1054,7 +1066,7 @@ UNRELEASED:
 
 2.0.15: Respect filter subscription expiration dates (famlam)
 
-2.0.14: Give icons a new look (thanks tgines!), and don't lose the current tab when reloading the Options page
+2.0.14: Give icons a new look (thanks tgines!), and do not lose the current tab when reloading the Options page
 
 2.0.13: Fix bug with "Collapse Blocked Elements" beta feature
 
@@ -1065,17 +1077,17 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 2.0.10: Fix some filter rule parsing bugs and a small UI bug (famlam)
 
-2.0.9: Grr, turns out Gmail needs a special case to work around a bug in Chrome that makes CC and BCC fields disappear onclick.  Put the special case back in.
+2.0.9: Grr, turns out Gmail needs a special case to work around a bug in Chrome that makes CC and BCC fields disappear on-click.  Put the special case back in.
 
 2.0.8: Remove an old facebook layout hack that may be affecting safari
 
-2.0.7: Before a user reports an ad via the blacklist wizard, point him to a helper that makes sure he's got up to date subscriptions, and that the ad doesn't appear in Firefox (if he has Firefox.)  (Famlam)
+2.0.7: Before a user reports an ad via the blacklist wizard, point him to a helper that makes sure he's got up to date subscriptions, and that the ad does not appear in Firefox (if he has Firefox.)  (Famlam)
 
 2.0.6: Remove an old gmail special case
 
 2.0.5: A few blacklist UI fixes (famlam)
 
-2.0.4: Subscribe to filter lists when you click on abp:subscribe links on the web.  I *still* don't understand how Famlam pulled this off.  Only works in Chrome.
+2.0.4: Subscribe to filter lists when you click on abp:subscribe links on the web.  I *still* do not understand how Famlam pulled this off.  Only works in Chrome.
 
 2.0.3: Remove a workaround no longer needed
 
@@ -1083,7 +1095,7 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 2.0.1: Resource blocking works in Chrome Stable after all, so get Stable users in on the goodness too.
 
-2.0.0: True blocking of resources in Chrome 6.  Most resources can be blocked before they're even downloaded.  Because Chrome doesn't fully support resource blocking yet, a few resources will load so quickly that the resource blocker will miss them, and they'll be removed after the fact as usual.
+2.0.0: True blocking of resources in Chrome 6.  Most resources can be blocked before they are even downloaded.  Because Chrome does not fully support resource blocking yet, a few resources will load so quickly that the resource blocker will miss them, and they'll be removed after the fact as usual.
 
 1.4.36: Workaround #2 for Safari crashes
 
@@ -1160,7 +1172,7 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 1.3.47: Band-aid over badly parsed RuAd filter until a correct solution can be written.
 
-1.3.46: Remove, don't just hide, Flash ads, to save CPU.
+1.3.46: Remove, do not just hide, Flash ads, to save CPU.
 
 1.3.45: Add X icon to blacklister and whitelister dialogs.
 
@@ -1184,7 +1196,7 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 1.3.35: Handle uppercased blacklist or whitelist manual entries correctly.
 
-1.3.34: Standardize whitelist and blacklist UIs more, and don't let CSS from underlying page bleed through.
+1.3.34: Standardize whitelist and blacklist UIs more, and do not let CSS from underlying page bleed through.
 
 1.3.33: No more alert on acid3 test -- Chrome gets to 100/100 even with AdBlock.
 
@@ -1192,7 +1204,7 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 1.3.31: Handle ksplice.com
 
-1.3.30: Retire "Prevent ad flashup" as an option -- now it's always true.
+1.3.30: Retire "Prevent ad flashup" as an option -- now it is always true.
 
 1.3.29: Disallow z-indexes higher than the blacklist wizard's, upon wizard opening.  This keeps websites from hiding the wizard behind their ads or other content.
 
@@ -1204,29 +1216,29 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 1.3.25: Now blocking background image ads.
 
-1.3.24: Now handling the '(Adblock' case when importing filters. Working around a webkit bug that hasn't merged into Chrome stable yet.
+1.3.24: Now handling the '(Adblock' case when importing filters. Working around a webkit bug that has not merged into Chrome stable yet.
 
-1.3.22: Working around a webkit bug that hasn't merged into Chrome stable yet.
+1.3.22: Working around a webkit bug that has not merged into Chrome stable yet.
 
-1.3.21: Tooltip on filter list names showing the URL you're subscribing to.
+1.3.21: Tooltip on filter list names showing the URL you are subscribing to.
 
 1.3.20: Fixes hole in Options page where a script tag in blacklist would run the script.
 
-1.3.19: The adp:subscribe syntax is coverted to the proper url. URLs that don't point to filter subscriptions are not supported.
+1.3.19: The adp:subscribe syntax is converted to the proper url. URLs that do not point to filter subscriptions are not supported.
 
-1.3.18: Working around a webkit bug that hasn't merged into Chrome stable yet.
+1.3.18: Working around a webkit bug that has not merged into Chrome stable yet.
 
 1.3.17: Added helpful buttons for contributors.
 
 1.3.16: Added a Donate button to the Options page.
 
-1.3.15: Remove two experiments from the Contributors section that didn't pan out.
+1.3.15: Remove two experiments from the Contributors section that did not pan out.
 
 1.3.14: Possibly fixes bug that makes AdBlock stop working when leaving Chrome open overnight.
 
 1.3.13: Fixes bug that let whitelister open multiple dialog boxes.
 
-1.3.12: Working around a webkit bug that hasn't merged into Chrome stable yet.
+1.3.12: Working around a webkit bug that has not merged into Chrome stable yet.
 
 1.3.11: Added YouTube in-video ad blocking.  Based heavily on AdThwart's code.
 
@@ -1238,7 +1250,7 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 1.3.7: Added Danish filter subscription.
 
-1.3.6: Working around a webkit bug that hasn't merged into Chrome stable yet.
+1.3.6: Working around a webkit bug that has not merged into Chrome stable yet.
 
 1.3.5: Point to a new Russian subscription list.
 
@@ -1246,7 +1258,7 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 1.3.3: Point users to bug tracker on the Options page.
 
-1.3.2: Working around a webkit bug that hasn't merged into Chrome stable yet.
+1.3.2: Working around a webkit bug that has not merged into Chrome stable yet.
 
 1.3.1: Attempt to point to a new Russian subscription list.
 

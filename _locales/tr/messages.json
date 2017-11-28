@@ -11,8 +11,12 @@
     "message":"AdBlock. 200 milyonun üzerinde indirmeyle #1 numaralı reklam engelleyicisi. Tüm web sitelerindeki reklamları engeller.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
   },
+  "description_yt":{
+    "message":"Dünya üzerinde 60 milyon kullanıcısı olan Chrome eklentisi AdBlock tarafından yapılan tek YouTube reklam engelleyici",
+    "description":"Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
+  },
   "name_adblock_on_youtube":{
-    "message":"AdBlock on YouTube™",
+    "message":"YouTube™ üzerinde AdBlock",
     "description":"Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
   },
   "adblock_click_for_details":{
@@ -42,6 +46,10 @@
   "optionstitle":{
     "message":"AdBlock Ayarları",
     "description":"Title for the Options page"
+  },
+  "optionstitle_yt":{
+    "message":"YouTube™ üzerinde AdBlock Seçenekleri",
+    "description":"Title for the Options page for the 'AdBlock on YouTube' extension."
   },
   "chromebutton_how_to_hide2":{
     "message":"AdBlock butonuna tıklayarak 'Chrome menüsünde gizle' seçeneğini seçin. Tekrar görmek için Chrome menüsüne tıklayın ve AdBlock butonuna sağ tıklayarak 'Araç çubuğunda göster'i seçin.",
@@ -255,6 +263,10 @@
     "message":"Safari İçerik Engellemeyi Etkinleştir",
     "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
   },
+  "debuginlogoption":{
+    "message":"Konsol Kayıtlarında hata ayıklama bilgilerini göster (eklentiyi yavaşlatır)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
   "datacollectionoption":{
     "message":"AdBlock'un anonim filtre kullanım verilerini ve filtre listeleri tarafından engellenen içerikler hakkında bilgileri toplamasına izin ver",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -355,6 +367,10 @@
     "message":"Ne kadar çok filtre listesi kullanırsanız, AdBlock o kadar yavaşlar. Çok fazla liste kullanmak bazı sitelerde tarayıcınızın çökmesine bile sebep olabilir. Bu listeyi yine de eklemek istiyorsanız Tamam'a basın.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"Eğer bütün filtre listelerini devre dışı bırakırsan AdBlock reklamları engelleyemez. Onun yerine AdBlock'u duraklatmanı öneririz. Yinede bütün listelerin aboneliğinden çıkmak ister misin?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Filtrelere abone olun",
     "description":"Title of the Filter lists tab of the Options page"
@@ -403,10 +419,6 @@
     "message":"EasyList",
     "description":"A filter list"
   },
-  "filtereasylist_lite":{
-    "message":"EasyList Lite (tavsiye edilen)",
-    "description":"A filter list"
-  },
   "filterrussian":{
     "message":"Rusça ve Ukraynaca",
     "description":"Language names for a filter list"
@@ -437,6 +449,10 @@
   },
   "filtermalware":{
     "message":"Zararlı yazılımlara karşı koruma",
+    "description":"A filter list"
+  },
+  "filterbitcoin_mining_protection":{
+    "message":"Cryptocurrency (Bitcoin) Madencilik Koruma Listesi",
     "description":"A filter list"
   },
   "filterlatvian":{
@@ -514,6 +530,14 @@
   "filtersavewarning":{
     "message":"Dikkat: eğer burada bir hata yaparsanız, abone olduğunuz filtreler de dahil, çoğu liste tamamen bozulabilir!\n Gelişmiş \"izin verilenler\" ve \"engellenenler\" listesi oluşturmak için lütfen [[filtre sözdizimi kuralları]] bölümünü okuyun.",
     "description":"Warning when manually editing filters."
+  },
+  "filtersavewarning_ytadblock_1":{
+    "message":"Dikkat: Eğer burada bir hata yaparsanız, YouTube™ üzerinde AdBlock düzgün çalışmayabilir.",
+    "description":"First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
+  },
+  "filtersavewarning_ytadblock_2":{
+    "message":"[[Sözdizimi filtresi öğreticisi]]'ni okuyarak nasıl beyaz liste filtreleri ekleyebileceğinizi öğrenin.",
+    "description":"Second part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
   },
   "migration_error_message":{
     "message":"Özel filtrelerinde bazı hatalar bulduk. İletiler için aşağıya bakın.",
@@ -658,6 +682,14 @@
   "disableforsafaristepone":{
     "message":"Safari menüsünden tercihler kısmına girin ve eklentilere tıklayın.",
     "description":"Step 1 for disabling Safari extensions"
+  },
+  "disableforedgestepone":{
+    "message":"Daha fazla menüsüne (...) tıklayın ve Uzantılar'ı seçin.",
+    "description":"Step 1 for disabling Edge extensions"
+  },
+  "disableforedgesteptwo":{
+    "message":"AdBlock dışındaki her uzantı için, dişli ikonuna tıklayın ve durumunu kapalı olarak değiştirmek için açık butonuna tıklayın.",
+    "description":"Step 2 for disabling Edge extensions"
   },
   "reenableadsonebyone":{
     "message":"Harika! Şimdi hangi eklentinin soruna neden olduğunu bulalım. Şimdi gidin ve eklentilerin her birini tek tek açın. Reklamlardan kurtulmak için gerekli olan eklentiyi bulun.",
@@ -1095,6 +1127,10 @@
     "message":"Üzgünüm, Filtre listelerinizden biri AdBlock'u bu sayfada kapatmak için ayarlanmış.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
   },
+  "disabled_by_filter_lists_yt":{
+    "message":"Üzgünüz, YouTube™ üzerinde AdBlock ayarlarınızdan biri tarafından bu sayfada devre dışı.",
+    "description":"Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+  },
   "dont_run_on_pages_on_domain":{
     "message":"Bu alan adındaki sayfalarda çalışma",
     "description":"Menu entry to open the whitelist wizard"
@@ -1103,9 +1139,17 @@
     "message":"AdBlock bu sayfada kapatılmıştır.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
   },
+  "disabled_on_this_channel":{
+    "message":"Bu kanaldaki reklamlara izin verdin.",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
+  },
   "enable_adblock":{
     "message":"Bu sayfada AdBlock'u etkinleştir",
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
+  },
+  "enable_adblock_on_this_channel":{
+    "message":"Bu kanaldaki reklamları engelle",
+    "description":"Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
   },
   "status_paused":{
     "message":"AdBlock duraklatıldı.",
@@ -1118,6 +1162,14 @@
   "pause_adblock":{
     "message":"AdBlock'u duraklat",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "unpause_adblocking":{
+    "message":"Reklam engellemeyi devam ettir",
+    "description":"Menu entry to unpause the extension (start blocking ads again)"
+  },
+  "pause_adblocking":{
+    "message":"Reklam engellemeyi duraklat",
+    "description":"Menu entry to pause the extension (stop blocking ads)"
   },
   "safaricontentblockingpausemessage":{
     "message":"İçerik engelleme etkin iken AdBlock'u duraklatmak için, lütfen Safari'den (menü çubuğunda) > Tercihler > Uzantılar > AdBlock ve \"AdBlock'u Etkinleştir\" işaretini kaldırın.",
@@ -1158,6 +1210,14 @@
   "donate_to_adblock":{
     "message":"AdBlock'u beğeniyor musun? Bağış yapmak isteyebilirsin!",
     "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"Yardım ve Geri bildirim",
+    "description":"Text of a help link in the toolbar button menu"
+  },
+  "donate_to_youtube_adblock":{
+    "message":"Bunu beğendin mi? Bağış yapmak isteyebilirsin!",
+    "description":"Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
   },
   "pwyw":{
     "message":"İstediğiniz kadar ödeyin!",
@@ -1259,6 +1319,26 @@
     "message":"AdBlock menüsünde kaç tane reklamın engellendiğini göster",
     "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
+  "show_on_button":{
+    "message":"Kaç reklamın engellendiğini buton üzerinde göster",
+    "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_menu":{
+    "message":"Kaç reklamın engellendiğini menüde göster",
+    "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "block_ads_on_youtube":{
+    "message":"YouTube™'daki reklamları kaldır",
+    "description":"Label for checkbox letting user choose whether to block ads on youtube.com"
+  },
+  "block_privacy_on_youtube":{
+    "message":"YouTube™'da gizliliğimi koru",
+    "description":"Checkbox letting user choose whether to block privacy-related requests on youtube.com"
+  },
+  "block_annonyances_on_youtube":{
+    "message":"YouTube™'daki sinir bozucu reklamları kaldır",
+    "description":"Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
+  },
   "show_devtools_panel":{
     "message":"Geliştirici araçlarında 'AdBlock' panelini göster",
     "description":"Checkbox letting user choose whether the AdBlock tab should be displayed in the developer tools window"
@@ -1321,6 +1401,10 @@
     "message":"Takip ettiğiniz tüm YouTube™ kanalları izin verilenlere eklendi",
     "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
+  "allow_ads_all_youtube_channels":{
+    "message":"Abone olunan tüm YouTube™ kanallarında reklamlara izin ver",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
   "whitelist_youtube_channel":{
     "message":"Bu kanala izin verin : $name$",
     "description":"Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
@@ -1330,6 +1414,10 @@
         "example":"Name of channel"
       }
     }
+  },
+  "whitelist_youtube_channel_v2":{
+    "message":"YouTube™ üzerinde reklama izin verilen kanallar:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters":{
     "message":"$host$ alan adında yaptığınız $count$ engellemeyi kaldırmak istediğinize emin misiniz?",
@@ -1368,6 +1456,10 @@
   "adblockupdates":{
     "message":"AdBlock güncellemeleri",
     "description":"Subtitle on the Support tab"
+  },
+  "ytadblockupdates":{
+    "message":"YouTube™ üzerinde AdBlock güncellemeleri",
+    "description":"Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
   },
   "whatmakesadblocktick":{
     "message":"AdBlock'un çalışmasını sağlayan şeyleri görmek ister misiniz?",
@@ -1512,6 +1604,22 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"Bunu yeniden açabilir ve aşağıdaki \"Müdahale etmeyen bazı sitelere izin ver\" özelliğini seçerek sevdiğiniz internet sitelerine destek olabilirsiniz.",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlock çoğu websitede reklamları engellemek için EasyList kullanır.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"Açık kalmasını öneriyoruz. Eğer kazayla abonelikten çıktıysanız, lütfen şimdi daha fazla reklam engellemek için \"EasyList\" seçin.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock çoğu websitede reklamları engellemek için EasyList Lite yada EasyList kullanır.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"Biz açık kalmasını öneriyoruz. Eğer kazayla abonelikten çıktıysanız, lütfen şimdi daha fazla reklam engellemek için \"EasyList Lite\" yada \"EasyList\" seçin.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
   },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Seni kabul edilebilir reklamlar aboneliğinden çıkardık çünkü sen Safari İçerik Engelleme'ye geri döndün. Yalnızca bir tanesini seçebilirsin. ([[Neden?]])",
