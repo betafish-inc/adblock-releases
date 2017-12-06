@@ -416,7 +416,7 @@ var run_bandaids = function()
               del : false
             }, function()
             {
-              BGcall("recordGeneralMessage", "disableacceptableads clicked", undefined, function()
+              BGcall("recordGeneralMessage", "disableacceptableads_clicked", undefined, undefined, function()
               {
                 BGcall("openTab", "options.html?tab=0&aadisabled=true");
               });

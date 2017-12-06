@@ -21,7 +21,7 @@ $(function ()
 
   // Set menu entries appropriately for the selected tab.
   $('.menu-entry, .menu-status, .separator').hide();
-  BG.recordGeneralMessage("popup opened");
+  BG.recordGeneralMessage("popup_opened");
 
   BG.getCurrentTabInfo(function (info)
   {
@@ -155,6 +155,7 @@ $(function ()
   // Click handlers
   $('#bugreport').click(function ()
   {
+    BG.recordGeneralMessage("bugreport_clicked");
     var supportURL = 'https://help.getadblock.com/support/tickets/new';
     ext.pages.open(supportURL);
     closeAndReloadPopup();
@@ -162,6 +163,7 @@ $(function ()
 
   $('#titletext').click(function ()
   {
+    BG.recordGeneralMessage("titletext_clicked");
     var chrome_url = 'https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom';
     var opera_url = 'https://addons.opera.com/extensions/details/adblockforopera/';
     var getadblock_url = 'https://getadblock.com/';
@@ -181,6 +183,7 @@ $(function ()
 
   $('#div_enable_adblock_on_this_page').click(function ()
   {
+    BG.recordGeneralMessage("enable_adblock_clicked");
     if (BG.tryToUnwhitelist(page.unicodeUrl))
     {
       !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
@@ -193,6 +196,7 @@ $(function ()
 
   $('#div_paused_adblock').click(function ()
   {
+    BG.recordGeneralMessage("unpause_clicked");
     BG.adblockIsPaused(false);
     BG.updateButtonUIAndContextMenus();
     closeAndReloadPopup();
@@ -200,6 +204,7 @@ $(function ()
 
   $('#div_undo').click(function ()
   {
+    BG.recordGeneralMessage("undo_clicked");
     var host = parseUri(page.unicodeUrl).host;
     if (!SAFARI)
     {
@@ -211,6 +216,7 @@ $(function ()
 
   $('#div_whitelist_channel').click(function ()
   {
+    BG.recordGeneralMessage("whitelist_youtube_clicked");
     BG.createWhitelistFilterForYoutubeChannel(page.unicodeUrl);
     closeAndReloadPopup();
     !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
@@ -218,6 +224,7 @@ $(function ()
 
   $('#div_pause_adblock').click(function ()
   {
+    BG.recordGeneralMessage("pause_clicked");
     try
     {
       if (pageInfo.settings.safari_content_blocking)
@@ -239,6 +246,7 @@ $(function ()
 
   $('#div_blacklist').click(function ()
   {
+    BG.recordGeneralMessage("blacklist_clicked");
     if (!SAFARI)
     {
       BG.emitPageBroadcast({
@@ -260,6 +268,7 @@ $(function ()
 
   $('#div_whitelist').click(function ()
   {
+    BG.recordGeneralMessage("whitelist_domain_clicked");
     if (!SAFARI)
     {
       BG.emitPageBroadcast({
@@ -279,6 +288,7 @@ $(function ()
 
   $('#div_whitelist_page').click(function ()
   {
+    BG.recordGeneralMessage("whitelist_page_clicked");
     BG.createPageWhitelistFilter(page.unicodeUrl);
     closeAndReloadPopup();
     !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
@@ -286,6 +296,7 @@ $(function ()
 
   $('#div_show_resourcelist').click(function ()
   {
+    BG.recordGeneralMessage("resource_clicked");
     if (backgroundPage.STATS.os === 'Mac OS X')
     {
       $('#new_resourcelist_explanation').text(translate('new_resourcelist_explanation_osx'))
@@ -295,6 +306,7 @@ $(function ()
 
   $('#div_report_an_ad').click(function ()
   {
+    BG.recordGeneralMessage("report_ad_clicked");
     var url = 'adblock-adreport.html?url=' + encodeURIComponent(page.unicodeUrl) + '&tabId=' + page.id;
     BG.ext.pages.open(BG.ext.getURL(url));
     closeAndReloadPopup();
@@ -302,12 +314,14 @@ $(function ()
 
   $('#div_options').click(function ()
   {
+    BG.recordGeneralMessage("options_clicked");
     BG.ext.pages.open(BG.ext.getURL('options.html'));
     closeAndReloadPopup();
   });
 
   $('#div_help_hide').click(function ()
   {
+    BG.recordGeneralMessage("help_clicked");
     if (OPERA)
     {
       $('#help_hide_explanation').text(translate('operabutton_how_to_hide2')).slideToggle();
@@ -326,6 +340,7 @@ $(function ()
 
   $('#link_open').click(function ()
   {
+    BG.recordGeneralMessage("link_clicked");
     var linkHref = "https://getadblock.com/pay/?exp=7003&u=" + backgroundPage.STATS.userId();
     BG.ext.pages.open(linkHref);
     closeAndReloadPopup();

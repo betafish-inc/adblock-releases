@@ -50,7 +50,7 @@ STATS = (function()
       return JSON.parse(json);
     } catch (ex) {
       if (ex && ex.message) {
-        recordErrorMessage('storage_get error ' + ex.message);
+        recordErrorMessage('storage_get_error ', undefined, { errorMessage: ex.message});
       }
       return undefined;
     }
@@ -402,17 +402,17 @@ STATS = (function()
               {
                 if (info)
                 {
-                  recordGeneralMessage('new install ' + info.installType);
+                  recordGeneralMessage('new_install_' + info.installType);
                 }
                 else
                 {
-                  recordGeneralMessage('new install');
+                  recordGeneralMessage('new_install');
                 }
               });
             }
             else
             {
-              recordGeneralMessage('new install');
+              recordGeneralMessage('new_install');
             }
           }
         });

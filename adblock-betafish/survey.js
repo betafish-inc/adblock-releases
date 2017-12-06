@@ -60,7 +60,7 @@ SURVEY = (function() {
           if (newSurveyData.survey_id === surveyData.survey_id) {
             surveyData = newSurveyData;
           } else {
-            recordGeneralMessage("survey ids do not match, original sid: " + surveyData.survey_id + " updated sid: " + newSurveyData.survey_id);
+            recordGeneralMessage("survey_ids_do_not_match", undefined, {original_sid: surveyData.survey_id, updated_sid: newSurveyData.survey_id });
             return;
           }
         }
@@ -69,7 +69,7 @@ SURVEY = (function() {
             !surveyData.notification_options.message ||
             !surveyData.notification_options.icon_url ||
             isNaN(surveyData.notification_options.priority)) {
-          recordGeneralMessage("invalid survey data sid: " + surveyData.survey_id);
+          recordGeneralMessage("invalid_survey_data", undefined, { sid: surveyData.survey_id });
           return;
         }
         var notificationOptions = {
@@ -94,10 +94,10 @@ SURVEY = (function() {
           chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
           chrome.notifications.onClosed.removeListener(closedClicked);
           if (notificationId === lastNotificationID && surveyData.notification_options.clicked_url) {
-            recordGeneralMessage("notification clicked sid: " + surveyData.survey_id);
+            recordGeneralMessage("notification_clicked" , undefined, { sid: surveyData.survey_id });
             openTab("https://getadblock.com/" + surveyData.notification_options.clicked_url);
           } else {
-            recordGeneralMessage("notification clicked no URL to open sid: " + surveyData.survey_id);
+            recordGeneralMessage("notification_clicked_no_URL_to_open", undefined, { sid: surveyData.survey_id });
           }
         };
         var buttonNotificationClicked = function(notificationId, buttonIndex) {
@@ -106,11 +106,11 @@ SURVEY = (function() {
           chrome.notifications.onClosed.removeListener(closedClicked);
           if (surveyData.notification_options.buttons) {
             if (notificationId === lastNotificationID && buttonIndex === 0) {
-                recordGeneralMessage("button 0 clicked sid: " + surveyData.survey_id);
+                recordGeneralMessage("button_0_clicked", undefined, { sid: surveyData.survey_id });
                 openTab("https://getadblock.com/" + surveyData.notification_options.buttons[0].clicked_url);
             }
             if (notificationId === lastNotificationID && buttonIndex === 1) {
-                recordGeneralMessage("button 1 clicked sid: " + surveyData.survey_id);
+                recordGeneralMessage("button_1_clicked", undefined, { sid: surveyData.survey_id });
                 openTab("https://getadblock.com/" + surveyData.notification_options.buttons[1].clicked_url);
             }
           }
@@ -119,7 +119,7 @@ SURVEY = (function() {
           chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
           chrome.notifications.onClicked.removeListener(notificationClicked);
           chrome.notifications.onClosed.removeListener(closedClicked);
-          recordGeneralMessage("notification closed sid: " + surveyData.survey_id + " bu:" + byUser);
+          recordGeneralMessage("notification_closed", undefined, { sid: surveyData.survey_id , bu: byUser });
         };
         chrome.notifications.onClicked.removeListener(notificationClicked);
         chrome.notifications.onClicked.addListener(notificationClicked);
@@ -141,13 +141,13 @@ SURVEY = (function() {
         // show the notification to the user.
         chrome.notifications.create(lastNotificationID, notificationOptions, function(id) {
           if (chrome.runtime.lastError) {
-            recordGeneralMessage("error, survey not shown, type:notification sid: " + surveyData.survey_id);
+            recordGeneralMessage("error_survey_not_shown", undefined, { sid: surveyData.survey_id });
             chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
             chrome.notifications.onClicked.removeListener(notificationClicked);
             chrome.notifications.onClosed.removeListener(closedClicked);
             return;
           }
-          recordGeneralMessage("survey shown, type:notification sid: " + surveyData.survey_id);
+          recordGeneralMessage("survey_shown", undefined, { sid: surveyData.survey_id });
         });
       });
     };
@@ -243,12 +243,12 @@ SURVEY = (function() {
         var validateResponseFromTab = function(response) {
           if (chrome.runtime.lastError) {
             if (chrome.runtime.lastError.message) {
-              recordErrorMessage('overlay message error ' + chrome.runtime.lastError.message);
+              recordErrorMessage('overlay_message_error ', undefined, { errorMessage: chrome.runtime.lastError.message});
             } else {
-              recordErrorMessage('overlay message error ' + JSON.stringify(chrome.runtime.lastError));
+              recordErrorMessage('overlay_message_error ', undefined, { error: JSON.stringify(chrome.runtime.lastError) });
             }
           } else if (!response || response.ack !== data.command) {
-            recordErrorMessage('invalid response from notification overlay script' + response);
+            recordErrorMessage('invalid_response_from_notification_overlay_script', undefined, { response: response });
           }
         };
         if (SAFARI) {
