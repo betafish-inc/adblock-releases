@@ -527,6 +527,10 @@
     "message":"Je filters handmatig bewerken:",
     "description":"Subtitle on the 'Customize' tab"
   },
+  "manualfilteredit_yt":{
+    "message":"Je filters handmatig bewerken:",
+    "description":"Subtitle on the 'General' tab of AdBlock on YouTube"
+  },
   "manualexcludefilteredit":{
     "message":"Bewerk uitgeschakelde filters:",
     "description":"Subtitle on the 'Customize' tab"
@@ -815,6 +819,46 @@
     "message":"Turks",
     "description":"Language name"
   },
+  "lang_catalan":{
+    "message":"Catalaans",
+    "description":"Language name"
+  },
+  "lang_chinese_simplified":{
+    "message":"Vereenvoudigd Chinees",
+    "description":"Language name"
+  },
+  "lang_chinese_traditional":{
+    "message":"Traditioneel Chinees",
+    "description":"Language name"
+  },
+  "lang_croatian":{
+    "message":"Kroatisch",
+    "description":"Language name"
+  },
+  "lang_norwegian":{
+    "message":"Noors",
+    "description":"Language name"
+  },
+  "lang_serbian":{
+    "message":"Servisch",
+    "description":"Language name"
+  },
+  "lang_slovenian":{
+    "message":"Sloveens",
+    "description":"Language name"
+  },
+  "lang_vietnamese":{
+    "message":"Vietnamees",
+    "description":"Language name"
+  },
+  "lang_portuguese_brazil":{
+    "message":"Portugees (Brazilië)",
+    "description":"Language name"
+  },
+  "lang_portuguese_portugal":{
+    "message":"Portugees (Portugal)",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"Bulgaars",
     "description":"A filter list"
@@ -964,6 +1008,10 @@
   "checkinfirefoxorchrome_1":{
     "message":"Installeer Firefox of Chrome als je dit nog niet hebt.",
     "description":"instruction for how to check Firefox or Chrome for a reported ad"
+  },
+  "checkinfirefox_2":{
+    "message":"Installeer AdBlock Plus voor Firefox als je dit niet hebt.",
+    "description":"Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
   },
   "checkinfirefoxorchrome_2":{
     "message":"Installeer AdBlock Plus voor Firefox of AdBlock voor Chrome als je dit niet hebt.",
@@ -1251,6 +1299,10 @@
     "message":"Pagina:",
     "description":"Caption for the whitelist wizard slider that modifies the path part of a URL"
   },
+  "show_ads_except_for":{
+    "message":"Toon overal advertenties behalve op deze domeinen...",
+    "description":"Section title for the whitelisting section of Customize tab"
+  },
   "only_block_ads_on_these_sites":{
     "message":"Blokkeer alleen advertenties op deze websites:",
     "description":"Label for textbox where user enters a list of sites on Customize tab"
@@ -1266,6 +1318,10 @@
   "storage_quota_exceeded":{
     "message":"Je gebruikt meer opslagruimte dan AdBlock kan gebruiken. Meldt je aub af voor enkele filters!",
     "description":"Message shown when the user uses more storage than allowed by the browser."
+  },
+  "safari50_updatenotice":{
+    "message":"Je gebruikt een verouderde versie van Safari. Werk je browser bij naar de laatste versie om de AdBlock knop te gebruiken om AdBlock te pauzeren, websites te whitelisten en advertenties te rapporteren. [[Update nu]].",
+    "description":"A message shown to Safari 5.0 users urging them to upgrade"
   },
   "firefox_explanation":{
     "message":"Het doel van deze vraag is om na te gaan wie je melding moet ontvangen. Als je deze vraag incorrect beantwoordt zal de melding naar de verkeerde persoon gestuurd worden. Dit kan ervoor zorgen dat deze niet behandeld zal worden.",
@@ -1394,6 +1450,10 @@
         "example":"Name of channel"
       }
     }
+  },
+  "whitelist_youtube_channel_v2":{
+    "message":"Sta advertenties toe op YouTube™ kanaal:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters":{
     "message":"Weet je zeker dat je de $count$ blokkeringen die je aangemaakt hebt op $host$ wilt verwijderen?",
@@ -1589,6 +1649,10 @@
     "message":"AdBlock gebruikt EasyList Lite of EasyList om advertenties te blokkeren op de meeste websites.",
     "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
   },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"We hebben je afgemeld van de aanvaardbare advertenties omdat je Safari Content Blocking hebt ingeschakeld. Je kan slechts 1 van deze 2 opties tegelijk selecteren. ([[Waarom?]])",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
   "content_blocking_acceptable_ads_disbled_message":{
     "message":"We hebben Safari Content Blocking uitgeschakeld omdat je opteerde om niet-opdringerige advertenties toe te staan. Je kan slechts 1 van deze 2 opties tegelijk selecteren. ([[Waarom?]])",
     "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
@@ -1680,5 +1744,13 @@
   "custom_filters_migration_error_message_part3":{
     "message":"Originele invoer: ",
     "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options":{
+    "message":"Laat mij de weergavetaal van AdBlock kiezen",
+    "description":"Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector":{
+    "message":"AdBlock weergeven in het",
+    "description":"Text shown before language selector drop-down."
   }
 }

@@ -56,7 +56,7 @@ function loadOptions()
       activeTab = searchQuery.tab;
     }
   }
-
+  backgroundPage.recordGeneralMessage("options_opened", undefined, { tab: activeTab });
   $('#tabpages').tabs({
     // Go to the last opened tab
     active: activeTab,
