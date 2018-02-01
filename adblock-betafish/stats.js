@@ -150,6 +150,7 @@ STATS = (function()
         l : determineUserLanguage(),
         pc : total_pings,
         cb : getSettings().safari_content_blocking ? '1' : '0',
+        dcv2 : getSettings().data_collection_v2 ? '1' : '0',
       };
       // only on Chrome
       if (flavor === "E" && Prefs.blocked_total)
@@ -362,6 +363,7 @@ STATS = (function()
     browserVersion : browserVersion,
     os : os,
     osVersion : osVersion,
+    pingNow : pingNow,
     statsUrl : stats_url,
     untilLoaded : function(callback)
     {

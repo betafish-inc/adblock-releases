@@ -198,37 +198,27 @@ SURVEY = (function() {
   //open a Tab for a full page survey
   var processTab = function(surveyData) {
 
-    var waitForUserAction = function() {
-      if (SAFARI) {
-        safari.application.removeEventListener("open", waitForUserAction, true);
-      } else {
-        chrome.tabs.onCreated.removeListener(waitForUserAction);
-      }
-      var openTabIfAllowed = function() {
+    var openTabIfAllowed = function() {
+      setTimeout(function () {
         shouldShowSurvey(surveyData, function (responseData) {
           ext.pages.open('https://getadblock.com/' + responseData.open_this_url);
         });
-      }
-      if (SAFARI) {
-        // Safari has a bug: if you open a new tab, it will shortly thereafter
-        // set the active tab's URL to "Top Sites". However, here, after the
-        // user opens a tab, we open another. It mistakenly thinks
-        // our tab is the one the user opened and clobbers our URL with "Top
-        // Sites."
-        // To avoid this, we wait a bit, let it update the user's tab, then
-        // open ours.
-        window.setTimeout(openTabIfAllowed, 500);
-      } else {
-        openTabIfAllowed();
-      }
+      }, 10000); // 10 seconds
     };
 
-    if (SAFARI) {
-      safari.application.addEventListener("open", waitForUserAction, true);
-    } else {
+    var waitForUserAction = function() {
       chrome.tabs.onCreated.removeListener(waitForUserAction);
-      chrome.tabs.onCreated.addListener(waitForUserAction);
-    }
+      openTabIfAllowed();
+    };
+
+    chrome.idle.queryState(60, function(state) {
+      if (state === "active") {
+        openTabIfAllowed();
+      } else {
+        chrome.tabs.onCreated.removeListener(waitForUserAction);
+        chrome.tabs.onCreated.addListener(waitForUserAction);
+      }
+    });
   }; //end of processTab()
 
   //Display a notification overlay on the active tab
