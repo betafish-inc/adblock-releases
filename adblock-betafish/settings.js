@@ -8,6 +8,7 @@ function Settings()
     show_advanced_options : false,
     show_block_counts_help_link : true,
     show_survey : true,
+    local_cdn : false,
   };
   var _this = this;
   this._init = new Promise(function(resolve)
@@ -19,6 +20,10 @@ function Settings()
       if (settings.debug_logging)
       {
         logging(true);
+      }
+      if (settings.local_cdn)
+      {
+        LocalCDN.start();
       }
 
       resolve();

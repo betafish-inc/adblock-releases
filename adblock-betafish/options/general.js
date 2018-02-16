@@ -13,7 +13,6 @@ catch (ex)
 // user's saved settings.
 $(function ()
 {
-
   var subs = backgroundPage.getSubscriptionsMinusText();
 
   //if the user is currently subscribed to AA
@@ -87,6 +86,19 @@ $(function ()
       else
       {
         backgroundPage.DataCollectionV2.end();
+      }
+    }
+    // if the user enables/disable Local CDN
+    // start or end the Local CDN 
+    if (name === 'local_cdn')
+    {
+      if (isEnabled)
+      {
+        backgroundPage.LocalCDN.start();
+      }
+      else
+      {
+        backgroundPage.LocalCDN.end();
       }
     }
     // if the user enables/disable YouTube Channel hiding

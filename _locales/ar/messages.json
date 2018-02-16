@@ -1315,6 +1315,14 @@
     "message":"إظهار عدد إعلانات المحظورو على قائمة AdBlock",
     "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
+  "show_on_button":{
+    "message":"إظهار عدد إعلانات المحظورة على زر قائمة AdBlock",
+    "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_menu":{
+    "message":"إظهار عدد إعلانات المحظورة على قائمة AdBlock",
+    "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
   "block_ads_on_youtube":{
     "message":"إزالة الإعلانات على YouTube™",
     "description":"Label for checkbox letting user choose whether to block ads on youtube.com"
@@ -1373,9 +1381,21 @@
     "message":" --حدد اللغة -- ",
     "description":"First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"السماح whitelisting لقنوات يوتيوب محددة (يتطلب إعادة تشغيل المستعرض الخاص بك)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "whitelist_all_youtube_channels":{
+    "message":"اضافة كل القنوات المشترُك بها للقائمة البيضاء",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled."
+  },
   "one_moment_all_youtube_channels":{
     "message":"لحظة واحدة في حين نجمع جميع الاشتراكات الخاصة بك",
     "description":"Alert displayed when whitelisting all subscribed YouTube channels"
+  },
+  "all_youtube_channels_complete":{
+    "message":"تم اضافة جميع اشتراكاتك للائحة البيضاء",
+    "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
   "allow_ads_all_youtube_channels":{
     "message":"السماح بالإعلانات على جميع القنوات YouTube™ الذي تم الاشتراك فيها",
@@ -1432,6 +1452,10 @@
   "adblockupdates":{
     "message":"تحديثات AdBlock",
     "description":"Subtitle on the Support tab"
+  },
+  "ytadblockupdates":{
+    "message":"AdBlock على تحديثات اليوتوب ™",
+    "description":"Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
   },
   "whatmakesadblocktick":{
     "message":"تريد أن ترى ما الذي يجعل AdBlock  جميل؟",

@@ -7,6 +7,10 @@
     "message":"Najobľúbenejšie rozšírenie pre Chrome s viac ako 40 miliónmi používateľov! Blokuje reklamy na celom webe.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
+  "description_edge":{
+    "message":"AdBlock. Číslo 1 v blokovaní reklám s viac ako 200 miliónmi stiahnutí. Blokuje reklamy na celom webe.",
+    "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
+  },
   "name_adblock_on_youtube":{
     "message":"AdBlock on YouTube™",
     "description":"Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
@@ -243,6 +247,10 @@
     "message":"Pridať položky do ponuky po kliknutí pravým tlačidlom myši",
     "description":"Checkbox on the 'General' tab of the Options page."
   },
+  "safaricontentblocking":{
+    "message":"Povoliť blokovanie obsahu Safari",
+    "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
+  },
   "updatedrightnow":{
     "message":"aktualizované práve teraz",
     "description":"Label for filter list subscription"
@@ -307,6 +315,18 @@
     "message":"Načítavam... prosím čakajte.",
     "description":"Status label when selecting a new filter list"
   },
+  "ab_filters_subscription_lastDownload_invalidURL":{
+    "message":"Chyba, neplatná adresa",
+    "description":"Filter lists tab of the Options page: Message when you subscribe to a non-list URL."
+  },
+  "ab_filters_subscription_lastDownload_connectionError":{
+    "message":"Chyba, sťahovanie zlyhalo",
+    "description":"Filter lists tab of the Options page: Generic filter list download error message."
+  },
+  "ab_filters_subscription_lastDownload_invalidData":{
+    "message":"Chyba, neplatný zoznam filtrov",
+    "description":"Filter lists tab of the Options page: Invalid filter list file."
+  },
   "invalidListUrl":{
     "message":"Neplatný zoznam URL. Zoznam bude vymazaný.",
     "description":"Message when you subscribe to a non-list URL"
@@ -349,6 +369,14 @@
   },
   "filterantisocial":{
     "message":"Antisociálny zoznam filtrov (odstraňuje tlačidlá sociálnych sietí)",
+    "description":"A filter list"
+  },
+  "filteracceptable_ads":{
+    "message":"Prijateľné reklamy",
+    "description":"A filter list"
+  },
+  "filteradblock_custom":{
+    "message":"AdBlock vlastné filtre",
     "description":"A filter list"
   },
   "filterrussian":{
@@ -447,6 +475,10 @@
     "message":"Buďte opatrní: pokiaľ tu urobíte chybu, veľa iných filtrov, vrátane oficiálnych, môžu byť tiež poškodené!\nPrečítajte si [[filter syntax tutorial (anglicky)]] kde sa dozviete, ako pridávať pokročilé vlastné filtre a výnimky.",
     "description":"Warning when manually editing filters."
   },
+  "delete_migration_error_messages":{
+    "message":"Odstrániť správy",
+    "description":"Button to delete error messages when adding custom filters manually"
+  },
   "savebutton":{
     "message":"Uložiť",
     "description":"Save button"
@@ -483,6 +515,14 @@
     "message":"Malvér nebol nájdený.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
+  "aalinkadreport":{
+    "message":"Zistite viac o programe akceptovateľných reklám.",
+    "description":"Acceptable Ads link message on ad report page"
+  },
+  "updateyourlists":{
+    "message":"Uistite sa, že Váš zoznam filtrov je aktuálny:",
+    "description":"Section header on the ad report page"
+  },
   "clickupdatefilters":{
     "message":"Kliknite tu: [[Aktualizovať filtre!]]",
     "description":"Instruction on ad report page"
@@ -503,9 +543,21 @@
     "message":"Nie",
     "description":"A negative response to a question"
   },
+  "adalreadyblocked":{
+    "message":"Výborne! Všetko je nastavené.",
+    "description":"On the ad report page, telling the user there is nothing to do as the ad they were seeing is now blocked."
+  },
+  "disableallextensions":{
+    "message":"Vypnúť všetky rozšírenia okrem AdBlock:",
+    "description":"Instruction on ad report page"
+  },
   "clickdisableotherextensions":{
     "message":"alebo, kliknite na toto tlačidlo a my urobíme všetky veci uvedené vyššie: [[Zakázať všetky ostatné rožšírenia]]",
     "description":"On the ad report page, an alternative way to disable other extensions"
+  },
+  "disableotherextensionscomplete":{
+    "message":"Zakázali sme všetky ďaľšie rozšírenia. Teraz znovunačítame stránku s reklamou. Chvíľku strpenia, prosím.",
+    "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "enableotherextensionscomplete":{
     "message":"Rozšírenia ktoré sú zakázané boli znovu povolené.",
@@ -522,6 +574,10 @@
   "disableforsafaristepone":{
     "message":"Kliknite v Safari menu -> Predvoľby -> Rozšírenia.",
     "description":"Step 1 for disabling Safari extensions"
+  },
+  "correctfilters":{
+    "message":"Uistite sa, že používate správne jazykové filtre:",
+    "description":"On the ad report page, label describing having the right filter lists enabled"
   },
   "pagelanguagecheck":{
     "message":"V akom jazyku je stránka napísaná?",
@@ -875,6 +931,10 @@
     "message":"Pozastaviť AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
   },
+  "safarinotificationbody":{
+    "message":"Prosím vypnite niektoré zoznamy filtrov. Viac informácii v možnostiach AdBlock.",
+    "description":"Body of a notification shown to Safari Content Blocking users with too many filter list rules."
+  },
   "undo_last_block":{
     "message":"Vrátiť blokovanie na tejto doméne",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
@@ -891,9 +951,17 @@
     "message":"Skryť toto tlačidlo",
     "description":"Toolbar button menu entry to hide the AdBlock button"
   },
+  "donate_to_adblock":{
+    "message":"Páči sa vám AdBlock? Zvážte príspevok!",
+    "description":"Text of a donate link in the toolbar button menu"
+  },
   "pwyw":{
     "message":"Zaplaťte, koľko chcete!",
     "description":"Text of a payment request link"
+  },
+  "privacy_policy":{
+    "message":"Ochrana osobných údajov",
+    "description":"Link to AdBlock's privacy policy"
   },
   "translator_credit":{
     "message":"Autorom prekladu je:",
@@ -1013,6 +1081,10 @@
     "message":"Pridať filtre pre iný jazyk: ",
     "description":"Dropdown list for language-specific filter lists"
   },
+  "how":{
+    "message":"Ako na to?",
+    "description":"Text of a link pointing to instructions on how to do something"
+  },
   "whats_this":{
     "message":"Čo je to?",
     "description":"Text of a link pointing to the explanation of a new feature"
@@ -1093,16 +1165,52 @@
     "message":"Ak ste videli reklamu, neposielajte nám hlásenie o chybe ale [[hlásenie o reklame]]!",
     "description":"Link to the ad report page on AdBlock's help site. This is found on the Support tab of the options."
   },
+  "resourceblocktitle":{
+    "message":"Všetky zdroje",
+    "description":"Resource list page name"
+  },
+  "headerresource":{
+    "message":"Zdroj",
+    "description":"Resource list page: title of a column"
+  },
   "headertype":{
     "message":"Typ",
     "description":"Resource list page: title of a column"
+  },
+  "headerfilter":{
+    "message":"Zodpovedajúci filter",
+    "description":"Resource list page: title of a column"
+  },
+  "show_resourcelist":{
+    "message":"Zobraziť všetky žiadosti",
+    "description":"Menu entry to open the resource list page"
   },
   "typemain_frame":{
     "message":"stránka",
     "description":"A resource type"
   },
+  "adreport_name":{
+    "message":"Ako sa voláte?",
+    "description":"Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email":{
+    "message":"Aká je Vaša emailová adresa?",
+    "description":"Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
+  "adreport_screen_cap_upload":{
+    "message":"Priložiť snímku obrazovky:",
+    "description":"Label next to a file upload button."
+  },
   "buttonsubmit":{
     "message":"Potvrdiť",
     "description":"Button to send a form."
+  },
+  "adreport_response_large_file":{
+    "message":"Tento súbor je príliš veľký. Prosím uistite sa, že Váš súbor je menší než 10 MB.",
+    "description":"Error message shown when the user tries to upload a large image file."
+  },
+  "adreport_response_save_error":{
+    "message":"Chyba pri ukladaní nahraného súboru.",
+    "description":"Error message shown when the server could not save an attached file."
   }
 }

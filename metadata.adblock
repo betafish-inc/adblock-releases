@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.24.0
+version = 3.25.3
 backgroundScripts += adblock-jquery.js
   adblock-errorreporting.js
   adblock-functions.js
@@ -8,6 +8,8 @@ backgroundScripts += adblock-jquery.js
   adblock-stats.js
   adblock-uninstall.js
   adblock-idlehandler.js
+  adblock-localFilesIndex.js
+  adblock-localcdn.js
   adblock-settings.js
   adblock-servermessages.js
   adblock-background.js
@@ -17,7 +19,7 @@ backgroundScripts += adblock-jquery.js
   adblock-data-migrate.js
   adblock-excludefilter.js
   adblock-datacollection.v2.js
-
+  
 options = options.html
 testScripts += tests/example.js
 browserAction = icons/ab-16.png icons/ab-19.png icons/ab-20.png icons/ab-32.png icons/ab-38.png icons/ab-40.png adblock-button-popup.html
@@ -39,6 +41,25 @@ webAccessible = adblock-jquery-ui.custom.css
   jquery-ui/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png
   jquery-ui/css/images/ui-icons_056b93_256x240.png
   jquery-ui/css/images/ui-icons_d8e7f3_256x240.png
+  localLib/jquery/jquery-1.10.2.min.js
+  localLib/jquery/jquery-1.11.0.min.js
+  localLib/jquery/jquery-1.11.1.min.js
+  localLib/jquery/jquery-1.11.2.min.js
+  localLib/jquery/jquery-1.11.3.min.js
+  localLib/jquery/jquery-1.12.4.min.js
+  localLib/jquery/jquery-1.3.2.min.js 
+  localLib/jquery/jquery-1.4.2.min.js 
+  localLib/jquery/jquery-1.7.1.min.js 
+  localLib/jquery/jquery-1.7.2.min.js 
+  localLib/jquery/jquery-1.8.2.min.js 
+  localLib/jquery/jquery-1.8.3.min.js 
+  localLib/jquery/jquery-1.9.1.min.js 
+  localLib/jquery/jquery-2.1.1.min.js 
+  localLib/jquery/jquery-2.1.3.min.js 
+  localLib/jquery/jquery-2.1.4.min.js 
+  localLib/jquery/jquery-2.2.4.min.js 
+  localLib/jquery/jquery-3.1.1.min.js 
+  localLib/jquery/jquery-3.2.1.min.js 
 
 [contentScripts]
 document_start += adblock-functions.js
@@ -76,6 +97,8 @@ adblock-idlehandler.js = adblock-betafish/idlehandler.js
 adblock-excludefilter.js = adblock-betafish/excludefilter.js
 adblock-subscriptioninit.js = adblock-betafish/subscriptioninit.js
 adblock-subscriptions.xml = adblock-betafish/subscriptions.xml
+adblock-localcdn.js = adblock-betafish/localcdn.js
+adblock-localFilesIndex.js = adblock-betafish/localFilesIndex.js
 options.html = adblock-betafish/options/index.html
 adblock-option-index.js = adblock-betafish/options/index.js
 adblock-option-options.css = adblock-betafish/options/options.css
@@ -170,6 +193,25 @@ jquery-ui/css/images/ui-bg_gloss-wave_75_2191c0_500x100.png = adblock-betafish/j
 jquery-ui/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png = adblock-betafish/jquery/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png
 jquery-ui/css/images/ui-icons_056b93_256x240.png = adblock-betafish/jquery/css/images/ui-icons_056b93_256x240.png
 jquery-ui/css/images/ui-icons_d8e7f3_256x240.png = adblock-betafish/jquery/css/images/ui-icons_d8e7f3_256x240.png
+localLib/jquery/jquery-1.10.2.min.js = adblock-betafish/localLib/jquery/jquery-1.10.2.min.js
+localLib/jquery/jquery-1.11.0.min.js = adblock-betafish/localLib/jquery/jquery-1.11.0.min.js
+localLib/jquery/jquery-1.11.1.min.js = adblock-betafish/localLib/jquery/jquery-1.11.1.min.js
+localLib/jquery/jquery-1.11.2.min.js = adblock-betafish/localLib/jquery/jquery-1.11.2.min.js
+localLib/jquery/jquery-1.11.3.min.js = adblock-betafish/localLib/jquery/jquery-1.11.3.min.js
+localLib/jquery/jquery-1.12.4.min.js = adblock-betafish/localLib/jquery/jquery-1.12.4.min.js
+localLib/jquery/jquery-1.3.2.min.js = adblock-betafish/localLib/jquery/jquery-1.3.2.min.js
+localLib/jquery/jquery-1.4.2.min.js = adblock-betafish/localLib/jquery/jquery-1.4.2.min.js
+localLib/jquery/jquery-1.7.1.min.js = adblock-betafish/localLib/jquery/jquery-1.7.1.min.js
+localLib/jquery/jquery-1.7.2.min.js = adblock-betafish/localLib/jquery/jquery-1.7.2.min.js
+localLib/jquery/jquery-1.8.2.min.js = adblock-betafish/localLib/jquery/jquery-1.8.2.min.js
+localLib/jquery/jquery-1.8.3.min.js = adblock-betafish/localLib/jquery/jquery-1.8.3.min.js
+localLib/jquery/jquery-1.9.1.min.js = adblock-betafish/localLib/jquery/jquery-1.9.1.min.js
+localLib/jquery/jquery-2.1.1.min.js = adblock-betafish/localLib/jquery/jquery-2.1.1.min.js
+localLib/jquery/jquery-2.1.3.min.js = adblock-betafish/localLib/jquery/jquery-2.1.3.min.js
+localLib/jquery/jquery-2.1.4.min.js = adblock-betafish/localLib/jquery/jquery-2.1.4.min.js
+localLib/jquery/jquery-2.2.4.min.js = adblock-betafish/localLib/jquery/jquery-2.2.4.min.js
+localLib/jquery/jquery-3.1.1.min.js = adblock-betafish/localLib/jquery/jquery-3.1.1.min.js
+localLib/jquery/jquery-3.2.1.min.js = adblock-betafish/localLib/jquery/jquery-3.2.1.min.js
 
 [convert_js]
 lib/adblockplus.js -= lib/filterComposer.js lib/uninstall.js

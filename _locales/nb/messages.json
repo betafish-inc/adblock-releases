@@ -7,6 +7,14 @@
     "message":"Den mest populære Chrome utvidelsen med over 40 millioner brukere! Blokkerer annonser over hele internett.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
+  "description_edge":{
+    "message":"AdBlock. Reklameblokkerer #1 med over 200 millioner nedlastninger. Blokkerer reklamer over hele internettet.",
+    "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
+  },
+  "description_yt":{
+    "message":"Den eneste YouTube™-reklameblokkereren laget av AdBlock, den mest populære Chrome-utvidelsen med 60 millioner brukere verden over",
+    "description":"Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
+  },
   "name_adblock_on_youtube":{
     "message":"AdBlock on YouTube™",
     "description":"Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
@@ -38,6 +46,14 @@
   "optionstitle":{
     "message":"AdBlock-innstillinger",
     "description":"Title for the Options page"
+  },
+  "optionstitle_yt":{
+    "message":"Innstillinger for AdBlock on YouTube™",
+    "description":"Title for the Options page for the 'AdBlock on YouTube' extension."
+  },
+  "chromebutton_how_to_hide2":{
+    "message":"Høyreklikk på AdBlock-knappen og velg 'Skjul i Chrome-menyen'. For å vise den, klikk på Chrome-menyen, høyreklikk på AdBlock-knappen, og velg 'Vis i verktøyraden'.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2":{
     "message":"For å fjerne knappen, gå til opera:\/\/extensions og sett en markering i boksen ved menylinjen \"Skjul fra verktøylinjen\" . For å vise knappen igjen må markeringen du satte ved menylinjen fjernes .",
@@ -247,6 +263,14 @@
     "message":"Aktiver Safari innholdsblokkering",
     "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
   },
+  "debuginlogoption":{
+    "message":"Vis avlusingshendelser i konsoll-loggboken (som sløver ned utvidelsen)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption":{
+    "message":"Tillat AdBlock å samle inn anonyme filterliste-bruksdata, og informasjon om innholdet som blir blokkert av filterlister",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
   "updatedrightnow":{
     "message":"oppdatert akkurat nå",
     "description":"Label for filter list subscription"
@@ -311,6 +335,22 @@
     "message":"Henter... vennligst vent.",
     "description":"Status label when selecting a new filter list"
   },
+  "ab_filters_subscription_lastDownload_invalidURL":{
+    "message":"Mislyktes, ikke en gyldig adresse",
+    "description":"Filter lists tab of the Options page: Message when you subscribe to a non-list URL."
+  },
+  "ab_filters_subscription_lastDownload_connectionError":{
+    "message":"Mislyktes i å laste ned",
+    "description":"Filter lists tab of the Options page: Generic filter list download error message."
+  },
+  "ab_filters_subscription_lastDownload_invalidData":{
+    "message":"Mislyktes, ikke en gyldig filterliste",
+    "description":"Filter lists tab of the Options page: Invalid filter list file."
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch":{
+    "message":"Mislyktes, sjekksummene samsvarte ikke",
+    "description":"Filter lists tab of the Options page: Corrupted filter list file."
+  },
   "invalidListUrl":{
     "message":"Ugyldig liste-URL. Den vil bli slettet.",
     "description":"Message when you subscribe to a non-list URL"
@@ -326,6 +366,10 @@
   "you_know_thats_a_bad_idea_right":{
     "message":"Jo flere lister du velger, dess tregere kjører AdBlock. Hvis du bruker for mange lister, kan nettleseren slutte å virke på noen sider. Trykk OK for å abonnere på listen uansett.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
+  },
+  "unsubscribe_from_all_confirmation":{
+    "message":"AdBlock kan ikke blokkere reklamer hvis du deaktiverer alle filterlistene. Vi anbefaler å sette AdBlock på pause i stedet. Vil du avskrive deg fra denne listen likevel?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
   },
   "filterstabtitle":{
     "message":"Abonner på filterlister",
@@ -355,17 +399,45 @@
     "message":"Antisosial filterliste (tar bort knapper for sosiale media)",
     "description":"A filter list"
   },
+  "filterannoyances":{
+    "message":"Fanboy's Annoyances (Blokkerer oppsprettere, widgeter for sosiale medier og lignende, og andre plager)",
+    "description":"A filter list"
+  },
   "filterwarning_removal":{
     "message":"Adblock liste for fjerning av advarsel (fjerner advarsler om bruk av filtre)",
     "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filteracceptable_ads":{
+    "message":"Akseptable Reklamer",
+    "description":"A filter list"
+  },
+  "filteradblock_custom":{
+    "message":"Tilpassede AdBlock-filtre",
+    "description":"A filter list"
+  },
+  "filtereasylist":{
+    "message":"EasyList",
+    "description":"A filter list"
+  },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite",
+    "description":"A filter list"
   },
   "filterrussian":{
     "message":"Russisk og ukrainsk",
     "description":"Language names for a filter list"
   },
+  "filter_russian":{
+    "message":"Russisk og ukrainsk + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterczech":{
     "message":"Tsjekkisk og slovakisk",
     "description":"A filter list"
+  },
+  "filter_czech":{
+    "message":"Tsjekkisk og slovakisk + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (beskyttelse av privatliv)",
@@ -375,13 +447,25 @@
     "message":"Indonesisk",
     "description":"A filter list"
   },
+  "filter_easylist_plus_indonesian":{
+    "message":"Indonesisk + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtermalware":{
     "message":"Beskyttelse mot skadelig programvare",
+    "description":"A filter list"
+  },
+  "filterbitcoin_mining_protection":{
+    "message":"Beskyttelsesliste mot graving av krypto-myntenheter (f.eks. Bitcoin)",
     "description":"A filter list"
   },
   "filterlatvian":{
     "message":"Latvisk",
     "description":"A filter list"
+  },
+  "filter_latvian":{
+    "message":"Latvisk + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterswedish":{
     "message":"Svensk",
@@ -455,6 +539,22 @@
     "message":"Vær forsiktig: hvis du gjør en feil her kan mange andre filtere, inkludert de offisielle, bli ødelagt!\nLes [[filtersyntax-veiledningen]] for å lære hvordan du kan legge til avanserte svarteliste- og hvitelistefiltere.",
     "description":"Warning when manually editing filters."
   },
+  "filtersavewarning_ytadblock_1":{
+    "message":"Vær forsiktig: Hvis du gjør en tabbe her, kan AdBlock on YouTube kanskje slutte å virke riktig.",
+    "description":"First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
+  },
+  "filtersavewarning_ytadblock_2":{
+    "message":"Les [[filtersyntaks-anvisningen]] for å lære hvordan man legger til hvitelistingsfiltre.",
+    "description":"Second part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
+  },
+  "migration_error_message":{
+    "message":"Vi fant noen feil i dine tilpassede filtre. Se notisene nedenfor.",
+    "description":"Error when adding custom filters manually"
+  },
+  "delete_migration_error_messages":{
+    "message":"Slett meldinger",
+    "description":"Button to delete error messages when adding custom filters manually"
+  },
   "contentblockingwarning":{
     "message":"Merk: Hvitlisting (tillater annonser på) en side eller webområde støttes ikke med Safari når innholdsblokkering er aktivert.",
     "description":"Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
@@ -473,6 +573,10 @@
   },
   "adreportintro":{
     "message":"Fant en annonse på en webside? Vi vil hjelpe deg å finne det rette stedet å rapportere det til!",
+    "description":"Introduction of the ad reporting page"
+  },
+  "adreportvoluntary":{
+    "message":"Å rapportere reklamer er valgfritt. Det hjelper andre folk ved å gjøre det mulig for listevedlikeholderne å blokkere reklamen for alle. Hvis du ikke føler deg altrusitisk akkurat nå, er det også greit. Lukk da denne siden, og [[blokker reklamen]] for deg selv.",
     "description":"Introduction of the ad reporting page"
   },
   "malwarenotificationcheckboxmessage":{
@@ -507,6 +611,10 @@
     "message":"Sjekk Akseptabel Annonser filtre:",
     "description":"Section header on the ad report page"
   },
+  "clickdisableaa":{
+    "message":"Klikk på dette: [[Deaktiver akseptable reklamer]]",
+    "description":"Instruction on ad report page"
+  },
   "aamessageadreport":{
     "message":"Hvis du ikke vil se annonser som dette, kan du la Akseptabel Annonser filterlisten deaktivert.",
     "description":"Acceptable Ads message on ad report page"
@@ -514,6 +622,10 @@
   "aalinkadreport":{
     "message":"Finn ut mer om Akseptabel Annonse programmet.",
     "description":"Acceptable Ads link message on ad report page"
+  },
+  "adreportthanks":{
+    "message":"Tusen takk!",
+    "description":"Message to the user thanking them for sharing the URL with us."
   },
   "updateyourlists":{
     "message":"Sørg for at filterlistene dine er oppdatert:",
@@ -547,6 +659,10 @@
     "message":"Slå av alle utvidelser, utenom AdBlock:",
     "description":"Instruction on ad report page"
   },
+  "disableforchromestepone":{
+    "message":"Åpne [[utvidelsessiden]].",
+    "description":"Step 1 for disabling Chrome extensions"
+  },
   "clickdisableotherextensions":{
     "message":"ELLER så kan du bare klikke på denne knappen, så fikser vi alt: [[Deaktiver alle andre utvidelser]]",
     "description":"On the ad report page, an alternative way to disable other extensions"
@@ -574,6 +690,14 @@
   "disableforsafaristepone":{
     "message":"Klikk på Safari-menyen > Innstillinger > Utvidelser.",
     "description":"Step 1 for disabling Safari extensions"
+  },
+  "disableforedgestepone":{
+    "message":"Klikk på Mer-menyen (•••) og velg Utvidelser.",
+    "description":"Step 1 for disabling Edge extensions"
+  },
+  "disableforedgesteptwo":{
+    "message":"For alle utvidelser bortsett fra AdBlock, klikk på girikonet (⚙), og klikk på Av\/På-knappen for å endre den til Av.",
+    "description":"Step 2 for disabling Edge extensions"
   },
   "reenableadsonebyone":{
     "message":"Utmerket! Nå la oss finne ut hvilke utvidelser som er årsaken. Gå og aktivere hver utvidelse enkeltvis. Utvidelsen som bringer tilbake den annonsen(e) er det du trenger å avinstallere for å kvitte deg med annonsene.",
@@ -707,9 +831,17 @@
     "message":"Bulgarsk",
     "description":"A filter list"
   },
+  "filter_easylist_plus_bulgarian":{
+    "message":"Bulgarsk + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filterchinese":{
     "message":"Kinesisk",
     "description":"A filter list"
+  },
+  "filter_chinese":{
+    "message":"Kinesisk + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterdanish":{
     "message":"Dansk",
@@ -719,6 +851,10 @@
     "message":"Nederlandsk",
     "description":"A filter list"
   },
+  "filter_dutch":{
+    "message":"Nederlandsk + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_finnish":{
     "message":"Finsk",
     "description":"A filter list"
@@ -727,9 +863,17 @@
     "message":"Fransk",
     "description":"A filter list"
   },
+  "filter_easylist_plus_french":{
+    "message":"Fransk + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_german":{
     "message":"Tysk",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_german":{
+    "message":"Tysk + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_greek":{
     "message":"Gresk",
@@ -743,9 +887,17 @@
     "message":"Hebraisk",
     "description":"A filter list"
   },
+  "filter_israeli":{
+    "message":"Hebraisk + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filteritalian":{
     "message":"Italiensk",
     "description":"A filter list"
+  },
+  "filter_italian":{
+    "message":"Italiensk + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filterjapanese":{
     "message":"Japansk",
@@ -763,6 +915,10 @@
     "message":"Rumensk",
     "description":"A filter list"
   },
+  "filter_easylist_plus_romanian":{
+    "message":"Rumensk + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "filtereasylist_plus_spanish":{
     "message":"Spansk",
     "description":"A filter list"
@@ -770,6 +926,10 @@
   "filtereasylist_plus_arabic":{
     "message":"Arabisk",
     "description":"A filter list"
+  },
+  "filter_easylist_plus_arabic_plus_french":{
+    "message":"Arabisk og fransk + EasyList",
+    "description":"A filter list combined with EasyList"
   },
   "filtereasylist_plus_estonian":{
     "message":"Estonesisk",
@@ -783,9 +943,17 @@
     "message":"Litauisk",
     "description":"A filter list"
   },
+  "filter_easylist_plus_lithuania":{
+    "message":"Litauisk + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
   "other":{
     "message":"Annet",
     "description":"Multiple choice option"
+  },
+  "nodefaultfilter1":{
+    "message":"Vi har ikke noen standard-filterlister for det språket. Vennligst prøv å finn [[en passende liste som støtter dette språket]], eller blokker denne reklamen for deg selv gjennom AdBlock-menyen.",
+    "description":"Instructions on ad report page pointing users to EasyList subscriptions list."
   },
   "retryaftersubscribe":{
     "message":"Abonner på denne filterlisten, og prøv igjen: $list_title$",
@@ -801,9 +969,25 @@
     "message":"Sjekk i Firefox ",
     "description":"Tell a user to see if a reported ad also appears in Firefox"
   },
+  "checkinfirefoxorchrometitle":{
+    "message":"Sjekk i Firefox eller Chrome",
+    "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome"
+  },
   "checkinfirefox_1":{
     "message":"Installer Firefox hvis du ikke har det.",
     "description":"instruction for how to check Firefox for a reported ad"
+  },
+  "checkinfirefoxorchrome_1":{
+    "message":"Installer Firefox eller Chrome hvis du ikke har dem.",
+    "description":"instruction for how to check Firefox or Chrome for a reported ad"
+  },
+  "checkinfirefox_2":{
+    "message":"Installer Adblock Plus for Firefox, hvis du ikke har det.",
+    "description":"Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefoxorchrome_2":{
+    "message":"Installer Adblock Plus for Firefox, eller AdBlock for Chrome, hvis du ikke har dem.",
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
   },
   "checkinfirefox_3":{
     "message":"I den nettleseren, abonner på de samme filterlistene som her.",
@@ -915,6 +1099,10 @@
     "message":"side",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"WebSocket",
+    "description":"A resource type"
+  },
   "typeunknown":{
     "message":"ukjent",
     "description":"A resource type"
@@ -947,6 +1135,10 @@
     "message":"Beklager, AdBlock er deaktivert på denne siden av en av dine filerlister.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
   },
+  "disabled_by_filter_lists_yt":{
+    "message":"Beklager, AdBlock på YouTube™ er deaktivert på denne siden av en av innstillingene dine.",
+    "description":"Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+  },
   "dont_run_on_pages_on_domain":{
     "message":"Deaktiver på sider under dette domenet",
     "description":"Menu entry to open the whitelist wizard"
@@ -955,9 +1147,17 @@
     "message":"AdBlock er deaktivert på denne siden.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
   },
+  "disabled_on_this_channel":{
+    "message":"Du har tillatt reklamer på denne kanalen.",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
+  },
   "enable_adblock":{
     "message":"Aktiver AdBlock på denne siden",
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
+  },
+  "enable_adblock_on_this_channel":{
+    "message":"Blokker reklamer på denne kanalen",
+    "description":"Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
   },
   "status_paused":{
     "message":"AdBlock er satt på pause.",
@@ -971,6 +1171,14 @@
     "message":"Sett AdBlock på pause",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
   },
+  "unpause_adblocking":{
+    "message":"Fortsett reklameblokkeringen igjen",
+    "description":"Menu entry to unpause the extension (start blocking ads again)"
+  },
+  "pause_adblocking":{
+    "message":"Sett reklameblokkering på pause",
+    "description":"Menu entry to pause the extension (stop blocking ads)"
+  },
   "safaricontentblockingpausemessage":{
     "message":"For å pause AdBlock med innholdsblokkering aktivert, Velg Safari (i menylinjen) > innstillinger > utvidelser > AdBlock, og fjern krysset \"Aktiver AdBlock.",
     "description":"Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled."
@@ -978,6 +1186,10 @@
   "safaricontentblockinglimitexceeded":{
     "message":"Antall filter lister overskrider grensen på 50 000, og er automatisk redusert. Vennligst fjern noen filterlister eller deaktivere Safari innholdsblokkering!",
     "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled."
+  },
+  "browserestartrequired":{
+    "message":"Vennligst start Safari på nytt for å fullføre avskruingen av innholdsblokkering.",
+    "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch."
   },
   "safarinotificationtitle":{
     "message":"Innholds blokkering regelen er overskredet",
@@ -1003,9 +1215,25 @@
     "message":"Skjul denne knappen",
     "description":"Toolbar button menu entry to hide the AdBlock button"
   },
+  "donate_to_adblock":{
+    "message":"Elsker du AdBlock? Tenk over om du vil donere!",
+    "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"Hjelp og tilbakemelding",
+    "description":"Text of a help link in the toolbar button menu"
+  },
+  "donate_to_youtube_adblock":{
+    "message":"Elsker du dette? Tenk gjerne på om du vil donere!",
+    "description":"Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
+  },
   "pwyw":{
     "message":"Betal det du vil!",
     "description":"Text of a payment request link"
+  },
+  "privacy_policy":{
+    "message":"Retningslinjer for personvern",
+    "description":"Link to AdBlock's privacy policy"
   },
   "translator_credit":{
     "message":"Bidragsytere til oversettelsen:",
@@ -1014,6 +1242,14 @@
   "tabsupport":{
     "message":"Støtte",
     "description":"A tab on the Options page"
+  },
+  "tabtranslations":{
+    "message":"Oversettelser",
+    "description":"A tab on the Options page"
+  },
+  "translators":{
+    "message":"Lær mer om hvordan man kan hjelpe til med å oversette AdBlock [[her]]",
+    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
   },
   "report_ad_on_page":{
     "message":"Rapporter en annonse på denne siden",
@@ -1099,6 +1335,30 @@
     "message":"Vis antall annonser blokkert i AdBlock-menyen",
     "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
+  "show_on_button":{
+    "message":"Vis antall blokkerte reklamer på knappen",
+    "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_menu":{
+    "message":"Vis antall blokkerte reklamer i menyen",
+    "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "block_ads_on_youtube":{
+    "message":"Fjern reklamer på YouTube™",
+    "description":"Label for checkbox letting user choose whether to block ads on youtube.com"
+  },
+  "block_privacy_on_youtube":{
+    "message":"Beskytt personvernet mitt på YouTube™",
+    "description":"Checkbox letting user choose whether to block privacy-related requests on youtube.com"
+  },
+  "block_annonyances_on_youtube":{
+    "message":"Fjern irritasjoner på YouTube™",
+    "description":"Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
+  },
+  "show_devtools_panel":{
+    "message":"Vis 'AdBlock'-panelet i utviklerverktøyene",
+    "description":"Checkbox letting user choose whether the AdBlock tab should be displayed in the developer tools window"
+  },
   "adblockinglist":{
     "message":"Liste over annonsefiltre",
     "description":"Subtitle on the Filter lists tab: List of filter lists to block ads."
@@ -1141,6 +1401,26 @@
     "message":" --Velg språk-- ",
     "description":"First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Tillat hvitelisting av spesifikke YouTube™-kanaler (Krever en omstart av nettleseren din)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "whitelist_all_youtube_channels":{
+    "message":"Hvitelist alle YouTube™-kanaler du abonnerer på",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled."
+  },
+  "one_moment_all_youtube_channels":{
+    "message":"Et øyeblikk, mens vi samler sammen alle dinne abonnementer",
+    "description":"Alert displayed when whitelisting all subscribed YouTube channels"
+  },
+  "all_youtube_channels_complete":{
+    "message":"Alle dine YouTube™-kanalabonnementer har blitt hvitelistet",
+    "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
+  },
+  "allow_ads_all_youtube_channels":{
+    "message":"Tillater reklamer på alle YouTube™-kanaler du abonnerer på",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
   "whitelist_youtube_channel":{
     "message":"Hvitelist kanalen $name$",
     "description":"Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
@@ -1150,6 +1430,10 @@
         "example":"Name of channel"
       }
     }
+  },
+  "whitelist_youtube_channel_v2":{
+    "message":"Tillat reklamer på YouTube™-kanalen:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters":{
     "message":"Er du sikker på at du vil ta bort $count$ blokkeringene som du har fjernet på $host$?",
@@ -1189,6 +1473,10 @@
     "message":"AdBlock-oppdateringer",
     "description":"Subtitle on the Support tab"
   },
+  "ytadblockupdates":{
+    "message":"Oppdateringer av AdBlock on YouTube™",
+    "description":"Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
+  },
   "whatmakesadblocktick":{
     "message":"Vil du se hva som får AdBlock til å virke?",
     "description":"Subtitle on the Support tab. This section contains links to the AdBlock source code and contributors. In this context, 'tick' can be replaced with the word 'work'."
@@ -1201,9 +1489,17 @@
     "message":"Kildekoden er [[fritt tilgjengelig]]!",
     "description":"Link to the source code of AdBlock on the Support tab"
   },
+  "contributors":{
+    "message":"Vi har også en side som hjelper deg å lære om [[folkene bak AdBlock]]!",
+    "description":"Link to the contributors page on the Support tab"
+  },
   "debuginfo":{
     "message":"Har vårt team etterspurt feilsøkingsinfo? Klikk [[her]] for det!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Hvorfor ikke sende oss en [[bug-rapportering]]?",
+    "description":"Link to send a bug report on the Support tab"
   },
   "supportsite":{
     "message":"La oss få vite det på vår [[støtteside]]!",
@@ -1232,6 +1528,14 @@
   "show_resourcelist":{
     "message":"Vis alle forespørsler",
     "description":"Menu entry to open the resource list page"
+  },
+  "new_resourcelist_explanation_win":{
+    "message":"For å vise alle forespørsler, høyreklikk på siden, og så velg 'Inspiser' (Ctrl+Shift+i), og så velg 'AdBlock'-fanen.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+ (Windows)"
+  },
+  "new_resourcelist_explanation_osx":{
+    "message":"For å vise alle forespørsler, høyreklikk på siden, og så velg 'Inspiser' (Option+⌘+i), og så velg 'AdBlock'-fanen.",
+    "description":"Message explaining how to access the resource list page on AdBlock 3.0+ (Mac)"
   },
   "noresourcessend2":{
     "message":"No gikk galt. Ingen elementer har blitt sendt. Denne siden vil nå lukkes. Prøv å last inn på nytt.",
@@ -1317,6 +1621,38 @@
     "message":"Du kan aktivere dette alternativet og støtte nettsteder du elsker ved å velge \"Tilatt noen ikke-påtrengende reklamer\" nedenfor.",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
+  "easylist_lite_or_easylist":{
+    "message":"Vi anbefaler å abonnere på enten \"EasyList Lite\" eller \"EasyList\", men ikke begge to av dem.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlock bruker EasyList til å blokkere annonser på de fleste nettsteder.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"Vi anbefaler at du lar den stå på. Hvis du avmeldte deg den ved et uhell, vennligst velg \"EasyList\" nå for å blokkere flere reklamer.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock bruker EasyList eller EasyList Lite til å blokkere annonser på de fleste nettsteder.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"Vi anbefaler at du lar den stå på. Hvis du avmeldte deg den ved et uhell, vennligst velg \"EasyList\" eller \"EasyList Lite\" nå for å blokkere flere reklamer.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"Vi avmeldte deg fra \"Akseptable reklamer\" fordi du skrudde på Safari-innholdsblokkering. Du kan bare velge én av dem om gangen. ([[Hvorfor?]])",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"Vi skrudde av Safari-innholdsblokkering, siden du valgte å tillate ikke-påtrengende reklamer. Du kan bare velge én om gangen. ([[Hvorfor?]])",
+    "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
+  },
+  "adreport_laststep":{
+    "message":"Siste trinn: Rapporter inn problemet til oss.",
+    "description":"Subtitle on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
+  },
   "adreport_name":{
     "message":"Hva er ditt navn?",
     "description":"Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
@@ -1324,5 +1660,81 @@
   "adreport_email":{
     "message":"Hva er din e-postadresse?",
     "description":"Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
+  "adreport_email_privacy":{
+    "message":"Vi vil kun bruke dette til å kontakte deg hvis vi behøver mer informasjon.",
+    "description":"Let the user know that their email address won't be used for reasons other than contacting them about their bug or ad report."
+  },
+  "adreport_location":{
+    "message":"Nøyaktig hvor på siden er reklamen? Hva ser den ut som?",
+    "description":"Question on the ad report page asking the user to describe the ad and its location on a webpage."
+  },
+  "adreport_screen_cap_upload":{
+    "message":"Legg med et skjermklipp:",
+    "description":"Label next to a file upload button."
+  },
+  "adreport_filter":{
+    "message":"Hvis du har laget et fungerende filter gjennom \"Blokker en reklame\"-veiviseren, kan du lime den inn i boksen nedenfor:",
+    "description":"Optional question on the ad report page when the ad needs to be reported to AdBlock."
+  },
+  "buttonsubmit":{
+    "message":"Send",
+    "description":"Button to send a form."
+  },
+  "adreport_missing_info":{
+    "message":"Den påkrevde informasjonen mangler eller er ugyldig. Vennligst skriv inn i de spørsmålsfeltene som har en rød kant.",
+    "description":"Error message shown when the user doesn't enter anything in some of the text fields."
+  },
+  "adreport_missing_screenshot":{
+    "message":"Du glemte å legge ved et skjermbilde! Vi kan ikke hjelpe deg hvis vi ikke kan se annonsen(e) du rapporterer.",
+    "description":"Error message shown when the user doesn't attach a screenshot to an ad report."
+  },
+  "adreport_response_success":{
+    "message":"Alt klart! Vi vil komme i kontakt så fort vi kan. I mellomtiden, se etter en E-post fra AdBlock. Du vil finne en lenke til billetten din på vår hjelpeside der, i tillegg til noen selvhjelpsråd hvis vi ikke kan komme tilbake til deg umiddelbart.",
+    "description":"Shown when a ticket has been sumbitted to AdBlock's support site successfully."
+  },
+  "adreport_response_invalid_file":{
+    "message":"Det er ikke en bildefil. Vennligst last opp en .png-, .gif-, eller .jpg-fil.",
+    "description":"Error message shown when the user uploads an invalid file type."
+  },
+  "adreport_response_large_file":{
+    "message":"Den filen er for stor. Vennligst sørg for at filen din er mindre enn 10 MB.",
+    "description":"Error message shown when the user tries to upload a large image file."
+  },
+  "adreport_response_save_error":{
+    "message":"Feil under lagring av den opplastede filen.",
+    "description":"Error message shown when the server could not save an attached file."
+  },
+  "adreport_response_file_name":{
+    "message":"Filnavnet er for langt. Vennligst gi filen din et kortere navn.",
+    "description":"Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
+  },
+  "adreport_all_debug_info":{
+    "message":"Den følgende informasjonen vil også bli lagt til i reklamerapporten.",
+    "description":"Shows the user the debug information that will be sent along with their report."
+  },
+  "adreport_server_response_error_msg":{
+    "message":"Det oppstod en feil under behandling av forespørselen din.",
+    "description":"Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
+  },
+  "adreport_server_response_error__manual_msg_step1":{
+    "message":"Vennligst gå til [[vår kundestøtteside]].",
+    "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "adreport_server_response_error__manual_msg_step2":{
+    "message":"Og manuelt opprette en billett, og kopier og lim inn informasjonen nedenfor i \"Fill in any details you think will help us understand your issue\"-feltet.",
+    "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "custom_filters_migration_error_message_part1":{
+    "message":"Antall feil i de tilpassede filtrene: ",
+    "description":"Part one of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part2":{
+    "message":"De(n) følgende meldingen(e) ble generert under migreringen av tilpassede filtre (Ignorer linjenumrene): ",
+    "description":"Part two of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3":{
+    "message":"Opprinnelig oppføring: ",
+    "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
   }
 }

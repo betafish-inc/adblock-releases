@@ -151,6 +151,9 @@ STATS = (function()
         pc : total_pings,
         cb : getSettings().safari_content_blocking ? '1' : '0',
         dcv2 : getSettings().data_collection_v2 ? '1' : '0',
+        cdn: getSettings().local_cdn ? '1' : '0',
+        cdnr: LocalCDN.getRedirectCount(),
+        cdnd: LocalCDN.getDataCount(),
       };
       // only on Chrome
       if (flavor === "E" && Prefs.blocked_total)
@@ -227,6 +230,9 @@ STATS = (function()
       {
         $.ajax(ajaxOptions);
       }
+
+      // send Local CDN missed versions stats as well
+      recordGeneralMessage("cdn_miss_stats", undefined, {"cdnm": LocalCDN.getMissedVersions()});
     });
   };
 
