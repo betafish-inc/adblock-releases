@@ -15,7 +15,19 @@ function cleanCustomFilter(filters)
     {
       filters.splice(index, 1);
     }
+  } 
+
+  // Remove the domain pause white-list items
+  var domainPauses = backgroundPage.adblockIsDomainPaused();
+  for (var aDomain in domainPauses)
+  {
+    var index = filters.indexOf("@@" + aDomain + "$document");
+    if (index >= 0)
+    {
+      filters.splice(index, 1);
+    }
   }
+
   return filters;
 }
 

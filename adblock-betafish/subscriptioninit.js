@@ -71,7 +71,7 @@ function getSubscriptions()
   {
     var acceptableAdsSubscription = Subscription.fromURL("https://cdn.adblockcdn.com/filters/adblock_custom.txt");
     subscriptions.push(acceptableAdsSubscription);
-    var nominersSubscription = Subscription.fromURL("https://cdn.adblockcdn.com/filters/nominers.txt");
+    var nominersSubscription = Subscription.fromURL("https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt");
     subscriptions.push(nominersSubscription);
   }
 

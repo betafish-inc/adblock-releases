@@ -47,19 +47,22 @@ $(function ()
 
     show(['div_options', 'separator2']);
     var paused = BG.adblockIsPaused();
+    var domainPaused = BG.adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id});
     if (paused)
     {
       show(['div_status_paused', 'separator0', 'div_paused_adblock', 'div_options']);
+    } else if (domainPaused)
+    {
+      show(['div_status_domain_paused', 'separator0', 'div_domain_paused_adblock', 'div_options']);
     } else if (info.disabledSite)
     {
-      show(['div_status_disabled', 'separator0', 'div_pause_adblock', 'div_options', 'div_help_hide_start']);
+      show(['div_status_disabled', 'separator0', 'div_pause_adblock', 'div_options']);
     } else if (info.whitelisted)
     {
-      show(['div_status_whitelisted', 'div_enable_adblock_on_this_page', 'separator0', 'div_pause_adblock', 'separator1', 'div_options', 'div_help_hide_start']);
+      show(['div_status_whitelisted', 'div_enable_adblock_on_this_page', 'separator0', 'div_pause_adblock', 'separator1', 'div_options']);
     } else
     {
-      show(['div_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_show_resourcelist_start', 'div_report_an_ad', 'separator1', 'div_options',
-          'div_help_hide_start', 'separator3', 'block_counts', ]);
+      show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_report_an_ad', 'separator3', 'separator4', 'div_options', 'block_counts']);
 
       $('#page_blocked_count').text(getBlockedPerPage(page).toLocaleString());
       $('#total_blocked_count').text(Prefs.blocked_total.toLocaleString());
@@ -76,7 +79,7 @@ $(function ()
 
     var host = parseUri(page.unicodeUrl).host;
     var advancedOption = info.settings.show_advanced_options;
-    var eligibleForUndo = !paused && (info.disabledSite || !info.whitelisted);
+    var eligibleForUndo = !paused && !domainPaused && (info.disabledSite || !info.whitelisted);
     var urlToCheckForUndo = info.disabledSite ? undefined : host;
     if (eligibleForUndo && BG.countCache.getCustomFilterCount(urlToCheckForUndo))
     {
@@ -102,7 +105,7 @@ $(function ()
     // whitelisting of domains is not currently supported.
     if (SAFARI && info.settings.safari_content_blocking)
     {
-      hide(['div_paused_adblock', 'div_whitelist_page', 'div_whitelist']);
+      hide(['div_paused_adblock', 'div_domain_paused_adblock', 'div_whitelist_page', 'div_whitelist']);
     }
 
     for (var div in shown)
@@ -113,7 +116,7 @@ $(function ()
       }
     }
 
-    if (SAFARI || !Prefs.show_statsinpopup || paused || info.disabledSite || info.whitelisted)
+    if (SAFARI || !Prefs.show_statsinpopup || paused || domainPaused || info.disabledSite || info.whitelisted)
     {
       $('#block_counts').hide();
     }
@@ -202,6 +205,14 @@ $(function ()
     closeAndReloadPopup();
   });
 
+  $('#div_domain_paused_adblock').click(function ()
+  {
+    BG.recordGeneralMessage("domain_unpause_clicked");
+    BG.adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id}, false);
+    BG.updateButtonUIAndContextMenus();
+    closeAndReloadPopup();
+  });
+
   $('#div_undo').click(function ()
   {
     BG.recordGeneralMessage("undo_clicked");
@@ -242,6 +253,14 @@ $(function ()
     {
       BG.log(ex);
     }
+  });
+
+  $('#div_domain_pause_adblock').click(function ()
+  {
+    BG.recordGeneralMessage("domain_pause_clicked");
+    BG.adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id}, true);
+    BG.updateButtonUIAndContextMenus();
+    closeAndReloadPopup();
   });
 
   $('#div_blacklist').click(function ()
@@ -294,16 +313,6 @@ $(function ()
     !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
   });
 
-  $('#div_show_resourcelist').click(function ()
-  {
-    BG.recordGeneralMessage("resource_clicked");
-    if (backgroundPage.STATS.os === 'Mac OS X')
-    {
-      $('#new_resourcelist_explanation').text(translate('new_resourcelist_explanation_osx'))
-    }
-    $('#new_resourcelist_explanation').slideToggle();
-  });
-
   $('#div_report_an_ad').click(function ()
   {
     BG.recordGeneralMessage("report_ad_clicked");
@@ -317,25 +326,6 @@ $(function ()
     BG.recordGeneralMessage("options_clicked");
     BG.ext.pages.open(BG.ext.getURL('options.html'));
     closeAndReloadPopup();
-  });
-
-  $('#div_help_hide').click(function ()
-  {
-    BG.recordGeneralMessage("help_clicked");
-    if (OPERA)
-    {
-      $('#help_hide_explanation').text(translate('operabutton_how_to_hide2')).slideToggle();
-    } else if (SAFARI)
-    {
-      $('#help_hide_explanation').text(translate('safaributton_how_to_hide2')).slideToggle(function ()
-      {
-        var popupheight = $('body').outerHeight();
-        safari.extension.popovers[0].height = popupheight;
-      });
-    } else
-    {
-      $('#help_hide_explanation').slideToggle();
-    }
   });
 
   $('#link_open').click(function ()

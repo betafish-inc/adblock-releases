@@ -456,6 +456,131 @@ var adblockIsPaused = function (newValue)
   sessionstorage_set(pausedKey, newValue);
 };
 
+// Get or set if AdBlock is domain paused for the domain of the specified tab
+// Inputs:  activeTab (optional object with url and id properties): the paused tab
+//          newValue (optional boolean): if true, AdBlock will be domain paused 
+// on the tab's domain, if false, AdBlock will not be domain paused on that domain.
+// Returns: undefined if activeTab and newValue were specified; otherwise if activeTab 
+// is specified it returns true if domain paused, false otherwise; finally it returns
+// the complete storedDomainPauses if activeTab is not specified
+var domainPausedKey = 'domainPaused';
+var adblockIsDomainPaused = function (activeTab, newValue)
+{
+  // get stored domain pauses
+  var storedDomainPauses = sessionstorage_get(domainPausedKey);
+
+  // return the complete list of stored domain pauses if activeTab is undefined
+  if (activeTab === undefined)
+  {
+    return storedDomainPauses;
+  }
+
+  // return a boolean indicating whether the domain is paused if newValue is undefined
+  var activeDomain = parseUri(activeTab.url).host;
+  if (newValue === undefined)
+  {
+    if (storedDomainPauses)
+    {
+      return (storedDomainPauses.hasOwnProperty(activeDomain));
+    } else 
+    {
+      return false;
+    }
+  }
+
+  // create storedDomainPauses object if needed
+  if (!storedDomainPauses) 
+  {
+    storedDomainPauses = {};
+  }
+
+  // set or delete a domain pause
+  var result = parseFilter("@@" + activeDomain + "$document");
+  if (newValue === true)
+  {
+    // add a domain pause
+    FilterStorage.addFilter(result.filter);
+    storedDomainPauses[activeDomain] = activeTab.id;
+    chrome.tabs.onUpdated.addListener(domainPauseNavigationHandler);
+    chrome.tabs.onRemoved.addListener(domainPauseClosedTabHandler);
+  } else
+  {
+    // remove the domain pause
+    FilterStorage.removeFilter(result.filter);
+    delete storedDomainPauses[activeDomain];
+  }
+
+  // save the updated list of domain pauses
+  saveDomainPauses(storedDomainPauses);
+};
+
+// Handle the effects of a tab update event on any existing domain pauses
+// Inputs:  tabId (required integer): identifier for the affected tab
+//          changeInfo (required object with a url property): contains the
+// new url for the tab
+//          tab (optional Tab object): the affected tab
+// Returns: undefined 
+var domainPauseNavigationHandler = function(tabId, changeInfo, tab) 
+{
+  if (changeInfo === undefined || changeInfo.url === undefined || tabId === undefined)
+  {
+    return;
+  }
+
+  var newDomain = parseUri(changeInfo.url).host;
+
+  domainPauseChangeHelper(tabId, newDomain);
+};
+
+// Handle the effects of a tab remove event on any existing domain pauses
+// Inputs:  tabId (required integer): identifier for the affected tab
+//          changeInfo (optional object): info about the remove event
+// Returns: undefined
+var domainPauseClosedTabHandler = function(tabId, removeInfo) 
+{
+  if (tabId === undefined)
+  {
+    return;
+  }
+
+  domainPauseChangeHelper(tabId);
+};
+
+// Helper that removes any domain pause filter rules based on tab events
+// Inputs:  tabId (required integer): identifier for the affected tab
+//          newDomain (optional string): the current domain of the tab
+// Returns: undefined
+var domainPauseChangeHelper = function(tabId, newDomain)
+{
+  // get stored domain pauses
+  var storedDomainPauses = sessionstorage_get(domainPausedKey);
+
+  // check if any of the stored domain pauses match the affected tab
+  for (var aDomain in storedDomainPauses)
+  {
+    if (storedDomainPauses[aDomain] === tabId && aDomain != newDomain)
+    {
+      // Remove the filter that white-listed the domain
+      var result = parseFilter("@@" + aDomain + "$document");
+      FilterStorage.removeFilter(result.filter);
+      delete storedDomainPauses[aDomain];
+
+      // save updated domain pauses
+      saveDomainPauses(storedDomainPauses);
+    }
+  }
+  updateButtonUIAndContextMenus();
+};
+
+// Helper that saves the domain pauses 
+// Inputs:  domainPauses (required object): domain pauses to save
+// Returns: undefined
+var saveDomainPauses = function(domainPauses) 
+{
+  ext.storage.set(domainPausedKey, domainPauses);
+  sessionstorage_set(domainPausedKey, domainPauses);
+}
+
 // If AdBlock was paused on shutdown (adblock_is_paused is true), then
 // unpause / remove the white-list all entry at startup.
 ext.storage.get(pausedKey, function (response)
@@ -476,6 +601,37 @@ ext.storage.get(pausedKey, function (response)
     };
 
     FilterNotifier.addListener(pauseHandler);
+  }
+});
+
+// If AdBlock was domain paused on shutdown, then unpause / remove 
+// all domain pause white-list entries at startup.
+ext.storage.get(domainPausedKey, function (response)
+{
+  try 
+  {
+    var storedDomainPauses = response[domainPausedKey];
+    if (!jQuery.isEmptyObject(storedDomainPauses))
+    {
+      var domainPauseHandler = function (action)
+      {
+        if (action == 'load')
+        {
+          FilterNotifier.removeListener(domainPauseHandler);
+          for (var aDomain in storedDomainPauses) 
+          {
+            var result = parseFilter("@@" + aDomain + "$document");
+            FilterStorage.removeFilter(result.filter);
+          }
+          ext.storage.remove(domainPausedKey);
+        }
+      };
+
+      FilterNotifier.addListener(domainPauseHandler);
+    }
+  } catch (err)
+  {
+    // do nothing
   }
 });
 

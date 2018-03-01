@@ -29,7 +29,7 @@
     {
       return;
     }
-    if (getSettings().data_collection_v2 && !adblockIsPaused() && changeInfo.status === 'loading'  )
+    if (getSettings().data_collection_v2 && !adblockIsPaused() && !adblockIsDomainPaused({"url": tabInfo.url, "id": tabId}) && changeInfo.status === 'loading'  )
     {
       chrome.tabs.executeScript(tabId,
       {
@@ -50,7 +50,7 @@
   {
     port.on("datacollection.elementHide", (message, sender) =>
     {
-      if (getSettings().data_collection_v2 && !adblockIsPaused())
+      if (getSettings().data_collection_v2 && !adblockIsPaused() && !adblockIsDomainPaused({"url": sender.page.url, "id": sender.page.id}))
       {
         var selectors = message.selectors;
         var filters = message.filters;
@@ -83,7 +83,7 @@
 
   var webRequestListener = function(details)
   {
-    if (details.url && details.type === "main_frame" && !adblockIsPaused())
+    if (details.url && details.type === "main_frame" && !adblockIsPaused() && !adblockIsDomainPaused({"url": details.url, "id": details.id}))
     {
       var domain = parseUri(details.url).host;
       if (!dataCollectionCache.domains[domain]) {
@@ -145,7 +145,7 @@
 
   var filterListener = function(item, newValue, oldValue, page)
   {
-    if (getSettings().data_collection_v2 && !adblockIsPaused())
+    if (getSettings().data_collection_v2 && !adblockIsPaused() && (!page || !adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id})))
     {
       addFilterToCache(item, page);
     }

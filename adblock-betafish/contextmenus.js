@@ -6,7 +6,7 @@ var updateButtonUIAndContextMenus = function ()
   {
     pages.forEach(function (page)
     {
-      if (adblockIsPaused())
+      if (adblockIsPaused() || adblockIsDomainPaused({"url": page.url.href, "id": page.id}))
       {
         page.browserAction.setBadge({ number: '' });
       }

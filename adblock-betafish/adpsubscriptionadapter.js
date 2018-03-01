@@ -504,7 +504,7 @@ var abSubscriptionIdMap =
     language : false,
     hidden : false,
   },
-  "https://cdn.adblockcdn.com/filters/nominers.txt" :
+  "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt" :
   {
     id : "bitcoin_mining_protection", // Cryptocurrency (Bitcoin) Mining Protection
     language : false,
