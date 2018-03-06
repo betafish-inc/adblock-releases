@@ -200,7 +200,7 @@
     "description":"Checkbox in the whitelist wizard"
   },
   "wizardcantrunonframesets":{
-    "message":"Функцията на AdBlock няма да работи тук, защото сайтът ползва остаряла технология. Можете да забраните или да изключите ресурсите наръка от преградка „Нагласяване“ в страницата с настройки.",
+    "message":"Възможността на AdBlock няма да работи тук, защото сайтът ползва остаряла технология. Можете да забраните или да изключите ресурсите наръка от преградка „Нагласяване“ в страницата с настройки.",
     "description":"Alert shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
   "subscribeconfirm":{
@@ -268,7 +268,7 @@
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "datacollectionoption":{
-    "message":"Събирай анонимно за AdBlock данни с ползваните филтри и сведения с блокираното съдържание",
+    "message":"Събирай анонимно данни с ползваните филтри и сведения с блокираното съдържание в AdBlock",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
@@ -392,7 +392,7 @@
     "description":"Subscribe to a filter list button"
   },
   "showlinkstolists2":{
-    "message":"Показвай препратки към филтрите",
+    "message":"Покажи филтрите с препратки",
     "description":"Label to display filter list links"
   },
   "filterantisocial":{
@@ -400,7 +400,7 @@
     "description":"A filter list"
   },
   "filterannoyances":{
-    "message":"Разреши Fanboy Annoyances (премахва досадни неща)",
+    "message":"Разреши Annoyances от Fanboy (премахва досадни неща)",
     "description":"A filter list"
   },
   "filterwarning_removal":{
@@ -412,7 +412,7 @@
     "description":"A filter list"
   },
   "filteradblock_custom":{
-    "message":"Разреши собствен пакет на AdBlock",
+    "message":"Разреши собствения пакет на AdBlock",
     "description":"A filter list"
   },
   "filtereasylist":{
@@ -452,11 +452,11 @@
     "description":"A filter list combined with EasyList"
   },
   "filtermalware":{
-    "message":"Разреши защитата от злонамерен софтуер",
+    "message":"Разреши защитата от вредоносен софтуер",
     "description":"A filter list"
   },
   "filterbitcoin_mining_protection":{
-    "message":"Разреши защита от добив на криптовалута (биткоини)",
+    "message":"Разреши защитата от добив на криптовалута (биткоин)",
     "description":"A filter list"
   },
   "filterlatvian":{
@@ -580,15 +580,15 @@
     "description":"Introduction of the ad reporting page"
   },
   "malwarenotificationcheckboxmessage":{
-    "message":"Уведомявай за установен от AdBlock злонамерен софтуер",
+    "message":"Уведомявай за установен от AdBlock вредоносен софтуер",
     "description":"Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock блокира изтегляне от сайт, за който се знае, че хоства злонамерен софтуер.",
+    "message":"AdBlock блокира изтегляне от сайт, за който се знае, че хоства вредоносен софтуер.",
     "description":"Notification when a potential malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
-    "message":"Повече за злонамерения софтуер",
+    "message":"Повече за вредоносния софтуер",
     "description":"Button on the malware notification that opens a page about malware on the AdBlock website. Message should be under 45 characters!"
   },
   "malwarenotificationdisablethesemessages":{
@@ -596,15 +596,15 @@
     "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
   "malwarecheck":{
-    "message":"Проверете за злонамерен софтуер, инжектиращ реклами:",
+    "message":"Проверете за вредоносен софтуер, инжектиращ реклами:",
     "description":"Section header on the ad report page"
   },
   "malwarewarning":{
-    "message":"Компютърът вероятно e заразен със злонамерен софтуер. Щракнете [[тук]] за повече сведения.",
+    "message":"Компютърът вероятно e заразен с вредоносен софтуер. Щракнете [[тук]] за повече сведения.",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
   },
   "malwarenotfound":{
-    "message":"Няма намерен злонамерен софтуер.",
+    "message":"Няма намерен вредоносен софтуер.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
   "disableaa":{
@@ -1183,6 +1183,10 @@
     "message":"Не изпълнявай за домейна",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"Не изпълнявай за страниците в сайта",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock е забранен за страницата.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1203,13 +1207,37 @@
     "message":"Задържан AdBlock.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock е задържан за всички сайтове.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock е задържан само за сайта.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Поднови блокирането",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Освободи AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Освободи AdBlock за сайта",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Задръж AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Задръж за всички сайтове",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Задръж само за сайта",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Освободи блокирането",
@@ -1241,6 +1269,10 @@
   },
   "undo_last_block":{
     "message":"Отмени блокираните за домейна",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"Отмени блокираните в сайта",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1396,7 +1428,7 @@
     "description":"Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
   },
   "show_devtools_panel":{
-    "message":"Показвай панел „AdBlock“ към инструментите за разработка",
+    "message":"Показвай панел AdBlock към Развойни инструменти",
     "description":"Checkbox letting user choose whether the AdBlock tab should be displayed in the developer tools window"
   },
   "adblockinglist":{
@@ -1570,11 +1602,11 @@
     "description":"Menu entry to open the resource list page"
   },
   "new_resourcelist_explanation_win":{
-    "message":"Щракнете с десен в страницата, изберете „Инспектирай“ (Ctrl+Shift+I) и отворете раздел „AdBlock“.",
+    "message":"Щракнете с десен в страницата, изберете „Обследвай“ (Ctrl+Shift+I) и отворете раздел AdBlock.",
     "description":"Message explaining how to access the resource list page on AdBlock 3.0+ (Windows)"
   },
   "new_resourcelist_explanation_osx":{
-    "message":"Щракнете с десен в страницата, изберете „Инспектирай“ (⌥+⌘+I) и отворете раздел „AdBlock“.",
+    "message":"Щракнете с десен в страницата, изберете „Обследвай“ (⌥+⌘+I) и отворете раздел AdBlock.",
     "description":"Message explaining how to access the resource list page on AdBlock 3.0+ (Mac)"
   },
   "noresourcessend2":{
@@ -1784,5 +1816,9 @@
   "display_language_selector":{
     "message":"Показвай AdBlock на",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Разреши местно кеширане на съдържанието за библиотеките на популярни сайтове",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

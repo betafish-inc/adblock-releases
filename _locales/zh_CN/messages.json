@@ -1183,6 +1183,10 @@
     "message":"不要在这个网域的页面上运行",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"不要在本网站的页面上运行",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock在这个页面上被禁用。",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1203,13 +1207,37 @@
     "message":"AdBlock 已暂停。",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock已在所有网站上暂停。",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock已在本网站上暂停。",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"恢复屏蔽广告",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"重新启用AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"在本网站上恢复运行AdBlock",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"暂停AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"在所有网站上暂停AdBlock",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"在本网站上暂停AdBlock",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"继续广告拦截",
@@ -1241,6 +1269,10 @@
   },
   "undo_last_block":{
     "message":"撤销我在此域上设置的屏蔽",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"撤消在本网站上暂停AdBlock",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1784,5 +1816,9 @@
   "display_language_selector":{
     "message":"以如下语言显示AdBlock",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"为流行的网站脚本库启用本地内容缓存",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

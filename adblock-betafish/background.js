@@ -661,13 +661,114 @@ if (!SAFARI && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
 }
 
 var updateStorageKey = 'last_known_version';
-chrome.runtime.onInstalled.addListener(function (details)
+// Temporarily commented out for /update release
+//chrome.runtime.onInstalled.addListener(function (details)
+//{
+//  if (details.reason === 'update' || details.reason === 'install')
+//  {
+//    localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
+//  }
+//});
+
+if (chrome.runtime.id)
 {
-  if (details.reason === 'update' || details.reason === 'install')
+  var updateTabRetryCount = 0;
+  var getUpdatedURL = function() 
   {
+    var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent(chrome.runtime.getManifest().version) + '/?u=' + STATS.userId();
+    updatedURL = updatedURL + '&bc=' + Prefs.blocked_total;
+    updatedURL = updatedURL + '&rt=' + updateTabRetryCount;
+    return updatedURL;
+  };
+  var waitForUserAction = function() 
+  {
+    chrome.tabs.onCreated.removeListener(waitForUserAction);
+    setTimeout(function () 
+    {
+      updateTabRetryCount++;
+      openUpdatedPage();
+    }, 10000); // 10 seconds
+  };
+  var openUpdatedPage = function() 
+  {
+    var updatedURL = getUpdatedURL();
+    chrome.tabs.create({ url: updatedURL }, function(tab) 
+    {
+      // if we couldn't open a tab to '/updated_tab', send a message
+      if (chrome.runtime.lastError || !tab) 
+      {
+        if (chrome.runtime.lastError && chrome.runtime.lastError.message) 
+        {
+          recordErrorMessage('updated_tab_failed_to_open' + chrome.runtime.lastError.message);
+        } 
+        else 
+        {
+          recordErrorMessage('updated_tab_failed_to_open');
+        }
+        chrome.tabs.onCreated.removeListener(waitForUserAction);
+        chrome.tabs.onCreated.addListener(waitForUserAction);
+        return;
+      }
+      if (updateTabRetryCount > 0) 
+      {
+        recordGeneralMessage('updated_tab_retry_success_count_' + updateTabRetryCount);
+      }
+    });
+  };
+  var shouldShowUpdate = function() 
+  {
+    var checkQueryState = function() 
+    {
+      chrome.idle.queryState(60, function(state) 
+      {
+        if (state === "active") 
+        {
+          openUpdatedPage();
+        } 
+        else 
+        {
+          chrome.tabs.onCreated.removeListener(waitForUserAction);
+          chrome.tabs.onCreated.addListener(waitForUserAction);
+        }
+      });
+    };
+    if (chrome.management && chrome.management.getSelf)
+    {
+      chrome.management.getSelf(function(info)
+      {
+        if (info && info.installType !== "admin") 
+        {
+          checkQueryState();
+        } 
+        else if (info && info.installType === "admin") 
+        {
+          recordGeneralMessage('update_tab_not_shown_admin_user');
+        }
+      });
+    }
+    else 
+    {
+      checkQueryState();
+    }
+  };
+  // Display updated page after each update
+  chrome.runtime.onInstalled.addListener(function (details)
+  {
+    var lastKnownVersion = localStorage.getItem(updateStorageKey);
+    if (details.reason === 'update' &&
+        chrome.runtime.getManifest().version === "3.27.0" &&
+        lastKnownVersion !== '3.27.0' &&
+        chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
+    {
+      STATS.untilLoaded(function(userID) 
+      {
+        Prefs.untilLoaded.then(shouldShowUpdate);
+      });
+    }
     localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
-  }
-});
+  });
+}
+
 
 var openTab = function (url)
 {

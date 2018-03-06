@@ -1183,6 +1183,10 @@
     "message":"Ne rien bloquer sur les pages de ce domaine",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"Ne rien bloquer sur les pages de ce site",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock est désactivé sur cette page.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1203,13 +1207,37 @@
     "message":"AdBlock est désactivé.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock est mis en pause sur tous les sites.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock est mis en pause sur ce site.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Réactiver le blocage de la pub",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Réactiver AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Réactiver AdBlock sur ce site",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Désactiver AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Mettre en pause sur tous les sites",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Mettre en pause sur ce site",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Réactiver le blocage de la pub",
@@ -1243,8 +1271,12 @@
     "message":"Annuler mes blocages sur ce domaine",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
+  "undo_last_block_site":{
+    "message":"Annuler mes blocages sur ce site",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "dont_run_on_this_page":{
-    "message":"Désactiver sur cette page",
+    "message":"Ne rien bloquer sur cette page",
     "description":"Menu entry to whitelist the current page"
   },
   "options":{
@@ -1784,5 +1816,9 @@
   "display_language_selector":{
     "message":"Afficher AdBlock en",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Activer la mise en cache locale des librairies de site web courantes",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

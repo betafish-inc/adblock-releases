@@ -1183,6 +1183,10 @@
     "message":"No actuar en les pàgines d'aquest domini",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"No actuar a les pàgines d'aquest lloc",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"L'AdBlock està desactivat en aquesta pàgina.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1203,13 +1207,37 @@
     "message":"L'AdBlock està en pausa.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock està aturat en tots els llocs.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock està aturat en aquest lloc.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Reprèn el bloqueig d'anuncis",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Reactiva l'AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Activa l'AdBlock en aquest lloc",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Pausa l'AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Atura a tots els llocs",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Atura en aquest lloc",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Reactiva el bloquejador d'anuncis",
@@ -1241,6 +1269,10 @@
   },
   "undo_last_block":{
     "message":"Desfés els meus blocatges en aquest domini",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"Desfés els meus blocatges en aquest lloc",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1784,5 +1816,9 @@
   "display_language_selector":{
     "message":"Mostra l'AdBlock en",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Activa la memòria cau de contingut local per a biblioteques de llocs web populars",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

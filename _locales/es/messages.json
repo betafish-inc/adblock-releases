@@ -419,6 +419,10 @@
     "message":"EasyList",
     "description":"A filter list"
   },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"Ruso y ucraniano",
     "description":"Language names for a filter list"
@@ -823,6 +827,46 @@
     "message":"Turco",
     "description":"Language name"
   },
+  "lang_catalan":{
+    "message":"Catalán",
+    "description":"Language name"
+  },
+  "lang_chinese_simplified":{
+    "message":"Chino simplificado",
+    "description":"Language name"
+  },
+  "lang_chinese_traditional":{
+    "message":"Chino tradicional",
+    "description":"Language name"
+  },
+  "lang_croatian":{
+    "message":"Croata",
+    "description":"Language name"
+  },
+  "lang_norwegian":{
+    "message":"Noruego",
+    "description":"Language name"
+  },
+  "lang_serbian":{
+    "message":"Serbio",
+    "description":"Language name"
+  },
+  "lang_slovenian":{
+    "message":"Esloveno",
+    "description":"Language name"
+  },
+  "lang_vietnamese":{
+    "message":"Vietnamita",
+    "description":"Language name"
+  },
+  "lang_portuguese_brazil":{
+    "message":"Portugués (Brasil)",
+    "description":"Language name"
+  },
+  "lang_portuguese_portugal":{
+    "message":"Portugués (Portugal)",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"Búlgaro",
     "description":"A filter list"
@@ -1139,6 +1183,10 @@
     "message":"No actuar en páginas de este dominio",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"No actuar en páginas de este sitio",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock está desactivado en esta página.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1159,13 +1207,37 @@
     "message":"AdBlock está pausado.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock está pausado en todos los sitios.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock está pausado en este sitio.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Reanudar el bloqueo de anuncios",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Reactivar AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Activar AdBlock en este sitio",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Pausar AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Pausar en todos los sitios",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Pausar en este sitio",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Reactivar bloqueador de anuncios",
@@ -1197,6 +1269,10 @@
   },
   "undo_last_block":{
     "message":"Deshacer mis bloqueos en este dominio",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"Deshacer mis bloqueos en este sitio",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1238,6 +1314,14 @@
   "tabsupport":{
     "message":"Soporte",
     "description":"A tab on the Options page"
+  },
+  "tabtranslations":{
+    "message":"Traducciones",
+    "description":"A tab on the Options page"
+  },
+  "translators":{
+    "message":"Más información acerca de cómo ayudar a traducir AdBlock [[[here]]]",
+    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
   },
   "report_ad_on_page":{
     "message":"Informar de un anuncio en esta página",
@@ -1609,6 +1693,10 @@
     "message":"Puedes volver a activar esto y ayudar a los sitios que te gustan seleccionando \"Permitir alguna publidad no intrusiva\".",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
+  "easylist_lite_or_easylist":{
+    "message":"Recomendamos suscribirse a \"EasyList Lite\" o \"EasyList\" pero no a ambos.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
   "easylist_disable_done":{
     "message":"AdBlock utiliza EasyList para bloquear anuncios en la mayoría de los sitios web.",
     "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
@@ -1720,5 +1808,17 @@
   "custom_filters_migration_error_message_part3":{
     "message":"Entrada original: ",
     "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options":{
+    "message":"Déjame elegir el idioma en que se muestra AdBlock",
+    "description":"Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector":{
+    "message":"Mostrar AdBlock en",
+    "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Activar el almacenamiento en caché de contenido local para bibliotecas de sitios web populares",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }
