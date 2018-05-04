@@ -458,9 +458,9 @@ var adblockIsPaused = function (newValue)
 
 // Get or set if AdBlock is domain paused for the domain of the specified tab
 // Inputs:  activeTab (optional object with url and id properties): the paused tab
-//          newValue (optional boolean): if true, AdBlock will be domain paused 
+//          newValue (optional boolean): if true, AdBlock will be domain paused
 // on the tab's domain, if false, AdBlock will not be domain paused on that domain.
-// Returns: undefined if activeTab and newValue were specified; otherwise if activeTab 
+// Returns: undefined if activeTab and newValue were specified; otherwise if activeTab
 // is specified it returns true if domain paused, false otherwise; finally it returns
 // the complete storedDomainPauses if activeTab is not specified
 var domainPausedKey = 'domainPaused';
@@ -482,14 +482,14 @@ var adblockIsDomainPaused = function (activeTab, newValue)
     if (storedDomainPauses)
     {
       return (storedDomainPauses.hasOwnProperty(activeDomain));
-    } else 
+    } else
     {
       return false;
     }
   }
 
   // create storedDomainPauses object if needed
-  if (!storedDomainPauses) 
+  if (!storedDomainPauses)
   {
     storedDomainPauses = {};
   }
@@ -519,8 +519,8 @@ var adblockIsDomainPaused = function (activeTab, newValue)
 //          changeInfo (required object with a url property): contains the
 // new url for the tab
 //          tab (optional Tab object): the affected tab
-// Returns: undefined 
-var domainPauseNavigationHandler = function(tabId, changeInfo, tab) 
+// Returns: undefined
+var domainPauseNavigationHandler = function(tabId, changeInfo, tab)
 {
   if (changeInfo === undefined || changeInfo.url === undefined || tabId === undefined)
   {
@@ -536,7 +536,7 @@ var domainPauseNavigationHandler = function(tabId, changeInfo, tab)
 // Inputs:  tabId (required integer): identifier for the affected tab
 //          changeInfo (optional object): info about the remove event
 // Returns: undefined
-var domainPauseClosedTabHandler = function(tabId, removeInfo) 
+var domainPauseClosedTabHandler = function(tabId, removeInfo)
 {
   if (tabId === undefined)
   {
@@ -572,10 +572,10 @@ var domainPauseChangeHelper = function(tabId, newDomain)
   updateButtonUIAndContextMenus();
 };
 
-// Helper that saves the domain pauses 
+// Helper that saves the domain pauses
 // Inputs:  domainPauses (required object): domain pauses to save
 // Returns: undefined
-var saveDomainPauses = function(domainPauses) 
+var saveDomainPauses = function(domainPauses)
 {
   ext.storage.set(domainPausedKey, domainPauses);
   sessionstorage_set(domainPausedKey, domainPauses);
@@ -604,11 +604,11 @@ ext.storage.get(pausedKey, function (response)
   }
 });
 
-// If AdBlock was domain paused on shutdown, then unpause / remove 
+// If AdBlock was domain paused on shutdown, then unpause / remove
 // all domain pause white-list entries at startup.
 ext.storage.get(domainPausedKey, function (response)
 {
-  try 
+  try
   {
     var storedDomainPauses = response[domainPausedKey];
     if (!jQuery.isEmptyObject(storedDomainPauses))
@@ -618,7 +618,7 @@ ext.storage.get(domainPausedKey, function (response)
         if (action == 'load')
         {
           FilterNotifier.removeListener(domainPauseHandler);
-          for (var aDomain in storedDomainPauses) 
+          for (var aDomain in storedDomainPauses)
           {
             var result = parseFilter("@@" + aDomain + "$document");
             FilterStorage.removeFilter(result.filter);
@@ -673,35 +673,35 @@ var updateStorageKey = 'last_known_version';
 if (chrome.runtime.id)
 {
   var updateTabRetryCount = 0;
-  var getUpdatedURL = function() 
+  var getUpdatedURL = function()
   {
     var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent(chrome.runtime.getManifest().version) + '/?u=' + STATS.userId();
     updatedURL = updatedURL + '&bc=' + Prefs.blocked_total;
     updatedURL = updatedURL + '&rt=' + updateTabRetryCount;
     return updatedURL;
   };
-  var waitForUserAction = function() 
+  var waitForUserAction = function()
   {
     chrome.tabs.onCreated.removeListener(waitForUserAction);
-    setTimeout(function () 
+    setTimeout(function ()
     {
       updateTabRetryCount++;
       openUpdatedPage();
     }, 10000); // 10 seconds
   };
-  var openUpdatedPage = function() 
+  var openUpdatedPage = function()
   {
     var updatedURL = getUpdatedURL();
-    chrome.tabs.create({ url: updatedURL }, function(tab) 
+    chrome.tabs.create({ url: updatedURL }, function(tab)
     {
       // if we couldn't open a tab to '/updated_tab', send a message
-      if (chrome.runtime.lastError || !tab) 
+      if (chrome.runtime.lastError || !tab)
       {
-        if (chrome.runtime.lastError && chrome.runtime.lastError.message) 
+        if (chrome.runtime.lastError && chrome.runtime.lastError.message)
         {
           recordErrorMessage('updated_tab_failed_to_open' + chrome.runtime.lastError.message);
-        } 
-        else 
+        }
+        else
         {
           recordErrorMessage('updated_tab_failed_to_open');
         }
@@ -709,23 +709,23 @@ if (chrome.runtime.id)
         chrome.tabs.onCreated.addListener(waitForUserAction);
         return;
       }
-      if (updateTabRetryCount > 0) 
+      if (updateTabRetryCount > 0)
       {
         recordGeneralMessage('updated_tab_retry_success_count_' + updateTabRetryCount);
       }
     });
   };
-  var shouldShowUpdate = function() 
+  var shouldShowUpdate = function()
   {
-    var checkQueryState = function() 
+    var checkQueryState = function()
     {
-      chrome.idle.queryState(60, function(state) 
+      chrome.idle.queryState(60, function(state)
       {
-        if (state === "active") 
+        if (state === "active")
         {
           openUpdatedPage();
-        } 
-        else 
+        }
+        else
         {
           chrome.tabs.onCreated.removeListener(waitForUserAction);
           chrome.tabs.onCreated.addListener(waitForUserAction);
@@ -736,17 +736,17 @@ if (chrome.runtime.id)
     {
       chrome.management.getSelf(function(info)
       {
-        if (info && info.installType !== "admin") 
+        if (info && info.installType !== "admin")
         {
           checkQueryState();
-        } 
-        else if (info && info.installType === "admin") 
+        }
+        else if (info && info.installType === "admin")
         {
           recordGeneralMessage('update_tab_not_shown_admin_user');
         }
       });
     }
-    else 
+    else
     {
       checkQueryState();
     }
@@ -756,11 +756,13 @@ if (chrome.runtime.id)
   {
     var lastKnownVersion = localStorage.getItem(updateStorageKey);
     if (details.reason === 'update' &&
-        chrome.runtime.getManifest().version === "3.27.0" &&
+        chrome.runtime.getManifest().version === "3.28.0" &&
         lastKnownVersion !== '3.27.0' &&
+        lastKnownVersion !== '3.27.1' &&
+        lastKnownVersion !== '3.28.0' &&
         chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
     {
-      STATS.untilLoaded(function(userID) 
+      STATS.untilLoaded(function(userID)
       {
         Prefs.untilLoaded.then(shouldShowUpdate);
       });
@@ -997,6 +999,8 @@ var getDebugInfo = function (callback)
     response.other_info.localStorageInfo = "no data";
   }
   response.other_info.is_adblock_paused = adblockIsPaused();
+  response.other_info.license_state = License.get().status;
+  response.other_info.license_version = License.get().lv;
 
   // Get total pings
   ext.storage.get('total_pings', function (storageResponse)
@@ -1024,9 +1028,30 @@ var getDebugInfo = function (callback)
             response.other_info[key] = messages[i];
           }
         }
-        if (callback)
-        {
-          callback(response);
+        if (License.isActiveLicense()) {
+          chrome.alarms.getAll(function(alarms) {
+            if (alarms && alarms.length > 0) {
+              response.other_info['Alarm info'] = 'length: ' + alarms.length;
+              for (var i = 0; i < alarms.length; i++)
+              {
+                var alarm = alarms[i];
+                response.other_info[i + " Alarm Name"] = alarm.name;
+                response.other_info[i + " Alarm Scheduled Time"] = new Date(alarm.scheduledTime);
+              }
+            } else {
+              response.other_info['No alarm info'];
+            }
+            License.getLicenseInstallationDate(function(installdate) {
+              response.other_info["License Installation Date"] = installdate;
+              if (typeof callback === 'function') {
+                callback(response);
+              }
+            });
+          });
+        } else { // License is not active
+          if (typeof callback === 'function') {
+            callback(response);
+          }
         }
       });
     });

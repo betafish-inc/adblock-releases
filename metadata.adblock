@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.27.0
+version = 3.29.3
 backgroundScripts += adblock-jquery.js
   adblock-errorreporting.js
   adblock-functions.js
@@ -19,7 +19,13 @@ backgroundScripts += adblock-jquery.js
   adblock-data-migrate.js
   adblock-excludefilter.js
   adblock-datacollection.v2.js
-  
+  adblock-picreplacement-image-sizes-map.js
+  adblock-picreplacement-channels.js
+  adblock-picreplacement-cat-channel.js
+  adblock-picreplacement-dog-channel.js
+  adblock-picreplacement-langscape-channel.js
+  adblock-picreplacement-check.js
+
 options = options.html
 testScripts += tests/example.js
 browserAction = icons/ab-16.png icons/ab-19.png icons/ab-20.png icons/ab-32.png icons/ab-38.png icons/ab-40.png adblock-button-popup.html
@@ -31,6 +37,7 @@ optionalPermissions = management
 webAccessible = adblock-jquery-ui.custom.css
   adblock-jquery-ui.override-page.css
   icons/icon24.png
+  icons/ab-19.png
   jquery-ui/css/images/ui-bg_flat_55_999999_40x100.png
   jquery-ui/css/images/ui-bg_flat_75_aaaaaa_40x100.png
   jquery-ui/css/images/ui-bg_glass_45_0078ae_1x400.png
@@ -41,28 +48,57 @@ webAccessible = adblock-jquery-ui.custom.css
   jquery-ui/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png
   jquery-ui/css/images/ui-icons_056b93_256x240.png
   jquery-ui/css/images/ui-icons_d8e7f3_256x240.png
-  localLib/jquery/jquery-1.10.2.min.js
-  localLib/jquery/jquery-1.11.0.min.js
-  localLib/jquery/jquery-1.11.1.min.js
-  localLib/jquery/jquery-1.11.2.min.js
-  localLib/jquery/jquery-1.11.3.min.js
-  localLib/jquery/jquery-1.12.4.min.js
-  localLib/jquery/jquery-1.3.2.min.js 
-  localLib/jquery/jquery-1.4.2.min.js 
-  localLib/jquery/jquery-1.7.1.min.js 
-  localLib/jquery/jquery-1.7.2.min.js 
-  localLib/jquery/jquery-1.8.2.min.js 
-  localLib/jquery/jquery-1.8.3.min.js 
-  localLib/jquery/jquery-1.9.1.min.js 
-  localLib/jquery/jquery-2.1.1.min.js 
-  localLib/jquery/jquery-2.1.3.min.js 
-  localLib/jquery/jquery-2.1.4.min.js 
-  localLib/jquery/jquery-2.2.4.min.js 
-  localLib/jquery/jquery-3.1.1.min.js 
-  localLib/jquery/jquery-3.2.1.min.js 
+  icons/adblock-picreplacement-images-AdBlockLogoLarge.png
+  icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png
+  icons/adblock-picreplacement-images-AdBlockLogoSmall.png
+  icons/adblock-picreplacement-images-AdBlockLogoSmall@2x.png
+  icons/adblock-picreplacement-images-close.png
+  icons/adblock-picreplacement-images-close@2x.png
+  icons/adblock-picreplacement-images-closeLarge.png
+  icons/adblock-picreplacement-images-closeLarge@2x.png
+  icons/adblock-picreplacement-images-settings.png
+  icons/adblock-picreplacement-images-settings@2x.png
+  icons/adblock-picreplacement-images-settingsLarge.png
+  icons/adblock-picreplacement-images-settingsLarge@2x.png
+  icons/adblock-picreplacement-images-view.png
+  icons/adblock-picreplacement-images-view@2x.png
+  icons/adblock-picreplacement-images-viewLarge.png
+  icons/adblock-picreplacement-images-viewLarge@2x.png
+  ﻿icons/adblock-picreplacement-images-whites-close.png
+  icons/adblock-picreplacement-images-whites-close@2x.png
+  icons/adblock-picreplacement-images-whites-closeLarge.png
+  icons/adblock-picreplacement-images-whites-closeLarge@2x.png
+  icons/adblock-picreplacement-images-whites-settings.png
+  icons/adblock-picreplacement-images-whites-settings@2x.png
+  icons/adblock-picreplacement-images-whites-settingsLarge.png
+  icons/adblock-picreplacement-images-whites-settingsLarge@2x.png
+  icons/adblock-picreplacement-images-whites-view.png
+  icons/adblock-picreplacement-images-whites-view@2x.png
+  icons/adblock-picreplacement-images-whites-viewLarge.png
+  icons/adblock-picreplacement-images-whites-viewLarge@2x.png
+  localLib/jquery/jquery-1.10.2.min.js.local
+  localLib/jquery/jquery-1.11.0.min.js.local
+  localLib/jquery/jquery-1.11.1.min.js.local
+  localLib/jquery/jquery-1.11.2.min.js.local
+  localLib/jquery/jquery-1.11.3.min.js.local
+  localLib/jquery/jquery-1.12.4.min.js.local
+  localLib/jquery/jquery-1.3.2.min.js.local
+  localLib/jquery/jquery-1.4.2.min.js.local
+  localLib/jquery/jquery-1.7.1.min.js.local
+  localLib/jquery/jquery-1.7.2.min.js.local
+  localLib/jquery/jquery-1.8.2.min.js.local
+  localLib/jquery/jquery-1.8.3.min.js.local
+  localLib/jquery/jquery-1.9.1.min.js.local
+  localLib/jquery/jquery-2.1.1.min.js.local
+  localLib/jquery/jquery-2.1.3.min.js.local
+  localLib/jquery/jquery-2.1.4.min.js.local
+  localLib/jquery/jquery-2.2.4.min.js.local
+  localLib/jquery/jquery-3.1.1.min.js.local
+  localLib/jquery/jquery-3.2.1.min.js.local
 
 [contentScripts]
-document_start += adblock-functions.js
+document_start += adblock-picreplacement-contentscript-loader.js
+  adblock-functions.js
   adblock-bandaids.js
 document_end += adblock-uiscripts-rightclick_hook.js adblock-notificationoverlay.js
 
@@ -126,6 +162,20 @@ adblock-uiscripts-rightclick_hook.js = adblock-betafish/uiscripts/blacklisting/r
 adblock-uiscripts-blacklisting-clickwatcher.js = adblock-betafish/uiscripts/blacklisting/clickwatcher.js
 adblock-uiscripts-blacklisting-elementchain.js = adblock-betafish/uiscripts/blacklisting/elementchain.js
 adblock-uiscripts-blacklisting-blacklistui.js = adblock-betafish/uiscripts/blacklisting/blacklistui.js
+adblock-picreplacement.js = adblock-betafish/picreplacement/picreplacement.js
+adblock-picreplacement-contentscript-loader.js = adblock-betafish/picreplacement/contentscript-loader.js
+adblock-picreplacement-image-sizes-map.js = adblock-betafish/picreplacement/image-sizes-map.js
+adblock-picreplacement-check.js = adblock-betafish/picreplacement/check.js
+adblock-picreplacement-channels.js = adblock-betafish/picreplacement/channels.js
+adblock-picreplacement-cat-channel.js = adblock-betafish/picreplacement/cat-channel.js
+adblock-picreplacement-dog-channel.js = adblock-betafish/picreplacement/dog-channel.js
+adblock-picreplacement-langscape-channel.js = adblock-betafish/picreplacement/langscape-channel.js
+adblock-picreplacement-options-general.html = adblock-betafish/picreplacement/options/general.html
+adblock-picreplacement-options-general.css = adblock-betafish/picreplacement/options/general.css
+adblock-picreplacement-options-general.js = adblock-betafish/picreplacement/options/general.js
+adblock-picreplacement-imageview.html = adblock-betafish/picreplacement/options/imageview.html
+adblock-picreplacement-imageview.js = adblock-betafish/picreplacement/options/imageview.js
+adblock-picreplacement-options-imageview.css = adblock-betafish/picreplacement/options/imageview.css
 devtools.js = adblock-betafish/devtools.js
 qunit/tests/example.js = tests/example.js
 firstRun.html = adblock-firstRun.html
@@ -156,6 +206,7 @@ icons/ab-64.png = icons/adblock-64.png
 icons/ab-128.png = icons/adblock-128.png
 icons/logo.png = icons/logo.png
 icons/icon24.png = icons/icon24.png
+icons/white-bg.png = icons/white-bg.png
 icons/facebook-sprite.png = icons/facebook-sprite.png
 icons/gplus-sprite.png = icons/gplus-sprite.png
 icons/twitter-sprite.png = icons/twitter-sprite.png
@@ -193,25 +244,71 @@ jquery-ui/css/images/ui-bg_gloss-wave_75_2191c0_500x100.png = adblock-betafish/j
 jquery-ui/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png = adblock-betafish/jquery/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png
 jquery-ui/css/images/ui-icons_056b93_256x240.png = adblock-betafish/jquery/css/images/ui-icons_056b93_256x240.png
 jquery-ui/css/images/ui-icons_d8e7f3_256x240.png = adblock-betafish/jquery/css/images/ui-icons_d8e7f3_256x240.png
-localLib/jquery/jquery-1.10.2.min.js = adblock-betafish/localLib/jquery/jquery-1.10.2.min.js
-localLib/jquery/jquery-1.11.0.min.js = adblock-betafish/localLib/jquery/jquery-1.11.0.min.js
-localLib/jquery/jquery-1.11.1.min.js = adblock-betafish/localLib/jquery/jquery-1.11.1.min.js
-localLib/jquery/jquery-1.11.2.min.js = adblock-betafish/localLib/jquery/jquery-1.11.2.min.js
-localLib/jquery/jquery-1.11.3.min.js = adblock-betafish/localLib/jquery/jquery-1.11.3.min.js
-localLib/jquery/jquery-1.12.4.min.js = adblock-betafish/localLib/jquery/jquery-1.12.4.min.js
-localLib/jquery/jquery-1.3.2.min.js = adblock-betafish/localLib/jquery/jquery-1.3.2.min.js
-localLib/jquery/jquery-1.4.2.min.js = adblock-betafish/localLib/jquery/jquery-1.4.2.min.js
-localLib/jquery/jquery-1.7.1.min.js = adblock-betafish/localLib/jquery/jquery-1.7.1.min.js
-localLib/jquery/jquery-1.7.2.min.js = adblock-betafish/localLib/jquery/jquery-1.7.2.min.js
-localLib/jquery/jquery-1.8.2.min.js = adblock-betafish/localLib/jquery/jquery-1.8.2.min.js
-localLib/jquery/jquery-1.8.3.min.js = adblock-betafish/localLib/jquery/jquery-1.8.3.min.js
-localLib/jquery/jquery-1.9.1.min.js = adblock-betafish/localLib/jquery/jquery-1.9.1.min.js
-localLib/jquery/jquery-2.1.1.min.js = adblock-betafish/localLib/jquery/jquery-2.1.1.min.js
-localLib/jquery/jquery-2.1.3.min.js = adblock-betafish/localLib/jquery/jquery-2.1.3.min.js
-localLib/jquery/jquery-2.1.4.min.js = adblock-betafish/localLib/jquery/jquery-2.1.4.min.js
-localLib/jquery/jquery-2.2.4.min.js = adblock-betafish/localLib/jquery/jquery-2.2.4.min.js
-localLib/jquery/jquery-3.1.1.min.js = adblock-betafish/localLib/jquery/jquery-3.1.1.min.js
-localLib/jquery/jquery-3.2.1.min.js = adblock-betafish/localLib/jquery/jquery-3.2.1.min.js
+icons/adblock-picreplacement-images-AdBlockLogoLarge.png = adblock-betafish/picreplacement/images/AdBlockLogoLarge.png
+icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png = adblock-betafish/picreplacement/images/AdBlockLogoLarge@2x.png
+icons/adblock-picreplacement-images-AdBlockLogoSmall.png = adblock-betafish/picreplacement/images/AdBlockLogoSmall.png
+icons/adblock-picreplacement-images-AdBlockLogoSmall@2x.png = adblock-betafish/picreplacement/images/AdBlockLogoSmall@2x.png
+icons/adblock-picreplacement-images-cat.png = adblock-betafish/picreplacement/images/cat.png
+icons/adblock-picreplacement-images-cat@2x.png = adblock-betafish/picreplacement/images/cat@2x.png
+icons/adblock-picreplacement-images-close.png = adblock-betafish/picreplacement/images/close.png
+icons/adblock-picreplacement-images-close@2x.png = adblock-betafish/picreplacement/images/close@2x.png
+icons/adblock-picreplacement-images-closeLarge.png = adblock-betafish/picreplacement/images/closeLarge.png
+icons/adblock-picreplacement-images-closeLarge@2x.png = adblock-betafish/picreplacement/images/closeLarge@2x.png
+icons/adblock-picreplacement-images-dog.png = adblock-betafish/picreplacement/images/dog.png
+icons/adblock-picreplacement-images-dog@2x.png = adblock-betafish/picreplacement/images/dog@2x.png
+icons/adblock-picreplacement-images-landscape.png = adblock-betafish/picreplacement/images/landscape.png
+icons/adblock-picreplacement-images-landscape@2x.png = adblock-betafish/picreplacement/images/landscape@2x.png
+icons/adblock-picreplacement-images-settings.png = adblock-betafish/picreplacement/images/settings.png
+icons/adblock-picreplacement-images-settings@2x.png = adblock-betafish/picreplacement/images/settings@2x.png
+icons/adblock-picreplacement-images-settingsLarge.png = adblock-betafish/picreplacement/images/settingsLarge.png
+icons/adblock-picreplacement-images-settingsLarge@2x.png = adblock-betafish/picreplacement/images/settingsLarge@2x.png
+icons/adblock-picreplacement-images-view.png = adblock-betafish/picreplacement/images/view.png
+icons/adblock-picreplacement-images-view@2x.png = adblock-betafish/picreplacement/images/view@2x.png
+icons/adblock-picreplacement-images-viewLarge.png = adblock-betafish/picreplacement/images/viewLarge.png
+icons/adblock-picreplacement-images-viewLarge@2x.png = adblock-betafish/picreplacement/images/viewLarge@2x.png
+icons/adblock-picreplacement-images-whites-close.png = adblock-betafish/picreplacement/images/whites/close.png
+icons/adblock-picreplacement-images-whites-close@2x.png = adblock-betafish/picreplacement/images/whites/close@2x.png
+icons/adblock-picreplacement-images-whites-closeLarge.png = adblock-betafish/picreplacement/images/whites/closeLarge.png
+icons/adblock-picreplacement-images-whites-closeLarge@2x.png = adblock-betafish/picreplacement/images/whites/closeLarge@2x.png
+icons/adblock-picreplacement-images-whites-settings.png = adblock-betafish/picreplacement/images/whites/settings.png
+icons/adblock-picreplacement-images-whites-settings@2x.png = adblock-betafish/picreplacement/images/whites/settings@2x.png
+icons/adblock-picreplacement-images-whites-settingsLarge.png = adblock-betafish/picreplacement/images/whites/settingsLarge.png
+icons/adblock-picreplacement-images-whites-settingsLarge@2x.png = adblock-betafish/picreplacement/images/whites/settingsLarge@2x.png
+icons/adblock-picreplacement-images-whites-view.png = adblock-betafish/picreplacement/images/whites/view.png
+icons/adblock-picreplacement-images-whites-view@2x.png = adblock-betafish/picreplacement/images/whites/view@2x.png
+icons/adblock-picreplacement-images-whites-viewLarge.png = adblock-betafish/picreplacement/images/whites/viewLarge.png
+icons/adblock-picreplacement-images-whites-viewLarge@2x.png = adblock-betafish/picreplacement/images/whites/viewLarge@2x.png
+icons/adblock-picreplacement-images-menu-cat@2x.png = adblock-betafish/picreplacement/images/menu/cat@2x.png
+icons/adblock-picreplacement-images-menu-cat.png = adblock-betafish/picreplacement/images/menu/cat.png
+icons/adblock-picreplacement-images-menu-dog@2x.png = adblock-betafish/picreplacement/images/menu/dog@2x.png
+icons/adblock-picreplacement-images-menu-dog.png = adblock-betafish/picreplacement/images/menu/dog.png
+icons/adblock-picreplacement-images-menu-landscape@2x.png = adblock-betafish/picreplacement/images/menu/landscape@2x.png
+icons/adblock-picreplacement-images-menu-landscape.png = adblock-betafish/picreplacement/images/menu/landscape.png
+icons/adblock-picreplacement-images-menu-catgrayscale@2x.png = adblock-betafish/picreplacement/images/menu/catgrayscale@2x.png
+icons/adblock-picreplacement-images-menu-catgrayscale.png = adblock-betafish/picreplacement/images/menu/catgrayscale.png
+icons/adblock-picreplacement-images-menu-doggrayscale@2x.png = adblock-betafish/picreplacement/images/menu/doggrayscale@2x.png
+icons/adblock-picreplacement-images-menu-doggrayscale.png = adblock-betafish/picreplacement/images/menu/doggrayscale.png
+icons/adblock-picreplacement-images-menu-landscapegrayscale@2x.png = adblock-betafish/picreplacement/images/menu/landscapegrayscale@2x.png
+icons/adblock-picreplacement-images-menu-landscapegrayscale.png = adblock-betafish/picreplacement/images/menu/landscapegrayscale.png
+localLib/jquery/jquery-1.10.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.10.2.min.js.local
+localLib/jquery/jquery-1.11.0.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.0.min.js.local
+localLib/jquery/jquery-1.11.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.1.min.js.local
+localLib/jquery/jquery-1.11.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.2.min.js.local
+localLib/jquery/jquery-1.11.3.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.3.min.js.local
+localLib/jquery/jquery-1.12.4.min.js.local = adblock-betafish/localLib/jquery/jquery-1.12.4.min.js.local
+localLib/jquery/jquery-1.3.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.3.2.min.js.local
+localLib/jquery/jquery-1.4.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.4.2.min.js.local
+localLib/jquery/jquery-1.7.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.7.1.min.js.local
+localLib/jquery/jquery-1.7.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.7.2.min.js.local
+localLib/jquery/jquery-1.8.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.8.2.min.js.local
+localLib/jquery/jquery-1.8.3.min.js.local = adblock-betafish/localLib/jquery/jquery-1.8.3.min.js.local
+localLib/jquery/jquery-1.9.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.9.1.min.js.local
+localLib/jquery/jquery-2.1.1.min.js.local = adblock-betafish/localLib/jquery/jquery-2.1.1.min.js.local
+localLib/jquery/jquery-2.1.3.min.js.local = adblock-betafish/localLib/jquery/jquery-2.1.3.min.js.local
+localLib/jquery/jquery-2.1.4.min.js.local = adblock-betafish/localLib/jquery/jquery-2.1.4.min.js.local
+localLib/jquery/jquery-2.2.4.min.js.local = adblock-betafish/localLib/jquery/jquery-2.2.4.min.js.local
+localLib/jquery/jquery-3.1.1.min.js.local = adblock-betafish/localLib/jquery/jquery-3.1.1.min.js.local
+localLib/jquery/jquery-3.2.1.min.js.local = adblock-betafish/localLib/jquery/jquery-3.2.1.min.js.local
 
 [convert_js]
 lib/adblockplus.js -= lib/filterComposer.js lib/uninstall.js

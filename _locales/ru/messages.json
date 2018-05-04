@@ -1183,6 +1183,10 @@
     "message":"Не запускать на страницах этого домена",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"Не запускать на страницах этого сайта",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock отключен на этой странице.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1203,13 +1207,37 @@
     "message":"AdBlock приостановлен.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock приостановлен на всех сайтах.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock приостановлен на этом сайте.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Возобновить блокировку рекламы",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Возобновить работу AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Возобновить AdBlock на этом сайте",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Приостановить AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Приостановить на всех сайтах",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Приостановить на этом сайте",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Возобновить блокировку рекламы",
@@ -1241,6 +1269,10 @@
   },
   "undo_last_block":{
     "message":"Отменить мои блокировки на этом домене",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"Отменить мои блокировки на этом сайте",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1784,5 +1816,9 @@
   "display_language_selector":{
     "message":"Отображать AdBlock на",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Разрешить локальное кэширование содержимого для популярных библиотек сайтов",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

@@ -9,6 +9,7 @@ function Settings()
     show_block_counts_help_link : true,
     show_survey : true,
     local_cdn : false,
+    picreplacement : false,
   };
   var _this = this;
   this._init = new Promise(function(resolve)
@@ -28,7 +29,7 @@ function Settings()
 
       resolve();
     });
-  }).then(function() 
+  }).then(function()
   {
     log('\n===SETTINGS FINISHED LOADING===\n\n');
   });

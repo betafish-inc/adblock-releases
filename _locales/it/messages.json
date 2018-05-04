@@ -367,6 +367,10 @@
     "message":"Più liste filtri usi, più lentamente funzionerà AdBlock. Utilizzando molte liste il browser può crashare su alcuni siti. Premi OK per sottoscriverti a questa lista ugualmente.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"AdBlock non può bloccare gli annunci se disabiliti tutte le liste dei filtri. Piuttosto consigliamo di mettere in pausa AdBlock. Ti vuoi comunque cancellare da questa lista?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Abbonati a una lista filtri",
     "description":"Title of the Filter lists tab of the Options page"
@@ -415,6 +419,10 @@
     "message":"EasyList",
     "description":"A filter list"
   },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"Russo e Ucraino",
     "description":"Language names for a filter list"
@@ -445,6 +453,10 @@
   },
   "filtermalware":{
     "message":"Protezione Malware",
+    "description":"A filter list"
+  },
+  "filterbitcoin_mining_protection":{
+    "message":"Lista di protezione dai miner di criptovaluta (Bitcoin)",
     "description":"A filter list"
   },
   "filterlatvian":{
@@ -815,6 +827,46 @@
     "message":"Turco",
     "description":"Language name"
   },
+  "lang_catalan":{
+    "message":"Catalano",
+    "description":"Language name"
+  },
+  "lang_chinese_simplified":{
+    "message":"Cinese semplificato",
+    "description":"Language name"
+  },
+  "lang_chinese_traditional":{
+    "message":"Cinese Tradizionale",
+    "description":"Language name"
+  },
+  "lang_croatian":{
+    "message":"Croato",
+    "description":"Language name"
+  },
+  "lang_norwegian":{
+    "message":"Norvegese",
+    "description":"Language name"
+  },
+  "lang_serbian":{
+    "message":"Serbo",
+    "description":"Language name"
+  },
+  "lang_slovenian":{
+    "message":"Sloveno",
+    "description":"Language name"
+  },
+  "lang_vietnamese":{
+    "message":"Vietnamita",
+    "description":"Language name"
+  },
+  "lang_portuguese_brazil":{
+    "message":"Portoghese (Brasile)",
+    "description":"Language name"
+  },
+  "lang_portuguese_portugal":{
+    "message":"Portoghese (Portogallo)",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"Bulgaro",
     "description":"A filter list"
@@ -1131,25 +1183,61 @@
     "message":"Non attivare sulle pagine di questo dominio",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"Non abilitare sulle pagine di questo sito",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock è disabilitato su questa pagina.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
+  },
+  "disabled_on_this_channel":{
+    "message":"Annunci permessi su questo canale.",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
   },
   "enable_adblock":{
     "message":"Abilita AdBlock su questa pagina",
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
   },
+  "enable_adblock_on_this_channel":{
+    "message":"Blocca annunci su questo canale",
+    "description":"Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
+  },
   "status_paused":{
     "message":"AdBlock è in pausa.",
     "description":"Message shown in toolbar button when AdBlock is not running"
+  },
+  "status_universal_paused":{
+    "message":"AdBlock è in pausa su tutti i siti.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock è in pausa su questo sito.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Riprendi il blocco degli annunci",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
   },
   "unpause_adblock":{
     "message":"Riabilita AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Abilita AdBlock su questo sito",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Metti in pausa AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Metti in pausa su tutti i siti",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Metti in pausa su questo sito",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Riattivare il blocco degli annunci",
@@ -1183,6 +1271,10 @@
     "message":"Annulla i miei blocchi su questo dominio",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
+  "undo_last_block_site":{
+    "message":"Rimuovi i miei blocchi su questo sito",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "dont_run_on_this_page":{
     "message":"Non abilitare su questa pagina",
     "description":"Menu entry to whitelist the current page"
@@ -1198,6 +1290,10 @@
   "donate_to_adblock":{
     "message":"Ti piace AdBlock? Considera una donazione!",
     "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"Aiuto e Feedback",
+    "description":"Text of a help link in the toolbar button menu"
   },
   "donate_to_youtube_adblock":{
     "message":"Ti piace AdBlock su YouTube? Considera una donazione!",
@@ -1218,6 +1314,14 @@
   "tabsupport":{
     "message":"Supporto",
     "description":"A tab on the Options page"
+  },
+  "tabtranslations":{
+    "message":"Traduzioni",
+    "description":"A tab on the Options page"
+  },
+  "translators":{
+    "message":"Scopri come aiutare a tradurre AdBlock [[here]]",
+    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
   },
   "report_ad_on_page":{
     "message":"Segnala una pubblicità su questa pagina",
@@ -1385,6 +1489,10 @@
     "message":"Tutte le sottoscrizioni ai canali YouTube™ sono state inserite nella whitelist",
     "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
+  "allow_ads_all_youtube_channels":{
+    "message":"Consentire gli annunci su tutti i canali sottoscritti di YouTube™",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
   "whitelist_youtube_channel":{
     "message":"Canale $name$ in Whitelist",
     "description":"Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
@@ -1394,6 +1502,10 @@
         "example":"Name of channel"
       }
     }
+  },
+  "whitelist_youtube_channel_v2":{
+    "message":"Consentire gli annunci sul canale YouTube™:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters":{
     "message":"Sei sicuro di voler rimuovere i $count$ blocchi che hai creato su $host$?",
@@ -1581,6 +1693,26 @@
     "message":"Puoi tornare indietro e supportare i siti Web che ami selezionando l'opzione \"Consenti alcune pubblicità non intrusive\" sotto.",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
+  "easylist_lite_or_easylist":{
+    "message":"Ti consigliamo di iscriverti a \"EasyList Lite\" o \"EasyList\" ma non ad entrambi.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlock utilizza EasyList per bloccare la pubblicità sulla maggior parte dei siti web.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"Noi consigliamo di tenerlo attivo. Se ti cancelli per errore, seleziona \"EasyList\" per bloccare la maggior parte degli annunci.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock utilizza EasyList Lite o EasyList per bloccare gli annunci nella maggior parte dei siti.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"Noi consigliamo di tenerlo attivo. Se ti cancelli per errore, seleziona \"EasyList Lite\" o \"EasyList\" per bloccare la maggior parte degli annunci.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Ti abbiamo cancellato da Pubblicità Accettabili perché hai attivato il Blocco dei Contenuti di Safari. Puoi selezionarne solo uno alla volta. ([[Perché?]])",
     "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
@@ -1676,5 +1808,17 @@
   "custom_filters_migration_error_message_part3":{
     "message":"Voce originale: ",
     "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options":{
+    "message":"Fammi scegliere la lingua visualizzata su AdBlock",
+    "description":"Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector":{
+    "message":"Mostra AdBlock in",
+    "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Abilita cache locale per librerie di siti web famosi",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

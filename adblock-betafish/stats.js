@@ -154,6 +154,7 @@ STATS = (function()
         cdn: getSettings().local_cdn ? '1' : '0',
         cdnr: LocalCDN.getRedirectCount(),
         cdnd: LocalCDN.getDataCount(),
+        rc: replacedCounts.getTotalAdsReplaced(),
       };
       // only on Chrome
       if (flavor === "E" && Prefs.blocked_total)
@@ -239,6 +240,7 @@ STATS = (function()
   var handlePingResponse = function(responseData, textStatus, jqXHR)
   {
     SURVEY.maybeSurvey(responseData);
+    License.checkPingResponse(responseData);
   };
 
   // Called just after we ping the server, to schedule our next ping.

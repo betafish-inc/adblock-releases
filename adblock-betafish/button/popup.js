@@ -1,6 +1,6 @@
 
-var backgroundPage = ext.backgroundPage.getWindow();
-var require = backgroundPage.require;
+var BG = chrome.extension.getBackgroundPage();
+var require = BG.require;
 
 var Filter = require('filterClasses').Filter;
 var FilterStorage = require('filterStorage').FilterStorage;
@@ -13,11 +13,14 @@ var getDecodedHostname = require('url').getDecodedHostname;
 var page = null;
 var pageInfo = null;
 var activeTab = null;
+
+var iframeSRCURL = "https://getadblock.com/myadblock/enrollment/?u=" + BG.STATS.userId();
+
 $(function ()
 {
   localizePage();
 
-  var BG = chrome.extension.getBackgroundPage();
+  var License = BG.License;
 
   // Set menu entries appropriately for the selected tab.
   $('.menu-entry, .menu-status, .separator').hide();
@@ -25,6 +28,9 @@ $(function ()
 
   BG.getCurrentTabInfo(function (info)
   {
+    $( window ).unload(function() {
+      BG.recordGeneralMessage("popup_closed");
+    });
     // Cache tab object for later use
     page = info.page;
     pageInfo = info;
@@ -66,15 +72,6 @@ $(function ()
 
       $('#page_blocked_count').text(getBlockedPerPage(page).toLocaleString());
       $('#total_blocked_count').text(Prefs.blocked_total.toLocaleString());
-
-      // Show help link until it is clicked.
-      $('#block_counts_help').toggle(info.settings.show_block_counts_help_link).click(function ()
-      {
-        BG.setSetting('show_block_counts_help_link', false);
-        ext.pages.open($(this).attr('href'));
-        $(this).hide();
-        closeAndReloadPopup();
-      });
     }
 
     var host = parseUri(page.unicodeUrl).host;
@@ -106,6 +103,84 @@ $(function ()
     if (SAFARI && info.settings.safari_content_blocking)
     {
       hide(['div_paused_adblock', 'div_domain_paused_adblock', 'div_whitelist_page', 'div_whitelist']);
+    }
+    if (info.disabledSite) {
+      hide(['div_myadblock_enrollment']);
+    }
+    if (License.shouldShowMyAdBlockEnrollment() && !License.isActiveLicense())
+    {
+      show(['div_myadblock_enrollment', 'separator-1', 'separator-2']);
+      chrome.management.getSelf(function(info)
+      {
+        if (info && info.installType === "development")
+        {
+          iframeSRCURL = "https://getadblock.com/myadblock/enrollment/?testmode&u=" + BG.STATS.userId();
+        }
+      });
+    }
+    if (License.isActiveLicense())
+    {
+      show(['div_myadblock_options', 'separator-1', 'separator-2']);
+    }
+    if (License.shouldShowMyAdBlockEnrollment() || License.isActiveLicense())
+    {
+      if (info.disabledSite || info.whitelisted)
+      {
+        hide(['separator-2']);
+      }
+      if (shown['block_counts'] && Prefs.show_statsinpopup)
+      {
+        hide(['separator-1']);
+      }
+    }
+
+    if ((window.devicePixelRatio >= 2) && (shown['div_myadblock_options'] || shown['div_myadblock_enrollment'] ))
+    {
+          $('#cat_option').attr("src","icons/adblock-picreplacement-images-menu-cat@2x.png");
+          $('#dog_option').attr("src","icons/adblock-picreplacement-images-menu-dog@2x.png");
+          $('#landscape_option').attr("src","icons/adblock-picreplacement-images-menu-landscape@2x.png");
+          $('#cat_enrollment').attr("src","icons/adblock-picreplacement-images-menu-cat@2x.png");
+          $('#dog_enrollment').attr("src","icons/adblock-picreplacement-images-menu-dog@2x.png");
+          $('#landscape_enrollment').attr("src","icons/adblock-picreplacement-images-menu-landscape@2x.png");
+    }
+
+    if (shown['div_myadblock_options'])
+    {
+      var guide = BG.channels.getGuide();
+      var anyEnabled = false;
+      for (var id in guide)
+      {
+        anyEnabled = anyEnabled || guide[id].enabled;
+        if ((guide[id].name === "CatsChannel" && !guide[id].enabled) || !info.settings.picreplacement)
+        {
+          if (window.devicePixelRatio >= 2)
+          {
+            $('#cat_option').attr("src","icons/adblock-picreplacement-images-menu-catgrayscale@2x.png");
+          } else
+          {
+            $('#cat_option').attr("src","icons/adblock-picreplacement-images-menu-catgrayscale.png");
+          }
+        }
+        if ((guide[id].name === "DogsChannel" && !guide[id].enabled) || !info.settings.picreplacement)
+        {
+          if (window.devicePixelRatio >= 2)
+          {
+            $('#dog_option').attr("src","icons/adblock-picreplacement-images-menu-doggrayscale@2x.png");
+          } else {
+            $('#dog_option').attr("src","icons/adblock-picreplacement-images-menu-doggrayscale.png");
+          }
+        }
+        if ((guide[id].name === "LandscapesChannel" && !guide[id].enabled) || !info.settings.picreplacement)
+        {
+          if (window.devicePixelRatio >= 2)
+          {
+            $('#landscape_option').attr("src","icons/adblock-picreplacement-images-menu-landscapegrayscale@2x.png");
+          } else
+          {
+            $('#landscape_option').attr("src","icons/adblock-picreplacement-images-menu-landscapegrayscale.png");
+          }
+        }
+      }
     }
 
     for (var div in shown)
@@ -328,10 +403,63 @@ $(function ()
     closeAndReloadPopup();
   });
 
+  $('#div_myadblock_options').click(function ()
+  {
+    BG.recordGeneralMessage("myadblock_options_clicked");
+    BG.ext.pages.open(BG.ext.getURL('adblock-picreplacement-options-general.html'));
+    closeAndReloadPopup();
+  });
+
+  $('#div_myadblock_enrollment').click(function ()
+  {
+    BG.recordGeneralMessage("myadblock_wizard_clicked");
+    $("#wrapper").hide();
+    var originalWidth = document.body.style.width;
+    var originalHeight = document.body.style.height;
+    var iframe = document.createElement('iframe');
+    iframe.id = "myadblock_wizard_frame";
+    iframe.width="100%";
+    iframe.height="100%";
+    iframe.style.border = "solid 0px";
+    iframe.src = iframeSRCURL;
+    document.body.appendChild(iframe);
+    document.body.style.width = "540px";
+    document.body.style.height = "440px";
+    document.body.style.border = "solid 0px";
+    window.addEventListener("message", receiveMessage, false);
+
+    function receiveMessage(event)
+    {
+      if (event.origin !== "https://getadblock.com") {
+        return;
+      }
+      if (event.data && event.data.command === "resize" && event.data.height && event.data.width) {
+        $(document.body).animate({ "width" : event.data.width + "px", "height" : event.data.height + "px" }, 400, "linear");
+      }
+      if (event.data && event.data.command === "openPage" && event.data.url && event.data.url.startsWith('http')) {
+        BG.ext.pages.open(event.data.url);
+        closeAndReloadPopup();
+      }
+      if (event.data && event.data.command === "close") {
+        document.body.removeChild(iframe);
+        document.body.style.width = originalWidth;
+        document.body.style.height = originalHeight;
+        $("#wrapper").show();
+      }
+    }
+  });
+
+  $('#help_link').click(function ()
+  {
+    BG.recordGeneralMessage("feedback_clicked");
+    BG.ext.pages.open("http://help.getadblock.com/");
+    closeAndReloadPopup();
+  });
+
   $('#link_open').click(function ()
   {
     BG.recordGeneralMessage("link_clicked");
-    var linkHref = "https://getadblock.com/pay/?exp=7003&u=" + backgroundPage.STATS.userId();
+    var linkHref = "https://getadblock.com/pay/?exp=7003&u=" + BG.STATS.userId();
     BG.ext.pages.open(linkHref);
     closeAndReloadPopup();
   });

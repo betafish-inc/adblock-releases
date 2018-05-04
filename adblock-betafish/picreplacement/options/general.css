@@ -1,0 +1,110 @@
+      body {
+        background-color: white;
+      }
+      .section {
+        padding: 10px;
+        padding-left: 162px;
+        margin: 0px -8px 0px -8px;
+        display: none;
+      }
+      .white {
+        background-color: white;
+      }
+      #headertext {
+        font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: normal;
+        font-size: 28px;
+        margin-top: 40px;
+      }
+      #headercategory {
+        font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: normal;
+        font-size: 22px;
+        margin-top: 20px;        
+      }
+      #myadblockpicreplacementswitchlabel {
+        font-family: Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: normal;
+        font-size: 16px;        
+      }
+      h2 {
+        font-size: 1.2em;
+        margin-left: 15px;
+      }
+      label {
+        margin-right: 5px;
+      }
+      #wrapper {
+        position: relative;
+        margin: 110px auto 30px;
+        max-width: 990px;
+        padding-left: 150px;
+      }
+      #picReplacementDiv {
+        margin-top: 40px;
+      }
+      #catChannelDiv, #dogChannelDiv, #landscapeChannelDiv {
+        margin-top: 20px;
+      }
+      .separator {
+        width: 100%;
+        border-top: 1px solid #ECE8E8;
+        margin: 25px -5px 0px -5px;
+      }
+      .verticalalign {
+        vertical-align: middle;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 42px;
+        height: 22px;
+      }
+
+      .switch input {display:none;}
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #9B9B9B;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 17px;
+        width: 17px;
+        left: 2px;
+        bottom: 3px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      input:checked + .slider {
+        background-color: #62B903;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #62B903;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(19px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 22px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }

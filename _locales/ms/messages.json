@@ -11,6 +11,10 @@
     "message":"AdBlock. Penyekat iklan No. 1 dengan lebih 200 juta muat turun. Sekat iklan di seluruh web.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
   },
+  "description_yt":{
+    "message":"Satu-satunya penyekat iklan YouTube™ dibina oleh AdBlock, sambungan Chrome paling popular dengan 60 juta pengguna seluruh dunia",
+    "description":"Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
+  },
   "name_adblock_on_youtube":{
     "message":"AdBlock di Youtube™",
     "description":"Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
@@ -239,6 +243,14 @@
     "message":"Senarai penapis",
     "description":"A tab on the Options page"
   },
+  "tabcustomize":{
+    "message":"Penyesuaian",
+    "description":"A tab on the Options page"
+  },
+  "generaloptions":{
+    "message":"Tetapan umum",
+    "description":"Title of the first Options page tab"
+  },
   "betalabel":{
     "message":"Beta",
     "description":"Label for experimental features in AdBlock Options"
@@ -355,9 +367,21 @@
     "message":"Lebih banyak penapis yang anda guna, lebih perlahan AdBlock berjalan. Menggunakan terlalu banyak senarai boleh merosakkan pelayar anda di beberapa laman web. Tekan OK untuk melanggan senarai ini juga.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"AdBlock tidak boleh menyekat iklan jika anda menyahdaya semua senarai penapis. Kami cadangkan untuk jeda AdBlock sahaja. Nyahlanggan daripada senarai ini juga?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Langgan senarai penapis",
     "description":"Title of the Filter lists tab of the Options page"
+  },
+  "filterlistlink":{
+    "message":"Jangan langgan lebih daripada yang anda perlu -- ia akan memperlahankan anda! Penghargaan dan senarai lain boleh dilihat [[di sini]].",
+    "description":"Filter lists tab explanation and link to filter list credits."
+  },
+  "updatenowmessage2":{
+    "message":"Akan dikemas kini secara automatik; anda juga boleh [[kemas kini sekarang]]",
+    "description":"Update filters text and button"
   },
   "orenteraurl":{
     "message":"Atau masukkan URL:",
@@ -373,6 +397,10 @@
   },
   "filterantisocial":{
     "message":"Senarai penapis antisosial (mengeluarkan butang media sosial)",
+    "description":"A filter list"
+  },
+  "filterannoyances":{
+    "message":"Gangguan Pengikut (menyekat halaman pop timbul, media sosial dan widget berkaitan, dan gangguan lain)",
     "description":"A filter list"
   },
   "filterwarning_removal":{
@@ -506,6 +534,10 @@
   "manualexcludefilteredit":{
     "message":"Sunting penapis yang dinyahdaya:",
     "description":"Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning":{
+    "message":"Hati-hati: jika anda membuat kesilapan di sini, banyak penapis lain, termasuk penapis rasmi, juga boleh rosak!\nBaca [[tutorial penapis sintaks]] untuk belajar cara menambah senarai lanjutan penapis hitam dan putih.",
+    "description":"Warning when manually editing filters."
   },
   "filtersavewarning_ytadblock_1":{
     "message":"Hati-hati: jika anda membuat kesilapan di sini, AdBlock di YouTube™ akan berhenti berfungsi dengan baik.",
@@ -1147,6 +1179,14 @@
     "message":"Maaf, AdBlock pada YouTube™ telah dinyahdaya di halaman ini oleh salah satu daripada pilihan anda.",
     "description":"Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
   },
+  "dont_run_on_pages_on_domain":{
+    "message":"Jangan jalankan pada halaman di domain ini",
+    "description":"Menu entry to open the whitelist wizard"
+  },
+  "dont_run_on_pages_on_site":{
+    "message":"Jangan jalankan pada halaman di tapak ini",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock dinyahdaya pada halaman ini.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1167,13 +1207,37 @@
     "message":"AdBlock dijeda.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock dijeda pada semua tapak.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock dijeda pada tapak ini.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Sambung menyekat iklan",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Nyahjeda AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Dayakan AdBlock di tapak ini",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Jeda AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Jeda pada semua tapak",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Jeda pada tapak ini",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Nyahjeda sekatan iklan",
@@ -1205,6 +1269,10 @@
   },
   "undo_last_block":{
     "message":"Buat asal sekatan saya di domain ini",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"Buat asal sekatan pada tapak ini",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1748,5 +1816,9 @@
   "display_language_selector":{
     "message":"Papar AdBlock dalam",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Dayakan caching kandungan tempatan untuk pustaka laman web popular",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

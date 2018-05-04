@@ -1183,6 +1183,10 @@
     "message":"Bu alan adındaki sayfalarda çalışma",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"Bu alan adındaki sayfalarda çalışma",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock bu sayfada kapatılmıştır.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1203,9 +1207,25 @@
     "message":"AdBlock duraklatıldı.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock tüm sitelerde duraklatıldı.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock bu sitede duraklatıldı.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Reklamları engellemeye devam et",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Tekrar başlat",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
+  },
+  "domain_unpause_adblock":{
+    "message":"Bu sitede AdBlock'u etkinleştir",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
   },
   "pause_adblock":{
     "message":"AdBlock'u duraklat",
@@ -1240,6 +1260,10 @@
     "description":"Body of a notification shown to Safari Content Blocking users with too many filter list rules."
   },
   "undo_last_block":{
+    "message":"Bu alan adında yaptığım engellemeleri geri al",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
     "message":"Bu alan adında yaptığım engellemeleri geri al",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },

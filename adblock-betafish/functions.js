@@ -266,3 +266,32 @@ var BGcall = function()
     args : args
   }, callback);
 };
+
+// Inputs: key:string.
+// Returns object from localStorage.
+// The following two functions should only be used when 
+// multiple 'sets' & 'gets' may occur in immediately preceding each other
+// ext.storage.get & set instead
+var storage_get = function(key) {
+  var store = localStorage;
+  var json = store.getItem(key);
+  if (json == null)
+    return undefined;
+  try {
+    return JSON.parse(json);
+  } catch (e) {
+    log("Couldn't parse json for " + key, e);
+    return undefined;
+  }
+};
+
+// Inputs: key:string, value:object.
+// Returns undefined.
+var storage_set = function(key, value) {
+  var store = localStorage;
+  try {
+    store.setItem(key, JSON.stringify(value));
+  } catch (ex) {
+    console.log(ex)
+  }
+};

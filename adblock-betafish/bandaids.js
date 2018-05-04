@@ -52,6 +52,10 @@ var getAdblockDomainWithUserID = function(userid) {
   adblock_userid = userid;
 };
 
+var getAdblockVersion = function(version) {
+  adblock_version = version;
+};
+
 // instartLogicBusterV1 consists of code borrowed from
 // https://github.com/gorhill/uBO-Extra which is licensed
 // under the GNU General Public License v3.0
@@ -263,13 +267,17 @@ var instartLogicBusterV1DomainsRegEx = /(^|\.)(afterellen\.com|baltimoresun\.com
       scriptText.push('(' + instartLogicBusterV1.toString() + ')();');
     }
     if ('getadblock.com' === document.location.hostname ||
-        'dev.getadblock.com' === document.location.hostname) {
+        'dev.getadblock.com' === document.location.hostname ||
+        'dev1.getadblock.com' === document.location.hostname ||
+        'dev2.getadblock.com' === document.location.hostname) {
       chrome.storage.local.get('userid', function (response) {
         var adblock_user_id = response['userid'];
+        var adblock_version = chrome.runtime.getManifest().version;
         var elem = document.createElement('script');
         var scriptToInject = '(' + getAdblockDomain.toString() + ')();' +
+            '(' + cleanup.toString() + ')();' +
             '(' + getAdblockDomainWithUserID.toString() + ')(\'' + adblock_user_id + '\');' +
-            '(' + cleanup.toString() + ')();';
+            '(' + getAdblockVersion.toString() + ')(\'' + adblock_version + '\');';
         elem.appendChild(document.createTextNode(scriptToInject));
         try {
             (document.head || document.documentElement).appendChild(elem);
@@ -301,8 +309,10 @@ var run_bandaids = function()
   {
     apply_bandaid_for = "hotmail";
   }
-  else if (("getadblock.com" === document.location.hostname ||
-            "dev.getadblock.com" === document.location.hostname) &&
+  else if (('getadblock.com' === document.location.hostname ||
+            'dev.getadblock.com' === document.location.hostname ||
+            'dev1.getadblock.com' === document.location.hostname ||    
+            'dev2.getadblock.com' === document.location.hostname) &&
            (window.top === window.self))
   {
     if (/\/question\/$/.test(document.location.pathname))
@@ -381,6 +391,18 @@ var run_bandaids = function()
     },
     getadblock : function()
     {
+      window.addEventListener("message", receiveMessage, false);
+      function receiveMessage(event)
+      {
+        if (event.data &&
+            event.data.command === "payment_success") {
+          window.removeEventListener("message", receiveMessage);
+          chrome.runtime.sendMessage(event.data, function (response) {
+            window.postMessage(response, "*");
+          });
+        }
+      }
+
       chrome.storage.local.get("userid", function(response)
       {
         if (response.userid)
@@ -445,35 +467,35 @@ var run_bandaids = function()
     },
     pornhub: function() {
       (function() {
-      	var w = window;
-      	var count = Math.ceil(8+Math.random()*4);
-      	var tomorrow = new Date(Date.now() + 86400);
-      	var expire = tomorrow.toString();
-      	document.cookie = 'FastPopSessionRequestNumber=' + count + '; expires=' + expire;
-      	var db;
-      	if ( (db = w.localStorage) ) {
-      		db.setItem('InfNumFastPops', count);
-      		db.setItem('InfNumFastPopsExpire', expire);
-      	}
-      	if ( (db = w.sessionStorage) ) {
-      		db.setItem('InfNumFastPops', count);
-      		db.setItem('InfNumFastPopsExpire', expire);
-      	}
+        var w = window;
+        var count = Math.ceil(8+Math.random()*4);
+        var tomorrow = new Date(Date.now() + 86400);
+        var expire = tomorrow.toString();
+        document.cookie = 'FastPopSessionRequestNumber=' + count + '; expires=' + expire;
+        var db;
+        if ( (db = w.localStorage) ) {
+          db.setItem('InfNumFastPops', count);
+          db.setItem('InfNumFastPopsExpire', expire);
+        }
+        if ( (db = w.sessionStorage) ) {
+          db.setItem('InfNumFastPops', count);
+          db.setItem('InfNumFastPopsExpire', expire);
+        }
       })();
       (function() {
-      	var removeAdFrames = function(aa) {
-      		var el;
-      		for ( var i = 0; i < aa.length; i++ ) {
-      			el = document.getElementById(aa[i]);
-      			if ( el !== null ) {
-      				el.parentNode.removeChild(el);
-      			}
-      		}
-      	};
-      	Object.defineProperty(window, 'block_logic', {
-      		get: function() { return removeAdFrames; },
-      		set: function() {}
-      	});
+        var removeAdFrames = function(aa) {
+          var el;
+          for ( var i = 0; i < aa.length; i++ ) {
+            el = document.getElementById(aa[i]);
+            if ( el !== null ) {
+              el.parentNode.removeChild(el);
+            }
+          }
+        };
+        Object.defineProperty(window, 'block_logic', {
+          get: function() { return removeAdFrames; },
+          set: function() {}
+        });
       })();
     },
   }; // end bandaids
