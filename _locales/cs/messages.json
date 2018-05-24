@@ -767,6 +767,22 @@
     "message":"Srbština",
     "description":"Language name"
   },
+  "lang_slovenian":{
+    "message":"Slovinština",
+    "description":"Language name"
+  },
+  "lang_vietnamese":{
+    "message":"Vietnamština",
+    "description":"Language name"
+  },
+  "lang_portuguese_brazil":{
+    "message":"Portugalština (Brazílie)",
+    "description":"Language name"
+  },
+  "lang_portuguese_portugal":{
+    "message":"Portugalština (Portugalsko)",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"Bulharština",
     "description":"A filter list"
@@ -886,6 +902,18 @@
   "filter_easylist_plus_lithuania":{
     "message":"Litevský + EasyList",
     "description":"A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_vietnamese":{
+    "message":"Vietnamština",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_vietnamese":{
+    "message":"Vietnamština + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterbrazilian_portuguese":{
+    "message":"Brazilská portugalština",
+    "description":"A filter list"
   },
   "other":{
     "message":"Jiný",
@@ -1035,6 +1063,10 @@
     "message":"stránka",
     "description":"A resource type"
   },
+  "typewebsocket":{
+    "message":"websocket",
+    "description":"A resource type"
+  },
   "typeunknown":{
     "message":"neznámý",
     "description":"A resource type"
@@ -1095,13 +1127,37 @@
     "message":"AdBlock je pozastaven.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock je pozastaven na všech stránkách.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock je pozastaven na této stránce.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Pokračovat v blokování reklam",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Zrušit pozastavení AdBlock-u",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Zrušit pozastavení AdBlocku na této stránce",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Pozastavit AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Pozastavit na všech stránkách",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Pozastavit na této stránce",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Zrušit pozastavení blokování reklam",
@@ -1135,6 +1191,10 @@
     "message":"Milujete AdBlock? Zvažte o příspěvku!",
     "description":"Text of a donate link in the toolbar button menu"
   },
+  "help_and_feedback":{
+    "message":"Pomoc a zpětná vazba",
+    "description":"Text of a help link in the toolbar button menu"
+  },
   "donate_to_youtube_adblock":{
     "message":"Milujete toto? Zvažte o příspěvku!",
     "description":"Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
@@ -1153,6 +1213,10 @@
   },
   "tabsupport":{
     "message":"Podpora",
+    "description":"A tab on the Options page"
+  },
+  "tabtranslations":{
+    "message":"Překlady",
     "description":"A tab on the Options page"
   },
   "report_ad_on_page":{
@@ -1505,6 +1569,14 @@
     "message":"Třetí strana",
     "description":"Resource list page: column title telling if the resource originates from a different domain"
   },
+  "acceptableadsdisable_done":{
+    "message":"Jste již přihlášen do seznamu přijatelných reklam.",
+    "description":"Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock využívá EasyList Lite nebo EasyList pro zablokování reklam na většině reklam.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
   "adreport_laststep":{
     "message":"Poslední krok: nahlaste nám tento problém.",
     "description":"Subtitle on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
@@ -1580,5 +1652,13 @@
   "custom_filters_migration_error_message_part1":{
     "message":"Počet chyb ve vlastních filtrech: ",
     "description":"Part one of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3":{
+    "message":"Originální vstup: ",
+    "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "display_language_selector":{
+    "message":"Zobrazit AdBlock v jazyce",
+    "description":"Text shown before language selector drop-down."
   }
 }

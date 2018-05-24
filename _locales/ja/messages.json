@@ -367,6 +367,10 @@
     "message":"フィルターリストの使用頻度が高くなるにつれ、AdBlockの動作が重くなります。たくさんのフィルターリストはブラウザがクラッシュする原因となりえます。それでも追加する場合はOKを押してください。",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"全てのフィルターリストを無効にすると、AdBlockは広告をブロックできなくなります。AdBlockが作業の妨げとなるのであれば、「一時的に無効」にすることをお勧めします。それでも全てのフィルターリストを無効にしてもよろしいですか？",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"フィルターリストの登録",
     "description":"Title of the Filter lists tab of the Options page"
@@ -415,6 +419,10 @@
     "message":"EasyList",
     "description":"A filter list"
   },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"ロシア語およびウクライナ語",
     "description":"Language names for a filter list"
@@ -445,6 +453,10 @@
   },
   "filtermalware":{
     "message":"マルウェア対策",
+    "description":"A filter list"
+  },
+  "filterbitcoin_mining_protection":{
+    "message":"Cryptocurrency (Bitcoin) マイニング保護リスト",
     "description":"A filter list"
   },
   "filterlatvian":{
@@ -815,6 +827,46 @@
     "message":"トルコ語",
     "description":"Language name"
   },
+  "lang_catalan":{
+    "message":"カタルーニャ語",
+    "description":"Language name"
+  },
+  "lang_chinese_simplified":{
+    "message":"中国語 (簡体字)",
+    "description":"Language name"
+  },
+  "lang_chinese_traditional":{
+    "message":"中国語 (繁体字)",
+    "description":"Language name"
+  },
+  "lang_croatian":{
+    "message":"クロアチア語",
+    "description":"Language name"
+  },
+  "lang_norwegian":{
+    "message":"ノルウェー語",
+    "description":"Language name"
+  },
+  "lang_serbian":{
+    "message":"セルビア語",
+    "description":"Language name"
+  },
+  "lang_slovenian":{
+    "message":"スロベニア語",
+    "description":"Language name"
+  },
+  "lang_vietnamese":{
+    "message":"ベトナム語",
+    "description":"Language name"
+  },
+  "lang_portuguese_brazil":{
+    "message":"ポルトガル語 (ブラジル)",
+    "description":"Language name"
+  },
+  "lang_portuguese_portugal":{
+    "message":"ポルトガル語 (ポルトガル)",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"ブルガリア語",
     "description":"A filter list"
@@ -934,6 +986,18 @@
   "filter_easylist_plus_lithuania":{
     "message":"リトアニア語 + EasyList",
     "description":"A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_vietnamese":{
+    "message":"ベトナム語",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_vietnamese":{
+    "message":"ベトナム語 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterbrazilian_portuguese":{
+    "message":"ポルトガル語 (ブラジル)",
+    "description":"A filter list"
   },
   "other":{
     "message":"その他",
@@ -1131,25 +1195,61 @@
     "message":"このドメイン上のページで稼動させない",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"このドメイン上でのみ無効にする",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlockはこのページでは無効になっています。",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
+  },
+  "disabled_on_this_channel":{
+    "message":"このチャンネル上での広告の設定は許可になっています。",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
   },
   "enable_adblock":{
     "message":"このページで AdBlock を有効にする",
     "description":"Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
   },
+  "enable_adblock_on_this_channel":{
+    "message":"このチャンネル上の広告をブロック",
+    "description":"Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
+  },
   "status_paused":{
     "message":"AdBlockは一時停止しています。",
     "description":"Message shown in toolbar button when AdBlock is not running"
+  },
+  "status_universal_paused":{
+    "message":"AdBlock は、すべてのサイトで一時的に無効になっています。",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlockは、このサイトでは無効になっています。",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"AdBlockを再開する",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
   },
   "unpause_adblock":{
     "message":"AdBlock の一時停止を解除",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"このサイトで AdBlock を有効にする",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"AdBlockを一時停止",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"すべてのサイトでAdBlockを一時停止する",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"現在のサイトでAdBlockを一時停止する",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"広告ブロックの一時停止を解除",
@@ -1183,6 +1283,10 @@
     "message":"このドメイン上の自分のブロックを取り消し",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
+  "undo_last_block_site":{
+    "message":"このサイトのブロック設定を取り消す",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "dont_run_on_this_page":{
     "message":"このページでは実行しない",
     "description":"Menu entry to whitelist the current page"
@@ -1198,6 +1302,10 @@
   "donate_to_adblock":{
     "message":"AdBlockをお気に召しましたか？ ぜひ寄付をお願いします！",
     "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"ヘルプとフィードバック",
+    "description":"Text of a help link in the toolbar button menu"
   },
   "donate_to_youtube_adblock":{
     "message":"AdBlock on YouTube™をお気に召しましたか？ぜひ寄付をお願いします！",
@@ -1218,6 +1326,14 @@
   "tabsupport":{
     "message":"サポート",
     "description":"A tab on the Options page"
+  },
+  "tabtranslations":{
+    "message":"言語設定",
+    "description":"A tab on the Options page"
+  },
+  "translators":{
+    "message":"AdBlockの翻訳を手伝う方法はこちら [[here]]",
+    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
   },
   "report_ad_on_page":{
     "message":"このページにある広告をレポート",
@@ -1385,6 +1501,10 @@
     "message":"すべてのチャンネル登録しているYouTube™チャンネルがホワイトリストに登録されました",
     "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
+  "allow_ads_all_youtube_channels":{
+    "message":"すべてのチャンネル登録しているYouTube™チャンネルをホワイトリストに登録する",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
   "whitelist_youtube_channel":{
     "message":"ホワイトリスト $name$ チャンネル",
     "description":"Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
@@ -1394,6 +1514,10 @@
         "example":"Name of channel"
       }
     }
+  },
+  "whitelist_youtube_channel_v2":{
+    "message":"広告を許可する YouTube™ チャンネル:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters":{
     "message":"$host$ に関して作成した  $count$ 個のブロックを本当に削除しますか？",
@@ -1581,6 +1705,26 @@
     "message":"下記の「非侵入型広告を許可する」を選択することで、再度有効にすることができ、お好きなウェブサイトを支援することができます。",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
+  "easylist_lite_or_easylist":{
+    "message":"「EasyList ライト」「EasyList」のいずれかの登録を推奨します。",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlockは広告をブロックためにほとんどのウェブサイトでEasyListを用いています。",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"EasyListを無効にすることは推奨されません。もし偶然無効になってしまったのであれば、より多くの広告をブロックするために、すぐ有効にしてください。",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock は広告をブロックするためにほとんどのウェブサイトで EasyList または EasyList Lite を用いています。",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"EasyList もしくは EasyList Lite を無効にすることは推奨されません。間違って無効になってしまった場合は、より多くの広告をブロックするために どちらかを選択してください。",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Safariコンテンツブロックを有効にしたため、Acceptable Adsからの登録を解除しました。 一度に1つしか選択できません。 （[[理由]]）",
     "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
@@ -1676,5 +1820,17 @@
   "custom_filters_migration_error_message_part3":{
     "message":"オリジナルエントリ： ",
     "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options":{
+    "message":"AdBlockの言語を自分で選択する",
+    "description":"Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector":{
+    "message":"AdBlockを表示する言語",
+    "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"一般的なサイトのライブラリに対し、ローカル コンテンツ キャッシュを有効にします。",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

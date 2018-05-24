@@ -432,7 +432,7 @@
     "description":"A filter list combined with EasyList"
   },
   "filterczech":{
-    "message":"Czeski",
+    "message":"Czeski i Słowacki",
     "description":"A filter list"
   },
   "filter_czech":{
@@ -526,6 +526,10 @@
   "manualfilteredit":{
     "message":"Ręcznie edytować własne filtry:",
     "description":"Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit_yt":{
+    "message":"Ręczna edycja własnych filtrów:",
+    "description":"Subtitle on the 'General' tab of AdBlock on YouTube"
   },
   "manualexcludefilteredit":{
     "message":"Edytuj zablokowane filtry:",
@@ -983,6 +987,10 @@
     "message":"Litewski + EasyList",
     "description":"A filter list combined with EasyList"
   },
+  "filtereasylist_plus_vietnamese":{
+    "message":"Wietnamski",
+    "description":"A filter list combined with EasyList"
+  },
   "other":{
     "message":"Innym",
     "description":"Multiple choice option"
@@ -1179,6 +1187,10 @@
     "message":"Wstrzymaj blokowanie na stronach w tej domenie",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"Nie uruchamiaj na stronach w tej domenie",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock jest wyłączony na tej stronie.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1199,13 +1211,37 @@
     "message":"AdBlock jest wstrzymany.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock jest wstrzymany na wszystkich stronach.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock jest wstrzymany na tej stronie.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Wznów blokowanie reklam",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Wznów AdBlock'a",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Wznów AdBlock na tej stronie",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Wstrzymaj AdBlock'a",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Wstrzymaj na wszystkich stronach",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Wstrzymaj na tej stronie",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Wznów blokowanie reklam",
@@ -1237,6 +1273,10 @@
   },
   "undo_last_block":{
     "message":"Cofnij moje blokady na tej domenie",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"Cofnij moje blokady na tej stronie",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1780,5 +1820,9 @@
   "display_language_selector":{
     "message":"Pokaż AdBlock w",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Włącz lokalne buforowanie zawartości dla biblioteki popularnych stron internetowych",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

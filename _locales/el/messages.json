@@ -419,6 +419,10 @@
     "message":"EasyList",
     "description":"A filter list"
   },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"Ρωσικά και Ουκρανικά",
     "description":"Language names for a filter list"
@@ -449,6 +453,10 @@
   },
   "filtermalware":{
     "message":"Προστασία από κακόβουλο λογισμικό",
+    "description":"A filter list"
+  },
+  "filterbitcoin_mining_protection":{
+    "message":"Κρυπτονόμισμα (Bitcoin) λίστα προστασίας εξόρυξης",
     "description":"A filter list"
   },
   "filterlatvian":{
@@ -819,6 +827,46 @@
     "message":"Τουρκικά",
     "description":"Language name"
   },
+  "lang_catalan":{
+    "message":"Καταλανικά",
+    "description":"Language name"
+  },
+  "lang_chinese_simplified":{
+    "message":"Κινεζικά (απλοποιημένα)",
+    "description":"Language name"
+  },
+  "lang_chinese_traditional":{
+    "message":"Κινεζικά (παραδοσιακά)",
+    "description":"Language name"
+  },
+  "lang_croatian":{
+    "message":"Κροατικά",
+    "description":"Language name"
+  },
+  "lang_norwegian":{
+    "message":"Νορβηγικά",
+    "description":"Language name"
+  },
+  "lang_serbian":{
+    "message":"Σερβικά",
+    "description":"Language name"
+  },
+  "lang_slovenian":{
+    "message":"Σλοβενικά",
+    "description":"Language name"
+  },
+  "lang_vietnamese":{
+    "message":"Βιετναμεζικά",
+    "description":"Language name"
+  },
+  "lang_portuguese_brazil":{
+    "message":"Πορτογαλικά (Βραζιλίας)",
+    "description":"Language name"
+  },
+  "lang_portuguese_portugal":{
+    "message":"Πορτογαλικά (Πορτογαλίας)",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"Βουλγαρικά",
     "description":"A filter list"
@@ -937,6 +985,10 @@
   },
   "filter_easylist_plus_lithuania":{
     "message":"Λιθουανικά + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_vietnamese":{
+    "message":"Βιετναμεζικά",
     "description":"A filter list combined with EasyList"
   },
   "other":{
@@ -1135,6 +1187,10 @@
     "message":"Εκτός λειτουργίας σε σελίδες αυτού του τομέα",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"Εκτός λειτουργίας σε σελίδες αυτού του ιστότοπου",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"Το AdBlock είναι απενεργοποιημένο σε αυτήν την σελίδα.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1155,13 +1211,37 @@
     "message":"Το AdBlock είναι σε παύση.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"Το AdBlock είναι σε παύση σε όλους τους ιστότοπους.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"Το AdBlock είναι σε παύση σε αυτόν τον ιστότοπο.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Συνέχιση αποκλεισμού διαφημίσεων",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Αναίρεση παύσης του AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Αναίρεση παύσης του AdBlock σε αυτόν τον ιστότοπο",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Παύση του AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Παύση σε όλους τους ιστότοπους",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Παύση σε αυτόν τον ιστότοπο",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Αναίρεση παύσης αποκλεισμού διαφημίσεων",
@@ -1193,6 +1273,10 @@
   },
   "undo_last_block":{
     "message":"Αναίρεση των μπλοκ μου σε αυτόν τον τομέα",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"Αναίρεση των αποκλεισμών μου σε αυτόν τον ιστότοπο",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1234,6 +1318,14 @@
   "tabsupport":{
     "message":"ΥΠΟΣΤΗΡΙΞΗ",
     "description":"A tab on the Options page"
+  },
+  "tabtranslations":{
+    "message":"Μεταφράσεις",
+    "description":"A tab on the Options page"
+  },
+  "translators":{
+    "message":"Μάθετε περισσότερα για το πώς μπορείτε να βοηθήσετε στη μετάφραση του AdBlock [[εδώ]]",
+    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
   },
   "report_ad_on_page":{
     "message":"Αναφέρετε μια διαφήμιση σε αυτή τη σελίδα",
@@ -1605,6 +1697,10 @@
     "message":"Μπορείτε να το ενεργοποιήσετε ξανά παρακάτω και να υποστηρίζετε τις ιστοσελίδες που αγαπάτε επιλέγοντας \"Να επιτρέπονται ορισμένες μη-παρεμβατικές διαφημίσεις\".",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
+  "easylist_lite_or_easylist":{
+    "message":"Σας συνιστούμε να εγγραφείτε στην \"EasyList Lite\" ή στην \"EasyList\" αλλά όχι και στις δύο.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
   "easylist_disable_done":{
     "message":"Το AdBlock χρησιμοποιεί την EasyList για τον αποκλεισμό διαφημίσεων στις περισσότερες ιστοσελίδες.",
     "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
@@ -1612,6 +1708,14 @@
   "easylist_disable_how_to_reenable":{
     "message":"Σας συνιστούμε να το διατηρήσετε ενεργό. Εάν κάνατε αναίρεση εγγραφής κατά λάθος, παρακαλώ επιλέξτε την \"EasyList\" τώρα για να μπλοκάρονται περισσότερες διαφημίσεις.",
     "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"Το AdBlock χρησιμοποιεί την EasyList Lite ή την EasyList για τον αποκλεισμό διαφημίσεων στις περισσότερες ιστοσελίδες.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"Σας συνιστούμε να το διατηρήσετε ενεργό. Εάν κάνατε αναίρεση εγγραφής κατά λάθος, παρακαλώ επιλέξτε την \"EasyList Lite\" ή την \"EasyList\" τώρα για να μπλοκάρονται περισσότερες διαφημίσεις.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
   },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Αναιρέσαμε την εγγραφή σας από τις αποδεκτές διαφημίσεις, διότι έχετε ενεργοποιήσει την Φραγή Περιεχομένου Safari. Μπορείτε να επιλέξετε μόνο ένα κάθε φορά. ([[Γιατί;]])",
@@ -1708,5 +1812,17 @@
   "custom_filters_migration_error_message_part3":{
     "message":"Αρχική εγγραφή: ",
     "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options":{
+    "message":"Αφήστε με να επιλέξω την γλώσσα εμφάνισης του AdBlock",
+    "description":"Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector":{
+    "message":"Εμφάνιση του AdBlock στα",
+    "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Ενεργοποίηση τοπικού περιεχομένου προσωρινής αποθήκευσης για δημοφιλής ιστοσελίδες βιβλιοθηκών",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

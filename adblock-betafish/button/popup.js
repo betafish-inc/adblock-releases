@@ -56,19 +56,19 @@ $(function ()
     var domainPaused = BG.adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id});
     if (paused)
     {
-      show(['div_status_paused', 'separator0', 'div_paused_adblock', 'div_options']);
+      show(['div_status_paused', 'separator0', 'div_paused_adblock', 'div_options', 'help_link']);
     } else if (domainPaused)
     {
-      show(['div_status_domain_paused', 'separator0', 'div_domain_paused_adblock', 'div_options']);
+      show(['div_status_domain_paused', 'separator0', 'div_domain_paused_adblock', 'div_options', 'help_link']);
     } else if (info.disabledSite)
     {
-      show(['div_status_disabled', 'separator0', 'div_pause_adblock', 'div_options']);
+      show(['div_status_disabled', 'separator0', 'div_pause_adblock', 'div_options', 'help_link']);
     } else if (info.whitelisted)
     {
-      show(['div_status_whitelisted', 'div_enable_adblock_on_this_page', 'separator0', 'div_pause_adblock', 'separator1', 'div_options']);
+      show(['div_status_whitelisted', 'div_enable_adblock_on_this_page', 'separator0', 'div_pause_adblock', 'separator1', 'div_options', 'help_link']);
     } else
     {
-      show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_report_an_ad', 'separator3', 'separator4', 'div_options', 'block_counts']);
+      show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_report_an_ad', 'separator3', 'separator4', 'div_options', 'block_counts', 'help_link']);
 
       $('#page_blocked_count').text(getBlockedPerPage(page).toLocaleString());
       $('#total_blocked_count').text(Prefs.blocked_total.toLocaleString());
