@@ -1,4 +1,4 @@
-LocalCDN = (function() {
+let LocalCDN = exports.LocalCDN = (function() {
   "use-strict";
 
   var urlsMatchPattern = ["http://*/*", "https://*/*"];
@@ -14,7 +14,7 @@ LocalCDN = (function() {
   var missedVersionsKey = "missedVersions";
 
   // Completes necessary set up for the LocalCDN
-  // Post:  localFiles, libraries, and versionArray are populated based on 
+  // Post:  localFiles, libraries, and versionArray are populated based on
   //        available local files
   var setUp = function() {
     localFiles = getAvailableFiles();
@@ -48,7 +48,7 @@ LocalCDN = (function() {
   // Handles a webRequest.onBeforeRequest event.
   // Redirects any requests for locally available files from a matching host,
   // if AdBlock is not paused. Otherwise allows request to continue as normal.
-  // Records any redirects, bytes of data redirected, and missing versions of 
+  // Records any redirects, bytes of data redirected, and missing versions of
   // supported libararies.
   // Param: details: holds information about the request, including the URL.
   var libRequestHandler = function(details) {
@@ -81,7 +81,7 @@ LocalCDN = (function() {
           } else {
             addMissedVersion(targetLibrary, version);
           }
-        } 
+        }
       }
     }
 
@@ -161,8 +161,8 @@ LocalCDN = (function() {
   };
 
   // Handles a webrequest.onBeforeSendHeaders event.
-  // Strips the cookie, origin, and referer headers (if present) from any requests for 
-  // a supported libarary from a matching host, if AdBlock is not paused. Otherwise 
+  // Strips the cookie, origin, and referer headers (if present) from any requests for
+  // a supported libarary from a matching host, if AdBlock is not paused. Otherwise
   // allows request to continue as normal.
   // Param: details: holds information about the request, including the URL and request
   //                 headers
@@ -203,17 +203,16 @@ LocalCDN = (function() {
     localStorage.setItem(missedVersionsKey, "{}");
   };
 
-  setUp();
-
   return {
+    setUp: setUp,
     // Starts the LocalCDN listeners
     start: function() {
-      chrome.webRequest.onBeforeRequest.addListener(libRequestHandler, { urls: urlsMatchPattern }, ["blocking"]); 
-      chrome.webRequest.onBeforeSendHeaders.addListener(stripMetadataHandler, { urls: urlsMatchPattern }, ["blocking", "requestHeaders"]);      
+      chrome.webRequest.onBeforeRequest.addListener(libRequestHandler, { urls: urlsMatchPattern }, ["blocking"]);
+      chrome.webRequest.onBeforeSendHeaders.addListener(stripMetadataHandler, { urls: urlsMatchPattern }, ["blocking", "requestHeaders"]);
     },
     // Stops the LocalCDN listeners and reset data
     end: function() {
-      chrome.webRequest.onBeforeRequest.removeListener(libRequestHandler); 
+      chrome.webRequest.onBeforeRequest.removeListener(libRequestHandler);
       chrome.webRequest.onBeforeSendHeaders.removeListener(stripMetadataHandler);
       resetCollectedData();
     },

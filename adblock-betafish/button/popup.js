@@ -1,20 +1,21 @@
 
 var BG = chrome.extension.getBackgroundPage();
-var require = BG.require;
 
-var Filter = require('filterClasses').Filter;
-var FilterStorage = require('filterStorage').FilterStorage;
-var Prefs = require('prefs').Prefs;
-var getBlockedPerPage = require('stats').getBlockedPerPage;
-var getDecodedHostname = require('url').getDecodedHostname;
+const Prefs = BG.Prefs;
+const getBlockedPerPage = BG.getBlockedPerPage;
+const getDecodedHostname = BG.getDecodedHostname;
 
-// the tab/page object, which contains |id| and |url| (stored as unicodeUrl) of
+// the tab/page object, which contains |id| and |url| of
 // the current tab
 var page = null;
 var pageInfo = null;
 var activeTab = null;
 
 var iframeSRCURL = "https://getadblock.com/myadblock/enrollment/?u=" + BG.STATS.userId();
+
+const openPage = function(url) {
+  chrome.tabs.create({url});
+}
 
 $(function ()
 {
@@ -53,7 +54,7 @@ $(function ()
 
     show(['div_options', 'separator2']);
     var paused = BG.adblockIsPaused();
-    var domainPaused = BG.adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id});
+    var domainPaused = BG.adblockIsDomainPaused({"url": page.url.href, "id": page.id});
     if (paused)
     {
       show(['div_status_paused', 'separator0', 'div_paused_adblock', 'div_options', 'help_link']);
@@ -70,11 +71,18 @@ $(function ()
     {
       show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_report_an_ad', 'separator3', 'separator4', 'div_options', 'block_counts', 'help_link']);
 
-      $('#page_blocked_count').text(getBlockedPerPage(page).toLocaleString());
+      chrome.runtime.sendMessage({
+        type: "stats.getBlockedPerPage",
+        tab: info.tab,
+      },
+      blockedPage =>
+      {
+        $('#page_blocked_count').text(blockedPage.toLocaleString());
+      });
       $('#total_blocked_count').text(Prefs.blocked_total.toLocaleString());
     }
 
-    var host = parseUri(page.unicodeUrl).host;
+    var host = page.url.hostname;
     var advancedOption = info.settings.show_advanced_options;
     var eligibleForUndo = !paused && !domainPaused && (info.disabledSite || !info.whitelisted);
     var urlToCheckForUndo = info.disabledSite ? undefined : host;
@@ -87,9 +95,9 @@ $(function ()
       hide(['div_report_an_ad', 'separator1']);
     }
 
-    if (host === 'www.youtube.com' && /channel|user/.test(page.unicodeUrl) && /ab_channel/.test(page.unicodeUrl) && eligibleForUndo && info.settings.youtube_channel_whitelist)
+    if (host === 'www.youtube.com' && /channel|user/.test(page.url.href) && /ab_channel/.test(page.url.href) && eligibleForUndo && info.settings.youtube_channel_whitelist)
     {
-      $('#div_whitelist_channel').html(translate('whitelist_youtube_channel', parseUri.parseSearch(page.unicodeUrl).ab_channel));
+      $('#div_whitelist_channel').html(translate('whitelist_youtube_channel', parseUri.parseSearch(page.url.href).ab_channel));
       show(['div_whitelist_channel']);
     }
 
@@ -235,7 +243,7 @@ $(function ()
   {
     BG.recordGeneralMessage("bugreport_clicked");
     var supportURL = 'https://help.getadblock.com/support/tickets/new';
-    ext.pages.open(supportURL);
+    openPage(supportURL);
     closeAndReloadPopup();
   });
 
@@ -247,13 +255,13 @@ $(function ()
     var getadblock_url = 'https://getadblock.com/';
     if (OPERA)
     {
-      BG.ext.pages.open(opera_url);
+      openPage(opera_url);
     } else if (SAFARI)
     {
-      BG.ext.pages.open(getadblock_url);
+      openPage(getadblock_url);
     } else
     {
-      BG.ext.pages.open(chrome_url);
+      openPage(chrome_url);
     }
 
     closeAndReloadPopup();
@@ -262,7 +270,7 @@ $(function ()
   $('#div_enable_adblock_on_this_page').click(function ()
   {
     BG.recordGeneralMessage("enable_adblock_clicked");
-    if (BG.tryToUnwhitelist(page.unicodeUrl))
+    if (BG.tryToUnwhitelist(page.url.href))
     {
       !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
       closeAndReloadPopup();
@@ -283,7 +291,7 @@ $(function ()
   $('#div_domain_paused_adblock').click(function ()
   {
     BG.recordGeneralMessage("domain_unpause_clicked");
-    BG.adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id}, false);
+    BG.adblockIsDomainPaused({"url": page.url.href, "id": page.id}, false);
     BG.updateButtonUIAndContextMenus();
     closeAndReloadPopup();
   });
@@ -291,7 +299,7 @@ $(function ()
   $('#div_undo').click(function ()
   {
     BG.recordGeneralMessage("undo_clicked");
-    var host = parseUri(page.unicodeUrl).host;
+    var host = page.url.hostname;
     if (!SAFARI)
     {
       activeTab = page;
@@ -303,7 +311,7 @@ $(function ()
   $('#div_whitelist_channel').click(function ()
   {
     BG.recordGeneralMessage("whitelist_youtube_clicked");
-    BG.createWhitelistFilterForYoutubeChannel(page.unicodeUrl);
+    BG.createWhitelistFilterForYoutubeChannel(page.url.href);
     closeAndReloadPopup();
     !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
   });
@@ -333,7 +341,7 @@ $(function ()
   $('#div_domain_pause_adblock').click(function ()
   {
     BG.recordGeneralMessage("domain_pause_clicked");
-    BG.adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id}, true);
+    BG.adblockIsDomainPaused({"url": page.url.href, "id": page.id}, true);
     BG.updateButtonUIAndContextMenus();
     closeAndReloadPopup();
   });
@@ -383,7 +391,7 @@ $(function ()
   $('#div_whitelist_page').click(function ()
   {
     BG.recordGeneralMessage("whitelist_page_clicked");
-    BG.createPageWhitelistFilter(page.unicodeUrl);
+    BG.createPageWhitelistFilter(page.url.href);
     closeAndReloadPopup();
     !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
   });
@@ -391,22 +399,22 @@ $(function ()
   $('#div_report_an_ad').click(function ()
   {
     BG.recordGeneralMessage("report_ad_clicked");
-    var url = 'adblock-adreport.html?url=' + encodeURIComponent(page.unicodeUrl) + '&tabId=' + page.id;
-    BG.ext.pages.open(BG.ext.getURL(url));
+    var url = 'adblock-adreport.html?url=' + encodeURIComponent(page.url.href) + '&tabId=' + page.id;
+    openPage(chrome.extension.getURL(url));
     closeAndReloadPopup();
   });
 
   $('#div_options').click(function ()
   {
     BG.recordGeneralMessage("options_clicked");
-    BG.ext.pages.open(BG.ext.getURL('options.html'));
+    openPage(chrome.extension.getURL('options.html'));
     closeAndReloadPopup();
   });
 
   $('#div_myadblock_options').click(function ()
   {
     BG.recordGeneralMessage("myadblock_options_clicked");
-    BG.ext.pages.open(BG.ext.getURL('adblock-picreplacement-options-general.html'));
+    openPage(chrome.extension.getURL('adblock-picreplacement-options-general.html'));
     closeAndReloadPopup();
   });
 
@@ -437,7 +445,7 @@ $(function ()
         $(document.body).animate({ "width" : event.data.width + "px", "height" : event.data.height + "px" }, 400, "linear");
       }
       if (event.data && event.data.command === "openPage" && event.data.url && event.data.url.startsWith('http')) {
-        BG.ext.pages.open(event.data.url);
+        openPage(event.data.url);
         closeAndReloadPopup();
       }
       if (event.data && event.data.command === "close") {
@@ -452,7 +460,7 @@ $(function ()
   $('#help_link').click(function ()
   {
     BG.recordGeneralMessage("feedback_clicked");
-    BG.ext.pages.open("http://help.getadblock.com/");
+    openPage("http://help.getadblock.com/");
     closeAndReloadPopup();
   });
 
@@ -460,7 +468,7 @@ $(function ()
   {
     BG.recordGeneralMessage("link_clicked");
     var linkHref = "https://getadblock.com/pay/?exp=7003&u=" + BG.STATS.userId();
-    BG.ext.pages.open(linkHref);
+    openPage(linkHref);
     closeAndReloadPopup();
   });
 

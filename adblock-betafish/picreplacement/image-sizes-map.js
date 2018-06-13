@@ -1,5 +1,12 @@
- // Used by both channels.js and picreplacement.js
-const imageSizesMap = new Map([
+// Used by both channels.js and picreplacement.js
+// Since this file is conditional loaded, and not part of the content script web pack,
+// 'exports' may not be defined, so we use this hack
+if (typeof exports === "undefined") {
+  var exports = {};
+}
+
+const imageSizesMap =
+exports.imageSizesMap = new Map([
   ["NONE", 0],
   ["wide", 1],
   ["tall", 2],
@@ -9,9 +16,15 @@ const imageSizesMap = new Map([
   ["small", 32]
 ]);
 
-const WIDE = imageSizesMap.get("wide");
-const TALL = imageSizesMap.get("tall");
-const SKINNYWIDE = imageSizesMap.get("skinnywide");
-const SKINNYTALL = imageSizesMap.get("skinnytall");
-const BIG = imageSizesMap.get("big");
-const SMALL = imageSizesMap.get("small");
+const WIDE =
+exports.WIDE = imageSizesMap.get("wide");
+const TALL =
+exports.TALL = imageSizesMap.get("tall");
+const SKINNYWIDE =
+exports.SKINNYWIDE = imageSizesMap.get("skinnywide");
+const SKINNYTALL =
+exports.SKINNYTALL = imageSizesMap.get("skinnytall");
+const BIG =
+exports.BIG = imageSizesMap.get("big");
+const SMALL =
+exports.SMALL = imageSizesMap.get("small");

@@ -4,59 +4,35 @@ var minDimension = 60;
 var cssRules = [];
 var hideElements = [];
 var hiddenElements = [];
-
-// we overrides the ABP Core hideElement function
-// to collect potential candidates for pic replacement
-function hideElement(element)
+browser.runtime.sendMessage({type: "getSelectors"}, response =>
 {
-  function doHide()
-  {
-    let propertyName = "display";
-    let propertyValue = "none";
-    if (element.localName == "frame")
-    {
-      propertyName = "visibility";
-      propertyValue = "hidden";
-    }
-
-    if (element.style.getPropertyValue(propertyName) != propertyValue ||
-        element.style.getPropertyPriority(propertyName) != "important")
-      element.style.setProperty(propertyName, propertyValue, "important");
+  if (response.selectors && response.selectors) {
+    cssRules = response.selectors;
   }
+});
 
-  // hideElement may get call after the page has completed loading on certain sites that have infinite scroll for example.
-  // if the user is on on these infinite scroll sites, such as FB, then attempt to do a pic replacement
-  var checkElement = function(theEl) {
-      if (document.readyState === 'complete' || window.top === window && hostname ==="www.facebook.com") {
-        let mediatype = typeMap.get(element.localName);
-        if (mediatype) {
-          picreplacement.augmentIfAppropriate({el: element, elType: mediatype, blocked: true}, function(response) {
-            if (response) {
-              chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-            }
-          });
-        } else  {
-          picreplacement.augmentDivIfAppropriate({el: element}, function(response) {
-            if (response) {
-              chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-            }
-          });
-        }
-      } else {
-        hideElements.push(theEl);
+// hideElement may get call after the page has completed loading on certain sites that have infinite scroll for example.
+// if the user is on on these infinite scroll sites, such as FB, then attempt to do a pic replacement
+var checkElement = function(element) {
+    if (document.readyState === 'complete' || window.top === window && hostname ==="www.facebook.com") {
+      let mediatype = typeMap.get(element.localName);
+      if (mediatype) {
+        picreplacement.augmentIfAppropriate({el: element, elType: mediatype, blocked: true}, function(response) {
+          if (response) {
+            chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
+          }
+        });
+      } else  {
+        picreplacement.augmentDivIfAppropriate({el: element}, function(response) {
+          if (response) {
+            chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
+          }
+        });
       }
-  };
-  checkElement(element);
-
-  doHide();
-
-  new MutationObserver(doHide).observe(
-    element, {
-      attributes: true,
-      attributeFilter: ["style"]
+    } else {
+      hideElements.push(element);
     }
-  );
-}
+};
 
 var ElementTypes = {
   IMAGE: 2,
@@ -81,18 +57,6 @@ var onReady = function (callback) {
 // 4) sort the array by size and type - we want to replace the large elements first
 // 5) process the sorted array, attempting to do a pic replacment for each element
 onReady(function() {
-  if (cssRules.length === 0 &&
-      elemhide &&
-      elemhide.shadow &&
-      elemhide.shadow.styleSheets &&
-      elemhide.shadow.styleSheets.length > 0) {
-    var hidingSheetCSSRules = elemhide.shadow.styleSheets[0].cssRules;
-    var cssRuleArray = [].slice.call(hidingSheetCSSRules);
-    for (var inx = 0; inx < cssRuleArray.length; inx++) {
-      var mySelectorText =  cssRuleArray[inx].selectorText.replace(/::content /g, '');
-      cssRules.push.apply(cssRules, mySelectorText.split(", "));
-    }
-  }
   var elementObjArray = [];
   cssRules.
     forEach(function(selector) {
@@ -121,7 +85,6 @@ onReady(function() {
     if (!elementObjArray.length || elementObjArray.length === 0)  {
       return;
     }
-
     function compareElements(a, b) {
       // sort type '1' to the top,
       // then sort by size
@@ -396,21 +359,16 @@ var picreplacement = {
     var el_style = window.getComputedStyle(el);
     var el_position = el_style.position;
     t.position = el_position;
-    if (!t.x && !t.y && !typeMap.get(el.localName)) {
-          var el_display    = el_style.display;
-          var el_visibility = el_style.visibility;
-          // temporarily set the visibility and display values to show the element
-          // we may be able to then calculate it's size more accurately
-          el.style.setProperty("position", "absolute", "important");
-          el.style.setProperty("visibility", "visible", "important");
-          el.style.setProperty("display", "block", "important");
-          var rect = el.getBoundingClientRect();
-          t.x = rect.width;
-          t.y = rect.height;
-          // reverting to the original values
-          el.style.display    = el_display;
-          el.style.position   = el_position;
-          el.style.visibility = el_visibility;
+    if (!t.x && !t.y && !typeMap.get(el.localName) && el.hasChildNodes()) {
+      // Since we're now injecting a 'user' stylesheet to hide elements, temporarily
+      // setting the display to block to unhide the element will not work, so..
+      // attempt to determine the size of one of children
+      for (var i = 0; i < el.children.length; i++) {
+        t = picreplacement._targetSize(el.children[i]);
+        if (t.x && t.y) {
+          break;
+        }
+      }
     }
 
     // Make it rectangular if ratio is appropriate, or if we only know one dim

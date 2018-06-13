@@ -52,7 +52,7 @@
     "description":"Title for the Options page for the 'AdBlock on YouTube' extension."
   },
   "chromebutton_how_to_hide2":{
-    "message":"AdBlock 버튼을 오른쪽 클릭한 후 'Chrome 메뉴에서 숨기기'를 누르세요. 다시 보이게 하려면 크롬 메뉴를 클릭한 후 AdBlock 버튼을 오른쪽 클릭한 뒤 '툴바에서 보기'를 선택하세요.",
+    "message":"AdBlock 버튼을 오른쪽 클릭한 후 'Chrome 메뉴에서 숨기기'를 누르세요. 다시 보이게 하려면 Chrome 메뉴를 클릭한 후 AdBlock 버튼을 오른쪽 클릭한 뒤 '툴바에서 보기'를 선택하세요.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2":{
@@ -68,7 +68,7 @@
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
   "sliderexplanation":{
-    "message":"웹 페이지의 광고가 정확히 숨겨지고 페이지가 정확히 보여질 때까지 슬라이더를 움직이세요.",
+    "message":"웹 페이지의 광고가 정확히 숨겨지고 페이지가 깔끔하게 보여질 때까지 슬라이더를 움직이세요.",
     "description":"'Block an ad' wizard usage explanation"
   },
   "slidertitle":{
@@ -991,6 +991,14 @@
     "message":"베트남어",
     "description":"A filter list combined with EasyList"
   },
+  "filter_easylist_plus_vietnamese":{
+    "message":"베트남어 + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterbrazilian_portuguese":{
+    "message":"포르투갈어 (브라질)",
+    "description":"A filter list"
+  },
   "other":{
     "message":"기타 언어",
     "description":"Multiple choice option"
@@ -1187,6 +1195,10 @@
     "message":"이 도메인에서 사용 중지",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"이 사이트에서 광고 허용",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"이 페이지에서는 AdBlock이 꺼져 있습니다.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1207,13 +1219,37 @@
     "message":"AdBlock 일시 중지됨.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"모든 사이트에서 AdBlock이 일시 중지되었습니다.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"이 사이트에서 AdBlock이 일시 중지되었습니다.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"광고 차단 다시 시작",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"AdBlock 일시 중지 해제",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"이 사이트에서 AdBlock 일시 중지 해제",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"AdBlock 일시 중지",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"모든 사이트에서 일시 중지",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"이 사이트에서 일시 중지",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"광고 차단 일시 중지 해제",
@@ -1245,6 +1281,10 @@
   },
   "undo_last_block":{
     "message":"해당 도메인에 대한 제한 풀기",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
+  "undo_last_block_site":{
+    "message":"이 사이트에서 광고 차단 해제",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
   "dont_run_on_this_page":{
@@ -1788,5 +1828,45 @@
   "display_language_selector":{
     "message":"AdBlock을 다음 언어로 사용",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"유명 웹사이트 라이브러리의 로컬 콘텐츠 캐싱 허용",
+    "description":"Option to let the user enable Local CDN feature."
+  },
+  "myadblockoptions":{
+    "message":"MyAdBlock",
+    "description":"The text of the menu item in the popup menu that takes you to the MyAdBlock Options page"
+  },
+  "newmyadblockenrollment":{
+    "message":"신규",
+    "description":"The text of the 'Enable MyAdBlock' menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockenrollment":{
+    "message":"MyAdBlock 켜기",
+    "description":"The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockoptionspageheader":{
+    "message":"MyAdBlock 설정",
+    "description":"The text of the header the MyAdBlock Options page"
+  },
+  "myadblockoptionscategoryheader":{
+    "message":"분류",
+    "description":"The text of the header the MyAdBlock Options page"
+  },
+  "myadblockpicreplacementswitchlabel":{
+    "message":"몇몇 차단된 광고를 아래 분류의 사진으로 대체합니다.",
+    "description":"The label text for the switch on the MyAdBlock Options page"
+  },
+  "catchannelswitchlabel":{
+    "message":"고양이",
+    "description":"The label text for the cat switch on the MyAdBlock Options page"
+  },
+  "dogchannelswitchlabel":{
+    "message":"개",
+    "description":"The label text for the dog switch on the MyAdBlock Options page"
+  },
+  "landscapechannelswitchlabel":{
+    "message":"풍경",
+    "description":"The label text for the Landscape switch on the MyAdBlock Options page"
   }
 }

@@ -1,7 +1,7 @@
 // if the ping reponse indicates a survey (tab or overlay)
 // gracefully processes the request
-
-SURVEY = (function() {
+const {recordGeneralMessage, recordErrorMessage} = require('./servermessages').ServerMessages;
+let SURVEY = exports.SURVEY = (function() {
   // Only allow one survey per browser startup, to make sure users don't get
   // spammed due to bugs in AdBlock / the ping server / the browser.
   var surveyAllowed = true;
@@ -33,7 +33,7 @@ SURVEY = (function() {
   };
 
   var getBlockCountOnActiveTab = function(callback) {
-    ext.pages.query(
+    chrome.tabs.query(
     {
       active: true,
       lastFocusedWindow: true,
@@ -201,7 +201,7 @@ SURVEY = (function() {
     var openTabIfAllowed = function() {
       setTimeout(function () {
         shouldShowSurvey(surveyData, function (responseData) {
-          ext.pages.open('https://getadblock.com/' + responseData.open_this_url);
+          chrome.tabs.create({ url: 'https://getadblock.com/' + responseData.open_this_url });
         });
       }, 10000); // 10 seconds
     };

@@ -1,45 +1,50 @@
-ext.backgroundPage.sendMessage({type: "elemhide.getSelectors"}, response => {
-  var filters = [];
-  let pairs = response.selectors.map((sel, i) => [sel, filters && filters[i]]);
+var matchSelectors = [];
+var pairs = [];
+const chunkSize = 1000;
+function* genFunc()
+{
+  var i = pairs.length;
+  while (i--)
+  {
+    yield pairs.splice((-1 * chunkSize), chunkSize);
+  }
+}
+
+chrome.runtime.sendMessage({type: "getSelectors"}, response =>
+{
   if (document.readyState != "loading")
   {
-    var nodes = [document];
-    let selectors = [];
-    let filters = [];
+    selectors = [];
+    pairs = response.selectors;
 
-    for (let [selector, filter] of pairs)
+    let interval = setInterval(() =>
     {
-      nodes: for (let node of nodes)
-      {
-
-        for (let element of node.querySelectorAll(selector))
+      let val = genFunc().next();
+      if (val.done) {
+        clearInterval(interval);
+        if (matchSelectors.length > 0)
         {
-          // Only consider selectors that actually have an effect on the
-          // computed styles, and aren't overridden by rules with higher
-          // priority, or haven't been circumvented in a different way.
-          if (getComputedStyle(element).display == "none")
+          let noDuplicates = Array.from(new Set(matchSelectors)); // remove any duplicates
+          chrome.runtime.sendMessage({ type: "datacollection.elementHide", selectors: noDuplicates });
+        }
+      }
+      else
+      {
+        let selectors = val.value;
+        for (let selector of selectors)
+        {
+          for (let element of document.querySelectorAll(selector))
           {
-            // For regular element hiding, we don't know the exact filter,
-            // but the background page can find it with the given selector.
-            // In case of element hiding emulation, the generated selector
-            // we got here is different from the selector part of the filter,
-            // but in this case we can send the whole filter text instead.
-            if (filter)
-              filters.push(filter);
-            else
-              selectors.push(selector);
-
-            break nodes;
+            // Only consider selectors that actually have an effect on the
+            // computed styles, and aren't overridden by rules with higher
+            // priority, or haven't been circumvented in a different way.
+            if (getComputedStyle(element).display == "none")
+            {
+              matchSelectors.push(selector);
+            }
           }
         }
       }
-    }
-    if (selectors.length > 0 || filters.length > 0)
-    {
-      ext.backgroundPage.sendMessage({
-        type: "datacollection.elementHide",
-        selectors, filters
-      });
-    }
+    }, 10); // pause 10 milli-seconds between each chunck
   }
 });

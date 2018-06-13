@@ -1,4 +1,8 @@
 
+const Subscription = require('subscriptionClasses').Subscription;
+
+const {imageSizesMap, WIDE, TALL, SKINNYWIDE, SKINNYTALL, BIG, SMALL} = require('./image-sizes-map');
+
 var subscription1 = Subscription.fromURL(getUrlFromId("antisocial"));
 var subscription2 = Subscription.fromURL(getUrlFromId("annoyances"));
 // Inputs: width:int, height:int, url:url, title:string, attribution_url:url
@@ -43,8 +47,9 @@ Channels.prototype = {
   //   id of newly created channel, or undefined if the channel already existed.
   add: function(data) {
     var klass = window[data.name];
-    if (!klass)
+    if (!klass) {
       return;
+    }
     var dataParam = JSON.stringify(data.param);
     for (var id in this._channelGuide) {
       var c = this._channelGuide[id];
@@ -280,3 +285,9 @@ Channel.prototype = {
     return type;
   }
 };
+
+Object.assign(window, {
+  Channel,
+  Channels,
+  Listing
+});

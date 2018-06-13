@@ -57,8 +57,6 @@ buildtools.packager.getMetadataPath = get_metadata_path
 buildtools.packager.getDevEnvPath = get_dev_env_path
 import buildtools.packagerChrome
 buildtools.packagerChrome.processFile = process_file
-import buildtools.packagerSafari
-buildtools.packagerSafari.processFile = process_file
 
 import buildtools.build
-buildtools.build.processArgs(ABP_DIR, sys.argv)
+buildtools.build.process_args(ABP_DIR)

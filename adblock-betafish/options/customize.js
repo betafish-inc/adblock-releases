@@ -15,7 +15,7 @@ function cleanCustomFilter(filters)
     {
       filters.splice(index, 1);
     }
-  } 
+  }
 
   // Remove the domain pause white-list items
   var domainPauses = backgroundPage.adblockIsDomainPaused();
@@ -48,7 +48,7 @@ function onFilterChange(action, item, param1, param2)
 
 $(function ()
 {
-  $('#tutorlink').attr('href', Utils.getDocLink("filterdoc"));
+  $('#tutorlink').attr('href',  backgroundPage.Utils.getDocLink("filterdoc"));
 
   var getExcludeFilters = function() {
     var excludeFiltersKey = 'exclude_filters';

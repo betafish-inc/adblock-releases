@@ -260,7 +260,7 @@ var BGcall = function()
   var callback = (has_callback ? args.pop() : function()
   {
   });
-  ext.backgroundPage.sendMessage({
+  chrome.runtime.sendMessage({
     command : "call",
     fn : fn,
     args : args
@@ -269,9 +269,9 @@ var BGcall = function()
 
 // Inputs: key:string.
 // Returns object from localStorage.
-// The following two functions should only be used when 
+// The following two functions should only be used when
 // multiple 'sets' & 'gets' may occur in immediately preceding each other
-// ext.storage.get & set instead
+// chrome.storage.local.get & set instead
 var storage_get = function(key) {
   var store = localStorage;
   var json = store.getItem(key);
@@ -295,3 +295,23 @@ var storage_set = function(key, value) {
     console.log(ex)
   }
 };
+
+var chromeStorageSetHelper = function(key, value, callback)
+{
+    let items = {};
+    items[key] = value;
+    chrome.storage.local.set(items, callback);
+};
+
+Object.assign(window, {
+  sessionstorage_set,
+  sessionstorage_get,
+  storage_get,
+  storage_set,
+  BGcall,
+  parseUri,
+  determineUserLanguage,
+  chromeStorageSetHelper,
+  logging,
+  translate,
+});

@@ -1,11 +1,9 @@
 
-var backgroundPage = ext.backgroundPage.getWindow();
-var require = backgroundPage.require;
-var Prefs = require('prefs').Prefs;
-var subscriptionClasses = require('subscriptionClasses');
-var Subscription = subscriptionClasses.Subscription;
-var FilterStorage = require('filterStorage').FilterStorage;
-var FilterNotifier = require('filterNotifier').FilterNotifier;
+var backgroundPage = chrome.extension.getBackgroundPage();
+var Prefs = backgroundPage.Prefs;
+var Subscription = backgroundPage.Subscription;
+var FilterStorage = backgroundPage.FilterStorage;
+var FilterNotifier = backgroundPage.FilterNotifier;
 
 var options = parseUri.parseSearch(document.location.search);
 var tabId = options.tabId.replace(/[^0-9]/g, '');

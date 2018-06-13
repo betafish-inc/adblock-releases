@@ -24,32 +24,15 @@ function load_jquery_ui(callback) {
   load_css("adblock-jquery-ui.custom.css");
   load_css("adblock-jquery-ui.override-page.css");
 
-  if (!SAFARI) {
-    // Chrome already loaded jQueryUI via executeScript
-    callback();
-  }
-  else {
-    BGcall('readfile', "adblock-jquery-ui.js", function(result) {
-      eval(result); // suck it, Trebek
-
-      // chrome.i18n.getMessage() lazily loads a file from disk using xhr,
-      // but the page itself doesn't have access to extension resources.
-      // Since we'll be using getMessage(), we have to ask the background
-      // page for the data.
-      BGcall('getL10NData', function(data) {
-        chrome.i18n._setL10nData(data);
-        callback();
-      });
-    });
-  }
+  callback();
 }
 
 // Set RTL for Arabic and Hebrew users in blacklist and whitelist wizards
-var text_direction = (function() { 
+var text_direction = (function() {
  var language = navigator.language.match(/^[a-z]+/i)[0] ;
  return language === "ar" || language === "he" ? "rtl":"ltr";
 })();
-function changeTextDirection($selector) { 
+function changeTextDirection($selector) {
  $selector.attr("dir", text_direction);
   if (text_direction === "rtl") {
     $(".ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset").css("float", "left");

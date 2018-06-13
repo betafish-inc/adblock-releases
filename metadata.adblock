@@ -1,40 +1,40 @@
 [general]
 author = Michael Gundlach
-version = 3.30.1
+version = 3.31.2
 backgroundScripts += adblock-jquery.js
-  adblock-errorreporting.js
-  adblock-functions.js
-  adblock-survey.js
-  adblock-stats.js
-  adblock-uninstall.js
-  adblock-idlehandler.js
-  adblock-localFilesIndex.js
-  adblock-localcdn.js
-  adblock-settings.js
-  adblock-servermessages.js
-  adblock-background.js
-  adblock-adpsubscriptionadapter.js
-  adblock-contextmenus.js
-  adblock-subscriptioninit.js
-  adblock-data-migrate.js
-  adblock-excludefilter.js
-  adblock-datacollection.v2.js
-  adblock-picreplacement-image-sizes-map.js
-  adblock-picreplacement-channels.js
-  adblock-picreplacement-cat-channel.js
-  adblock-picreplacement-dog-channel.js
-  adblock-picreplacement-langscape-channel.js
-  adblock-picreplacement-check.js
-
+icons =
+  icons/ab-16.png
+  icons/ab-32.png
+  icons/ab-48.png
+  icons/ab-64.png
+  icons/ab-128.png
 options = options.html
-testScripts += tests/example.js
-browserAction = icons/ab-16.png icons/ab-19.png icons/ab-20.png icons/ab-32.png icons/ab-38.png icons/ab-40.png adblock-button-popup.html
-icons = icons/ab-16.png icons/ab-32.png icons/ab-48.png
-  icons/ab-64.png icons/ab-128.png
-permissions += idle
+browserAction =
+  icons/ab-16.png
+  icons/ab-19.png
+  icons/ab-20.png
+  icons/ab-32.png
+  icons/ab-38.png
+  icons/ab-40.png
+  adblock-button-popup.html
+
+[manifest]
+permissions =
+  tabs
+  <all_urls>
+  contextMenus
+  webRequest
+  webRequestBlocking
+  webNavigation
+  storage
+  unlimitedStorage
+  notifications
+  idle
   alarms
-optionalPermissions = management
-webAccessible = adblock-jquery-ui.custom.css
+optional_permissions =
+  management
+web_accessible_resources =
+  adblock-jquery-ui.custom.css
   adblock-jquery-ui.override-page.css
   icons/icon24.png
   icons/ab-19.png
@@ -97,13 +97,11 @@ webAccessible = adblock-jquery-ui.custom.css
   localLib/jquery/jquery-3.2.1.min.js.local
 
 [contentScripts]
-document_start += adblock-picreplacement-contentscript-loader.js
-  adblock-functions.js
+document_start += adblock-functions.js
   adblock-bandaids.js
 document_end += adblock-uiscripts-rightclick_hook.js adblock-notificationoverlay.js
 
 [mapping]
-punycode.min.js = adblock-betafish/punycode.min.js
 CHANGELOG.txt = adblock-betafish/CHANGELOG.txt
 LICENSE = adblock-betafish/LICENSE
 translators.json = adblock-betafish/translators.json
@@ -114,27 +112,12 @@ adblock-jquery-ui.js = adblock-betafish/jquery/jquery-ui.custom.min.js
 adblock-jquery-ui.custom.min.js = adblock-betafish/jquery/jquery-ui.custom.min.js
 adblock-jquery-ui.custom.css = adblock-betafish/jquery/css/jquery-ui.custom.css
 adblock-jquery-ui.override-page.css = adblock-betafish/jquery/css/override-page.css
-adblock-background.js = adblock-betafish/background.js
-adblock-adpsubscriptionadapter.js = adblock-betafish/adpsubscriptionadapter.js
-adblock-settings.js = adblock-betafish/settings.js
-adblock-servermessages.js = adblock-betafish/servermessages.js
-adblock-data-migrate.js = adblock-betafish/migrate_legacy_data.js
 adblock-functions.js = adblock-betafish/functions.js
 adblock-bandaids.js = adblock-betafish/bandaids.js
 adblock-datacollection-contentscript.js = adblock-betafish/datacollection-contentscript.js
 adblock-ytchannel.js = adblock-betafish/ytchannel.js
-adblock-stats.js = adblock-betafish/stats.js
-adblock-uninstall.js = adblock-betafish/uninstall.js
-adblock-survey.js = adblock-betafish/survey.js
 adblock-notificationoverlay.js = adblock-betafish/notificationoverlay.js
-adblock-datacollection.v2.js = adblock-betafish/datacollection.v2.js
-adblock-contextmenus.js = adblock-betafish/contextmenus.js
-adblock-idlehandler.js = adblock-betafish/idlehandler.js
-adblock-excludefilter.js = adblock-betafish/excludefilter.js
-adblock-subscriptioninit.js = adblock-betafish/subscriptioninit.js
 adblock-subscriptions.xml = adblock-betafish/subscriptions.xml
-adblock-localcdn.js = adblock-betafish/localcdn.js
-adblock-localFilesIndex.js = adblock-betafish/localFilesIndex.js
 options.html = adblock-betafish/options/index.html
 adblock-option-index.js = adblock-betafish/options/index.js
 adblock-option-options.css = adblock-betafish/options/options.css
@@ -163,13 +146,7 @@ adblock-uiscripts-blacklisting-clickwatcher.js = adblock-betafish/uiscripts/blac
 adblock-uiscripts-blacklisting-elementchain.js = adblock-betafish/uiscripts/blacklisting/elementchain.js
 adblock-uiscripts-blacklisting-blacklistui.js = adblock-betafish/uiscripts/blacklisting/blacklistui.js
 adblock-picreplacement.js = adblock-betafish/picreplacement/picreplacement.js
-adblock-picreplacement-contentscript-loader.js = adblock-betafish/picreplacement/contentscript-loader.js
 adblock-picreplacement-image-sizes-map.js = adblock-betafish/picreplacement/image-sizes-map.js
-adblock-picreplacement-check.js = adblock-betafish/picreplacement/check.js
-adblock-picreplacement-channels.js = adblock-betafish/picreplacement/channels.js
-adblock-picreplacement-cat-channel.js = adblock-betafish/picreplacement/cat-channel.js
-adblock-picreplacement-dog-channel.js = adblock-betafish/picreplacement/dog-channel.js
-adblock-picreplacement-langscape-channel.js = adblock-betafish/picreplacement/langscape-channel.js
 adblock-picreplacement-options-general.html = adblock-betafish/picreplacement/options/general.html
 adblock-picreplacement-options-general.css = adblock-betafish/picreplacement/options/general.css
 adblock-picreplacement-options-general.js = adblock-betafish/picreplacement/options/general.js
@@ -177,9 +154,6 @@ adblock-picreplacement-imageview.html = adblock-betafish/picreplacement/options/
 adblock-picreplacement-imageview.js = adblock-betafish/picreplacement/options/imageview.js
 adblock-picreplacement-options-imageview.css = adblock-betafish/picreplacement/options/imageview.css
 devtools.js = adblock-betafish/devtools.js
-qunit/tests/example.js = tests/example.js
-firstRun.html = adblock-firstRun.html
-firstRun.js = adblock-firstRun.js
 icons/ab-16.png = icons/adblock-16.png
 icons/ab-16-whitelisted.png = icons/adblock-16-whitelisted.png
 icons/ab-16-grayscale.png = icons/adblock-16-grayscale.png
@@ -310,6 +284,35 @@ localLib/jquery/jquery-2.2.4.min.js.local = adblock-betafish/localLib/jquery/jqu
 localLib/jquery/jquery-3.1.1.min.js.local = adblock-betafish/localLib/jquery/jquery-3.1.1.min.js.local
 localLib/jquery/jquery-3.2.1.min.js.local = adblock-betafish/localLib/jquery/jquery-3.2.1.min.js.local
 
-[convert_js]
-lib/adblockplus.js -= lib/filterComposer.js lib/uninstall.js
+[module_alias]
+options = ../../adblock-betafish/alias/options.js
+subscriptionInit = ../../adblock-betafish/alias/subscriptionInit.js
+uninstall = ../../adblock-betafish/alias/uninstall.js
+
+[bundles]
+lib/adblockplus.js +=
+  ../adblock-betafish/errorreporting.js
+  ../adblock-betafish/functions.js
+  ../adblock-betafish/survey.js
+  ../adblock-betafish/localFilesIndex.js
+  ../adblock-betafish/settings.js
+  ../adblock-betafish/background.js
+  ../adblock-betafish/contextmenus.js
+  ../adblock-betafish/alias/subscriptionInit.js
+  ../adblock-betafish/excludefilter.js
+  ../adblock-betafish/picreplacement/image-sizes-map.js
+  ../adblock-betafish/picreplacement/channels.js
+  ../adblock-betafish/picreplacement/cat-channel.js
+  ../adblock-betafish/picreplacement/dog-channel.js
+  ../adblock-betafish/picreplacement/langscape-channel.js
+  ../adblock-betafish/picreplacement/check.js
+  ../adblock-betafish/getselectors.js
+lib/adblockplus.js -= lib/filterComposer.js
+  lib/subscriptionInit.js
+  lib/uninstall.js
+  lib/options.js
 include.postload.js -= blockElement.postload.js composer.postload.js
+include.preload.js +=
+  ../adblock-betafish/alias/include.preload.js
+  ../adblock-betafish/picreplacement/contentscript-loader.js
+include.preload.js -= include.preload.js

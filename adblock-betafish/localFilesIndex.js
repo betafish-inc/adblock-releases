@@ -23,3 +23,11 @@ jquery: {
 },
 };
 }
+ 
+// Attach methods to window
+Object.assign(window, {
+  getAvailableFiles
+});
+const {LocalCDN} = require('./localcdn');
+LocalCDN.setUp();
+ 

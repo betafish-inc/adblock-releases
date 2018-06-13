@@ -1,34 +1,20 @@
 //Temporary
 var SAFARI = false;
 
-var backgroundPage = ext.backgroundPage.getWindow();
-var require        = backgroundPage.require;
-
-with (require('filterClasses'))
-{
-  this.Filter          = Filter;
-  this.WhitelistFilter = WhitelistFilter;
-}
-
-with (require('subscriptionClasses'))
-{
-  this.Subscription             = Subscription;
-  this.SpecialSubscription      = SpecialSubscription;
-  this.DownloadableSubscription = DownloadableSubscription;
-}
-
-with (require('filterValidation'))
-{
-  this.parseFilter  = parseFilter;
-  this.parseFilters = parseFilters;
-}
-
-var FilterStorage       = require('filterStorage').FilterStorage;
-var FilterNotifier      = require('filterNotifier').FilterNotifier;
-var Prefs               = require('prefs').Prefs;
-var Synchronizer        = require('synchronizer').Synchronizer;
-var Utils               = require('utils').Utils;
-var NotificationStorage = require('notification').Notification;
+const backgroundPage  = chrome.extension.getBackgroundPage();
+const Filter          = backgroundPage.Filter;
+const WhitelistFilter = backgroundPage.WhitelistFilter;
+const Subscription             = backgroundPage.Subscription;
+const SpecialSubscription      = backgroundPage.SpecialSubscription;
+const DownloadableSubscription = backgroundPage.DownloadableSubscription;
+const parseFilter         = backgroundPage.parseFilter;
+const parseFilters        = backgroundPage.parseFilters;
+const FilterStorage       = backgroundPage.FilterStorage;
+const FilterNotifier      = backgroundPage.FilterNotifier;
+const Prefs               = backgroundPage.Prefs;
+const Synchronizer        = backgroundPage.Synchronizer;
+const Utils               = backgroundPage.Utils;
+const NotificationStorage = backgroundPage.Notification;
 
 function loadOptions()
 {
@@ -206,7 +192,7 @@ function displayVersionNumber()
   {} // silently fail
 }
 
-backgroundPage.ext.storage.get('userid', function (response)
+backgroundPage.chrome.storage.local.get('userid', function (response)
 {
   if (response.userid)
   {
@@ -353,22 +339,25 @@ function startSubscriptionSelection(title, url)
   }
 }
 
-function onMessage(msg)
-{
-  if (msg.type === "app.listen" || msg.type === "app.respond")
-  {
-    if (msg.action === "addSubscription" &&
-        msg.args &&
-        msg.args.length > 0)
-    {
-      var subscription = msg.args[0];
-      startSubscriptionSelection(subscription.title, subscription.url);
-    }
-  }
-}
-ext.onMessage.addListener(onMessage);
+let port = chrome.runtime.connect({name: "ui"});
 
-ext.backgroundPage.sendMessage({
+port.onMessage.addListener((message) =>
+{
+  switch (message.type)
+  {
+    case "app.respond":
+      switch (message.action)
+      {
+        case "addSubscription":
+          let subscription = message.args[0];
+          startSubscriptionSelection(subscription.title, subscription.url);
+          break;
+      }
+      break;
+  }
+});
+
+port.postMessage({
   type: "app.listen",
   filter: ["addSubscription"]
 });

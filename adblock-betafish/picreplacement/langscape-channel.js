@@ -320,3 +320,7 @@ LandscapesChannel.prototype = {
     ]);
   }
 };
+
+Object.assign(window, {
+  LandscapesChannel
+});

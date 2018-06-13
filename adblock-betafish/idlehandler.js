@@ -2,7 +2,7 @@
 // Call idleHandler.scheduleItem to schedule a function for exection upon idle
 // inputs: theFunction: function to be executed
 //         seconds: maximum time to wait upon idle, in seconds. 600 if omitted.
-var idleHandler = {
+let idleHandler = exports.idleHandler = {
   scheduleItemOnce : function(callback, seconds)
   {
     // In Safari, execute the function with only the minimum idle delay.

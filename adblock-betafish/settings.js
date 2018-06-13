@@ -1,3 +1,5 @@
+
+const {LocalCDN} = require('./localcdn');
 // OPTIONAL SETTINGS
 function Settings()
 {
@@ -14,7 +16,7 @@ function Settings()
   var _this = this;
   this._init = new Promise(function(resolve)
   {
-    ext.storage.get(_this._settingsKey, function(response)
+    chrome.storage.local.get(_this._settingsKey, function(response)
     {
       var settings = response.settings || {};
       _this._data = $.extend(_this._defaults, settings);
@@ -42,11 +44,11 @@ Settings.prototype = {
     var _this = this;
 
     // Don't store defaults that the user hasn't modified
-    ext.storage.get(this._settingsKey, function(response)
+    chrome.storage.local.get(this._settingsKey, function(response)
     {
       var storedData = response.settings || {};
       storedData[name] = isEnabled;
-      ext.storage.set(_this._settingsKey, storedData);
+      chromeStorageSetHelper(_this._settingsKey, storedData);
       if (callback !== undefined && typeof callback === 'function')
       {
         callback();
@@ -66,17 +68,17 @@ Settings.prototype = {
 
 };
 
-var _settings = new Settings();
-_settings.onload();
+var settings = new Settings();
+settings.onload();
 
 var getSettings = function()
 {
-  return _settings.get_all();
+  return settings.get_all();
 };
 
 var setSetting = function(name, isEnabled, callback)
 {
-  _settings.set(name, isEnabled, callback);
+  settings.set(name, isEnabled, callback);
 
   if (name === 'debug_logging')
   {
@@ -86,5 +88,13 @@ var setSetting = function(name, isEnabled, callback)
 
 var disableSetting = function(name)
 {
-  _settings.set(name, false);
+  settings.set(name, false);
 };
+
+// Attach methods to window
+Object.assign(window, {
+  disableSetting,
+  getSettings,
+  setSetting,
+  settings
+});

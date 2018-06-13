@@ -1,6 +1,6 @@
 ﻿// Module for removing individual filters from filter lists
 // An 'advance' feature, used on the Customize tab, titled "disabled filters"
-ExcludeFilter = (function () 
+ExcludeFilter = (function ()
 {
   var FilterNotifier = require('filterNotifier').FilterNotifier;
   var ABRemoveFilter = function (filter)
@@ -66,10 +66,10 @@ ExcludeFilter = (function ()
 
     if (validExcludeFiltersArray.length > 0)
     {
-      ext.storage.set('exclude_filters', validExcludeFiltersArray.join('\n'));
+      chromeStorageSetHelper('exclude_filters', validExcludeFiltersArray.join('\n'));
     } else
     {
-      ext.storage.remove('exclude_filters');
+      chrome.storage.local.remove('exclude_filters');
     }
   };
 

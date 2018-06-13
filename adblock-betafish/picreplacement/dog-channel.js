@@ -391,3 +391,7 @@ DogsChannel.prototype = {
     ]);
   }
 };
+
+Object.assign(window, {
+  DogsChannel
+});

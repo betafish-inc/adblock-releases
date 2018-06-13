@@ -1,18 +1,19 @@
 const {checkWhitelisted} = require("whitelisting");
+const FilterNotifier = require('filterNotifier').FilterNotifier;
+const Prefs = require('prefs').Prefs;
 
 var updateButtonUIAndContextMenus = function ()
 {
-  ext.pages.query({}, function (pages)
+  chrome.tabs.query({}, tabs =>
   {
-    pages.forEach(function (page)
-    {
-      if (adblockIsPaused() || adblockIsDomainPaused({"url": page.url.href, "id": page.id}))
+    for (let tab of tabs) {
+      const page = new ext.Page(tab);
+      if (adblockIsPaused() || adblockIsDomainPaused({"url": tab.url.href, "id": tab.id}))
       {
         page.browserAction.setBadge({ number: '' });
       }
-
       updateContextMenuItems(page);
-    });
+    }
   });
 };
 
@@ -31,9 +32,14 @@ var updateContextMenuItems = function (page)
   }
 };
 
-ext.pages.onLoading.addListener(updateContextMenuItems);
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
+{
+  if (changeInfo.status == "loading") {
+    updateContextMenuItems(new ext.Page(tab));
+  }
+});
 
-ext.onMessage.addListener(function (msg, sender, sendResponse)
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse)
 {
   switch (msg.type)
   {
@@ -62,7 +68,7 @@ Prefs.on(Prefs.shouldShowBlockElementMenu, function ()
 updateButtonUIAndContextMenus();
 
 var AdBlockContextMenuItemOne = {
-    title: ext.i18n.getMessage('block_this_ad'),
+    title: chrome.i18n.getMessage('block_this_ad'),
     contexts: ['all'],
     onclick: function (page, clickdata)
     {
@@ -74,7 +80,7 @@ var AdBlockContextMenuItemOne = {
   };
 
 var AdBlockContextMenuItemTwo = {
-    title: ext.i18n.getMessage('block_an_ad_on_this_page'),
+    title: chrome.i18n.getMessage('block_an_ad_on_this_page'),
     contexts: ['all'],
     onclick: function (page, clickdata)
     {
@@ -96,7 +102,6 @@ if (!SAFARI)
         {
           allFrames: false,
           include: [
-            'punycode.min.js',
             'adblock-jquery.js',
             'adblock-jquery-ui.js',
             'adblock-uiscripts-load_jquery_ui.js',
@@ -107,7 +112,6 @@ if (!SAFARI)
         {
           allFrames: false,
           include: [
-            'punycode.min.js',
             'adblock-jquery.js',
             'adblock-jquery-ui.js',
             'adblock-uiscripts-load_jquery_ui.js',
@@ -171,3 +175,7 @@ if (!SAFARI)
     return theFunction;
   })();
 }
+Object.assign(window, {
+  emitPageBroadcast,
+  updateButtonUIAndContextMenus
+});

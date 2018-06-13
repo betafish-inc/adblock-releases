@@ -1,4 +1,6 @@
-﻿DataCollectionV2 = (function()
+﻿const {postFilterStatsToLogServer} = require('./servermessages').ServerMessages;
+
+let DataCollectionV2 = exports.DataCollectionV2 = (function()
 {
 
   "use strict";
@@ -6,8 +8,10 @@
   const {RegExpFilter,
          WhitelistFilter,
          ElemHideFilter} = require("filterClasses");
-  var HOUR_IN_MS = 1000 * 60 * 60;
-  var TIME_LAST_PUSH_KEY = "timeLastPush";
+  const {port} = require("messaging");
+  const {idleHandler} = require('./idlehandler');
+  const HOUR_IN_MS = 1000 * 60 * 60;
+  const TIME_LAST_PUSH_KEY = "timeLastPush";
 
   // Setup memory cache
   var dataCollectionCache = {};
@@ -20,22 +24,16 @@
     {
       return;
     }
-    if (!tabInfo || !tabInfo.url)
+    if (!tabInfo || !tabInfo.url || !tabInfo.url.startsWith("http:"))
     {
       return;
     }
-    let url = parseUri(tabInfo.url);
-    if (url.protocol !== "http:" && url.protocol !== "https:")
-    {
-      return;
-    }
-    if (getSettings().data_collection_v2 && !adblockIsPaused() && !adblockIsDomainPaused({"url": tabInfo.url, "id": tabId}) && changeInfo.status === 'loading'  )
+    if (getSettings().data_collection_v2 && !adblockIsPaused() && !adblockIsDomainPaused({"url": tabInfo.url, "id": tabId}) && changeInfo.status === 'complete'  )
     {
       chrome.tabs.executeScript(tabId,
       {
           file: 'adblock-datacollection-contentscript.js',
           allFrames: true,
-          runAt: 'document_idle'
       }, function()
       {
         if (chrome.runtime.lastError)
@@ -53,7 +51,6 @@
       if (getSettings().data_collection_v2 && !adblockIsPaused() && !adblockIsDomainPaused({"url": sender.page.url, "id": sender.page.id}))
       {
         var selectors = message.selectors;
-        var filters = message.filters;
         var docDomain = extractHostFromFrame(sender.frame);
 
         for (let subscription of FilterStorage.subscriptions)
@@ -71,7 +68,7 @@
                                          selectors.includes(filter.selector) &&
                                          filter.isActiveOnDomain(docDomain);
 
-            if (isActiveElemHideFilter || filters.includes(filter.text))
+            if (isActiveElemHideFilter)
             {
               addFilterToCache(filter, sender.page);
             }
@@ -96,9 +93,9 @@
 
   var addFilterToCache = function(filter, page)
   {
-      if (filter && filter.text && (typeof filter.text === 'string') && page && page.url)
+      if (filter && filter.text && (typeof filter.text === 'string') && page && page.url && page.url.hostname)
       {
-        var domain = parseUri(page.url).host;
+        var domain = page.url.hostname;
         if (!domain)
         {
           return;
@@ -143,13 +140,19 @@
       }
   };
 
-  var filterListener = function(item, newValue, oldValue, page)
+  var filterListener = function(item, newValue, oldValue, tabIds)
   {
-    if (getSettings().data_collection_v2 && !adblockIsPaused() && (!page || !adblockIsDomainPaused({"url": page.unicodeUrl, "id": page.id})))
+    if (getSettings().data_collection_v2 && !adblockIsPaused())
     {
-      addFilterToCache(item, page);
+      for (let tabId of tabIds)
+      {
+        let page = new ext.Page({id: tabId});
+        if (page && !adblockIsDomainPaused({"url": page.url.href, "id": page.id})) {
+          addFilterToCache(item, page);
+        }
+      }
     }
-    else
+    else if (!getSettings().data_collection_v2)
     {
       FilterNotifier.removeListener(filterListener);
     }
@@ -157,7 +160,7 @@
 
   // If enabled at startup periodic saving of memory cache &
   // sending of data to the log server
-  _settings.onload().then(function()
+  settings.onload().then(function()
   {
     if (getSettings().data_collection_v2)
     {
@@ -174,7 +177,7 @@
                 subscribedSubs.push(subs[id].url);
               }
             }
-            if (getUserFilters()) {
+            if (getUserFilters().length) {
               subscribedSubs.push("customlist");
             }
             var data = {
@@ -190,7 +193,7 @@
               domains:                 dataCollectionCache.domains,
               filters:                 dataCollectionCache.filters
             };
-            ext.storage.get(TIME_LAST_PUSH_KEY, function(response) {
+            chrome.storage.local.get(TIME_LAST_PUSH_KEY, function(response) {
               var timeLastPush = "n/a";
               if (response[TIME_LAST_PUSH_KEY]) {
                 var serverTimestamp = new Date(response[TIME_LAST_PUSH_KEY]);
@@ -231,7 +234,7 @@
                     nowTimestamp = (new Date()).toGMTString();
                   }
                 }
-                ext.storage.set(TIME_LAST_PUSH_KEY, nowTimestamp);
+                chromeStorageSetHelper(TIME_LAST_PUSH_KEY, nowTimestamp);
                 // Reset memory cache
                 dataCollectionCache = {};
                 dataCollectionCache.filters = {};
@@ -263,7 +266,7 @@
     dataCollectionCache = {};
     FilterNotifier.off("filter.hitCount", filterListener);
     chrome.webRequest.onBeforeRequest.removeListener(webRequestListener);
-    ext.storage.remove(TIME_LAST_PUSH_KEY);
+    chrome.storage.local.remove(TIME_LAST_PUSH_KEY);
     chrome.tabs.onUpdated.removeListener(handleTabUpdated);
   };
   returnObj.getCache = function()

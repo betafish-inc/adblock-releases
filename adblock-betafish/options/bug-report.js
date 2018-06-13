@@ -1,7 +1,7 @@
 var debugInfo;
 var textDebugInfo  = '';
 var extInfo        = '';
-var backgroundPage = ext.backgroundPage.getWindow();
+var backgroundPage = chrome.extension.getBackgroundPage();
 $(document).ready(function ()
 {
   'use strict';

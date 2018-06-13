@@ -8,7 +8,7 @@ function top_open_whitelist_ui() {
 
   may_open_dialog_ui = false;
 
-  var domain = getUnicodeDomain(document.location.host);
+  var domain = document.location.host;
 
   // Safari's document.location breaks in the feed reader if the feed is fetched via https. Normal
   // feeds have URLs with scheme replaced with "feed", but HTTPS feeds have the scheme replaced with

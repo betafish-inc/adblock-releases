@@ -23,17 +23,8 @@ and Opera Add-Ons, run the following command:
 
     ./build.py -t chrome build
 
-Safari builds however alwyays need to be signed:
-
-    ./build.py -t safari build -k key.pem
-
-Note: `key.pem` should contain the private key for your developer certificate,
-the developer certificate itself as well as all the certificates it
-was signed with (Apple's root certificate and intermediate certificates)
-in PEM format - in hat order.
-
 This will create a build with a name in the form
-`adblockforchrome-VERSION.zip` or `adblockforsafari-VERSION.safariextz`.
+`adblockforchrome-VERSION.zip`
 
 
 ### Development builds
@@ -41,19 +32,12 @@ This will create a build with a name in the form
 To simplify the process of testing your changes you can create an unpacked
 development environment. For that run one of the following commands:
 
-    ./build.py -t chrome devenv
-    ./build.py -t safari devenv
+    ./build.py devenv -t chrome
 
 This will create a `devenv` directory in the repository. In Chrome you should
 load it as an unpacked extension directory. After making changes to the
 source code re-run the command to update the development environment, the
 extension should reload automatically after a few seconds.
-
-In Safari you should load `devenv/adblockforsafari.safariextension` as unpacked
-extension directory. After making changes to the source code re-run the command
-to update the development environment. You will still need to reload the
-extension explicitly in the Extension Builder, Safari currently doesn't allow
-automating this action.
 
 
 ### Dependencies
@@ -120,27 +104,3 @@ and `background.js` respectively, using `metadata.adblock`. For an example of
 more advanced usage I recommend taking a look at
 `adblockpluschrome/metadata.common`.
 
-
-### Unit tests
-
-To run the unit test suite browse to the extension's Options page, open the
-JavaScript Console and type in:
-
-    location.href = "qunit/index.html";
-
-The unit tests will run automatically once the page loads. The Adblock Plus unit
-tests will be run first, followed by any AdBlock tests.
-
-To add additional AdBlock specific unit tests to the test suite you can use the
-`general.testScripts` metadata option. (You will likely have to add a path
-mapping as well.)
-
-Tests are run using the [QUnit](http://qunitjs.com/) library, so should be
-written using the provided API.
-
-To run any new tests that you have added you will need to re-build the extension
-and then follow the above instructions for running the test suite.
-
-An example test has been added in the `tests/example.js` file. It demonstrates
-how tests can be included using our build system. A mapping has been added for
-it to `metadata.adblock` and it's path appended to the `testScripts` option.

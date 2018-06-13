@@ -188,7 +188,7 @@ BlacklistUi.prototype._build_page2 = function() {
     click: function() {
       var rule = $("#summary", that._ui_page2).text();
       if (rule.length > 0) {
-        var filter = getUnicodeDomain(document.location.hostname) + "##" + rule;
+        var filter = document.location.hostname + "##" + rule;
         BGcall('addCustomFilter', filter, function() {
           block_list_via_css([rule]);
           that._ui_page2.dialog('close');
@@ -200,7 +200,7 @@ BlacklistUi.prototype._build_page2 = function() {
   if (that._advanced_user)
     btns[translate("buttonedit")] =
       function() {
-        var custom_filter = getUnicodeDomain(document.location.hostname) + '##' + $("#summary", that._ui_page2).text();
+        var custom_filter = document.location.hostname + '##' + $("#summary", that._ui_page2).text();
         that._ui_page2.dialog('close');
         custom_filter = prompt(translate("blacklistereditfilter"), custom_filter);
         if (custom_filter) {//null => user clicked cancel
@@ -429,8 +429,6 @@ BlacklistUi._ellipsis = function(value, size) {
 
   if (size == undefined)
     size = 50;
-
-  value = getUnicodeUrl(value);
 
   var half = size / 2 - 2; // With ellipsis, the total length will be ~= size
 

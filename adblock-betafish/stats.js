@@ -1,6 +1,11 @@
+const Prefs = require('prefs').Prefs;
+const FilterStorage = require('filterStorage').FilterStorage;
+const {LocalCDN} = require('./localcdn');
+const {SURVEY} = require('./survey');
+const {recordGeneralMessage, recordErrorMessage} = require('./servermessages').ServerMessages;
 // Allows interaction with the server to track install rate
 // and log messages.
-STATS = (function()
+let STATS = exports.STATS = (function()
 {
   var userIDStorageKey = "userid";
   var totalPingStorageKey = "total_pings";
@@ -79,7 +84,7 @@ STATS = (function()
   function readUserIDPromisified() {
     return new Promise(
       function (resolve, reject) {
-        ext.storage.get(STATS.userIDStorageKey,
+        chrome.storage.local.get(STATS.userIDStorageKey,
           (response) => {
             var localuserid = storage_get(STATS.userIDStorageKey);
             if (!response[STATS.userIDStorageKey] && !localuserid)
@@ -96,7 +101,7 @@ STATS = (function()
               }
               user_ID = result.join('') + time_suffix;
               // store in redudant locations
-              ext.storage.set(STATS.userIDStorageKey, user_ID);
+              chromeStorageSetHelper(STATS.userIDStorageKey, user_ID);
               storage_set(STATS.userIDStorageKey, user_ID);
             }
             else
@@ -104,7 +109,7 @@ STATS = (function()
               user_ID = response[STATS.userIDStorageKey] || localuserid;
               if (!response[STATS.userIDStorageKey] && localuserid)
               {
-                ext.storage.set(STATS.userIDStorageKey, user_ID);
+                chromeStorageSetHelper(STATS.userIDStorageKey, user_ID);
               }
               if (response[STATS.userIDStorageKey] && !localuserid)
               {
@@ -116,7 +121,7 @@ STATS = (function()
         });
   }
 
-  ext.onMessage.addListener(function(message, sender, sendResponse)
+  chrome.runtime.onMessage.addListener(function(message, sender, sendResponse)
   {
     if (message.command !== "get_adblock_user_id")
     {
@@ -135,7 +140,7 @@ STATS = (function()
     {
       return;
     }
-    ext.storage.get(STATS.totalPingStorageKey, function(response)
+    chrome.storage.local.get(STATS.totalPingStorageKey, function(response)
     {
       var localTotalPings = storage_get(STATS.totalPingStorageKey);
       var total_pings = response[STATS.totalPingStorageKey] || localTotalPings || 0;
@@ -246,7 +251,7 @@ STATS = (function()
   // Called just after we ping the server, to schedule our next ping.
   var scheduleNextPing = function()
   {
-    ext.storage.get(STATS.totalPingStorageKey, function(response)
+    chrome.storage.local.get(STATS.totalPingStorageKey, function(response)
     {
       var localTotalPings = storage_get(totalPingStorageKey);
       localTotalPings = isNaN(localTotalPings) ? 0 : localTotalPings;
@@ -255,7 +260,7 @@ STATS = (function()
       total_pings = Math.max(localTotalPings, total_pings);
       total_pings += 1;
       // store in redudant locations
-      ext.storage.set(STATS.totalPingStorageKey, total_pings);
+      chromeStorageSetHelper(STATS.totalPingStorageKey, total_pings);
       storage_set(STATS.totalPingStorageKey, total_pings);
 
       var delay_hours;
@@ -271,7 +276,7 @@ STATS = (function()
       var nextPingTime = Date.now() + millis;
 
       // store in redudant location
-      ext.storage.set(STATS.nextPingTimeStorageKey, nextPingTime, function()
+      chromeStorageSetHelper(STATS.nextPingTimeStorageKey, nextPingTime, function()
       {
         if (chrome.runtime.lastError)
         {
@@ -303,7 +308,7 @@ STATS = (function()
     // Wait 10 seconds to allow the previous 'set' to finish
     window.setTimeout(function()
     {
-      ext.storage.get(STATS.nextPingTimeStorageKey, function(response)
+      chrome.storage.local.get(STATS.nextPingTimeStorageKey, function(response)
       {
         var local_next_ping_time = storage_get(STATS.nextPingTimeStorageKey);
         local_next_ping_time = isNaN(local_next_ping_time) ? 0 : local_next_ping_time;
@@ -402,7 +407,7 @@ STATS = (function()
       {
         // Do 'stuff' when we're first installed...
         // - send a message
-        ext.storage.get(STATS.totalPingStorageKey, function(response)
+        chrome.storage.local.get(STATS.totalPingStorageKey, function(response)
         {
           if (!response[STATS.totalPingStorageKey])
           {

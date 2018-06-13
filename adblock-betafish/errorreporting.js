@@ -12,7 +12,6 @@ window.addEventListener("error", function(e)
   if (e.message) {
     str += ": " + e.message;
   }
-  // capture possible 404's of filter list retrievals
   var src = e.target.src || e.target.href;
   if (src) {
     str += "src: " + src;
@@ -33,7 +32,6 @@ window.addEventListener("error", function(e)
         str = str.substr(0,1023);
       }
   }
-  STATS.msg(str);
-  ext.storage.set("error", "Date added:" + new Date() + " " + str);
+  chromeStorageSetHelper("errorkey", "Date added:" + new Date() + " " + str);
   console.log(str);
 });

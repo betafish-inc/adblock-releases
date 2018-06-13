@@ -527,3 +527,7 @@ CatsChannel.prototype = {
     ]);
   }
 };
+
+Object.assign(window, {
+  CatsChannel
+});

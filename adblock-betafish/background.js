@@ -1,31 +1,68 @@
-var getDecodedHostname = require('url').getDecodedHostname;
-with (require('filterClasses'))
-{
-  this.Filter = Filter;
-  this.WhitelistFilter = WhitelistFilter;
-}
+const getDecodedHostname = require('url').getDecodedHostname;
 
-with (require('subscriptionClasses'))
-{
-  this.Subscription = Subscription;
-  this.SpecialSubscription = SpecialSubscription;
-  this.DownloadableSubscription = DownloadableSubscription;
-}
+const Filter = require('filterClasses').Filter;
+const WhitelistFilter = require('filterClasses').WhitelistFilter;
 
-with (require('filterValidation'))
-{
-  this.parseFilter = parseFilter;
-  this.parseFilters = parseFilters;
-}
+const {checkWhitelisted} = require("whitelisting");
 
-var FilterStorage = require('filterStorage').FilterStorage;
-var FilterNotifier = require('filterNotifier').FilterNotifier;
-var Prefs = require('prefs').Prefs;
-var Synchronizer = require('synchronizer').Synchronizer;
-var Utils = require('utils').Utils;
-var NotificationStorage = require('notification').Notification;
-var punycode = require("punycode");
+const Subscription = require("subscriptionClasses").Subscription;
+const DownloadableSubscription = require("subscriptionClasses").DownloadableSubscription;
+const SpecialSubscription = require("subscriptionClasses").SpecialSubscription;
+
+const parseFilter = require('filterValidation').parseFilter;
+const parseFilters = require('filterValidation').parseFilters;
+
+const FilterStorage = require('filterStorage').FilterStorage;
+const FilterNotifier = require('filterNotifier').FilterNotifier;
+const Prefs = require('prefs').Prefs;
+const Synchronizer = require('synchronizer').Synchronizer;
+const Utils = require('utils').Utils;
+const NotificationStorage = require('notification').Notification;
+
 const {RegExpFilter} = require("filterClasses");
+
+const {getBlockedPerPage} = require("stats");
+
+const info = require("../buildtools/info");
+
+// Object's used on the option, pop up, etc. pages...
+const {STATS} = require('./stats');
+const {DataCollectionV2} = require('./datacollection.v2');
+const {LocalCDN} = require('./localcdn');
+const {ServerMessages} = require('./servermessages');
+const {recordGeneralMessage, recordErrorMessage, recordAdreportMessage} = require('./servermessages').ServerMessages;
+const {getUrlFromId, unsubscribe, getSubscriptionsMinusText, getAllSubscriptionsMinusText, getIdFromURL} = require('./adpsubscriptionadapter').SubscriptionAdapter;
+const {uninstallInit} = require('./alias/uninstall');
+
+Object.assign(window, {
+  FilterStorage,
+  FilterNotifier,
+  Prefs,
+  Synchronizer,
+  NotificationStorage,
+  Subscription,
+  SpecialSubscription,
+  DownloadableSubscription,
+  parseFilter,
+  parseFilters,
+  Filter,
+  WhitelistFilter,
+  info,
+  getBlockedPerPage,
+  Utils,
+  STATS,
+  DataCollectionV2,
+  LocalCDN,
+  ServerMessages,
+  recordGeneralMessage,
+  recordErrorMessage,
+  recordAdreportMessage,
+  getUrlFromId,
+  unsubscribe,
+  getSubscriptionsMinusText,
+  getAllSubscriptionsMinusText,
+  getIdFromURL,
+});
 
 // TODO
 // Temporary...
@@ -160,7 +197,7 @@ var countCache = (function ()
   // Update custom filter count stored in localStorage
   var _updateCustomFilterCount = function ()
   {
-    ext.storage.set('custom_filter_count', cache);
+    chromeStorageSetHelper('custom_filter_count', cache);
   };
 
   return {
@@ -202,7 +239,7 @@ var countCache = (function ()
 
     init: function ()
     {
-      ext.storage.get('custom_filter_count', function (response)
+      chrome.storage.local.get('custom_filter_count', function (response)
       {
         cache = response.custom_filter_count || {};
       });
@@ -294,7 +331,7 @@ var isSelectorExcludeFilter = function (text)
 // BGcall DISPATCH
 (function ()
 {
-  ext.onMessage.addListener(function (message, sender, sendResponse)
+  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse)
   {
     if (message.command != 'call')
       return; // not for us
@@ -350,19 +387,19 @@ var removeGABTabListeners = function (saveState)
 // Returns: null (asynchronous)
 var getCurrentTabInfo = function (callback, secondTime)
 {
-  ext.pages.query(
+  chrome.tabs.query(
   {
     active: true,
     lastFocusedWindow: true,
-  }, function (pages)
+  }, tabs =>
   {
-    if (pages.length === 0)
+    if (tabs.length === 0)
     {
       return; // For example: only the background devtools or a popup are opened
     }
-    page = pages[0];
+    tab = tabs[0];
 
-    if (page && !page.url)
+    if (tab && !tab.url)
     {
       // Issue 6877: tab URL is not set directly after you opened a window
       // using window.open()
@@ -374,14 +411,14 @@ var getCurrentTabInfo = function (callback, secondTime)
 
       return;
     }
-
-    page.unicodeUrl = getUnicodeUrl(page.url.href);
-    var disabledSite = pageIsUnblockable(page.unicodeUrl);
+    const page = new ext.Page(tab);
+    var disabledSite = pageIsUnblockable(page.url.href);
     var displayStats = Prefs.show_statsinicon;
 
     var result =
     {
       page: page,
+      tab: tab,
       disabledSite: disabledSite,
       settings: getSettings()
     };
@@ -445,12 +482,12 @@ var adblockIsPaused = function (newValue)
   {
     FilterStorage.addFilter(result1.filter);
     FilterStorage.addFilter(result2.filter);
-    ext.storage.set(pausedKey, true);
+    chromeStorageSetHelper(pausedKey, true);
   } else
   {
     FilterStorage.removeFilter(result1.filter);
     FilterStorage.removeFilter(result2.filter);
-    ext.storage.remove(pausedKey);
+    chrome.storage.local.remove(pausedKey);
   }
 
   sessionstorage_set(pausedKey, newValue);
@@ -577,13 +614,13 @@ var domainPauseChangeHelper = function(tabId, newDomain)
 // Returns: undefined
 var saveDomainPauses = function(domainPauses)
 {
-  ext.storage.set(domainPausedKey, domainPauses);
+  chromeStorageSetHelper(domainPausedKey, domainPauses);
   sessionstorage_set(domainPausedKey, domainPauses);
 }
 
 // If AdBlock was paused on shutdown (adblock_is_paused is true), then
 // unpause / remove the white-list all entry at startup.
-ext.storage.get(pausedKey, function (response)
+chrome.storage.local.get(pausedKey, function (response)
 {
   if (response[pausedKey])
   {
@@ -596,7 +633,7 @@ ext.storage.get(pausedKey, function (response)
         var result2 = parseFilter(pausedFilterText2);
         FilterStorage.removeFilter(result1.filter);
         FilterStorage.removeFilter(result2.filter);
-        ext.storage.remove(pausedKey);
+        chrome.storage.local.remove(pausedKey);
       }
     };
 
@@ -606,7 +643,7 @@ ext.storage.get(pausedKey, function (response)
 
 // If AdBlock was domain paused on shutdown, then unpause / remove
 // all domain pause white-list entries at startup.
-ext.storage.get(domainPausedKey, function (response)
+chrome.storage.local.get(domainPausedKey, function (response)
 {
   try
   {
@@ -623,7 +660,7 @@ ext.storage.get(domainPausedKey, function (response)
             var result = parseFilter("@@" + aDomain + "$document");
             FilterStorage.removeFilter(result.filter);
           }
-          ext.storage.remove(domainPausedKey);
+          chrome.storage.local.remove(domainPausedKey);
         }
       };
 
@@ -655,7 +692,7 @@ if (!SAFARI && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
   {
     if (details.reason === 'update' || details.reason === 'install')
     {
-      ext.pages.open('https://getadblock.com/beta');
+      chrome.tabs.create({ url: 'https://getadblock.com/beta' });
     }
   });
 }
@@ -671,7 +708,7 @@ chrome.runtime.onInstalled.addListener(function (details)
 
 var openTab = function (url)
 {
-  ext.pages.open(url);
+  chrome.tabs.create({ url })
 };
 
 // Creates a custom filter entry that whitelists a YouTube channel
@@ -788,7 +825,7 @@ if (!SAFARI)
     chrome.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHanlder);
   };
 
-  _settings.onload().then(function()
+  settings.onload().then(function()
   {
     if (getSettings().youtube_channel_whitelist)
     {
@@ -900,7 +937,7 @@ var getDebugInfo = function (callback)
   response.other_info.license_version = License.get().lv;
 
   // Get total pings
-  ext.storage.get('total_pings', function (storageResponse)
+  chrome.storage.local.get('total_pings', function (storageResponse)
   {
     response.other_info.total_pings = storageResponse.total_pings || 0;
 
@@ -912,44 +949,53 @@ var getDebugInfo = function (callback)
       {
         response.excluded_filters = secondResponse[excludeFiltersKey];
       }
-      // Now, add the migration messages (if there are any)
-      var migrateLogMessageKey = 'migrateLogMessageKey';
-      chrome.storage.local.get(migrateLogMessageKey, function (thirdResponse)
+      // Now, add JavaScript exception error (if there is one)
+      var errorKey = 'errorkey';
+      chrome.storage.local.get(errorKey, function (errorResponse)
       {
-        if (thirdResponse && thirdResponse[migrateLogMessageKey])
+        if (errorResponse && errorResponse[errorKey])
         {
-          messages = thirdResponse[migrateLogMessageKey].split('\n');
-          for (var i = 0; i < messages.length; i++)
+          response.other_info[errorKey] = errorResponse[errorKey];
+        }
+        // Now, add the migration messages (if there are any)
+        var migrateLogMessageKey = 'migrateLogMessageKey';
+        chrome.storage.local.get(migrateLogMessageKey, function (migrateLogMessageResponse)
+        {
+          if (migrateLogMessageResponse && migrateLogMessageResponse[migrateLogMessageKey])
           {
-            var key = 'migration_message_' + i;
-            response.other_info[key] = messages[i];
-          }
-        }
-        if (License.isActiveLicense()) {
-          chrome.alarms.getAll(function(alarms) {
-            if (alarms && alarms.length > 0) {
-              response.other_info['Alarm info'] = 'length: ' + alarms.length;
-              for (var i = 0; i < alarms.length; i++)
-              {
-                var alarm = alarms[i];
-                response.other_info[i + " Alarm Name"] = alarm.name;
-                response.other_info[i + " Alarm Scheduled Time"] = new Date(alarm.scheduledTime);
-              }
-            } else {
-              response.other_info['No alarm info'];
+            messages = migrateLogMessageResponse[migrateLogMessageKey].split('\n');
+            for (var i = 0; i < messages.length; i++)
+            {
+              var key = 'migration_message_' + i;
+              response.other_info[key] = messages[i];
             }
-            License.getLicenseInstallationDate(function(installdate) {
-              response.other_info["License Installation Date"] = installdate;
-              if (typeof callback === 'function') {
-                callback(response);
-              }
-            });
-          });
-        } else { // License is not active
-          if (typeof callback === 'function') {
-            callback(response);
           }
-        }
+          if (License.isActiveLicense()) {
+            chrome.alarms.getAll(function(alarms) {
+              if (alarms && alarms.length > 0) {
+                response.other_info['Alarm info'] = 'length: ' + alarms.length;
+                for (var i = 0; i < alarms.length; i++)
+                {
+                  var alarm = alarms[i];
+                  response.other_info[i + " Alarm Name"] = alarm.name;
+                  response.other_info[i + " Alarm Scheduled Time"] = new Date(alarm.scheduledTime);
+                }
+              } else {
+                response.other_info['No alarm info'];
+              }
+              License.getLicenseInstallationDate(function(installdate) {
+                response.other_info["License Installation Date"] = installdate;
+                if (typeof callback === 'function') {
+                  callback(response);
+                }
+              });
+            });
+          } else { // License is not active
+            if (typeof callback === 'function') {
+              callback(response);
+            }
+          }
+        });
       });
     });
   });
@@ -991,32 +1037,62 @@ function getUserFilters()
   return filters;
 }
 
-// Return |domain| encoded in Unicode
-getUnicodeDomain = function(domain)
-{
-  if (domain)
-  {
-    return punycode.toUnicode(domain);
-  }
-  else
-  {
-    return domain;
-  }
-}
 
-// Return |url| encoded in Unicode
-getUnicodeUrl = function(url)
+STATS.untilLoaded(function(userID)
 {
-  // URLs encoded in Punycode contain xn-- prefix
-  if (url && url.indexOf("xn--") > 0)
-  {
-    var parsed = parseUri(url);
-    parsed.href = parsed.href.replace(parsed.hostname, punycode.toUnicode(parsed.hostname));
-    return parsed.href;
-  }
-  return url;
-};
+  STATS.startPinging();
+  uninstallInit();
+});
 
-// Remove comment when migration code is removed
-// STATS = STATS();
-// STATS.startPinging();
+// Create the "blockage stats" for the uninstall logic ...
+chrome.runtime.onInstalled.addListener(function (details)
+{
+  if (details.reason === 'install')
+  {
+    chrome.storage.local.get("blockage_stats", function(response) {
+      var blockage_stats = response.blockage_stats;
+      if (!blockage_stats)
+      {
+        data = {};
+        data.start = Date.now();
+        data.version = 1;
+        chromeStorageSetHelper("blockage_stats", data);
+      }
+    });
+  }
+});
+
+
+// Attach methods to window
+Object.assign(window, {
+  adblockIsPaused,
+  createPageWhitelistFilter,
+  getUserFilters,
+  updateFilterLists,
+  getDebugInfo,
+  isSafariContentBlockingAvailable,
+  createWhitelistFilterForYoutubeChannel,
+  openTab,
+  readfile,
+  saveDomainPauses,
+  adblockIsDomainPaused,
+  pageIsWhitelisted,
+  pageIsUnblockable,
+  getCurrentTabInfo,
+  getAdblockUserId,
+  createPageWhitelistFilter,
+  SAFARI,
+  tryToUnwhitelist,
+  addCustomFilter,
+  removeCustomFilter,
+  countCache,
+  updateCustomFilterCountMap,
+  removeCustomFilterForHost,
+  confirmRemovalOfCustomFiltersOnHost,
+  reloadTab,
+  isSelectorFilter,
+  isWhitelistFilter,
+  isSelectorExcludeFilter,
+  addYouTubeHistoryStateUpdateHanlder,
+  removeYouTubeHistoryStateUpdateHanlder
+});

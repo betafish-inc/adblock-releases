@@ -1,6 +1,7 @@
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
-
+const {checkWhitelisted} = require("whitelisting");
+const {recordGeneralMessage} = require('./../servermessages').ServerMessages;
 var License = (function () {
   var licenseStorageKey = 'license';
   var installTimestampStorageKey = 'install_timestamp';
@@ -276,9 +277,7 @@ chrome.runtime.onMessage.addListener(
 });
 
 var channels = {};
-
 License.ready().then(function() {
-
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (!(request.message == "load_my_adblock")) {
       return;
@@ -299,6 +298,9 @@ License.ready().then(function() {
   });
 
   channels = new Channels();
+  Object.assign(window, {
+    channels
+  });
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message !== "get_random_listing") {
       return;
@@ -331,10 +333,17 @@ License.ready().then(function() {
     function(request, sender, sendResponse) {
       if (request.command !== "picreplacement_inject_jquery")
         return; // not for us
-      chrome.tabs.executeScript(undefined,
-        {allFrames: request.allFrames, file: "adblock-jquery.js"},
-        function() { sendResponse({}); }
-      );
+      if (sender.url && sender.url.startsWith("http")) {
+        chrome.tabs.executeScript(undefined,
+          {allFrames: request.allFrames, file: "adblock-jquery.js"},
+          function() {
+            if (chrome.runtime.lastError) {
+                log(chrome.runtime.lastError)
+            }
+            sendResponse({});
+          }
+        );
+      }
     }
   );
 
@@ -383,4 +392,9 @@ License.initialize(function() {
   if (!License.initialized) {
       License.initialized = true;
   }
+});
+
+Object.assign(window, {
+  License,
+  replacedCounts
 });
