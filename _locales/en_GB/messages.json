@@ -1,10 +1,10 @@
 {
   "description":{
-    "message":"The most popular Chrome extension, with over 40 million users! Blocks ads all over the web.",
+    "message":"The most popular Chrome extension, with over 60 million users! Blocks ads all over the web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "description2":{
-    "message":"The most popular Chrome extension, with over 40 million users! Blocks ads all over the web.",
+    "message":"The most popular Chrome extension, with over 60 million users! Blocks ads all over the web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "description_edge":{
@@ -200,7 +200,7 @@
     "description":"Checkbox in the whitelist wizard"
   },
   "wizardcantrunonframesets":{
-    "message":"This AdBlock feature does not work on this site because it uses out of date technology. You can blacklist or whitelist resources manually in the 'Customize' tab of the options page.",
+    "message":"This AdBlock feature does not work on this site because it uses out of date technology. You can blacklist or whitelist resources manually in the 'Customize' tab of the Options page.",
     "description":"Alert shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
   "subscribeconfirm":{
@@ -477,6 +477,10 @@
   },
   "filterturkish":{
     "message":"Turkish",
+    "description":"A filter list"
+  },
+  "filteranticircumvent":{
+    "message":"Anti-Circumvention filters",
     "description":"A filter list"
   },
   "blacklistclickmessage":{
@@ -1545,10 +1549,6 @@
       }
     }
   },
-  "here":{
-    "message":"here",
-    "description":"This message is injected in other strings as a link\/button"
-  },
   "adblocksupport":{
     "message":"AdBlock Support",
     "description":"Title of the Support tab of the Options page"
@@ -1590,7 +1590,7 @@
     "description":"Link to the contributors page on the Support tab"
   },
   "debuginfo":{
-    "message":"Have our team requested some debug info? Click [[here]] for that!",
+    "message":"Has our team requested some debug info? Click [[here]] for that!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
@@ -1880,5 +1880,29 @@
   "landscapechannelswitchlabel":{
     "message":"Landscapes",
     "description":"The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "urgent_safari_changes":{
+    "message":"URGENT: Apple is changing Safari extensions.",
+    "description":"Title for Options page message letting users know of settings change."
+  },
+  "settings_changed":{
+    "message":"In preparation, AdBlock now works differently and some of your settings may have changed.",
+    "description":"Part of Options page message letting users know of settings change."
+  },
+  "learn_more":{
+    "message":"Learn more.",
+    "description":"Link to Knowledge Base article with more information about the settings change"
+  },
+  "download_mac_app":{
+    "message":"To get the best AdBlock experience on your Mac, please download our [[AdBlock for Safari Mac App!]]",
+    "description":"Link to download our Mac App. [[ and ]] will be replaced with HTML to link to the Mac App Store"
+  },
+  "note":{
+    "message":"NOTE:",
+    "description":"Indicates that the user should take note of the message that follows."
+  },
+  "changes_to_adblock":{
+    "message":"We've made changes to AdBlock!",
+    "description":"Link to Options page with more information about the changes."
   }
 }

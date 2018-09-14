@@ -52,13 +52,14 @@ function detectFirstRun()
  *
  * @return {boolean}
  */
-function shouldAddDefaultSubscription()
+function shouldAddDefaultSubscriptions()
 {
   for (let subscription of FilterStorage.subscriptions)
   {
     if (subscription instanceof DownloadableSubscription &&
         subscription.url != Prefs.subscriptions_exceptionsurl &&
-        subscription.url != Prefs.subscriptions_antiadblockurl)
+        subscription.url != Prefs.subscriptions_antiadblockurl &&
+        subscription.type != "circumvention")
       return false;
 
     if (subscription instanceof SpecialSubscription &&
@@ -70,22 +71,24 @@ function shouldAddDefaultSubscription()
 }
 
 /**
- * Finds the element for the default ad blocking filter subscription based
+ * @typedef {object} DefaultSubscriptions
+ * @property {?Element} ads
+ * @property {?Element} circumvention
+ */
+/**
+ * Finds the elements for the default ad blocking filter subscriptions based
  * on the user's locale.
  *
  * @param {HTMLCollection} subscriptions
- * @return {Element}
+ * @return {DefaultSubscriptions}
  */
-function chooseFilterSubscription(subscriptions)
+function chooseFilterSubscriptions(subscriptions)
 {
-  let selectedItem = null;
+  let selectedItem = {};
   let selectedPrefix = null;
   let matchCount = 0;
   for (let subscription of subscriptions)
   {
-    if (!selectedItem)
-      selectedItem = subscription;
-
     let prefixes = subscription.getAttribute("prefixes");
     let prefix = prefixes && prefixes.split(",").find(
       lang => new RegExp("^" + lang + "\\b").test(Utils.appLocale)
@@ -93,27 +96,39 @@ function chooseFilterSubscription(subscriptions)
 
     let subscriptionType = subscription.getAttribute("type");
 
-    if (prefix && subscriptionType == "ads")
-    {
-      if (!selectedPrefix || selectedPrefix.length < prefix.length)
-      {
-        selectedItem = subscription;
-        selectedPrefix = prefix;
-        matchCount = 1;
-      }
-      else if (selectedPrefix && selectedPrefix.length == prefix.length)
-      {
-        matchCount++;
+    if ((subscriptionType == "ads" || subscriptionType == "circumvention") &&
+        !selectedItem[subscriptionType])
+      selectedItem[subscriptionType] = subscription;
 
-        // If multiple items have a matching prefix of the same length:
-        // Select one of the items randomly, probability should be the same
-        // for all items. So we replace the previous match here with
-        // probability 1/N (N being the number of matches).
-        if (Math.random() * matchCount < 1)
+    if (prefix)
+    {
+      // The "ads" subscription is the one driving the selection.
+      if (subscriptionType == "ads")
+      {
+        if (!selectedPrefix || selectedPrefix.length < prefix.length)
         {
-          selectedItem = subscription;
+          selectedItem[subscriptionType] = subscription;
           selectedPrefix = prefix;
+          matchCount = 1;
         }
+        else if (selectedPrefix && selectedPrefix.length == prefix.length)
+        {
+          matchCount++;
+
+          // If multiple items have a matching prefix of the same length:
+          // Select one of the items randomly, probability should be the same
+          // for all items. So we replace the previous match here with
+          // probability 1/N (N being the number of matches).
+          if (Math.random() * matchCount < 1)
+          {
+            selectedItem[subscriptionType] = subscription;
+            selectedPrefix = prefix;
+          }
+        }
+      }
+      else if (subscriptionType == "circumvention")
+      {
+        selectedItem[subscriptionType] = subscription;
       }
     }
   }
@@ -179,10 +194,10 @@ function getSubscriptions()
     }
   }
 
-  // Add default ad blocking subscription (e.g. EasyList)
-  if (shouldAddDefaultSubscription())
+  // Add default ad blocking subscriptions (e.g. EasyList, Anti-Circumvention)
+  let addDefaultSubscription = shouldAddDefaultSubscriptions();
+  if (addDefaultSubscription || !Prefs.subscriptions_addedanticv)
   {
-
     return fetch("subscriptions.xml")
       .then(response => response.text())
       .then(text =>
@@ -190,17 +205,33 @@ function getSubscriptions()
         let doc = new DOMParser().parseFromString(text, "application/xml");
         let nodes = doc.getElementsByTagName("subscription");
 
-        let node = chooseFilterSubscription(nodes);
-        if (node)
+        let defaultSubscriptions = chooseFilterSubscriptions(nodes);
+        if (defaultSubscriptions)
         {
-          let url = node.getAttribute("url");
-          if (url)
+          for (let name in defaultSubscriptions)
           {
-            let subscription = Subscription.fromURL(url);
-            subscription.disabled = false;
-            subscription.title = node.getAttribute("title");
-            subscription.homepage = node.getAttribute("homepage");
-            subscriptions.push(subscription);
+            let node = defaultSubscriptions[name];
+            if (!node)
+              continue;
+
+            let url = node.getAttribute("url");
+            if (url)
+            {
+              // Make sure that we don't add Easylist again if we want
+              // to just add the Anti-Circumvention subscription.
+              let type = node.getAttribute("type");
+              if (!addDefaultSubscription && type != "circumvention")
+                continue;
+
+              let subscription = Subscription.fromURL(url);
+              subscription.disabled = false;
+              subscription.title = node.getAttribute("title");
+              subscription.homepage = node.getAttribute("homepage");
+              subscription.type = type;
+              subscriptions.push(subscription);
+              if (subscription.type == "circumvention")
+                Prefs.subscriptions_addedanticv = true;
+            }
           }
         }
         // Add AdBlock specific filter lists
@@ -264,6 +295,9 @@ Promise.all([
 ]).then(detectFirstRun)
   .then(getSubscriptions)
   .then(addSubscriptionsAndNotifyUser)
+  // We have to require the "uninstall" module on demand,
+  // as the "uninstall" module in turn requires this module.
+  .then(() => { require("./uninstall").setUninstallURL(); })
   .then(initNotifications);
 
 /**
@@ -293,3 +327,6 @@ exports.setSubscriptionsCallback = callback =>
 {
   subscriptionsCallback = callback;
 };
+
+// Exports for tests only
+exports.chooseFilterSubscriptions = chooseFilterSubscriptions;

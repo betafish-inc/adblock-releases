@@ -8,7 +8,7 @@ let {ElemHideEmulation} =
   require("../../adblockpluschrome/adblockpluscore/lib/content/elemHideEmulation");
 
 // This variable is also used by our other content scripts.
-let elemhide;
+let contentFiltering;
 
 const typeMap = new Map([
   ["img", "IMAGE"],
@@ -214,7 +214,7 @@ function checkCollapse(element)
           if (!collapsingSelectors.has(selector))
           {
             collapsingSelectors.add(selector);
-            elemhide.addSelectors([selector], null, "collapsing", true);
+            contentFiltering.addSelectors([selector], null, "collapsing", true);
             if (typeof checkElement === "function") {
               checkElement(element);
             }
@@ -385,7 +385,7 @@ ElementHidingTracer.prototype = {
   }
 };
 
-function ElemHide()
+function ContentFiltering()
 {
   this.shadow = this.createShadowTree();
   this.styles = new Map();
@@ -398,7 +398,7 @@ function ElemHide()
     this.hideElements.bind(this)
   );
 }
-ElemHide.prototype = {
+ContentFiltering.prototype = {
   selectorGroupSize: 1024,
 
   createShadowTree()
@@ -549,9 +549,13 @@ ElemHide.prototype = {
     }
   },
 
-  apply()
+  apply(filterTypes)
   {
-    browser.runtime.sendMessage({type: "elemhide.getSelectors"}, response =>
+    browser.runtime.sendMessage({
+      type: "content.applyFilters",
+      filterTypes
+    },
+    response =>
     {
       if (this.tracer)
         this.tracer.disconnect();
@@ -583,8 +587,8 @@ if (document instanceof HTMLDocument)
 {
   checkSitekey();
 
-  elemhide = new ElemHide();
-  elemhide.apply();
+  contentFiltering = new ContentFiltering();
+  contentFiltering.apply();
 
   document.addEventListener("error", event =>
   {
@@ -600,6 +604,6 @@ if (document instanceof HTMLDocument)
 }
 
 window.checkCollapse = checkCollapse;
-window.elemhide = elemhide;
+window.contentFiltering = contentFiltering;
 window.typeMap = typeMap;
 window.getURLsFromElement = getURLsFromElement;

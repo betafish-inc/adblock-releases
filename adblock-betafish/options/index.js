@@ -212,54 +212,34 @@ function displayTranslationCredit()
     {
       var text = JSON.parse(this.responseText);
       var lang = navigator.language;
+      var matchFound = false;
       for (var id in text)
       {
-        if (!SAFARI)
+        // if matching id hasn't been found and id matches lang
+        if (!matchFound && 
+            (id === lang || id === lang.toLowerCase() || 
+             id === lang.substring(0, 2) || id === lang.substring(0, 2).toLowerCase()))
         {
-          if (id === lang)
+          matchFound = true;
+          // Check if this language is professionally translated
+          var professionalLang = text[id].professional;
+          for (var translator in text[id].translators)
           {
-            for (var translator in text[id].translators)
+            // If the language is not professionally translated, or if this translator
+            // is a professional, then add the name to the list of credits
+            if (!professionalLang || text[id].translators[translator].professional) 
             {
               var name = text[id].translators[translator].credit;
               translators.push(' ' + name);
             }
-          } else
-          {
-            for (var translator in text[id].translators)
-            {
-              var lang = lang.toLowerCase();
-              if (id === lang)
-              {
-                var name = text[lang].translators[translator].credit;
-                translators.push(' ' + name);
-              }
-            }
           }
-        } else
-        {
-          if (lang.substring(0, 2) === id)
-          {
-            for (var translator in text[id].translators)
-            {
-              var name = text[id].translators[translator].credit;
-              translators.push(' ' + name);
-            }
-          } else
-          {
-            for (var translator in text[id].translators)
-            {
-              if (id === lang)
-              {
-                var name = text[lang].translators[translator].credit;
-                translators.push(' ' + name);
-              }
-            }
-          }
-        }
+        } 
       }
 
-      $('#translator_credit').text(translate('translator_credit'));
-      $('#translator_names').text(translators.toString());
+      if (translators.length > 0) {
+        $('#translator_credit').text(translate('translator_credit'));
+        $('#translator_names').text(translators.toString());
+      }
     };
 
     xhr.send();

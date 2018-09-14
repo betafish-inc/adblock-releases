@@ -69,3 +69,4 @@ let uninstallInit = exports.uninstallInit = function()
     }); // end of STATS.then
   }
 };
+exports.setUninstallURL = uninstallInit;

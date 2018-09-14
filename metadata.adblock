@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.32.1
+version = 3.33.0
 backgroundScripts += adblock-jquery.js
 icons =
   icons/ab-16.png
@@ -312,6 +312,7 @@ lib/adblockplus.js -= lib/filterComposer.js
   lib/uninstall.js
   lib/options.js
 include.postload.js -= blockElement.postload.js composer.postload.js
+
 include.preload.js +=
   ../adblock-betafish/alias/include.preload.js
   ../adblock-betafish/picreplacement/contentscript-loader.js

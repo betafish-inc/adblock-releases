@@ -252,6 +252,7 @@ FilterListUtil.getFilterListType = function (filterList)
   var filterListType = '';
   if (filterList.id === 'adblock_custom' ||
       filterList.id === 'easylist' ||
+      filterList.id === 'anticircumvent' ||
       filterList.id === 'acceptable_ads')
   {
     filterListType = 'adblock_filter_list';

@@ -290,6 +290,13 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       language : true,
       hidden : false,
     },
+    "https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt" :
+    {
+      id : "anticircumvent", // Polish
+      language : false,
+      hidden : false,
+    },
+
   };
 
   // Properties:  id       -unique identifier for the filter list
