@@ -290,13 +290,34 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       language : true,
       hidden : false,
     },
+
     "https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt" :
     {
-      id : "anticircumvent", // Polish
+      id : "anticircumvent",
       language : false,
       hidden : false,
     },
 
+    "https://raw.githubusercontent.com/easylistbrasil/easylistbrasil/filtro/easylistbrasil.txt" :
+    {
+      id : "brazilian_portuguese", // Brazilian Portuguese
+      language : true,
+      hidden : false,
+    },
+
+    "https://easylist-downloads.adblockplus.org/abpvn+easylist.txt" :
+    {
+      id : "easylist_plus_vietnamese", // Vietnamese
+      language : true,
+      hidden : false,
+    },
+
+    "https://raw.githubusercontent.com/DandelionSprout/adfilt/master/NorwegianList.txt" :
+    {
+      id : "norwegian", // Norwegian
+      language : true,
+      hidden : false,
+    },
   };
 
   // Properties:  id       -unique identifier for the filter list
@@ -338,13 +359,6 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       hidden : true,
     },
 
-    "http://adb.juvander.net/Finland_adb.txt" :
-    {
-      id : "easylist_plus_finnish",
-      language : true,
-      hidden : false,
-    },
-
     "https://easylist-downloads.adblockplus.org/liste_fr.txt" :
     {
       id : "easylist_plus_french_old", // Additional French filters
@@ -380,7 +394,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       hidden : true,
     },
 
-    "http://www.zoso.ro/pages/rolist.txt" :
+    "https://www.zoso.ro/pages/rolist.txt" :
     {
       id : "easylist_plus_romanian_old", // Additional Romanian filters
       language : true, // discontinued language list
@@ -404,7 +418,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       language : true, // discontinued language list
       hidden : true,
     },
-    "http://adblock.schack.dk/block.txt" :
+    "https://adblock.schack.dk/block.txt" :
     {
       id : "danish_old", // Danish filters
       language : true, // discontinued language list
@@ -434,7 +448,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       language : true,
       hidden : false,
     },
-    "https://secure.fanboy.co.nz/fanboy-korean.txt" :
+    "https://raw.githubusercontent.com/gfmaster/adblock-korea-contrib/master/filter.txt" :
     {
       id : "easylist_plun_korean", // Korean filters
       language : true,
@@ -446,7 +460,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       language : true, // discontinued language list
       hidden : true,
     },
-    "http://fanboy.co.nz/fanboy-swedish.txt" :
+    "https://raw.githubusercontent.com/lassekongo83/Frellwits-filter-lists/master/Frellwits-Swedish-Filter.txt" :
     {
       id : "swedish", // Swedish filters
       language : true,

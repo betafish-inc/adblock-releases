@@ -104,3 +104,40 @@ and `background.js` respectively, using `metadata.adblock`. For an example of
 more advanced usage I recommend taking a look at
 `adblockpluschrome/metadata.common`.
 
+### Adding to manifest.json
+
+There is now the ability to add any key/value pairs to the manifest.json file by
+adding them to the [manifest] section of the metadata.adblock file. The
+following rules apply: 
+        * An option's key may be declared as a series of nested dictionary keys,
+          seperated by '.'.
+        * Declaring an option's value in a new line (even if only one is given)
+          will define the option's value as a list.
+        * When an option's value is defined as a list, no other nested
+          objects may follow.
+        * A list is expandable by the ConfigParser's '+=' token (Note: A
+          previously declared string will be converted into a list).
+        * Values may be marked as `number` or `bool` by prefixing them
+          accordingly (this also applies to values in a list):
+          * bool:<value>
+          * number:<value>
+
+        Example:
+                                    {
+        foo = foo                     "foo": "foo",
+        asd =                         "asd": ["asd"],
+          asd                         "bar": {
+        bar.baz = a                     "baz": ["a", "c", "d"]
+        baz.foo = a                   },
+        baz.z =                       "baz": {
+          bar                           "foo": "a",
+          bool:true             ===>    "z": ["bar", true]
+        bar.baz +=                    },
+          c                           "bad": true,
+          d                           "good": false,
+        bad = bool:true               "is": {
+        good = bool:false               "integer": 1,
+        is.integer = number:1           "float": 1.4
+        is.float = number:1.4         }
+                                    }
+

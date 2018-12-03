@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.33.0
+version = 3.35.0
 backgroundScripts += adblock-jquery.js
 icons =
   icons/ab-16.png
@@ -95,6 +95,9 @@ web_accessible_resources =
   localLib/jquery/jquery-2.2.4.min.js.local
   localLib/jquery/jquery-3.1.1.min.js.local
   localLib/jquery/jquery-3.2.1.min.js.local
+commands.toggle_pause.description = Toggle Pause/Resume on all sites
+commands.toggle_pause.suggested_key.default = Ctrl+Period
+commands.toggle_pause.suggested_key.mac = Command+Period
 
 [contentScripts]
 document_start += adblock-functions.js
@@ -134,8 +137,6 @@ adblock-option-bug-report.html = adblock-betafish/options/bug-report.html
 adblock-button-popup.html = adblock-betafish/button/popup.html
 adblock-button-popup.js = adblock-betafish/button/popup.js
 adblock-button-popup.css = adblock-betafish/button/popup.css
-adblock-adreport.html = adblock-betafish/pages/adreport.html
-adblock-adreport.js = adblock-betafish/pages/adreport.js
 adblock-uiscripts-load_jquery_ui.js = adblock-betafish/uiscripts/load_jquery_ui.js
 adblock-uiscripts-top_open_blacklist_ui.js = adblock-betafish/uiscripts/top_open_blacklist_ui.js
 adblock-uiscripts-top_open_whitelist_ui.js = adblock-betafish/uiscripts/top_open_whitelist_ui.js
@@ -317,3 +318,4 @@ include.preload.js +=
   ../adblock-betafish/alias/include.preload.js
   ../adblock-betafish/picreplacement/contentscript-loader.js
 include.preload.js -= include.preload.js
+  

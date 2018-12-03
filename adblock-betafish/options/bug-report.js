@@ -169,7 +169,7 @@ $(document).ready(function ()
     }
 
     $.ajax({
-      url: 'https://getadblock.com/freshdesk/bugReport.php',
+      url: 'https://getadblock.com/freshdesk/bugReportV2.php',
       data: {
         bug_report: JSON.stringify(reportData),
       },
@@ -181,9 +181,7 @@ $(document).ready(function ()
           try
           {
             var respObj = JSON.parse(text);
-            if (respObj &&
-              respObj.hasOwnProperty('helpdesk_ticket') &&
-              respObj.helpdesk_ticket.hasOwnProperty('display_id'))
+            if (respObj && respObj.hasOwnProperty('id'))
             {
               $('#step_response_success').fadeIn();
               $('html, body').animate({

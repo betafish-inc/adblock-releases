@@ -1,12 +1,4 @@
 {
-  "description":{
-    "message":"4천만 명 이상의 선택을 받은 가장 유명한 Chrome 확장 프로그램! 웹상의 광고를 차단할 수 있습니다.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
-  "description2":{
-    "message":"4천만 명 이상의 선택을 받은 가장 유명한 Chrome 확장 프로그램! 웹상의 광고를 차단할 수 있습니다.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
   "description_edge":{
     "message":"AdBlock. 2억 회 이상 다운로드된 1위 광고 차단기. 인터넷의 모든 광고를 차단하세요.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -180,7 +172,7 @@
     "description":"User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching":{
-    "message":"다음와 일치하는 페이지는 AdBlock이 동작하지 않을 것입니다:",
+    "message":"다음과 일치하는 페이지는 AdBlock이 동작하지 않을 것입니다:",
     "description":"Message displayed when the whitelist wizard will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change":{
@@ -196,7 +188,7 @@
     "description":"Button for excluding a domain in the whitelist wizard"
   },
   "reloadpageafterwhitelist":{
-    "message":"페이지를 새로고침 합니다.",
+    "message":"페이지 새로고침",
     "description":"Checkbox in the whitelist wizard"
   },
   "wizardcantrunonframesets":{
@@ -250,6 +242,10 @@
   "generaloptions":{
     "message":"일반 설정",
     "description":"Title of the first Options page tab"
+  },
+  "mac_app_message_options":{
+    "message":"AdBlock for Safari가 Mac 앱으로 이용 가능합니다!",
+    "description":"Message to users on the Options page"
   },
   "betalabel":{
     "message":"베타",
@@ -352,7 +348,7 @@
     "description":"Filter lists tab of the Options page: Corrupted filter list file."
   },
   "invalidListUrl":{
-    "message":"올바르지 않은 목록 URL이며 삭제될 것입니다.",
+    "message":"올바르지 않은 목록 URL입니다. 주소가 삭제됩니다.",
     "description":"Message when you subscribe to a non-list URL"
   },
   "failedtofetchfilter":{
@@ -364,7 +360,7 @@
     "description":"Label to remove a custom filter list"
   },
   "you_know_thats_a_bad_idea_right":{
-    "message":"필터를 구독할수록 AdBlock의 속도는 느려집니다. 과도하게 많은 구독 필터를 사용하면 브라우저가 작동을 중지할 수도 있습니다. 그래도 구독하려면 확인을 누르세요.",
+    "message":"필터를 많이 구독할수록 AdBlock의 속도는 느려집니다. 과도하게 많은 구독 필터를 사용하면 브라우저가 작동을 중지할 수도 있습니다. 그래도 구독하려면 확인을 누르세요.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
   "unsubscribe_from_all_confirmation":{
@@ -380,7 +376,7 @@
     "description":"Filter lists tab explanation and link to filter list credits."
   },
   "updatenowmessage2":{
-    "message":"자동으로 업데이트됩니다. [[바로 업데이트]] 또한 가능합니다.",
+    "message":"이 목록으로 자동으로 업데이트됩니다. [[바로 업데이트]] 또한 가능합니다.",
     "description":"Update filters text and button"
   },
   "orenteraurl":{
@@ -943,6 +939,10 @@
     "message":"일본어",
     "description":"A filter list"
   },
+  "filternorwegian":{
+    "message":"노르웨이어",
+    "description":"A filter lsit"
+  },
   "filtereasylist_plun_korean":{
     "message":"한국어",
     "description":"A filter list"
@@ -1387,6 +1387,14 @@
     "message":"이 질문은 보고를 접수할 사람을 가려내기 위함입니다. 이 답변이 정확하지 않을 시 엉뚱한 사람에게 보고가 전달될 수 있고, 따라서 처리되지 않을 수 있습니다.",
     "description":"Explanation of the 'Check in Firefox or Chrome' step on the ad report page"
   },
+  "mac_app_message_menu_part_one":{
+    "message":"신규 업데이트!",
+    "description":"part one of the message to safari users on the popup menu"
+  },
+  "mac_app_message_menu_part_two":{
+    "message":"AdBlock Mac 앱을 사용해보세요",
+    "description":"part two of the message to safari users on the popup menu"
+  },
   "blocked_ads":{
     "message":"차단된 광고들:",
     "description":"Title for toolbar icon menu section showing number of ads blocked"
@@ -1533,10 +1541,6 @@
       }
     }
   },
-  "here":{
-    "message":"여기",
-    "description":"This message is injected in other strings as a link\/button"
-  },
   "adblocksupport":{
     "message":"AdBlock 지원",
     "description":"Title of the Support tab of the Options page"
@@ -1576,10 +1580,6 @@
   "contributors":{
     "message":"AdBlock을 만드는 사람을 소개하는 [[페이지]] 또한 확인하실 수 있습니다!",
     "description":"Link to the contributors page on the Support tab"
-  },
-  "debuginfo":{
-    "message":"저희 팀으로부터 디버그 정보를 요청받으셨나요? [[여기]]를 클릭해주세요.",
-    "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
     "message":"문제가 생겼나요? [[버그 리포트]]로 알려주세요.",

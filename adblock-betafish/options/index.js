@@ -10,7 +10,7 @@ const DownloadableSubscription = backgroundPage.DownloadableSubscription;
 const parseFilter         = backgroundPage.parseFilter;
 const parseFilters        = backgroundPage.parseFilters;
 const FilterStorage       = backgroundPage.FilterStorage;
-const FilterNotifier      = backgroundPage.FilterNotifier;
+const filterNotifier      = backgroundPage.filterNotifier;
 const Prefs               = backgroundPage.Prefs;
 const Synchronizer        = backgroundPage.Synchronizer;
 const Utils               = backgroundPage.Utils;
@@ -216,8 +216,8 @@ function displayTranslationCredit()
       for (var id in text)
       {
         // if matching id hasn't been found and id matches lang
-        if (!matchFound && 
-            (id === lang || id === lang.toLowerCase() || 
+        if (!matchFound &&
+            (id === lang || id === lang.toLowerCase() ||
              id === lang.substring(0, 2) || id === lang.substring(0, 2).toLowerCase()))
         {
           matchFound = true;
@@ -227,13 +227,13 @@ function displayTranslationCredit()
           {
             // If the language is not professionally translated, or if this translator
             // is a professional, then add the name to the list of credits
-            if (!professionalLang || text[id].translators[translator].professional) 
+            if (!professionalLang || text[id].translators[translator].professional)
             {
               var name = text[id].translators[translator].credit;
               translators.push(' ' + name);
             }
           }
-        } 
+        }
       }
 
       if (translators.length > 0) {

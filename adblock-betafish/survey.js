@@ -233,12 +233,12 @@ let SURVEY = exports.SURVEY = (function() {
         var validateResponseFromTab = function(response) {
           if (chrome.runtime.lastError) {
             if (chrome.runtime.lastError.message) {
-              recordErrorMessage('overlay_message_error ', undefined, { errorMessage: chrome.runtime.lastError.message});
+              recordErrorMessage('overlay_message_error', undefined, { errorMessage: chrome.runtime.lastError.message });
             } else {
-              recordErrorMessage('overlay_message_error ', undefined, { error: JSON.stringify(chrome.runtime.lastError) });
+              recordErrorMessage('overlay_message_error', undefined, { errorMessage: JSON.stringify(chrome.runtime.lastError) });
             }
           } else if (!response || response.ack !== data.command) {
-            recordErrorMessage('invalid_response_from_notification_overlay_script', undefined, { response: response });
+            recordErrorMessage('invalid_response_from_notification_overlay_script', undefined, { errorMessage: response });
           }
         };
         if (SAFARI) {

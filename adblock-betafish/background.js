@@ -13,7 +13,7 @@ const parseFilter = require('filterValidation').parseFilter;
 const parseFilters = require('filterValidation').parseFilters;
 
 const FilterStorage = require('filterStorage').FilterStorage;
-const FilterNotifier = require('filterNotifier').FilterNotifier;
+const {filterNotifier} = require("filterNotifier");
 const Prefs = require('prefs').Prefs;
 const Synchronizer = require('synchronizer').Synchronizer;
 const Utils = require('utils').Utils;
@@ -36,7 +36,7 @@ const {uninstallInit} = require('./alias/uninstall');
 
 Object.assign(window, {
   FilterStorage,
-  FilterNotifier,
+  filterNotifier,
   Prefs,
   Synchronizer,
   NotificationStorage,
@@ -626,18 +626,15 @@ chrome.storage.local.get(pausedKey, function (response)
   {
     var pauseHandler = function (action)
     {
-      if (action == 'load')
-      {
-        FilterNotifier.removeListener(pauseHandler);
-        var result1 = parseFilter(pausedFilterText1);
-        var result2 = parseFilter(pausedFilterText2);
-        FilterStorage.removeFilter(result1.filter);
-        FilterStorage.removeFilter(result2.filter);
-        chrome.storage.local.remove(pausedKey);
-      }
+      FilterNotifier.off("load", pauseHandler);
+      var result1 = parseFilter(pausedFilterText1);
+      var result2 = parseFilter(pausedFilterText2);
+      FilterStorage.removeFilter(result1.filter);
+      FilterStorage.removeFilter(result2.filter);
+      chrome.storage.local.remove(pausedKey);
     };
 
-    FilterNotifier.addListener(pauseHandler);
+    FilterNotifier.on("load", pauseHandler);
   }
 });
 
@@ -652,23 +649,26 @@ chrome.storage.local.get(domainPausedKey, function (response)
     {
       var domainPauseHandler = function (action)
       {
-        if (action == 'load')
+        FilterNotifier.off("load", domainPauseHandler);
+        for (var aDomain in storedDomainPauses)
         {
-          FilterNotifier.removeListener(domainPauseHandler);
-          for (var aDomain in storedDomainPauses)
-          {
-            var result = parseFilter("@@" + aDomain + "$document");
-            FilterStorage.removeFilter(result.filter);
-          }
-          chrome.storage.local.remove(domainPausedKey);
+          var result = parseFilter("@@" + aDomain + "$document");
+          FilterStorage.removeFilter(result.filter);
         }
+        chrome.storage.local.remove(domainPausedKey);
       };
-
-      FilterNotifier.addListener(domainPauseHandler);
+      FilterNotifier.on("load", domainPauseHandler);
     }
   } catch (err)
   {
     // do nothing
+  }
+});
+
+chrome.commands.onCommand.addListener(function(command) {
+  if (command === "toggle_pause") {
+    adblockIsPaused(!adblockIsPaused());
+    recordGeneralMessage("pause_shortcut_used");
   }
 });
 
@@ -698,18 +698,118 @@ if (!SAFARI && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
 }
 
 var updateStorageKey = 'last_known_version';
-chrome.runtime.onInstalled.addListener(function (details)
-{
- if (details.reason === 'update' || details.reason === 'install')
- {
-   localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
- }
-});
+// Commented out temporarily while doing /update
+//chrome.runtime.onInstalled.addListener(function (details)
+//{
+// if (details.reason === 'update' || details.reason === 'install')
+// {
+//   localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
+// }
+//});
 
 var openTab = function (url)
 {
   chrome.tabs.create({ url })
 };
+
+if (chrome.runtime.id)
+{
+  var updateTabRetryCount = 0;
+  var getUpdatedURL = function()
+  {
+    var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent(chrome.runtime.getManifest().version) + '/?u=' + STATS.userId();
+    updatedURL = updatedURL + '&bc=' + Prefs.blocked_total;
+    updatedURL = updatedURL + '&rt=' + updateTabRetryCount;
+    return updatedURL;
+  };
+  var waitForUserAction = function()
+  {
+    chrome.tabs.onCreated.removeListener(waitForUserAction);
+    setTimeout(function ()
+    {
+      updateTabRetryCount++;
+      openUpdatedPage();
+    }, 10000); // 10 seconds
+  };
+  var openUpdatedPage = function()
+  {
+    var updatedURL = getUpdatedURL();
+    chrome.tabs.create({ url: updatedURL }, function(tab)
+    {
+      // if we couldn't open a tab to '/updated_tab', send a message
+      if (chrome.runtime.lastError || !tab)
+      {
+        if (chrome.runtime.lastError && chrome.runtime.lastError.message)
+        {
+          recordErrorMessage('updated_tab_failed_to_open', undefined, { errorMessage: chrome.runtime.lastError.message });
+        }
+        else
+        {
+          recordErrorMessage('updated_tab_failed_to_open');
+        }
+        chrome.tabs.onCreated.removeListener(waitForUserAction);
+        chrome.tabs.onCreated.addListener(waitForUserAction);
+        return;
+      }
+      if (updateTabRetryCount > 0)
+      {
+        recordGeneralMessage('updated_tab_retry_success_count_' + updateTabRetryCount);
+      }
+    });
+  };
+  var shouldShowUpdate = function()
+  {
+    var checkQueryState = function()
+    {
+      chrome.idle.queryState(60, function(state)
+      {
+        if (state === "active")
+        {
+          openUpdatedPage();
+        }
+        else
+        {
+          chrome.tabs.onCreated.removeListener(waitForUserAction);
+          chrome.tabs.onCreated.addListener(waitForUserAction);
+        }
+      });
+    };
+    if (chrome.management && chrome.management.getSelf)
+    {
+      chrome.management.getSelf(function(info)
+      {
+        if (info && info.installType !== "admin")
+        {
+          checkQueryState();
+        }
+        else if (info && info.installType === "admin")
+        {
+          recordGeneralMessage('update_tab_not_shown_admin_user');
+        }
+      });
+    }
+    else
+    {
+      checkQueryState();
+    }
+  };
+  // Display updated page after each update
+  chrome.runtime.onInstalled.addListener(function (details)
+  {
+    var lastKnownVersion = localStorage.getItem(updateStorageKey);
+    if (details.reason === 'update' &&
+        chrome.runtime.getManifest().version === "3.34.0" &&
+        lastKnownVersion === '3.33.1' &&
+        chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
+    {
+      STATS.untilLoaded(function(userID)
+      {
+        Prefs.untilLoaded.then(shouldShowUpdate);
+      });
+    }
+    localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
+  });
+}
 
 // Creates a custom filter entry that whitelists a YouTube channel
 // Inputs: url:string url of the page

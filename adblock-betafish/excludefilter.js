@@ -2,7 +2,6 @@
 // An 'advance' feature, used on the Customize tab, titled "disabled filters"
 ExcludeFilter = (function ()
 {
-  var FilterNotifier = require('filterNotifier').FilterNotifier;
   var ABRemoveFilter = function (filter)
   {
     var subscriptions = filter.subscriptions.slice();
@@ -35,8 +34,7 @@ ExcludeFilter = (function ()
               filter.subscriptions.splice(index, 1);
             }
           }
-
-          FilterNotifier.triggerListeners('filter.removed', filter, subscription, position);
+          filterNotifier.emit("filter.removed", filter, currentSubscription, currentPosition);
         }
       }
     }
@@ -75,11 +73,6 @@ ExcludeFilter = (function ()
 
   function excludeFilterChangeListener(action, item, param1, param2)
   {
-    if (action !== 'save')
-    {
-      return;
-    }
-
     var excludeFiltersKey = 'exclude_filters';
     chrome.storage.local.get(excludeFiltersKey, function (response)
     {
@@ -100,14 +93,14 @@ ExcludeFilter = (function ()
         }
       } else
       {
-        FilterNotifier.removeListener(excludeFilterChangeListener);
+        filterNotifier.off("save", excludeFilterChangeListener);
       }
     });
   }
 
   // At startup, add a listener to so that the exclude filters
   // can be removed if the filter lists are updated
-  FilterNotifier.addListener(excludeFilterChangeListener);
+  filterNotifier.on("save", excludeFilterChangeListener);
 
   return {
     setExcludeFilters: setExcludeFilters,

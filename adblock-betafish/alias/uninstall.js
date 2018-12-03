@@ -1,7 +1,6 @@
 /** @module adblock-betafish/alias/uninstall */
 
 const FilterStorage = require('filterStorage').FilterStorage;
-const FilterNotifier = require('filterNotifier').FilterNotifier;
 const {STATS} = require('./../stats');
 
 let uninstallInit = exports.uninstallInit = function()

@@ -8,6 +8,7 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
   const {RegExpFilter,
          WhitelistFilter,
          ElemHideFilter} = require("filterClasses");
+  const {filterNotifier} = require("filterNotifier");
   const {port} = require("messaging");
   const {idleHandler} = require('./idlehandler');
   const HOUR_IN_MS = 1000 * 60 * 60;
@@ -93,51 +94,55 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
 
   var addFilterToCache = function(filter, page)
   {
-      if (filter && filter.text && (typeof filter.text === 'string') && page && page.url && page.url.hostname)
+    if (filter && filter.text && (typeof filter.text === 'string') && page && page.url && page.url.hostname)
+    {
+      var domain = page.url.hostname;
+      if (!domain)
       {
-        var domain = page.url.hostname;
-        if (!domain)
-        {
-          return;
-        }
-        var text = filter.text;
+        return;
+      }
+      var text = filter.text;
 
-        if (!(text in dataCollectionCache.filters))
+      if (!(text in dataCollectionCache.filters))
+      {
+        dataCollectionCache.filters[text] = {};
+        dataCollectionCache.filters[text].firstParty = {};
+        dataCollectionCache.filters[text].thirdParty = {};
+        dataCollectionCache.filters[text].subscriptions = [];
+      }
+      if (filter.thirdParty)
+      {
+        if (!dataCollectionCache.filters[text].thirdParty[domain])
         {
-          dataCollectionCache.filters[text] = {};
-          dataCollectionCache.filters[text].firstParty = {};
-          dataCollectionCache.filters[text].thirdParty = {};
-          dataCollectionCache.filters[text].subscriptions = [];
+          dataCollectionCache.filters[text].thirdParty[domain] = {};
+          dataCollectionCache.filters[text].thirdParty[domain].hits = 0;
         }
-        if (filter.thirdParty)
+        dataCollectionCache.filters[text].thirdParty[domain].hits++;
+      }
+      else
+      {
+        if (!dataCollectionCache.filters[text].firstParty[domain])
         {
-          if (!dataCollectionCache.filters[text].thirdParty[domain])
+          dataCollectionCache.filters[text].firstParty[domain] = {};
+          dataCollectionCache.filters[text].firstParty[domain].hits = 0;
+        }
+        dataCollectionCache.filters[text].firstParty[domain].hits++;
+      }
+      if (filter.subscriptionCount > 0)
+      {
+        let iterator = filter.subscriptions();
+        let result = iterator.next();
+        while (!result.done)
+        {
+          const sub = result.value;
+          if (sub.url && dataCollectionCache.filters[text].subscriptions.indexOf(sub.url) === -1)
           {
-            dataCollectionCache.filters[text].thirdParty[domain] = {};
-            dataCollectionCache.filters[text].thirdParty[domain].hits = 0;
+            dataCollectionCache.filters[text].subscriptions.push(sub.url);
           }
-          dataCollectionCache.filters[text].thirdParty[domain].hits++;
-        }
-        else
-        {
-          if (!dataCollectionCache.filters[text].firstParty[domain])
-          {
-            dataCollectionCache.filters[text].firstParty[domain] = {};
-            dataCollectionCache.filters[text].firstParty[domain].hits = 0;
-          }
-          dataCollectionCache.filters[text].firstParty[domain].hits++;
-        }
-        if (filter.subscriptions && filter.subscriptions.length > 0)
-        {
-          filter.subscriptions.forEach(function(sub)
-          {
-            if (sub.url && dataCollectionCache.filters[text].subscriptions.indexOf(sub.url) === -1)
-            {
-              dataCollectionCache.filters[text].subscriptions.push(sub.url);
-            }
-          });
+          result = iterator.next();
         }
       }
+    }
   };
 
   var filterListener = function(item, newValue, oldValue, tabIds)
@@ -154,7 +159,7 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
     }
     else if (!getSettings().data_collection_v2)
     {
-      FilterNotifier.removeListener(filterListener);
+      filterNotifier.off("filter.hitCount", filterListener);
     }
   };
 
@@ -244,7 +249,7 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
           }
         });
       }, HOUR_IN_MS);
-      FilterNotifier.on("filter.hitCount", filterListener);
+      filterNotifier.on("filter.hitCount", filterListener);
       chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["http://*/*", "https://*/*"],types: ["main_frame"] });
       chrome.tabs.onUpdated.addListener(handleTabUpdated);
       addMessageListener();
@@ -256,7 +261,7 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
   {
     dataCollectionCache.filters = {};
     dataCollectionCache.domains = {};
-    FilterNotifier.on("filter.hitCount", filterListener);
+    filterNotifier.on("filter.hitCount", filterListener);
     chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["http://*/*", "https://*/*"],types: ["main_frame"] });
     chrome.tabs.onUpdated.addListener(handleTabUpdated);
     addMessageListener();
@@ -264,7 +269,7 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
   returnObj.end = function()
   {
     dataCollectionCache = {};
-    FilterNotifier.off("filter.hitCount", filterListener);
+    filterNotifier.off("filter.hitCount", filterListener);
     chrome.webRequest.onBeforeRequest.removeListener(webRequestListener);
     chrome.storage.local.remove(TIME_LAST_PUSH_KEY);
     chrome.tabs.onUpdated.removeListener(handleTabUpdated);

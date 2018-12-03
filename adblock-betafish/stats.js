@@ -237,8 +237,11 @@ let STATS = exports.STATS = (function()
         $.ajax(ajaxOptions);
       }
 
-      // send Local CDN missed versions stats as well
-      recordGeneralMessage("cdn_miss_stats", undefined, {"cdnm": LocalCDN.getMissedVersions()});
+      var missedVersions = LocalCDN.getMissedVersions();
+      if (missedVersions)
+      {
+        recordGeneralMessage("cdn_miss_stats", undefined, {"cdnm": missedVersions});
+      }
     });
   };
 

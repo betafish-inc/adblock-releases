@@ -1,5 +1,5 @@
 const {checkWhitelisted} = require("whitelisting");
-const FilterNotifier = require('filterNotifier').FilterNotifier;
+const {filterNotifier} = require("filterNotifier");
 const Prefs = require('prefs').Prefs;
 
 var updateButtonUIAndContextMenus = function ()
@@ -20,15 +20,39 @@ var updateButtonUIAndContextMenus = function ()
 var updateContextMenuItems = function (page)
 {
   // Remove the AdBlock context menu
-  page.contextMenus.remove(AdBlockContextMenuItemOne);
-  page.contextMenus.remove(AdBlockContextMenuItemTwo);
+  page.contextMenus.remove(contextMenuItem.blockThisAd);
+  page.contextMenus.remove(contextMenuItem.blockAnAd);
+  page.contextMenus.remove(contextMenuItem.pauseAll);
+  page.contextMenus.remove(contextMenuItem.unpauseAll);
+  page.contextMenus.remove(contextMenuItem.pauseDomain);
+  page.contextMenus.remove(contextMenuItem.unpauseDomain);
 
   // Check if the context menu items should be added
-  if (Prefs.shouldShowBlockElementMenu &&
-      !checkWhitelisted(page))
+  if (!Prefs.shouldShowBlockElementMenu) {
+    return;
+  }
+
+  const adblockIsPaused = window.adblockIsPaused();
+  const domainIsPaused = window.adblockIsDomainPaused({"url": page.url.href, "id": page.id});
+
+  if (adblockIsPaused)
   {
-    page.contextMenus.create(AdBlockContextMenuItemOne);
-    page.contextMenus.create(AdBlockContextMenuItemTwo);
+    page.contextMenus.create(contextMenuItem.unpauseAll);
+  }
+  else if (domainIsPaused)
+  {
+    page.contextMenus.create(contextMenuItem.unpauseDomain);
+  }
+  else if (checkWhitelisted(page))
+  {
+    page.contextMenus.create(contextMenuItem.pauseAll);
+  }
+  else
+  {
+    page.contextMenus.create(contextMenuItem.blockThisAd);
+    page.contextMenus.create(contextMenuItem.blockAnAd);
+    page.contextMenus.create(contextMenuItem.pauseDomain);
+    page.contextMenus.create(contextMenuItem.pauseAll);
   }
 };
 
@@ -52,13 +76,8 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse)
 // Update browser actions and context menus when whitelisting might have
 // changed. That is now when initally loading the filters and later when
 // importing backups or saving filter changes.
-FilterNotifier.addListener(function (action)
-{
-  if (action == 'load' || action == 'save')
-  {
-    updateButtonUIAndContextMenus();
-  }
-});
+filterNotifier.on("load", updateButtonUIAndContextMenus);
+filterNotifier.on("save", updateButtonUIAndContextMenus);
 
 Prefs.on(Prefs.shouldShowBlockElementMenu, function ()
 {
@@ -67,29 +86,79 @@ Prefs.on(Prefs.shouldShowBlockElementMenu, function ()
 
 updateButtonUIAndContextMenus();
 
-var AdBlockContextMenuItemOne = {
-    title: chrome.i18n.getMessage('block_this_ad'),
-    contexts: ['all'],
-    onclick: function (page, clickdata)
+const contextMenuItem = (() =>
+{
+  return {
+    pauseAll:
     {
-      emitPageBroadcast(
-        { fn:'top_open_blacklist_ui', options:{ info: clickdata } },
-        { tab: page }
-      );
+      title: chrome.i18n.getMessage('pause_adblock_everywhere'),
+      contexts: ['all'],
+      onclick: () =>
+      {
+        recordGeneralMessage('cm_pause_clicked');
+        adblockIsPaused(true);
+        updateButtonUIAndContextMenus();
+      },
+    },
+    unpauseAll:
+    {
+      title: chrome.i18n.getMessage('resume_blocking_ads'),
+      contexts: ['all'],
+      onclick: () =>
+      {
+        recordGeneralMessage('cm_unpause_clicked');
+        adblockIsPaused(false);
+        updateButtonUIAndContextMenus();
+      },
+    },
+    pauseDomain:
+    {
+      title: chrome.i18n.getMessage('domain_pause_adblock'),
+      contexts: ['all'],
+      onclick: (page) =>
+      {
+        recordGeneralMessage('cm_domain_pause_clicked');
+        adblockIsDomainPaused({'url': page.url.href, 'id': page.id}, true);
+        updateButtonUIAndContextMenus();
+      },
+    },
+    unpauseDomain:
+    {
+      title: chrome.i18n.getMessage('resume_blocking_ads'),
+      contexts: ['all'],
+      onclick: (page) =>
+      {
+        recordGeneralMessage('cm_domain_unpause_clicked');
+        adblockIsDomainPaused({'url': page.url.href, 'id': page.id}, false);
+        updateButtonUIAndContextMenus();
+      },
+    },
+    blockThisAd:
+    {
+      title: chrome.i18n.getMessage('block_this_ad'),
+      contexts: ['all'],
+      onclick: function (page, clickdata)
+      {
+        emitPageBroadcast(
+          { fn:'top_open_blacklist_ui', options:{ info: clickdata } },
+          { tab: page }
+        );
+      },
+    },
+    blockAnAd:
+    {
+      title: chrome.i18n.getMessage('block_an_ad_on_this_page'),
+      contexts: ['all'],
+      onclick: function (page)
+      {
+        emitPageBroadcast(
+          { fn:'top_open_blacklist_ui', options:{ nothing_clicked: true } },
+          { tab: page }
+        );
+      },
     },
   };
-
-var AdBlockContextMenuItemTwo = {
-    title: chrome.i18n.getMessage('block_an_ad_on_this_page'),
-    contexts: ['all'],
-    onclick: function (page, clickdata)
-    {
-      emitPageBroadcast(
-        { fn:'top_open_blacklist_ui', options:{ nothing_clicked: true } },
-        { tab: page }
-      );
-    },
-  };
+})();
 
 // Bounce messages back to content scripts.
 if (!SAFARI)

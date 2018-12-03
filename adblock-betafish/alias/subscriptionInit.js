@@ -7,7 +7,7 @@ const {Subscription,
        SpecialSubscription} =
   require("subscriptionClasses");
 const {FilterStorage} = require("filterStorage");
-const {FilterNotifier} = require("filterNotifier");
+const {filterNotifier} = require("filterNotifier");
 const info = require("info");
 const {Prefs} = require("prefs");
 const {Synchronizer} = require("synchronizer");
@@ -41,13 +41,13 @@ function detectFirstRun()
 }
 
 /**
- * Determines whether to add the default ad blocking subscription.
+ * Determines whether to add the default ad blocking subscriptions.
  * Returns true, if there are no filter subscriptions besides those
  * other subscriptions added automatically, and no custom filters.
  *
  * On first run, this logic should always result in true since there
  * is no data and therefore no subscriptions. But it also causes the
- * default ad blocking subscription to be added again after some
+ * default ad blocking subscriptions to be added again after some
  * data corruption or misconfiguration.
  *
  * @return {boolean}
@@ -290,7 +290,7 @@ function addSubscriptionsAndNotifyUser(subscriptions)
 }
 
 Promise.all([
-  FilterNotifier.once("load"),
+  filterNotifier.once("load"),
   Prefs.untilLoaded.catch(() => { dataCorrupted = true; })
 ]).then(detectFirstRun)
   .then(getSubscriptions)

@@ -1,12 +1,4 @@
 {
-  "description":{
-    "message":"Sambungan Chrome yang paling popular, dengan lebih dari 40 juta pengguna! Sekat iklan di seluruh web.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
-  "description2":{
-    "message":"Sambungan Chrome yang paling popular, dengan lebih dari 40 juta pengguna! Sekat iklan di seluruh web.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
   "description_edge":{
     "message":"AdBlock. Penyekat iklan No. 1 dengan lebih 200 juta muat turun. Sekat iklan di seluruh web.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -339,10 +331,6 @@
     "message":"Gagal, bukan alamt yang sah",
     "description":"Filter lists tab of the Options page: Message when you subscribe to a non-list URL."
   },
-  "ab_filters_subscription_lastDownload_connectionError":{
-    "message":"Gagal, kegagalan muat turun",
-    "description":"Filter lists tab of the Options page: Generic filter list download error message."
-  },
   "ab_filters_subscription_lastDownload_invalidData":{
     "message":"Gagal, bukan senarai penapis yang sah",
     "description":"Filter lists tab of the Options page: Invalid filter list file."
@@ -583,10 +571,6 @@
     "message":"Patutkah AdBlock memberitahu anda apabila ia mengesan perisian hasad?",
     "description":"Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
   },
-  "malwarenotificationmessage":{
-    "message":"AdBlock telah menyekat muat turun dari tapak yang diketahui mengehos perisian hasad.",
-    "description":"Notification when a potential malware request has been blocked. This message should be under 90 characters!"
-  },
   "malwarenotificationlearnmore":{
     "message":"Ketahui lebih lanjut mengenai perisian hasad",
     "description":"Button on the malware notification that opens a page about malware on the AdBlock website. Message should be under 45 characters!"
@@ -598,10 +582,6 @@
   "malwarecheck":{
     "message":"Semak perisian hasad yang mungkin mensasar iklan:",
     "description":"Section header on the ad report page"
-  },
-  "malwarewarning":{
-    "message":"Komputer anda mungkin dijangkiti dengan perisian hasad. Klik [[here]] untuk maklumat lanjut.",
-    "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
   },
   "malwarenotfound":{
     "message":"Tiada perisian hasad dijumpai.",
@@ -686,10 +666,6 @@
   "disableforchromeandsafaristeptwo":{
     "message":"Nyahtanda kotak pilihan \"Dayakan\" di sebelah setiap sambungan kecuali untuk AdBlock. Biar AdBlock diaktifkan.",
     "description":"Step 2 for disabling Chrome and Safari extensions"
-  },
-  "disableforsafaristepone":{
-    "message":"Klik menu Safari > Keutamaan > Sambungan.",
-    "description":"Step 1 for disabling Safari extensions"
   },
   "disableforedgestepone":{
     "message":"Klik menu Lagi (...) dan pilih Sambungan.",
@@ -943,6 +919,10 @@
     "message":"Jepun",
     "description":"A filter list"
   },
+  "filternorwegian":{
+    "message":"Norway",
+    "description":"A filter lsit"
+  },
   "filtereasylist_plun_korean":{
     "message":"Korea",
     "description":"A filter list"
@@ -1187,10 +1167,6 @@
     "message":"Maaf, AdBlock dinyahdaya pada halaman ini oleh salah satu senarai penapis anda.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
   },
-  "disabled_by_filter_lists_yt":{
-    "message":"Maaf, AdBlock pada YouTube™ telah dinyahdaya di halaman ini oleh salah satu daripada pilihan anda.",
-    "description":"Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
-  },
   "dont_run_on_pages_on_domain":{
     "message":"Jangan jalankan pada halaman di domain ini",
     "description":"Menu entry to open the whitelist wizard"
@@ -1275,10 +1251,6 @@
     "message":"Peraturan Penyekatan Kandungan melebihi batas",
     "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules."
   },
-  "safarinotificationbody":{
-    "message":"Sila nyahdayakan beberapa senarai penapis. Maklumat lanjut dalam Pilihan AdBlock.",
-    "description":"Body of a notification shown to Safari Content Blocking users with too many filter list rules."
-  },
   "undo_last_block":{
     "message":"Buat asal sekatan saya di domain ini",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
@@ -1331,10 +1303,6 @@
     "message":"Terjemahan",
     "description":"A tab on the Options page"
   },
-  "translators":{
-    "message":"Ketahui lebih lanjut mengenai bagaimana untuk membantu menterjemah AdBlock [[here]]",
-    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
-  },
   "report_ad_on_page":{
     "message":"Laporkan iklan di halaman ini",
     "description":"Entry in the AdBlock button menu"
@@ -1342,10 +1310,6 @@
   "acceptableadsoption":{
     "message":"Benarkan beberapa iklan yang tidak mengganggu",
     "description":"Checkbox on the 'General' tab of the Options page to enable the Acceptable Ads filter list"
-  },
-  "advanced_options2":{
-    "message":"Saya adalah pengguna mahir, tunjukkan pilihan yang lebih maju",
-    "description":"Checkbox on the 'General' tab of the Options page"
   },
   "work_around_hulu_problems":{
     "message":"Betulkan video Hulu.com yang tidak dimainkan (memerlukan memulakan semula pelayar anda)",
@@ -1533,10 +1497,6 @@
       }
     }
   },
-  "here":{
-    "message":"sini",
-    "description":"This message is injected in other strings as a link\/button"
-  },
   "adblocksupport":{
     "message":"Sokongan AdBlock",
     "description":"Title of the Support tab of the Options page"
@@ -1576,14 +1536,6 @@
   "contributors":{
     "message":"Kami juga mempunyai halaman untuk membantu anda mengenali [[orang di sebalik AdBlock]]!",
     "description":"Link to the contributors page on the Support tab"
-  },
-  "debuginfo":{
-    "message":"Adakah pasukan kami meminta beberapa maklumat debug? Klik [[here]] untuknya!",
-    "description":"Users can click this link to provide debug information to AdBlock staff"
-  },
-  "bugreport":{
-    "message":"Mengapa anda tidak menghantar kami [[laporan pepijat]]?",
-    "description":"Link to send a bug report on the Support tab"
   },
   "supportsite":{
     "message":"Beritahu kami di [[tapak sokongan]] kami!",

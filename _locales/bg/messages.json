@@ -1,12 +1,4 @@
 {
-  "description":{
-    "message":"Най-популярното разширение за Chrome с над 40 милиона потребители! Блокира реклами в световната мрежа.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
-  "description2":{
-    "message":"Най-популярното разширение за Chrome с над 40 милиона потребители! Блокира реклами в световната мрежа.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
   "description_edge":{
     "message":"AdBlock. Блокер на реклами №1 с над 200 милиона изтегляния! Блокира реклами в световната мрежа.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -250,6 +242,10 @@
   "generaloptions":{
     "message":"Общи настройки",
     "description":"Title of the first Options page tab"
+  },
+  "mac_app_message_options":{
+    "message":"AdBlock за Safari е налично като като ап за Mac!",
+    "description":"Message to users on the Options page"
   },
   "betalabel":{
     "message":"(бета)",
@@ -943,6 +939,10 @@
     "message":"японски",
     "description":"A filter list"
   },
+  "filternorwegian":{
+    "message":"норвежки",
+    "description":"A filter lsit"
+  },
   "filtereasylist_plun_korean":{
     "message":"корейски",
     "description":"A filter list"
@@ -1244,11 +1244,11 @@
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
   },
   "pause_adblock_everywhere":{
-    "message":"Задръж във всеки сайт",
+    "message":"Задръж за всеки сайт",
     "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
   },
   "domain_pause_adblock":{
-    "message":"Задръж само в сайта",
+    "message":"Задръж само за сайта",
     "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
@@ -1386,6 +1386,14 @@
   "firefox_explanation":{
     "message":"Въпросът определя кой трябва да получи вашия доклад. Ако отговорите неправилно, докладът ви ще получат неподходящите хора и може да не бъде взет под внимание.",
     "description":"Explanation of the 'Check in Firefox or Chrome' step on the ad report page"
+  },
+  "mac_app_message_menu_part_one":{
+    "message":"Ново!",
+    "description":"part one of the message to safari users on the popup menu"
+  },
+  "mac_app_message_menu_part_two":{
+    "message":"Пробвайте AdBlock като ап за Mac",
+    "description":"part two of the message to safari users on the popup menu"
   },
   "blocked_ads":{
     "message":"Блокирани реклами:",
@@ -1533,10 +1541,6 @@
       }
     }
   },
-  "here":{
-    "message":"тук",
-    "description":"This message is injected in other strings as a link\/button"
-  },
   "adblocksupport":{
     "message":"Поддръжка",
     "description":"Title of the Support tab of the Options page"
@@ -1576,10 +1580,6 @@
   "contributors":{
     "message":"А на тази [[страница]] ще откриете хората, които стоят зад AdBlock!",
     "description":"Link to the contributors page on the Support tab"
-  },
-  "debuginfo":{
-    "message":"Изискват се предпроверочни данни? Щракнете [[тук]], за да ги предадете!",
-    "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
     "message":"Бихте ли изпратил [[доклад за грешка]]?",

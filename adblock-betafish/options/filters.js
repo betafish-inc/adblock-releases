@@ -775,7 +775,7 @@ CustomFilterListUploadUtil.bindControls = function ()
   });
 };
 
-function onFilterChangeHandler(action, item, param1, param2)
+function onFilterChangeHandler(action, item)
 {
   var updateEntry = function (entry, eventAction)
   {
@@ -810,58 +810,52 @@ function onFilterChangeHandler(action, item, param1, param2)
       }
     }
   };
-
-  if (action &&
-     (action === 'load' ||
-      action.indexOf('subscription.') > -1))
+  // If we get an entry, update it
+  if (item &&
+      item.url)
   {
-    // If we get an entry, update it
-    if (item &&
-        item.url)
+    var updateItem = function (item, id)
     {
-      var updateItem = function (item, id)
-      {
-        item.id = id;
-        updateEntry(item, action);
-      };
+      item.id = id;
+      updateEntry(item, action);
+    };
 
-      var id = backgroundPage.getIdFromURL(item.url);
+    var id = backgroundPage.getIdFromURL(item.url);
+    if (id)
+    {
+      updateItem(item, id);
+      return;
+    } else if (FilterListUtil.cachedSubscriptions['url:' + item.url]) {
+      // or user subscribed filter list
+      updateItem(item, 'url:' + item.url);
+      return;
+    } else if (action === 'subscription.title' && param1)
+    {
+      // or if the URL changed due to a redirect, we may not be able to determine
+      // the correct id, but should be able to using one of the params
+      var id = backgroundPage.getIdFromURL(param1);
       if (id)
       {
         updateItem(item, id);
         return;
-      } else if (FilterListUtil.cachedSubscriptions['url:' + item.url]) {
-        // or user subscribed filter list
-        updateItem(item, 'url:' + item.url);
-        return;
-      } else if (action === 'subscription.title' && param1)
+      } else
       {
-        // or if the URL changed due to a redirect, we may not be able to determine
-        // the correct id, but should be able to using one of the params
-        var id = backgroundPage.getIdFromURL(param1);
+        var id = backgroundPage.getIdFromURL(param2);
         if (id)
         {
           updateItem(item, id);
           return;
-        } else
-        {
-          var id = backgroundPage.getIdFromURL(param2);
-          if (id)
-          {
-            updateItem(item, id);
-            return;
-          }
         }
       }
     }
-    // If we didn't get an entry or id, loop through all of the subscriptions.
-    var subs = backgroundPage.getAllSubscriptionsMinusText();
-    var cachedSubscriptions = FilterListUtil.cachedSubscriptions;
-    for (var id in cachedSubscriptions)
-    {
-      var entry = subs[id];
-      updateEntry(entry);
-    }
+  }
+  // If we didn't get an entry or id, loop through all of the subscriptions.
+  var subs = backgroundPage.getAllSubscriptionsMinusText();
+  var cachedSubscriptions = FilterListUtil.cachedSubscriptions;
+  for (var id in cachedSubscriptions)
+  {
+    var entry = subs[id];
+    updateEntry(entry);
   }
 }
 
@@ -898,7 +892,27 @@ $(function ()
   LanguageSelectUtil.init();
   CustomFilterListUploadUtil.bindControls();
 
-  FilterNotifier.addListener(onFilterChangeHandler);
+  filterNotifier.on("save", function(item) {
+    onFilterChangeHandler("save", item);
+  });
+  filterNotifier.on("subscription.added", function(item) {
+    onFilterChangeHandler("subscription.added", item)
+  });
+  filterNotifier.on("subscription.removed", function(item) {
+    onFilterChangeHandler("subscription.removed", item)
+  });
+  filterNotifier.on("subscription.disabled", function(item) {
+    onFilterChangeHandler("subscription.disabled", item)
+  });
+  filterNotifier.on("subscription.updated", function(item) {
+    onFilterChangeHandler("subscription.updated", item)
+  });
+  filterNotifier.on("subscription.downloadStatus", function(item) {
+    onFilterChangeHandler("subscription.downloadStatus", item)
+  });
+  filterNotifier.on("subscription.errors", function(item) {
+    onFilterChangeHandler("subscription.errors", item)
+  });
 
   FilterListUtil.updateSubscriptionInfoAll();
 

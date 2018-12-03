@@ -69,7 +69,7 @@ $(function ()
       show(['div_status_whitelisted', 'div_enable_adblock_on_this_page', 'separator0', 'div_pause_adblock', 'separator1', 'div_options', 'help_link']);
     } else
     {
-      show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_report_an_ad', 'separator3', 'separator4', 'div_options', 'block_counts', 'help_link']);
+      show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_troubleshoot_an_ad', 'separator3', 'separator4', 'div_options', 'block_counts', 'help_link']);
 
       chrome.runtime.sendMessage({
         type: "stats.getBlockedPerPage",
@@ -92,7 +92,7 @@ $(function ()
     }
 
     if (SAFARI && !advanced_option) {
-      hide(['div_report_an_ad', 'separator1']);
+      hide(['div_troubleshoot_an_ad', 'separator1']);
     }
 
     if (host === 'www.youtube.com' && /channel|user/.test(page.url.href) && /ab_channel/.test(page.url.href) && eligibleForUndo && info.settings.youtube_channel_whitelist)
@@ -396,11 +396,11 @@ $(function ()
     !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
   });
 
-  $('#div_report_an_ad').click(function ()
+  $('#div_troubleshoot_an_ad').click(function ()
   {
-    BG.recordGeneralMessage("report_ad_clicked");
-    var url = 'adblock-adreport.html?url=' + encodeURIComponent(page.url.href) + '&tabId=' + page.id;
-    openPage(chrome.extension.getURL(url));
+    BG.recordGeneralMessage("troubleshoot_ad_clicked");
+    var url = 'https://help.getadblock.com/support/solutions/articles/6000109812-report-an-unblocked-ad';
+    openPage(url);
     closeAndReloadPopup();
   });
 

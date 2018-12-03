@@ -1,12 +1,4 @@
 {
-  "description":{
-    "message":"40 milyondan fazla kullanıcısıyla en popüler Chrome eklentisi! İnternetteki tüm reklamları engeller.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
-  "description2":{
-    "message":"40 milyondan fazla kullanıcısıyla en popüler Chrome eklentisi! İnternetteki tüm reklamları engeller.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
   "description_edge":{
     "message":"AdBlock. 200 milyonun üzerinde indirmeyle #1 numaralı reklam engelleyicisi. Tüm web sitelerindeki reklamları engeller.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -943,6 +935,10 @@
     "message":"Japonca",
     "description":"A filter list"
   },
+  "filternorwegian":{
+    "message":"Norveççe",
+    "description":"A filter lsit"
+  },
   "filtereasylist_plun_korean":{
     "message":"Korece",
     "description":"A filter list"
@@ -990,6 +986,14 @@
   "filtereasylist_plus_vietnamese":{
     "message":"Vietnamca",
     "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_vietnamese":{
+    "message":"Vietnamca + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterbrazilian_portuguese":{
+    "message":"Brezilya Portekizcesi",
+    "description":"A filter list"
   },
   "other":{
     "message":"Diğer",
@@ -1234,6 +1238,14 @@
   "pause_adblock":{
     "message":"AdBlock'u duraklat",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Tüm sitelerde duraklat",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Bu sitede duraklat",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Reklam engellemeyi devam ettir",
@@ -1517,10 +1529,6 @@
       }
     }
   },
-  "here":{
-    "message":"buradan",
-    "description":"This message is injected in other strings as a link\/button"
-  },
   "adblocksupport":{
     "message":"AdBlock Destek",
     "description":"Title of the Support tab of the Options page"
@@ -1560,10 +1568,6 @@
   "contributors":{
     "message":"[[AdBlock'un arkasındaki kişileri]] öğrenmenizde yardımcı olmak için bir sayfamız var!",
     "description":"Link to the contributors page on the Support tab"
-  },
-  "debuginfo":{
-    "message":"Ekibimiz sizden hata ayıklama bilgileri mi istedi? Onun için [[buraya]] tıklayın!",
-    "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
     "message":"Neden bize bir [[hata raporu]] göndermiyorsun?",
@@ -1812,5 +1816,9 @@
   "display_language_selector":{
     "message":"AdBlock içinde görüntüleme",
     "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Popüler web sitesi kitaplıkları için yerel içerik önbelleğe almayı etkinleştir",
+    "description":"Option to let the user enable Local CDN feature."
   }
 }

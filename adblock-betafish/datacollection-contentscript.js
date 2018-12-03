@@ -1,6 +1,6 @@
 var matchSelectors = [];
 var pairs = [];
-const chunkSize = 1000;
+var chunkSize = 1000;
 function* genFunc()
 {
   var i = pairs.length;

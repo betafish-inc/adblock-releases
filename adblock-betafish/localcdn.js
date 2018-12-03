@@ -227,7 +227,7 @@ let LocalCDN = exports.LocalCDN = (function() {
     // Gets the missed versions object, which includes a count of how many
     // times the missed version has been requested
     getMissedVersions: function() {
-      return getStoredValue(missedVersionsKey, {});
+      return getStoredValue(missedVersionsKey, undefined);
     }
   };
 })();

@@ -31,18 +31,16 @@ function cleanCustomFilter(filters)
   return filters;
 }
 
-function onFilterChange(action, item, param1, param2)
+function onFilterChange()
 {
-  if ((action === 'save') &&
-    ($('#txtFiltersAdvanced').prop('disabled') === true))
+  var userFilters = backgroundPage.getUserFilters();
+  if (userFilters &&
+    userFilters.length)
   {
-    var userFilters = backgroundPage.getUserFilters();
-    if (userFilters &&
-      userFilters.length)
-    {
-      originalCustomFilters = cleanCustomFilter(userFilters);
-      $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));
-    }
+    originalCustomFilters = cleanCustomFilter(userFilters);
+    $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));
+  } else {
+    $('#txtFiltersAdvanced').val("");
   }
 }
 
@@ -439,6 +437,6 @@ $(function ()
     $('#safariwarning').text(translate('contentblockingwarning')).show();
   }
 
-  FilterNotifier.addListener(onFilterChange);
+  filterNotifier.on("save", onFilterChange);
 
 });

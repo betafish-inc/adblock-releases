@@ -7,12 +7,12 @@ body {
   width: 275px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
-  max-height: 600px;
+  max-height: 606px;
+  color: #2a2a2a;
 }
 .separator {
-  width: 100%;
-  border-top: 2px groove white;
-  margin: 5px -5px 5px -3px;
+  border-top: 1px solid #e2e2e2;
+  margin: 5px 10px;
 }
 .logo {
   cursor: pointer;
@@ -47,13 +47,19 @@ body {
   text-align: center;
 }
 .box {
-  margin: 5px 3px 5px 0px;
-  background: #f7f6f2;
+  margin: 0px;
+  background: #fff;
   padding: 10px;
-  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.10);
 }
-#link_open {
-  padding: 0px 0px 3px 8px;
+#help_link {
+  color: #2a2a2a;
+}
+#help_link:hover {
+  color: #1855ed;
+  background: #f8f8f8;
+}
+#help_link, #link_open {
+  padding: 3px 0px 3px 8px;
   display: inline-block;
 }
 #link_close {
@@ -62,7 +68,7 @@ body {
 }
 #block_counts {
   display: none;
-  margin-bottom: 1em;
+  margin-bottom: 5px;
 }
 .header {
   font-weight: bold;
@@ -72,7 +78,7 @@ body {
   color: red;
 }
 a {
-  color: #4D7BD6;
+  color: #1855ed;
   text-decoration: none;
 }
 a:focus {
@@ -124,7 +130,7 @@ input[type="checkbox"]:checked:before {
   white-space: pre-wrap;
 }
 .italic {
-    font-style: italic;
+  font-style: italic;
 }
 .myadblocklogo {
   float: right;
@@ -136,4 +142,7 @@ input[type="checkbox"]:checked:before {
   color: #E7B202;
   font-weight: bold;
   font-size: 14px;
+}
+.float-right {
+  float: right;
 }
