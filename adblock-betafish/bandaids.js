@@ -112,8 +112,47 @@ var getAdblockVersion = function(version) {
         } catch(ex) {
         }
       });
+    // Twitch - related code below is based on code from uBlockOrigin GPLv3.
+    // and https://github.com/uBlockOrigin/uAssets/blob/master/filters/resources.txt
+    // and https://gist.githubusercontent.com/gorhill/a47fe36d5f3da185f8c4d44d18ee022d/raw/911466e5d255a081c7126392186bf1a08ee85d4c/gistfile1.txt
+    //
+    } else if ( /(^|\.)twitch\.tv$/.test(hostname) === true) {
+          var ourMediaPlayer;
+      	Object.defineProperty(window, 'MediaPlayer', {
+      		set: function(newMediaPlayer) {
+      			if ( ourMediaPlayer !== undefined ) { return; }
+      			var oldLoad = newMediaPlayer.MediaPlayer.prototype.load;
+      			newMediaPlayer.MediaPlayer.prototype.load = function(e) {
+      				try {
+      					if ( e.startsWith('https://usher.ttvnw.net/api/channel/hls/') ) {
+      						var url = new URL(e);
+      						url.searchParams.delete('baking_bread');
+      						url.searchParams.delete('baking_brownies');
+      						url.searchParams.delete('baking_brownies_timeout');
+      						e = url.href;
+      					}
+      				} catch (err) {
+      					//console.error('Failed to bypass Twitch livestream ad');
+      				}
+      				return oldLoad.call(this, e);
+      			};
+      			ourMediaPlayer = newMediaPlayer;
+      		},
+      		get: function() {
+      			return ourMediaPlayer;
+      		}
+      	});
+      	var realFetch = window.fetch;
+      	window.fetch = function(input, init) {
+      		if (arguments.length >= 2 && typeof input === "string" && input.includes("/access_token"))
+      		{
+      			var url = new URL(arguments[0]);
+      			url.searchParams.delete('player_type');
+      			arguments[0] = url.href;
+      		}
+      		return realFetch.apply(this, arguments);
+      	};
     }
-
     if ( scriptText.length === 0 ) { return; }
 
     scriptText.push('(' + cleanup.toString() + ')();');
