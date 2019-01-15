@@ -21,65 +21,33 @@ if (!/ab_channel/.test(url))
   // Get name of the channel by using YouTube Data v3 API
   if (/channel/.test(url))
   {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" + getChannelId(url) + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
-    xhr.onload = function()
-    {
-      if (xhr.readyState === 4 && xhr.status === 200)
-      {
-        var json = JSON.parse(xhr.response);
-        // Got name of the channel
-        if (json.items[0])
-        {
-          updateURL(json.items[0].snippet.title, true);
-        }
-      }
-    }
-    xhr.send(null);
+    chrome.runtime.sendMessage({
+      command: "get_channel_name_by_channel_id",
+      channelId: getChannelId(url)
+    });
   }
   else if (/watch/.test(url))
   {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + getVideoId(url) + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
-    xhr.onload = function()
-    {
-      if (xhr.readyState === 4 && xhr.status === 200)
-      {
-        var json = JSON.parse(xhr.response);
-        // Got name of the channel
-        if (json.items[0])
-        {
-          updateURL(json.items[0].snippet.channelTitle, false);
-        }
-      }
-    }
-    xhr.send(null);
+    chrome.runtime.sendMessage({
+      command: "get_channel_name_by_video_id",
+      videoId: getVideoId(url)
+    });
   }
-  else
+  else if (/user/.test(url))
   {
-    if (/user/.test(url))
-    {
-      document.addEventListener("spfdone", function()
-      {
-        var channelNameElement = document.querySelector("span .qualified-channel-title-text > a");
-        if (channelNameElement)
-        {
-          var channelName = document.querySelector("span .qualified-channel-title-text > a").textContent;
-          updateURL(channelName, true);
-        }
-      }, true);
-      // Spfdone event doesn't fire, when you access YT user directly
-      window.addEventListener("DOMContentLoaded", function()
-      {
-        var channelNameElement = document.querySelector("span .qualified-channel-title-text > a");
-        if (channelNameElement)
-        {
-          var channelName = channelNameElement.textContent;
-          updateURL(channelName, true);
-        }
-      }, true);
+    var userId = getUserId(url);
+    if (!userId) {
+      chrome.runtime.sendMessage({ command: 'updateYouTubeChannelName', args: false });
+    } else {
+      chrome.runtime.sendMessage({
+        command: "get_channel_name_by_user_id",
+        userId: userId
+      });
     }
+  } else {
+    chrome.runtime.sendMessage({ command: 'updateYouTubeChannelName', args: false });
   }
+
 
   // Get id of the channel
   function getChannelId(url)
@@ -93,31 +61,47 @@ if (!/ab_channel/.test(url))
     return parseUri.parseSearch(url).v;
   }
 
-  // Function which: - adds name of the channel on the end of the URL, e.g.
-  // &channel=nameofthechannel
-  // - reload the page, so AdBlock can properly whitelist the page (just if
-  // channel is whitelisted by user)
-  function updateURL(channelName, isChannel)
+  // Get id of the user
+  function getUserId(url)
   {
-    channelName = parseChannelName(channelName);
-    // Add the name of the channel to the end of URL
-    if (isChannel)
-    {
-      var updatedUrl = url + "?&ab_channel=" + channelName.replace(/\s/g, "");
+    let pathName = parseUri(location.href).pathname;
+    if (pathName.startsWith("/user/") && pathName.length > 6) {
+      return pathName.slice(6);
     }
-    else
-    {
-      var updatedUrl = url + "&ab_channel=" + channelName.replace(/\s/g, "");
-    }
-    window.history.replaceState(null, null, updatedUrl);
-    // Reload page from cache, just if it should be whitelisted
-    BGcall("pageIsWhitelisted", function(whitelisted)
-    {
-      if (whitelisted)
-      {
-        window.location.reload(false);
+  }
+
+
+  // Function which: - adds name of the channel on the end of the URL,
+  //                   e.g. &ab_channel=nameofthechannel
+  //                 - reload the page, so AdBlock can properly whitelist
+  //                   the page (just if channel is whitelisted by user)
+  function updateURL(channelName, shouldReload) {
+    // check that the url hasn't changed
+    if (url === document.location.href) {
+      const parsedChannelName = parseChannelName(channelName);
+      let updatedUrl;
+      let [baseUrl] = url.split('&ab_channel');
+      [baseUrl] = baseUrl.split('?ab_channel');
+      if (parseUri(url).search.indexOf('?') === -1) {
+        updatedUrl = `${baseUrl}?&ab_channel=${parsedChannelName}`;
+      } else {
+        updatedUrl = `${baseUrl}&ab_channel=${parsedChannelName}`;
       }
-    });
+
+      // Add the name of the channel to the end of URL
+      window.history.replaceState(null, null, updatedUrl);
+
+      // |shouldReload| is true only if we are not able to get
+      // name of the channel by using YouTube Data v3 API
+      if (shouldReload) {
+        // Reload page from cache, if it should be whitelisted
+        BGcall('pageIsWhitelisted', updatedUrl, (whitelisted) => {
+          if (whitelisted) {
+            document.location.reload(false);
+          }
+        });
+      }
+    }
   }
 }
 
@@ -128,6 +112,9 @@ function onMessage(msg)
   {
     elemhide = new ElemHide();
     elemhide.apply();
+  }
+  if (msg.command === 'updateURLWithYouTubeChannelName') {
+    updateURL(msg.channelName, true);
   }
 }
 chrome.runtime.onMessage.addListener(onMessage);

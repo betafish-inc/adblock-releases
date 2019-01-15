@@ -49,30 +49,9 @@ if (window.top === window) {
           abFrame.style.height = "27px";
           overlayElement.style.height = "27px";
         };
-        if (SAFARI) {
-          overlayElement.appendChild(abFrame);
-          abFrame.src = urlPrefix + iframeURLsrc;
-          setABElementsHeight();
-        } else {
-          //CHROME browser allow us to load via AJAX
-          //so we'll try loading the contents of the iframe using an AJAX request first,
-          //this way we can capture the response code.
-          var frameRequest = new XMLHttpRequest();
-          frameRequest.onload = function() {
-            if (200 === frameRequest.status && frameRequest.response) {
-              overlayElement.appendChild(abFrame);
-              abFrame.contentWindow.document.write(frameRequest.response);
-              setABElementsHeight();
-            } else {
-              removeOverlay();
-            }
-          }
-          frameRequest.onerror = function() {
-            removeOverlay();
-          };
-          frameRequest.open('get', urlPrefix + iframeURLsrc);
-          frameRequest.send();
-        }
+        overlayElement.appendChild(abFrame);
+        abFrame.src = urlPrefix + iframeURLsrc;
+        setABElementsHeight();
       }
     };
 

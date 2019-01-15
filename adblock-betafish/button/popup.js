@@ -95,9 +95,9 @@ $(function ()
       hide(['div_troubleshoot_an_ad', 'separator1']);
     }
 
-    if (host === 'www.youtube.com' && /channel|user/.test(page.url.href) && /ab_channel/.test(page.url.href) && eligibleForUndo && info.settings.youtube_channel_whitelist)
+    if (host === 'www.youtube.com' && info.youTubeChannelName && /ab_channel/.test(page.url.href) && eligibleForUndo)
     {
-      $('#div_whitelist_channel').html(translate('whitelist_youtube_channel', parseUri.parseSearch(page.url.href).ab_channel));
+      $('#div_whitelist_channel').text(translate('whitelist_youtube_channel', info.youTubeChannelName));
       show(['div_whitelist_channel']);
     }
 

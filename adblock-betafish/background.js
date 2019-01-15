@@ -427,7 +427,17 @@ var getCurrentTabInfo = function (callback, secondTime)
     {
       result.whitelisted = checkWhitelisted(page);
     }
-
+    if (getSettings().youtube_channel_whitelist
+        && parseUri(tab.url).hostname === 'www.youtube.com') {
+      result.youTubeChannelName = ytChannelNamePages.get(page.id);
+      // handle the odd occurence of when the  YT Channel Name
+      // isn't available in the ytChannelNamePages map
+      // obtain the channel name from the URL
+      // for instance, when the forward / back button is clicked
+      if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
+        result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
+      }
+    }
     callback(result);
   });
 };
@@ -832,107 +842,200 @@ var createWhitelistFilterForYoutubeChannel = function (url)
 };
 
 // YouTube Channel Whitelist and AdBlock Bandaids
-// Script injection logic for Safari is done in safari_bg.js
-if (!SAFARI)
+var runChannelWhitelist = function (tabUrl, tabId)
 {
-  var runChannelWhitelist = function (tabUrl, tabId)
+  if (parseUri(tabUrl).hostname === 'www.youtube.com' && getSettings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).ab_channel)
   {
-    if (parseUri(tabUrl).hostname === 'www.youtube.com' && getSettings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).ab_channel)
+    chrome.tabs.executeScript(tabId,
     {
-      chrome.tabs.executeScript(tabId,
-      {
-        file: 'adblock-ytchannel.js',
-        runAt: 'document_start',
-      });
-    }
-  };
+      file: 'adblock-ytchannel.js',
+      runAt: 'document_start',
+    });
+  }
+};
 
-  chrome.tabs.onCreated.addListener(function (tab)
+chrome.tabs.onCreated.addListener(function (tab)
+{
+  if (chrome.runtime.lastError)
+  {
+    return;
+  }
+  chrome.tabs.get(tab.id, function (tabs)
   {
     if (chrome.runtime.lastError)
     {
       return;
     }
-    chrome.tabs.get(tab.id, function (tabs)
+    if (tabs && tabs.url && tabs.id)
     {
-      if (chrome.runtime.lastError)
-      {
-        return;
-      }
+      runChannelWhitelist(tabs.url, tabs.id);
+    }
+  });
+});
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab)
+{
+  if (chrome.runtime.lastError)
+  {
+    return;
+  }
+  if (changeInfo.status === 'loading')
+  {
+    if (chrome.runtime.lastError)
+    {
+      return;
+    }
+    chrome.tabs.get(tabId, function (tabs)
+    {
       if (tabs && tabs.url && tabs.id)
       {
         runChannelWhitelist(tabs.url, tabs.id);
       }
     });
-  });
+  }
+});
 
-  chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab)
+// On single page sites, such as YouTube, that update the URL using the History API pushState(),
+// they don't actually load a new page, we need to get notified when this happens
+// and update the URLs in the Page and Frame objects
+var youTubeHistoryStateUpdateHanlder = function(details) {
+  if (details &&
+      details.hasOwnProperty("frameId") &&
+      details.hasOwnProperty("tabId") &&
+      details.hasOwnProperty("url") &&
+      details.hasOwnProperty("transitionType") &&
+      details.transitionType === "link")
   {
-    if (chrome.runtime.lastError)
+    var myURL = new URL(details.url);
+    if (myURL.hostname === "www.youtube.com")
     {
-      return;
-    }
-    if (changeInfo.status === 'loading')
-    {
-      if (chrome.runtime.lastError)
-      {
-        return;
+      var myFrame = ext.getFrame(details.tabId, details.frameId);
+      var myPage = ext.getPage(details.tabId);
+      var previousWhitelistState = checkWhitelisted(myPage);
+      myPage.url = myURL;
+      myPage._url = myURL;
+      myFrame.url = myURL;
+      myFrame._url = myURL;
+      var currentWhitelistState = checkWhitelisted(myPage);
+      if (!currentWhitelistState && (currentWhitelistState !== previousWhitelistState)) {
+        myPage.sendMessage({type: "reloadStyleSheet"});
       }
-      chrome.tabs.get(tabId, function (tabs)
+      if (myURL.pathname === "/") {
+        ytChannelNamePages.set(myPage.id, "");
+      }
+    }
+  }
+};
+
+var addYouTubeHistoryStateUpdateHanlder = function() {
+  chrome.webNavigation.onHistoryStateUpdated.addListener(youTubeHistoryStateUpdateHanlder);
+};
+
+var removeYouTubeHistoryStateUpdateHanlder = function() {
+  chrome.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHanlder);
+};
+
+settings.onload().then(function()
+{
+  if (getSettings().youtube_channel_whitelist)
+  {
+    addYouTubeHistoryStateUpdateHanlder();
+  }
+});
+
+// Listen for the message from the ytchannel.js content script
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command === 'updateYouTubeChannelName' && message.args === false) {
+    ytChannelNamePages.set(sender.tab.id, "");
+    sendResponse({});
+    return;
+  }
+  if (message.command === 'updateYouTubeChannelName' && message.channelName) {
+    ytChannelNamePages.set(sender.tab.id, message.channelName);
+    sendResponse({});
+    return;
+  }
+  if (message.command === 'get_channel_name_by_channel_id' && message.channelId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" + message.channelId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
+    xhr.onload = function()
+    {
+      if (xhr.readyState === 4 && xhr.status === 200)
       {
-        if (tabs && tabs.url && tabs.id)
+        const json = JSON.parse(xhr.response);
+        // Got name of the channel
+        if (json && json.items && json.items[0])
         {
-          runChannelWhitelist(tabs.url, tabs.id);
-        }
-      });
-    }
-  });
-
-  // On single page sites, such as YouTube, that update the URL using the History API pushState(),
-  // they don't actually load a new page, we need to get notified when this happens
-  // and update the URLs in the Page and Frame objects
-  var youTubeHistoryStateUpdateHanlder = function(details) {
-    if (details &&
-        details.hasOwnProperty("frameId") &&
-        details.hasOwnProperty("tabId") &&
-        details.hasOwnProperty("url") &&
-        details.hasOwnProperty("transitionType") &&
-        details.transitionType === "link")
-    {
-      var myURL = new URL(details.url);
-      if (myURL.hostname === "www.youtube.com")
-      {
-        var myFrame = ext.getFrame(details.tabId, details.frameId);
-        var myPage = ext.getPage(details.tabId);
-        var previousWhitelistState = checkWhitelisted(myPage);
-        myPage.url = myURL;
-        myPage._url = myURL;
-        myFrame.url = myURL;
-        myFrame._url = myURL;
-        var currentWhitelistState = checkWhitelisted(myPage);
-        if (!currentWhitelistState && (currentWhitelistState !== previousWhitelistState)) {
-          myPage.sendMessage({type: "reloadStyleSheet"});
+          const channelName = json.items[0].snippet.title;
+          ytChannelNamePages.set(sender.tab.id, channelName);
+          chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
         }
       }
     }
-  };
-
-  var addYouTubeHistoryStateUpdateHanlder = function() {
-    chrome.webNavigation.onHistoryStateUpdated.addListener(youTubeHistoryStateUpdateHanlder);
-  };
-
-  var removeYouTubeHistoryStateUpdateHanlder = function() {
-    chrome.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHanlder);
-  };
-
-  settings.onload().then(function()
-  {
-    if (getSettings().youtube_channel_whitelist)
+    xhr.send();
+    sendResponse({});
+    return;
+  }
+  if (message.command === 'get_channel_name_by_video_id' && message.videoId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + message.videoId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
+    xhr.onload = function()
     {
-      addYouTubeHistoryStateUpdateHanlder();
+      if (xhr.readyState === 4 && xhr.status === 200)
+      {
+        const json = JSON.parse(xhr.response);
+        // Got name of the channel
+        if (json && json.items && json.items[0])
+        {
+          const channelName = json.items[0].snippet.channelTitle;
+          ytChannelNamePages.set(sender.tab.id, channelName);
+          chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
+        }
+      }
     }
-  });
-}
+    xhr.send();
+    sendResponse({});
+    return;
+  }
+  if (message.command === 'get_channel_name_by_user_id' && message.userId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=" + message.userId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
+    xhr.onload = function()
+    {
+      if (xhr.readyState === 4 && xhr.status === 200)
+      {
+        const json = JSON.parse(xhr.response);
+        // Got name of the channel
+        if (json && json.items && json.items[0])
+        {
+          const channelName = json.items[0].snippet.title;
+          ytChannelNamePages.set(sender.tab.id, channelName);
+          chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
+        }
+      }
+    }
+    xhr.send();
+    sendResponse({});
+    return;
+  }
+});
+var ytChannelNamePages = new Map();
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  if (!getSettings().youtube_channel_whitelist) {
+    return;
+  }
+  if (ytChannelNamePages.get(tabId) && parseUri(tab.url).hostname !== 'www.youtube.com') {
+    ytChannelNamePages.delete(tabId);
+    return;
+  }
+});
+chrome.tabs.onRemoved.addListener(function(tabId) {
+  if (getSettings().youtube_channel_whitelist) {
+    return;
+  }
+  ytChannelNamePages.delete(tabId);
+});
 
 // used by the Options pages, since they don't have access to setContentBlocker
 function isSafariContentBlockingAvailable()
@@ -1194,5 +1297,6 @@ Object.assign(window, {
   isWhitelistFilter,
   isSelectorExcludeFilter,
   addYouTubeHistoryStateUpdateHanlder,
-  removeYouTubeHistoryStateUpdateHanlder
+  removeYouTubeHistoryStateUpdateHanlder,
+  ytChannelNamePages
 });
