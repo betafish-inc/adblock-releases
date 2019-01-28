@@ -636,7 +636,7 @@ chrome.storage.local.get(pausedKey, function (response)
   {
     var pauseHandler = function (action)
     {
-      FilterNotifier.off("load", pauseHandler);
+      filterNotifier.off("load", pauseHandler);
       var result1 = parseFilter(pausedFilterText1);
       var result2 = parseFilter(pausedFilterText2);
       FilterStorage.removeFilter(result1.filter);
@@ -644,7 +644,7 @@ chrome.storage.local.get(pausedKey, function (response)
       chrome.storage.local.remove(pausedKey);
     };
 
-    FilterNotifier.on("load", pauseHandler);
+    filterNotifier.on("load", pauseHandler);
   }
 });
 
@@ -659,7 +659,7 @@ chrome.storage.local.get(domainPausedKey, function (response)
     {
       var domainPauseHandler = function (action)
       {
-        FilterNotifier.off("load", domainPauseHandler);
+        filterNotifier.off("load", domainPauseHandler);
         for (var aDomain in storedDomainPauses)
         {
           var result = parseFilter("@@" + aDomain + "$document");
@@ -667,7 +667,7 @@ chrome.storage.local.get(domainPausedKey, function (response)
         }
         chrome.storage.local.remove(domainPausedKey);
       };
-      FilterNotifier.on("load", domainPauseHandler);
+      filterNotifier.on("load", domainPauseHandler);
     }
   } catch (err)
   {
