@@ -85,13 +85,14 @@ var License = (function () {
   // Inputs:
   //   responseData: string response from a ping
   var myAdBlockDataFrom = function(responseData) {
-      if (responseData.length === 0 || responseData.trim().length === 0)
+      if (responseData.length === 0 || responseData.trim().length === 0) {
         return null;
+      }
 
       try {
         var pingData = JSON.parse(responseData);
         if (!pingData)
-          return;
+          return null;
       } catch (e) {
         console.log("Something went wrong with parsing survey data.");
         console.log('error', e);
@@ -107,6 +108,15 @@ var License = (function () {
     initialized: initialized,
     licenseAlarmName: licenseAlarmName,
     checkPingResponse: function(pingResponseData) {
+      if (pingResponseData.length === 0 || pingResponseData.trim().length === 0) {
+        loadFromStorage(function() {
+          if (theLicense.myadblock_enrollment === true) {
+            theLicense.myadblock_enrollment = false;
+            License.set(theLicense);
+          }
+        });
+        return;
+      }
       var pingData = myAdBlockDataFrom(pingResponseData);
       if (!pingData){
         return;

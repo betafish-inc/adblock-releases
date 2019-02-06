@@ -1,4 +1,12 @@
 {
+  "description":{
+    "message":"الإضافة الأكثر شعبية في كروم، أكثر من ٦٠ مليون مستخدم! تمنع الإعلانات على الإنترنت.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
+  "description2":{
+    "message":"الإضافة الأكثر شعبية في كروم، أكثر من ٦٠ مليون مستخدم! تمنع الإعلانات على الإنترنت.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "description_edge":{
     "message":"AdBlock. مانع الإعلانات رقم واحد مع ما يزيد على ٢٠٠ مليون تحميل. يحجب الإعلانات في جميع أنحاء شبكة الإنترنت.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -243,6 +251,10 @@
     "message":"خيارات عامة",
     "description":"Title of the first Options page tab"
   },
+  "mac_app_message_options":{
+    "message":"يتوفر AdBlock لمتصفح سفاري كتطبيق ماك.",
+    "description":"Message to users on the Options page"
+  },
   "betalabel":{
     "message":"الإصدار التجريبي",
     "description":"Label for experimental features in AdBlock Options"
@@ -411,6 +423,10 @@
     "message":"EasyList",
     "description":"A filter list"
   },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"الروسية والأوكرانية",
     "description":"Language names for a filter list"
@@ -443,6 +459,10 @@
     "message":"الحماية من البرامج الضارة",
     "description":"A filter list"
   },
+  "filterbitcoin_mining_protection":{
+    "message":"قائمة الحماية من تعدين العملات المعمّاة (Bitcoin)",
+    "description":"A filter list"
+  },
   "filterlatvian":{
     "message":"اللاتفية",
     "description":"A filter list"
@@ -457,6 +477,10 @@
   },
   "filterturkish":{
     "message":"التركية",
+    "description":"A filter list"
+  },
+  "filteranticircumvent":{
+    "message":"مرشحات مكافحة التحايل",
     "description":"A filter list"
   },
   "blacklistclickmessage":{
@@ -811,6 +835,46 @@
     "message":"التركية",
     "description":"Language name"
   },
+  "lang_catalan":{
+    "message":"الكتالانية",
+    "description":"Language name"
+  },
+  "lang_chinese_simplified":{
+    "message":"الصينية المبسطة",
+    "description":"Language name"
+  },
+  "lang_chinese_traditional":{
+    "message":"الصينية التقليدية",
+    "description":"Language name"
+  },
+  "lang_croatian":{
+    "message":"الكرواتية",
+    "description":"Language name"
+  },
+  "lang_norwegian":{
+    "message":"النرويجية",
+    "description":"Language name"
+  },
+  "lang_serbian":{
+    "message":"الصربية",
+    "description":"Language name"
+  },
+  "lang_slovenian":{
+    "message":"السلوفينية",
+    "description":"Language name"
+  },
+  "lang_vietnamese":{
+    "message":"الفيتنامية",
+    "description":"Language name"
+  },
+  "lang_portuguese_brazil":{
+    "message":"البرتغالية (البرازيل)",
+    "description":"Language name"
+  },
+  "lang_portuguese_portugal":{
+    "message":"البرتغالية (البرتغال)",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"البلغارية",
     "description":"A filter list"
@@ -887,6 +951,10 @@
     "message":"اليابانية",
     "description":"A filter list"
   },
+  "filternorwegian":{
+    "message":"النرويجية",
+    "description":"A filter lsit"
+  },
   "filtereasylist_plun_korean":{
     "message":"الكورية",
     "description":"A filter list"
@@ -930,6 +998,18 @@
   "filter_easylist_plus_lithuania":{
     "message":"اللتوانية + EasyList",
     "description":"A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_vietnamese":{
+    "message":"الفيتنامية",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_vietnamese":{
+    "message":"الفيتنامية + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterbrazilian_portuguese":{
+    "message":"البرتغالية البرازيلية",
+    "description":"A filter list"
   },
   "other":{
     "message":"الأخرى",
@@ -1127,6 +1207,10 @@
     "message":"لا تقم بتشغيل على الصفحات الموجودة في هذا المجال",
     "description":"Menu entry to open the whitelist wizard"
   },
+  "dont_run_on_pages_on_site":{
+    "message":"لا تشغّل على صفحات هذا الموقع",
+    "description":"Menu entry to open the whitelist wizard"
+  },
   "disabled_on_this_page":{
     "message":"AdBlock معطل في هذه الصفحة.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
@@ -1147,13 +1231,37 @@
     "message":"AdBlock متوقفة مؤقتاً.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"أُلبِث AdBlock على جميع المواقع.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"أُلبِث AdBlock على هذا الموقع.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"استأنف حجب الإعلانات",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"إلغاء الإيقاف المؤقت ل AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"استأنف AdBlock على هذا الموقع",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"وقفه AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"ألبث على كل المواقع",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"ألبث على هذا الموقع",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"إلغاء حظر منع الإعلان مؤقتا",
@@ -1187,6 +1295,10 @@
     "message":"التراجع عن المنع الذي وضعته في هذا المجال",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
+  "undo_last_block_site":{
+    "message":"تراجع عن المنع الذي وضعته على هذه الصفحة",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "dont_run_on_this_page":{
     "message":"لا تقم بتشغيل على هذه الصفحة",
     "description":"Menu entry to whitelist the current page"
@@ -1202,6 +1314,10 @@
   "donate_to_adblock":{
     "message":"تحب AdBlock، تبرع!",
     "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"المساعدة والملاحظات",
+    "description":"Text of a help link in the toolbar button menu"
   },
   "donate_to_youtube_adblock":{
     "message":"تحب AdBlock، تبرع!",
@@ -1223,8 +1339,20 @@
     "message":"الدعم",
     "description":"A tab on the Options page"
   },
+  "tabtranslations":{
+    "message":"الترجمة",
+    "description":"A tab on the Options page"
+  },
+  "translators":{
+    "message":"اطلع على المزيد عن المساهمة في ترجمة AdBlock [[هنا]] ",
+    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
+  },
   "report_ad_on_page":{
     "message":"تقرير مخصص في هذه الصفحة",
+    "description":"Entry in the AdBlock button menu"
+  },
+  "troubleshoot_an_ad":{
+    "message":"تنقيح أعطال إعلان",
     "description":"Entry in the AdBlock button menu"
   },
   "acceptableadsoption":{
@@ -1274,6 +1402,14 @@
   "firefox_explanation":{
     "message":"والغرض من هذا السؤال لتحديد الذين ينبغي أن تلقي التقرير الخاص بك. إذا كان يمكنك الإجابة على هذا السؤال بشكل غير صحيح، سيتم إرسال التقرير إلى الأشخاص الخطأ، حيث أنها قد تحصل على تجاهلها.",
     "description":"Explanation of the 'Check in Firefox or Chrome' step on the ad report page"
+  },
+  "mac_app_message_menu_part_one":{
+    "message":"جديد",
+    "description":"part one of the message to safari users on the popup menu"
+  },
+  "mac_app_message_menu_part_two":{
+    "message":"جرب تطبيق AdBlock لماك",
+    "description":"part two of the message to safari users on the popup menu"
   },
   "blocked_ads":{
     "message":"الإعلانات المحظورة:",
@@ -1461,6 +1597,10 @@
     "message":"لقد حصلنا على صفحة لمساعدتك على معرفة [[الناس وراء AdBlock]]، جيداً!",
     "description":"Link to the contributors page on the Support tab"
   },
+  "debuginfo":{
+    "message":"هل طلب فريقنا بعض معلومات التنقيح؟ انقر [[هنا]] للحصول على ذلك!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
   "bugreport":{
     "message":"لماذا لا ترسل لنا [[تقرير عن العيوب]]؟",
     "description":"Link to send a bug report on the Support tab"
@@ -1585,6 +1725,34 @@
     "message":"يمكنك تشغيل هذا مرة أخرى ودعم المواقع التي تحب عن طريق تحديد \"السماح لبعض الإعلانات غير تدخلية\" أدناه.",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
+  "easylist_lite_or_easylist":{
+    "message":"نوصي بالاشتراك أما في قائمة ”EasyList Lite“ أو ”EasyList“ وليس الاثنين معا.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"يستخدم AdBlock قائمة EasyList لمنع الإعلانات على معظم المواقع.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"ننصح بإبقائها مفعّلة. إذا كنت ألغيت الاشتراك دون قصد، فرجاء اختر ”EasyList“ الآن لحجب المزيد من الإعلانات.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"يستخدم AdBlock قائمة EasyList أو EasyList Lite لمنع الإعلانات على معظم المواقع.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"ننصح بإبقائها مفعّلة. إذا كنت ألغيت الاشتراك دون قصد، فرجاء اختر ”EasyList“ أو ”EasyList Lite“ الآن لحجب المزيد من الإعلانات.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"نحن قمنا بإلغاء اشتراكك من (الإعلانات المقبولة\/ Acceptable Ads) لأنك فعلت حجب المحتوى في متصفح سفاري. تستطيع أن تقوم باختيار واحد فقط في المرة الواحدة. \n[[لماذا]]",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"أوقفنا حجب المحتوى في متصفح سفاري لأنك اخترت السماح للإعلانات المتطفلة بالظهور. تستطيع أن تقوم باختيار واحد فقط في المرة الواحدة. ([[لماذا؟]])",
+    "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
+  },
   "adreport_laststep":{
     "message":"الخطوة الأخيرة: قُم بالإبلاغ عن هذه المسألة لنا.",
     "description":"Subtitle on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
@@ -1672,5 +1840,77 @@
   "custom_filters_migration_error_message_part3":{
     "message":"مدخل أصلي: ",
     "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options":{
+    "message":"اسمح لي باختيار لغة واجهة AdBlock",
+    "description":"Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector":{
+    "message":"اعرض AdBlock في",
+    "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"فعّل خبيئة المحتوى المحلي لمكتبات المواقع الشائعة",
+    "description":"Option to let the user enable Local CDN feature."
+  },
+  "myadblockoptions":{
+    "message":"MyAdBlock",
+    "description":"The text of the menu item in the popup menu that takes you to the MyAdBlock Options page"
+  },
+  "newmyadblockenrollment":{
+    "message":"جديد",
+    "description":"The text of the 'Enable MyAdBlock' menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockenrollment":{
+    "message":"فعل MyAdBlock",
+    "description":"The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockoptionspageheader":{
+    "message":"خيارات MyAdBlock",
+    "description":"The text of the header the MyAdBlock Options page"
+  },
+  "myadblockoptionscategoryheader":{
+    "message":"الفئات",
+    "description":"The text of the header the MyAdBlock Options page"
+  },
+  "myadblockpicreplacementswitchlabel":{
+    "message":"استبدل ببعض الإعلانات المحجوبة صورًا عالية الجودة من الفئات التالية",
+    "description":"The label text for the switch on the MyAdBlock Options page"
+  },
+  "catchannelswitchlabel":{
+    "message":"قطط",
+    "description":"The label text for the cat switch on the MyAdBlock Options page"
+  },
+  "dogchannelswitchlabel":{
+    "message":"كلاب",
+    "description":"The label text for the dog switch on the MyAdBlock Options page"
+  },
+  "landscapechannelswitchlabel":{
+    "message":"مناظر طبيعية",
+    "description":"The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "urgent_safari_changes":{
+    "message":"عاجل: أبل تغيّر امتدادات سفاري.",
+    "description":"Title for Options page message letting users know of settings change."
+  },
+  "settings_changed":{
+    "message":"استعدادا لهذا يعمل الآن AdBlock بشكل مختلف وبعض إعداداتك قد تكون تغيرت.",
+    "description":"Part of Options page message letting users know of settings change."
+  },
+  "learn_more":{
+    "message":"اطلع على المزيد.",
+    "description":"Link to Knowledge Base article with more information about the settings change"
+  },
+  "download_mac_app":{
+    "message":"للحصول على الأفضل من AdBlock على ماك، رجاء نزّل [[تطبيق AdBlock لسفاري على ماك]]",
+    "description":"Link to download our Mac App. [[ and ]] will be replaced with HTML to link to the Mac App Store"
+  },
+  "note":{
+    "message":"ملاحظة:",
+    "description":"Indicates that the user should take note of the message that follows."
+  },
+  "changes_to_adblock":{
+    "message":"أجرينا بعض التغييرات على AdBlock",
+    "description":"Link to Options page with more information about the changes."
   }
 }

@@ -1,4 +1,12 @@
 {
+  "description":{
+    "message":"Найпопулярніше розширення для Chrome, яким користуються понад 60 мільйонів людей! Заблокуйте рекламу по всьому інтернету.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
+  "description2":{
+    "message":"Найпопулярніше розширення для Chrome, яким користуються понад 60 мільйонів людей! Заблокуйте рекламу по всьому інтернету.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "description_edge":{
     "message":"AdBlock. Блокувальник реклами № 1, завантажений більш ніж 200 мільйонів разів. Блокує рекламу по всьому інтернету.",
     "description":"Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -243,6 +251,10 @@
     "message":"Основні налаштування",
     "description":"Title of the first Options page tab"
   },
+  "mac_app_message_options":{
+    "message":"AdBlock для Safari тепер доступний як додаток для Mac!",
+    "description":"Message to users on the Options page"
+  },
   "betalabel":{
     "message":"Бета",
     "description":"Label for experimental features in AdBlock Options"
@@ -254,6 +266,14 @@
   "safaricontentblocking":{
     "message":"Увімкнути блокування вмісту в Safari",
     "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
+  },
+  "debuginlogoption":{
+    "message":"Показувати повідомлення налагодження в Журналі Консолі (сповільнює розширення)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption":{
+    "message":"Дозволити AdBlock анонімно збирати дані про використання фільтрів та про заблокований ними контент",
+    "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
     "message":"щойно оновлено",
@@ -351,6 +371,10 @@
     "message":"Що більше списків фільтрів ви використовуєте, то повільніше працює AdBlock. На деяких сайтах надмірне використання списків може навіть призвести до аварійного завершення роботи браузера. Натисніть OK, щоб все одно підписатись на цей список.",
     "description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
   },
+  "unsubscribe_from_all_confirmation":{
+    "message":"AdBlock не зможе блокувати оголошення, якщо вимкнути всі списки фільтрів. Натомість ми рекомендуємо призупинити AdBlock. Всеодно відписатися від цього списку?",
+    "description":"Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
   "filterstabtitle":{
     "message":"Підписатись на список фільтрів",
     "description":"Title of the Filter lists tab of the Options page"
@@ -399,6 +423,10 @@
     "message":"EasyList",
     "description":"A filter list"
   },
+  "filtereasylist_lite":{
+    "message":"EasyList Lite",
+    "description":"A filter list"
+  },
   "filterrussian":{
     "message":"Українська та російська",
     "description":"Language names for a filter list"
@@ -431,6 +459,10 @@
     "message":"Захист від шкідливих програм",
     "description":"A filter list"
   },
+  "filterbitcoin_mining_protection":{
+    "message":"Список захисту від майнінга криптовалюти (Bitcoin)",
+    "description":"A filter list"
+  },
   "filterlatvian":{
     "message":"Латиська",
     "description":"A filter list"
@@ -445,6 +477,10 @@
   },
   "filterturkish":{
     "message":"Турецька",
+    "description":"A filter list"
+  },
+  "filteranticircumvent":{
+    "message":"Протиобхідні фільтри",
     "description":"A filter list"
   },
   "blacklistclickmessage":{
@@ -655,9 +691,21 @@
     "message":"Готово! Ми перезавантажили сторінку з рекламою. Будь ласка, перевірте чи зникла реклама на тій сторінці. Потім поверніться на цю сторінку та дайте відповіді на наступні запитання.",
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
+  "disableforchromeandsafaristeptwo":{
+    "message":"Зніміть позначку «Увімкнено» поруч із кожним розширенням крім AdBlock. Залиште AdBlock увімкненим.",
+    "description":"Step 2 for disabling Chrome and Safari extensions"
+  },
   "disableforsafaristepone":{
     "message":"Клацніть на меню «Safari» > «Налаштування» > «Розширення».",
     "description":"Step 1 for disabling Safari extensions"
+  },
+  "disableforedgestepone":{
+    "message":"Натисніть меню Більше (...) і виберіть розширення.",
+    "description":"Step 1 for disabling Edge extensions"
+  },
+  "disableforedgesteptwo":{
+    "message":"Для кожного розширення крім AdBlock, натисніть на значок шестерні, а потім на перемикач, щоб змінити значення на Off.",
+    "description":"Step 2 for disabling Edge extensions"
   },
   "reenableadsonebyone":{
     "message":"Чудово! Тепер давайте визначимо яке з розширень є причиною. Перевірте це вмикаючи розширення одне за одним. Розширення, яке поверне рекламні оголошення необхідно видалити, щоб позбавитися від реклами.",
@@ -787,6 +835,46 @@
     "message":"Турецька",
     "description":"Language name"
   },
+  "lang_catalan":{
+    "message":"Каталонська",
+    "description":"Language name"
+  },
+  "lang_chinese_simplified":{
+    "message":"Китайська спрощена",
+    "description":"Language name"
+  },
+  "lang_chinese_traditional":{
+    "message":"Китайська традиційна",
+    "description":"Language name"
+  },
+  "lang_croatian":{
+    "message":"Хорватська",
+    "description":"Language name"
+  },
+  "lang_norwegian":{
+    "message":"Норвезька",
+    "description":"Language name"
+  },
+  "lang_serbian":{
+    "message":"Сербська",
+    "description":"Language name"
+  },
+  "lang_slovenian":{
+    "message":"Словенська",
+    "description":"Language name"
+  },
+  "lang_vietnamese":{
+    "message":"В’єтнамська",
+    "description":"Language name"
+  },
+  "lang_portuguese_brazil":{
+    "message":"Португальська (Бразилія)",
+    "description":"Language name"
+  },
+  "lang_portuguese_portugal":{
+    "message":"Португальська (Португалія)",
+    "description":"Language name"
+  },
   "filtereasylist_plus_bulgarian":{
     "message":"Болгарською",
     "description":"A filter list"
@@ -863,6 +951,10 @@
     "message":"Японською",
     "description":"A filter list"
   },
+  "filternorwegian":{
+    "message":"Норвезька",
+    "description":"A filter lsit"
+  },
   "filtereasylist_plun_korean":{
     "message":"Корейською",
     "description":"A filter list"
@@ -907,9 +999,25 @@
     "message":"Литовська + EasyList",
     "description":"A filter list combined with EasyList"
   },
+  "filtereasylist_plus_vietnamese":{
+    "message":"В’єтнамська",
+    "description":"A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_vietnamese":{
+    "message":"В'єтнамська + EasyList",
+    "description":"A filter list combined with EasyList"
+  },
+  "filterbrazilian_portuguese":{
+    "message":"Бразильська Португальська",
+    "description":"A filter list"
+  },
   "other":{
     "message":"Іншою",
     "description":"Multiple choice option"
+  },
+  "nodefaultfilter1":{
+    "message":"У нас немає стандартного списку фільтрів для цієї мови.\nБудь ласка, [[спробуйте знайти відповідний список з підтримкою цієї мови]], або заблокуйте цю рекламу лише для себе в меню AdBlock.",
+    "description":"Instructions on ad report page pointing users to EasyList subscriptions list."
   },
   "retryaftersubscribe":{
     "message":"Передплатіть список фільтрів «$list_title$» та спробуйте знов.",
@@ -1091,13 +1199,25 @@
     "message":"Перепрошуємо, AdBlock вимкнено на цій сторінці одним зі списків фільтрів.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
   },
+  "disabled_by_filter_lists_yt":{
+    "message":"Перепрошуємо, AdBlock для YouTube™ вимкнено на цій сторінці одним із ваших фільтрів.",
+    "description":"Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+  },
   "dont_run_on_pages_on_domain":{
     "message":"Не виконувати на сторінках цього домена",
+    "description":"Menu entry to open the whitelist wizard"
+  },
+  "dont_run_on_pages_on_site":{
+    "message":"Не запускати на сторінках цього домена",
     "description":"Menu entry to open the whitelist wizard"
   },
   "disabled_on_this_page":{
     "message":"AdBlock вимкнено на цій сторінці.",
     "description":"Message shown in toolbar button on web pages that have been whitelisted"
+  },
+  "disabled_on_this_channel":{
+    "message":"Ви дозволили показувати рекламу на цьому каналі.",
+    "description":"Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
   },
   "enable_adblock":{
     "message":"Увімкнути AdBlock на цій сторінці",
@@ -1111,13 +1231,37 @@
     "message":"AdBlock призупинено.",
     "description":"Message shown in toolbar button when AdBlock is not running"
   },
+  "status_universal_paused":{
+    "message":"AdBlock призупинено на всіх сайтах.",
+    "description":"Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused":{
+    "message":"AdBlock призупинено на цьому сайті.",
+    "description":"Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "resume_blocking_ads":{
+    "message":"Відновити блокування реклами",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
   "unpause_adblock":{
     "message":"Запустити AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
+  "domain_unpause_adblock":{
+    "message":"Відновити AdBlock на цьому сайті",
+    "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
   "pause_adblock":{
     "message":"Призупинити AdBlock",
     "description":"Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere":{
+    "message":"Призупинити на всіх сайтах",
+    "description":"Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock":{
+    "message":"Призупинити на цьому сайті",
+    "description":"Menu entry to pause AdBlock on this domain (stop blocking ads)"
   },
   "unpause_adblocking":{
     "message":"Активувати блокування реклами",
@@ -1151,6 +1295,10 @@
     "message":"Скасувати обмеження, запроваджені мною на цьому домені",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
   },
+  "undo_last_block_site":{
+    "message":"Скасувати мої блокування на цьому сайті",
+    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "dont_run_on_this_page":{
     "message":"Не запускати на цій сторінці",
     "description":"Menu entry to whitelist the current page"
@@ -1166,6 +1314,10 @@
   "donate_to_adblock":{
     "message":"Подобається AdBlock? Подумайте о пожертвуванні!",
     "description":"Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback":{
+    "message":"Довідка та зворотній зв'язок",
+    "description":"Text of a help link in the toolbar button menu"
   },
   "donate_to_youtube_adblock":{
     "message":"Подобається AdBlock на YouTube? Подумайте о пожертвуванні!",
@@ -1187,8 +1339,20 @@
     "message":"Підтримка",
     "description":"A tab on the Options page"
   },
+  "tabtranslations":{
+    "message":"Переклади",
+    "description":"A tab on the Options page"
+  },
+  "translators":{
+    "message":"Дізнайтеся більше про те, як допомогти перекласти AdBlock [[here]]",
+    "description":"A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
+  },
   "report_ad_on_page":{
     "message":"Поскаржитись на рекламу на цій сторінці",
+    "description":"Entry in the AdBlock button menu"
+  },
+  "troubleshoot_an_ad":{
+    "message":"Вирішення проблем з рекламою",
     "description":"Entry in the AdBlock button menu"
   },
   "acceptableadsoption":{
@@ -1223,6 +1387,10 @@
     "message":"Формат: ~site1.com|~site2.com|~novyny.site3.org",
     "description":"Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
+  "warning_overrules_filters":{
+    "message":"Увага: на всіх інших сайтах Ви побачите рекламу!\nБудуть скасовані всі інші фільтри для цих сайтів.",
+    "description":"Message on the 'Customize' tab of the options page, explaining the danger of adding a whitelist filter for all websites with only some exceptions."
+  },
   "storage_quota_exceeded":{
     "message":"Ви перевищили об'єм пам'яті, який може використовувати AdBlock. Будь ласка, вимкніть деякі списки фільтрів!",
     "description":"Message shown when the user uses more storage than allowed by the browser."
@@ -1234,6 +1402,14 @@
   "firefox_explanation":{
     "message":"Мета цього питання визначити, хто має отримати вашу скаргу. Якщо ви дасте хибну відповідь, скарга потрапить не у ті руки і, у такому випадку, може бути проігнорована.",
     "description":"Explanation of the 'Check in Firefox or Chrome' step on the ad report page"
+  },
+  "mac_app_message_menu_part_one":{
+    "message":"Нове!",
+    "description":"part one of the message to safari users on the popup menu"
+  },
+  "mac_app_message_menu_part_two":{
+    "message":"Спробуйте додаток AdBlock для Mac",
+    "description":"part two of the message to safari users on the popup menu"
   },
   "blocked_ads":{
     "message":"Заблокована реклама:",
@@ -1349,6 +1525,10 @@
     "message":"Всі YouTube™ канали, на які ви підписані, були додані до білого списку",
     "description":"Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
   },
+  "allow_ads_all_youtube_channels":{
+    "message":"Дозволити рекламу на усіх каналах YouTube™, на які ви підписані",
+    "description":"Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+  },
   "whitelist_youtube_channel":{
     "message":"Додати $name$ в білий список",
     "description":"Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
@@ -1358,6 +1538,10 @@
         "example":"Name of channel"
       }
     }
+  },
+  "whitelist_youtube_channel_v2":{
+    "message":"Дозволити рекламу на каналі YouTube™:",
+    "description":"Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters":{
     "message":"Ви впевнені, що хочете видалити блокування, створені на $host$? Кількість створених блокувань: $count$",
@@ -1412,6 +1596,10 @@
   "contributors":{
     "message":"Ми маємо сторінку, яка допоможе вам дізнатись про [[людей, які створили AdBlock]]!",
     "description":"Link to the contributors page on the Support tab"
+  },
+  "debuginfo":{
+    "message":"Наша команда запросила деяку налагоджувальну інформацію? Натисніть [[here]]!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
     "message":"Чому б Вам не відправити нам [[повідомлення про помилку]]?",
@@ -1537,6 +1725,26 @@
     "message":"Ви можете знову увімкнути це і підтримати улюблені веб-сайти, просто оберіть \"Дозволити деяку ненав’язливу рекламу\" нижче.",
     "description":"Message shown to users after disabling Acceptable Ads via the Options page."
   },
+  "easylist_lite_or_easylist":{
+    "message":"Ми рекомендуємо підписатись на \"EasyList Lite\" або \"EasyList\", але не на обидва.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_done":{
+    "message":"AdBlock використовує EasyList для блокування реклами на більшості сайтів.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable":{
+    "message":"Ми рекомендуємо не вимикати його. Якщо ви випадково скасували підписку, оберіть «EasyList», щоб заблокувати більше реклами.",
+    "description":"Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done":{
+    "message":"AdBlock використовує EasyList Lite або EasyList, щоб блокувати оголошення на більшості сайтів.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable":{
+    "message":"Ми рекомендуємо не вимикати його. Якщо ви випадково скасували підписку, оберіть «EasyList», щоб заблокувати більше реклами.",
+    "description":"Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
   "acceptable_ads_content_blocking_disbled_message":{
     "message":"Ми відписали Вас від Прийнятної Реклами, тому що Ви увімкнули блокування вмісту в Safari. Ви можете одночасно обрати лише одне. ([[Чому?]])",
     "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
@@ -1632,5 +1840,77 @@
   "custom_filters_migration_error_message_part3":{
     "message":"Оригінальний запис: ",
     "description":"Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options":{
+    "message":"Дозвольте мені вибрати мову відображення на AdBlock",
+    "description":"Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector":{
+    "message":"Показувати AdBlock на",
+    "description":"Text shown before language selector drop-down."
+  },
+  "local_cdn_option":{
+    "message":"Дозволити локальне кешування вмісту для популярних бібліотек сайтів",
+    "description":"Option to let the user enable Local CDN feature."
+  },
+  "myadblockoptions":{
+    "message":"MyAdBlock",
+    "description":"The text of the menu item in the popup menu that takes you to the MyAdBlock Options page"
+  },
+  "newmyadblockenrollment":{
+    "message":"НОВЕ",
+    "description":"The text of the 'Enable MyAdBlock' menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockenrollment":{
+    "message":"Увімкнути MyAdBlock",
+    "description":"The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockoptionspageheader":{
+    "message":"Налаштування MyAdBlock",
+    "description":"The text of the header the MyAdBlock Options page"
+  },
+  "myadblockoptionscategoryheader":{
+    "message":"Категорії",
+    "description":"The text of the header the MyAdBlock Options page"
+  },
+  "myadblockpicreplacementswitchlabel":{
+    "message":"Замінити деякі заблоковані оголошення високоякісними зображеннями з наведених нижче категорій",
+    "description":"The label text for the switch on the MyAdBlock Options page"
+  },
+  "catchannelswitchlabel":{
+    "message":"Кішки",
+    "description":"The label text for the cat switch on the MyAdBlock Options page"
+  },
+  "dogchannelswitchlabel":{
+    "message":"Собаки",
+    "description":"The label text for the dog switch on the MyAdBlock Options page"
+  },
+  "landscapechannelswitchlabel":{
+    "message":"Ландшафтний режим",
+    "description":"The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "urgent_safari_changes":{
+    "message":"ВАЖЛИВО: Apple змінює розширення для Safari.",
+    "description":"Title for Options page message letting users know of settings change."
+  },
+  "settings_changed":{
+    "message":"У процесі підготовки AdBlock тепер працює по-різному і частину встановлених вами параметрів може бути змінено.",
+    "description":"Part of Options page message letting users know of settings change."
+  },
+  "learn_more":{
+    "message":"Дізнатися більше.",
+    "description":"Link to Knowledge Base article with more information about the settings change"
+  },
+  "download_mac_app":{
+    "message":"Щоб отримати кращий досвід від AdBlock на вашому Mac, будь ласка, завантажте наш [[AdBlock для Safari Mac App!]]",
+    "description":"Link to download our Mac App. [[ and ]] will be replaced with HTML to link to the Mac App Store"
+  },
+  "note":{
+    "message":"ПРИМІТКА:",
+    "description":"Indicates that the user should take note of the message that follows."
+  },
+  "changes_to_adblock":{
+    "message":"Ми внесли зміни до AdBlock!",
+    "description":"Link to Options page with more information about the changes."
   }
 }

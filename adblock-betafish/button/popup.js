@@ -141,6 +141,10 @@ $(function ()
         hide(['separator-1']);
       }
     }
+    if (info.settings.show_protect_enrollment && !shown['div_myadblock_enrollment']) {
+      show(['div_adblock_protect_enrollment']);
+      hide(['separator0']);
+    }
 
     if ((window.devicePixelRatio >= 2) && (shown['div_myadblock_options'] || shown['div_myadblock_enrollment'] ))
     {
@@ -469,6 +473,14 @@ $(function ()
     BG.recordGeneralMessage("link_clicked");
     var linkHref = "https://getadblock.com/pay/?exp=7003&u=" + BG.STATS.userId();
     openPage(linkHref);
+    closeAndReloadPopup();
+  });
+
+  $('#protect_enrollment_btn').click(function ()
+  {
+    BG.recordGeneralMessage("protect_enrollment_btn_clicked");
+    BG.setSetting("show_protect_enrollment", false);
+    openPage("https://chrome.google.com/webstore/detail/adblock-protect/fpkpgcabihmjieiegmejiloplfdmpcee");
     closeAndReloadPopup();
   });
 

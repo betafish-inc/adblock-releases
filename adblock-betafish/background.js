@@ -1265,6 +1265,42 @@ chrome.runtime.onInstalled.addListener(function (details)
   }
 });
 
+// AdBlock Protect integration
+//
+// Check the response from a ping to see if it contains valid show AdBlock Protect enrollment instructions.
+// If so, set the "show_protect_enrollment" setting
+// if an empty / zero length string is returned, and a user was previously enrolled then
+// set "show_protect_enrollment" to false
+// Inputs:
+//   responseData: string response from a ping
+function checkPingResponseForProtect(responseData) {
+  if (responseData.length === 0 || responseData.trim().length === 0) {
+    if (getSettings().show_protect_enrollment) {
+      setSetting("show_protect_enrollment", false);
+    }
+    return;
+  }
+  // if the user has clicked the Protect CTA, which sets the |show_protect_enrollment| to false
+  // then don't re-enroll them, even if the ping server has a show_protect_enrollment = true.
+  if (getSettings().show_protect_enrollment === false) {
+    return;
+  }
+  try {
+    var pingData = JSON.parse(responseData);
+  } catch (e) {
+    console.log("Something went wrong with parsing survey data.");
+    console.log('error', e);
+    console.log('response data', responseData);
+    return;
+  }
+  if (!pingData){
+    return;
+  }
+  if (typeof pingData.protect_enrollment === "boolean") {
+    setSetting("show_protect_enrollment", pingData.protect_enrollment);
+  }
+}
+
 
 // Attach methods to window
 Object.assign(window, {
@@ -1298,5 +1334,6 @@ Object.assign(window, {
   isSelectorExcludeFilter,
   addYouTubeHistoryStateUpdateHanlder,
   removeYouTubeHistoryStateUpdateHanlder,
-  ytChannelNamePages
+  ytChannelNamePages,
+  checkPingResponseForProtect
 });

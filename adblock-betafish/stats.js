@@ -249,6 +249,7 @@ let STATS = exports.STATS = (function()
   {
     SURVEY.maybeSurvey(responseData);
     License.checkPingResponse(responseData);
+    checkPingResponseForProtect(responseData);
   };
 
   // Called just after we ping the server, to schedule our next ping.
