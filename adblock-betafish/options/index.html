@@ -4,11 +4,14 @@
     <title i18n="optionstitle"></title>
     <link rel="stylesheet" href="adblock-jquery-ui.custom.css" />
     <link rel="stylesheet" href="adblock-option-options.css" />
+    <link rel="stylesheet" href="adblock-options-myadblock.css" />
     <script src="adblock-jquery.js"></script>
     <script src="adblock-jquery.cookie.js"></script>
     <script src="adblock-jquery-ui.custom.min.js"></script>
     <script src="adblock-functions.js"></script>
     <script src="adblock-option-index.js"></script>
+    <script src="adblock-option-myadblock.js"></script>
+
   </head>
   <body>
 
@@ -16,12 +19,11 @@
       <div class="wrap">
         <nav id="main_nav" class="right">
           <ul>
-          <li class="social"><a class="twitter" href="https://twitter.com/getadblock" target="_blank"></a></li>
-          <li class="social"><a class="gplus" href="https://plus.google.com/100807459477993641578" target="_blank" ></a></li>
-          <li class="social"><a class="facebook" href="https://facebook.com/heres.adblock" target="_blank" ></a></li>
+          <li class="social"><a class="twitter" href="https://twitter.com/getadblock" target="_blank"><img id="twitter-icon" /></a></li>
+          <li class="social"><a class="facebook" href="https://facebook.com/heres.adblock" target="_blank" ><img id="facebook-icon" /></a></li>
           </ul>
         </nav>
-        <a href="https://www.getadblock.com" class="left adblock-logo"><img src="icons/logo.png" width="240" height="64"></a>
+        <a href="https://www.getadblock.com" class="left adblock-logo"><img src="icons/logo.png" width="148"></a>
       </div>
      <div id="small_nav"></div>
     </header>
@@ -30,6 +32,7 @@
 
     <div id="tabpages">
       <ul>
+        <li data-scripts="adblock-option-myadblock.js"  id="myadblock-tab"><a href="adblock-options-myadblock.html"><span id="myadblock-tab-lock"></span>&nbsp;<span i18n="myadblockoptions"></span></a></li>
         <li data-scripts="adblock-option-general.js"><a href="adblock-option-general.html"><span i18n="tabgeneral"></span></a></li>
         <li data-scripts="adblock-option-filters.js"><a href="adblock-option-filters.html"><span i18n="tabfilterlists"></span></a></li>
         <li data-scripts="adblock-option-customize.js"><a href="adblock-option-customize.html"><span i18n="tabcustomize" class="menubuttons"></span></a></li>

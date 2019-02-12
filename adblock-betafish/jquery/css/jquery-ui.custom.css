@@ -55,20 +55,20 @@
 ----------------------------------*/
 .ui-widget { font: 15px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1em;  border-radius: 5px; font-weight: 300; }
 .ui-widget .ui-widget { font-size: 1em; }
-.ui-widget-content { color: #222222; border: none;}
+.ui-widget-content { color: #666666; border: none;}
 .ui-widget-content a { color: #4D7BD6; text-decoration: none; }
 .ui-widget-content a:hover { color: red; -webkit-transition: all 0.2s ease-out; transition: all 0.2s ease-out; }
-.ui-widget-header { color: #F1F1F1; font-weight: bold; }
+.ui-widget-header { color: #F1F1F1; }
 .ui-widget-header a { color: #eaf5f7; }
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { font-weight: normal; color: #606060; }
-.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #606060; text-decoration: none; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { color: #666666; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #666666; text-decoration: none; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { font-weight: normal; color: #606060; }
-.ui-state-hover a, .ui-state-hover a:hover { color: #FF0000; -webkit-transition: all 0.2s ease-out; -o-transition: all 0.2s ease-out; transition: all 0.2s ease-out; text-decoration: none; }
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { font-weight: normal; color:#FF0000; }
-.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color:#FF0000; text-decoration: none; outline: none; }
+.ui-state-hover a, .ui-state-hover a:hover { color: red; -webkit-transition: all 0.2s ease-out; -o-transition: all 0.2s ease-out; transition: all 0.2s ease-out; text-decoration: none; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { color: #333; background-color: #ffffff; border-radius: 6px 6px 0px 0px; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #333; text-decoration: none; outline: none; }
 .ui-widget :active { outline: none; }
 
 /* Interaction Cues
@@ -309,6 +309,6 @@
 .ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em; text-decoration: none; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: default; }
-.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; text-transform: uppercase; font-weight: 200; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-panel { display: block; border-width: 2; padding: 2em 0em 0em 0em; background: none; }
 .ui-tabs .ui-tabs-hide { display: none !important; }

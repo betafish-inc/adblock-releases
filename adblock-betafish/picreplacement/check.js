@@ -2,9 +2,12 @@
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
 const {checkWhitelisted} = require("whitelisting");
 const {recordGeneralMessage} = require('./../servermessages').ServerMessages;
+const MY_ADBLOCK_FEATURE_VERSION = 0;
+
 var License = (function () {
   var licenseStorageKey = 'license';
   var installTimestampStorageKey = 'install_timestamp';
+  var myAdBlockEnrollmentFeatureKey = 'myAdBlockFeature';
   var licenseAlarmName = 'licenseAlarm';
   var theLicense = undefined;
   var oneDayInMinutes = 1140;
@@ -105,6 +108,7 @@ var License = (function () {
 
   return {
     licenseStorageKey: licenseStorageKey,
+    myAdBlockEnrollmentFeatureKey: myAdBlockEnrollmentFeatureKey,
     initialized: initialized,
     licenseAlarmName: licenseAlarmName,
     checkPingResponse: function(pingResponseData) {
@@ -126,6 +130,20 @@ var License = (function () {
           theLicense.myadblock_enrollment = true;
           License.set(theLicense);
         });
+
+        // Create myAdBlock storage if it doesn't already exist
+        chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey, (myAdBlockInfo) => {
+          if (!$.isEmptyObject(myAdBlockInfo)) {
+            return;
+          }
+          var myAdBlockFeature = {
+            'version': MY_ADBLOCK_FEATURE_VERSION,
+            'displayPopupMenuBanner': true,
+            'takeUserToMyAdBlockTab': false,
+          };
+          chrome.storage.local.set({ myAdBlockFeature });
+        });
+
       }
     },
     get: function() {
@@ -259,12 +277,25 @@ var License = (function () {
   };
 })();
 
+var reloadOptionsPageTabs = function() {
+  var optionTabQuery = {
+    title: 'AdBlock Options',
+    url: 'chrome-extension://*/options.html*'
+  }
+  chrome.tabs.query(optionTabQuery, function(tabs) {
+    for (var i in tabs) {
+      chrome.tabs.reload(tabs[i].id);
+    }
+  });
+}
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    if (request.command === "payment_success" && request.transID && request.selections && request.version === 1) {
+    if (request.command === "payment_success" && request.transID && request.version === 1) {
         var currentLicense = {};
         currentLicense.status = "active";
         License.set(currentLicense);
+        reloadOptionsPageTabs();
         var delay = 30 * 60 * 1000; // 30 minutes
         window.setTimeout(function() {
           License.updatePeriodically();
@@ -272,15 +303,7 @@ chrome.runtime.onMessage.addListener(
         setSetting("picreplacement", true);
         var guide = channels.getGuide();
         for (var id in guide) {
-          if (guide[id].name === "CatsChannel") {
-            channels.setEnabled(id, request.selections.cat);
-          }
-          if (guide[id].name === "DogsChannel") {
-            channels.setEnabled(id, request.selections.dog);
-          }
-          if (guide[id].name === "LandscapesChannel") {
-            channels.setEnabled(id, request.selections.landscape);
-          }
+          channels.setEnabled(id, true);
         }
         sendResponse({ ack: true });
     }
@@ -292,7 +315,7 @@ License.ready().then(function() {
     if (!(request.message == "load_my_adblock")) {
       return;
     }
-    if (sender.url && sender.url.startsWith("http") && getSettings().picreplacement) {
+    if (sender.url && sender.url.startsWith("http") && getSettings().picreplacement && channels.isAnyEnabled()) {
       chrome.tabs.executeScript(sender.tab.id, {file: "adblock-picreplacement-image-sizes-map.js", frameId: sender.frameId, runAt:"document_start"}, function(){
           if (chrome.runtime.lastError) {
               log(chrome.runtime.lastError)

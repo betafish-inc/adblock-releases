@@ -112,11 +112,21 @@ Channels.prototype = {
     }
   },
 
+  isAnyEnabled: function() {
+    for (var id in this._channelGuide) {
+      var channel = this._channelGuide[id];
+      if (channel.enabled) {
+        return true;
+      }
+    }
+    return false;
+  },
+
   // Returns a random Listing from all enabled channels or from channel
   // |channelId| if specified, trying to match the ratio of |width| and
   // |height| decently.  Returns undefined if there are no enabled channels.
   randomListing: function(opts) {
-    if (!getSettings().picreplacement) {
+    if (!getSettings().picreplacement && !this.isAnyEnabled()) {
       return undefined;
     }
     // if the element to be replace is 'fixed' in position, it may make for bad pic replacement element.

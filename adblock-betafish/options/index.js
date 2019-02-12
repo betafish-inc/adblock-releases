@@ -15,9 +15,40 @@ const Prefs               = backgroundPage.Prefs;
 const Synchronizer        = backgroundPage.Synchronizer;
 const Utils               = backgroundPage.Utils;
 const NotificationStorage = backgroundPage.Notification;
+const License             = backgroundPage.License;
+
+var myAdBlockTabDisplay = () => {
+  if (License.shouldShowMyAdBlockEnrollment()) {
+    $('#myadblock-tab').show();
+    $('#myadblock-tab-lock').show();
+  } else if (License.isActiveLicense()) {
+    $('#myadblock-tab').show();
+    $('#myadblock-tab-lock').hide();
+  } else {
+    $('#myadblock-tab').hide();
+    return $('#myadblock-tab');
+  }
+}
+
+var showMyAdBlockTabContent = () => {
+  if (License.shouldShowMyAdBlockEnrollment()) {
+    displayMyAdBlock('enrolled-free-user-view');
+  } else if (License.isActiveLicense()) {
+    displayMyAdBlock('paid-user-view');
+  }
+}
+
+// Make sure to always display only 1 of the
+// available myAdBlock tab content views
+var displayMyAdBlock = function(viewId) {
+  $('.myadblock-tab-content').hide();
+  $(`#${ viewId }`).show();
+}
 
 function loadOptions()
 {
+  let hiddenTab = myAdBlockTabDisplay();
+
   if (backgroundPage &&
       typeof backgroundPage.getSettings !== "function") {
     // if the backgroudPage isn't available, wait 50 ms, and reload page
@@ -42,7 +73,31 @@ function loadOptions()
       activeTab = searchQuery.tab;
     }
   }
+
+  // Make sure to not use myAdBlock tab index when the myAdBlock tab
+  // is hidden because the user is not enrolled
+  if (hiddenTab && (activeTab === hiddenTab.index() || activeTab == null))
+    activeTab = 1;
+
+  chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey, (myAdBlockInfo) => {
+    if (!myAdBlockInfo || !myAdBlockInfo.myAdBlockFeature) {
+      loadTabs(activeTab);
+      return;
+    }
+
+    if (myAdBlockInfo.myAdBlockFeature.takeUserToMyAdBlockTab) {
+      activeTab = 0;
+      myAdBlockInfo.myAdBlockFeature.takeUserToMyAdBlockTab = false;
+      chrome.storage.local.set(myAdBlockInfo);
+    }
+
+    loadTabs(activeTab);
+  });
+
   backgroundPage.recordGeneralMessage("options_opened", undefined, { tab: activeTab });
+}
+
+var loadTabs = function(activeTab) {
   $('#tabpages').tabs({
     // Go to the last opened tab
     active: activeTab,
@@ -73,6 +128,8 @@ function loadOptions()
     {
       //translation
       localizePage();
+
+      showMyAdBlockTabContent();
 
       // Toggle won't handle .advanced.chrome-only
       if (optionalSettings &&

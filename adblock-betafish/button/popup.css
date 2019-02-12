@@ -1,5 +1,5 @@
 body {
-  background-color: #f8f8f8;
+  background-color: white;
   margin: 0px;
 }
 #wrapper {
@@ -14,13 +14,8 @@ body {
   border-top: 1px solid #e2e2e2;
   margin: 5px 10px;
 }
-.logo {
-  cursor: pointer;
-  height: auto;
-  width: 45%;
-}
 .menu-entry {
-  padding: 3px 4px 3px 8px;
+  padding: 3px 4px 3px 10px;
   cursor: pointer;
 }
 .menu-entry:hover {
@@ -28,38 +23,26 @@ body {
   background: #F2F2F2;
 }
 .menu-status-italic {
-  padding: 4px 2px 0px 8px;
+  padding: 4px 2px 0px 10px;
   font-style: italic;
   display: none;
  }
-.info {
-  background: #f7f6f2;
-  margin: 5px;
-  padding: 0px 5px 0px 5px;
-  background: #f7f6f2;
-  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.10);
-}
 #div_status_beta {
-  padding-left: 8px;
+  padding-left: 10px;
 }
 #titletext {
-  padding: 8px 8px 2px 0px;
-  text-align: center;
+  padding: 10px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .box {
   margin: 0px;
-  background: #fff;
+  background-color: #f4f4f4;
   padding: 10px;
 }
-#help_link {
-  color: #2a2a2a;
-}
-#help_link:hover {
-  color: #1855ed;
-  background: #f8f8f8;
-}
-#help_link, #link_open {
-  padding: 3px 0px 3px 8px;
+#link_open {
+  padding: 3px 0px 3px 10px;
   display: inline-block;
 }
 #link_close {
@@ -69,6 +52,9 @@ body {
 #block_counts {
   display: none;
   margin-bottom: 5px;
+}
+#block_counts.remove-bottom-margin {
+  margin-bottom: 0px;
 }
 .header {
   font-weight: bold;
@@ -184,4 +170,77 @@ input[type="checkbox"]:checked:before {
 }
 .float-right {
   float: right;
+}
+#header-icons {
+  display: flex;
+  width: 50px;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-icon-box {
+  width: 22px;
+  height: 20px;
+}
+.header-logo {
+  content: url(icons/logo.png);
+  cursor: pointer;
+  height: auto;
+  width: 45%;
+}
+.header-icon {
+  content: "";
+  display: inline-block;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  cursor: pointer;
+  margin: 2px 3px;
+  background-size: 16px auto;
+  height: 16px;
+  width: 16px;
+}
+.header-icon:hover {
+  cursor: pointer;
+  background-position: 0px -16px;
+}
+#div_options {
+  background-image: url(icons/options.png);
+}
+#help_link {
+  background-image: url(icons/help.png);
+}
+#div_myadblock_enrollment {
+  background-color: red;
+  color: white;
+  position: relative;
+  line-height: 32px;
+  padding: 0 10px;
+}
+#div_myadblock_enrollment.bottom-space {
+  margin-bottom: 5px;
+}
+#div_myadblock_enrollment:hover,
+#div_myadblock_enrollment:hover .pointer-up {
+  -webkit-transition: all 0.1s ease-out;
+  background-color: #E40D0D;
+  font-weight: bold;
+}
+.pointer-up {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  transform: rotate(45deg) skew(15deg, 15deg);
+  background: red;
+  right: 9px;
+  z-index: -1;
+}
+/* Retina & hi DPI displays only */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  #div_options {
+    background-image: url(icons/options@2x.png);
+  }
+  #help_link {
+    background-image: url(icons/help@2x.png);
+  }
 }

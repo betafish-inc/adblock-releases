@@ -682,7 +682,7 @@ var picreplacement = {
             width: settingsImageWidth,
             src: settingsImageURL,
             click: function() {
-              BGcall("openTab", "adblock-picreplacement-options-general.html" );
+              BGcall("openTab", "options.html?tab=0" );
             },
             on: {
               mouseenter: function( event ) {

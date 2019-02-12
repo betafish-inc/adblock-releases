@@ -411,34 +411,38 @@ var getCurrentTabInfo = function (callback, secondTime)
 
       return;
     }
-    const page = new ext.Page(tab);
-    var disabledSite = pageIsUnblockable(page.url.href);
-    var displayStats = Prefs.show_statsinicon;
-
-    var result =
+    chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey, (myAdBlockInfo) =>
     {
-      page: page,
-      tab: tab,
-      disabledSite: disabledSite,
-      settings: getSettings()
-    };
+      const page = new ext.Page(tab);
+      var disabledSite = pageIsUnblockable(page.url.href);
+      var displayStats = Prefs.show_statsinicon;
 
-    if (!disabledSite)
-    {
-      result.whitelisted = checkWhitelisted(page);
-    }
-    if (getSettings().youtube_channel_whitelist
-        && parseUri(tab.url).hostname === 'www.youtube.com') {
-      result.youTubeChannelName = ytChannelNamePages.get(page.id);
-      // handle the odd occurence of when the  YT Channel Name
-      // isn't available in the ytChannelNamePages map
-      // obtain the channel name from the URL
-      // for instance, when the forward / back button is clicked
-      if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
-        result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
+      var result =
+      {
+        page: page,
+        tab: tab,
+        disabledSite: disabledSite,
+        settings: getSettings(),
+        myAdBlockInfo: myAdBlockInfo
+      };
+
+      if (!disabledSite)
+      {
+        result.whitelisted = checkWhitelisted(page);
       }
-    }
-    callback(result);
+      if (getSettings().youtube_channel_whitelist
+          && parseUri(tab.url).hostname === 'www.youtube.com') {
+        result.youTubeChannelName = ytChannelNamePages.get(page.id);
+        // handle the odd occurence of when the  YT Channel Name
+        // isn't available in the ytChannelNamePages map
+        // obtain the channel name from the URL
+        // for instance, when the forward / back button is clicked
+        if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
+          result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
+        }
+      }
+      callback(result);
+    });// end of chrome.storage.local.get
   });
 };
 
