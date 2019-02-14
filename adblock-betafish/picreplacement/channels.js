@@ -223,11 +223,11 @@ Channels.prototype = {
     var entries = storage_get("channels");
     if (!entries || (entries.length > 0 && !entries[0].name)) {
       this.add({name: "DogsChannel", param: undefined,
-                enabled: true});
+                enabled: false});
       this.add({name: "CatsChannel", param: undefined,
                 enabled: true});
       this.add({name: "LandscapesChannel", param: undefined,
-                enabled: true});
+                enabled: false});
     }
     else {
       for (var i=0; i < entries.length; i++) {

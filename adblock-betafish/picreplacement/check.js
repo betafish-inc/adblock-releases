@@ -301,10 +301,6 @@ chrome.runtime.onMessage.addListener(
           License.updatePeriodically();
         }, delay);
         setSetting("picreplacement", true);
-        var guide = channels.getGuide();
-        for (var id in guide) {
-          channels.setEnabled(id, true);
-        }
         sendResponse({ ack: true });
     }
 });
