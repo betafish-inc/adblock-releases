@@ -1,4 +1,4 @@
-
+var $ = require('../jquery/jquery.min');
 const Subscription = require('subscriptionClasses').Subscription;
 
 const {imageSizesMap, WIDE, TALL, SKINNYWIDE, SKINNYTALL, BIG, SMALL} = require('./image-sizes-map');

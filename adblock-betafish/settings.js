@@ -1,4 +1,6 @@
-
+var $ = require('./jquery/jquery.min');
+window.jQuery = $;
+window.$ = $;
 const {LocalCDN} = require('./localcdn');
 // OPTIONAL SETTINGS
 function Settings()

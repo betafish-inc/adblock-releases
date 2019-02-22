@@ -387,63 +387,84 @@ var removeGABTabListeners = function (saveState)
 // Returns: null (asynchronous)
 var getCurrentTabInfo = function (callback, secondTime)
 {
-  chrome.tabs.query(
+  try
   {
-    active: true,
-    lastFocusedWindow: true,
-  }, tabs =>
-  {
-    if (tabs.length === 0)
+    chrome.tabs.query(
     {
-      return; // For example: only the background devtools or a popup are opened
-    }
-    tab = tabs[0];
-
-    if (tab && !tab.url)
+      active: true,
+      lastFocusedWindow: true,
+    }, tabs =>
     {
-      // Issue 6877: tab URL is not set directly after you opened a window
-      // using window.open()
-      if (!secondTime)
-        window.setTimeout(function ()
+      try
+      {
+        if (tabs.length === 0)
         {
-          getCurrentTabInfo(callback, true);
-        }, 250);
-
-      return;
-    }
-    chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey, (myAdBlockInfo) =>
-    {
-      const page = new ext.Page(tab);
-      var disabledSite = pageIsUnblockable(page.url.href);
-      var displayStats = Prefs.show_statsinicon;
-
-      var result =
-      {
-        page: page,
-        tab: tab,
-        disabledSite: disabledSite,
-        settings: getSettings(),
-        myAdBlockInfo: myAdBlockInfo
-      };
-
-      if (!disabledSite)
-      {
-        result.whitelisted = checkWhitelisted(page);
-      }
-      if (getSettings().youtube_channel_whitelist
-          && parseUri(tab.url).hostname === 'www.youtube.com') {
-        result.youTubeChannelName = ytChannelNamePages.get(page.id);
-        // handle the odd occurence of when the  YT Channel Name
-        // isn't available in the ytChannelNamePages map
-        // obtain the channel name from the URL
-        // for instance, when the forward / back button is clicked
-        if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
-          result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
+          return; // For example: only the background devtools or a popup are opened
         }
+        tab = tabs[0];
+
+        if (tab && !tab.url)
+        {
+          // Issue 6877: tab URL is not set directly after you opened a window
+          // using window.open()
+          if (!secondTime)
+            window.setTimeout(function ()
+            {
+              getCurrentTabInfo(callback, true);
+            }, 250);
+
+          return;
+        }
+        chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey, (myAdBlockInfo) =>
+        {
+          try
+          {
+            const page = new ext.Page(tab);
+            var disabledSite = pageIsUnblockable(page.url.href);
+            var displayStats = Prefs.show_statsinicon;
+
+            var result =
+            {
+              page: page,
+              tab: tab,
+              disabledSite: disabledSite,
+              settings: getSettings(),
+              myAdBlockInfo: myAdBlockInfo
+            };
+
+            if (!disabledSite)
+            {
+              result.whitelisted = checkWhitelisted(page);
+            }
+            if (getSettings().youtube_channel_whitelist
+                && parseUri(tab.url).hostname === 'www.youtube.com') {
+              result.youTubeChannelName = ytChannelNamePages.get(page.id);
+              // handle the odd occurence of when the  YT Channel Name
+              // isn't available in the ytChannelNamePages map
+              // obtain the channel name from the URL
+              // for instance, when the forward / back button is clicked
+              if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
+                result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
+              }
+            }
+            callback(result);
+          }
+          catch(err)
+          {
+            callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
+          }
+        });// end of chrome.storage.local.get
       }
-      callback(result);
-    });// end of chrome.storage.local.get
-  });
+      catch(err)
+      {
+        callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
+      }
+    });
+  }
+  catch(err)
+  {
+    callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
+  }
 };
 
 // Returns true if the url cannot be blocked
@@ -944,6 +965,26 @@ settings.onload().then(function()
   if (getSettings().youtube_channel_whitelist)
   {
     addYouTubeHistoryStateUpdateHanlder();
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab)
+    {
+      if (!getSettings().youtube_channel_whitelist)
+      {
+        return;
+      }
+      if (ytChannelNamePages.get(tabId) && parseUri(tab.url).hostname !== 'www.youtube.com')
+      {
+        ytChannelNamePages.delete(tabId);
+        return;
+      }
+    });
+    chrome.tabs.onRemoved.addListener(function(tabId)
+    {
+      if (!getSettings().youtube_channel_whitelist)
+      {
+        return;
+      }
+      ytChannelNamePages.delete(tabId);
+    });
   }
 });
 
@@ -1024,22 +1065,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 var ytChannelNamePages = new Map();
-
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  if (!getSettings().youtube_channel_whitelist) {
-    return;
-  }
-  if (ytChannelNamePages.get(tabId) && parseUri(tab.url).hostname !== 'www.youtube.com') {
-    ytChannelNamePages.delete(tabId);
-    return;
-  }
-});
-chrome.tabs.onRemoved.addListener(function(tabId) {
-  if (getSettings().youtube_channel_whitelist) {
-    return;
-  }
-  ytChannelNamePages.delete(tabId);
-});
 
 // used by the Options pages, since they don't have access to setContentBlocker
 function isSafariContentBlockingAvailable()

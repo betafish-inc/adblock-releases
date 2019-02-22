@@ -1,7 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.40.1
-backgroundScripts += adblock-jquery.js
+version = 3.41.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -291,6 +290,7 @@ uninstall = ../../adblock-betafish/alias/uninstall.js
 
 [bundles]
 lib/adblockplus.js +=
+  ../adblock-betafish/jquery/jquery.min.js
   ../adblock-betafish/errorreporting.js
   ../adblock-betafish/functions.js
   ../adblock-betafish/survey.js

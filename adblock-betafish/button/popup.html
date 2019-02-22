@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="adblock-button-popup.css"/>
     <script src="adblock-jquery.js"></script>
     <script src="adblock-functions.js"></script>
-    <script src="adblock-button-popup.js"></script>
   </head>
   <body style="overflow:hidden;">
     <div id="wrapper">
@@ -23,6 +22,25 @@
             </div>
 
           </span>
+        </div>
+
+        <div id="div_status_error" style="display:none; font-size: 14px; padding: 5px 10px 0px 10px;">
+          <p i18n_error="error_msg_header"></p>
+          <div id="first_msg">
+            <span i18n_error="error_msg_help_us"></span>
+            <a id="errorreport" style="cursor: pointer;" i18n_error="error_msg_here"></a>
+            <br />
+            <br />
+          </div>
+          <p id="second_msg" i18n_error="error_msg_thank_you" style="display:none;">
+          </p>
+          <span id="reload_msg" i18n_error="error_msg_reload" >
+          </span>
+          <a id="reload" style="cursor: pointer;" i18n_error="error_msg_here"></a>
+          <br /><br />
+          <span i18n_error="error_msg_help" >
+          </span>
+          <a i18n_error="error_msg_here" style="cursor: pointer;" href="https://help.getadblock.com/support/solutions/articles/6000137757-the-adblock-menu-doesn-t-open-or-contains-only-a-donation-request-or-icons-in-chrome" target="_blank" ></a>
         </div>
 
         <div id="div_myadblock_enrollment" class="menu-entry">
@@ -122,4 +140,5 @@
       </div>
     </div> <!-- wrapper -->
   </body>
+  <script src="adblock-button-popup.js"></script>
 </html>
