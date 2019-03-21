@@ -2,27 +2,22 @@
 // Set to true to get noisier console.log statements
 var VERBOSE_DEBUG = false;
 
-// Temporary...
-var SAFARI = false;
-
-// Global variable for Opera, so we can make specific things for Opera
-var OPERA = navigator.userAgent.indexOf("OPR") > -1;
-
 // Enabled in adblock_start_common.js and background.js if the user wants
 var logging = function (enabled) {
   if (enabled) {
     loggingEnable = true;
     window.log = function () {
-      if (VERBOSE_DEBUG || arguments[0] != '[DEBUG]') // comment out for verbosity
+      if (VERBOSE_DEBUG || arguments[0] !== '[DEBUG]') { // comment out for verbosity
         console.log.apply(console, arguments);
-    };
+      }
+    }
   } else {
     window.log = function () {
-    };
+    }
 
     loggingEnable = false;
   }
-};
+}
 
 logging(false); // disabled by default
 var loggingEnable = false;
@@ -224,21 +219,15 @@ var sessionstorage_get = function(key)
 
 // Inputs: key:string.
 // Returns value if key exists, else undefined.
-var sessionstorage_set = function(key, value)
-{
-  if (value === undefined)
-  {
+var sessionstorage_set = function(key, value) {
+  if (value === undefined) {
     sessionStorage.removeItem(key);
     return;
   }
-  try
-  {
+  try {
     sessionStorage.setItem(key, JSON.stringify(value));
-  }
-  catch (ex)
-  {
-    if (ex.name == "QUOTA_EXCEEDED_ERR" && !SAFARI)
-    {
+  } catch (ex) {
+    if (ex.name == "QUOTA_EXCEEDED_ERR") {
       alert(translate("storage_quota_exceeded"));
       openTab("options/index.html#ui-tabs-2");
     }
@@ -257,9 +246,7 @@ var BGcall = function()
     args.push(arguments[i]);
   var fn = args.shift();
   var has_callback = (typeof args[args.length - 1] == "function");
-  var callback = (has_callback ? args.pop() : function()
-  {
-  });
+  var callback = (has_callback ? args.pop() : function() {});
   chrome.runtime.sendMessage({
     command : "call",
     fn : fn,

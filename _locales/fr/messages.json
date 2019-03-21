@@ -7,6 +7,14 @@
     "message": "L'extension Chrome la plus populaire, avec plus de 60 millions d'utilisateurs ! Bloque les publicités partout sur le web.",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
+  "name_devbuild": {
+    "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
+    "message": "Version de développement AdBlock"
+  },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release \/ published builds.  Should not be translated",
+    "message": "AdBlock"
+  },
   "description_edge": {
     "message": "AdBlock. Le No.1 des bloqueurs de publicités avec plus 200 millions de téléchargements. Bloque les publicités partout sur le web.",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -1148,7 +1156,7 @@
     "description": "A resource type"
   },
   "typeother": {
-    "message": "autre",
+    "message": "Autre",
     "description": "A resource type"
   },
   "typepopup": {
@@ -1865,6 +1873,14 @@
     "message": "Activer MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
+  "adblockprotectenrollmentbutton": {
+    "message": "Essayez maintenant, c’est gratuit",
+    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
+  },
+  "adblockprotectenrollmenttext": {
+    "message": "Assurez la sécurité de vos données personnelles avec AdBlock Protect",
+    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
+  },
   "myadblockoptionspageheader": {
     "message": "Options MyAdBlock",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1912,5 +1928,145 @@
   "changes_to_adblock": {
     "message": "Nous avons modifié AdBlock !",
     "description": "Link to Options page with more information about the changes."
+  },
+  "new_myadblock_feature_available": {
+    "message": "Cliquez ici pour débloquer de nouvelles fonctionnalités !",
+    "description": "The text in the popup menu item saying there is a new MyAdBlock feature and takes you to the MyAdBlock tab in the option page."
+  },
+  "images_coming_soon": {
+    "message": "Plus de photos à venir !",
+    "description": "The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
+  "myadblock_pic_replacemenet_description": {
+    "message": "Remplacer des publicités par des images que vous aimez",
+    "description": "The text briefly describing what the feature does in the MyAdBlock tab in the option page."
+  },
+  "myadblock_payment_not_available_title": {
+    "message": "OH NON ! Impossible d'établir une connexion avec nos serveurs",
+    "description": "The title of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_payment_not_available_text": {
+    "message": "Nous vous remercions de votre intérêt pour MyAdBlock ! Malheureusement, nous ne pouvons pas traiter les paiements en ce moment. Veuillez réessayer ultérieurement.",
+    "description": "The text of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_options_page_header": {
+    "message": "MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_picreplacement_exlained": {
+    "message": "Faites un choix parmi les catégories ci-dessous et AdBlock remplacera de temps en temps des publicités par des images de haute qualité pour égayer votre journée.",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "error_msg_header": {
+    "message": "Oups ! Désolé, le menu AdBlock avait du mal à charger.",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us": {
+    "message": "Aidez-nous à résoudre ce problème en nous envoyant des données de débogage : Cliquez ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_thank_you": {
+    "message": "Merci",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_reload": {
+    "message": "Ensuite, essayer de recharger l’extension : Cliquez ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help": {
+    "message": "Si cela ne fonctionne pas, une aide plus complète est disponible : Cliquez ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_here": {
+    "message": "ici",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "generaloptions2": {
+    "message": "Options générales",
+    "description": "Title of one of the Options page tabs"
+  },
+  "debuginlogoption2": {
+    "message": "Afficher les relevés de débogage dans le log console",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "slows_down_extension": {
+    "message": "ralentit l’extension",
+    "description": "Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url": {
+    "message": "entrer une URL",
+    "description": "Placeholder text in the Custom Filter list URL bar"
+  },
+  "filterantisocial2": {
+    "message": "Liste de filtres antisociaux",
+    "description": "A filter list"
+  },
+  "filter_antisocial_explained": {
+    "message": "retire les boutons de réseaux sociaux",
+    "description": "A filter list explaination"
+  },
+  "filterannoyances2": {
+    "message": "Fanboy's Annoyances",
+    "description": "A filter list"
+  },
+  "filter_annoyances_explained": {
+    "message": "bloque les pop-ups à l'intérieur des pages, les widgets de réseaux sociaux et d'autres désagréments",
+    "description": "A filter list explaination"
+  },
+  "filterwarning_removal2": {
+    "message": "Adblock Warning Removal List",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filter_warning_removal_explained": {
+    "message": "supprime les messages d'avertissement contre les bloqueurs de publicités",
+    "description": "A filter list explaination"
+  },
+  "filterlistsrock2": {
+    "message": "Les listes de filtres bloquent la plupart des publicités sur le web. Vous pouvez également...",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads2": {
+    "message": "Bloquer plus de publicités",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2": {
+    "message": "Ne plus bloquer des publicités",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2": {
+    "message": "Modifier manuellement vos filtres",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2": {
+    "message": "Modifier les filtres désactivés",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1": {
+    "message": "Attention : en cas d'erreur, vous pouvez perturber le fonctionnement de beaucoup d'autres filtres, y compris les filtres officiels !",
+    "description": "Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2": {
+    "message": "Lisez le [[didacticiel de syntaxe de filtre]] pour apprendre comment ajouter des filtres avancés de liste blanche et de liste noire.",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2": {
+    "message": "Donnez ce que vous voulez !",
+    "description": "Text of a payment request link"
+  },
+  "translator_credit2": {
+    "message": "Merci pour leur aide en traduction...",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2": {
+    "message": "choisir la langue",
+    "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "Autoriser la mise sur liste blanche de chaînes YouTube™ spécifiques",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser": {
+    "message": "nécessite le redémarrage de votre navigateur",
+    "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
   }
 }

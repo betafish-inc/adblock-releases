@@ -1,39 +1,53 @@
-  <!doctype html><!-- required to help Safari not get confused when injecting this fragment -->
-  <div>
-    <div id="message_holder" class="failed_fetch"></div>
-    <h2 i18n="filterstabtitle"></h2>
-    <div class="footnote padding adblock-preserve-whitespace" i18n="filterlistlink" i18n_replacement_el="footnotelink"> <a id="footnotelink" href="https://adblockplus.org/en/subscriptions" target="_blank"> </a> </div>
-    <div i18n="updatenowmessage2" class="padding" i18n_replacement_el="btnUpdateNow"> <input type="button" id="btnUpdateNow" > </input> </div>
-    <div class="padding">
-      <div id="filter_subscriptions">
-        <h3 i18n="adblockinglist"></h2>
-        <div id="easylist_info">
-          <b><span i18n="easylist_disable_done"></span></b>
-          <span i18n="easylist_disable_how_to_reenable"></span>
-          <br/>
-        </div>
-        <div id="ad_blocking_list"></div>
-        <div id="language_list"></div>
-        <div id="language_dropdown_container">
-          <span i18n="languagedropdowndescription"></span>
-          <select id='language_select'>
-              <option value="" i18n="selectlanguage"></option>
-          </select>
-        </div>
-        <h3 i18n="otherfilters"></h3>
-        <div id="other_filter_lists"></div>
-        <h3 i18n="customfilters"></h3>
-        <div id="custom_filter_lists"></div>
-      </div>
-      <div class="padding" style="margin-top:10px;">
-        <span i18n="orenteraurl"></span>
-        <input id="txtNewSubscriptionTitle" style="width:50px; display:none;" type="text" />
-        <input id="txtNewSubscriptionUrl" style="width:300px;" type="text" />
-        <input type="button" id="btnNewSubscriptionUrl" i18n_value="subscribebutton" />
-      </div>
+<!doctype html>
+<div class="option-page-box">
+  <div class="option-page-content">
+
+    <div id="message_holder" class="failed_fetch red-text"></div>
+
+    <h1 i18n="filterstabtitle" class="page-title"></h1>
+    <a class="section-padding bottom-line" i18n="filterlistlink" i18n_replacement_el="filterlistlink" href="https://adblockplus.org/en/subscriptions" target="_blank">
+      <span id="filterlistlink" class="blue-text"></span>
+    </a>
+
+    <div i18n="updatenowmessage2" i18n_replacement_el="btnUpdateNow" class="add-space-between align-items-center section-padding">
+      <button class="btn red long right" type="button" id="btnUpdateNow"></button>
     </div>
 
+    <div id="filter_subscriptions">
+
+      <h2 i18n="adblockinglist" class="paragraph-title"></h2>
+
+      <div id="easylist_info">
+        <b><span i18n="easylist_disable_done"></span></b>
+        <span i18n="easylist_disable_how_to_reenable"></span>
+        <br/>
+      </div>
+      <div id="ad_blocking_list"></div>
+      <div id="language_list"></div>
+      <div id="language_dropdown_container">
+        <span i18n="languagedropdowndescription"></span>
+        <select id='language_select'>
+          <option value="" i18n="selectlanguage2"></option>
+        </select>
+      </div>
+
+      <h2 i18n="otherfilters" class="paragraph-title"></h2>
+      <div id="other_filter_lists"></div>
+
+      <h2 i18n="customfilters" class="paragraph-title"></h2>
+      <div id="custom_filter_lists"></div>
+    </div>
+
+    <div class="space-between-line">
+      <input id="txtNewSubscriptionUrl" type="text" />
+      <button class="btn red long" type="button" id="btnNewSubscriptionUrl" i18n="subscribebutton" />
+    </div>
+
+
     <p id="btnShowLinks" class="advanced">
-     <span id="btnShowLinks" i18n="showlinkstolists2"></span>
+    <span id="btnShowLinks" i18n="showlinkstolists2"></span>
     </p>
+
+    <div class="translation_credits italic do-not-display"></div>
   </div>
+</div>

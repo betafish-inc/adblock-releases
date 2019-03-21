@@ -13,8 +13,8 @@
 .ui-helper-hidden { display: none; }
 .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px 1px 1px 1px); clip: rect(1px,1px,1px,1px); }
 .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.0; text-decoration: none; font-size: 100%; list-style: none; }
-.ui-helper-clearfix:before, .ui-helper-clearfix:after { content: ""; display: table; }
-.ui-helper-clearfix:after { clear: both; }
+.ui-helper-clearfix::before, .ui-helper-clearfix::after { content: ""; display: table; }
+.ui-helper-clearfix::after { clear: both; }
 .ui-helper-clearfix { zoom: 1; }
 .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
 
@@ -53,11 +53,11 @@
 
 /* Component containers
 ----------------------------------*/
-.ui-widget { font: 15px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1em;  border-radius: 5px; font-weight: 300; }
+.ui-widget { font-family: "Lato", Arial, sans-serif; font-size: 16px; line-height: 25px; border-radius: 6px; font-weight: normal; }
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget-content { color: #666666; border: none;}
-.ui-widget-content a { color: #4D7BD6; text-decoration: none; }
-.ui-widget-content a:hover { color: red; -webkit-transition: all 0.2s ease-out; transition: all 0.2s ease-out; }
+.ui-widget-content a { color: #666666; text-decoration: none; }
+.ui-widget-content a:hover { color: #333; cursor: pointer; }
 .ui-widget-header { color: #F1F1F1; }
 .ui-widget-header a { color: #eaf5f7; }
 

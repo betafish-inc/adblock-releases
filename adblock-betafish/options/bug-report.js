@@ -283,56 +283,56 @@ $(document).ready(function ()
     if ($name.val() === '')
     {
       problems++;
-      $name.addClass('inputError');
+      $name.addClass('input-error');
     } else
     {
-      $name.removeClass('inputError');
+      $name.removeClass('input-error');
     }
 
     if ($email.val() === '' ||
       $email.val().search(/^.+@.+\..+$/) === -1)
     {
       problems++;
-      $email.addClass('inputError');
+      $email.addClass('input-error');
     } else
     {
-      $email.removeClass('inputError');
+      $email.removeClass('input-error');
     }
 
     if ($title.val() === '')
     {
       problems++;
-      $title.addClass('inputError');
+      $title.addClass('input-error');
     } else
     {
-      $title.removeClass('inputError');
+      $title.removeClass('input-error');
     }
 
     if ($repro.val() === '1. \n2. \n3. ')
     {
       problems++;
-      $repro.addClass('inputError');
+      $repro.addClass('input-error');
     } else
     {
-      $repro.removeClass('inputError');
+      $repro.removeClass('input-error');
     }
 
     if ($expect.val() === '')
     {
       problems++;
-      $expect.addClass('inputError');
+      $expect.addClass('input-error');
     } else
     {
-      $expect.removeClass('inputError');
+      $expect.removeClass('input-error');
     }
 
     if ($actual.val() === '')
     {
       problems++;
-      $actual.addClass('inputError');
+      $actual.addClass('input-error');
     } else
     {
-      $actual.removeClass('inputError');
+      $actual.removeClass('input-error');
     }
 
     if (problems === 0)

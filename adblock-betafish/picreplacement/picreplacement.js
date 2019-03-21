@@ -571,7 +571,7 @@ var picreplacement = {
             "padding": 3,
             "box-sizing": "border-box",
             "border": "2px solid rgb(128, 128, 128)",
-            "font": "normal small Arial, sans-serif",
+            "font": "'Lato', Arial, sans-serif",
             "color": "black",
             "background-color": "rgba(0, 0, 0, 0.7)",
           } });

@@ -161,89 +161,77 @@ const contextMenuItem = (() =>
 })();
 
 // Bounce messages back to content scripts.
-if (!SAFARI)
-{
-  var emitPageBroadcast = (function ()
-  {
-    var injectMap =
-    {
-        top_open_whitelist_ui:
-        {
-          allFrames: false,
-          include: [
-            'adblock-jquery.js',
-            'adblock-jquery-ui.js',
-            'adblock-uiscripts-load_jquery_ui.js',
-            'adblock-uiscripts-top_open_whitelist_ui.js',
-            ],
-        },
-        top_open_blacklist_ui:
-        {
-          allFrames: false,
-          include: [
-            'adblock-jquery.js',
-            'adblock-jquery-ui.js',
-            'adblock-uiscripts-load_jquery_ui.js',
-            'adblock-uiscripts-blacklisting-overlay.js',
-            'adblock-uiscripts-blacklisting-clickwatcher.js',
-            'adblock-uiscripts-blacklisting-elementchain.js',
-            'adblock-uiscripts-blacklisting-blacklistui.js',
-            'adblock-uiscripts-top_open_blacklist_ui.js',
-            ],
-        },
-        send_content_to_back:
-        {
-          allFrames: true,
-          include: ['adblock-uiscripts-send_content_to_back.js'],
-        },
-      };
-
-    // Inject the required scripts to execute fnName(parameter) in
-    // the current tab.
-    // Inputs: fnName:string name of function to execute on tab.
-    //         fnName must exist in injectMap above.
-    //         parameter:object to pass to fnName.  Must be JSON.stringify()able.
-    //         injectedSoFar?:int used to recursively inject required scripts.
-    var executeOnTab = function (fnName, parameter, injectedSoFar)
-    {
-      injectedSoFar = injectedSoFar || 0;
-      var data = injectMap[fnName];
-      var details = { allFrames: data.allFrames };
-
-      // If there's anything to inject, inject the next item and recurse.
-      if (data.include.length > injectedSoFar)
+var emitPageBroadcast = (function () {
+  var injectMap = {
+      top_open_whitelist_ui:
       {
-        details.file = data.include[injectedSoFar];
-        chrome.tabs.executeScript(undefined, details, function ()
-          {
-          if (chrome.runtime.lastError)
-            {
-            log(chrome.runtime.lastError);
-            return;
-          }
+        allFrames: false,
+        include: [
+          'adblock-jquery.js',
+          'adblock-jquery-ui.js',
+          'adblock-uiscripts-load_jquery_ui.js',
+          'adblock-uiscripts-top_open_whitelist_ui.js',
+          ],
+      },
+      top_open_blacklist_ui:
+      {
+        allFrames: false,
+        include: [
+          'adblock-jquery.js',
+          'adblock-jquery-ui.js',
+          'adblock-uiscripts-load_jquery_ui.js',
+          'adblock-uiscripts-blacklisting-overlay.js',
+          'adblock-uiscripts-blacklisting-clickwatcher.js',
+          'adblock-uiscripts-blacklisting-elementchain.js',
+          'adblock-uiscripts-blacklisting-blacklistui.js',
+          'adblock-uiscripts-top_open_blacklist_ui.js',
+          ],
+      },
+      send_content_to_back:
+      {
+        allFrames: true,
+        include: ['adblock-uiscripts-send_content_to_back.js'],
+      },
+    };
 
-          executeOnTab(fnName, parameter, injectedSoFar + 1);
-        });
-      }
+  // Inject the required scripts to execute fnName(parameter) in
+  // the current tab.
+  // Inputs: fnName:string name of function to execute on tab.
+  //         fnName must exist in injectMap above.
+  //         parameter:object to pass to fnName.  Must be JSON.stringify()able.
+  //         injectedSoFar?:int used to recursively inject required scripts.
+  var executeOnTab = function (fnName, parameter, injectedSoFar) {
+    injectedSoFar = injectedSoFar || 0;
+    var data = injectMap[fnName];
+    var details = { allFrames: data.allFrames };
 
+    // If there's anything to inject, inject the next item and recurse.
+    if (data.include.length > injectedSoFar) {
+      details.file = data.include[injectedSoFar];
+      chrome.tabs.executeScript(undefined, details, function () {
+        if (chrome.runtime.lastError) {
+          log(chrome.runtime.lastError);
+          return;
+        }
+
+        executeOnTab(fnName, parameter, injectedSoFar + 1);
+      });
+    } else {
       // Nothing left to inject, so execute the function.
-      else
-      {
-        var param = JSON.stringify(parameter);
-        details.code = fnName + '(' + param + ');';
-        chrome.tabs.executeScript(undefined, details);
-      }
-    };
+      var param = JSON.stringify(parameter);
+      details.code = fnName + '(' + param + ');';
+      chrome.tabs.executeScript(undefined, details);
+    }
+  };
 
-    // The emitPageBroadcast() function
-    var theFunction = function (request)
-    {
-      executeOnTab(request.fn, request.options);
-    };
+  // The emitPageBroadcast() function
+  var theFunction = function (request) {
+    executeOnTab(request.fn, request.options);
+  };
 
-    return theFunction;
-  })();
-}
+  return theFunction;
+})();
+
 Object.assign(window, {
   emitPageBroadcast,
   updateButtonUIAndContextMenus

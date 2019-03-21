@@ -7,6 +7,14 @@
     "message": "L'estensione più popolare di Chrome, con oltre 60 milioni di utenti! Blocca la pubblicità in tutto il web.",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
+  "name_devbuild": {
+    "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
+    "message": "Versione di sviluppo di AdBlock"
+  },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release \/ published builds.  Should not be translated",
+    "message": "AdBlock"
+  },
   "description_edge": {
     "message": "AdBlock. L'ad-blocker n. 1 con oltre 200 milioni di download. Blocca la pubblicità in tutto il web.",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -52,7 +60,7 @@
     "description": "Title for the Options page for the 'AdBlock on YouTube' extension."
   },
   "chromebutton_how_to_hide2": {
-    "message": "Clicca il pulsante AdBlock e seleziona \"Nascondi in menu Chrome\". Per visualizzarlo, clicca sul menu Chrome, clicca sul pulsante AdBlock e seleziona \"Mostra in barra degli strumenti\".",
+    "message": "Clicca col pulsante destro sul pulsante AdBlock e seleziona \"Nascondi in menu Chrome\". Per visualizzarlo, clicca sul menu Chrome, clicca col pulsante destro sul pulsante AdBlock e seleziona \"Mostra in barra degli strumenti\".",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2": {
@@ -60,7 +68,7 @@
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
   },
   "safaributton_how_to_hide2": {
-    "message": "Per nascondere il pulsante, clicca col pulsante destro sulla barra degli strumenti di Safari e scegli \"Personalizza barra degli strumenti\", quindi trascina il pulsante AdBlock fuori dalla barra degli strumenti. È possibile visualizzarlo nuovamente trascinandolo nella barra degli strumenti.",
+    "message": "Per nascondere il pulsante, clicca col pulsante destro sulla barra degli strumenti di Safari e scegli \"Personalizza barra degli strumenti\", quindi trascina il pulsante AdBlock fuori dalla barra degli strumenti. È possibile visualizzarlo nuovamente trascinandolo di nuovo nella barra degli strumenti.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "ff_button_how_to_hide": {
@@ -1865,6 +1873,14 @@
     "message": "Attiva MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
+  "adblockprotectenrollmentbutton": {
+    "message": "Prova subito - È gratis",
+    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
+  },
+  "adblockprotectenrollmenttext": {
+    "message": "Proteggi le tue informazioni personali con AdBlock Protect",
+    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
+  },
   "myadblockoptionspageheader": {
     "message": "Opzioni di MyAdBlock",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1912,5 +1928,145 @@
   "changes_to_adblock": {
     "message": "Abbiamo apportato delle modifiche ad AdBlock!",
     "description": "Link to Options page with more information about the changes."
+  },
+  "new_myadblock_feature_available": {
+    "message": "Clicca qui per sbloccare nuove funzionalità!",
+    "description": "The text in the popup menu item saying there is a new MyAdBlock feature and takes you to the MyAdBlock tab in the option page."
+  },
+  "images_coming_soon": {
+    "message": "Altre foto in arrivo!",
+    "description": "The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
+  "myadblock_pic_replacemenet_description": {
+    "message": "Sostituisci gli annunci con immagini che ami",
+    "description": "The text briefly describing what the feature does in the MyAdBlock tab in the option page."
+  },
+  "myadblock_payment_not_available_title": {
+    "message": "OH NO! Non siamo riusciti a connetterci ai nostri server",
+    "description": "The title of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_payment_not_available_text": {
+    "message": "Siamo veramente contenti che ti interessi MyAdBlock! Purtroppo, non possiamo elaborare i pagamenti in questo momento. Riprova più tardi.",
+    "description": "The text of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_options_page_header": {
+    "message": "MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_picreplacement_exlained": {
+    "message": "Seleziona tra le categorie qui sotto e AdBlock sostituirà occasionalmente gli annunci con immagini di alta qualità per allietare la tua giornata.",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "error_msg_header": {
+    "message": "Ops! Il menu AdBlock ha incontrato un problema durante il caricamento.",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us": {
+    "message": "Aiutaci a risolvere questo problema inviandoci alcuni dati di debug: clicca ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_thank_you": {
+    "message": "Grazie",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_reload": {
+    "message": "Dopo, prova a ricaricare l'estensione: clicca ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help": {
+    "message": "Se non funziona, qui puoi trovare ulteriori informazioni: clicca ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_here": {
+    "message": "qui",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "generaloptions2": {
+    "message": "Opzioni generali",
+    "description": "Title of one of the Options page tabs"
+  },
+  "debuginlogoption2": {
+    "message": "Mostra le informazioni di debug nel Log della console",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "slows_down_extension": {
+    "message": "rallenta l'estensione",
+    "description": "Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url": {
+    "message": "inserisci un URL",
+    "description": "Placeholder text in the Custom Filter list URL bar"
+  },
+  "filterantisocial2": {
+    "message": "Lista di filtri anti-social",
+    "description": "A filter list"
+  },
+  "filter_antisocial_explained": {
+    "message": "rimuove i pulsanti dei social media",
+    "description": "A filter list explaination"
+  },
+  "filterannoyances2": {
+    "message": "Fanboy's Annoyances",
+    "description": "A filter list"
+  },
+  "filter_annoyances_explained": {
+    "message": "blocca i pop-up nelle pagine, i social media e i relativi widget, e altri fastidi",
+    "description": "A filter list explaination"
+  },
+  "filterwarning_removal2": {
+    "message": "Lista Adblock Warning Removal",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filter_warning_removal_explained": {
+    "message": "rimuove gli avvisi sull'uso degli ad-blocker",
+    "description": "A filter list explaination"
+  },
+  "filterlistsrock2": {
+    "message": "Le liste di filtri bloccano la maggior parte delle pubblicità sul web. Puoi anche...",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads2": {
+    "message": "Blocca altra pubblicità",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2": {
+    "message": "Smetti di bloccare la pubblicità",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2": {
+    "message": "Modifica manualmente i tuoi filtri",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2": {
+    "message": "Modifica i filtri disattivati",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1": {
+    "message": "Attenzione: se commetti un errore qui, potresti compromettere molti altri filtri, compresi quelli ufficiali!",
+    "description": "Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2": {
+    "message": "Leggi il [[tutorial sulla sintassi dei filtri]] per sapere come aggiungere filtri avanzati alla lista nera e bianca.",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2": {
+    "message": "Paga quello che vuoi!",
+    "description": "Text of a payment request link"
+  },
+  "translator_credit2": {
+    "message": "I riconoscimenti per la traduzione vanno a...",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2": {
+    "message": "seleziona la lingua",
+    "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "Consenti la lista bianca per specifici canali di YouTube™",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser": {
+    "message": "richiede il riavvio del browser",
+    "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
   }
 }

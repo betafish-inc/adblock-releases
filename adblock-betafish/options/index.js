@@ -1,6 +1,3 @@
-//Temporary
-var SAFARI = false;
-
 const backgroundPage  = chrome.extension.getBackgroundPage();
 const Filter          = backgroundPage.Filter;
 const WhitelistFilter = backgroundPage.WhitelistFilter;
@@ -31,6 +28,9 @@ var myAdBlockTabDisplay = () => {
 }
 
 var showMyAdBlockTabContent = () => {
+  if (!License) {
+    return;
+  }
   if (License.shouldShowMyAdBlockEnrollment()) {
     displayMyAdBlock('enrolled-free-user-view');
   } else if (License.isActiveLicense()) {
@@ -42,12 +42,37 @@ var showMyAdBlockTabContent = () => {
 // available myAdBlock tab content views
 var displayMyAdBlock = function(viewId) {
   $('.myadblock-tab-content').hide();
-  $(`#${ viewId }`).show();
+  $(`#${ viewId }`).css('display', 'flex');
+}
+
+var addMyAdBlockTab = function() {
+  if (!License) {
+    return;
+  }
+  let showMyAdBlockTab = License.shouldShowMyAdBlockEnrollment() || License.isActiveLicense();
+  if (!showMyAdBlockTab) {
+    return;
+  }
+
+  let myAdBlockTabHTMLString = '<li data-scripts="adblock-option-myadblock.js" id="myadblock-tab">\
+    <a href="adblock-options-myadblock.html">\
+      <span id="myadblock-tab-lock"></span>&nbsp;\
+      <span i18n="myadblockoptions"></span>\
+    </a>\
+  </li>';
+  let $tabsUL = $('#tabpages > ul:not(.has-myadblock)');
+  let $tabs = $('#tabpages');
+
+  $tabsUL.prepend(myAdBlockTabHTMLString);
+  $tabsUL.addClass('has-myadblock');
+  $tabs.tabs().tabs('refresh');
+
+  myAdBlockTabDisplay();
 }
 
 function loadOptions()
 {
-  let hiddenTab = myAdBlockTabDisplay();
+  addMyAdBlockTab();
 
   if (backgroundPage &&
       typeof backgroundPage.getSettings !== "function") {
@@ -73,11 +98,6 @@ function loadOptions()
       activeTab = searchQuery.tab;
     }
   }
-
-  // Make sure to not use myAdBlock tab index when the myAdBlock tab
-  // is hidden because the user is not enrolled
-  if (hiddenTab && (activeTab === hiddenTab.index() || activeTab == null))
-    activeTab = 1;
 
   chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey, (myAdBlockInfo) => {
     if (!myAdBlockInfo || !myAdBlockInfo.myAdBlockFeature) {
@@ -131,21 +151,10 @@ var loadTabs = function(activeTab) {
 
       showMyAdBlockTabContent();
 
-      // Toggle won't handle .advanced.chrome-only
       if (optionalSettings &&
           !optionalSettings.show_advanced_options)
       {
         $('.advanced').hide();
-      }
-
-      if (SAFARI)
-      {
-        $('.chrome-only').hide();
-      }
-
-      if (!SAFARI)
-      {
-        $('.safari-only').hide();
       }
 
       // Must load tab .js here: CSP won't let injected html inject <script>
@@ -157,6 +166,7 @@ var loadTabs = function(activeTab) {
         s.src = scriptToLoad;
         document.body.appendChild(s);
       });
+      displayTranslationCredit();
     },
   }).show();
 }
@@ -170,12 +180,12 @@ function rightToLeft()
     {
       if ($('.social').is(':hidden'))
       {
-        $('#translation_credits').css({ margin: '0px 50%', width: '350px' });
+        $('.translation_credits').css({ margin: '0px 50%', width: '350px' });
         $('#paymentlink').css({ margin: '0px 50%', width: '350px' });
         $('#version_number').css({ margin: '20px 50%', width: '350px' });
       } else
       {
-        $('#translation_credits').css('right', '0px');
+        $('.translation_credits').css('right', '0px');
         $('#paymentlink').css('right', '0px');
         $('#version_number').css({ right: '0px', padding: '0px' });
       }
@@ -221,7 +231,7 @@ function showMiniMenu()
         $('.ui-tabs .ui-tabs-nav li').css('float', 'left');
       }
 
-      $('.ui-tabs-nav').show();
+      $('.ui-tabs-nav').css('display', 'flex');
     } else if ($('#small_nav').is(':visible'))
     {
       $('.ui-tabs-nav').hide();
@@ -231,46 +241,32 @@ function showMiniMenu()
 
 function displayVersionNumber()
 {
-  try
-  {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', chrome.extension.getURL('manifest.json'), true);
-    xhr.onreadystatechange = function ()
-    {
-      if (this.readyState == 4)
-      {
-        var theManifest = JSON.parse(this.responseText);
-        $('#version_number').text(translate('optionsversion', [theManifest.version]));
-      }
-    };
-
-    xhr.send();
-  } catch (ex)
-  {} // silently fail
+  let currentVersion = chrome.runtime.getManifest().version;
+  $('#version_number').text(translate('optionsversion', [currentVersion]));
 }
 
-backgroundPage.chrome.storage.local.get('userid', function (response)
-{
-  if (response.userid)
+function createAndAssignPaymentURL() {
+  chrome.storage.local.get('userid', function (response)
   {
-    var paymentHREFhref = 'https://getadblock.com/pay/?source=O&u=' + response.userid;
-    $('#paymentlink').attr('href', paymentHREFhref);
-  }
-});
+    var paymentURL = 'https://getadblock.com/pay/';
+    if (response.userid)
+    {
+      var paymentURL = paymentURL + '?source=O&u=' + response.userid;
+    }
+    $('#paymentlink').attr('href', paymentURL);
+  });
+}
 
 function displayTranslationCredit()
 {
   if (navigator.language.substring(0, 2) != 'en')
   {
     var translators = [];
-    var xhr         = new XMLHttpRequest();
-    xhr.open('GET', chrome.extension.getURL('translators.json'), true);
-    xhr.onload = function ()
-    {
-      var text = JSON.parse(this.responseText);
+
+    $.getJSON(chrome.extension.getURL('translators.json'), function(response) {
       var lang = navigator.language;
       var matchFound = false;
-      for (var id in text)
+      for (var id in response)
       {
         // if matching id hasn't been found and id matches lang
         if (!matchFound &&
@@ -279,14 +275,14 @@ function displayTranslationCredit()
         {
           matchFound = true;
           // Check if this language is professionally translated
-          var professionalLang = text[id].professional;
-          for (var translator in text[id].translators)
+          var professionalLang = response[id].professional;
+          for (var translator in response[id].translators)
           {
             // If the language is not professionally translated, or if this translator
             // is a professional, then add the name to the list of credits
-            if (!professionalLang || text[id].translators[translator].professional)
+            if (!professionalLang || response[id].translators[translator].professional)
             {
-              var name = text[id].translators[translator].credit;
+              var name = response[id].translators[translator].credit;
               translators.push(' ' + name);
             }
           }
@@ -294,23 +290,23 @@ function displayTranslationCredit()
       }
 
       if (translators.length > 0) {
-        $('#translator_credit').text(translate('translator_credit'));
-        $('#translator_names').text(translators.toString());
-      }
-    };
+        var $translatorsCreditBubble = $('.translation_credits');
+        var $translatorCreditDiv = $('<div></div');
+        var $translatorNamesDiv = $('<div></div>');
 
-    xhr.send();
+        $translatorCreditDiv.addClass('speech-bubble-content').text(translate('translator_credit2'));
+        $translatorNamesDiv.addClass('speech-bubble-content').text(translators.toString());
+        $translatorsCreditBubble.empty()
+            .addClass('speech-bubble')
+            .removeClass('do-not-display')
+            .append($translatorCreditDiv)
+            .append($translatorNamesDiv);
+      } else {
+        $translatorsCreditBubble.addClass('do-not-display').empty();
+      }
+    });
   }
 }
-
-//if (SAFARI && LEGACY_SAFARI) {
-//  if (navigator.appVersion.indexOf('Mac OS X 10_5_') !== -1) {
-//    // Safari 5.1 isn't available on Leopard (OS X 10.5).
-//    // Don't urge the users to upgrade in this case.
-//  } else {
-//    $('#safari50_updatenotice').show();
-//  }
-//}
 
 // Test if pattern#@#pattern or pattern##pattern
 var isSelectorFilter = function (text)
@@ -334,11 +330,11 @@ var isWhitelistFilter = function (text)
 var optionalSettings = {};
 $(document).ready(function ()
 {
+  createAndAssignPaymentURL();
   loadOptions();
   rightToLeft();
   showMiniMenu();
   displayVersionNumber();
-  displayTranslationCredit();
   localizePage();
 });
 

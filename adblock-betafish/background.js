@@ -64,10 +64,6 @@ Object.assign(window, {
   getIdFromURL,
 });
 
-// TODO
-// Temporary...
-var SAFARI = false;
-
 // CUSTOM FILTERS
 // Creates a custom filter entry that whitelists a given page
 // Inputs: url:string url of the page
@@ -142,21 +138,16 @@ var tryToUnwhitelist = function (url)
 // Add a new custom filter entry.
 // Inputs: filter:string line of text to add to custom filters.
 // Returns: null if succesfull, otherwise an exception
-var addCustomFilter = function (filterText)
-{
-  try
-  {
+var addCustomFilter = function (filterText) {
+  try {
     var filter = Filter.fromText(filterText);
     FilterStorage.addFilter(filter);
-    if (isSelectorFilter(filterText))
-    {
+    if (isSelectorFilter(filterText)) {
       countCache.addCustomFilterCount(filterText);
     }
 
     return null;
-  }
-  catch (ex)
-  {
+  } catch (ex) {
     // convert to a string so that Safari can pass
     // it back to content scripts
     return ex.toString();
@@ -274,13 +265,7 @@ var confirmRemovalOfCustomFiltersOnHost = function (host, activeTab)
   }
 
   removeCustomFilterForHost(host);
-  if (!SAFARI)
-  {
-    chrome.tabs.reload(activeTab.id);
-  } else
-  {
-    activeTab.url = activeTab.url;
-  }
+  chrome.tabs.reload(activeTab.id);
 };
 
 // Reload already opened tab
@@ -465,33 +450,27 @@ var getCurrentTabInfo = function (callback, secondTime)
   {
     callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
   }
-};
+}
 
 // Returns true if the url cannot be blocked
-var pageIsUnblockable = function (url)
-{
-  if (!url)
-  { // Safari empty/bookmarks/top sites page
+var pageIsUnblockable = function (url) {
+  if (!url) { // Protect against empty URLs - e.g. Safari empty/bookmarks/top sites page
     return true;
-  } else
-  {
+  } else {
     var scheme = '';
-    if (!url.protocol)
-    {
+    if (!url.protocol) {
       scheme = parseUri(url).protocol;
-    } else
-    {
+    } else {
       scheme = url.protocol;
     }
 
     return (scheme !== 'http:' && scheme !== 'https:' && scheme !== 'feed:');
   }
-};
+}
 
 // Returns true if the page is whitelisted.
 // Called from a content script
-var pageIsWhitelisted = function(sender)
-{
+var pageIsWhitelisted = function(sender) {
   return (checkWhitelisted(sender.page) != undefined);
 }
 
@@ -720,13 +699,10 @@ var readfile = function (file)
 };
 
 // BETA CODE
-if (!SAFARI && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
-{
+if (chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
   // Display beta page after each update for beta-users only
-  chrome.runtime.onInstalled.addListener(function (details)
-  {
-    if (details.reason === 'update' || details.reason === 'install')
-    {
+  chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason === 'update' || details.reason === 'install') {
       chrome.tabs.create({ url: 'https://getadblock.com/beta' });
     }
   });
@@ -988,6 +964,10 @@ settings.onload().then(function()
   }
 });
 
+var previousYTchannelId ="";
+var previousYTvideoId ="";
+var previousYTuserId ="";
+
 // Listen for the message from the ytchannel.js content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === 'updateYouTubeChannelName' && message.args === false) {
@@ -1001,109 +981,100 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return;
   }
   if (message.command === 'get_channel_name_by_channel_id' && message.channelId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" + message.channelId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
-    xhr.onload = function()
-    {
-      if (xhr.readyState === 4 && xhr.status === 200)
-      {
-        const json = JSON.parse(xhr.response);
-        // Got name of the channel
-        if (json && json.items && json.items[0])
-        {
-          const channelName = json.items[0].snippet.title;
-          ytChannelNamePages.set(sender.tab.id, channelName);
-          chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
+    if (previousYTchannelId !== message.channelId) {
+      previousYTchannelId = message.channelId;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" + message.channelId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
+      xhr.onload = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const json = JSON.parse(xhr.response);
+          // Got name of the channel
+          if (json && json.items && json.items[0]) {
+            const channelName = json.items[0].snippet.title;
+            ytChannelNamePages.set(sender.tab.id, channelName);
+            chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
+          }
         }
       }
+      xhr.send();
+      sendResponse({});
+      return;
+    } else {
+      chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: ytChannelNamePages.get(sender.tab.id) });
+      sendResponse({});
+      return;
     }
-    xhr.send();
-    sendResponse({});
-    return;
   }
   if (message.command === 'get_channel_name_by_video_id' && message.videoId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + message.videoId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
-    xhr.onload = function()
-    {
-      if (xhr.readyState === 4 && xhr.status === 200)
-      {
-        const json = JSON.parse(xhr.response);
-        // Got name of the channel
-        if (json && json.items && json.items[0])
-        {
-          const channelName = json.items[0].snippet.channelTitle;
-          ytChannelNamePages.set(sender.tab.id, channelName);
-          chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
+    if (previousYTvideoId !== message.videoId) {
+      previousYTvideoId = message.videoId;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + message.videoId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
+      xhr.onload = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const json = JSON.parse(xhr.response);
+          // Got name of the channel
+          if (json && json.items && json.items[0]) {
+            const channelName = json.items[0].snippet.channelTitle;
+            ytChannelNamePages.set(sender.tab.id, channelName);
+            chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
+          }
         }
       }
+      xhr.send();
+      sendResponse({});
+      return;
+    } else {
+      chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: ytChannelNamePages.get(sender.tab.id) });
+      sendResponse({});
+      return;
     }
-    xhr.send();
-    sendResponse({});
-    return;
   }
   if (message.command === 'get_channel_name_by_user_id' && message.userId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=" + message.userId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
-    xhr.onload = function()
-    {
-      if (xhr.readyState === 4 && xhr.status === 200)
-      {
-        const json = JSON.parse(xhr.response);
-        // Got name of the channel
-        if (json && json.items && json.items[0])
-        {
-          const channelName = json.items[0].snippet.title;
-          ytChannelNamePages.set(sender.tab.id, channelName);
-          chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
+    if (previousYTuserId !== message.userId) {
+      previousYTuserId = message.userId;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=" + message.userId + "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"));
+      xhr.onload = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const json = JSON.parse(xhr.response);
+          // Got name of the channel
+          if (json && json.items && json.items[0])
+          {
+            const channelName = json.items[0].snippet.title;
+            ytChannelNamePages.set(sender.tab.id, channelName);
+            chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: channelName });
+          }
         }
       }
+      xhr.send();
+      sendResponse({});
+      return;
+    } else {
+      chrome.tabs.sendMessage(sender.tab.id, { command: 'updateURLWithYouTubeChannelName', channelName: ytChannelNamePages.get(sender.tab.id) });
+      sendResponse({});
+      return;
     }
-    xhr.send();
-    sendResponse({});
-    return;
   }
 });
 var ytChannelNamePages = new Map();
-
-// used by the Options pages, since they don't have access to setContentBlocker
-function isSafariContentBlockingAvailable()
-{
-  return (SAFARI && safari && safari.extension && (typeof safari.extension.setContentBlocker === 'function'));
-}
 
 // These functions are usually only called by content scripts.
 
 // DEBUG INFO
 
 // Get debug info as a JSON object for bug reporting and ad reporting
-var getDebugInfo = function (callback)
-{
+var getDebugInfo = function (callback) {
   response = {};
   response.other_info = {};
 
   // Is this installed build of AdBlock the official one?
-  if (!SAFARI)
-  {
-    if (chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk')
-    {
-      response.other_info.buildtype = ' Beta';
-    } else if (chrome.runtime.id === 'gighmmpiobklfepjocnamgkkbiglidom' || chrome.runtime.id === 'aobdicepooefnbaeokijohmhjlleamfj')
-    {
-      response.other_info.buildtype = ' Stable';
-    } else
-    {
-      response.other_info.buildtype = ' Unofficial';
-    }
-  } else
-  {
-    if (safari.extension.baseURI.indexOf('com.betafish.adblockforsafari-UAMUU4S2D9') > -1)
-    {
-      response.other_info.buildtype = ' Stable';
-    } else
-    {
-      response.other_info.buildtype = ' Unofficial';
-    }
+  if (chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
+    response.other_info.buildtype = ' Beta';
+  } else if (chrome.runtime.id === 'gighmmpiobklfepjocnamgkkbiglidom' || chrome.runtime.id === 'aobdicepooefnbaeokijohmhjlleamfj') {
+    response.other_info.buildtype = ' Stable';
+  } else {
+    response.other_info.buildtype = ' Unofficial';
   }
 
   // Get AdBlock version
@@ -1112,10 +1083,8 @@ var getDebugInfo = function (callback)
   // Get subscribed filter lists
   var subscriptionInfo = {};
   var subscriptions = getSubscriptionsMinusText();
-  for (var id in subscriptions)
-  {
-    if (subscriptions[id].subscribed)
-    {
+  for (var id in subscriptions) {
+    if (subscriptions[id].subscribed) {
       subscriptionInfo[id] = {};
       subscriptionInfo[id].lastSuccess = new Date(subscriptions[id].lastSuccess * 1000);
       subscriptionInfo[id].lastDownload = new Date(subscriptions[id].lastDownload * 1000);
@@ -1127,16 +1096,14 @@ var getDebugInfo = function (callback)
   response.subscriptions = subscriptionInfo;
 
   var userFilters = getUserFilters();
-  if (userFilters && userFilters.length)
-  {
+  if (userFilters && userFilters.length) {
     response.custom_filters = userFilters.join("\n");
   }
 
   // Get settings
   var adblockSettings = {};
   var settings = getSettings();
-  for (setting in settings)
-  {
+  for (setting in settings) {
     adblockSettings[setting] = JSON.stringify(settings[setting]);
   }
 
@@ -1146,8 +1113,7 @@ var getDebugInfo = function (callback)
   response.other_info.browserVersion = STATS.browserVersion;
   response.other_info.osVersion = STATS.osVersion;
   response.other_info.os = STATS.os;
-  if (window['blockCounts'])
-  {
+  if (window['blockCounts']) {
     response.other_info.blockCounts = blockCounts.get();
   }
   if (localStorage &&
@@ -1159,9 +1125,7 @@ var getDebugInfo = function (callback)
       response.other_info.localStorageInfo['key'+inx]= key;
       inx++;
     }
-  }
-  else
-  {
+  } else {
     response.other_info.localStorageInfo = "no data";
   }
   response.other_info.is_adblock_paused = adblockIsPaused();
@@ -1169,35 +1133,27 @@ var getDebugInfo = function (callback)
   response.other_info.license_version = License.get().lv;
 
   // Get total pings
-  chrome.storage.local.get('total_pings', function (storageResponse)
-  {
+  chrome.storage.local.get('total_pings', function (storageResponse) {
     response.other_info.total_pings = storageResponse.total_pings || 0;
 
     // Now, add exclude filters (if there are any)
     var excludeFiltersKey = 'exclude_filters';
-    chrome.storage.local.get(excludeFiltersKey, function (secondResponse)
-    {
-      if (secondResponse && secondResponse[excludeFiltersKey])
-      {
+    chrome.storage.local.get(excludeFiltersKey, function (secondResponse) {
+      if (secondResponse && secondResponse[excludeFiltersKey]) {
         response.excluded_filters = secondResponse[excludeFiltersKey];
       }
       // Now, add JavaScript exception error (if there is one)
       var errorKey = 'errorkey';
-      chrome.storage.local.get(errorKey, function (errorResponse)
-      {
-        if (errorResponse && errorResponse[errorKey])
-        {
+      chrome.storage.local.get(errorKey, function (errorResponse) {
+        if (errorResponse && errorResponse[errorKey]) {
           response.other_info[errorKey] = errorResponse[errorKey];
         }
         // Now, add the migration messages (if there are any)
         var migrateLogMessageKey = 'migrateLogMessageKey';
-        chrome.storage.local.get(migrateLogMessageKey, function (migrateLogMessageResponse)
-        {
-          if (migrateLogMessageResponse && migrateLogMessageResponse[migrateLogMessageKey])
-          {
+        chrome.storage.local.get(migrateLogMessageKey, function (migrateLogMessageResponse) {
+          if (migrateLogMessageResponse && migrateLogMessageResponse[migrateLogMessageKey]) {
             messages = migrateLogMessageResponse[migrateLogMessageKey].split('\n');
-            for (var i = 0; i < messages.length; i++)
-            {
+            for (var i = 0; i < messages.length; i++) {
               var key = 'migration_message_' + i;
               response.other_info[key] = messages[i];
             }
@@ -1206,8 +1162,7 @@ var getDebugInfo = function (callback)
             chrome.alarms.getAll(function(alarms) {
               if (alarms && alarms.length > 0) {
                 response.other_info['Alarm info'] = 'length: ' + alarms.length;
-                for (var i = 0; i < alarms.length; i++)
-                {
+                for (var i = 0; i < alarms.length; i++) {
                   var alarm = alarms[i];
                   response.other_info[i + " Alarm Name"] = alarm.name;
                   response.other_info[i + " Alarm Scheduled Time"] = new Date(alarm.scheduledTime);
@@ -1338,7 +1293,6 @@ Object.assign(window, {
   getUserFilters,
   updateFilterLists,
   getDebugInfo,
-  isSafariContentBlockingAvailable,
   createWhitelistFilterForYoutubeChannel,
   openTab,
   readfile,
@@ -1349,7 +1303,6 @@ Object.assign(window, {
   getCurrentTabInfo,
   getAdblockUserId,
   createPageWhitelistFilter,
-  SAFARI,
   tryToUnwhitelist,
   addCustomFilter,
   removeCustomFilter,

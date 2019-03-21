@@ -7,6 +7,14 @@
     "message": "最受歡迎的 Chrome 擴充功能，擁有超過六千萬使用者！阻擋網路上的各種廣告。",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
+  "name_devbuild": {
+    "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
+    "message": "AdBlock 開發版本"
+  },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release \/ published builds.  Should not be translated",
+    "message": "AdBlock"
+  },
   "description_edge": {
     "message": "AdBlock。排名第一的廣告攔截程式，下載量超過兩億。阻擋網路上的各種廣告。",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -1865,6 +1873,14 @@
     "message": "啟用 MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
+  "adblockprotectenrollmentbutton": {
+    "message": "立即免費試用",
+    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
+  },
+  "adblockprotectenrollmenttext": {
+    "message": "使用 AdBlock Protect 保護您的個資安全",
+    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
+  },
   "myadblockoptionspageheader": {
     "message": "MyAdBlock 選項",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1912,5 +1928,145 @@
   "changes_to_adblock": {
     "message": "我們更改了 AdBlock！",
     "description": "Link to Options page with more information about the changes."
+  },
+  "new_myadblock_feature_available": {
+    "message": "按這裡解鎖新功能！",
+    "description": "The text in the popup menu item saying there is a new MyAdBlock feature and takes you to the MyAdBlock tab in the option page."
+  },
+  "images_coming_soon": {
+    "message": "更多照片即將推出！",
+    "description": "The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
+  "myadblock_pic_replacemenet_description": {
+    "message": "將廣告替換為您喜愛的圖片",
+    "description": "The text briefly describing what the feature does in the MyAdBlock tab in the option page."
+  },
+  "myadblock_payment_not_available_title": {
+    "message": "糟糕！無法連到我們的伺服器",
+    "description": "The title of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_payment_not_available_text": {
+    "message": "很高興您對 MyAdBlock 感興趣！很抱歉我們目前無法處理付款。請稍後再試。",
+    "description": "The text of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_options_page_header": {
+    "message": "MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_picreplacement_exlained": {
+    "message": "從以下類別選擇，AdBlock 有時就會將廣告替換為高畫質圖片，帶給您愉快的心情。",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "error_msg_header": {
+    "message": "哎呀！很抱歉，載入 AdBlock 選單時遇到了問題。",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us": {
+    "message": "傳送除錯資料給我們，幫助我們解決此問題：按一下 ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_thank_you": {
+    "message": "謝謝！",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_reload": {
+    "message": "接下來，嘗試重新載入擴充功能：按一下 ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help": {
+    "message": "如果沒有用，請查看此處以取得更多説明：按一下 ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_here": {
+    "message": "這裡",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "generaloptions2": {
+    "message": "一般選項",
+    "description": "Title of one of the Options page tabs"
+  },
+  "debuginlogoption2": {
+    "message": "在主控台紀錄中顯示偵錯說明",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "slows_down_extension": {
+    "message": "會讓擴充功能變慢",
+    "description": "Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url": {
+    "message": "輸入連結網址",
+    "description": "Placeholder text in the Custom Filter list URL bar"
+  },
+  "filterantisocial2": {
+    "message": "反社會過濾清單",
+    "description": "A filter list"
+  },
+  "filter_antisocial_explained": {
+    "message": "刪除社群媒體按鈕",
+    "description": "A filter list explaination"
+  },
+  "filterannoyances2": {
+    "message": "Fanboy's Annoyances",
+    "description": "A filter list"
+  },
+  "filter_annoyances_explained": {
+    "message": "阻擋頁面內彈出視窗、社群媒體與相關小工具以及其他煩惱",
+    "description": "A filter list explaination"
+  },
+  "filterwarning_removal2": {
+    "message": "Adblock Warning Removal 清單",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filter_warning_removal_explained": {
+    "message": "移除使用廣告攔截程式的警告",
+    "description": "A filter list explaination"
+  },
+  "filterlistsrock2": {
+    "message": "過濾清單可以阻擋網路上大部分的廣告。您也可以……",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads2": {
+    "message": "阻擋更多廣告",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2": {
+    "message": "停止阻擋廣告",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2": {
+    "message": "手動編輯過濾條件",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2": {
+    "message": "編輯停用的過濾條件",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1": {
+    "message": "注意：如果在這裡犯了錯誤，包括官方過濾條件的其他許多過濾條件也可能會出錯！",
+    "description": "Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2": {
+    "message": "請參閱[[篩選語法教學]]，了解如何新增進階黑名單與白名單過濾條件。",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2": {
+    "message": "支付您想要的金額！",
+    "description": "Text of a payment request link"
+  },
+  "translator_credit2": {
+    "message": "翻譯貢獻來自……",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2": {
+    "message": "選擇語言",
+    "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "允許特定 YouTube™ 頻道列入白名單",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser": {
+    "message": "需要重新啟動瀏覽器",
+    "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
   }
 }

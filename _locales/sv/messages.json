@@ -7,6 +7,14 @@
     "message": "Det mest populära Chrome-tillägget, med över 60 miljoner användare! Blockerar annonser över hela nätet.",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
+  "name_devbuild": {
+    "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
+    "message": "AdBlock-utvecklingsbygge"
+  },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release \/ published builds.  Should not be translated",
+    "message": "AdBlock"
+  },
   "description_edge": {
     "message": "AdBlock. Den bästa annonsblockeraren med över 200 miljoner nedladdningar. Blockerar annonser över hela nätet.",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -200,7 +208,7 @@
     "description": "Checkbox in the whitelist wizard"
   },
   "wizardcantrunonframesets": {
-    "message": "Denna AdBlock-funktion fungerar inte på denna webbplats eftersom den använder föråldrad teknik. Du kan svartlista eller vitlista resurser manuellt under fliken \"Anpassa\" på Alternativ-sidan.",
+    "message": "AdBlock-funktionen fungerar inte på denna webbplats eftersom den använder föråldrad teknik. Du kan svartlista eller vitlista resurser manuellt under fliken \"Anpassa\" på Alternativ-sidan.",
     "description": "Alert shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
   "subscribeconfirm": {
@@ -1865,6 +1873,14 @@
     "message": "Aktivera MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
+  "adblockprotectenrollmentbutton": {
+    "message": "Prova nu – Det är gratis",
+    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
+  },
+  "adblockprotectenrollmenttext": {
+    "message": "Skydda dina personuppgifter med AdBlock Protect",
+    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
+  },
   "myadblockoptionspageheader": {
     "message": "MyAdBlock-alternativ",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1912,5 +1928,145 @@
   "changes_to_adblock": {
     "message": "Vi har gjort ändringar i AdBlock!",
     "description": "Link to Options page with more information about the changes."
+  },
+  "new_myadblock_feature_available": {
+    "message": "Klicka här för att låsa upp nya funktioner!",
+    "description": "The text in the popup menu item saying there is a new MyAdBlock feature and takes you to the MyAdBlock tab in the option page."
+  },
+  "images_coming_soon": {
+    "message": "Fler bilder kommer snart!",
+    "description": "The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
+  "myadblock_pic_replacemenet_description": {
+    "message": "Ersätt annonser med bilder som du älskar",
+    "description": "The text briefly describing what the feature does in the MyAdBlock tab in the option page."
+  },
+  "myadblock_payment_not_available_title": {
+    "message": "ÅH NEJ! Det gick inte att ansluta till våra servrar",
+    "description": "The title of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_payment_not_available_text": {
+    "message": "Vi är så glada att du är intresserad av MyAdBlock! Vi kan tyvärr inte behandla betalningar just nu Försök igen senare.",
+    "description": "The text of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_options_page_header": {
+    "message": "MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_picreplacement_exlained": {
+    "message": "Välj bland kategorierna nedan så kommer AdBlock ibland att ersätta annonser med bilder i hög kvalitet för att pigga upp din dag.",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "error_msg_header": {
+    "message": "Hoppsan! AdBlock-menyn kunde tyvärr inte laddas.",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us": {
+    "message": "Hjälp oss lösa problemet genom att skicka debug-information till oss: Klicka på ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_thank_you": {
+    "message": "Tack",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_reload": {
+    "message": "Prova därefter att ladda om tillägget: Klicka på ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help": {
+    "message": "Om det inte fungerar, kolla här för mer hjälp: Klicka på ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_here": {
+    "message": "här",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "generaloptions2": {
+    "message": "Allmänna alternativ",
+    "description": "Title of one of the Options page tabs"
+  },
+  "debuginlogoption2": {
+    "message": "Visa debug-uttalanden i konsolloggen",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "slows_down_extension": {
+    "message": "saktar ner tillägget",
+    "description": "Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url": {
+    "message": "ange en URL",
+    "description": "Placeholder text in the Custom Filter list URL bar"
+  },
+  "filterantisocial2": {
+    "message": "Antisocial-filterlista",
+    "description": "A filter list"
+  },
+  "filter_antisocial_explained": {
+    "message": "tar bort knappar för sociala medier",
+    "description": "A filter list explaination"
+  },
+  "filterannoyances2": {
+    "message": "Fanboys irritationsmoment",
+    "description": "A filter list"
+  },
+  "filter_annoyances_explained": {
+    "message": "blockerar popups, sociala medier och relaterade widgets och andra irritationsmoment",
+    "description": "A filter list explaination"
+  },
+  "filterwarning_removal2": {
+    "message": "Borttagningslista för reklamblockeringsvarningar",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filter_warning_removal_explained": {
+    "message": "tar bort varningar om att använda reklamblockerare",
+    "description": "A filter list explaination"
+  },
+  "filterlistsrock2": {
+    "message": "Filterlistorna blockerar de flesta annonserna på nätet. Du kan även...",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads2": {
+    "message": "Blockera fler annonser",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2": {
+    "message": "Sluta blockera annonser",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2": {
+    "message": "Redigera dina filter manuellt",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2": {
+    "message": "Redigera inaktiverade filter",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1": {
+    "message": "Var försiktig: om du gör ett misstag här, kan en hel del andra filter, inklusive de officiella filtren, gå sönder också!",
+    "description": "Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2": {
+    "message": "Läs [[filtersyntax-genomgången]] för att lära dig hur du lägger till avancerade svart- och vitlistningsfilter.",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2": {
+    "message": "Betala vad du vill!",
+    "description": "Text of a payment request link"
+  },
+  "translator_credit2": {
+    "message": "All heder för översättningen går till...",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2": {
+    "message": "välj språk",
+    "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "Tillåt vitlistning av specifika YouTube™-kanaler",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser": {
+    "message": "kräver omstart av webbläsaren",
+    "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
   }
 }

@@ -7,6 +7,14 @@
     "message": "De populairste Chrome-extensie, met meer dan 60 miljoen gebruikers! Blokkeert advertenties overal op internet.",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
+  "name_devbuild": {
+    "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
+    "message": "AdBlock development build"
+  },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release \/ published builds.  Should not be translated",
+    "message": "AdBlock"
+  },
   "description_edge": {
     "message": "AdBlock. De beste advertentieblokker met meer dan 200 miljoen downloads. Blokkeert advertenties overal op internet.",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -1865,6 +1873,14 @@
     "message": "MyAdBlock inschakelen",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
+  "adblockprotectenrollmentbutton": {
+    "message": "Probeer het nu - het is gratis",
+    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
+  },
+  "adblockprotectenrollmenttext": {
+    "message": "Hou je persoonlijke gegevens veilig met AdBlock Protect",
+    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
+  },
   "myadblockoptionspageheader": {
     "message": "Opties MyAbBlock",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1912,5 +1928,145 @@
   "changes_to_adblock": {
     "message": "We hebben wijzigingen doorgevoerd in AdBlock!",
     "description": "Link to Options page with more information about the changes."
+  },
+  "new_myadblock_feature_available": {
+    "message": "Klik hier om nieuwe functies te ontgrendelen!",
+    "description": "The text in the popup menu item saying there is a new MyAdBlock feature and takes you to the MyAdBlock tab in the option page."
+  },
+  "images_coming_soon": {
+    "message": "Binnenkort meer foto's!",
+    "description": "The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
+  "myadblock_pic_replacemenet_description": {
+    "message": "Vervang advertenties met afbeeldingen die je wel leuk vindt",
+    "description": "The text briefly describing what the feature does in the MyAdBlock tab in the option page."
+  },
+  "myadblock_payment_not_available_title": {
+    "message": "O, nee! We konden geen verbinding meer maken met onze servers",
+    "description": "The title of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_payment_not_available_text": {
+    "message": "We zijn zo blij dat je geïnteresseerd bent in MyAdBlock! We kunnen op dit moment helaas geen betalingen verwerken. Probeer het later nog eens.",
+    "description": "The text of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_options_page_header": {
+    "message": "MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_picreplacement_exlained": {
+    "message": "Selecteer uit de categorieën hieronder, dan vervangt AdBlock af en toe advertenties met eersteklas afbeeldingen om je dag op te fleuren.",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "error_msg_header": {
+    "message": "Oeps! Het spijt ons, het AdBlock-menu kon niet worden geladen.",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us": {
+    "message": "Help ons dit probleem oplossen door debuggegevens te sturen: klik op ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_thank_you": {
+    "message": "Bedankt",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_reload": {
+    "message": "Probeer vervolgens de extensie opnieuw te laden: klik op ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help": {
+    "message": "Kijk als dat niet werkt hier voor meer hulp: klik op ",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_here": {
+    "message": "hier",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "generaloptions2": {
+    "message": "Algemene opties",
+    "description": "Title of one of the Options page tabs"
+  },
+  "debuginlogoption2": {
+    "message": "Debugberichten weergeven in consolelog",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "slows_down_extension": {
+    "message": "vertraagt de extensie",
+    "description": "Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url": {
+    "message": "voer een URL in",
+    "description": "Placeholder text in the Custom Filter list URL bar"
+  },
+  "filterantisocial2": {
+    "message": "Antisociale filterlijst",
+    "description": "A filter list"
+  },
+  "filter_antisocial_explained": {
+    "message": "hiermee verwijder je sociale-mediaknoppen",
+    "description": "A filter list explaination"
+  },
+  "filterannoyances2": {
+    "message": "Fanboy Annoyances",
+    "description": "A filter list"
+  },
+  "filter_annoyances_explained": {
+    "message": "blokkeert pop-ups op pagina's, sociale media en gerelateerde widgets, en andere irritante zaken",
+    "description": "A filter list explaination"
+  },
+  "filterwarning_removal2": {
+    "message": "Verwijderingslijst adblock-waarschuwingen",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filter_warning_removal_explained": {
+    "message": "verwijdert waarschuwingen over het gebruik van adblockers",
+    "description": "A filter list explaination"
+  },
+  "filterlistsrock2": {
+    "message": "Met de filterlijsten blokkeer je de meeste advertenties op internet. Je kunt ook...",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads2": {
+    "message": "Meer advertenties blokkeren",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2": {
+    "message": "Stoppen met blokkeren",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2": {
+    "message": "Bewerk je filters handmatig",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2": {
+    "message": "Bewerk uitgeschakelde filters",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1": {
+    "message": "Wees voorzichtig: als je hier een fout maakt, kunnen ook een heleboel andere filters, met inbegrip van de officiële filters, niet meer werken!",
+    "description": "Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2": {
+    "message": "Lees de [[filtersyntax-tutorial]] om te leren hoe je geavanceerde blacklist- en whitelist-filters toevoegt.",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2": {
+    "message": "Betaal wat je wilt!",
+    "description": "Text of a payment request link"
+  },
+  "translator_credit2": {
+    "message": "Credits voor de vertaling...",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2": {
+    "message": "taal selecteren",
+    "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "Whitelisting van bepaalde YouTube™-kanalen toestaan",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser": {
+    "message": "hiervoor moet je je browser opnieuw opstarten",
+    "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
   }
 }

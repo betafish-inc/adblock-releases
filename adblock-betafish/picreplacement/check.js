@@ -279,8 +279,7 @@ var License = (function () {
 
 var reloadOptionsPageTabs = function() {
   var optionTabQuery = {
-    title: 'AdBlock Options',
-    url: 'chrome-extension://*/options.html*'
+    url: 'chrome-extension://' + chrome.runtime.id + '/options.html*'
   }
   chrome.tabs.query(optionTabQuery, function(tabs) {
     for (var i in tabs) {

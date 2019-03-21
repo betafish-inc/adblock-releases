@@ -7,6 +7,14 @@
     "message": "6000万人のユーザーを誇る一番人気のChrome拡張機能！ウェブ上のあらゆる広告をブロックしましょう！",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
+  "name_devbuild": {
+    "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
+    "message": "AdBlock開発ビルド"
+  },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release \/ published builds.  Should not be translated",
+    "message": "AdBlock"
+  },
   "description_edge": {
     "message": "AdBlockは2億回ダウンロードを誇るNo.1の広告ブロッカーです。ウェブ上のあらゆる広告をブロックしましょう。",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -1865,6 +1873,14 @@
     "message": "MyAdBlockを有効にする",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
+  "adblockprotectenrollmentbutton": {
+    "message": "ぜひお試し下さい — 完全無料です",
+    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
+  },
+  "adblockprotectenrollmenttext": {
+    "message": "AdBlock Protectであなたの個人情報を安全に保護しましょう",
+    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
+  },
   "myadblockoptionspageheader": {
     "message": "MyAdBlockオプション",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1912,5 +1928,145 @@
   "changes_to_adblock": {
     "message": "AdBlockに変更を加えました！",
     "description": "Link to Options page with more information about the changes."
+  },
+  "new_myadblock_feature_available": {
+    "message": "ここをクリックして新機能のロックを解除しましょう！",
+    "description": "The text in the popup menu item saying there is a new MyAdBlock feature and takes you to the MyAdBlock tab in the option page."
+  },
+  "images_coming_soon": {
+    "message": "追加画像が近日登場！",
+    "description": "The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
+  "myadblock_pic_replacemenet_description": {
+    "message": "お好きな画像で広告を置き換えましょう",
+    "description": "The text briefly describing what the feature does in the MyAdBlock tab in the option page."
+  },
+  "myadblock_payment_not_available_title": {
+    "message": "残念です！サーバーに接続できませんでした",
+    "description": "The title of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_payment_not_available_text": {
+    "message": "MyAdBlockに興味を持って頂き誠にありがとうございます！残念ながら、現在お支払い処理を行う事ができません。時間をおいてから再度お試し下さい。",
+    "description": "The text of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_options_page_header": {
+    "message": "MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_picreplacement_exlained": {
+    "message": "以下のカテゴリから選択してください。AdBlockは時々ユーザーの気分を和らげるために高品質の画像で広告を置き換えます。",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "error_msg_header": {
+    "message": "申し訳ありません、AdBlockメニューの読み込みの際に問題が発生しました。",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us": {
+    "message": "この問題を解決するのに役立つデバッグデータを送信ください。Click",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_thank_you": {
+    "message": "ありがとうございます",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_reload": {
+    "message": "次に、拡張機能をリロードしてください。Click",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help": {
+    "message": "それでもうまくいかない場合は、こちらをチェックしてください。Click",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_here": {
+    "message": "こちら",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "generaloptions2": {
+    "message": "全般オプション",
+    "description": "Title of one of the Options page tabs"
+  },
+  "debuginlogoption2": {
+    "message": "コンソールログにデバッグステートメントを表示する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "slows_down_extension": {
+    "message": "拡張機能が重くなります",
+    "description": "Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url": {
+    "message": "URLの入力URL",
+    "description": "Placeholder text in the Custom Filter list URL bar"
+  },
+  "filterantisocial2": {
+    "message": "反社会フィルタリスト",
+    "description": "A filter list"
+  },
+  "filter_antisocial_explained": {
+    "message": "ソーシャルメディアボタンを排除します",
+    "description": "A filter list explaination"
+  },
+  "filterannoyances2": {
+    "message": "ファンボーイの迷惑な広告",
+    "description": "A filter list"
+  },
+  "filter_annoyances_explained": {
+    "message": "ページ内ポップアップ、ソーシャルメディア、関連ウィジェット、その他の迷惑な広告",
+    "description": "A filter list explaination"
+  },
+  "filterwarning_removal2": {
+    "message": "広告ブロック警告排除リスト",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filter_warning_removal_explained": {
+    "message": "広告ブロッカーの使用に関する警告を排除します",
+    "description": "A filter list explaination"
+  },
+  "filterlistsrock2": {
+    "message": "フィルタリストは、Web上のほとんどの広告をブロックします。",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads2": {
+    "message": "もっと広告をブロックする",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2": {
+    "message": "広告ブロックを停止する",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2": {
+    "message": "あなたのフィルタを手動で編集",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2": {
+    "message": "無効のフィルタの編集",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1": {
+    "message": "ご注意下さい: ここで間違うと、公式のフィルタを含む他の多くのフィルタも破損する恐れがあります。",
+    "description": "Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2": {
+    "message": "高度なブラックリストとホワイトリストフィルタを追加する方法を学ぶためには、[[フィルタ文のチュートリアル]]をお読み下さい。",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2": {
+    "message": "お好きなだけお支払い下さい！",
+    "description": "Text of a payment request link"
+  },
+  "translator_credit2": {
+    "message": "翻訳クレジットの表示場所...",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2": {
+    "message": "言語の選択",
+    "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "特定のYouTube™チャンネルのホワイトリスト登録を許可する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser": {
+    "message": "ブラウザを再起動する必要があります",
+    "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
   }
 }

@@ -1,82 +1,78 @@
-  <!doctype html><!-- required to help Safari not get confused when injecting this fragment -->
-  <div>
-    <h2 i18n="generaloptions"></h2>
+<!doctype html>
+<div class="option-page-box">
+  <div class="option-page-content">
+    <h1 i18n="generaloptions2" class="page-title"></h1>
 
     <div id="acceptable_ads_info">
       <b><span i18n="acceptableadsdisable_done"></span></b>
       <span i18n="acceptableadsdisable_how_to_reenable"></span>
       <br/>
     </div>
+    <ul id="general-option-list">
 
-    <p>
-      <input type="checkbox" class="feature" id="acceptable_ads"/>
-      <label for="acceptable_ads" i18n="acceptableadsoption"></label>
-    </p>
+      <li class="add-space-between checkbox-indentation section-padding">
+        <input type="checkbox" class="feature" id="acceptable_ads"/>
+        <label for="acceptable_ads" i18n="acceptableadsoption"></label>
+      </li>
 
-    <p class="exclude_safari_content_blocking">
-      <input type="checkbox" class="feature" id="enable_youtube_channel_whitelist"/>
-      <label for="enable_youtube_channel_whitelist" i18n="allow_whitelisting_youtube_channels"></label>
-    </p>
+      <li class="section-padding">
+        <div class="add-space-between checkbox-indentation" >
+          <input type="checkbox" class="feature" id="enable_youtube_channel_whitelist"/>
+          <label for="enable_youtube_channel_whitelist" i18n="allow_whitelisting_youtube_channels2"></label>
+        </div>
+        <div class="extra-info">
+          <div i18n="require_restart_browser" class="italic no-indent"></div>
+        </div>
+      </li>
 
-    <p>
-      <input type="checkbox" class="feature" id="prefs__shouldShowBlockElementMenu" />
-      <label for="prefs__shouldShowBlockElementMenu" i18n="showcontextmenus2"></label>
-    </p>
+      <li class="add-space-between checkbox-indentation section-padding">
+        <input type="checkbox" class="feature" id="prefs__shouldShowBlockElementMenu" />
+        <label for="prefs__shouldShowBlockElementMenu" i18n="showcontextmenus2"></label>
+      </li>
 
-    <p class="safari-only exclude_safari_content_blocking">
-      <input type="checkbox" class="feature" id="enable_clicktoflash_compatibility_mode" />
-      <label for="enable_clicktoflash_compatibility_mode" i18n="disableyoutubestreamingads"></label>
-    </p>
+      <li class="add-space-between checkbox-indentation section-padding">
+        <input type="checkbox" class="feature" id="prefs__show_statsinicon" />
+        <label for="prefs__show_statsinicon" i18n="show_on_adblock_button"></label>
+      </li>
 
-    <p class="chrome-only">
-      <input type="checkbox" class="feature" id="prefs__show_statsinicon" />
-      <label  for="prefs__show_statsinicon" i18n="show_on_adblock_button"></label>
-    </p>
+      <li class="add-space-between checkbox-indentation section-padding">
+        <input type="checkbox" class="feature" id="prefs__show_statsinpopup" />
+        <label for="prefs__show_statsinpopup" i18n="show_on_adblock_menu"></label>
+      </li>
 
-    <p class="chrome-only">
-      <input type="checkbox" class="feature" id="prefs__show_statsinpopup" />
-      <label for="prefs__show_statsinpopup" i18n="show_on_adblock_menu"></label>
-    </p>
+      <li class="add-space-between checkbox-indentation section-padding">
+        <input type="checkbox" class="feature" id="prefs__show_devtools_panel" />
+        <label for="prefs__show_devtools_panel" i18n="show_devtools_panel"></label>
+      </li>
 
-    <p class="chrome-only">
-      <input type="checkbox" class="feature" id="prefs__show_devtools_panel" />
-      <label for="prefs__show_devtools_panel" i18n="show_devtools_panel"></label>
-    </p>
+      <li class="add-space-between checkbox-indentation section-padding">
+        <input type="checkbox" class="feature" id="enable_data_collection_v2" />
+        <label for="enable_data_collection_v2" i18n="datacollectionoption"></label>
+        <a class="help-icon-link" href="https://help.getadblock.com/support/solutions/articles/6000067136" target="_blank"></a>
+      </li>
 
-    <p class="safari-only" style="display:none" id="safari_content_blocking">
-      <input type="checkbox" class="feature" id="enable_safari_content_blocking" />
-      <label for="enable_safari_content_blocking" i18n="safaricontentblocking"></label>
-      <sup>
-        [<a i18n="whats_this" href="https://help.getadblock.com/support/solutions/articles/6000099239" target="_blank"></a>]
-      </sup>
-      <div id="safari_content_blocking_bmessage" class="usermessage"></div>
-    </p>
+      <li class="add-space-between checkbox-indentation section-padding">
+        <input type="checkbox" class="feature" id="enable_local_cdn" />
+        <label for="enable_local_cdn" i18n="local_cdn_option"></label>
+        <a class="help-icon-link" href="https://help.getadblock.com/support/solutions/articles/6000191643-what-is-the-local-cdn-feature-" target="_blank"></a>
+      </li>
 
-    <p class="chrome-only">
-      <input type="checkbox" class="feature" id="enable_data_collection_v2" />
-      <label for="enable_data_collection" i18n="datacollectionoption"></label>
-      <sup>
-        [<a id="data_collection_help" i18n="whats_this" href="https://help.getadblock.com/support/solutions/articles/6000067136" target="_blank"></a>]
-      </sup>
-    </p>
+      <li class="add-space-between checkbox-indentation section-padding">
+        <input type="checkbox" class="feature" id="enable_show_advanced_options" />
+        <label for="enable_show_advanced_options" i18n="advanced_options2"></label>
+      </li>
 
-    <p class="chrome-only">
-      <input type="checkbox" class="feature" id="enable_local_cdn" />
-      <label i18n="betalabel" style="padding-right: 5px;"></label>
-      <label for="enable_local_cdn" i18n="local_cdn_option"></label>
-      <sup>
-        [<a id="local_cdn_help" i18n="whats_this" href="https://help.getadblock.com/support/solutions/articles/6000191643-what-is-the-local-cdn-feature-" target="_blank"></a>]
-      </sup>
-    </p>
+      <li class="section-padding advanced light-grey-text">
+        <div class="add-space-between checkbox-indentation forDebug">
+          <input type="checkbox" class="feature" id="enable_debug_logging" />
+          <label for="enable_debug_logging" i18n="debuginlogoption2"></label>
+        </div>
+        <div class="extra-info">
+          <div i18n="slows_down_extension" class="italic"></div>
+        </div>
+      </li>
 
-    <p>
-      <input type="checkbox" class="feature" id="enable_show_advanced_options" />
-      <label for="enable_show_advanced_options" i18n="advanced_options2"></label>
-    </p>
-
-    <p class="forDebug advanced">
-      <input type="checkbox" class="feature" id="enable_debug_logging" />
-      <label for="enable_debug_logging" i18n="debuginlogoption"></label>
-    </p>
-
+    </ul>
+    <div class="translation_credits italic do-not-display"></div>
   </div>
+</div>

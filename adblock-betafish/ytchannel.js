@@ -48,7 +48,6 @@ if (!/ab_channel/.test(url))
     chrome.runtime.sendMessage({ command: 'updateYouTubeChannelName', args: false });
   }
 
-
   // Get id of the channel
   function getChannelId(url)
   {
@@ -77,7 +76,7 @@ if (!/ab_channel/.test(url))
   //                   the page (just if channel is whitelisted by user)
   function updateURL(channelName, shouldReload) {
     // check that the url hasn't changed
-    if (url === document.location.href) {
+    if (channelName && url === document.location.href) {
       const parsedChannelName = parseChannelName(channelName);
       let updatedUrl;
       let [baseUrl] = url.split('&ab_channel');

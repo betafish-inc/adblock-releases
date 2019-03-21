@@ -10,24 +10,15 @@ let SURVEY = exports.SURVEY = (function() {
   // Call |callback(tab)|, where |tab| is the active tab, or undefined if
   // there is no active tab.
   var getActiveTab = function(callback) {
-    if (!SAFARI) {
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        callback(tabs[0]);
-      });
-    } else {
-      var target = safari || {};
-      target = target.application || {};
-      target = target.activeBrowserWindow || {};
-      callback(target.activeTab);
-    }
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      callback(tabs[0]);
+    });
   };
 
   // True if we are willing to show an overlay on this tab.
   var validTab = function(tab) {
-    if (!SAFARI) {
-      if (tab.incognito || tab.status !== "complete") {
-        return false;
-      }
+    if (tab.incognito || tab.status !== "complete") {
+      return false;
     }
     return /^http:/.test(tab.url);
   };
@@ -241,11 +232,7 @@ let SURVEY = exports.SURVEY = (function() {
             recordErrorMessage('invalid_response_from_notification_overlay_script', undefined, { errorMessage: response });
           }
         };
-        if (SAFARI) {
-          chrome.extension.sendRequest(data, validateResponseFromTab);
-        } else {
-          chrome.tabs.sendRequest(tab.id, data, validateResponseFromTab);
-        }
+        chrome.tabs.sendRequest(tab.id, data, validateResponseFromTab);
       });
     };
 

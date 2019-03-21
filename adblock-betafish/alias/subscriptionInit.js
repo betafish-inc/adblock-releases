@@ -126,7 +126,7 @@ function chooseFilterSubscriptions(subscriptions)
           }
         }
       }
-      else if (subscriptionType == "circumvention")
+      else if (subscriptionType === "circumvention")
       {
         selectedItem[subscriptionType] = subscription;
       }
@@ -135,26 +135,22 @@ function chooseFilterSubscriptions(subscriptions)
   return selectedItem;
 }
 
-function supportsNotificationsWithButtons()
-{
+function supportsNotificationsWithButtons() {
   // Microsoft Edge (as of EdgeHTML 16) doesn't have the notifications API.
-  // Opera gives an asynchronous error when buttons are provided (we cannot
-  // detect that behavior without attempting to show a notification).
-  if (!("notifications" in browser) || info.application == "opera")
+  if (!("notifications" in browser)) {
     return false;
+  }
 
   // Firefox throws synchronously if the "buttons" option is provided.
   // If buttons are supported (i.e. on Chrome), this fails with
   // an asynchronous error due to missing required options.
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1190681
-  try
-  {
+  try {
     browser.notifications.create({buttons: []}).catch(() => {});
-  }
-  catch (e)
-  {
-    if (e.toString().includes('"buttons" is unsupported'))
+  } catch (e) {
+    if (e.toString().includes('"buttons" is unsupported')) {
       return false;
+    }
   }
 
   return true;

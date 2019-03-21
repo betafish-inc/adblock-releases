@@ -122,7 +122,7 @@ $(function ()
       appendCustomFilter(blockDomain + '##' + blockCss);
     }
 
-    $(this).closest('.entryTable').find('input[type=\'text\']').val('');
+    $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
     $(this).prop('disabled', true);
   });
 
@@ -138,7 +138,7 @@ $(function ()
 
     appendCustomFilter('@@' + excludeUrl + '$document');
 
-    $(this).closest('.entryTable').find('input[type=\'text\']').val('');
+    $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
     $(this).prop('disabled', true);
   });
 
@@ -187,7 +187,7 @@ $(function ()
       appendCustomFilter(blockUrl + '$domain=' + blockDomain);
     }
 
-    $(this).closest('.entryTable').find('input[type=\'text\']').val('');
+    $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
     $(this).prop('disabled', true);
   });
 
@@ -263,9 +263,9 @@ $(function ()
   });
 
   // When one presses 'Enter', pretend it was a click on the 'add' button
-  $('.entryTable input[type=\'text\']').keypress(function (event)
+  $('.customize-entry-table input[type=\'text\']').keypress(function (event)
   {
-    var submitButton = $(this).closest('.entryTable').find('input[type=\'button\']');
+    var submitButton = $(this).closest('.customize-entry-table').find('input[type=\'button\']');
     if (event.keyCode === 13 && !submitButton.prop('disabled'))
     {
       event.preventDefault();
@@ -273,18 +273,35 @@ $(function ()
     }
   });
 
-  $('a.controlsLink').click(function ()
+  $('a.controlsLink').click(function (event)
   {
     event.preventDefault();
-    var myControls = $(this).closest('div').find('.addControls');
-    $('.addControls').not(myControls).slideUp();
-    myControls.slideToggle();
+    var $myControls = $(this).closest('div').find('.addControls');
+    $('.addControls').not($myControls).slideUp({
+      complete: function() {
+        $(this).parent('div').find('.red-dropdown-icon').removeClass('upward');
+      }
+    });
+    $myControls.slideToggle({
+      complete: function() {
+        let $icon = $(this).parent('div').find('.red-dropdown-icon');
+        let isExpanded = $(this).css('display') !== 'none';
+
+        if (isExpanded) {
+          $icon.addClass('upward');
+        } else {
+          $icon.removeClass('upward');
+        }
+      }
+    });
   });
 
-  $('#btnEditAdvancedFilters').click(function ()
+  $('#btnEditAdvancedFilters').click(function(event)
   {
-    $('#divAddNewFilter').slideUp();
-    $('.addControls').slideUp();
+    let headerOffset = $("#header").height() + 10;
+    $("body, html").animate({
+      scrollTop: $(event.target).offset().top - headerOffset
+    }, 1000);
     $('#txtFiltersAdvanced').prop('disabled', false);
     $('#spanSaveButton').show();
     $('#btnEditAdvancedFilters').hide();
@@ -292,10 +309,12 @@ $(function ()
   });
 
 
-  $('#btnEditExcludeAdvancedFilters').click(function ()
+  $('#btnEditExcludeAdvancedFilters').click(function(event)
   {
-    $('#divAddNewFilter').slideUp();
-    $('.addControls').slideUp();
+    let headerOffset = $("#header").height() + 10;
+    $("body, html").animate({
+      scrollTop: $(event.target).offset().top - headerOffset
+    }, 1000);
     $('#txtExcludeFiltersAdvanced').removeAttr('disabled');
     $('#spanSaveExcludeButton').show();
     $('#btnEditExcludeAdvancedFilters').hide();
@@ -332,7 +351,6 @@ $(function ()
     var customFiltersArray = customFiltersText.split('\n');
     var filterErrorMessage = '';
     $('#messagecustom').html(filterErrorMessage);
-    $('#messagecustom').hide();
     for (var i = 0; (!filterErrorMessage && i < customFiltersArray.length); i++)
     {
       var filter = customFiltersArray[i];
@@ -350,7 +368,7 @@ $(function ()
     if (filterErrorMessage)
     {
       $('#messagecustom').html(filterErrorMessage);
-      $('#messagecustom').show();
+      $('#messagecustom').removeClass('do-not-display');
     }
     else
     {
@@ -438,5 +456,7 @@ $(function ()
   }
 
   filterNotifier.on("save", onFilterChange);
-
+  window.addEventListener("unload", function() {
+    filterNotifier.off("save", onFilterChange);
+  });
 });

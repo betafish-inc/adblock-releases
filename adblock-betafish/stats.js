@@ -21,17 +21,8 @@ let STATS = exports.STATS = (function()
   var match = navigator.userAgent.match(/(CrOS\ \w+|Windows\ NT|Mac\ OS\ X|Linux)\ ([\d\._]+)?/);
   var os = (match || [])[1] || "Unknown";
   var osVersion = (match || [])[2] || "Unknown";
-  var flavor;
-  if (window.opr)
-    flavor = "O"; // Opera
-  else if (window.safari)
-    flavor = "S"; // Safari
-  else
-    flavor = "E"; // Chrome
-  if (flavor === "O")
-    match = navigator.userAgent.match(/(?:OPR)\/([\d\.]+)/);
-  else
-    match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d\.]+)/);
+  var flavor = "E"; // Chrome
+  match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d\.]+)/);
   var browserVersion = (match || [])[1] || "Unknown";
 
   var firstRun = false;
@@ -373,8 +364,6 @@ let STATS = exports.STATS = (function()
     version : version,
     flavor : flavor,
     browser : ({
-      O : "Opera",
-      S : "Safari",
       E : "Chrome"
     })[flavor],
     browserVersion : browserVersion,

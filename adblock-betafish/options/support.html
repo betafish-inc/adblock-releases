@@ -1,34 +1,49 @@
-<!doctype html><!-- required to help Safari not get confused when injecting this fragment -->
- <head>
-  <title i18n="optionstitle"></title>
- </head>
- <body>
-  <h2 i18n="adblocksupport"></h2>
+<!doctype html>
 
-  <h3 i18n="foundbug"></h3>
-  <p>
-    <span i18n="bugreport" i18n_replacement_el="report"> <a href="adblock-option-bug-report.html" id="report"> </a> </span>
-    <span class='english-only'>(<span i18n='englishonly'></span>)</span>
-  </p>
-  <p>
-    <span i18n="ad_report_please" i18n_replacement_el="kb_adreport"> <a id="kb_adreport" href="https://getadblock.com/faq/adreport" id="report" target="_blank"> </a> </span>
-    <p i18n="debuginfo" i18n_replacement_el="debug"> <a id="debug"> </a> </p>
-    <textarea id="debugInfo" rows="30" cols="60" style="display:none;"></textarea>
-  </p>
+<div class="option-page-box" id="support-page">
+  <div class="option-page-content">
 
-  <h3 i18n="questionoridea"></h3>
-  <p>
-   <span i18n="supportsite" i18n_replacement_el="supportlink"> <a id="supportlink" href="https://help.getadblock.com/" target="_blank"> </a> </span>
-   <span class='english-only'>(<span i18n='englishonly'></span>)</span>
-  </p>
+    <h1 i18n="adblocksupport" class="page-title"></h1>
 
-  <h3 i18n="whatmakesadblocktick"></h3>
+    <h2 i18n="foundbug" class="paragraph-title"></h2>
+    <div class="section-padding bottom-line">
+      <a i18n="bugreport" i18n_replacement_el="bugreport" href="adblock-option-bug-report.html" target="_blank">
+        <span id="bugreport" class="blue-text"></span>
+      </a>
+      <span class='english-only do-not-display'>(<span i18n='englishonly'></span>)</span>
+    </div>
+    <a i18n="ad_report_please" i18n_replacement_el="ad_report_please" class="section-padding bottom-line" href="https://getadblock.com/faq/adreport" target="_blank">
+      <span id="ad_report_please" class="blue-text"></span>
+    </a>
+    <a i18n="debuginfo" i18n_replacement_el="debuginfo" class="section-padding" id="debug">
+      <span id="debuginfo" class="blue-text"></span>
+    </a>
+    <textarea id="debugInfo"class="widest" style="display:none;"></textarea>
 
-  <p i18n="sourcecode" i18n_replacement_el="codelink"> <a id="codelink" href="http://code.getadblock.com/" target="_blank"> </a> </p>
-  <p i18n="contributors" i18n_replacement_el="contributorslink"> <a id="contributorslink" href="https://getadblock.com/contributors/" target="_blank"> </a> </p>
 
-  <h3 i18n="adblockupdates"></h3>
-  <p id="whatsnew" i18n="whatsnew" i18n_replacement_el="whatsnew_link"> <a id="whatsnew_link"> </a> </p>
-  <textarea id="changes" style="display:none;"></textarea>
+    <h2 i18n="questionoridea" class="paragraph-title"></h2>
+    <div class="section-padding">
+      <a i18n="supportsite" i18n_replacement_el="supportsite" href="https://help.getadblock.com/" target="_blank">
+        <span id="supportsite" class="blue-text"></span>
+      </a>
+      <span class='english-only do-not-display'>(<span i18n='englishonly'></span>)</span>
+    </div>
 
- </body>
+    <h2 i18n="whatmakesadblocktick" class="paragraph-title"></h2>
+    <a i18n="sourcecode" i18n_replacement_el="sourcecode" class="section-padding bottom-line" href="http://code.getadblock.com/" target="_blank">
+      <span id="sourcecode" class="blue-text"></span>
+    </a>
+    <a i18n="contributors" i18n_replacement_el="contributors" class="section-padding" href="https://getadblock.com/contributors/" target="_blank">
+      <span id="contributors" class="blue-text"></span>
+    </a>
+
+    <h2 i18n="adblockupdates" class="paragraph-title"></h2>
+    <a class="section-padding" id="whatsnew_link" i18n="whatsnew" i18n_replacement_el="whatsnew">
+      <span id="whatsnew" class="blue-text"></span>
+    </a>
+    <textarea id="changes" class="widest" style="display:none;"></textarea>
+
+    <div class="translation_credits italic do-not-display"></div>
+
+  </div>
+</div>
