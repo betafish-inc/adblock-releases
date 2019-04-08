@@ -5,12 +5,12 @@ function cleanCustomFilter(filters)
   // Remove the global pause white-list item if adblock is paused
   if (backgroundPage.adblockIsPaused())
   {
-    var index = filters.indexOf("@@");
+    var index = filters.indexOf(backgroundPage.pausedFilterText1);
     if (index >= 0)
     {
       filters.splice(index, 1);
     }
-    var index = filters.indexOf("@@^$document");
+    var index = filters.indexOf(backgroundPage.pausedFilterText2);
     if (index >= 0)
     {
       filters.splice(index, 1);
@@ -386,7 +386,7 @@ $(function ()
           var result = parseFilter(filter);
           if (result.filter)
           {
-            FilterStorage.addFilter(result.filter);
+            filterStorage.addFilter(result.filter);
           }
         }
       }
@@ -405,7 +405,7 @@ $(function ()
               var result = parseFilter(filter);
               if (result.filter)
               {
-                FilterStorage.removeFilter(result.filter);
+                filterStorage.removeFilter(result.filter);
               }
             }
           }

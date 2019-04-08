@@ -6,7 +6,7 @@ const SpecialSubscription      = backgroundPage.SpecialSubscription;
 const DownloadableSubscription = backgroundPage.DownloadableSubscription;
 const parseFilter         = backgroundPage.parseFilter;
 const parseFilters        = backgroundPage.parseFilters;
-const FilterStorage       = backgroundPage.FilterStorage;
+const filterStorage       = backgroundPage.filterStorage;
 const filterNotifier      = backgroundPage.filterNotifier;
 const Prefs               = backgroundPage.Prefs;
 const Synchronizer        = backgroundPage.Synchronizer;
@@ -368,6 +368,11 @@ function startSubscriptionSelection(title, url)
       {
         alert(translate('failedtofetchfilter'));
       }
+    }
+    // show the link icon for the new filter list, if the advance setting is set and the show links button has been clicked (not visible)
+    if (optionalSettings &&
+      optionalSettings.show_advanced_options && $('#btnShowLinks').is(":visible") == false) {
+      $('.filter-list-link').fadeIn('slow');
     }
   }
 }

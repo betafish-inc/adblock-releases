@@ -6,7 +6,7 @@ const {Subscription,
        DownloadableSubscription,
        SpecialSubscription} =
   require("subscriptionClasses");
-const {FilterStorage} = require("filterStorage");
+const {filterStorage} = require("filterStorage");
 const {filterNotifier} = require("filterNotifier");
 const info = require("info");
 const {Prefs} = require("prefs");
@@ -32,9 +32,9 @@ let dataCorrupted = false;
  */
 function detectFirstRun()
 {
-  firstRun = FilterStorage.subscriptions.length == 0;
+  firstRun = filterStorage.subscriptionCount == 0;
 
-  if (firstRun && (!FilterStorage.firstRun || Prefs.currentVersion))
+  if (firstRun && (!filterStorage.firstRun || Prefs.currentVersion))
     reinitialized = true;
 
   Prefs.currentVersion = info.addonVersion;
@@ -54,7 +54,7 @@ function detectFirstRun()
  */
 function shouldAddDefaultSubscriptions()
 {
-  for (let subscription of FilterStorage.subscriptions)
+  for (let subscription of filterStorage.subscriptions())
   {
     if (subscription instanceof DownloadableSubscription &&
         subscription.url != Prefs.subscriptions_exceptionsurl &&
@@ -63,7 +63,7 @@ function shouldAddDefaultSubscriptions()
       return false;
 
     if (subscription instanceof SpecialSubscription &&
-        subscription.filters.length > 0)
+        subscription.filterCount > 0)
       return false;
   }
 
@@ -249,7 +249,7 @@ function addSubscriptionsAndNotifyUser(subscriptions)
 
   for (let subscription of subscriptions)
   {
-    FilterStorage.addSubscription(subscription);
+    filterStorage.addSubscription(subscription);
     if (subscription instanceof DownloadableSubscription &&
         !subscription.lastDownload)
       Synchronizer.execute(subscription);
@@ -269,7 +269,6 @@ function addSubscriptionsAndNotifyUser(subscriptions)
     {
       if (!Prefs.suppress_first_run_page)
       {
-        // TODO- do we want to do this?
         // Always show the first run page if a data corruption was detected
         // (either through failure of reading from or writing to storage.local).
         // The first run page notifies the user about the data corruption.
@@ -277,7 +276,7 @@ function addSubscriptionsAndNotifyUser(subscriptions)
         if (firstRun || dataCorrupted) {
           STATS.untilLoaded(function(userID)
           {
-            browser.tabs.create({url: "https://getadblock.com/installed/?u=" + userID + "&lg=" + chrome.i18n.getUILanguage() });
+            browser.tabs.create({url: "https://getadblock.com/installed/?u=" + userID + "&lg=" + chrome.i18n.getUILanguage() + "&dc=" + dataCorrupted });
           });
         }
       }

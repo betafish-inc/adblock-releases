@@ -1,6 +1,6 @@
 /** @module adblock-betafish/alias/uninstall */
 
-const FilterStorage = require('filterStorage').FilterStorage;
+const {filterStorage} = require("filterStorage");
 const {STATS} = require('./../stats');
 
 let uninstallInit = exports.uninstallInit = function()
@@ -20,9 +20,8 @@ let uninstallInit = exports.uninstallInit = function()
         var twoMinutes = 2 * 60 * 1000;
         var getABCLastUpdateTime = function()
         {
-          for ( var sub in FilterStorage.subscriptions)
+          for (let subscription of filterStorage.subscriptions())
           {
-            var subscription = FilterStorage.subscriptions[sub];
             if (subscription.url === getUrlFromId("adblock_custom"))
             {
               return subscription._lastDownload;

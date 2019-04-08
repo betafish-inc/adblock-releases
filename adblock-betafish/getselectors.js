@@ -4,6 +4,7 @@
 
 "use strict";
 
+
 const {ElemHide} = require("elemHide");
 const {RegExpFilter} = require("filterClasses");
 const {ElemHideEmulation} = require("elemHideEmulation");
@@ -24,10 +25,11 @@ port.on("getSelectors", (message, sender) =>
     let specificOnly = checkWhitelisted(sender.page, sender.frame, null,
                                         RegExpFilter.typeMap.GENERICHIDE);
 
-    selectors = ElemHide.getSelectorsForDomain(
+    selectors = ElemHide.generateStyleSheetForDomain(
       hostname,
-      specificOnly ? ElemHide.SPECIFIC_ONLY : ElemHide.ALL_MATCHING
-    );
+      specificOnly ? ElemHide.SPECIFIC_ONLY : ElemHide.ALL_MATCHING,
+      true
+    ).selectors;
 
     for (let filter of ElemHideEmulation.getRulesForDomain(hostname))
       emulatedPatterns.push({selector: filter.selector, text: filter.text});

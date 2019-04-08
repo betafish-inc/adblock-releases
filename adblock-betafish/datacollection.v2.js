@@ -54,7 +54,7 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
         var selectors = message.selectors;
         var docDomain = extractHostFromFrame(sender.frame);
 
-        for (let subscription of FilterStorage.subscriptions)
+        for (let subscription of filterStorage.subscriptions())
         {
           if (subscription.disabled)
             continue;

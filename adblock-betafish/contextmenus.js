@@ -19,13 +19,8 @@ var updateButtonUIAndContextMenus = function ()
 
 var updateContextMenuItems = function (page)
 {
-  // Remove the AdBlock context menu
-  page.contextMenus.remove(contextMenuItem.blockThisAd);
-  page.contextMenus.remove(contextMenuItem.blockAnAd);
-  page.contextMenus.remove(contextMenuItem.pauseAll);
-  page.contextMenus.remove(contextMenuItem.unpauseAll);
-  page.contextMenus.remove(contextMenuItem.pauseDomain);
-  page.contextMenus.remove(contextMenuItem.unpauseDomain);
+  // Remove the AdBlock context menu items
+  chrome.contextMenus.removeAll();
 
   // Check if the context menu items should be added
   if (!Prefs.shouldShowBlockElementMenu) {
@@ -34,31 +29,30 @@ var updateContextMenuItems = function (page)
 
   const adblockIsPaused = window.adblockIsPaused();
   const domainIsPaused = window.adblockIsDomainPaused({"url": page.url.href, "id": page.id});
-
   if (adblockIsPaused)
   {
-    page.contextMenus.create(contextMenuItem.unpauseAll);
+    chrome.contextMenus.create(contextMenuItem.unpauseAll);
   }
   else if (domainIsPaused)
   {
-    page.contextMenus.create(contextMenuItem.unpauseDomain);
+    chrome.contextMenus.create(contextMenuItem.unpauseDomain);
   }
   else if (checkWhitelisted(page))
   {
-    page.contextMenus.create(contextMenuItem.pauseAll);
+    chrome.contextMenus.create(contextMenuItem.pauseAll);
   }
   else
   {
-    page.contextMenus.create(contextMenuItem.blockThisAd);
-    page.contextMenus.create(contextMenuItem.blockAnAd);
-    page.contextMenus.create(contextMenuItem.pauseDomain);
-    page.contextMenus.create(contextMenuItem.pauseAll);
+    chrome.contextMenus.create(contextMenuItem.blockThisAd);
+    chrome.contextMenus.create(contextMenuItem.blockAnAd);
+    chrome.contextMenus.create(contextMenuItem.pauseDomain);
+    chrome.contextMenus.create(contextMenuItem.pauseAll);
   }
 };
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
 {
-  if (changeInfo.status == "loading") {
+  if (changeInfo.status) {
     updateContextMenuItems(new ext.Page(tab));
   }
 });
@@ -115,10 +109,10 @@ const contextMenuItem = (() =>
     {
       title: chrome.i18n.getMessage('domain_pause_adblock'),
       contexts: ['all'],
-      onclick: (page) =>
+      onclick: (info, tab) =>
       {
         recordGeneralMessage('cm_domain_pause_clicked');
-        adblockIsDomainPaused({'url': page.url.href, 'id': page.id}, true);
+        adblockIsDomainPaused({'url': tab.url, 'id': tab.id}, true);
         updateButtonUIAndContextMenus();
       },
     },
@@ -126,10 +120,10 @@ const contextMenuItem = (() =>
     {
       title: chrome.i18n.getMessage('resume_blocking_ads'),
       contexts: ['all'],
-      onclick: (page) =>
+      onclick: (info, tab) =>
       {
         recordGeneralMessage('cm_domain_unpause_clicked');
-        adblockIsDomainPaused({'url': page.url.href, 'id': page.id}, false);
+        adblockIsDomainPaused({'url': tab.url, 'id': tab.id}, false);
         updateButtonUIAndContextMenus();
       },
     },
@@ -137,11 +131,11 @@ const contextMenuItem = (() =>
     {
       title: chrome.i18n.getMessage('block_this_ad'),
       contexts: ['all'],
-      onclick: function (page, clickdata)
+      onclick: function (info, tab)
       {
         emitPageBroadcast(
-          { fn:'top_open_blacklist_ui', options:{ info: clickdata } },
-          { tab: page }
+          { fn:'top_open_blacklist_ui', options:{ info: info } },
+          { tab: tab }
         );
       },
     },
@@ -149,11 +143,11 @@ const contextMenuItem = (() =>
     {
       title: chrome.i18n.getMessage('block_an_ad_on_this_page'),
       contexts: ['all'],
-      onclick: function (page)
+      onclick: function (info, tab)
       {
         emitPageBroadcast(
           { fn:'top_open_blacklist_ui', options:{ nothing_clicked: true } },
-          { tab: page }
+          { tab: tab }
         );
       },
     },

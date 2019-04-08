@@ -65,7 +65,7 @@ $(function () {
       }
     }
     // if the user enables/disable Local CDN
-    // start or end the Local CDN 
+    // start or end the Local CDN
     if (name === 'local_cdn') {
       if (isEnabled) {
         backgroundPage.LocalCDN.start();
@@ -92,7 +92,7 @@ var acceptableAdsClicked = function (isEnabled)
   var subscription = Subscription.fromURL(Prefs.subscriptions_exceptionsurl);
   if (isEnabled)
   {
-    FilterStorage.addSubscription(subscription);
+    filterStorage.addSubscription(subscription);
     if (subscription instanceof DownloadableSubscription)
     {
       Synchronizer.execute(subscription);
@@ -100,7 +100,7 @@ var acceptableAdsClicked = function (isEnabled)
     $('#acceptable_ads_info').slideUp();
   } else
   {
-    FilterStorage.removeSubscription(subscription);
+    filterStorage.removeSubscription(subscription);
     $('#acceptable_ads_info').slideDown();
   }
 };

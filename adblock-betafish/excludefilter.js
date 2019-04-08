@@ -4,15 +4,42 @@ ExcludeFilter = (function ()
 {
   var ABRemoveFilter = function (filter)
   {
-    var subscriptions = filter.subscriptions.slice();
-    for (var i = 0; i < subscriptions.length; i++)
+    for (let currentSubscription of filter.subscriptions())
     {
-      var subscription = subscriptions[i];
+      let positions = [];
+      let index = -1;
+      do
+      {
+        index = currentSubscription.searchFilter(filter, index + 1);
+        if (index >= 0) {
+          positions.push(index);
+        }
+      } while (index >= 0);
+
+      for (let j = positions.length - 1; j >= 0; j--)
+      {
+        let currentPosition = positions[j];
+        let currentFilter = currentSubscription.filterAt(currentPosition);
+        if (currentFilter && currentFilter.text == filter.text)
+        {
+          currentSubscription.deleteFilterAt(currentPosition);
+          if (currentSubscription.searchFilter(filter) < 0)
+            filter.removeSubscription(currentSubscription);
+          filterNotifier.emit("filter.removed", filter, currentSubscription,
+                              currentPosition);
+        }
+      }
+    }
+
+
+
+    for (let subscription of filter.subscriptions())
+    {
       var positions = [];
       var index = -1;
       do
       {
-        index = subscription.filters.indexOf(filter, index + 1);
+        index = subscription._filters.indexOf(filter, index + 1);
         if (index >= 0)
         {
           positions.push(index);
@@ -23,15 +50,15 @@ ExcludeFilter = (function ()
       for (var j = positions.length - 1; j >= 0; j--)
       {
         var position = positions[j];
-        if (subscription.filters[position] === filter)
+        if (subscription._filters[position] === filter)
         {
-          subscription.filters.splice(position, 1);
-          if (subscription.filters.indexOf(filter) < 0)
+          subscription._filters.splice(position, 1);
+          if (subscription._filters.indexOf(filter) < 0)
           {
-            var index = filter.subscriptions.indexOf(subscription);
+            var index = filter._subscriptions.indexOf(subscription);
             if (index >= 0)
             {
-              filter.subscriptions.splice(index, 1);
+              filter._subscriptions.splice(index, 1);
             }
           }
           filterNotifier.emit("filter.removed", filter, currentSubscription, currentPosition);

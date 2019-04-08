@@ -12,7 +12,7 @@ const SpecialSubscription = require("subscriptionClasses").SpecialSubscription;
 const parseFilter = require('filterValidation').parseFilter;
 const parseFilters = require('filterValidation').parseFilters;
 
-const FilterStorage = require('filterStorage').FilterStorage;
+const {filterStorage} = require("filterStorage");
 const {filterNotifier} = require("filterNotifier");
 const Prefs = require('prefs').Prefs;
 const Synchronizer = require('synchronizer').Synchronizer;
@@ -35,7 +35,7 @@ const {getUrlFromId, unsubscribe, getSubscriptionsMinusText, getAllSubscriptions
 const {uninstallInit} = require('./alias/uninstall');
 
 Object.assign(window, {
-  FilterStorage,
+  filterStorage,
   filterNotifier,
   Prefs,
   Synchronizer,
@@ -104,9 +104,9 @@ var tryToUnwhitelist = function (url)
       // Remove protocols
       url = url.replace(/((http|https):\/\/)?(www.)?/, '').split(/[/?#]/)[0];
       var oldFilter = Filter.fromText(text);
-      FilterStorage.removeFilter(oldFilter);
+      filterStorage.removeFilter(oldFilter);
       var newFilter = Filter.fromText(text + '|~' + url);
-      FilterStorage.addFilter(newFilter);
+      filterStorage.addFilter(newFilter);
       return true;
     } else
     {
@@ -127,7 +127,7 @@ var tryToUnwhitelist = function (url)
       {
         continue;
       }
-      FilterStorage.removeFilter(filter);
+      filterStorage.removeFilter(filter);
       return true;
     }
   }
@@ -141,7 +141,7 @@ var tryToUnwhitelist = function (url)
 var addCustomFilter = function (filterText) {
   try {
     var filter = Filter.fromText(filterText);
-    FilterStorage.addFilter(filter);
+    filterStorage.addFilter(filter);
     if (isSelectorFilter(filterText)) {
       countCache.addCustomFilterCount(filterText);
     }
@@ -175,7 +175,7 @@ var removeCustomFilter = function (host)
     if (entry.indexOf(identifier) === 0)
     {
       var filter = Filter.fromText(entry);
-      FilterStorage.removeFilter(filter);
+      filterStorage.removeFilter(filter);
     }
   }
 };
@@ -481,7 +481,7 @@ var pageIsWhitelisted = function(sender) {
 // if paused, false otherwise.
 var pausedKey = 'paused';
 var pausedFilterText1 = '@@';  // white-list all blocking requests regardless of frame / document, but still allows element hiding
-var pausedFilterText2 = '@@^$document';  // white-list all documents, which prevents element hiding
+var pausedFilterText2 = '@@*$document';  // white-list all documents, which prevents element hiding
 var adblockIsPaused = function (newValue)
 {
   if (newValue === undefined)
@@ -494,13 +494,13 @@ var adblockIsPaused = function (newValue)
   var result2 = parseFilter(pausedFilterText2);
   if (newValue === true)
   {
-    FilterStorage.addFilter(result1.filter);
-    FilterStorage.addFilter(result2.filter);
+    filterStorage.addFilter(result1.filter);
+    filterStorage.addFilter(result2.filter);
     chromeStorageSetHelper(pausedKey, true);
   } else
   {
-    FilterStorage.removeFilter(result1.filter);
-    FilterStorage.removeFilter(result2.filter);
+    filterStorage.removeFilter(result1.filter);
+    filterStorage.removeFilter(result2.filter);
     chrome.storage.local.remove(pausedKey);
   }
 
@@ -550,14 +550,14 @@ var adblockIsDomainPaused = function (activeTab, newValue)
   if (newValue === true)
   {
     // add a domain pause
-    FilterStorage.addFilter(result.filter);
+    filterStorage.addFilter(result.filter);
     storedDomainPauses[activeDomain] = activeTab.id;
     chrome.tabs.onUpdated.addListener(domainPauseNavigationHandler);
     chrome.tabs.onRemoved.addListener(domainPauseClosedTabHandler);
   } else
   {
     // remove the domain pause
-    FilterStorage.removeFilter(result.filter);
+    filterStorage.removeFilter(result.filter);
     delete storedDomainPauses[activeDomain];
   }
 
@@ -613,7 +613,7 @@ var domainPauseChangeHelper = function(tabId, newDomain)
     {
       // Remove the filter that white-listed the domain
       var result = parseFilter("@@" + aDomain + "$document");
-      FilterStorage.removeFilter(result.filter);
+      filterStorage.removeFilter(result.filter);
       delete storedDomainPauses[aDomain];
 
       // save updated domain pauses
@@ -643,8 +643,8 @@ chrome.storage.local.get(pausedKey, function (response)
       filterNotifier.off("load", pauseHandler);
       var result1 = parseFilter(pausedFilterText1);
       var result2 = parseFilter(pausedFilterText2);
-      FilterStorage.removeFilter(result1.filter);
-      FilterStorage.removeFilter(result2.filter);
+      filterStorage.removeFilter(result1.filter);
+      filterStorage.removeFilter(result2.filter);
       chrome.storage.local.remove(pausedKey);
     };
 
@@ -667,7 +667,7 @@ chrome.storage.local.get(domainPausedKey, function (response)
         for (var aDomain in storedDomainPauses)
         {
           var result = parseFilter("@@" + aDomain + "$document");
-          FilterStorage.removeFilter(result.filter);
+          filterStorage.removeFilter(result.filter);
         }
         chrome.storage.local.remove(domainPausedKey);
       };
@@ -1191,9 +1191,7 @@ var getDebugInfo = function (callback) {
 // Called when user explicitly requests filter list updates
 function updateFilterLists()
 {
-  for (var i = 0; i < FilterStorage.subscriptions.length; i++)
-  {
-    var subscription = FilterStorage.subscriptions[i];
+  for (let subscription of filterStorage.subscriptions()) {
     if (subscription instanceof DownloadableSubscription)
     {
       Synchronizer.execute(subscription, true, true);
@@ -1206,17 +1204,15 @@ function getUserFilters()
   var filters = [];
   var exceptions = [];
 
-  for (var i = 0; i < FilterStorage.subscriptions.length; i++)
-  {
-    var subscription = FilterStorage.subscriptions[i];
+  for (let subscription of filterStorage.subscriptions()) {
     if (!(subscription instanceof SpecialSubscription))
     {
       continue;
     }
 
-    for (var j = 0; j < subscription.filters.length; j++)
+    for (var j = 0; j < subscription._filters.length; j++)
     {
-      var filter = subscription.filters[j];
+      var filter = subscription._filters[j];
       filters.push(filter.text);
     }
   }
@@ -1317,5 +1313,7 @@ Object.assign(window, {
   addYouTubeHistoryStateUpdateHanlder,
   removeYouTubeHistoryStateUpdateHanlder,
   ytChannelNamePages,
-  checkPingResponseForProtect
+  checkPingResponseForProtect,
+  pausedFilterText1,
+  pausedFilterText2
 });

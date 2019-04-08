@@ -1,5 +1,4 @@
 const Prefs = require('prefs').Prefs;
-const FilterStorage = require('filterStorage').FilterStorage;
 const {LocalCDN} = require('./localcdn');
 const {SURVEY} = require('./survey');
 const {recordGeneralMessage, recordErrorMessage} = require('./servermessages').ServerMessages;

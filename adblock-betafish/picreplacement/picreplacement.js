@@ -4,7 +4,7 @@ var minDimension = 60;
 var cssRules = [];
 var hideElements = [];
 var hiddenElements = [];
-browser.runtime.sendMessage({type: "getSelectors"}, response =>
+chrome.runtime.sendMessage({type: "getSelectors"}, response =>
 {
   if (response.selectors && response.selectors) {
     cssRules = response.selectors;

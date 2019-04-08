@@ -545,7 +545,7 @@ SubscriptionUtil.subscribe = function (id, title) {
     }
   }
 
-  FilterStorage.addSubscription(subscription);
+  filterStorage.addSubscription(subscription);
   if (subscription instanceof DownloadableSubscription) {
     Synchronizer.execute(subscription);
   }
@@ -570,7 +570,7 @@ SubscriptionUtil.unsubscribe = function (id) {
   subscription     = Subscription.fromURL(subscription.url);
 
   setTimeout(function () {
-    FilterStorage.removeSubscription(subscription);
+    filterStorage.removeSubscription(subscription);
   }, 1);
 
   if (id === 'acceptable_ads') {

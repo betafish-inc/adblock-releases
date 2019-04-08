@@ -1,6 +1,6 @@
 var $ = require('../jquery/jquery.min');
 const Subscription = require('subscriptionClasses').Subscription;
-
+const {filterStorage} = require("filterStorage");
 const {imageSizesMap, WIDE, TALL, SKINNYWIDE, SKINNYTALL, BIG, SMALL} = require('./image-sizes-map');
 
 var subscription1 = Subscription.fromURL(getUrlFromId("antisocial"));
@@ -131,8 +131,7 @@ Channels.prototype = {
     }
     // if the element to be replace is 'fixed' in position, it may make for bad pic replacement element.
     if (opts.position === "fixed") {
-      for (var inx = 0; inx < FilterStorage.subscriptions.length; inx++) {
-        var sub = FilterStorage.subscriptions[inx];
+      for (let subscription of filterStorage.subscriptions()) {
         if (sub.url === subscription1.url || sub.url === subscription2.url) {
           return undefined;
         }

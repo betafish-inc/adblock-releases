@@ -1,4 +1,4 @@
-﻿const FilterStorage = require('filterStorage').FilterStorage;
+﻿const {filterStorage} = require("filterStorage");
 with (require('subscriptionClasses'))
 {
   this.Subscription = Subscription;
@@ -47,7 +47,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       var subscription = Subscription.fromURL(subscriptionUrl);
       if (subscription)
       {
-        FilterStorage.removeSubscription(subscription);
+        filterStorage.removeSubscription(subscription);
       }
     }
   }
@@ -57,9 +57,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
   var getSubscriptionsMinusText = function()
   {
     var result = {};
-    for (var sub in FilterStorage.subscriptions)
-    {
-      var subscription = FilterStorage.subscriptions[sub];
+    for (let subscription of filterStorage.subscriptions()) {
       if (subscription instanceof DownloadableSubscription)
       {
         var tempSub = {};
