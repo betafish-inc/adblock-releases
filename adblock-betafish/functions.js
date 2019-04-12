@@ -290,6 +290,52 @@ var chromeStorageSetHelper = function(key, value, callback)
     chrome.storage.local.set(items, callback);
 };
 
+function chromeStorageGetHelper(storageKey) {
+  return new Promise(function(resolve, reject) {
+    chrome.storage.local.get(storageKey, function(items) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        reject(chrome.runtime.lastError.message);
+      } else {
+        resolve(items[storageKey]);
+      }
+    });
+  });
+};
+
+function chromeLocalStorageOnChangedHelper(storageKey, callback) {
+  chrome.storage.onChanged.addListener(function(changes, namespace) {
+    if (namespace !== 'local') return;
+
+    for (var key in changes) {
+      if (key !== storageKey) return;
+      callback();
+    }
+  });
+};
+
+var reloadOptionsPageTabs = function() {
+  var optionTabQuery = {
+    url: 'chrome-extension://' + chrome.runtime.id + '/options.html*'
+  }
+  chrome.tabs.query(optionTabQuery, function(tabs) {
+    for (var i in tabs) {
+      chrome.tabs.reload(tabs[i].id);
+    }
+  });
+};
+
+var reloadAllOpenedTabs = function() {
+  var optionTabQuery = {
+    url: 'chrome-extension://' + chrome.runtime.id + '/*'
+  }
+  chrome.tabs.query(optionTabQuery, function(tabs) {
+    for (var i in tabs) {
+      chrome.tabs.reload(tabs[i].id);
+    }
+  });
+};
+
 Object.assign(window, {
   sessionstorage_set,
   sessionstorage_get,
@@ -301,4 +347,8 @@ Object.assign(window, {
   chromeStorageSetHelper,
   logging,
   translate,
+  chromeStorageGetHelper,
+  reloadOptionsPageTabs,
+  reloadAllOpenedTabs,
+  chromeLocalStorageOnChangedHelper,
 });

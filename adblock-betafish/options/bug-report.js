@@ -2,9 +2,9 @@ var debugInfo;
 var textDebugInfo  = '';
 var extInfo        = '';
 var backgroundPage = chrome.extension.getBackgroundPage();
-$(document).ready(function ()
-{
-  'use strict';
+
+
+var bugReportLogic = function() {
 
   // Retrieve extension info
   var askUserToGatherExtensionInfo = function ()
@@ -369,4 +369,17 @@ $(document).ready(function ()
     $('#submit').prop('disabled', true);
     $('#step2-back').prop('disabled', true);
   });
+};
+
+
+$(document).ready(function ()
+{
+  'use strict';
+  var optionsTheme = 'default_theme';
+  if (backgroundPage && backgroundPage.getSettings()) {
+    let settings = backgroundPage.getSettings();
+    optionsTheme = settings.color_themes.options_page;
+  }
+  $('body').attr('id', optionsTheme).data('theme', optionsTheme);
+  bugReportLogic();
 });

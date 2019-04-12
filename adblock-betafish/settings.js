@@ -14,6 +14,10 @@ function Settings()
     show_survey : true,
     local_cdn : false,
     picreplacement : false,
+    color_themes: {
+      popup_menu: 'default_theme',
+      options_page: 'default_theme'
+    }
   };
   var _this = this;
   this._init = new Promise(function(resolve)

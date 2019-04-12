@@ -10,9 +10,14 @@
       <h2 i18n="blockmoreads2" class="paragraph-title"></h2>
 
       <div>
-        <a class="add-space-between controlsLink" href="#">
+        <a class="add-space-between align-items-center controlsLink" href="#">
           <span i18n="linkblockadbyurl"></span>
-          <img class="red-dropdown-icon" />
+          <span class="svg-box">
+            <svg class="customize-dropdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+              <path fill="none" d="M0 0h24v24H0V0z"/>
+              <path class="customize-dropdown-icon-color" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-.35 12.65l-2.79-2.79c-.32-.32-.1-.86.35-.86h5.59c.45 0 .67.54.35.85l-2.79 2.79c-.2.2-.52.2-.71.01z"/>
+            </svg>
+          </span>
         </a>
         <div id="divUrlBlock" class="addControls" style="display:none;">
           <table class="customize-entry-table">
@@ -39,9 +44,14 @@
       </div>
 
       <div>
-        <a class="add-space-between controlsLink" href="#">
+        <a class="add-space-between align-items-center controlsLink" href="#">
           <span i18n="linkhidesection"></span>
-          <img class="red-dropdown-icon" />
+          <span class="svg-box">
+            <svg class="customize-dropdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+              <path fill="none" d="M0 0h24v24H0V0z"/>
+              <path class="customize-dropdown-icon-color" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-.35 12.65l-2.79-2.79c-.32-.32-.1-.86.35-.86h5.59c.45 0 .67.54.35.85l-2.79 2.79c-.2.2-.52.2-.71.01z"/>
+            </svg>
+          </span>
         </a>
         <div id="divCssBlock" class="addControls" style="display:none;">
           <p class="italic light-grey-text" i18n="blacklistclickmessage"></p>
@@ -70,9 +80,14 @@
       <h2 i18n="stop_blocking_ads2" class="paragraph-title"></h2>
 
       <div>
-        <a class="add-space-between controlsLink" href="#" >
+        <a class="add-space-between align-items-center controlsLink" href="#" >
           <span i18n="linkunblock"></span>
-          <img class="red-dropdown-icon" />
+          <span class="svg-box">
+            <svg class="customize-dropdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+              <path fill="none" d="M0 0h24v24H0V0z"/>
+              <path class="customize-dropdown-icon-color" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-.35 12.65l-2.79-2.79c-.32-.32-.1-.86.35-.86h5.59c.45 0 .67.54.35.85l-2.79 2.79c-.2.2-.52.2-.71.01z"/>
+            </svg>
+          </span>
         </a>
         <div id="divExcludeBlock" class="addControls" style="display:none;">
           <table class="customize-entry-table">
@@ -99,9 +114,14 @@
       </div>
 
       <div>
-        <a class="add-space-between controlsLink" href="#">
+        <a class="add-space-between align-items-center controlsLink" href="#">
           <span i18n="show_ads_except_for"></span>
-          <img class="red-dropdown-icon" />
+          <span class="svg-box">
+            <svg class="customize-dropdown-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+              <path fill="none" d="M0 0h24v24H0V0z"/>
+              <path class="customize-dropdown-icon-color" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-.35 12.65l-2.79-2.79c-.32-.32-.1-.86.35-.86h5.59c.45 0 .67.54.35.85l-2.79 2.79c-.2.2-.52.2-.71.01z"/>
+            </svg>
+          </span>
         </a>
         <div id="divBlacklistBlock" class="addControls" style="display:none;">
           <table class="customize-entry-table">
@@ -123,7 +143,7 @@
             </tr>
             <tr>
               <td></td>
-              <td colspan=3><div class="red-text bold italic preserve-whitespace" i18n="warning_overrules_filters"></div></td>
+              <td colspan=3><div class="standout-message bold italic preserve-whitespace" i18n="warning_overrules_filters"></div></td>
               <td colspan=2><button id="btnAddBlacklist" class="btn short red right" type="button" i18n="buttonok" disabled="disabled"/>
               </td>
             </tr>
@@ -139,7 +159,7 @@
       <span>
         <button class="btn short red" type="button" id="btnEditAdvancedFilters" i18n="buttonedit" />
         <span id="spanSaveButton" style="display:none;">
-          <span class="savereminder bold red-text" i18n="savereminder"></span>
+          <span class="savereminder bold standout-message" i18n="savereminder"></span>
           <button type="button" id="btnSaveAdvancedFilters" i18n="savebutton" class="btn short red inline" />
         </span>
       </span>
@@ -148,11 +168,11 @@
     <div class="add-top-down-space">
       <div i18n="filtersavewarning_part1"></div>
       <a i18n="filtersavewarning_part2" i18n_replacement_el="filtersavewarning_part2" href="https://adblockplus.org/filters" target="_blank">
-        <span id="filtersavewarning_part2" class="blue-text"></span>
+        <span id="filtersavewarning_part2" class="link-text-color"></span>
       </a>
     </div>
 
-    <div id="messagecustom" class="preserve-whitespace bold red-text do-not-display add-top-down-space"></div>
+    <div id="messagecustom" class="preserve-whitespace bold error-message do-not-display add-top-down-space"></div>
 
     <div>
       <textarea id="txtFiltersAdvanced" class="widest" disabled></textarea>
@@ -170,7 +190,7 @@
           <span>
             <button class="btn short red" type="button" id="btnEditExcludeAdvancedFilters" i18n="buttonedit" />
             <span id="spanSaveExcludeButton" style="display:none;">
-              <span class="savereminder bold red-text" i18n="savereminder"></span>
+              <span class="savereminder bold standout-message" i18n="savereminder"></span>
               <button type="button" id="btnSaveExcludeAdvancedFilters" i18n="savebutton" class="btn short red inline" />
             </span>
           </span>

@@ -276,15 +276,15 @@ $(function ()
   $('a.controlsLink').click(function (event)
   {
     event.preventDefault();
-    var $myControls = $(this).closest('div').find('.addControls');
+    var $myControls = $(this).parent('div').find('.addControls');
     $('.addControls').not($myControls).slideUp({
       complete: function() {
-        $(this).parent('div').find('.red-dropdown-icon').removeClass('upward');
+        $(this).parent('div').find('.svg-box').removeClass('upward');
       }
     });
     $myControls.slideToggle({
       complete: function() {
-        let $icon = $(this).parent('div').find('.red-dropdown-icon');
+        let $icon = $(this).parent('div').find('.svg-box');
         let isExpanded = $(this).css('display') !== 'none';
 
         if (isExpanded) {

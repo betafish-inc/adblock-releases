@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>AdBlock - Report a bug</title>
+    <link rel="stylesheet" href="adblock-color-themes.css" />
     <link rel="stylesheet" href="adblock-jquery-ui.custom.css" />
     <link rel="stylesheet" href="adblock-option-options.css" />
     <script src="adblock-jquery.js"></script>
@@ -9,8 +10,11 @@
     <script src="adblock-functions.js"></script>
     <script src="adblock-option-bug-report.js"></script>
     <style type="text/css">
+      :root {
+        --standout-text-color: #F30D12;
+      }
       .input-error {
-        border-color: #f00 !important;
+        border-color: var(--standout-text-color) !important;
       }
       #info  {
         margin-top: 110px;
@@ -39,13 +43,13 @@
 
         <!--Step 1: Name & Email -->
         <div id="step_name_email">
-          <span class="do-not-display red-text">Required information is missing or invalid.  Please fill in the questions that have a red border.</span>
-          <p class="red-text">* Required</p>
-          <label for="name">What's your name?<span class="red-text">&nbsp;*</span></label>
+          <span class="do-not-display error-message">Required information is missing or invalid.  Please fill in the questions that have a red border.</span>
+          <p class="error-message">* Required</p>
+          <label for="name">What's your name?<span class="error-message">&nbsp;*</span></label>
           <input type="text" id="name" class="widest" />
           <br></br>
 
-          <label for="email">What's your email address?<span class="red-text">&nbsp;*</span><br>
+          <label for="email">What's your email address?<span class="error-message">&nbsp;*</span><br>
             <span class="italic">(We'll only use this to contact you if we need more information)</span>
           </label>
           <input type="email" id="email" class="widest" />
@@ -55,11 +59,11 @@
           </div>
           <br>
 
-          <label for="summary">Briefly describe the bug:<span class="red-text">&nbsp;*</span></label>
+          <label for="summary">Briefly describe the bug:<span class="error-message">&nbsp;*</span></label>
           <input type="text" id="summary" class="widest" />
           <br></br>
 
-          <label for="repro-steps">If you can, tell us how it happened.<span class="red-text">&nbsp;*</span><br>
+          <label for="repro-steps">If you can, tell us how it happened.<span class="error-message">&nbsp;*</span><br>
             <span class="italic">(Be specific, because we'll try to reproduce the bug on our systems)</span>
           </label>
           <textarea id="repro-steps" class="widest">
@@ -69,11 +73,11 @@
           </textarea>
           <br></br>
 
-          <label for="expected-result"> When you do this, what should happen?<span class="red-text">&nbsp;*</span></label>
+          <label for="expected-result"> When you do this, what should happen?<span class="error-message">&nbsp;*</span></label>
           <textarea id="expected-result" class="widest"></textarea>
           <br></br>
 
-          <label for="actual-result">What's happening instead?<span class="red-text">&nbsp;*</span></label>
+          <label for="actual-result">What's happening instead?<span class="error-message">&nbsp;*</span></label>
           <textarea id="actual-result" class="widest"></textarea>
           <div class="flex-end">
             <button type="button" class="btn short red" id="step1-next">Next</button>

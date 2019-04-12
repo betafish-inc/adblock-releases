@@ -13,6 +13,7 @@ const Synchronizer        = backgroundPage.Synchronizer;
 const Utils               = backgroundPage.Utils;
 const NotificationStorage = backgroundPage.Notification;
 const License             = backgroundPage.License;
+const validThemes = ['default_theme', 'dark_theme'];
 
 var myAdBlockTabDisplay = () => {
   if (License.shouldShowMyAdBlockEnrollment()) {
@@ -56,7 +57,10 @@ var addMyAdBlockTab = function() {
 
   let myAdBlockTabHTMLString = '<li data-scripts="adblock-option-myadblock.js" id="myadblock-tab">\
     <a href="adblock-options-myadblock.html">\
-      <span id="myadblock-tab-lock"></span>&nbsp;\
+      <svg id="myadblock-tab-lock" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">\
+        <path d="M0 0h24v24H0z" fill="none"></path>\
+        <path class="tab-lock-color" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path>\
+      </svg>&nbsp;\
       <span i18n="myadblockoptions"></span>\
     </a>\
   </li>';
@@ -330,6 +334,12 @@ var isWhitelistFilter = function (text)
 var optionalSettings = {};
 $(document).ready(function ()
 {
+  var optionsTheme = 'default_theme';
+  if (backgroundPage && backgroundPage.getSettings()) {
+    let settings = backgroundPage.getSettings();
+    optionsTheme = settings.color_themes.options_page;
+  }
+  $('body').attr('id', optionsTheme).data('theme', optionsTheme);
   createAndAssignPaymentURL();
   loadOptions();
   rightToLeft();

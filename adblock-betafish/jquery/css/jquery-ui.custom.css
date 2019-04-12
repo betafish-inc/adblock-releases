@@ -8,6 +8,16 @@
  * http://docs.jquery.com/UI/Theming/API
  */
 
+ /* Default color variables
+----------------------------------*/
+:root {
+  --main-text-color: #666666;
+  --background-color: white;
+  --link-hovered-color: #F30D12;
+  --text-link-hovered-color: #333333;
+  --active-tab-color: #333333;
+}
+
 /* Layout helpers
 ----------------------------------*/
 .ui-helper-hidden { display: none; }
@@ -55,20 +65,20 @@
 ----------------------------------*/
 .ui-widget { font-family: "Lato", Arial, sans-serif; font-size: 16px; line-height: 25px; border-radius: 6px; font-weight: normal; }
 .ui-widget .ui-widget { font-size: 1em; }
-.ui-widget-content { color: #666666; border: none;}
-.ui-widget-content a { color: #666666; text-decoration: none; }
-.ui-widget-content a:hover { color: #333; cursor: pointer; }
+.ui-widget-content { color: var(--main-text-color); border: none;}
+.ui-widget-content a { color: var(--main-text-color); text-decoration: none; }
+.ui-widget-content a:hover { color: var(--text-link-hovered-color); cursor: pointer; }
 .ui-widget-header { color: #F1F1F1; }
 .ui-widget-header a { color: #eaf5f7; }
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { color: #666666; }
-.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #666666; text-decoration: none; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { color: var(--main-text-color); }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: var(--main-text-color); text-decoration: none; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { font-weight: normal; color: #606060; }
-.ui-state-hover a, .ui-state-hover a:hover { color: red; -webkit-transition: all 0.2s ease-out; -o-transition: all 0.2s ease-out; transition: all 0.2s ease-out; text-decoration: none; }
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { color: #333; background-color: #ffffff; border-radius: 6px 6px 0px 0px; }
-.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #333; text-decoration: none; outline: none; }
+.ui-state-hover a, .ui-state-hover a:hover { color: var(--link-hovered-color); -webkit-transition: all 0.2s ease-out; -o-transition: all 0.2s ease-out; transition: all 0.2s ease-out; text-decoration: none; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { color: var(--active-tab-color); background-color: var(--background-color); border-radius: 6px 6px 0px 0px; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: var(--active-tab-color); background-color: var(--background-color); text-decoration: none; outline: none; }
 .ui-widget :active { outline: none; }
 
 /* Interaction Cues

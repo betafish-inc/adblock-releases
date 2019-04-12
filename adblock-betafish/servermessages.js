@@ -69,6 +69,7 @@ let ServerMessages = exports.ServerMessages = (function()
       "o": STATS.os,
       "l": determineUserLanguage(),
       "t": queryType,
+      "v": chrome.runtime.getManifest().version,
     };
     if (typeof additionalParams === "object") {
       for (var prop in additionalParams) {

@@ -277,17 +277,6 @@ var License = (function () {
   };
 })();
 
-var reloadOptionsPageTabs = function() {
-  var optionTabQuery = {
-    url: 'chrome-extension://' + chrome.runtime.id + '/options.html*'
-  }
-  chrome.tabs.query(optionTabQuery, function(tabs) {
-    for (var i in tabs) {
-      chrome.tabs.reload(tabs[i].id);
-    }
-  });
-}
-
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.command === "payment_success" && request.transID && request.version === 1) {

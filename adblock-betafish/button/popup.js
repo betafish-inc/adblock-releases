@@ -128,6 +128,7 @@ try {
   var page = null;
   var pageInfo = null;
   var activeTab = null;
+  var popupMenuTheme = 'default_theme';
 
   const openPage = function(url) {
     chrome.tabs.create({url});
@@ -160,6 +161,11 @@ try {
 
       BG.getCurrentTabInfo(function (info) {
         try {
+          if (info.settings) {
+            popupMenuTheme = info.settings.color_themes.popup_menu;
+          }
+          $('body').attr('id', popupMenuTheme).data('theme', popupMenuTheme);
+
           if (info && info.errorStr) {
             processError(info.errorStr, info.stack, info.message);
             return;
@@ -183,19 +189,19 @@ try {
             });
           }
 
-          show(['div_options']);
+          show(['svg_options']);
           var paused = BG.adblockIsPaused();
           var domainPaused = BG.adblockIsDomainPaused({"url": page.url.href, "id": page.id});
           if (paused) {
-            show(['div_status_paused', 'separator0', 'div_paused_adblock', 'div_options', 'help_link']);
+            show(['div_status_paused', 'separator0', 'div_paused_adblock', 'svg_options', 'help_link']);
           } else if (domainPaused) {
-            show(['div_status_domain_paused', 'separator0', 'div_domain_paused_adblock', 'div_options', 'help_link']);
+            show(['div_status_domain_paused', 'separator0', 'div_domain_paused_adblock', 'svg_options', 'help_link']);
           } else if (info.disabledSite) {
-            show(['div_status_disabled', 'separator0', 'div_pause_adblock', 'div_options', 'help_link']);
+            show(['div_status_disabled', 'separator0', 'div_pause_adblock', 'svg_options', 'help_link']);
           } else if (info.whitelisted) {
-            show(['div_status_whitelisted', 'div_enable_adblock_on_this_page', 'separator0', 'div_pause_adblock', 'div_options', 'help_link']);
+            show(['div_status_whitelisted', 'div_enable_adblock_on_this_page', 'separator0', 'div_pause_adblock', 'svg_options', 'help_link']);
           } else {
-            show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_troubleshoot_an_ad', 'separator3', 'separator4', 'div_options', 'block_counts', 'help_link']);
+            show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_troubleshoot_an_ad', 'separator3', 'separator4', 'svg_options', 'block_counts', 'help_link']);
 
             chrome.runtime.sendMessage({
               type: "stats.getBlockedPerPage",
@@ -390,7 +396,7 @@ try {
         closeAndReloadPopup();
       });
 
-      $('#div_options').click(function () {
+      $('#svg_options').click(function () {
         if (License.shouldShowMyAdBlockEnrollment()) {
           myAdBlockBannerDisplay();
         }

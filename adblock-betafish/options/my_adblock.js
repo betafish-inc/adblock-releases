@@ -24,7 +24,9 @@ var lockedFeatureLogic = function() {
   var checkUrlAccesibility = function(callback) {
     // the 'rand' query string parameter is added make the Frame URL unique,
     // to prevent the browser from caching the iframe, and it's contents
-    var url = 'https://getadblock.com/myadblock/enrollment/v2?rand=' + (+ new Date());
+    var currentTheme = $('body').attr('id') || 'default_theme';
+    var urlQueries = `?rand='${ (+ new Date()) }&theme=${ currentTheme }`;
+    var url = 'https://getadblock.com/myadblock/enrollment/v2' + urlQueries;
 
     if (License && License.isActiveLicense()) {
       return;
