@@ -360,7 +360,7 @@ $(function ()
         var result = parseFilter(filter);
         if (result.error)
         {
-          filterErrorMessage = translate('customfilterserrormessage', [filter, result.error]);
+          filterErrorMessage = translate('customfilterserrormessage', [filter, result.error.reason || result.error]);
         }
       }
     }
