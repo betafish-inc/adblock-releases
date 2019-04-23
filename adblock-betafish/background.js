@@ -809,8 +809,8 @@ if (chrome.runtime.id)
   {
     var lastKnownVersion = localStorage.getItem(updateStorageKey);
     if (details.reason === 'update' &&
-        chrome.runtime.getManifest().version === "3.34.0" &&
-        lastKnownVersion === '3.33.1' &&
+        chrome.runtime.getManifest().version === "3.46.0" &&
+        lastKnownVersion &&
         chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
     {
       STATS.untilLoaded(function(userID)

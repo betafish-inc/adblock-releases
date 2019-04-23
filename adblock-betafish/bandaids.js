@@ -281,6 +281,25 @@ var run_bandaids = function()
           }
         }
       }
+      var aaElements = document.querySelectorAll("#optionsPageLink");
+      if (aaElements &&
+          aaElements.length)
+      {
+        for (i = 0; i < aaElements.length; ++i)
+        {
+          aaElements[i].onclick = function(event)
+          {
+            if (event.isTrusted === false) {
+              return;
+            }
+            event.preventDefault();
+            BGcall("recordGeneralMessage", "updateoptionopen_clicked", undefined, undefined, function()
+            {
+              BGcall("openTab", "options.html?tab=4");
+            });
+          }
+        }
+      }
     }
   }; // end bandaids
 

@@ -92,14 +92,19 @@ function loadOptions()
     optionalSettings     = backgroundPage.getSettings();
   }
   var activeTab    = $.cookie('activetab');
+  var searchQuery;
   if (window.location &&
     window.location.search)
   {
-    var searchQuery = parseUri.parseSearch(window.location.search);
+    searchQuery = parseUri.parseSearch(window.location.search);
     if (searchQuery &&
       searchQuery.tab)
     {
       activeTab = searchQuery.tab;
+    }
+    // check if the 'MyAdBlock' tab may or may not be shown, if it is, add one to the requested tab number
+    if ((License.shouldShowMyAdBlockEnrollment() || License.isActiveLicense()) && activeTab) {
+      activeTab = (parseInt(activeTab, 10) + 1).toString();
     }
   }
 
@@ -109,7 +114,7 @@ function loadOptions()
       return;
     }
 
-    if (myAdBlockInfo.myAdBlockFeature.takeUserToMyAdBlockTab) {
+    if (myAdBlockInfo.myAdBlockFeature.takeUserToMyAdBlockTab && !searchQuery) {
       activeTab = 0;
       myAdBlockInfo.myAdBlockFeature.takeUserToMyAdBlockTab = false;
       chrome.storage.local.set(myAdBlockInfo);
