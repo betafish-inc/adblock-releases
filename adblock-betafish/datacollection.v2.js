@@ -54,27 +54,24 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
         var selectors = message.selectors;
         var docDomain = extractHostFromFrame(sender.frame);
 
-        for (let subscription of filterStorage.subscriptions())
-        {
-          if (subscription.disabled)
-            continue;
+        filterStorage.knownSubscriptions.forEach(function(subscription) {
+          if (!subscription.disabled) {
+            for (let filter of subscription._filters) {
+              // We only know the exact filter in case of element hiding emulation.
+              // For regular element hiding filters, the content script only knows
+              // the selector, so we have to find a filter that has an identical
+              // selector and is active on the domain the match was reported from.
+              let isActiveElemHideFilter = filter instanceof ElemHideFilter &&
+                                           selectors.includes(filter.selector) &&
+                                           filter.isActiveOnDomain(docDomain);
 
-          for (let filter of subscription.filters)
-          {
-            // We only know the exact filter in case of element hiding emulation.
-            // For regular element hiding filters, the content script only knows
-            // the selector, so we have to find a filter that has an identical
-            // selector and is active on the domain the match was reported from.
-            let isActiveElemHideFilter = filter instanceof ElemHideFilter &&
-                                         selectors.includes(filter.selector) &&
-                                         filter.isActiveOnDomain(docDomain);
-
-            if (isActiveElemHideFilter)
-            {
-              addFilterToCache(filter, sender.page);
+              if (isActiveElemHideFilter)
+              {
+                addFilterToCache(filter, sender.page);
+              }
             }
           }
-        }
+        });
       }
     });
   };

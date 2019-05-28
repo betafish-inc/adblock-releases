@@ -469,6 +469,35 @@ var picreplacement = {
       }
 
       var newPic = document.createElement("img");
+      var iconStyle = document.createElement('style');
+      iconStyle.type = 'text/css';
+      iconStyle.textContent = `\
+      .ab-material-icons {\
+        font-family: 'Material Icons';\
+        color: #999;\
+        cursor: pointer;\
+        font-weight: normal;\
+        font-style: normal;\
+        font-size: 24px;\
+        display: inline-block;\
+        line-height: 1;\
+        text-transform: none;\
+        letter-spacing: normal;\
+        word-wrap: normal;\
+        white-space: nowrap;\
+        direction: ltr;\
+        vertical-align: middle;\
+        -webkit-font-smoothing: antialiased;\
+        text-rendering: optimizeLegibility;\
+      }\
+      @font-face {\
+        font-family: 'Material Icons';\
+        font-style: normal;\
+        font-weight: normal;\
+        src: local('Material Icons'),\
+          url("${ chrome.extension.getURL('/icons/MaterialIcons-Regular.woff2') }");\
+      }`;
+      document.head.appendChild(iconStyle);
 
       newPic.classList.add("picreplacement-image");
       var css = {
@@ -580,62 +609,19 @@ var picreplacement = {
         var adblockImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-AdBlockLogoLarge.png");
         var adblockImageWidth = "114px";
         var adblockImageHeight = "29px";
-        var viewImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-viewLarge.png");
-        var viewWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-viewLarge.png");
-        var viewImageWidth = "25px";
-        var viewImageHeight = "15px";
-        var settingsImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-settingsLarge.png");
-        var settingsWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-settingsLarge.png");
-        var settingsImageWidth = "18px";
-        var settingsImageHeight = "18px";
-        var closeImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-closeLarge.png");
-        var closeWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-closeLarge.png");
-        var closeImageWidth = "15px";
-        var closeImageHeight = "14px";
-        var wrapperHeight = "18px";
         var wrapperWidth = "90px";
         if (placement.type !== imageSizesMap.get("skinnywide") && window.devicePixelRatio >= 2) {
           adblockImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png");
-          viewImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-viewLarge@2x.png");
-          settingsImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-settingsLarge@2x.png");
-          closeImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-closeLarge@2x.png");
-          viewWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-viewLarge@2x.png");
-          settingsWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-settingsLarge@2x.png");
-          closeWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-closeLarge@2x.png");
         }
         else if (placement.type === imageSizesMap.get("skinnywide") && window.devicePixelRatio < 2) {
           adblockImageWidth = "81px";
           adblockImageHeight = "20px";
-          viewImageWidth = "17px";
-          viewImageHeight = "10px";
-          settingsImageWidth = "14px";
-          settingsImageHeight = "14px";
-          closeImageWidth = "11px";
-          closeImageHeight = "10px";
           adblockImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-AdBlockLogoSmall.png");
-          viewImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-view.png");
-          settingsImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-settings.png");
-          closeImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-close.png");
-          viewWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-view.png");
-          settingsWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-settings.png");
-          closeWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-close.png");
         }
         else if (placement.type === imageSizesMap.get("skinnywide") && window.devicePixelRatio >= 2) {
           adblockImageWidth = "81px";
           adblockImageHeight = "20px";
-          viewImageWidth = "17px";
-          viewImageHeight = "10px";
-          settingsImageWidth = "14px";
-          settingsImageHeight = "14px";
-          closeImageWidth = "11px";
-          closeImageHeight = "10px";
           adblockImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-AdBlockLogoSmall@2x.png");
-          viewImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-view@2x.png");
-          settingsImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-settings@2x.png");
-          closeImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-close@2x.png");
-          viewWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-view@2x.png");
-          settingsWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-settings@2x.png");
-          closeWhiteImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-whites-close@2x.png");
         }
         var linkWrapper = $("<div>", {
           css: {
@@ -649,69 +635,56 @@ var picreplacement = {
             display: "inline",
           }
         });
-        linkWrapper.append($("<img>", {
+        linkWrapper
+          .append($("<i></i>", {
+            "class": "ab-material-icons",
+            text: "remove_red_eye",
             css: {
-              border: "none",
-              "margin-right": "15px",
-              "vertical-align": "middle",
-              display: "inline",
+              "margin-right": "10px",
             },
-            height: viewImageHeight,
-            width: viewImageWidth,
-            src: viewImageURL,
             click: function() {
               BGcall("openTab", "adblock-picreplacement-imageview.html" + "?url=" + encodeURIComponent(placement.attribution_url) + "&width=" + placement.listingWidth + "&height=" + placement.listingHeight );
             },
             on: {
               mouseenter: function( event ) {
-                $(this).attr("src",viewWhiteImageURL);
+                $(this).css('color', 'white');
               },
               mouseleave: function( event ) {
-                $(this).attr("src",viewImageURL);
+                $(this).css('color', '#666666');
               }
             }
-          })).
-          append($("<img>", {
+          }))
+          .append($("<i></i>", {
+            "class": "ab-material-icons",
+            text: "settings",
             css: {
-              border: "none",
-              "margin-right": "15px",
-              "vertical-align": "middle",
-              display: "inline",
+              "margin-right": "8px",
             },
-            height: settingsImageHeight,
-            width: settingsImageWidth,
-            src: settingsImageURL,
             click: function() {
-              BGcall("openTab", "options.html?tab=0" );
+              BGcall("openTab", "options.html#mab" );
             },
             on: {
               mouseenter: function( event ) {
-                $(this).attr("src",settingsWhiteImageURL);
+                $(this).css('color', 'white');
               },
               mouseleave: function( event ) {
-                $(this).attr("src",settingsImageURL);
+                $(this).css('color', '#666666');
               }
             }
-          })).
-          append($("<img>", {
-            css: {
-              border: "none",
-              "vertical-align": "middle",
-              display: "inline",
-            },
-            height: closeImageHeight,
-            width: closeImageWidth,
-            src: closeImageURL,
+          }))
+          .append($("<i></i>", {
+            "class": "ab-material-icons",
+            text: "close",
             click: function() {
               newPic.infoCard.remove();
               $(newPic).remove();
             },
             on: {
               mouseenter: function( event ) {
-                $(this).attr("src",closeWhiteImageURL);
+                $(this).css('color', 'white');
               },
               mouseleave: function( event ) {
-                $(this).attr("src",closeImageURL);
+                $(this).css('color', '#666666');
               }
             }
           }));

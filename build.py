@@ -58,5 +58,14 @@ buildtools.packager.getDevEnvPath = get_dev_env_path
 import buildtools.packagerChrome
 buildtools.packagerChrome.processFile = process_file
 
+originalGetIgnoredFiles = buildtools.packagerChrome.getIgnoredFiles
+
+def get_ignored_files(params):
+    returnSet = originalGetIgnoredFiles(params)
+    returnSet.add('skin')
+    return returnSet
+
+buildtools.packagerChrome.getIgnoredFiles = get_ignored_files
+
 import buildtools.build
 buildtools.build.process_args(ABP_DIR)

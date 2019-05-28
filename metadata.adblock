@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.46.0
+version = 3.48.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -51,30 +51,6 @@ web_accessible_resources =
   icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png
   icons/adblock-picreplacement-images-AdBlockLogoSmall.png
   icons/adblock-picreplacement-images-AdBlockLogoSmall@2x.png
-  icons/adblock-picreplacement-images-close.png
-  icons/adblock-picreplacement-images-close@2x.png
-  icons/adblock-picreplacement-images-closeLarge.png
-  icons/adblock-picreplacement-images-closeLarge@2x.png
-  icons/adblock-picreplacement-images-settings.png
-  icons/adblock-picreplacement-images-settings@2x.png
-  icons/adblock-picreplacement-images-settingsLarge.png
-  icons/adblock-picreplacement-images-settingsLarge@2x.png
-  icons/adblock-picreplacement-images-view.png
-  icons/adblock-picreplacement-images-view@2x.png
-  icons/adblock-picreplacement-images-viewLarge.png
-  icons/adblock-picreplacement-images-viewLarge@2x.png
-  ﻿icons/adblock-picreplacement-images-whites-close.png
-  icons/adblock-picreplacement-images-whites-close@2x.png
-  icons/adblock-picreplacement-images-whites-closeLarge.png
-  icons/adblock-picreplacement-images-whites-closeLarge@2x.png
-  icons/adblock-picreplacement-images-whites-settings.png
-  icons/adblock-picreplacement-images-whites-settings@2x.png
-  icons/adblock-picreplacement-images-whites-settingsLarge.png
-  icons/adblock-picreplacement-images-whites-settingsLarge@2x.png
-  icons/adblock-picreplacement-images-whites-view.png
-  icons/adblock-picreplacement-images-whites-view@2x.png
-  icons/adblock-picreplacement-images-whites-viewLarge.png
-  icons/adblock-picreplacement-images-whites-viewLarge@2x.png
   localLib/jquery/jquery-1.10.2.min.js.local
   localLib/jquery/jquery-1.11.0.min.js.local
   localLib/jquery/jquery-1.11.1.min.js.local
@@ -102,6 +78,7 @@ web_accessible_resources =
   fonts/lato-regular.woff
   fonts/lato-ext-bold.woff
   fonts/lato-bold.woff
+  icons/MaterialIcons-Regular.woff2
 commands.toggle_pause.description = Toggle Pause/Resume on all sites
 commands.toggle_pause.suggested_key.default = Ctrl+Period
 commands.toggle_pause.suggested_key.mac = Command+Period
@@ -120,6 +97,7 @@ adblock-errorreporting.js = adblock-betafish/errorreporting.js
 adblock-jquery.cookie.js = adblock-betafish/jquery/jquery.cookie.js
 adblock-jquery-ui.js = adblock-betafish/jquery/jquery-ui.custom.min.js
 adblock-jquery-ui.custom.min.js = adblock-betafish/jquery/jquery-ui.custom.min.js
+adblock.css = adblock-betafish/adblock.css
 adblock-jquery-ui.custom.css = adblock-betafish/jquery/css/jquery-ui.custom.css
 adblock-jquery-ui.override-page.css = adblock-betafish/jquery/css/override-page.css
 adblock-functions.js = adblock-betafish/functions.js
@@ -128,21 +106,23 @@ adblock-datacollection-contentscript.js = adblock-betafish/datacollection-conten
 adblock-ytchannel.js = adblock-betafish/ytchannel.js
 adblock-notificationoverlay.js = adblock-betafish/notificationoverlay.js
 adblock-subscriptions.xml = adblock-betafish/subscriptions.xml
+adblock-options-tabs.css = adblock-betafish/options/tabs.css
+adblock-options-tabs.js = adblock-betafish/options/tabs.js
 options.html = adblock-betafish/options/index.html
-adblock-option-index.js = adblock-betafish/options/index.js
-adblock-option-options.css = adblock-betafish/options/options.css
-adblock-option-general.js = adblock-betafish/options/general.js
-adblock-option-general.html = adblock-betafish/options/general.html
-adblock-option-filters.js = adblock-betafish/options/filters.js
-adblock-option-filters.html = adblock-betafish/options/filters.html
-adblock-option-customize.js = adblock-betafish/options/customize.js
-adblock-option-customize.html = adblock-betafish/options/customize.html
-adblock-option-support.js = adblock-betafish/options/support.js
-adblock-option-support.html = adblock-betafish/options/support.html
-adblock-option-themes.js = adblock-betafish/options/themes.js
-adblock-option-themes.html = adblock-betafish/options/themes.html
-adblock-option-bug-report.js = adblock-betafish/options/bug-report.js
-adblock-option-bug-report.html = adblock-betafish/options/bug-report.html
+adblock-options-index.js = adblock-betafish/options/index.js
+adblock-options-options.css = adblock-betafish/options/options.css
+adblock-options-general.js = adblock-betafish/options/general.js
+adblock-options-general.html = adblock-betafish/options/general.html
+adblock-options-filters.js = adblock-betafish/options/filters.js
+adblock-options-filters.html = adblock-betafish/options/filters.html
+adblock-options-customize.js = adblock-betafish/options/customize.js
+adblock-options-customize.html = adblock-betafish/options/customize.html
+adblock-options-support.js = adblock-betafish/options/support.js
+adblock-options-support.html = adblock-betafish/options/support.html
+adblock-options-themes.js = adblock-betafish/options/themes.js
+adblock-options-themes.html = adblock-betafish/options/themes.html
+adblock-options-bug-report.js = adblock-betafish/options/bug-report.js
+adblock-options-bug-report.html = adblock-betafish/options/bug-report.html
 adblock-button-popup.html = adblock-betafish/button/popup.html
 adblock-button-popup.js = adblock-betafish/button/popup.js
 adblock-button-popup.css = adblock-betafish/button/popup.css
@@ -157,14 +137,13 @@ adblock-uiscripts-blacklisting-elementchain.js = adblock-betafish/uiscripts/blac
 adblock-uiscripts-blacklisting-blacklistui.js = adblock-betafish/uiscripts/blacklisting/blacklistui.js
 adblock-picreplacement.js = adblock-betafish/picreplacement/picreplacement.js
 adblock-picreplacement-image-sizes-map.js = adblock-betafish/picreplacement/image-sizes-map.js
-adblock-options-myadblock.html = adblock-betafish/options/my_adblock.html
-adblock-options-myadblock.css = adblock-betafish/options/my_adblock.css
-adblock-option-myadblock.js = adblock-betafish/options/my_adblock.js
+adblock-options-mab.html = adblock-betafish/options/mab.html
+adblock-options-mab.css = adblock-betafish/options/mab.css
+adblock-options-mab.js = adblock-betafish/options/mab.js
 adblock-color-themes.css = adblock-betafish/options/color_themes.css
 adblock-picreplacement-imageview.html = adblock-betafish/picreplacement/options/imageview.html
 adblock-picreplacement-imageview.js = adblock-betafish/picreplacement/options/imageview.js
 adblock-picreplacement-options-imageview.css = adblock-betafish/picreplacement/options/imageview.css
-devtools.js = adblock-betafish/devtools.js
 icons/ab-16.png = icons/adblock-16.png
 icons/popup_menu_dark_theme.png = icons/popup_menu_dark.png
 icons/popup_menu_default_theme.png = icons/popup_menu_default.png
@@ -195,22 +174,9 @@ icons/ab-64.png = icons/adblock-64.png
 icons/ab-128.png = icons/adblock-128.png
 icons/logo.png = icons/logo.png
 icons/icon24.png = icons/icon24.png
-icons/facebook-icon.svg = icons/facebook-icon.svg
-icons/twitter-icon.svg = icons/twitter-icon.svg
 icons/dark_theme/logo.png = icons/dark_theme/logo.png
-icons/dark_theme/facebook-icon.svg = icons/dark_theme/facebook-icon.svg
-icons/dark_theme/twitter-icon.svg = icons/dark_theme/twitter-icon.svg
-icons/dark_theme/dropdown_circle.svg = icons/dark_theme/dropdown_circle.svg
-icons/dropdown_circle.svg = icons/dropdown_circle.svg
 icons/loader.gif = icons/loader.gif
-icons/lock.png = icons/lock.png
-icons/lock@2x.png = icons/lock@2x.png
-icons/outline_heart.svg = icons/outline_heart.svg
-icons/filled_heart.svg = icons/filled_heart.svg
 icons/replaceads_heroimage.png = icons/replaceads_heroimage.png
-icons/error_icon.svg = icons/error_icon.svg
-icons/round_check.svg = icons/round_check.svg
-icons/search.svg = icons/search.svg
 icons/abp-16.png = icons/adblock-16.png
 icons/abp-16-whitelisted.png = icons/adblock-16-whitelisted.png
 icons/abp-16-grayscale.png = icons/adblock-16-grayscale.png
@@ -248,34 +214,22 @@ icons/adblock-picreplacement-images-AdBlockLogoSmall.png = adblock-betafish/picr
 icons/adblock-picreplacement-images-AdBlockLogoSmall@2x.png = adblock-betafish/picreplacement/images/AdBlockLogoSmall@2x.png
 icons/adblock-picreplacement-images-cat.png = adblock-betafish/picreplacement/images/cat.png
 icons/adblock-picreplacement-images-cat-grayscale.png = adblock-betafish/picreplacement/images/cat_grayscale.png
-icons/adblock-picreplacement-images-close.png = adblock-betafish/picreplacement/images/close.png
-icons/adblock-picreplacement-images-close@2x.png = adblock-betafish/picreplacement/images/close@2x.png
-icons/adblock-picreplacement-images-closeLarge.png = adblock-betafish/picreplacement/images/closeLarge.png
-icons/adblock-picreplacement-images-closeLarge@2x.png = adblock-betafish/picreplacement/images/closeLarge@2x.png
 icons/adblock-picreplacement-images-dog.png = adblock-betafish/picreplacement/images/dog.png
 icons/adblock-picreplacement-images-dog-grayscale.png = adblock-betafish/picreplacement/images/dog_grayscale.png
 icons/adblock-picreplacement-images-landscape.png = adblock-betafish/picreplacement/images/landscape.png
 icons/adblock-picreplacement-images-landscape-grayscale.png = adblock-betafish/picreplacement/images/landscape_grayscale.png
-icons/adblock-picreplacement-images-settings.png = adblock-betafish/picreplacement/images/settings.png
-icons/adblock-picreplacement-images-settings@2x.png = adblock-betafish/picreplacement/images/settings@2x.png
-icons/adblock-picreplacement-images-settingsLarge.png = adblock-betafish/picreplacement/images/settingsLarge.png
-icons/adblock-picreplacement-images-settingsLarge@2x.png = adblock-betafish/picreplacement/images/settingsLarge@2x.png
-icons/adblock-picreplacement-images-view.png = adblock-betafish/picreplacement/images/view.png
-icons/adblock-picreplacement-images-view@2x.png = adblock-betafish/picreplacement/images/view@2x.png
-icons/adblock-picreplacement-images-viewLarge.png = adblock-betafish/picreplacement/images/viewLarge.png
-icons/adblock-picreplacement-images-viewLarge@2x.png = adblock-betafish/picreplacement/images/viewLarge@2x.png
-icons/adblock-picreplacement-images-whites-close.png = adblock-betafish/picreplacement/images/whites/close.png
-icons/adblock-picreplacement-images-whites-close@2x.png = adblock-betafish/picreplacement/images/whites/close@2x.png
-icons/adblock-picreplacement-images-whites-closeLarge.png = adblock-betafish/picreplacement/images/whites/closeLarge.png
-icons/adblock-picreplacement-images-whites-closeLarge@2x.png = adblock-betafish/picreplacement/images/whites/closeLarge@2x.png
-icons/adblock-picreplacement-images-whites-settings.png = adblock-betafish/picreplacement/images/whites/settings.png
-icons/adblock-picreplacement-images-whites-settings@2x.png = adblock-betafish/picreplacement/images/whites/settings@2x.png
-icons/adblock-picreplacement-images-whites-settingsLarge.png = adblock-betafish/picreplacement/images/whites/settingsLarge.png
-icons/adblock-picreplacement-images-whites-settingsLarge@2x.png = adblock-betafish/picreplacement/images/whites/settingsLarge@2x.png
-icons/adblock-picreplacement-images-whites-view.png = adblock-betafish/picreplacement/images/whites/view.png
-icons/adblock-picreplacement-images-whites-view@2x.png = adblock-betafish/picreplacement/images/whites/view@2x.png
-icons/adblock-picreplacement-images-whites-viewLarge.png = adblock-betafish/picreplacement/images/whites/viewLarge.png
-icons/adblock-picreplacement-images-whites-viewLarge@2x.png = adblock-betafish/picreplacement/images/whites/viewLarge@2x.png
+icons/adblock-picreplacement-images-menu-cat@2x.png = adblock-betafish/picreplacement/images/menu/cat@2x.png
+icons/adblock-picreplacement-images-menu-cat.png = adblock-betafish/picreplacement/images/menu/cat.png
+icons/adblock-picreplacement-images-menu-dog@2x.png = adblock-betafish/picreplacement/images/menu/dog@2x.png
+icons/adblock-picreplacement-images-menu-dog.png = adblock-betafish/picreplacement/images/menu/dog.png
+icons/adblock-picreplacement-images-menu-landscape@2x.png = adblock-betafish/picreplacement/images/menu/landscape@2x.png
+icons/adblock-picreplacement-images-menu-landscape.png = adblock-betafish/picreplacement/images/menu/landscape.png
+icons/adblock-picreplacement-images-menu-catgrayscale@2x.png = adblock-betafish/picreplacement/images/menu/catgrayscale@2x.png
+icons/adblock-picreplacement-images-menu-catgrayscale.png = adblock-betafish/picreplacement/images/menu/catgrayscale.png
+icons/adblock-picreplacement-images-menu-doggrayscale@2x.png = adblock-betafish/picreplacement/images/menu/doggrayscale@2x.png
+icons/adblock-picreplacement-images-menu-doggrayscale.png = adblock-betafish/picreplacement/images/menu/doggrayscale.png
+icons/adblock-picreplacement-images-menu-landscapegrayscale@2x.png = adblock-betafish/picreplacement/images/menu/landscapegrayscale@2x.png
+icons/adblock-picreplacement-images-menu-landscapegrayscale.png = adblock-betafish/picreplacement/images/menu/landscapegrayscale.png
 localLib/jquery/jquery-1.10.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.10.2.min.js.local
 localLib/jquery/jquery-1.11.0.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.0.min.js.local
 localLib/jquery/jquery-1.11.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.1.min.js.local
@@ -303,6 +257,11 @@ fonts/lato-ext-regular.woff = adblock-betafish/fonts/lato-ext-regular.woff
 fonts/lato-regular.woff = adblock-betafish/fonts/lato-regular.woff
 fonts/lato-ext-bold.woff = adblock-betafish/fonts/lato-ext-bold.woff
 fonts/lato-bold.woff = adblock-betafish/fonts/lato-bold.woff
+icons/MaterialIcons-Regular.woff2 = icons/MaterialIcons-Regular.woff2
+icons/adblock-icons.woff2 = icons/adblock-icons.woff2
+devtools.js = adblock-betafish/alias/devtools.js
+devtools-panel.css = adblockpluschrome/adblockplusui/skin/devtools-panel.css
+devtools-panel.html = adblock-betafish/alias/devtools-panel.html
 
 [module_alias]
 options = ../../adblock-betafish/alias/options.js
@@ -338,4 +297,3 @@ include.preload.js +=
   ../adblock-betafish/alias/include.preload.js
   ../adblock-betafish/picreplacement/contentscript-loader.js
 include.preload.js -= include.preload.js
-

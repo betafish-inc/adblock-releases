@@ -1,0 +1,98 @@
+<!-- This file is based on this similar ABP file: -->
+<!-- https://github.com/adblockplus/adblockplusui/blob/master/devtools-panel.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="devtools-panel.css">
+    <script src="polyfill.js"></script>
+    <script src="ext/common.js"></script>
+    <script src="ext/content.js"></script>
+    <script src="ext/devtools.js"></script>
+    <script src="devtools-panel.js"></script>
+  </head>
+  <body>
+    <header>
+      <table>
+        <colgroup>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <tr>
+          <td colspan="3">
+            Show
+            <select id="filter-state">
+              <option value="">all</option>
+              <option>blocked</option>
+              <option>whitelisted</option>
+            </select>
+            items of
+            <select id="filter-type">
+              <option value="">any</option>
+            </select>
+            type
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="request-wrapper">
+              <div class="url">Request</div>
+              <div class="domain">Document domain</div>
+            </div>
+          </td>
+          <td>
+            <div class="type">Type</div>
+          </td>
+          <td>
+            <div class="filter-wrapper">
+              <div class="filter">Filter</div>
+              <div class="origin">Origin</div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </header>
+    <div id="items">
+      <table>
+        <colgroup>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <footer>
+      <a id="reload">Reload</a> page to see effect of filter changes
+    </footer>
+
+    <template>
+      <tr>
+        <td>
+          <div class="request-wrapper">
+            <div>
+              <a class="resource-link" href="" target="_blank">&nbsp;</a>
+              <span class="rewritten-url" hidden> rewritten to
+                <a href="" target="_blank"></a>
+              </span>
+            </div>
+            <div class="domain"></div>
+          </div>
+        </td>
+        <td>
+          <div class="type"></div>
+        </td>
+        <td>
+          <div class="action-wrapper">
+            <div class="filter-wrapper">
+              <div class="filter">&nbsp;</div>
+              <div class="origin">&nbsp;</div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </template>
+  </body>
+</html>

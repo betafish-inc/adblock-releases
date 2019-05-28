@@ -22,6 +22,11 @@ let STATS = exports.STATS = (function()
   var osVersion = (match || [])[2] || "Unknown";
   var flavor = "E"; // Chrome
   match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d\.]+)/);
+  var edgeMatch = navigator.userAgent.match(/(?:Edg|Version)\/([\d\.]+)/);
+  if (edgeMatch) { // null in Chrome browsers
+    flavor = "M"; // MS - Edge
+    match = edgeMatch;
+  }
   var browserVersion = (match || [])[1] || "Unknown";
 
   var firstRun = false;
@@ -90,7 +95,7 @@ let STATS = exports.STATS = (function()
                 result.push(alphabet[choice]);
               }
               user_ID = result.join('') + time_suffix;
-              // store in redudant locations
+              // store in redundant locations
               chromeStorageSetHelper(STATS.userIDStorageKey, user_ID);
               storage_set(STATS.userIDStorageKey, user_ID);
             }
@@ -134,6 +139,8 @@ let STATS = exports.STATS = (function()
     {
       var localTotalPings = storage_get(STATS.totalPingStorageKey);
       var total_pings = response[STATS.totalPingStorageKey] || localTotalPings || 0;
+      var themeOptionsPage = getSettings().color_themes.options_page.replace('_theme', '');
+      var themePopupMenu = getSettings().color_themes.popup_menu.replace('_theme', '');
       var data = {
         u : user_ID,
         v : version,
@@ -150,6 +157,8 @@ let STATS = exports.STATS = (function()
         cdnr: LocalCDN.getRedirectCount(),
         cdnd: LocalCDN.getDataCount(),
         rc: replacedCounts.getTotalAdsReplaced(),
+        to: themeOptionsPage,
+        tm: themePopupMenu,
       };
       // only on Chrome
       if (flavor === "E" && Prefs.blocked_total)

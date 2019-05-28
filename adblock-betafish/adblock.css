@@ -1,0 +1,303 @@
+/* Core AdBlock stylesheet. */
+
+/*
+-----------------------------------------------------------------------------
+Global Styles
+-----------------------------------------------------------------------------
+*/
+
+:root {
+  --main-text-color: #666666;
+  --popup-menu--main-text-color: #333333;
+  --popup-menu--entry-hovered-bg-color: #E6E6E6;
+  --popup-menu--block-ads-bg-color: #f4f4f4;
+  --background-color: white;
+  --options-header-bg-color: #F1F1F1;
+  --options-footer-bg-color: #F1F1F1;
+  --teaser-theme-box-color: #666666;
+  --not-selected-checkbox-bg-color: #E6E6E6;
+  --bottom-line-color: #E6E6E6;
+  --speech-bubble-border-color: #E6E6E6;
+  --help-icon-color: #999999;
+  --help-icon-color-hovered: #666666;
+  --link-color: #1855ED;
+  --link-hovered-color: #F30D12;
+  --text-link-hovered-color: #333333;
+  --language-dropdown-menu-icon-color: #666666;
+  --customize-dropdown-menu-icon-color: #F30D12;
+  --standout-text-color: #F30D12;
+  --active-tab-color: #333333;
+  --locked-toggle-color: #E6E6E6;
+  --header-social-icons: #666666;
+  --adblock-logo-url: url(icons/logo.png);
+  --select-language-border-top-width: 1px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-size: 16px;
+  font-style: normal;
+  font-family: 'Lato', Arial, sans-serif;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+textarea::-webkit-scrollbar {
+  width: 14px; 
+}
+textarea::-webkit-scrollbar-track {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+textarea::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: #E6E6E6;
+  background-clip: content-box;
+  border: 3px solid transparent;
+}
+
+/*
+-----------------------------------------------------------------------------
+Icons global styling
+-----------------------------------------------------------------------------
+*/
+
+.adblock-icon,
+.adblock-icons {
+  font-family:'AdBlock Icons';
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+}
+
+.adblock-icon,
+.adblock-icons,
+.material-icons {
+  color: #999;
+  cursor: pointer;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  vertical-align: middle;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+.adblock-icon:hover,
+.adblock-icons:hover,
+.material-icons:hover {
+  color: #666;
+}
+
+/* Stacking 2 icons */
+.md-stack {
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+  font-size: 24px;
+  line-height: 24px;
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.md-stack .md-stack-1x,
+.md-stack .md-stack-2x {
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #666; /* Default */
+  position: absolute;
+  text-align: center;
+  cursor: default;
+}
+.md-stack .md-stack-1x {
+  font-size: 65%;
+  color: white; /* Default */
+  line-height: inherit;
+ }
+.md-stack .md-stack-2x {
+  font-weight: bold;
+ }
+
+/* Rules for sizing the icon. */
+.material-icons.md-14 { font-size: 18px; }
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+.material-icons.md-64 { font-size: 64px; }
+
+.adblock-icon.md-14 { font-size: 18px; }
+.adblock-icon.md-18 { font-size: 18px; }
+.adblock-icon.md-24 { font-size: 24px; }
+.adblock-icon.md-36 { font-size: 36px; }
+.adblock-icon.md-48 { font-size: 48px; }
+.adblock-icon.md-64 { font-size: 64px; }
+
+.adblock-icons.md-14 { font-size: 18px; }
+.adblock-icons.md-18 { font-size: 18px; }
+.adblock-icons.md-24 { font-size: 24px; }
+.adblock-icons.md-36 { font-size: 36px; }
+.adblock-icons.md-48 { font-size: 48px; }
+.adblock-icons.md-64 { font-size: 64px; }
+
+.md-stack.md-14 .md-stack-2x { font-size: 14px; }
+.md-stack.md-18 .md-stack-2x { font-size: 18px; }
+.md-stack.md-24 .md-stack-2x { font-size: 24px; }
+.md-stack.md-36 .md-stack-2x { font-size: 36px; }
+.md-stack.md-48 .md-stack-2x { font-size: 48px; }
+.md-stack.md-64 .md-stack-2x { font-size: 64px; }
+
+.md-stack.md-14 {
+  font-size: 14px;
+  line-height: 14px;
+  height: 14px;
+  width: 14px;
+}
+.md-stack.md-18 {
+  font-size: 18px;
+  line-height: 18px;
+  height: 18px;
+  width: 18px;
+ }
+.md-stack.md-24 {
+  font-size: 24px;
+  line-height: 24px;
+  height: 24px;
+  width: 24px;
+}
+.md-stack.md-36 {
+  font-size: 36px;
+  line-height: 36px;
+  height: 36px;
+  width: 36px;
+ }
+.md-stack.md-48 {
+  font-size: 48px;
+  line-height: 48px;
+  height: 48px;
+  width: 48px;
+}
+.md-stack.md-64 {
+  font-size: 64px;
+  line-height: 64px;
+  height: 64px;
+  width: 64px;
+}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+/*
+-----------------------------------------------------------------------------
+Fonts
+-----------------------------------------------------------------------------
+*/
+
+/* Lato Regular latin-ext */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/fonts/lato-ext-regular.woff') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* Lato Regular latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/fonts/lato-regular.woff') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Lato Italic latin-ext */
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: normal;
+  src: url('/fonts/lato-ext-italic.woff') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* Lato Italic latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: normal;
+  src: url('/fonts/lato-italic.woff') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Lato Bold Italic latin-ext */
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: bold;
+  src: url('/fonts/lato-ext-bolditalic.woff') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* Lato Bold Italic latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: bold;
+  src: url('/fonts/lato-bolditalic.woff') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Lato Bold latin-ext */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: bold;
+  src: url('/fonts/lato-ext-bold.woff') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* Lato Bold latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: bold;
+  src: url('/fonts/lato-bold.woff') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Google Material Design Icons */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Material Icons'),
+    url('/icons/MaterialIcons-Regular.woff2');
+}
+/* AdBlock Custom Icons */
+@font-face {
+  font-family: 'AdBlock Icons';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/icons/adblock-icons.woff2') format('woff2');
+}

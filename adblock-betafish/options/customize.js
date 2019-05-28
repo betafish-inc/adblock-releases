@@ -279,12 +279,12 @@ $(function ()
     var $myControls = $(this).parent('div').find('.addControls');
     $('.addControls').not($myControls).slideUp({
       complete: function() {
-        $(this).parent('div').find('.svg-box').removeClass('upward');
+        $(this).parent('div').find('.accordion-icon').removeClass('upward');
       }
     });
     $myControls.slideToggle({
       complete: function() {
-        let $icon = $(this).parent('div').find('.svg-box');
+        let $icon = $(this).parent('div').find('.accordion-icon');
         let isExpanded = $(this).css('display') !== 'none';
 
         if (isExpanded) {

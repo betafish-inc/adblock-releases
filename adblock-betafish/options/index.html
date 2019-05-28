@@ -2,47 +2,84 @@
 <html id="options-page-html">
   <head>
     <title i18n="optionstitle"></title>
-    <link rel="stylesheet" href="adblock-color-themes.css" />
-    <link rel="stylesheet" href="adblock-jquery-ui.custom.css" />
-    <link rel="stylesheet" href="adblock-option-options.css" />
-    <link rel="stylesheet" href="adblock-options-myadblock.css" />
+    <link rel="stylesheet" href="adblock-options-options.css" />
+    <link rel="stylesheet" href="adblock-options-tabs.css" />
+    <link rel="stylesheet" href="adblock-options-mab.css" />
     <script src="adblock-jquery.js"></script>
     <script src="adblock-jquery.cookie.js"></script>
-    <script src="adblock-jquery-ui.custom.min.js"></script>
     <script src="adblock-functions.js"></script>
-    <script src="adblock-option-index.js"></script>
-    <script src="adblock-option-myadblock.js"></script>
-
+    <script src="adblock-options-tabs.js"></script>
+    <script src="adblock-options-index.js"></script>
   </head>
   <body>
 
-    <header id="header">
-      <div class="wrap">
-        <nav id="main_nav" class="right">
-          <ul>
-          <li class="social"><a class="twitter" href="https://twitter.com/getadblock" target="_blank"><img id="twitter-icon" /></a></li>
-          <li class="social"><a class="facebook" href="https://facebook.com/heres.adblock" target="_blank" ><img id="facebook-icon" /></a></li>
-          </ul>
-        </nav>
-        <a href="https://www.getadblock.com" class="left adblock-logo"><img/></a>
-      </div>
-     <div id="small_nav"></div>
-    </header>
+    <div id="sidebar">
+      <div id="sidebar-content">
+        <section id="sidebar-content-top">
+          <a id="adblock-logo-link" href="https://www.getadblock.com" target="_blank">
+            <img id="sidebar-adblock-logo" />
+          </a>
 
-    <div id="tabpages">
-      <ul>
-        <li data-scripts="adblock-option-general.js"><a href="adblock-option-general.html"><span i18n="tabgeneral"></span></a></li>
-        <li data-scripts="adblock-option-filters.js"><a href="adblock-option-filters.html"><span i18n="tabfilterlists"></span></a></li>
-        <li data-scripts="adblock-option-customize.js"><a href="adblock-option-customize.html"><span i18n="tabcustomize" class="menubuttons"></span></a></li>
-        <li data-scripts="adblock-option-support.js"><a href="adblock-option-support.html"><span i18n="tabsupport"></span></a></li>
-        <li data-scripts="adblock-option-themes.js"><a href="adblock-option-themes.html"><span i18n="tabthemes"></span></a></li>
-      </ul>
+          <nav id="sidebar-tabs">
+            <ul>
+              <li>
+                <a href="#general" class="tablink">
+                  <i class="material-icons md-18">settings</i>&#32;&#32;<span i18n="tabgeneral"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#filters" class="tablink">
+                  <i class="material-icons md-18">format_list_bulleted</i>&#32;&#32;<span i18n="tabfilterlists"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#customize" class="tablink">
+                  <i class="material-icons md-18">create</i><span i18n="tabcustomize"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#themes" class="tablink">
+                  <i class="material-icons md-18">featured_video</i><span i18n="tabthemes"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#support" class="tablink">
+                  <i class="material-icons md-18">chat</i><span i18n="tabsupport"></span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
+        <section id="sidebar-content-bottom">
+          <div id="sidebar-social-links">
+            <a href="https://facebook.com/heres.adblock" target="_blank">
+              <i class="adblock-icon">facebook</i>
+            </a>
+            <a id="twitter-icon-link" href="https://twitter.com/getadblock" target="_blank">
+              <i class="adblock-icon">twitter</i>
+            </a>
+            <a href="https://www.linkedin.com/company/adblock/" target="_blank">
+              <i class="adblock-icon">linkedin</i>
+            </a>
+          </div>
+          <div class="top-line">
+            <a href="https://getadblock.com/privacy" i18n="privacy_policy" target="_blank"></a>
+            <div id="version_number"></div>
+          </div>
+        </section>
+
+      </div>
     </div>
 
-    <footer id="footer">
-      <a id="privacypolicylink" href="https://getadblock.com/privacy" i18n="privacy_policy" target="_blank"></a>
-      <a class="link" id="paymentlink" i18n="pwyw2" target="_blank"></a>
-      <span id="version_number"></span>
-    </footer>
+    <div id="tab-content">
+      <div id="mab" class="tab"></div>
+      <div id="general" class="tab"></div>
+      <div id="filters" class="tab"></div>
+      <div id="customize" class="tab"></div>
+      <div id="themes" class="tab"></div>
+      <div id="support" class="tab"></div>
+    </div>
+
   </body>
 </html>

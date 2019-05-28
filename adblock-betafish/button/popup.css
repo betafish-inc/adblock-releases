@@ -1,90 +1,12 @@
+@import "adblock.css";
+@import "adblock-color-themes.css";
 
-/* Lato Regular latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: normal;
-  src: url('/fonts/lato-ext-regular.woff') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* Lato Regular latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: normal;
-  src: url('/fonts/lato-regular.woff') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* Lato Italic latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: normal;
-  src: url('/fonts/lato-ext-italic.woff') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* Lato Italic latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: normal;
-  src: url('/fonts/lato-italic.woff') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* Lato Bold Italic latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: bold;
-  src: url('/fonts/lato-ext-bolditalic.woff') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* Lato Bold Italic latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: bold;
-  src: url('/fonts/lato-bolditalic.woff') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* Lato Bold latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: bold;
-  src: url('/fonts/lato-ext-bold.woff') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* Lato Bold latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: bold;
-  src: url('/fonts/lato-bold.woff') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-:root {
-  --popup-menu--main-text-color: #333333;
-  --popup-menu--entry-hovered-bg-color: #E6E6E6;
-  --popup-menu--block-ads-bg-color: #f4f4f4;
-  --background-color: white;
-  --bottom-line-color: #E6E6E6;
-  --help-icon-color: #999999;
-  --help-icon-color-hovered: #666666;
-  --link-color: #1855ED;
-  --link-hovered-color: #F30D12;
-  --adblock-logo-url: url(icons/logo.png);
-}
 body {
-  margin: 0px;
-  font-size: 15px;
-  font-style: normal;
   color: var(--popup-menu--main-text-color);
   background-color: var(--background-color);
-  font-family: "Lato", Arial, sans-serif;
 }
 #wrapper {
+  font-size: 15px;
   margin: 0px 0px;
   width: 275px;
   max-height: 606px;
@@ -145,15 +67,12 @@ body {
 }
 a {
   color: var(--link-color);
-  text-decoration: none;
 }
 a:focus {
   outline: none;
 }
 a:hover {
   font-weight: bold;
-  -webkit-transition: all 0.2s ease-out;
-  transition: all 0.2s ease-out;
   color: var(--link-hovered-color);
 }
 .preserve-whitespace {
@@ -167,6 +86,7 @@ a:hover {
   height: 18px;
   width: 18px;
   margin-right: 7px;
+  margin-top: 5px;
 }
 #div_adblock_protect_enrollment {
   height: 98px;
@@ -224,56 +144,24 @@ a:hover {
 }
 #header-icons {
   display: flex;
-  width: 50px;
+  width: 45px;
   align-items: center;
   justify-content: space-between;
 }
-svg#help_link,
-svg#svg_options {
-  display: block;
+#header-icons .material-icons {
+  color: var(--help-icon-color);
+}
+#header-icons .material-icons:hover {
+  color: var(--help-icon-color-hovered);
+}
+.myadblocklogo {
+  float: right;
   height: 18px;
   width: 18px;
+  margin-right: 7px;
   margin-top: 5px;
-  margin-left: 5px;
 }
-svg#help_link .icon-color,
-svg#svg_options .icon-color {
-  fill: var(--help-icon-color);
-}
-svg#help_link:hover .icon-color,
-svg#help_link .icon-color:hover,
-svg#svg_options:hover .icon-color,
-svg#svg_options .icon-color:hover {
-  cursor: pointer;
-  fill: var(--help-icon-color-hovered);
-}
-#div_myadblock_enrollment {
-  background-color: red;
-  color: white;
-  position: relative;
-  line-height: 32px;
-  padding: 0 10px;
-}
-#div_myadblock_enrollment.bottom-space {
-  margin-bottom: 5px;
-}
-#div_myadblock_enrollment:hover,
-#div_myadblock_enrollment:hover .pointer-up {
-  transition: all 0.1s ease-out;
-  -webkit-transition: all 0.1s ease-out;
-  background-color: #E40D0D;
-  font-weight: bold;
-}
-.pointer-up {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 2px;
-  transform: rotate(45deg) skew(15deg, 15deg);
-  background: red;
-  right: 9px;
-  z-index: -1;
-}
+
 /* Retina & hi DPI displays only */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {}
 

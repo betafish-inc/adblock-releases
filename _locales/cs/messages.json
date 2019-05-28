@@ -515,6 +515,10 @@
     "message":"Buďte opatrní: Pokud zde uděláte chybu, AdBlock na YouTube™ by mohl přestat správně pracovat.",
     "description":"First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
   },
+  "filtersavewarning_ytadblock_2":{
+    "message":"Přečtěte si [[návod o syntaxe filtru]] a zjistěte, jak přidávat filtry na bílou listinu.",
+    "description":"Second part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
+  },
   "delete_migration_error_messages":{
     "message":"Odstranit zprávy",
     "description":"Button to delete error messages when adding custom filters manually"
@@ -1164,7 +1168,7 @@
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
   },
   "unpause_adblock":{
-    "message":"Zrušit pozastavení AdBlock-u",
+    "message":"Spustit AdBlock",
     "description":"Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
   },
   "domain_unpause_adblock":{
@@ -1212,7 +1216,7 @@
     "description":"Toolbar button menu entry to hide the AdBlock button"
   },
   "donate_to_adblock":{
-    "message":"Milujete AdBlock? Zvažte o příspěvku!",
+    "message":"Milujete AdBlock? Uvažujte o přispění!",
     "description":"Text of a donate link in the toolbar button menu"
   },
   "help_and_feedback":{
@@ -1332,11 +1336,11 @@
     }
   },
   "show_on_adblock_button":{
-    "message":"Zobrazit počet zablokovaných reklam na tlačítku AdBlock-u",
+    "message":"Zobrazit počet zablokovaných reklam na tlačítku AdBlocku",
     "description":"Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
   },
   "show_on_adblock_menu":{
-    "message":"Zobrazit počet zablokovaných reklam v menu AdBlock-u",
+    "message":"Zobrazit počet zablokovaných reklam v menu AdBlocku",
     "description":"Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
   "show_on_button":{
@@ -1462,11 +1466,11 @@
     "description":"Lets the user know that a link\/page is only available in English."
   },
   "foundbug":{
-    "message":"Našel jste chybu?",
+    "message":"Našli jste chybu?",
     "description":"Subtitle on the Support tab"
   },
   "adblockupdates":{
-    "message":"Aktualizace AdBlock-u",
+    "message":"Aktualizace AdBlocku",
     "description":"Subtitle on the Support tab"
   },
   "ytadblockupdates":{
@@ -1486,7 +1490,7 @@
     "description":"Link to the source code of AdBlock on the Support tab"
   },
   "contributors":{
-    "message":"Máme stránku, která vám pomůže zjistit [[kdo stojí za AdBlockem!]]",
+    "message":"Máme stránku, která vám pomůže zjistit, [[kdo vlastně za AdBlockem stojí]]!",
     "description":"Link to the contributors page on the Support tab"
   },
   "bugreport":{
@@ -1741,8 +1745,128 @@
     "message":"V AdBlocku jsme provedli změny!",
     "description":"Link to Options page with more information about the changes."
   },
+  "images_coming_soon":{
+    "message":"Více fotografií již brzy!",
+    "description":"The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
   "myadblock_options_page_header":{
     "message":"MyAdBlock",
     "description":"The text of the header the MyAdBlock Options page"
+  },
+  "error_msg_thank_you":{
+    "message":"Děkujeme",
+    "description":"The text on the popup menu when an error has occurred"
+  },
+  "error_msg_here":{
+    "message":"zde",
+    "description":"DO NOT TRANSLATE"
+  },
+  "generaloptions2":{
+    "message":"Obecné možnosti",
+    "description":"Title of one of the Options page tabs"
+  },
+  "slows_down_extension":{
+    "message":"zpomaluje rozšíření",
+    "description":"Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url":{
+    "message":"zadejte adresu URL",
+    "description":"Placeholder text in the Custom Filter list URL bar"
+  },
+  "filter_warning_removal_explained":{
+    "message":"odstraňuje varování o používání blokátorů reklam",
+    "description":"A filter list explaination"
+  },
+  "filterlistsrock2":{
+    "message":"Seznamy filtrů blokují většinu reklam na webu. Můžete také...",
+    "description":"Header text on the Customize tab"
+  },
+  "blockmoreads2":{
+    "message":"Blokovat více reklam",
+    "description":"Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2":{
+    "message":"Zastavit blokování reklam",
+    "description":"Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2":{
+    "message":"Manuálně upravit své filtry",
+    "description":"Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2":{
+    "message":"Upravit zakázané filtry",
+    "description":"Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1":{
+    "message":"Buďte opatrní: pokud zde uděláte chybu, tak by se mohlo mnoho ostatních filtrů, včetně oficiálních filtrů, rozbít!",
+    "description":"Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2":{
+    "message":"Přečtěte si [[návod o syntaxi filtru]] a zjistěte, jak přidávat pokročilé filtry na černé a bílé listině.",
+    "description":"Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2":{
+    "message":"Zaplaťte, kolik chcete!",
+    "description":"Text of a payment request link"
+  },
+  "translator_credit2":{
+    "message":"Na překladu se podílel...",
+    "description":"This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2":{
+    "message":"vybrat jazyk",
+    "description":"First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2":{
+    "message":"Povolit přidávání určených YouTube™ kanálů na bílou listinu",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser":{
+    "message":"vyžaduje restartování prohlížeče",
+    "description":"Text displayed within an option to notify users to restart the browser to fully enable the option"
+  },
+  "tabthemes":{
+    "message":"Motivy",
+    "description":"A tab on the Options page"
+  },
+  "themes":{
+    "message":"Motivy",
+    "description":"Title of the Themes tab of the Options page"
+  },
+  "popup_menu_theme":{
+    "message":"Motiv vyskakovacího okna",
+    "description":"Section title of the Themes tab of the Options page"
+  },
+  "options_page_theme":{
+    "message":"Motiv nastavení",
+    "description":"Section title of the Themes tab of the Options page"
+  },
+  "more_themes_coming_soon":{
+    "message":"Brzy se vraťte, nové motivy jsou na cestě!",
+    "description":"Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
+  },
+  "stay_tuned":{
+    "message":"Zůstaňte naladěni",
+    "description":"Text in theme box of the Themes tab of the Options page (no more than 30 characters)"
+  },
+  "header":{
+    "message":"Nadpis",
+    "description":"Text in theme box of the Themes tab of the Options page (no more than 10 characters)"
+  },
+  "text_body":{
+    "message":"text",
+    "description":"Text in theme box of the Themes tab of the Options page (no more than 22 characters)"
+  },
+  "default_theme":{
+    "message":"Výchozí",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
+  "dark_theme":{
+    "message":"Tmavý",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
+  "apply_theme":{
+    "message":"Použít motiv",
+    "description":"Text of clickable element that applies the theme of a theme box in the Themes tab of the Options page"
   }
 }

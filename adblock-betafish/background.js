@@ -728,7 +728,7 @@ if (chrome.runtime.id)
   var updateTabRetryCount = 0;
   var getUpdatedURL = function()
   {
-    var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent(chrome.runtime.getManifest().version) + '/?u=' + STATS.userId();
+    var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent('3.46.0') + '/?u=' + STATS.userId();
     updatedURL = updatedURL + '&bc=' + Prefs.blocked_total;
     updatedURL = updatedURL + '&rt=' + updateTabRetryCount;
     return updatedURL;
@@ -804,13 +804,15 @@ if (chrome.runtime.id)
       checkQueryState();
     }
   };
+  const slashUpdateReleases = ['3.46.0', '3.47.0', '3.48.0'];
   // Display updated page after each update
   chrome.runtime.onInstalled.addListener(function (details)
   {
-    var lastKnownVersion = localStorage.getItem(updateStorageKey);
+    const lastKnownVersion = localStorage.getItem(updateStorageKey);
+    const currentVersion = chrome.runtime.getManifest().version;
     if (details.reason === 'update' &&
-        chrome.runtime.getManifest().version === "3.46.0" &&
-        lastKnownVersion &&
+        slashUpdateReleases.includes(currentVersion) &&
+        !slashUpdateReleases.includes(lastKnownVersion) &&
         chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
     {
       STATS.untilLoaded(function(userID)
@@ -818,7 +820,7 @@ if (chrome.runtime.id)
         Prefs.untilLoaded.then(shouldShowUpdate);
       });
     }
-    localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
+    localStorage.setItem(updateStorageKey, currentVersion);
   });
 }
 

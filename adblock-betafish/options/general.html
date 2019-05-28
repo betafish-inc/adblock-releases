@@ -10,14 +10,24 @@
     </div>
     <ul id="general-option-list">
 
-      <li class="add-space-between checkbox-indentation section-padding">
-        <input type="checkbox" class="feature" id="acceptable_ads"/>
+      <li class="section-padding checkbox-indentation">
+        <span class="checkbox md-stack">
+          <input type="checkbox" class="feature" id="acceptable_ads"/>
+          <i class="unchecked material-icons">lens</i>
+          <i class="checked material-icons md-stack-2x">lens</i>
+          <i class="checked material-icons md-stack-1x">done</i>
+        </span>
         <label for="acceptable_ads" i18n="acceptableadsoption"></label>
       </li>
 
-      <li class="section-padding">
-        <div class="add-space-between checkbox-indentation" >
-          <input type="checkbox" class="feature" id="enable_youtube_channel_whitelist"/>
+      <li class="section-padding checkbox-indentation">
+        <div>
+          <span class="checkbox md-stack">
+            <input type="checkbox" class="feature" id="enable_youtube_channel_whitelist" />
+            <i class="unchecked material-icons">lens</i>
+            <i class="checked material-icons md-stack-2x">lens</i>
+            <i class="checked material-icons md-stack-1x">done</i>
+          </span>
           <label for="enable_youtube_channel_whitelist" i18n="allow_whitelisting_youtube_channels2"></label>
         </div>
         <div class="extra-info">
@@ -25,56 +35,94 @@
         </div>
       </li>
 
-      <li class="add-space-between checkbox-indentation section-padding">
-        <input type="checkbox" class="feature" id="prefs__shouldShowBlockElementMenu" />
+      <li class="section-padding checkbox-indentation">
+        <span class="checkbox md-stack">
+          <input type="checkbox" class="feature" id="prefs__shouldShowBlockElementMenu" />
+          <i class="unchecked material-icons">lens</i>
+          <i class="checked material-icons md-stack-2x">lens</i>
+          <i class="checked material-icons md-stack-1x">done</i>
+        </span>
         <label for="prefs__shouldShowBlockElementMenu" i18n="showcontextmenus2"></label>
       </li>
 
-      <li class="add-space-between checkbox-indentation section-padding">
-        <input type="checkbox" class="feature" id="prefs__show_statsinicon" />
+      <li class="section-padding checkbox-indentation">
+        <span class="checkbox md-stack">
+          <input type="checkbox" class="feature" id="prefs__show_statsinicon" />
+          <i class="unchecked material-icons">lens</i>
+          <i class="checked material-icons md-stack-2x">lens</i>
+          <i class="checked material-icons md-stack-1x">done</i>
+        </span>
         <label for="prefs__show_statsinicon" i18n="show_on_adblock_button"></label>
       </li>
 
-      <li class="add-space-between checkbox-indentation section-padding">
-        <input type="checkbox" class="feature" id="prefs__show_statsinpopup" />
+      <li class="section-padding checkbox-indentation">
+        <span class="checkbox md-stack">
+          <input type="checkbox" class="feature" id="prefs__show_statsinpopup" />
+          <i class="unchecked material-icons">lens</i>
+          <i class="checked material-icons md-stack-2x">lens</i>
+          <i class="checked material-icons md-stack-1x">done</i>
+        </span>
         <label for="prefs__show_statsinpopup" i18n="show_on_adblock_menu"></label>
       </li>
 
-      <li class="add-space-between checkbox-indentation section-padding">
-        <input type="checkbox" class="feature" id="prefs__show_devtools_panel" />
+      <li class="section-padding checkbox-indentation">
+        <span class="checkbox md-stack">
+          <input type="checkbox" class="feature" id="prefs__show_devtools_panel" />
+          <i class="unchecked material-icons">lens</i>
+          <i class="checked material-icons md-stack-2x">lens</i>
+          <i class="checked material-icons md-stack-1x">done</i>
+        </span>
         <label for="prefs__show_devtools_panel" i18n="show_devtools_panel"></label>
       </li>
 
       <li class="add-space-between checkbox-indentation section-padding">
-        <input type="checkbox" class="feature" id="enable_data_collection_v2" />
-        <label for="enable_data_collection_v2" i18n="datacollectionoption"></label>
-        <a href="https://help.getadblock.com/support/solutions/articles/6000067136" target="_blank">
-          <svg id="help-link-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0z" fill="none"/>
-            <path class="icon-color" d="M19 2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h4l3 3 3-3h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 16h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 11.9 13 12.5 13 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-          </svg>
+        <div>
+          <span class="checkbox md-stack">
+            <input type="checkbox" class="feature" id="enable_data_collection_v2" />
+            <i class="unchecked material-icons">lens</i>
+            <i class="checked material-icons md-stack-2x">lens</i>
+            <i class="checked material-icons md-stack-1x">done</i>
+          </span>
+          <label for="enable_data_collection_v2" i18n="datacollectionoption"></label>
+        </div>
+        <a class="help-link-icon" href="https://help.getadblock.com/support/solutions/articles/6000067136" target="_blank">
+          <i class="material-icons md-18">live_help</i>
         </a>
       </li>
 
       <li class="add-space-between checkbox-indentation section-padding">
-        <input type="checkbox" class="feature" id="enable_local_cdn" />
-        <label for="enable_local_cdn" i18n="local_cdn_option"></label>
-        <a href="https://help.getadblock.com/support/solutions/articles/6000191643-what-is-the-local-cdn-feature-" target="_blank">
-          <svg id="help-link-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0z" fill="none"/>
-            <path class="icon-color" d="M19 2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h4l3 3 3-3h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 16h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 11.9 13 12.5 13 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-          </svg>
+        <div>
+          <span class="checkbox md-stack">
+            <input type="checkbox" class="feature" id="enable_local_cdn" />
+            <i class="unchecked material-icons">lens</i>
+            <i class="checked material-icons md-stack-2x">lens</i>
+            <i class="checked material-icons md-stack-1x">done</i>
+          </span>
+          <label for="enable_local_cdn" i18n="local_cdn_option"></label>
+        </div>
+        <a class="help-link-icon" href="https://help.getadblock.com/support/solutions/articles/6000191643-what-is-the-local-cdn-feature" target="_blank">
+          <i class="material-icons md-18">live_help</i>
         </a>
       </li>
 
-      <li class="add-space-between checkbox-indentation section-padding">
-        <input type="checkbox" class="feature" id="enable_show_advanced_options" />
+      <li class="section-padding checkbox-indentation">
+        <span class="checkbox md-stack">
+          <input type="checkbox" class="feature" id="enable_show_advanced_options" />
+          <i class="unchecked material-icons">lens</i>
+          <i class="checked material-icons md-stack-2x">lens</i>
+          <i class="checked material-icons md-stack-1x">done</i>
+        </span>
         <label for="enable_show_advanced_options" i18n="advanced_options2"></label>
       </li>
 
       <li class="section-padding advanced light-grey-text">
-        <div class="add-space-between checkbox-indentation forDebug">
-          <input type="checkbox" class="feature" id="enable_debug_logging" />
+        <div class="checkbox-indentation forDebug">
+          <span class="checkbox md-stack">
+            <input type="checkbox" class="feature" id="enable_debug_logging" />
+            <i class="unchecked material-icons">lens</i>
+            <i class="checked material-icons md-stack-2x">lens</i>
+            <i class="checked material-icons md-stack-1x">done</i>
+          </span>
           <label for="enable_debug_logging" i18n="debuginlogoption2"></label>
         </div>
         <div class="extra-info">

@@ -38,19 +38,28 @@ function CheckboxForFilterList(filterList, filterListType, index, container) {
   this._filterList = filterList;
   var id           = filterListType + '_' + index;
   var filterId     = this._filterList.id;
-  var filterListIconSVG = '\
-    <svg class="filter-list-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">\
-      <path class="icon-color" fill="#999" d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/>\
-      <path fill="none" d="M0 0h24v24H0V0z"/>\
-    </svg>'
+  var filterListIcon = $('<i></i>')
+    .addClass('material-icons')
+    .addClass('md-24')
+    .text('format_list_bulleted');
 
   this._div = $('<div></div>').addClass('section-padding').addClass('bottom-line').addClass('filter-subscription-wrapper')
                   .css('display', filterListType === 'language_filter_list' ? (filterList.subscribed ? 'block' : 'none') : 'block');
-  
+
   this._checkBox = $('<input />').attr('type', 'checkbox')
               .attr('id', id)
               .prop('checked', filterList.subscribed ? true : null)
               .addClass('filter_list_control');
+  this._checkBoxIcons = $('\
+    <i class="unchecked material-icons">lens</i>\
+    <i class="checked material-icons md-stack-2x">lens</i>\
+    <i class="checked material-icons md-stack-1x">done</i>'
+  )
+  this._checkBoxWrapper = $('<span></span>')
+              .addClass('checkbox')
+              .addClass('md-stack')
+              .append(this._checkBox)
+              .append(this._checkBoxIcons)
 
   this._label = $('<label></label>')
   .text(filterList.label || filterList.title || filterList.url.substr(0,40)+'...')
@@ -58,11 +67,12 @@ function CheckboxForFilterList(filterList, filterListType, index, container) {
   .attr('for', id)
   .append(this._link);
 
-  this._link = $('<a>' + filterListIconSVG + '</a>').addClass('filter-list-link')
+  this._link = $('<a></a>').addClass('filter-list-link')
             .css('display', $('#btnShowLinks')
             .prop('disabled') ? 'inline' : 'none')
             .attr('target', '_blank')
             .attr('data-URL', filterList.url)
+            .append(filterListIcon)
             .click(function (e)
               {
               var url = $(this).attr('data-URL');
@@ -93,7 +103,7 @@ function CheckboxForFilterList(filterList, filterListType, index, container) {
 
   this._checkboxAndLabel = $('<div></div>')
                               .addClass('label-max-width')
-                              .append(this._checkBox)
+                              .append(this._checkBoxWrapper)
                               .append(this._label)
                               .append(this._link)
 

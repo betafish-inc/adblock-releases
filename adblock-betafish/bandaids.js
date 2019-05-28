@@ -275,7 +275,7 @@ var run_bandaids = function()
             {
               BGcall("recordGeneralMessage", "disableacceptableads_clicked", undefined, undefined, function()
               {
-                BGcall("openTab", "options.html?tab=1&aadisabled=true");
+                BGcall("openTab", "options.html?aadisabled=true#general");
               });
             });
           }
@@ -295,7 +295,7 @@ var run_bandaids = function()
             event.preventDefault();
             BGcall("recordGeneralMessage", "updateoptionopen_clicked", undefined, undefined, function()
             {
-              BGcall("openTab", "options.html?tab=4");
+              BGcall("openTab", "options.html#themes");
             });
           }
         }

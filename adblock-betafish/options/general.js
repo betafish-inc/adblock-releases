@@ -23,6 +23,9 @@ $(function () {
   for (var name in optionalSettings) {
     $('#enable_' + name).prop('checked', optionalSettings[name]);
   }
+  if (optionalSettings && !optionalSettings.show_advanced_options) {
+    $('.advanced').hide();
+  }
 
   var abpPrefs = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];
   for (var inx in abpPrefs) {
