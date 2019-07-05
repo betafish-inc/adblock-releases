@@ -118,6 +118,12 @@ function addMyAdBlockTab() {
       <span i18n="myadblockoptions"></span>\
     </a>\
     <ul data-parent-tab="#mab">\
+      <li>\
+        <a href="#mab-themes" class="tablink">\
+          <i class="material-icons md-18 unlocked">featured_video</i>\
+          <span i18n="themes"></span>\
+        </a>\
+      </li>\
       <li class="locked">\
         <a href="#mab-image-swap" class="tablink">\
           <i class="material-icons md-18 unlocked">image</i>\
@@ -135,13 +141,16 @@ function addMyAdBlockTab() {
 
   if (License.shouldShowMyAdBlockEnrollment()) {
     $('#myadblock-tab').show();
+    $('#themes-tab').hide();
     return true;
   } else if (License.isActiveLicense()) {
     $('#myadblock-tab li.locked').removeClass('locked');
     $('#myadblock-tab').show();
+    $('#themes-tab').hide();
     return true;
   } else {
     $('#myadblock-tab').hide();
+    $('#themes-tab').show();
     return false;
   }
 };

@@ -12,7 +12,9 @@ body {
   max-height: 606px;
 }
 .separator {
-  border-top: 1px solid var(--bottom-line-color);
+  height: 1px;
+  background-color: var(--popup-menu--main-text-color);
+  opacity: 0.5;
   margin: 0px 10px;
 }
 .menu-entry {
@@ -63,7 +65,7 @@ body {
 }
 .block_count_number {
   font-weight: bold;
-  color: red;
+  color: var(--block-count-color);
 }
 a {
   color: var(--link-color);
@@ -73,7 +75,7 @@ a:focus {
 }
 a:hover {
   font-weight: bold;
-  color: var(--link-hovered-color);
+  color: var(--block-count-color);
 }
 .preserve-whitespace {
   white-space: pre-wrap;
@@ -149,10 +151,11 @@ a:hover {
   justify-content: space-between;
 }
 #header-icons .material-icons {
-  color: var(--help-icon-color);
+  color: var(--popup-menu--main-text-color);
+  opacity: 0.5;
 }
 #header-icons .material-icons:hover {
-  color: var(--help-icon-color-hovered);
+  opacity: 1;
 }
 .myadblocklogo {
   float: right;
@@ -166,8 +169,20 @@ a:hover {
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {}
 
 #default_theme .header-logo {
-  content: url(icons/logo.png);
+  content: url(icons/default_theme/logo.svg);
 }
 #dark_theme .header-logo {
-  content: url(icons/dark_theme/logo.png);
+  content: url(icons/dark_theme/logo.svg);
+}
+#ocean_theme .header-logo {
+  content: url(icons/ocean_theme/logo.svg);
+}
+#solarized_theme .header-logo {
+  content: url(icons/solarized_theme/logo.svg);
+}
+#sunshine_theme .header-logo {
+  content: url(icons/sunshine_theme/logo.svg);
+}
+#watermelon_theme .header-logo {
+  content: url(icons/watermelon_theme/logo.svg);
 }

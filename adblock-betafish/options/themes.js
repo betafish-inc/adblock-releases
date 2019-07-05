@@ -15,6 +15,9 @@
       return;
     }
     let $selectedTheme = $(changeEvent.target).closest('.theme-box');
+    if ($selectedTheme.closest('.theme-wrapper').hasClass('locked')) {
+      return;
+    }
     let sectionID = $selectedTheme.closest('section').attr('id');
     let $otherThemes = $(`#${ sectionID } .theme-box`).not($selectedTheme);
 
@@ -68,6 +71,11 @@
   }
 
   const showPreviewOfClickedTheme = (clickEvent) => {
+    // Check that a preview overlay isn't already being shown
+    if ($('.dark-overlay-preview').length > 0) {
+      return;
+    }
+
     let $darkOverlayPreview = createPreviewNode(clickEvent);
     $darkOverlayPreview.show();
 
@@ -89,8 +97,17 @@
   }
 
   const showNameTheme = ($themeBox) => {
+    if ($themeBox.parent().hasClass('locked')) {
+      $themeBox.find('.theme-name-lock').show();
+    }
     let $themeNameDiv = $themeBox.find('.theme-name');
     $themeNameDiv.text(translate($themeNameDiv.attr('i18n')));
+  }
+
+  const showSupportToUnlock = ($themeBox) => {
+    $themeBox.find('.theme-name-lock').hide();
+    let $themeNameDiv = $themeBox.find('.theme-name');
+    $themeNameDiv.text(translate('support_to_unlock'));
   }
 
   const validateTheme = (themeName) => {
@@ -116,8 +133,13 @@
 
   const documentEventsHandling = () => {
     // Hover events
-    $('.theme-box:not(.selected)').hover(
+    $('.theme-wrapper:not(.locked) .theme-box:not(.selected)').hover(
       function() { showApplyTheme($(this)) },
+      function() { showNameTheme($(this)) }
+    );
+
+    $('.theme-wrapper.locked .theme-box').hover(
+      function() { showSupportToUnlock($(this)) },
       function() { showNameTheme($(this)) }
     );
 
@@ -135,6 +157,20 @@
     }
 
     selectCurrentThemes(colorThemes);
+
+    if (!License || $.isEmptyObject(License) || !MABPayment) {
+      return;
+    }
+
+    const iframeData = MABPayment.initialize("themes");
+    if (License.shouldShowMyAdBlockEnrollment()) {
+      $('.theme-wrapper.locked .theme-box').click((event) => {
+        MABPayment.freeUserLogic(iframeData);
+      });
+    } else if (License.isActiveLicense()) {
+      MABPayment.paidUserLogic(iframeData);
+    }
+
     documentEventsHandling();
   });
 })();

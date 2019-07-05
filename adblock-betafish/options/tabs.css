@@ -10,7 +10,7 @@
 }
 #sidebar-tabs ul[data-parent-tab] {
   display: none;
-  margin-left: 30px;
+  margin-left: 41px;
   border-radius: 3px 0px 0px 3px;
   opacity: 0;
   transition: opacity .2s linear;
@@ -50,7 +50,10 @@
   color: #999999;
   cursor: default
 }
-#sidebar-tabs li a span {
+#sidebar-tabs li a i:not(.unlocked):not(.locked) + span {
+  margin-left: 15px;
+}
+#sidebar-tabs li.locked a span {
   margin-left: 15px;
 }
 #sidebar-tabs .tablink {
@@ -99,6 +102,7 @@
   }
   #sidebar-tabs a:not(.active):hover span {
     display: inline-block;
+    margin-left: 15px;
   }
   #sidebar-tabs ul[data-parent-tab] li.locked a {
     color: #999999;

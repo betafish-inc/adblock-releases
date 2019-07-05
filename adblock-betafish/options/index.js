@@ -13,7 +13,10 @@ const Synchronizer        = backgroundPage.Synchronizer;
 const Utils               = backgroundPage.Utils;
 const NotificationStorage = backgroundPage.Notification;
 const License             = backgroundPage.License;
-const validThemes = ['default_theme', 'dark_theme'];
+const validThemes = [
+  'default_theme', 'dark_theme', 'watermelon_theme',
+  'solarized_theme', 'ocean_theme', 'sunshine_theme'
+];
 let language = navigator.language.match(/^[a-z]+/i)[0];
 let optionalSettings = {};
 let delayedSubscriptionSelection = null;

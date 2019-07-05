@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 
-<div class="option-page-box">
-  <div class="option-page-content center-if-iframe">
+<div class="option-page-box" id="mab-page">
+  <div class="option-page-content">
     <h1 i18n="myadblock_options_page_header" class="page-title"></h1>
     <div class="section-title bottom-line">
       <span id="mab-new-feature" i18n="callout_new_feature"></span>
       <span i18n="myadblock_short_description"></span>
     </div>
     <div id="myadblock-features">
+
+      <!-- START: Themes tab feature -->
+      <div class="mab-feature hover-shadow">
+        <a href="#mab-themes">
+          <section class="mab-feature-header">
+            <i class="material-icons md-24 header-icon">featured_video</i>
+            <span i18n="themes">Themes</span>
+          </section>
+          <section class="mab-feature-body">
+            <span i18n="myadblock_themes_description"></span>
+            <img id="themes-preview"/>
+          </section>
+        </a>
+      </div>
+      <!-- END: Themes tab feature -->
 
       <!-- START: Image Swap tab feature -->
       <div class="mab-feature locked">
@@ -50,9 +65,9 @@
   </div>
 
   <!-- START: payment iframe block -->
-  <div id="payment-iframe"></div>
-  <div id="payment-iframe-error">
-    <div id="error-title" class="bottom-line">
+  <div id="payment-iframe-mab"></div>
+  <div id="payment-iframe-error-mab">
+    <div id="error-title-mab" class="bottom-line">
       <div class="align-items-center">
         <i class="material-icons circle-icon-bg-24 error-icon">cancel</i>
         &nbsp;&nbsp;
