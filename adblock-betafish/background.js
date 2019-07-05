@@ -709,14 +709,13 @@ if (chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
 }
 
 var updateStorageKey = 'last_known_version';
-// Commented out temporarily while doing /update
-//chrome.runtime.onInstalled.addListener(function (details)
-//{
-// if (details.reason === 'update' || details.reason === 'install')
-// {
-//   localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
-// }
-//});
+chrome.runtime.onInstalled.addListener(function (details)
+{
+  if (details.reason === 'update' || details.reason === 'install')
+  {
+    localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
+  }
+});
 
 var openTab = function (url)
 {
@@ -728,7 +727,7 @@ if (chrome.runtime.id)
   var updateTabRetryCount = 0;
   var getUpdatedURL = function()
   {
-    var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent('3.46.0') + '/?u=' + STATS.userId();
+    var updatedURL = 'https://getadblock.com/update/' + encodeURIComponent(chrome.runtime.getManifest().version) + '/?u=' + STATS.userId();
     updatedURL = updatedURL + '&bc=' + Prefs.blocked_total;
     updatedURL = updatedURL + '&rt=' + updateTabRetryCount;
     return updatedURL;
@@ -768,60 +767,6 @@ if (chrome.runtime.id)
       }
     });
   };
-  var shouldShowUpdate = function()
-  {
-    var checkQueryState = function()
-    {
-      chrome.idle.queryState(60, function(state)
-      {
-        if (state === "active")
-        {
-          openUpdatedPage();
-        }
-        else
-        {
-          chrome.tabs.onCreated.removeListener(waitForUserAction);
-          chrome.tabs.onCreated.addListener(waitForUserAction);
-        }
-      });
-    };
-    if (chrome.management && chrome.management.getSelf)
-    {
-      chrome.management.getSelf(function(info)
-      {
-        if (info && info.installType !== "admin")
-        {
-          checkQueryState();
-        }
-        else if (info && info.installType === "admin")
-        {
-          recordGeneralMessage('update_tab_not_shown_admin_user');
-        }
-      });
-    }
-    else
-    {
-      checkQueryState();
-    }
-  };
-  const slashUpdateReleases = ['3.46.0', '3.47.0', '3.48.0'];
-  // Display updated page after each update
-  chrome.runtime.onInstalled.addListener(function (details)
-  {
-    const lastKnownVersion = localStorage.getItem(updateStorageKey);
-    const currentVersion = chrome.runtime.getManifest().version;
-    if (details.reason === 'update' &&
-        slashUpdateReleases.includes(currentVersion) &&
-        !slashUpdateReleases.includes(lastKnownVersion) &&
-        chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk')
-    {
-      STATS.untilLoaded(function(userID)
-      {
-        Prefs.untilLoaded.then(shouldShowUpdate);
-      });
-    }
-    localStorage.setItem(updateStorageKey, currentVersion);
-  });
 }
 
 // Creates a custom filter entry that whitelists a YouTube channel

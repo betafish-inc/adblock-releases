@@ -13,6 +13,7 @@ body {
   font-size: 24px;
   font-weight: bold;
   font-style: normal;
+  color: var(--options-page-title-color);
 }
 .paragraph-title {
   font-size: 21px;
@@ -26,6 +27,7 @@ body {
   font-size: 18px;
   font-weight: normal;
   font-style: normal;
+  padding-bottom: 15px;
 }
 a {
   color: var(--main-text-color);
@@ -137,7 +139,12 @@ a .link-text-color:hover {
   border-top-style: solid;
   border-top-color: var(--bottom-line-color, #E6E6E6);
 }
-
+.shadow {
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
+}
+.hover-shadow:hover {
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
+}
 /* BUTTONS */
 
 .btn {
@@ -192,7 +199,7 @@ a .link-text-color:hover {
   color: var(--header-social-icons);
 }
 
-/* TABPAGES */
+/* TAB PANELS LAYOUTS */
 
 .option-page-box {
   display: flex;
@@ -201,8 +208,18 @@ a .link-text-color:hover {
 .option-page-content {
   display: flex;
   flex-direction: column;
-  width: 630px;
-  margin: 25px 0;
+  margin: 24px 20px;
+  max-width: 711px;
+  width: 711px;
+}
+.option-page-content.center-if-iframe {
+  margin: 24px 20px 24px auto;
+  margin-left: auto;
+}
+.center-if-iframe .page-title,
+.center-if-iframe .section-title,
+.center-if-iframe #myadblock-features {
+  margin-left: 20px;
 }
 
 /* GENERAL TAB */
@@ -555,9 +572,6 @@ textarea.widest {
 .checkbox > input:not(:checked) ~ i.checked {
   display: none;
 }
-.checkbox .checked.md-stack-2x {
-  color: #05BCFC;
-}
 .checkbox .unchecked {
   font-weight: bold;
   color: var(--not-selected-checkbox-bg-color);
@@ -565,6 +579,9 @@ textarea.widest {
 .checkbox ~ label {
   padding-left: 10px;
   font-size: 18px;
+}
+.checkbox .checkbox-icon {
+  color: #05bcfc;
 }
 
 /* BORDERED SPEECH BUBBLE */
@@ -735,33 +752,18 @@ textarea.widest {
 .icons-preview {
   width: 40px;
 }
-.header-icon {
-  content: "";
-  display: inline-block;
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  background-color: transparent;
-  cursor: none;
-  margin: 0;
-  background-size: 16px auto;
-  height: 16px;
-  width: 16px;
-}
-.md-stack.theme-selected-icon {
+.material-icons.theme-selected-icon {
   display: none;
   top: -8px;
   right: -8px;
   position: absolute;
   z-index: 1;
-}
-.md-stack.theme-selected-icon:hover {
-  cursor: default;
-}
-.md-stack.theme-selected-icon .md-stack-2x,
-.md-stack.theme-selected-icon .md-stack-2x:hover {
   color: #05BCFC;
 }
-.theme-box.selected + .md-stack.theme-selected-icon {
+.theme-selected-icon:hover {
+  cursor: default;
+}
+.theme-box.selected + .theme-selected-icon {
   display: block;
 }
 .theme-wrapper,
@@ -807,9 +809,6 @@ textarea.widest {
   top: -20px;
   right: -20px;
   position: absolute;
-}
-.fixed-box > .close-preview-icon > .md-stack-2x,
-.fixed-box > .close-preview-icon > .md-stack-2x:hover {
   color: #E40D0D;
 }
 .fixed-box > .close-preview-icon:hover {
@@ -876,7 +875,7 @@ section .theme-section-row {
 }
 #sidebar-content-bottom i,
 #sidebar-content-bottom i:hover {
-  color: #999999;
+  color: var(--header-social-icons);
 }
 #sidebar-content-bottom {
   font-size: 14px;
@@ -898,7 +897,7 @@ section .theme-section-row {
 /* BUG REPORT */
 
 .input-error {
-  border-color: var(--standout-text-color, #F30D12) !important;
+  border-color: var(--standout-text-color) !important;
 }
 #info  {
   margin-top: 110px;
@@ -909,8 +908,9 @@ section .theme-section-row {
 
 /* Retina & hi DPI displays only */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {}
+
 /* Screen resolution support */
-@media screen and (max-width: 840px) {
+@media screen and (max-width: 890px) {
   #sidebar-adblock-logo {
     content: url(icons/ab-38.png);
     margin-top: 35px;
@@ -930,26 +930,26 @@ section .theme-section-row {
   #bug-report-page-content {
     margin-left: calc(var(--small-sidebar-width, 60px) + 25px);
   }
-  @media screen and (max-width: 700px) {
-    #channels#channels {
+  @media screen and (max-width: 600px) {
+    section .theme-section-row {
       flex-wrap: wrap;
       justify-content: start;
-    }
-    @media screen and (max-width: 600px) {
-      section .theme-section-row {
-        flex-wrap: wrap;
-        justify-content: start;
-      }
     }
   }
 }
 
-@media screen and (max-height: 435px) {
-  #sidebar-content-bottom #sidebar-social-links {
+@media screen and (max-height: 530px) {
+  #sidebar-content-bottom .top-line {
     display: none;
   }
+  @media screen and (max-height: 435px) {
+    #sidebar-content-bottom #sidebar-social-links {
+      display: none;
+    }
+  }
 }
-/* Chrome 49 compatability */
+
+/* BELOW: Chrome 49 compatability */
 
 #default_theme .adblock-logo img {
   content: url(icons/logo.png);

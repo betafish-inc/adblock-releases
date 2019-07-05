@@ -1,0 +1,166 @@
+/*
+** For reducing clashing of styling rules with host websites
+** we need to start all our selectors with '#adblock-dialog'.
+** This is necessary if we support Chrome versions < 53.
+*/
+
+@import 'fonts/font-face.css'; /* Fallback for older Chrome */
+
+#adblock-dialog div,
+#adblock-dialog h1,
+#adblock-dialog p,
+#adblock-dialog span,
+#adblock-dialog button,
+#adblock-dialog header,
+#adblock-dialog footer,
+#adblock-dialog section {
+    all: initial;
+}
+
+#adblock-dialog {
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 16px;
+    --border-radius: 6px;
+    --border: #999999;
+    --background-color: white;
+    --button-color: white;
+    --button-background: #F30D12;
+    --button-background-hover: #E40D0D;
+    --button-cancel-background: #999999;
+    --button-cancel-background-hover: #666666;
+    --options-header-bg-color: #F1F1F1;
+    --options-footer-bg-color: #F1F1F1;
+    --check-checked: #05BCFC;
+
+    position: fixed;
+    top: 55px;
+    left: 75px;
+    width: 550px;
+    min-width: 525px;
+    background: var(--background-color);
+    border: 1px solid var(--border);
+    color: aliceblue;
+    z-index: 9999999999999999999;
+    border-radius: var(--border-radius);
+}
+
+#adblock-dialog .adblock {
+    font-family: "Lato", Arial, sans-serif;
+    font-size: 16px;
+}
+
+#adblock-dialog header.adblock {
+    display: flex;
+    cursor: move;
+    background: var(--options-header-bg-color);
+    color: white;
+    border-top-right-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+    padding: 8px
+}
+
+#adblock-dialog header h1.adblock {
+    display: inline-block;
+    cursor: move;
+    padding: 4px 12px;
+}
+
+#adblock-dialog section.adblock {
+    display: block;
+    padding: 6px;
+    margin-top: 12px;
+}
+
+#adblock-dialog footer.adblock {
+    display: flex;
+    justify-content: flex-end;
+    background: var(--options-footer-bg-color);
+    color: black;
+    border-bottom-right-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+    padding: 12px
+}
+
+#adblock-dialog #adblock-parts {
+    padding: 30px 12px;
+}
+
+#adblock-dialog #adblock-parts li.adblock-part-item {
+    display: inline-block;
+    font-style: italic;
+}
+
+#adblock-dialog #adblock-dialog p.adblock {
+    padding: 20px 12px;
+}
+
+#adblock-dialog input[type="range"].adblock {
+    vertical-align: middle;
+}
+
+#adblock-dialog #adblock-wizard-form {
+    padding: 16px 12px;
+}
+
+#adblock-dialog fieldset.adblock {
+    border: none;
+}
+
+#adblock-dialog #adblock-sliders {
+    padding: 5px 0;
+}
+
+#adblock-dialog button.adblock {
+    color: var(--button-color);
+    background-color: var(--button-background);
+    border: 1px solid #dcdcdc;
+    display: inline-block;
+    font-style: normal;
+    text-decoration: none;
+    text-align: center;
+    border-radius: var(--border-radius);
+    padding: 6px 12px;
+    margin: 0 12px;
+}
+
+#adblock-dialog button.adblock:hover {
+    background-color: var(--button-background-hover);
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+#adblock-dialog button.adblock.cancel {
+    background-color: var(--button-cancel-background);
+}
+
+#adblock-dialog button.adblock.cancel:hover {
+    background-color: var(--button-cancel-background-hover);
+}
+
+#adblock-dialog button.adblock:active {
+    position: relative;
+    top: 1px;
+}
+
+#adblock-dialog button.adblock:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+#adblock-dialog div.adblock > label.adblock {
+    margin-left: 7px;
+}
+
+#adblock-dialog label.adblock {
+    cursor: pointer;
+}
+
+#adblock-dialog #adblock-sliders div {
+    display: inline-block;
+}
+
+#adblock-dialog input[type=checkbox] {
+    height: 16px;
+    width: 16px;
+    vertical-align: top;
+}

@@ -279,7 +279,7 @@ var License = (function () {
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    if (request.command === "payment_success" && request.transID && request.version === 1) {
+    if (request.command === "payment_success" && request.version === 1) {
         var currentLicense = {};
         currentLicense.status = "active";
         License.set(currentLicense);

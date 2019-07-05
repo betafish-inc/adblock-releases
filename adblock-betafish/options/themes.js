@@ -41,20 +41,11 @@
     let $imgPreview = $('<img/>');
     let $closeIcon = $('<i></i>');
     let $overlay = $('<div></div>');
-    let $iconStack2x = $('<i></i>')
-        .addClass('material-icons')
-        .addClass('md-stack-2x')
-        .text('lens');
-    let $iconStack1x = $('<i></i>')
-        .addClass('material-icons')
-        .addClass('md-stack-1x')
-        .text('clear');
-
     $closeIcon
-        .addClass('md-stack')
+        .addClass('material-icons')
+        .addClass('circle-icon-bg-24')
         .addClass('close-preview-icon')
-        .append($iconStack2x)
-        .append($iconStack1x);
+        .text('cancel');
 
     $imgPreview
         .addClass(theme)

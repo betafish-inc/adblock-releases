@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.48.0
+version = 3.49.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -35,6 +35,7 @@ optional_permissions =
 web_accessible_resources =
   adblock-jquery-ui.custom.css
   adblock-jquery-ui.override-page.css
+  adblock-uiscripts-adblock-wizard.css
   icons/icon24.png
   icons/ab-19.png
   jquery-ui/css/images/ui-bg_flat_55_999999_40x100.png
@@ -78,7 +79,9 @@ web_accessible_resources =
   fonts/lato-regular.woff
   fonts/lato-ext-bold.woff
   fonts/lato-bold.woff
+  fonts/font-face.css
   icons/MaterialIcons-Regular.woff2
+  icons/adblock-icons.woff2
 commands.toggle_pause.description = Toggle Pause/Resume on all sites
 commands.toggle_pause.suggested_key.default = Ctrl+Period
 commands.toggle_pause.suggested_key.mac = Command+Period
@@ -126,6 +129,7 @@ adblock-options-bug-report.html = adblock-betafish/options/bug-report.html
 adblock-button-popup.html = adblock-betafish/button/popup.html
 adblock-button-popup.js = adblock-betafish/button/popup.js
 adblock-button-popup.css = adblock-betafish/button/popup.css
+adblock-uiscripts-adblock-wizard.css = adblock-betafish/uiscripts/adblock-wizard.css
 adblock-uiscripts-load_jquery_ui.js = adblock-betafish/uiscripts/load_jquery_ui.js
 adblock-uiscripts-top_open_blacklist_ui.js = adblock-betafish/uiscripts/top_open_blacklist_ui.js
 adblock-uiscripts-top_open_whitelist_ui.js = adblock-betafish/uiscripts/top_open_whitelist_ui.js
@@ -140,6 +144,8 @@ adblock-picreplacement-image-sizes-map.js = adblock-betafish/picreplacement/imag
 adblock-options-mab.html = adblock-betafish/options/mab.html
 adblock-options-mab.css = adblock-betafish/options/mab.css
 adblock-options-mab.js = adblock-betafish/options/mab.js
+adblock-options-mab-image-swap.html = adblock-betafish/options/image-swap.html
+adblock-options-mab-image-swap.js = adblock-betafish/options/image-swap.js
 adblock-color-themes.css = adblock-betafish/options/color_themes.css
 adblock-picreplacement-imageview.html = adblock-betafish/picreplacement/options/imageview.html
 adblock-picreplacement-imageview.js = adblock-betafish/picreplacement/options/imageview.js
@@ -230,6 +236,8 @@ icons/adblock-picreplacement-images-menu-doggrayscale@2x.png = adblock-betafish/
 icons/adblock-picreplacement-images-menu-doggrayscale.png = adblock-betafish/picreplacement/images/menu/doggrayscale.png
 icons/adblock-picreplacement-images-menu-landscapegrayscale@2x.png = adblock-betafish/picreplacement/images/menu/landscapegrayscale@2x.png
 icons/adblock-picreplacement-images-menu-landscapegrayscale.png = adblock-betafish/picreplacement/images/menu/landscapegrayscale.png
+icons/adblock-picreplacement-image-swap.png = adblock-betafish/picreplacement/images/image_swap.png
+icons/adblock-picreplacement-image-swap@2x.png = adblock-betafish/picreplacement/images/image_swap@2x.png
 localLib/jquery/jquery-1.10.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.10.2.min.js.local
 localLib/jquery/jquery-1.11.0.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.0.min.js.local
 localLib/jquery/jquery-1.11.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.1.min.js.local
@@ -262,6 +270,7 @@ icons/adblock-icons.woff2 = icons/adblock-icons.woff2
 devtools.js = adblock-betafish/alias/devtools.js
 devtools-panel.css = adblockpluschrome/adblockplusui/skin/devtools-panel.css
 devtools-panel.html = adblock-betafish/alias/devtools-panel.html
+fonts/font-face.css = adblock-betafish/fonts/font-face.css
 
 [module_alias]
 options = ../../adblock-betafish/alias/options.js

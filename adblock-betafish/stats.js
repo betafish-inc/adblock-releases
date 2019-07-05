@@ -262,7 +262,7 @@ let STATS = exports.STATS = (function()
       total_pings = isNaN(total_pings) ? 0 : total_pings;
       total_pings = Math.max(localTotalPings, total_pings);
       total_pings += 1;
-      // store in redudant locations
+      // store in redundant locations
       chromeStorageSetHelper(STATS.totalPingStorageKey, total_pings);
       storage_set(STATS.totalPingStorageKey, total_pings);
 
@@ -278,7 +278,7 @@ let STATS = exports.STATS = (function()
       var millis = 1000 * 60 * 60 * delay_hours;
       var nextPingTime = Date.now() + millis;
 
-      // store in redudant location
+      // store in redundant location
       chromeStorageSetHelper(STATS.nextPingTimeStorageKey, nextPingTime, function()
       {
         if (chrome.runtime.lastError)

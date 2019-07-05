@@ -310,7 +310,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       hidden : false,
     },
 
-    "https://raw.githubusercontent.com/DandelionSprout/adfilt/master/NorwegianList.txt" :
+    "https://raw.githubusercontent.com/DandelionSprout/adfilt/master/NorwegianExperimentalList%20alternate%20versions/NordicFiltersABP.txt" :
     {
       id : "norwegian", // Norwegian
       language : true,

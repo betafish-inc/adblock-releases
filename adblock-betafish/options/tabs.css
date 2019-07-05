@@ -10,13 +10,22 @@
 }
 #sidebar-tabs ul[data-parent-tab] {
   display: none;
-  margin-left: 8px;
+  margin-left: 30px;
   border-radius: 3px 0px 0px 3px;
   opacity: 0;
   transition: opacity .2s linear;
 }
-#sidebar-tabs ul[data-parent-tab] i {
+#sidebar-tabs ul[data-parent-tab] li.locked a {
+  color: #999999;
+  cursor: default;
+  pointer-events: none;
+}
+#sidebar-tabs ul[data-parent-tab] li i.unlocked,
+#sidebar-tabs ul[data-parent-tab] li:not(.locked) i.locked {
   display: none;
+}
+#sidebar-tabs ul[data-parent-tab] li.locked i.locked {
+  display: inline-block;
 }
 #sidebar-tabs li {
   padding: 5px 0;
@@ -34,6 +43,12 @@
 }
 #sidebar-tabs li a i {
   line-height: 25px;
+  color: var(--main-text-color);
+}
+#sidebar-tabs li.locked a i {
+  line-height: 25px;
+  color: #999999;
+  cursor: default
 }
 #sidebar-tabs li a span {
   margin-left: 15px;
@@ -58,15 +73,12 @@
   margin-left: var(--defaul-sidebar-width, 204px);
 }
 
-@media screen and (max-width: 840px) {
+@media screen and (max-width: 890px) {
   #tab-content .tab {
-    margin-left: calc(var(--small-sidebar-width, 60px) + 25px);
+    margin-left: var(--small-sidebar-width, 60px);
   }
   #sidebar-tabs span {
     display: none;
-  }
-  #sidebar-tabs ul[data-parent-tab] i {
-    display: inline-block;
   }
   #sidebar-tabs a:not(.active):hover {
     z-index: 100;
@@ -78,7 +90,29 @@
     -webkit-box-shadow:0px 5px 15px rgba(10,14,71,0.2);
     box-shadow:0px 5px 15px rgba(10,14,71,0.2);
   }
+  #sidebar-tabs ul[data-parent-tab] {
+    margin-left: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--bottom-line-color);
+  }
   #sidebar-tabs a:not(.active):hover span {
     display: inline-block;
+  }
+  #sidebar-tabs ul[data-parent-tab] li.locked a {
+    color: #999999;
+    pointer-events: auto;
+  }
+  #sidebar-tabs ul[data-parent-tab] li.locked i.locked,
+  #sidebar-tabs ul[data-parent-tab] li.locked a:not(.active):hover > i.unlocked {
+    display: none;
+  }
+  #sidebar-tabs ul[data-parent-tab] li a i.unlocked,
+  #sidebar-tabs ul[data-parent-tab] li.locked a:not(.active):hover > i.locked {
+    display: inline-block;
+  }
+  #sidebar-tabs ul[data-parent-tab] li.locked a:not(.active):hover > i.locked {
+    color: #999999;
   }
 }

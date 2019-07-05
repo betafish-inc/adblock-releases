@@ -52,8 +52,7 @@ function CheckboxForFilterList(filterList, filterListType, index, container) {
               .addClass('filter_list_control');
   this._checkBoxIcons = $('\
     <i class="unchecked material-icons">lens</i>\
-    <i class="checked material-icons md-stack-2x">lens</i>\
-    <i class="checked material-icons md-stack-1x">done</i>'
+    <i class="checked material-icons circle-icon-bg-24 checkbox-icon">check_circle</i>'
   )
   this._checkBoxWrapper = $('<span></span>')
               .addClass('checkbox')

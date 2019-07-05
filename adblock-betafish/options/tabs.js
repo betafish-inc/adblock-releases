@@ -1,5 +1,51 @@
+function tabIsLocked(tabID) {
+  let $tabToActivate = $(`.tablink[href=${ tabID }]`);
+  let $locked = $tabToActivate.parent('li.locked');
+  return !!$locked.length;
+}
 
-function activateTab(tabID) {
+// Output an array of all tab ids in HTML
+function allTabIDs() {
+  return $('.tablink').map(function() {
+    return $(this).attr('href');
+  }).get();
+}
+
+// Active tab cannot be #mab at any point
+// if mab tab doesn't exist
+// Inputs:
+//    - tabID -- string (tab ID to activate)
+//    - mabExists -- bool (true if enrolled to MAB)
+// Output:
+//    - tabID -- string (valid tab ID to activate)
+function validateTabID(tabID, mabExists) {
+  var defaultTabID = mabExists ? '#mab' : '#general';
+  var currentTabID = $('.tablink.active').attr('href');
+
+  if (!tabID)
+    return defaultTabID;
+  else if (tabID === '#mab' && !mabExists)
+    return defaultTabID;
+  else if (!allTabIDs().includes(tabID))
+    return defaultTabID;
+  else if (currentTabID && tabIsLocked(tabID))
+    return currentTabID;
+  else if (tabIsLocked(tabID))
+    return defaultTabID;
+  return tabID;
+}
+
+// Display tabs and panel based on the current active tab
+// Inputs: $activeTab - active tab jQuery object
+function displayActiveTab($activeTab) {
+  let $activeTabPanel = $($activeTab.attr('href'));
+  handleSubTabs($activeTab);
+  loadTabPanelScript($activeTabPanel);
+  $activeTabPanel.show();
+}
+
+function activateTab(tabID, mabExists) {
+  tabID = validateTabID(tabID, mabExists);
   let $activeTab = $(`[href=${ tabID }]`);
   let $allTabs = $('.tablink');
   let $allTabPanels = $('.tab');
@@ -63,11 +109,23 @@ function addMyAdBlockTab() {
     return false;
   }
 
+  // Hint: To add an extra subtab, add another <li> element below.
+  // Add class="locked" to li only if the subtab is not clickable for a free user 
   let myAdBlockTab = '\
   <li id="myadblock-tab">\
     <a href="#mab" class="tablink">\
-      <i class="material-icons md-18"></i><span i18n="myadblockoptions"></span>\
+      <i class="material-icons md-18">account_circle</i>\
+      <span i18n="myadblockoptions"></span>\
     </a>\
+    <ul data-parent-tab="#mab">\
+      <li class="locked">\
+        <a href="#mab-image-swap" class="tablink">\
+          <i class="material-icons md-18 unlocked">image</i>\
+          <i class="material-icons md-18 locked">lock</i>\
+          <span i18n="image_swap"></span>\
+        </a>\
+      </li>\
+    </ul>\
   </li>';
 
   let $tabsUL = $('#sidebar-tabs > ul:not(.has-myadblock)');
@@ -77,11 +135,10 @@ function addMyAdBlockTab() {
 
   if (License.shouldShowMyAdBlockEnrollment()) {
     $('#myadblock-tab').show();
-    $('#myadblock-tab i').text('lock');
     return true;
   } else if (License.isActiveLicense()) {
+    $('#myadblock-tab li.locked').removeClass('locked');
     $('#myadblock-tab').show();
-    $('#myadblock-tab i').text('account_circle');
     return true;
   } else {
     $('#myadblock-tab').hide();
@@ -102,44 +159,17 @@ function loadTabPanelsHTML() {
   });
 }
 
-// Display tabs and panel based on the current active tab
-// Inputs: $activeTab - active tab jQuery object
-function displayActiveTab($activeTab) {
-  let $activeTabPanel = $($activeTab.attr('href'));
-  handleSubTabs($activeTab);
-  loadTabPanelScript($activeTabPanel);
-  $activeTabPanel.show();
-}
-
-// Active tab cannot be #mab at any point
-// if mab tab doesn't exist
-// Inputs:
-//    - tabID -- string (active tab ID with ')
-//    - mabExists -- bool (true if enrolled to MAB)
-function validateTabID(tabID, mabExists) {
-  var defaultTabID = '#general';
-  if (!tabID)
-    return defaultTabID;
-  if (tabID === '#mab' && !mabExists)
-    return defaultTabID;
-  return tabID;
-}
-
 // Get active tab ID from cookie or URL hash and activate tab
 // and display the tabs and tabel accordingly
-function activateTabOnPageLoad(myAdBlockExists) {
+function activateTabOnPageLoad(mabExists) {
   // Set active tab from cookie
   let activeTabID = $.cookie('active_tab');
-  activeTabID = validateTabID(activeTabID, myAdBlockExists);
 
   // Set active tab from hash (has priority over cookie)
   if (window.location && window.location.hash) {
-    let hashID = window.location.hash.split('_')[0];
-    activeTabID = validateTabID(hashID, myAdBlockExists);
+    activeTabID = window.location.hash.split('_')[0];
   }
-  // Activate and display tab
-  let $activeTab = $(`.tablink[href=${ activeTabID }]`).addClass('active');
-  displayActiveTab($activeTab);
+  activateTab(activeTabID, mabExists);
 }
 
 $(document).ready(function () {
@@ -155,6 +185,6 @@ $(document).ready(function () {
   // 4. Activate tab when clicked
   $('.tablink').click(function() {
     let tabID = $(this).attr('href');
-    activateTab(tabID);
+    activateTab(tabID, myAdBlockTabAdded);
   });
 });

@@ -1,168 +1,109 @@
 'use strict';
 
-var lockedFeatureLogic = function() {
-
-  var wiggleBoxLogic = function() {
-    // When the user clicks the frozen slider
-    // shake the error message box
-    var $errorMessageBox = $("#error-message-box");
-    var isWiggling = false;
-
-    $(".lock-switch span.slider").click(function(ev) {
-      if (isWiggling === true) {
-        return false;
-      }
-      isWiggling = true;
-      $errorMessageBox.addClass("wiggle");
-      setTimeout(function() {
-        isWiggling = false;
-        $errorMessageBox.removeClass("wiggle");
-      }, 1000);
-    });
-  };
-
-  var checkUrlAccesibility = function(callback) {
+(function(){
+  const init = function() {
     // the 'rand' query string parameter is added make the Frame URL unique,
     // to prevent the browser from caching the iframe, and it's contents
-    var currentTheme = $('body').attr('id') || 'default_theme';
-    var urlQueries = `?rand='${ (+ new Date()) }&theme=${ currentTheme }`;
-    var url = 'https://getadblock.com/myadblock/enrollment/v2' + urlQueries;
+    const currentTheme = $('body').attr('id') || 'default_theme';
+    const urlQueries = `?rand='${ (+ new Date()) }&theme=${ currentTheme }`;
+    const iframeUrl = 'https://getadblock.com/myadblock/enrollment/v3/';
 
-    if (License && License.isActiveLicense()) {
-      return;
+    return {
+      url: `${ iframeUrl }${ urlQueries }`,
+      id: 'myadblock_wizard_frame',
+      width: '336px',
+      widthThin: '264px',
+      height: '100%',
+      border: 'solid 0px',
     }
+  }
+  const freeUserLogic = function(iframeData) {
+    const updateWidthOnWindowResize = function() {
+      $(window).resize(function(){
+        if (window.innerWidth < 825) {
+          $('#payment-iframe').width(iframeData.widthThin);
+          $('#myadblock_wizard_frame').width(iframeData.widthThin);
+          $('#payment-iframe-error').width(iframeData.widthThin);
+        } else {
+          $('#payment-iframe').width(iframeData.width);
+          $('#myadblock_wizard_frame').width(iframeData.width);
+          $('#payment-iframe-error').width(iframeData.width);
+        }
+      });
+    };
 
-    $.ajax({
-      type: 'HEAD',
-      url: url,
-      success: function() {
-        displayMyAdBlock('enrolled-free-user-view');
-        callback(url);
-      },
-      error: function() {
-        displayMyAdBlock('enrolled-free-user-error-view');
-        wiggleBoxLogic();
-      }
-    });
-  };
-
-  var showEnrollmentIframe = function(iframeUrl) {
-    var enrolledContent = document.getElementById('enrolled-free-user-view');
-    var iframe = document.createElement('iframe');
-    iframe.id = "myadblock_wizard_frame";
-    iframe.width = "100%";
-    iframe.height = "640px";
-    iframe.style.border = "solid 0px";
-    iframe.src = iframeUrl;
-    /*iframe.style.minWidth = '1440px'; // shows horizontal iframe layout*/
-
-    // Append iframe only if it doesn't already exist
-    if (enrolledContent && $('#myadblock_wizard_frame').length == 0) {
-      enrolledContent.appendChild(iframe);
-      window.addEventListener("message", receiveMessage, false);
-    }
-
-    function receiveMessage(event)
-    {
-      if (event.origin !== "https://getadblock.com") {
+    const checkUrlAccesibility = function() {
+      if (License && License.isActiveLicense()) {
         return;
       }
-      if (event.data && event.data.command === "resize" && event.data.height && event.data.width) {
-        $(enrolledContent).animate({ "width" : event.data.width + "px", "height" : event.data.height + "px" }, 400, "linear");
-      }
-      if (event.data && event.data.command === "openPage" && event.data.url && event.data.url.startsWith('http')) {
-        chrome.tabs.create({ url:event.data.url });
-      }
-      if (event.data && event.data.command === "close") {
-        enrolledContent.removeChild(iframe);
-      }
-    }
-  };
+      $.ajax({
+        type: 'HEAD',
+        url: iframeData.url,
+        success: function() {
+          $('#payment-iframe').show();
+          showEnrollmentIframe(iframeData.url);
+        },
+        error: function() {
+          $('#payment-iframe').hide();
+          $('#payment-iframe-error').show();
+        }
+      });
+    };
 
-  checkUrlAccesibility(showEnrollmentIframe);
-}
+    const showEnrollmentIframe = function() {
+      const enrolledContent = document.getElementById('payment-iframe');
+      const iframe = document.createElement('iframe');
+      iframe.id = iframeData.id;
+      iframe.width = window.innerWidth > 825 ? iframeData.width : iframeData.widthThin;
+      iframe.height = iframeData.height;
+      iframe.style.border = iframeData.border;
+      iframe.src = iframeData.url;
 
-var paidFeatureLogic = function() {
-  var BG = chrome.extension.getBackgroundPage();
+      // Append iframe only if it doesn't already exist
+      if (enrolledContent && $('#myadblock_wizard_frame').length == 0) {
+        enrolledContent.appendChild(iframe);
+        window.addEventListener("message", receiveMessage, false);
+      }
 
-  var showFeatureContent = function(isEnabled) {
-    $('.feature-view').hide();
-    if (isEnabled) {
-       $('#pic-replacement-enabled').show()
-    } else {
-      $('#pic-replacement-disabled').show();
-    }
+      function receiveMessage(event)
+      {
+        if (event.origin !== parseUri(iframeData.url).origin) {
+          return;
+        }
+        if (event.data && event.data.command === "resize" && event.data.height && event.data.width) {
+          $(enrolledContent).animate({ "width" : event.data.width + "px", "height" : event.data.height + "px" }, 400, "linear");
+        }
+        if (event.data && event.data.command === "openPage" && event.data.url && event.data.url.startsWith('http')) {
+          chrome.tabs.create({ url:event.data.url });
+        }
+        if (event.data && event.data.command === "close") {
+          enrolledContent.removeChild(iframe);
+        }
+      }
+    };
+    checkUrlAccesibility();
+    updateWidthOnWindowResize();
+  }
+  const paidUserLogic = function() {
+    $('#payment-iframe').hide();
+    $('.option-page-content.center-if-iframe').removeClass('center-if-iframe');
+    $('.mab-feature.locked').removeClass('locked').addClass('hover-shadow');
+    $('.mab-feature a').click(function() {
+      activateTab($(this).attr('href'));
+    });
   }
 
-  var loadCurrentSettingsIntoPage = function() {
-    var guide = BG.channels.getGuide();
-    var myAdBlockIsEnabled = BG.getSettings().picreplacement;
+  $(document).ready(function () {
+    const iframeData = init();
+    localizePage();
 
-    $('#picReplacementSwitch').prop('checked', myAdBlockIsEnabled);
-    showFeatureContent(myAdBlockIsEnabled);
-
-    for (var id in guide) {
-      var $channelInput = $(`#${guide[id].name}`);
-      var isEnabled = guide[id].enabled;
-
-      $channelInput.prop('checked', isEnabled);
-      $channelInput.data('channel-id', id);
-
-      if (isEnabled) {
-        $channelInput.parent('.image-box').addClass('selected');
-      }
-    }
-  }
-
-  var updateFeatureSectionAndSettings = function() {
-    var isEnabled = $('#picReplacementSwitch').is(':checked');
-    if (isEnabled) {
-      BG.getSettings().picreplacement = true;
-    } else {
-      BG.getSettings().picreplacement = false
-    }
-    showFeatureContent(isEnabled);
-  }
-
-  var updateChannelSelectionAndSettings = function(event) {
-    var channels = BG.channels;
-    var channelId = $(event.target).data('channel-id');
-    var enabled = $(event.target).is(":checked");
-    var $image = $(event.target).parent('.image-box');
-
-    if (enabled) {
-      $image.addClass('selected')
-    } else {
-      $image.removeClass('selected');
-    }
-
-    if (!channelId) {
+    if (!License || $.isEmptyObject(License)) {
       return;
+    } else if (License.shouldShowMyAdBlockEnrollment()) {
+      $('#payment-iframe').show();
+      freeUserLogic(iframeData);
+    } else if (License.isActiveLicense()) {
+      paidUserLogic();
     }
-    channels.setEnabled(channelId, enabled);
-  }
-
-  loadCurrentSettingsIntoPage();
-  $('#picReplacementSwitch').change(updateFeatureSectionAndSettings);
-  $('input.invisible-overlay').change(updateChannelSelectionAndSettings);
-}
-
-// Make sure to always display only 1 of the
-// available myAdBlock tab content views
-var displayMyAdBlock = function(viewId) {
-  $('.myadblock-tab-content').hide();
-  $(`#${ viewId }`).css('display', 'flex');
-}
-
-$(document).ready(function () {
-  localizePage();
-  if (!License || $.isEmptyObject(License)) {
-    return;
-  } else if (License.shouldShowMyAdBlockEnrollment()) {
-    displayMyAdBlock('enrolled-free-user-view');
-    lockedFeatureLogic();
-  } else if (License.isActiveLicense()) {
-    displayMyAdBlock('paid-user-view');
-    paidFeatureLogic();
-  }
-});
+  });
+})();
