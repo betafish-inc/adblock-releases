@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.49.1
+version = 3.50.1
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -33,21 +33,9 @@ permissions =
 optional_permissions =
   management
 web_accessible_resources =
-  adblock-jquery-ui.custom.css
-  adblock-jquery-ui.override-page.css
   adblock-uiscripts-adblock-wizard.css
   icons/icon24.png
   icons/ab-19.png
-  jquery-ui/css/images/ui-bg_flat_55_999999_40x100.png
-  jquery-ui/css/images/ui-bg_flat_75_aaaaaa_40x100.png
-  jquery-ui/css/images/ui-bg_glass_45_0078ae_1x400.png
-  jquery-ui/css/images/ui-bg_glass_55_f8da4e_1x400.png
-  jquery-ui/css/images/ui-bg_glass_75_79c9ec_1x400.png
-  jquery-ui/css/images/ui-bg_gloss-wave_50_38cfff_500x100.png
-  jquery-ui/css/images/ui-bg_gloss-wave_75_2191c0_500x100.png
-  jquery-ui/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png
-  jquery-ui/css/images/ui-icons_056b93_256x240.png
-  jquery-ui/css/images/ui-icons_d8e7f3_256x240.png
   icons/adblock-picreplacement-images-AdBlockLogoLarge.png
   icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png
   icons/adblock-picreplacement-images-AdBlockLogoSmall.png
@@ -98,11 +86,7 @@ translators.json = adblock-betafish/translators.json
 adblock-jquery.js = adblock-betafish/jquery/jquery.min.js
 adblock-errorreporting.js = adblock-betafish/errorreporting.js
 adblock-jquery.cookie.js = adblock-betafish/jquery/jquery.cookie.js
-adblock-jquery-ui.js = adblock-betafish/jquery/jquery-ui.custom.min.js
-adblock-jquery-ui.custom.min.js = adblock-betafish/jquery/jquery-ui.custom.min.js
 adblock.css = adblock-betafish/adblock.css
-adblock-jquery-ui.custom.css = adblock-betafish/jquery/css/jquery-ui.custom.css
-adblock-jquery-ui.override-page.css = adblock-betafish/jquery/css/override-page.css
 adblock-functions.js = adblock-betafish/functions.js
 adblock-bandaids.js = adblock-betafish/bandaids.js
 adblock-datacollection-contentscript.js = adblock-betafish/datacollection-contentscript.js
@@ -130,7 +114,7 @@ adblock-button-popup.html = adblock-betafish/button/popup.html
 adblock-button-popup.js = adblock-betafish/button/popup.js
 adblock-button-popup.css = adblock-betafish/button/popup.css
 adblock-uiscripts-adblock-wizard.css = adblock-betafish/uiscripts/adblock-wizard.css
-adblock-uiscripts-load_jquery_ui.js = adblock-betafish/uiscripts/load_jquery_ui.js
+adblock-uiscripts-load_wizard_resources.js = adblock-betafish/uiscripts/load_wizard_resources.js
 adblock-uiscripts-top_open_blacklist_ui.js = adblock-betafish/uiscripts/top_open_blacklist_ui.js
 adblock-uiscripts-top_open_whitelist_ui.js = adblock-betafish/uiscripts/top_open_whitelist_ui.js
 adblock-uiscripts-send_content_to_back.js = adblock-betafish/uiscripts/send_content_to_back.js
@@ -224,16 +208,6 @@ icons/abp-38-whitelisted.png = icons/adblock-38-whitelisted.png
 icons/abp-38-grayscale.png = icons/adblock-38-grayscale.png
 icons/abp-38-whitelisted.png = icons/adblock-38-whitelisted.png
 icons/abp-38-grayscale.png = icons/adblock-38-grayscale.png
-jquery-ui/css/images/ui-bg_flat_55_999999_40x100.png = adblock-betafish/jquery/css/images/ui-bg_flat_55_999999_40x100.png
-jquery-ui/css/images/ui-bg_flat_75_aaaaaa_40x100.png = adblock-betafish/jquery/css/images/ui-bg_flat_75_aaaaaa_40x100.png
-jquery-ui/css/images/ui-bg_glass_45_0078ae_1x400.png = adblock-betafish/jquery/css/images/ui-bg_glass_45_0078ae_1x400.png
-jquery-ui/css/images/ui-bg_glass_55_f8da4e_1x400.png = adblock-betafish/jquery/css/images/ui-bg_glass_55_f8da4e_1x400.png
-jquery-ui/css/images/ui-bg_glass_75_79c9ec_1x400.png = adblock-betafish/jquery/css/images/ui-bg_glass_75_79c9ec_1x400.png
-jquery-ui/css/images/ui-bg_gloss-wave_50_38cfff_500x100.png = adblock-betafish/jquery/css/images/ui-bg_gloss-wave_50_38cfff_500x100.png
-jquery-ui/css/images/ui-bg_gloss-wave_75_2191c0_500x100.png = adblock-betafish/jquery/css/images/ui-bg_gloss-wave_75_2191c0_500x100.png
-jquery-ui/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png = adblock-betafish/jquery/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png
-jquery-ui/css/images/ui-icons_056b93_256x240.png = adblock-betafish/jquery/css/images/ui-icons_056b93_256x240.png
-jquery-ui/css/images/ui-icons_d8e7f3_256x240.png = adblock-betafish/jquery/css/images/ui-icons_d8e7f3_256x240.png
 icons/adblock-picreplacement-images-AdBlockLogoLarge.png = adblock-betafish/picreplacement/images/AdBlockLogoLarge.png
 icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png = adblock-betafish/picreplacement/images/AdBlockLogoLarge@2x.png
 icons/adblock-picreplacement-images-AdBlockLogoSmall.png = adblock-betafish/picreplacement/images/AdBlockLogoSmall.png
@@ -290,6 +264,7 @@ icons/adblock-icons.woff2 = icons/adblock-icons.woff2
 devtools.js = adblock-betafish/alias/devtools.js
 devtools-panel.css = adblockpluschrome/adblockplusui/skin/devtools-panel.css
 devtools-panel.html = adblock-betafish/alias/devtools-panel.html
+snippets.js = adblock-betafish/alias/snippets.js
 fonts/font-face.css = adblock-betafish/fonts/font-face.css
 
 [module_alias]

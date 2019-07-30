@@ -162,8 +162,7 @@ var emitPageBroadcast = (function () {
         allFrames: false,
         include: [
           'adblock-jquery.js',
-          'adblock-jquery-ui.js',
-          'adblock-uiscripts-load_jquery_ui.js',
+          'adblock-uiscripts-load_wizard_resources.js',
           'adblock-uiscripts-top_open_whitelist_ui.js',
           ],
       },
@@ -172,8 +171,7 @@ var emitPageBroadcast = (function () {
         allFrames: false,
         include: [
           'adblock-jquery.js',
-          'adblock-jquery-ui.js',
-          'adblock-uiscripts-load_jquery_ui.js',
+          'adblock-uiscripts-load_wizard_resources.js',
           'adblock-uiscripts-blacklisting-overlay.js',
           'adblock-uiscripts-blacklisting-clickwatcher.js',
           'adblock-uiscripts-blacklisting-elementchain.js',

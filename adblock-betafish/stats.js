@@ -137,10 +137,11 @@ let STATS = exports.STATS = (function()
     }
     chrome.storage.local.get(STATS.totalPingStorageKey, function(response)
     {
+      var settingsObj = getSettings();
       var localTotalPings = storage_get(STATS.totalPingStorageKey);
       var total_pings = response[STATS.totalPingStorageKey] || localTotalPings || 0;
-      var themeOptionsPage = getSettings().color_themes.options_page.replace('_theme', '');
-      var themePopupMenu = getSettings().color_themes.popup_menu.replace('_theme', '');
+      var themeOptionsPage = settingsObj.color_themes.options_page.replace('_theme', '');
+      var themePopupMenu = settingsObj.color_themes.popup_menu.replace('_theme', '');
       var data = {
         u : user_ID,
         v : version,
@@ -148,17 +149,18 @@ let STATS = exports.STATS = (function()
         o : os,
         bv : browserVersion,
         ov : osVersion,
-        ad: getSettings().show_advanced_options ? '1': '0',
-        yt: getSettings().youtube_channel_whitelist ? '1': '0',
+        ad: settingsObj.show_advanced_options ? '1': '0',
+        yt: settingsObj.youtube_channel_whitelist ? '1': '0',
         l : determineUserLanguage(),
         pc : total_pings,
-        dcv2 : getSettings().data_collection_v2 ? '1' : '0',
-        cdn: getSettings().local_cdn ? '1' : '0',
+        dcv2 : settingsObj.data_collection_v2 ? '1' : '0',
+        cdn: settingsObj.local_cdn ? '1' : '0',
         cdnr: LocalCDN.getRedirectCount(),
         cdnd: LocalCDN.getDataCount(),
         rc: replacedCounts.getTotalAdsReplaced(),
         to: themeOptionsPage,
         tm: themePopupMenu,
+        twh: getSettings().twitch_hiding ? '1' : '0',
       };
       // only on Chrome
       if (flavor === "E" && Prefs.blocked_total)

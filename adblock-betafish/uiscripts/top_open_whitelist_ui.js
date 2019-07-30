@@ -9,13 +9,16 @@ var top_open_whitelist_ui = (function() {
 
   // DragElement makes a given DOM element draggable. It assumes the element is positioned absolutely
   // and adjusts the element's `top` and `left` styles directly.
+  // Inputs:
+  //    - el : DOM element that activates dragging on mousedown (e.g. wizard header)
+  //    - elementToDrag : DOM element that drags if dragging is active (e.g. entire wizard)
   class DragElement {
-    constructor(el) {
+    constructor(el, elementToDrag) {
       this.pos1 = 0;
       this.pos2 = 0;
       this.pos3 = 0;
       this.pos4 = 0;
-      this.el = el.parentNode;
+      this.el = elementToDrag;
       this.dragging = false;
 
       if (document.getElementById(el.d + 'header')) {
@@ -161,7 +164,7 @@ var top_open_whitelist_ui = (function() {
       // fallback to using the host node as a poor man's shadow
       $base = $(base);
     }
-    load_jquery_ui($base, () => {
+    load_wizard_resources($base, () => {
 
       //check if we're running on website with a frameset, if so, tell
       //the user we can't run on it.
@@ -202,14 +205,16 @@ var top_open_whitelist_ui = (function() {
     </form>
   </section>
   <footer class="adblock">
-    <button class="adblock primary">${translate('buttonexclude')}</button>
+    <button class="adblock primary adblock-default-button">${translate('buttonexclude')}</button>
     <button class="adblock cancel">${translate('buttoncancel')}</button>
   </footer>
 </div>
 `;
       let $dialog = $(html)
-
-      new DragElement($dialog.find('header').get(0));
+      new DragElement(
+        $dialog.find('header').get(0),
+        $dialog.get(0)
+      );
       const domainFilter = new ExceptionFilterEditor(document.location);
 
       const $domainPart = $dialog.find("#adblock-domain-part");
@@ -251,8 +256,10 @@ var top_open_whitelist_ui = (function() {
         (document.body || document.documentElement).removeChild(base);
       });
 
+      setTextDirection($dialog);
+      bindEnterClickToDefault($dialog);
+
       $base.append($dialog);
-      bind_enter_click_to_default();
     });
     (document.body || document.documentElement).appendChild(base);
   }

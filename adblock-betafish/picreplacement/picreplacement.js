@@ -14,24 +14,24 @@ chrome.runtime.sendMessage({type: "getSelectors"}, response =>
 // hideElement may get call after the page has completed loading on certain sites that have infinite scroll for example.
 // if the user is on on these infinite scroll sites, such as FB, then attempt to do a pic replacement
 var checkElement = function(element) {
-    if (document.readyState === 'complete' || window.top === window && hostname ==="www.facebook.com") {
-      let mediatype = typeMap.get(element.localName);
-      if (mediatype) {
-        picreplacement.augmentIfAppropriate({el: element, elType: mediatype, blocked: true}, function(response) {
-          if (response) {
-            chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-          }
-        });
-      } else  {
-        picreplacement.augmentDivIfAppropriate({el: element}, function(response) {
-          if (response) {
-            chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-          }
-        });
-      }
-    } else {
-      hideElements.push(element);
+  if (document.readyState === 'complete' || window.top === window && hostname ==="www.facebook.com") {
+    let mediatype = typeMap.get(element.localName);
+    if (mediatype) {
+      picreplacement.augmentIfAppropriate({el: element, elType: mediatype, blocked: true}, function(response) {
+        if (response) {
+          chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
+        }
+      });
+    } else  {
+      picreplacement.augmentDivIfAppropriate({el: element}, function(response) {
+        if (response) {
+          chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
+        }
+      });
     }
+  } else {
+    hideElements.push(element);
+  }
 };
 
 var ElementTypes = {
@@ -42,10 +42,10 @@ var ElementTypes = {
 
 //
 var onReady = function (callback) {
-    if (document.readyState === 'complete')
-        window.setTimeout(callback, 0);
-    else
-        window.addEventListener('load', callback, false);
+  if (document.readyState === 'complete')
+    window.setTimeout(callback, 0);
+  else
+    window.addEventListener('load', callback, false);
 };
 
 // when the page has completed loading:
@@ -75,96 +75,89 @@ onReady(function() {
       }
     });
 
-    hideElements.forEach(function(elem) {
-      var t = picreplacement._targetSize(elem);
-      if (!t.x || !t.y || t.x < minDimension || t.y < minDimension) {
-        return;
-      }
-      elementObjArray.push({ elem: elem, size: (t.x * t.y), type: 1});
-    });
-    if (!elementObjArray.length || elementObjArray.length === 0)  {
+  hideElements.forEach(function(elem) {
+    var t = picreplacement._targetSize(elem);
+    if (!t.x || !t.y || t.x < minDimension || t.y < minDimension) {
       return;
     }
-    function compareElements(a, b) {
-      // sort type '1' to the top,
-      // then sort by size
-      if (a.type === b.type) {
-         if (b.size >= a.size) {
-           return 1;
-         } else {
-           return -1;
-         }
-      } else {
-         if (b.type >= a.type) {
-           return 1;
-         } else {
-           return -1;
-         }
+    elementObjArray.push({ elem: elem, size: (t.x * t.y), type: 1});
+  });
+  if (!elementObjArray.length || elementObjArray.length === 0)  {
+    return;
+  }
+  function compareElements(a, b) {
+    // sort type '1' to the top,
+    // then sort by size
+    if (a.type === b.type) {
+       if (b.size >= a.size) {
+         return 1;
+       } else {
+         return -1;
+       }
+    } else {
+       if (b.type >= a.type) {
+         return 1;
+       } else {
+         return -1;
+       }
+    }
+  }
+  elementObjArray = elementObjArray.sort(compareElements);
+
+  var uniqueElementObjArray = [];
+  for (var inx = 0; (inx < elementObjArray.length); inx++) {
+    var addElement = true;
+    for (var jnx = 0; (jnx < elementObjArray.length && addElement); jnx++) {
+      // add check to see the any of the objects are children of other elements in the array, if so, don't add it.
+      if (jnx !== inx) {
+        addElement = !elementObjArray[jnx].elem.contains(elementObjArray[inx].elem);
       }
     }
-    elementObjArray = elementObjArray.sort(compareElements);
+    if (addElement) {
+      uniqueElementObjArray.push(elementObjArray[inx]);
+    }
+  }
 
-    var uniqueElementObjArray = [];
-    for (var inx = 0; (inx < elementObjArray.length); inx++) {
-      var addElement = true;
-      for (var jnx = 0; (jnx < elementObjArray.length && addElement); jnx++) {
-        // add check to see the any of the objects are children of other elements in the array, if so, don't add it.
-        if (jnx !== inx) {
-          addElement = !elementObjArray[jnx].elem.contains(elementObjArray[inx].elem);
+  for (var inx = 0; (inx < uniqueElementObjArray.length); inx++) {
+    var elem =  uniqueElementObjArray[inx].elem;
+    if (uniqueElementObjArray[inx].type === 1) {
+      let mediatype = typeMap.get(elem.localName);
+      picreplacement.augmentIfAppropriate({el: elem, elType: mediatype, blocked: true}, function(response) {
+        if (response) {
+          // on some sites, such as freepik.com with absolute positioning,
+          // the position of other elements is calculated before our pic replacement is injected.
+          // a forced window resize event repaints the page to correctly lay it out
+          window.dispatchEvent(new Event('resize'));
+          chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
         }
-      }
-      if (addElement) {
-        uniqueElementObjArray.push(elementObjArray[inx]);
-      }
+      });
+    } else {
+      picreplacement.augmentIfAppropriate({el: elem}, function(response) {
+        if (response) {
+          // on some sites, such as freepik.com with absolute positioning,
+          // the position of other elements is calculated before our pic replacement is injected.
+          // a forced window resize event repaints the page to correctly lay it out
+          window.dispatchEvent(new Event('resize'));
+          chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
+        }
+      });
     }
-
-    for (var inx = 0; (inx < uniqueElementObjArray.length); inx++) {
-      var elem =  uniqueElementObjArray[inx].elem;
-      if (uniqueElementObjArray[inx].type === 1) {
-        let mediatype = typeMap.get(elem.localName);
-        picreplacement.augmentIfAppropriate({el: elem, elType: mediatype, blocked: true}, function(response) {
-          if (response) {
-            // on some sites, such as freepik.com with absolute positioning,
-            // the position of other elements is calculated before our pic replacement is injected.
-            // a forced window resize event repaints the page to correctly lay it out
-            window.dispatchEvent(new Event('resize'));
-            chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-          }
-        });
-      } else {
-        picreplacement.augmentIfAppropriate({el: elem}, function(response) {
-          if (response) {
-            // on some sites, such as freepik.com with absolute positioning,
-            // the position of other elements is calculated before our pic replacement is injected.
-            // a forced window resize event repaints the page to correctly lay it out
-            window.dispatchEvent(new Event('resize'));
-            chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-          }
-        });
-      }
-    };
+  };
 });
 var picreplacement = {
   // data: {el, elType, blocked}
   augmentIfAppropriate: function(data, callback) {
-    if (!picreplacement.enabled) {
-      callback(false);
-    }
     if (data.elType in ElementTypes) {
-        this._forceToOriginalSizeAndAugment(data.el, callback);
+      this._forceToOriginalSizeAndAugment(data.el, callback);
     } else if (this._inHiddenSection(data.el)) {
       this._replaceHiddenSectionContaining(data.el, callback);
     }
   },
   augmentDivIfAppropriate: function(data, callback) {
-    if (!picreplacement.enabled) {
-      callback(false);
-    }
     this._replaceNonHiddenSectionContaining(data.el, callback);
   },
 
   _forceToOriginalSizeAndAugment: function(el, callback) {
-
     // We may have already augmented this element...
     if (el.dataset.picinjectionaugmented) {
       return;
@@ -192,7 +185,7 @@ var picreplacement = {
         for (var i = 0; i < addedImgs.length; i++) {
           var displayVal = window.getComputedStyle(addedImgs[i])["display"];
           if (displayVal === 'none') {
-              addedImgs[i].style.display = "";
+            addedImgs[i].style.display = "";
           }
         }
       }
@@ -398,14 +391,14 @@ var picreplacement = {
       return (!t.x || !t.y || t.x < minDimension || t.y < minDimension);
     }
     if (_checkSize(t)) {
-        // if there's previously calculate size, use it
-        if (el.dataset && el.dataset.adblockSize) {
-          t = JSON.parse(el.dataset.adblockSize);
-        }
-        if (_checkSize(t)) {
-          callback(false);
-          return false; // unknown dims or too small to bother
-        }
+      // if there's previously calculate size, use it
+      if (el.dataset && el.dataset.adblockSize) {
+        t = JSON.parse(el.dataset.adblockSize);
+      }
+      if (_checkSize(t)) {
+        callback(false);
+        return false; // unknown dims or too small to bother
+      }
     }
     if (window.getComputedStyle(el.parentNode).display === "none") {
       callback(false);
@@ -691,33 +684,33 @@ var picreplacement = {
         linkWrapper.appendTo(newPic.infoCard);
         if (placement.width > 240) {
           newPic.infoCard.append($("<img>", {
-              css: {
-                float: "left",
-                // independent.co.uk borders all imgs
-                border: "none",
-                "margin-top": "0px",
-                "margin-left": "0px",
-              },
-              height: adblockImageHeight,
-              width: adblockImageWidth,
-              src: adblockImageURL
-            }));
-         } else {
-            newPic.infoCard.append($("<img>", {
-                css: {
-                  // independent.co.uk borders all imgs
-                  border: "none",
-                  left: "0px",
-                  right: "0px",
-                  position: "absolute",
-                  bottom: "15px",
-                  margin: "auto",
-                },
-                height: adblockImageHeight,
-                width: adblockImageWidth,
-                src: adblockImageURL
-              }));
-         }
+            css: {
+              float: "left",
+              // independent.co.uk borders all imgs
+              border: "none",
+              "margin-top": "0px",
+              "margin-left": "0px",
+            },
+            height: adblockImageHeight,
+            width: adblockImageWidth,
+            src: adblockImageURL
+          }));
+        } else {
+          newPic.infoCard.append($("<img>", {
+            css: {
+              // independent.co.uk borders all imgs
+              border: "none",
+              left: "0px",
+              right: "0px",
+              position: "absolute",
+              bottom: "15px",
+              margin: "auto",
+            },
+            height: adblockImageHeight,
+            width: adblockImageWidth,
+            src: adblockImageURL
+          }));
+        }
         // Now that all the elements are on the card so it knows its height...
         position_card(newPic.infoCard);
 

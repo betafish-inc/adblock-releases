@@ -14,6 +14,7 @@ function Settings()
     show_survey : true,
     local_cdn : false,
     picreplacement : false,
+    twitch_hiding : false,
     color_themes: {
       popup_menu: 'default_theme',
       options_page: 'default_theme'

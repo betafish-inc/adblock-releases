@@ -7,8 +7,14 @@ function Highlighter() {
   var target = null;
   var enabled = false;
   var then = Date.now();
-  var box = $("<div class='adblock-highlight-node'></div>");
-  box.appendTo("body");
+  var box = $("<div id='overlay-box' class='adblock-highlight-node'></div>");
+  box.css({
+    'background-color': 'rgba(130, 180, 230, 0.5)',
+    'outline': 'solid 1px #0F4D9A',
+    'box-sizing': 'border-box',
+    'position': 'absolute'
+  });
+  box.appendTo($(document.body));
 
   function handler(e) {
     var offset, el = e.target;
@@ -84,36 +90,20 @@ ClickWatcher.prototype._fire = function(eventName, arg) {
   for (var i = 0; i < callbacks.length; i++)
     callbacks[i](arg);
 }
-ClickWatcher.prototype.show = function() {
+
+ClickWatcher.prototype.enable = function() {
   var that = this;
-  var wait = $("<div style='white-space: pre-wrap;'></div>").
-    append(translate("findingads")).
-    dialog({
-      dialogClass: "adblock-blacklist-dialog",
-      position: [50, 50],
-      height: 120,
-      minHeight: 120,
-      title: translate("blockanadtitle")
-    });
-    changeTextDirection($("body .adblock-blacklist-dialog"));
-  // setTimeout to give 'wait' a chance to display
-  window.setTimeout(function() {
-    that._ui = that._build_ui();
-    wait.dialog('close');
-    wait.remove();
-    that._ui.dialog('open');
-    that._highlighter.enable();
-  }, 10);
+  that._highlighter.enable();
+  that._eventsListener();
 }
+
 // Called externally to close ClickWatcher.  Doesn't cause any events to
 // fire.
 ClickWatcher.prototype.close = function() {
   // Delete our event listeners so we don't fire any cancel events
   this._callbacks.cancel = [];
-  if (this._ui) {
-    this._ui.dialog('close');
-  }
 }
+
 // The dialog is closing, either because the user clicked cancel, or the
 // close button, or because they clicked an item.
 ClickWatcher.prototype._onClose = function() {
@@ -126,7 +116,11 @@ ClickWatcher.prototype._onClose = function() {
   }
   this._highlighter.destroy();
 }
-ClickWatcher.prototype._build_ui = function() {
+
+// Catches clicks on elements and mouse hover on the wizard
+// when element is clicked we stored the element in _clicked_element
+// and close all ClickWatcher processes
+ClickWatcher.prototype._eventsListener = function() {
   var that = this;
 
   function click_catch_this() {
@@ -135,15 +129,15 @@ ClickWatcher.prototype._build_ui = function() {
 
   function click_catch(element) {
     that._clicked_element = that._highlighter.getCurrentNode(element);
-    //that._clicked_element = element;
-    that._ui.dialog('close');
+    $("body").off("click",
+    ".adblock-killme-overlay, .adblock-highlight-node", click_catch_this);
+    Overlay.removeAll();
+    that._onClose();
     return false;
   }
 
-
   // Most things can be blacklisted with a simple click handler.
-  $("body").on("click", ".adblock-killme-overlay, .adblock-highlight-node",
-    click_catch_this);
+  $("body").on("click", ".adblock-killme-overlay, .adblock-highlight-node", click_catch_this);
 
   // Since iframes that will get clicked will almost always be an entire
   // ad, and I *really* don't want to figure out inter-frame communication
@@ -152,9 +146,7 @@ ClickWatcher.prototype._build_ui = function() {
   $("object,embed,iframe,[onclick]:empty").
       each(function(i, el) {
         // Don't add overlay's for hidden elements
-        if (el.style &&
-            el.style.display === "none")
-        {
+        if (el.style && el.style.display === "none") {
           return;
         }
         var killme_overlay = new Overlay({
@@ -163,45 +155,6 @@ ClickWatcher.prototype._build_ui = function() {
         });
         killme_overlay.display();
   });
-
-  var btn = {};
-  btn[translate("buttoncancel")] = function() {
-    $(".adblock-ui-stylesheet").remove();
-    page.dialog('close');
-  }
-
-  var page = $("<div></div>").
-    append(translate("clickthead")).
-    append("<br/><br/>").
-    dialog({
-      dialogClass: "adblock-blacklist-dialog",
-      position:[50, 50],
-      width:400,
-      minHeight:125,
-      autoOpen: false,
-      title: translate("blockanadtitle"),
-      buttons: btn,
-      close: function() {
-        $("body").off("click",
-          ".adblock-killme-overlay, .adblock-highlight-node", click_catch_this);
-        Overlay.removeAll();
-        that._onClose();
-        page.remove();
-      },
-      drag: function() {
-        that._highlighter.disable();
-      }
-    });
-    page.dialog("widget").
-      css("position", "fixed").
-      bind("mouseenter",function() {
-        that._highlighter.disable();
-      }).
-      bind("mouseleave",function() {
-        that._highlighter.enable();
-      });
-    changeTextDirection($("body .adblock-blacklist-dialog"));
-  return page;
 }
 
 //@ sourceURL=/uiscripts/blacklisting/clickwatcher.js

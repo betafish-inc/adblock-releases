@@ -1,8 +1,3 @@
-
-// PornHub - related code in this file based on code from uBlockOrigin GPLv3.
-// and available at https://github.com/uBlockOrigin/uAssets/blob/master/filters/filters.txt
-// and https://github.com/uBlockOrigin/uAssets/blob/master/filters/resources.txt
-
 var hostname = window.location.hostname;
 
 var abort = (function() {
@@ -93,7 +88,6 @@ var getAdblockVersion = function(version) {
         }
     };
 
-    var scriptText = [];
     if ('getadblock.com' === document.location.hostname ||
         'dev.getadblock.com' === document.location.hostname ||
         'dev1.getadblock.com' === document.location.hostname ||
@@ -112,56 +106,7 @@ var getAdblockVersion = function(version) {
         } catch(ex) {
         }
       });
-    // Twitch - related code below is based on code from uBlockOrigin GPLv3.
-    // and https://github.com/uBlockOrigin/uAssets/blob/master/filters/resources.txt
-    // and https://gist.githubusercontent.com/gorhill/a47fe36d5f3da185f8c4d44d18ee022d/raw/911466e5d255a081c7126392186bf1a08ee85d4c/gistfile1.txt
-    //
-    } else if ( /(^|\.)twitch\.tv$/.test(hostname) === true) {
-          var ourMediaPlayer;
-      	Object.defineProperty(window, 'MediaPlayer', {
-      		set: function(newMediaPlayer) {
-      			if ( ourMediaPlayer !== undefined ) { return; }
-      			var oldLoad = newMediaPlayer.MediaPlayer.prototype.load;
-      			newMediaPlayer.MediaPlayer.prototype.load = function(e) {
-      				try {
-      					if ( e.startsWith('https://usher.ttvnw.net/api/channel/hls/') ) {
-      						var url = new URL(e);
-      						url.searchParams.delete('baking_bread');
-      						url.searchParams.delete('baking_brownies');
-      						url.searchParams.delete('baking_brownies_timeout');
-      						e = url.href;
-      					}
-      				} catch (err) {
-      					//console.error('Failed to bypass Twitch livestream ad');
-      				}
-      				return oldLoad.call(this, e);
-      			};
-      			ourMediaPlayer = newMediaPlayer;
-      		},
-      		get: function() {
-      			return ourMediaPlayer;
-      		}
-      	});
-      	var realFetch = window.fetch;
-      	window.fetch = function(input, init) {
-      		if (arguments.length >= 2 && typeof input === "string" && input.includes("/access_token"))
-      		{
-      			var url = new URL(arguments[0]);
-      			url.searchParams.delete('player_type');
-      			arguments[0] = url.href;
-      		}
-      		return realFetch.apply(this, arguments);
-      	};
-    }
-    if ( scriptText.length === 0 ) { return; }
-
-    scriptText.push('(' + cleanup.toString() + ')();');
-    var elem = document.createElement('script');
-    elem.appendChild(document.createTextNode(scriptText.join('\n')));
-    try {
-        (document.head || document.documentElement).appendChild(elem);
-    } catch(ex) {
-    }
+    } 
 })();
 
 var run_bandaids = function()
@@ -186,6 +131,10 @@ var run_bandaids = function()
     {
       apply_bandaid_for = "getadblock";
     }
+  }
+  else if (/(^|\.)twitch\.tv$/.test(hostname) === true)
+  {
+    apply_bandaid_for = "twitch";
   }
 
   var bandaids = {
@@ -281,6 +230,154 @@ var run_bandaids = function()
           }
         }
       }
+    },
+    // The following Twitch-related code is used under the terms of the MIT license
+    // from https://greasyfork.org/en/scripts/371186-twitch-mute-ads-and-optionally-hide-them
+    twitch : function()
+    {
+      var _tmuteVars = { "timerCheck": 1000, // Checking rate of ad in progress (in ms ; EDITABLE)
+                          "playerMuted": false, // Player muted or not
+                          "adsDisplayed": 0, // Number of ads displayed
+                          "disableDisplay": true, // Disable the player display during an ad (true = yes, false = no (default) ; EDITABLE)
+                          "alreadyMuted": false, // Used to check if the player is muted at the start of an ad
+                          "adElapsedTime": undefined, // Used to check if Twitch forgot to remove the ad notice
+                          "adUnlockAt": 150, // Unlock the player if this amount of seconds elapsed during an ad (EDITABLE)
+                          "adMinTime": 15, // Minimum amount of seconds the player will be muted/hidden since an ad started (EDITABLE ; Recommended to really avoid any ad: 30 to 45)
+                          "squadPage": false, // Either the current page is a squad page or not
+                          "playerIdAds": 0, // Player ID where ads may be displayed (on squads page it's the last id instead of 0)
+                          "displayingOptions": false // Either ads options are currently displayed or not
+                         };
+      
+      // Check if there's an ad
+      function checkAd()
+      { 
+        var isViewing = Boolean(document.getElementsByClassName("player-video").length);
+        if (isViewing === false) return;
+        
+        // Initialize the ads options if necessary.
+        var optionsInitialized = (document.getElementById("_tmads_options") === null) ? false : true;
+        if (optionsInitialized === false) adsOptions("init");
+        
+        var advert = document.getElementsByClassName("player-ad-notice");
+        
+        if (_tmuteVars.adElapsedTime !== undefined)
+        {
+          _tmuteVars.adElapsedTime++;
+          if (_tmuteVars.adElapsedTime >= _tmuteVars.adUnlockAt && advert[0] !== undefined) 
+          {
+            advert[0].parentNode.removeChild(advert[0]);
+          }
+        }
+        
+        if ((advert.length >= 1 && _tmuteVars.playerMuted === false) || (_tmuteVars.playerMuted === true && advert.length === 0)) 
+        {
+          // Update at the start of an ad if the player is already muted or not
+          if (advert.length >= 1) _tmuteVars.alreadyMuted = Boolean(document.getElementsByClassName("player-button--volume")[_tmuteVars.playerIdAds].childNodes[0].className === "unmute-button"); 
+          
+          // Keep the player muted/hidden for the minimum ad time set (Twitch started to remove the ad notice before the end of some ads)
+          if (advert.length === 0 && _tmuteVars.adElapsedTime !== undefined && _tmuteVars.adElapsedTime < _tmuteVars.adMinTime) return;
+
+          mutePlayer();
+        }
+      }
+
+      // (un)Mute Player
+      function mutePlayer()
+      {
+        if (document.getElementsByClassName("player-button--volume").length >= 1)
+        {
+          if (_tmuteVars.alreadyMuted === false) document.getElementsByClassName("player-button--volume")[_tmuteVars.playerIdAds].click(); // If the player is already muted before an ad, we avoid to unmute it.
+          _tmuteVars.playerMuted = !(_tmuteVars.playerMuted);
+
+          if (_tmuteVars.playerMuted === true)
+          {
+            _tmuteVars.adsDisplayed++;
+            _tmuteVars.adElapsedTime = 1;
+            if (_tmuteVars.disableDisplay === true) document.getElementsByClassName("player-video")[_tmuteVars.playerIdAds].style.visibility = "hidden";
+          } else {
+            _tmuteVars.adElapsedTime = undefined;
+            if (_tmuteVars.disableDisplay === true) document.getElementsByClassName("player-video")[_tmuteVars.playerIdAds].style.visibility = "visible";
+          }
+        }
+      }
+      
+      // Manage ads options
+      function adsOptions(changeType = "show")
+      {
+        switch(changeType) {
+          // Manage player display during an ad (either hiding the ads or still showing them)
+          case "display":
+            _tmuteVars.disableDisplay = !(_tmuteVars.disableDisplay);
+            // Update the player display if an ad is supposedly in progress
+            if (_tmuteVars.playerMuted === true) document.getElementsByClassName("player-video")[_tmuteVars.playerIdAds].style.visibility = (_tmuteVars.disableDisplay === true) ? "hidden" : "visible";
+            document.getElementById("_tmads_display").innerText = (_tmuteVars.disableDisplay === true ? "Show" : "Hide") + " player during ads";
+            break;
+          // Force a player unlock if Twitch didn't remove the ad notice properly instead of waiting the auto unlock
+          case "unlock":
+            var advert = document.getElementsByClassName('player-ad-notice');
+            if (_tmuteVars.adElapsedTime !== undefined || advert[0] !== undefined)
+            {
+              // We set the elapsed time to the unlock timer to trigger it during the next check.
+              _tmuteVars.adElapsedTime = _tmuteVars.adUnlockAt;
+            }
+            break;
+          // Display the ads options button
+          case "init":
+            if (document.getElementsByClassName("channel-info-bar__viewers-wrapper")[0] === undefined && document.getElementsByClassName("squad-stream-top-bar__container")[0] === undefined) break;
+            
+            // Append ads options and events related
+            var optionsTemplate = document.createElement("div");
+            optionsTemplate.id = "_tmads_options-wrapper";
+            optionsTemplate.className = "tw-mg-r-1";
+            optionsTemplate.innerHTML = `
+            <span id="_tmads_options" style="display: none;">
+              <button type="button" id="_tmads_unlock" style="padding: 0 2px 0 2px; margin-left: 2px; height: 30px;" class="tw-interactive tw-button-icon tw-button-icon--hollow">Unlock player</button>
+              <button type="button" id="_tmads_display" style="padding: 0 2px 0 2px; margin-left: 2px; height: 30px;" class="tw-interactive tw-button-icon tw-button-icon--hollow">` + (_tmuteVars.disableDisplay === true ? "Show" : "Hide") + ` player during ads</button>
+            </span>
+            <button type="button" id="_tmads_showoptions" style="padding: 0 2px 0 2px; margin-left: 2px; height: 30px;" class="tw-interactive tw-button-icon tw-button-icon--hollow">Ads Options</button>`;
+            
+            // Normal player page
+            if (document.getElementsByClassName("channel-info-bar__viewers-wrapper")[0] !== undefined)
+            {
+              _tmuteVars.squadPage = false;
+              _tmuteVars.playerIdAds = 0;
+              document.getElementsByClassName("channel-info-bar__viewers-wrapper")[0].parentNode.parentNode.appendChild(optionsTemplate);
+            // Squad page
+            } else if (document.getElementsByClassName("squad-stream-top-bar__container")[0] !== undefined)
+            {
+              _tmuteVars.squadPage = true;
+              _tmuteVars.playerIdAds = 0;
+              // Since the primary player is never at the same place, we've to find it.
+              for (var i = 0; i < parseInt(document.getElementsByClassName("player-video").length); i++)
+              {
+                if (document.getElementsByClassName("multi-stream-player-layout__player-container")[0].childNodes[i].classList.contains("multi-stream-player-layout__player-primary"))
+                {
+                  _tmuteVars.playerIdAds = i;
+                  break;
+                }
+              }
+              document.getElementsByClassName("squad-stream-top-bar__container")[0].appendChild(optionsTemplate);
+            }
+            
+            document.getElementById("_tmads_showoptions").addEventListener("click", adsOptions, false);
+            document.getElementById("_tmads_display").addEventListener("click", function() { adsOptions("display"); }, false);
+            document.getElementById("_tmads_unlock").addEventListener("click", function() { adsOptions("unlock"); }, false);
+            
+            break;
+          // Display/Hide the ads options
+          case "show":
+          default:
+            _tmuteVars.displayingOptions = !(_tmuteVars.displayingOptions);
+            document.getElementById("_tmads_options").style.display = (_tmuteVars.displayingOptions === false) ? "none" : "inline-block";
+        } 
+      }
+      
+      BGcall("getSettings", function(settings) {
+        if (settings.twitch_hiding) {
+          // Start the background check
+          _tmuteVars.autoCheck = setInterval(checkAd, _tmuteVars.timerCheck);
+        }
+      });
     }
   }; // end bandaids
 

@@ -5,7 +5,10 @@ Overlay = function(options) {
   this.image = $("<div class='adblock-killme-overlay'></div>").
     css({
       "left": el.position().left,
-      "top": el.position().top
+      "top": el.position().top,
+      "background-color": "transparent !important",
+      "position": "absolute",
+      "z-index": 1000000
     }).
     width(el.width()).
     height(el.height());

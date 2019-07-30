@@ -6,6 +6,7 @@
 
 @import 'fonts/font-face.css'; /* Fallback for older Chrome */
 
+#adblock-dialog,
 #adblock-dialog div,
 #adblock-dialog h1,
 #adblock-dialog p,
@@ -23,6 +24,7 @@
     --border-radius: 6px;
     --border: #999999;
     --background-color: white;
+    --text-color: #333333;
     --button-color: white;
     --button-background: #F30D12;
     --button-background-hover: #E40D0D;
@@ -31,6 +33,7 @@
     --options-header-bg-color: #F1F1F1;
     --options-footer-bg-color: #F1F1F1;
     --check-checked: #05BCFC;
+    --unchecked-circle: #e6e6e6;
 
     position: fixed;
     top: 55px;
@@ -39,12 +42,13 @@
     min-width: 525px;
     background: var(--background-color);
     border: 1px solid var(--border);
-    color: aliceblue;
-    z-index: 9999999999999999999;
+    color: var(--text-color);
+    z-index: 2147483647;
     border-radius: var(--border-radius);
 }
 
-#adblock-dialog .adblock {
+#adblock-dialog .adblock,
+#adblock-dialog .adblock * {
     font-family: "Lato", Arial, sans-serif;
     font-size: 16px;
 }
@@ -53,13 +57,18 @@
     display: flex;
     cursor: move;
     background: var(--options-header-bg-color);
-    color: white;
+    color: var(--text-color);
     border-top-right-radius: var(--border-radius);
     border-top-left-radius: var(--border-radius);
     padding: 8px
 }
 
-#adblock-dialog header h1.adblock {
+#adblock-dialog header.adblock img.adblock {
+    height: 24px;
+    width: 24px;
+}
+
+#adblock-dialog header.adblock h1.adblock {
     display: inline-block;
     cursor: move;
     padding: 4px 12px;
@@ -67,47 +76,31 @@
 
 #adblock-dialog section.adblock {
     display: block;
-    padding: 6px;
+    padding: 6px 12px;
     margin-top: 12px;
+    min-height: 40px;
 }
 
 #adblock-dialog footer.adblock {
     display: flex;
     justify-content: flex-end;
     background: var(--options-footer-bg-color);
-    color: black;
+    color: var(--text-color);
     border-bottom-right-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
     padding: 12px
 }
 
-#adblock-dialog #adblock-parts {
-    padding: 30px 12px;
-}
-
-#adblock-dialog #adblock-parts li.adblock-part-item {
-    display: inline-block;
-    font-style: italic;
-}
-
-#adblock-dialog #adblock-dialog p.adblock {
-    padding: 20px 12px;
+#adblock-dialog p.adblock {
+    padding: 20px 0;
 }
 
 #adblock-dialog input[type="range"].adblock {
     vertical-align: middle;
 }
 
-#adblock-dialog #adblock-wizard-form {
-    padding: 16px 12px;
-}
-
 #adblock-dialog fieldset.adblock {
     border: none;
-}
-
-#adblock-dialog #adblock-sliders {
-    padding: 5px 0;
 }
 
 #adblock-dialog button.adblock {
@@ -163,4 +156,70 @@
     height: 16px;
     width: 16px;
     vertical-align: top;
+}
+
+/* Whitelist specific */
+
+#adblock-dialog #adblock-wizard-form {
+    padding: 16px 12px;
+}
+
+#adblock-dialog #adblock-parts {
+    padding: 30px 12px;
+}
+
+#adblock-dialog #adblock-parts li.adblock-part-item {
+    display: inline-block;
+    font-style: italic;
+}
+
+#adblock-dialog  #adblock-sliders {
+    padding: 5px 0;
+}
+
+#adblock-dialog  #adblock-checkboxes {
+    padding: 10px 0;
+}
+
+#adblock-dialog #adblock-sliders div {
+    display: inline-block;
+}
+
+/* Blacklist specific */
+
+#adblock-dialog  #slider {
+    width: calc(100% - 30px);
+    margin: 15px 15px 0 15px;
+}
+#adblock-dialog  #selected_data .node_attr {
+    margin-left: 10px;
+}
+#adblock-dialog #count {
+    background: #eeeeee;
+    border: 1px solid #dddddd;
+    padding: 3px;
+    line-height: 25px;
+}
+#adblock-dialog  button.adblock.edit.advanced-user {
+    display: none; /* Default */
+}
+#adblock-dialog  #filter_warning {
+    font-weight: bold;
+    color: var(--button-background);
+}
+#adblock-dialog  #summary {
+    display: block;
+    margin: 10px;
+    word-break: break-all;
+}
+#adblock-dialog #adblock-details > div {
+    display: block;
+    margin: 3px 0;
+}
+
+/* RTL languages CSS */
+
+#adblock-dialog[dir='rtl'] {
+    left: auto;
+    right: 75px;
 }
