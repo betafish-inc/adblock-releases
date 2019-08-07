@@ -4,10 +4,12 @@
   const updateThemeSettings = ($newTheme) => {
     let key = $newTheme.data('key');
     let newTheme = $newTheme.data('theme');
-    let themeSettings = backgroundPage.getSettings().color_themes;
+    // get local copy of the Color Themes object
+    let colorThemes = JSON.parse(JSON.stringify(backgroundPage.getSettings().color_themes));
 
-    themeSettings[key] = newTheme;
-    backgroundPage.setSetting('color_themes', themeSettings, reloadAllOpenedTabs);
+    colorThemes[key] = newTheme;
+    backgroundPage.setSetting('color_themes', colorThemes);
+    window.location.reload();
   }
 
   const updateSelection = (changeEvent) => {
@@ -110,13 +112,13 @@
     $themeNameDiv.text(translate('support_to_unlock'));
   }
 
-  const validateTheme = (themeName) => {
-    return validThemes.includes(themeName) ? themeName : 'default_theme';
-  }
-
   const selectCurrentThemes = (currentThemes) => {
-    let popupMenuTheme = validateTheme(currentThemes.popup_menu);
-    let optionsPageTheme = validateTheme(currentThemes.options_page);
+    let popupMenuTheme = backgroundPage.isValidTheme(currentThemes.popup_menu) ? currentThemes.popup_menu : 'default_theme';
+    let optionsPageTheme = backgroundPage.isValidTheme(currentThemes.options_page) ? currentThemes.options_page : 'default_theme';
+
+    // reset selected theme
+    $('#popup-menu-themes .selected').removeClass("selected");
+    $('#options-page-themes .selected').removeClass("selected");
 
     // Get theme nodes to select
     let $popupTheme = $(`#popup-menu-themes [data-theme=${ popupMenuTheme }]`);
@@ -172,5 +174,17 @@
     }
 
     documentEventsHandling();
+  });
+
+  var onSettingsChanged = function(name, currentValue, previousValue) {
+    if (name === 'color_themes') {
+      selectCurrentThemes(currentValue);
+    }
+  };
+
+  settingsNotifier.on("settings.changed", onSettingsChanged);
+
+  window.addEventListener("unload", function() {
+    settingsNotifier.off("settings.changed", onSettingsChanged);
   });
 })();

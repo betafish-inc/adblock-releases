@@ -27,11 +27,12 @@ const info = require("../buildtools/info");
 
 // Object's used on the option, pop up, etc. pages...
 const {STATS} = require('./stats');
+const {SyncService} = require('./picreplacement/sync-service');
 const {DataCollectionV2} = require('./datacollection.v2');
 const {LocalCDN} = require('./localcdn');
 const {ServerMessages} = require('./servermessages');
 const {recordGeneralMessage, recordErrorMessage, recordAdreportMessage} = require('./servermessages').ServerMessages;
-const {getUrlFromId, unsubscribe, getSubscriptionsMinusText, getAllSubscriptionsMinusText, getIdFromURL} = require('./adpsubscriptionadapter').SubscriptionAdapter;
+const {getUrlFromId, unsubscribe, getSubscriptionsMinusText, getAllSubscriptionsMinusText, getIdFromURL, isLanguageSpecific } = require('./adpsubscriptionadapter').SubscriptionAdapter;
 const {uninstallInit} = require('./alias/uninstall');
 
 Object.assign(window, {
@@ -51,6 +52,7 @@ Object.assign(window, {
   getBlockedPerPage,
   Utils,
   STATS,
+  SyncService,
   DataCollectionV2,
   LocalCDN,
   ServerMessages,
@@ -552,6 +554,8 @@ var adblockIsDomainPaused = function (activeTab, newValue)
     // add a domain pause
     filterStorage.addFilter(result.filter);
     storedDomainPauses[activeDomain] = activeTab.id;
+    chrome.tabs.onUpdated.removeListener(domainPauseNavigationHandler);
+    chrome.tabs.onRemoved.removeListener(domainPauseClosedTabHandler);
     chrome.tabs.onUpdated.addListener(domainPauseNavigationHandler);
     chrome.tabs.onRemoved.addListener(domainPauseClosedTabHandler);
   } else
@@ -1106,6 +1110,15 @@ var getDebugInfo = function (callback) {
             }
           }
           if (License.isActiveLicense()) {
+            response.other_info.license_info = {};
+            response.other_info.license_info.extensionGUID = STATS.userId();
+            response.other_info.license_info.licenseId = License.get().licenseId;
+            if (getSettings().sync_settings) {
+              response.other_info.sync_info = {};
+              response.other_info.sync_info['SyncCommitVersion'] = SyncService.getCommitVersion();
+              response.other_info.sync_info['SyncCommitName'] = SyncService.getCurrentExtensionName();
+              response.other_info.sync_info['SyncCommitLog'] = SyncService.getSyncLog();
+            }
             chrome.alarms.getAll(function(alarms) {
               if (alarms && alarms.length > 0) {
                 response.other_info['Alarm info'] = 'length: ' + alarms.length;
@@ -1262,5 +1275,6 @@ Object.assign(window, {
   ytChannelNamePages,
   checkPingResponseForProtect,
   pausedFilterText1,
-  pausedFilterText2
+  pausedFilterText2,
+  isLanguageSpecific
 });

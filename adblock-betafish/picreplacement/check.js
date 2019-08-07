@@ -2,9 +2,13 @@
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
 const {checkWhitelisted} = require("whitelisting");
 const {recordGeneralMessage} = require('./../servermessages').ServerMessages;
+const {SyncService} = require('./sync-service');
 const MY_ADBLOCK_FEATURE_VERSION = 0;
+const {EventEmitter} = require("events");
+let licenseNotifier = new EventEmitter();
 
 var License = (function () {
+  const isProd = true;
   var licenseStorageKey = 'license';
   var installTimestampStorageKey = 'install_timestamp';
   var myAdBlockEnrollmentFeatureKey = 'myAdBlockFeature';
@@ -31,6 +35,23 @@ var License = (function () {
     saveData[key] = value;
     chrome.storage.local.set(saveData, callback);
   };
+
+  const mabConfig = {
+    prod: {
+      licenseURL: "https://myadblock-licensing.firebaseapp.com/license/",
+      syncURL: "https://myadblock.sync.getadblock.com/v1/sync",
+      iframeUrl: 'https://getadblock.com/myadblock/enrollment/v3/',
+      subscribeKey: "sub-c-9eccffb2-8c6a-11e9-97ab-aa54ad4b08ec"
+    },
+    dev: {
+      licenseURL: "https://dev.myadblock.licensing.getadblock.com/license/",
+      syncURL: "https://dev.myadblock.sync.getadblock.com/v1/sync",
+      iframeUrl: 'http://dev.getadblock.com/myadblock/enrollment/v3/',
+      subscribeKey: "sub-c-9e0a7270-83e7-11e9-99de-d6d3b84c4a25"
+    },
+  };
+  const MAB_CONFIG = isProd ? mabConfig.prod : mabConfig.dev;
+
 
   chrome.alarms.onAlarm.addListener(function(alarm) {
     if (alarm && alarm.name === licenseAlarmName) {
@@ -111,6 +132,10 @@ var License = (function () {
     myAdBlockEnrollmentFeatureKey: myAdBlockEnrollmentFeatureKey,
     initialized: initialized,
     licenseAlarmName: licenseAlarmName,
+    licenseTimer: undefined, // the license update timer token
+    licenseNotifier: licenseNotifier,
+    MAB_CONFIG: MAB_CONFIG,
+    isProd: isProd,
     checkPingResponse: function(pingResponseData) {
       if (pingResponseData.length === 0 || pingResponseData.trim().length === 0) {
         loadFromStorage(function() {
@@ -169,31 +194,39 @@ var License = (function () {
     update: function() {
       STATS.untilLoaded(function(userID)
       {
+        licenseNotifier.emit("license.updating");
         var postData = {};
-        postData.u = STATS.userId();
+        postData.u = userID;
         postData.cmd = "license_check";
         var licsenseStatusBefore = License.get().status;
         // license version
         postData.v = "1";
         $.ajax({
             jsonp: false,
-            url: "https://myadblock.licensing.getadblock.com/license/",
+            url: License.MAB_CONFIG.licenseURL,
             type: 'post',
             success: function (text, status, xhr) {
                 ajaxRetryCount = 0;
                 var updatedLicense = {};
-                try {
-                  updatedLicense = JSON.parse(text);
-                } catch (e) {
-                  console.log("Something went wrong with parsing license data.");
-                  console.log('error', e);
-                  return;
+                if (typeof text === "object") {
+                  updatedLicense = text;
+                } else if (typeof text === "string") {
+                  try {
+                    updatedLicense = JSON.parse(text);
+                  } catch (e) {
+                    console.log("Something went wrong with parsing license data.");
+                    console.log('error', e);
+                    console.log(text)
+                    return;
+                  }
                 }
+                licenseNotifier.emit("license.updated", updatedLicense);
                 if (!updatedLicense) {
                   return;
                 }
                 // merge the updated license
                 theLicense = $.extend(theLicense, updatedLicense);
+                theLicense.licenseId = theLicense.code;
                 License.set(theLicense);
                 // now check to see if we need to do anything because of a status change
                 if (licsenseStatusBefore === "active" && updatedLicense.status && updatedLicense.status === "expired") {
@@ -203,6 +236,7 @@ var License = (function () {
             },
             error: function (xhr, textStatus, errorThrown) {
                 log("license server error response", xhr, textStatus, errorThrown, ajaxRetryCount);
+                licenseNotifier.emit("license.updated.error", ajaxRetryCount);
                 ajaxRetryCount++;
                 if (ajaxRetryCount > 3) {
                   log("Retry Count exceeded, giving up", ajaxRetryCount);
@@ -222,6 +256,8 @@ var License = (function () {
       theLicense.myadblock_enrollment = true;
       License.set(theLicense);
       setSetting("picreplacement", false);
+      setSetting("sync_settings", false);
+      setSetting("color_themes", { popup_menu: 'default_theme', options_page: 'default_theme'});
       chrome.alarms.clear(licenseAlarmName);
     },
     ready: function () {
@@ -268,11 +304,79 @@ var License = (function () {
         }
       });
     },
+    // activate the current license and configure the extension in licensed mode. Call with an optional delay parameter
+    // (in milliseconds) if the first license update should be delayed by a custom delay (default is 30 minutes).
+    activate: function(delay) {
+      let currentLicense = License.get() || {};
+      currentLicense.status = "active";
+      License.set(currentLicense);
+      reloadOptionsPageTabs();
+      if (typeof delay !== 'number') {
+        delay = 30 * 60 * 1000; // 30 minutes
+      }
+      if (!this.licenseTimer) {
+        this.licenseTimer = window.setTimeout(function () {
+          License.updatePeriodically();
+        }, delay);
+      }
+      setSetting("picreplacement", true);
+    },
     isActiveLicense: function() {
       return License && License.get() && License.get().status === "active";
     },
+    isMyAdBlockEnrolled: function() {
+      return License && License.get() && License.get().myadblock_enrollment === true;
+    },
     shouldShowMyAdBlockEnrollment: function() {
-      return License && License.get() && License.get().myadblock_enrollment && !License.isActiveLicense();
+      return License.isMyAdBlockEnrolled() && !License.isActiveLicense();
+    },
+    // fetchLicenseAPI automates the common steps required to call the /license/api endpoint. POST bodies
+    // will always automatically contain the command, license and userid so only provide the missing fields
+    // in the body parameter. The ok callback handler receives the data returned by the API and the fail
+    // handler receives any error information available.
+    fetchLicenseAPI: function(command, body, ok, fail) {
+      let licenseCode = License.get().code;
+      let userID = STATS.userId();
+      body.cmd = command;
+      body.userid = userID;
+      if (licenseCode) {
+        body.license = licenseCode;
+      }
+      let request = new Request('https://myadblock.licensing.getadblock.com/license/api/', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          fail(response.status);
+          fail = null;
+          return Promise.resolve({});
+        })
+        .then((data) => {
+          ok(data);
+        })
+        .catch((err) => {
+          fail(err);
+        });
+    },
+    // resendEmail that contains license information and a "magic link" to activate other extensions.
+    // This is a workaround for MAB not being generally available so other extensions needing MAB
+    // must be enrolled somehow in MAB. The license is sent to the currently registered email for the
+    // original license purchase and is returned to the `ok` handler for UI display. If an error sending
+    // the email occurs, the `fail` handler is called with the failure error encountered.
+    resendEmail: function(ok, fail) {
+      License.fetchLicenseAPI('resend_email', {}, (data) => {
+        if (data && data.email) {
+          ok(data.email);
+        } else {
+          fail();
+        }
+      }, (err) => {
+        fail(err);
+      })
     }
   };
 })();
@@ -280,17 +384,32 @@ var License = (function () {
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.command === "payment_success" && request.version === 1) {
-        var currentLicense = {};
-        currentLicense.status = "active";
-        License.set(currentLicense);
-        reloadOptionsPageTabs();
-        var delay = 30 * 60 * 1000; // 30 minutes
-        window.setTimeout(function() {
-          License.updatePeriodically();
-        }, delay);
-        setSetting("picreplacement", true);
+        License.activate();
         sendResponse({ ack: true });
+    } else if (typeof request.magicCode === 'string') {
+      // Find MAB status: justInstalled | alreadyActive
+      let status = License.isMyAdBlockEnrolled() ? 'alreadyActive' : 'justInstalled';
+      if (status === 'alreadyActive') {
+        sendResponse({ack: true, status});
+      } else {
+        // We need to validate the magic code
+        License.fetchLicenseAPI('validate_magic_code', {magiccode: request.magicCode}, (data) => {
+          if (data && data.success === true) {
+            // Not sure if we should do something with the `data`
+            sendResponse({ack: true, status});
+            // Set up extension with MAB enrollment
+            License.checkPingResponse(JSON.stringify({myadblock_enrollment: true}));
+            // Assume the magic link activates the license and update immediately
+            License.activate(0);
+          } else {
+            sendResponse({ack: false, status});
+          }
+        }, (err) => {
+          sendResponse({ack: false, status, error: err});
+        });
+      }
     }
+    return true;
 });
 
 var channels = {};

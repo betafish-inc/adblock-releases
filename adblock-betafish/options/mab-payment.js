@@ -75,7 +75,10 @@ let MABPayment = (function(){
       // the 'rand' query string parameter is added make the Frame URL unique,
       // to prevent the browser from caching the iframe, and it's contents
       const currentTheme = $('body').attr('id') || 'default_theme';
-      const urlQueries = `?rand='${ (+ new Date()) }&theme=${ currentTheme }`;
+      let urlQueries = `?rand='${ (+ new Date()) }&theme=${ currentTheme }`;
+      if (!License.isProd) {
+        urlQueries += '&testmode=true';
+      }
       const iframeUrl = 'https://getadblock.com/myadblock/enrollment/v3/';
 
       return {

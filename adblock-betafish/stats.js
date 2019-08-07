@@ -160,7 +160,9 @@ let STATS = exports.STATS = (function()
         rc: replacedCounts.getTotalAdsReplaced(),
         to: themeOptionsPage,
         tm: themePopupMenu,
-        twh: getSettings().twitch_hiding ? '1' : '0',
+        sy: settingsObj.sync_settings ? '1' : '0',
+        ir: channels.isAnyEnabled() ? '1' : '0',
+        twh: settingsObj.twitch_hiding ? '1' : '0',
       };
       // only on Chrome
       if (flavor === "E" && Prefs.blocked_total)

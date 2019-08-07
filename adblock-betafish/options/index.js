@@ -8,19 +8,36 @@ const parseFilter         = backgroundPage.parseFilter;
 const parseFilters        = backgroundPage.parseFilters;
 const filterStorage       = backgroundPage.filterStorage;
 const filterNotifier      = backgroundPage.filterNotifier;
+const settingsNotifier    = backgroundPage.settingsNotifier;
+const channelsNotifier    = backgroundPage.channelsNotifier;
 const Prefs               = backgroundPage.Prefs;
 const Synchronizer        = backgroundPage.Synchronizer;
 const Utils               = backgroundPage.Utils;
 const NotificationStorage = backgroundPage.Notification;
 const License             = backgroundPage.License;
-const validThemes = [
-  'default_theme', 'dark_theme', 'watermelon_theme',
-  'solarized_theme', 'ocean_theme', 'sunshine_theme'
-];
+const SyncService         = backgroundPage.SyncService;
+const isValidTheme       = backgroundPage.isValidTheme;
+const abpPrefPropertyNames  = backgroundPage.abpPrefPropertyNames;
+const FIVE_SECONDS = 5000;
+const TWENTY_SECONDS = FIVE_SECONDS * 4;
+
 let language = navigator.language.match(/^[a-z]+/i)[0];
 let optionalSettings = {};
 let delayedSubscriptionSelection = null;
 let port = chrome.runtime.connect({name: "ui"});
+let syncErrorCode = 0;
+
+// Function to check the last known Sync Error Code,
+// only allows an event handler to run if there is
+// no error to prevent data loss
+function checkForSyncError(handler) {
+  return function(event) {
+    if (syncErrorCode >= 400) {
+      return;
+    }
+    handler(event);
+  }
+}
 
 function displayVersionNumber() {
   let currentVersion = chrome.runtime.getManifest().version;
@@ -89,7 +106,8 @@ var isWhitelistFilter = function (text) {
   return /^\@\@/.test(text);
 };
 
-function startSubscriptionSelection(title, url) {
+function startSubscriptionSelection(title, url)
+{
   var list = document.getElementById("language_select");
   if (!list ||
       ((typeof FilterListUtil === 'undefined') || (FilterListUtil === null )) ||
@@ -137,6 +155,8 @@ port.postMessage({
   filter: ["addSubscription"]
 });
 
+window.addEventListener("unload", () => port.disconnect());
+
 function setSelectedThemeColor() {
   var optionsTheme = 'default_theme';
   if (backgroundPage && backgroundPage.getSettings()) {
@@ -161,11 +181,148 @@ function loadOptionalSettings()
     // Check or uncheck each option.
     optionalSettings     = backgroundPage.getSettings();
   }
+  if (optionalSettings.sync_settings) {
+    addSyncListeners();
+    window.addEventListener("unload", function() {
+      removeSyncListeners();
+    });
+  }
 }
 
-$(document).ready(function () {
+const removeSyncListeners = function() {
+  SyncService.syncNotifier.off("post.data.sending", onPostDataSending);
+  SyncService.syncNotifier.off("post.data.sent", onPostDataSent);
+  SyncService.syncNotifier.off("post.data.sent.error", onPostDataSentError);
+  SyncService.syncNotifier.off("sync.data.getting", onSyncDataGetting);
+  SyncService.syncNotifier.off("sync.data.receieved", onSyncDataReceieved);
+  SyncService.syncNotifier.off("sync.data.getting.error", onSyncDataGettingError);
+  SyncService.syncNotifier.off("sync.data.getting.error.initial.fail", onSyncDataInitialGettingError);
+  SyncService.syncNotifier.off("extension.name.updated.error", onExtensionNameError);
+};
+
+const addSyncListeners = function() {
+  SyncService.syncNotifier.on("post.data.sending", onPostDataSending);
+  SyncService.syncNotifier.on("post.data.sent", onPostDataSent);
+  SyncService.syncNotifier.on("post.data.sent.error", onPostDataSentError);
+  SyncService.syncNotifier.on("sync.data.getting", onSyncDataGetting);
+  SyncService.syncNotifier.on("sync.data.receieved", onSyncDataReceieved);
+  SyncService.syncNotifier.on("sync.data.getting.error", onSyncDataGettingError);
+  SyncService.syncNotifier.on("sync.data.getting.error.initial.fail", onSyncDataInitialGettingError);
+  SyncService.syncNotifier.on("extension.name.updated.error", onExtensionNameError);
+};
+
+const requestSyncMessageRemoval = function(delayTime) {
+  if (!delayTime) {
+    return;
+  }
+  setTimeout(function() {
+    $(".sync-header-message-text").text("");
+    $(".sync-header-done-icon").hide();
+    $(".sync-header-error-icon").hide();
+    $(".sync-header-sync-icon").hide();
+    $(".sync-out-of-date-header-error-icon").hide();
+    $(".sync-header-message").removeClass("sync-message-good").removeClass("sync-message-error").addClass("sync-header-message-hidden");
+    $(".sync-out-of-date-header-message").addClass("sync-out-of-date-header-message-hidden");
+  }, delayTime);
+};
+
+const showSyncMessage = function(msgText, doneIndicator, errorIndicator) {
+  if (!msgText) {
+    return;
+  }
+  $(".sync-header-message-text").text(msgText);
+  $(".sync-icon").hide();
+  if (!doneIndicator && errorIndicator) {
+    $(".sync-header-error-icon").show();
+    $(".sync-header-message").removeClass("sync-header-message-hidden").removeClass("sync-message-good").addClass("sync-message-error");
+    requestSyncMessageRemoval(TWENTY_SECONDS);
+  } else if (doneIndicator && !errorIndicator) {
+    $(".sync-header-done-icon").show();
+    $(".sync-header-message").removeClass("sync-header-message-hidden").removeClass("sync-message-error").addClass("sync-message-good");
+    requestSyncMessageRemoval(FIVE_SECONDS);
+  } else {
+    $(".sync-header-sync-icon").show();
+    $(".sync-header-message").removeClass("sync-header-message-hidden").removeClass("sync-message-error").addClass("sync-message-good");
+  }
+}
+
+const showOutOfDateExtensionError = function() {
+  $(".sync-out-of-date-header-error-icon").show();
+  $(".sync-out-of-date-header-message").removeClass("sync-out-of-date-header-message-hidden");
+  requestSyncMessageRemoval(TWENTY_SECONDS);
+}
+
+const onExtensionNameError = function(errorCode) {
+  showSyncMessage(translate("sync_header_message_setup_fail_prefix") + " " + translate("sync_header_message_setup_fail_part_2"), false, true);
+};
+
+const onPostDataSending = function() {
+  showSyncMessage(translate("sync_header_message_in_progress"));
+};
+
+const onPostDataSent = function() {
+  syncErrorCode = 0;
+  showSyncMessage(translate("sync_header_message_sync_complete"), true);
+};
+
+const onPostDataSentError = function(errorCode, initialGet) {
+  if (errorCode === 409) {
+    showSyncMessage(translate("sync_header_message_error_prefix") + " " + translate("sync_header_message_old_commit_version_part_2") + " " + translate("sync_header_message_old_commit_version_part_3"), false, true);
+    if ($('#customize').is(":visible")) {
+      $("#customize-sync-header-message").text(translate("sync_header_message_error_prefix") + " " + translate("sync_header_message_old_commit_version_customize_tab_part_2") + " " + translate("sync_header_message_old_commit_version_customize_tab_part_3"));
+      syncErrorCode = errorCode;
+    }
+  } else if (initialGet && (errorCode === 0 || errorCode === 401 || errorCode === 404 || errorCode === 500)) {
+    showSyncMessage(translate("sync_header_message_setup_fail_prefix") + " " + translate("sync_header_message_setup_fail_part_2"), false, true);
+    if ($('#customize').is(":visible")) {
+      $("#customize-sync-header-message").text(translate("sync_header_message_setup_fail_prefix") + " " + translate("sync_header_message_setup_fail_part_2"));
+      syncErrorCode = errorCode;
+    }
+  } else if (!initialGet && (errorCode === 0 || errorCode === 401 || errorCode === 404 || errorCode === 500)) {
+    showSyncMessage(translate("sync_header_message_setup_fail_prefix") + " " + translate("sync_header_error_revert_message_part_2") + " " + translate("sync_header_message_error_suffix"), false, true);
+    if ($('#customize').is(":visible")) {
+      $("#customize-sync-header-message").text(translate("sync_header_message_setup_fail_prefix") + " " + translate("sync_header_error_revert_message_part_2") + " " + translate("sync_header_message_error_suffix"));
+      syncErrorCode = errorCode;
+    }
+  }
+};
+
+const onSyncDataGetting = function() {
+  showSyncMessage(translate("sync_header_message_in_progress"));
+};
+
+const onSyncDataReceieved = function(data) {
+  showSyncMessage(translate("sync_header_message_sync_complete"), true);
+};
+
+const onSyncDataGettingError = function(errorCode, responseJSON) {
+  // NOTE - currently, there are no error messages for  404, 500
+  if (errorCode ===  400 && responseJSON && responseJSON.code === "invalid_sync_version") {
+    showOutOfDateExtensionError();
+    return;
+  }
+  showSyncMessage(translate("sync_header_message_no_license"), false, true);
+};
+
+const onSyncDataInitialGettingError = function(errorCode) {
+  showSyncMessage(translate("sync_header_message_setup_fail_prefix") + " " + translate("sync_header_message_setup_fail_part_2"), false, true);
+};
+
+$(document).ready(function ()
+{
+  var onSettingsChanged = function(name, currentValue, previousValue) {
+    if (name === 'color_themes') {
+      $('body').attr('id', currentValue.options_page).data('theme', currentValue.options_page);
+    }
+  };
+  settingsNotifier.on("settings.changed", onSettingsChanged);
+  window.addEventListener("unload", function() {
+    settingsNotifier.off("settings.changed", onSettingsChanged);
+  });
+
   setSelectedThemeColor();
   loadOptionalSettings();
   displayVersionNumber();
   localizePage();
+  displayTranslationCredit();
 });

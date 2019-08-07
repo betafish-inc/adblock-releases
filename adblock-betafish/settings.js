@@ -2,6 +2,9 @@ var $ = require('./jquery/jquery.min');
 window.jQuery = $;
 window.$ = $;
 const {LocalCDN} = require('./localcdn');
+const {EventEmitter} = require("events");
+let settingsNotifier = new EventEmitter();
+
 // OPTIONAL SETTINGS
 function Settings()
 {
@@ -47,6 +50,7 @@ function Settings()
 Settings.prototype = {
   set : function(name, isEnabled, callback)
   {
+    const originalValue = this._data[name];
     this._data[name] = isEnabled;
     var _this = this;
 
@@ -54,8 +58,13 @@ Settings.prototype = {
     chrome.storage.local.get(this._settingsKey, function(response)
     {
       var storedData = response.settings || {};
+
       storedData[name] = isEnabled;
       chromeStorageSetHelper(_this._settingsKey, storedData);
+      if (originalValue !== isEnabled)
+      {
+        settingsNotifier.emit("settings.changed", name, isEnabled, originalValue);
+      }
       if (callback !== undefined && typeof callback === 'function')
       {
         callback();
@@ -98,10 +107,24 @@ var disableSetting = function(name)
   settings.set(name, false);
 };
 
+const isValidTheme = (themeName) => {
+  return validThemes.includes(themeName);
+}
+
+const validThemes = [
+  'default_theme', 'dark_theme', 'watermelon_theme',
+  'solarized_theme', 'ocean_theme', 'sunshine_theme'
+];
+
+const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];
+
 // Attach methods to window
 Object.assign(window, {
   disableSetting,
   getSettings,
   setSetting,
-  settings
+  settings,
+  settingsNotifier,
+  isValidTheme,
+  abpPrefPropertyNames
 });

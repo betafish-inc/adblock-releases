@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<div class="sync-tab-message page-title sync-tab-message-hidden">
+  <span id="sync-tab-no-license-message" class="sync-tab-message-text"></span>
+</div>
+<div class="option-page-box">
+  <div class="option-page-content">
+    <!-- Icon & Title -->
+    <div class="align-items-center" >
+      <i id="sync-icon" class="material-icons black md-24 header-icon">sync</i>
+      <h1 i18n="sync_tab_item" class="page-title"></h1>
+    </div>
+    <!--Step 0: wait for license -->
+    <div class="do-not-display" id="no-license-div">
+      <div i18n="sync_check_status_text" i18n_replacement_el="btnCheckStatus" class="add-space-between align-items-center section-padding sync-sub-header">
+        <button class="btn right red button-size" type="button" id="btnCheckStatus"></button>
+      </div>
+    </div>
+    <!--Step 1a: Turn on -->
+    <div class="do-not-display" id="turn-on-div">
+      <div i18n="sync_turn_on_text" i18n_replacement_el="btnTurnSyncOn" class="add-space-between align-items-center section-padding sync-sub-header">
+        <button class="btn right red button-size" type="button" id="btnTurnSyncOn"></button>
+      </div>
+    </div>
+    <!--Step 1b: verify with user to overwrite -->
+    <div class="do-not-display" id="verify-overwrite-div">
+      <div class="align-items-center" >
+        <h2 i18n="sync_verify_turn_on_text" class="add-space-between paragraph-title section-padding" id="show-verify-message"></h2>
+        <button i18n="buttonok" class="btn right red do-not-display button-size" type="button" id="btnVerifyOK"></button>
+        <button i18n="buttoncancel" class="btn right do-not-display button-size" type="button" id="btnVerifyCancel"></button>
+      </div>
+    </div>
+    <!--Step 2: Enter name -->
+    <div class="do-not-display" id="enter-name-div">
+      <p class="error-message" id="error-message"></p>
+      <div id="enter-name-child-div" class="align-items-center widest">
+        <input type="text" id="extension-name" i18n_placeholder="sync_extension_name_placeholder" />
+        <button i18n="buttoncancel" class="btn right do-not-display button-size" type="button" id="btnCancelSyncName" ></button>
+        <button i18n="savebutton" class="btn right red do-not-display button-size" type="button" id="btnSaveSyncName"></button>
+      </div>
+    </div>
+    <!--Step 3: show name -->
+    <div class="do-not-display" id="show-name-div">
+      <div class="align-items-center add-space-between">
+        <h2 class="paragraph-title section-padding" id="show-name-message" i18n_replacement_el="extension-name-txt"> <span id="extension-name-txt" > </span> </h2>
+        <button i18n="sync_turn_off_btn_text" class="btn grey right off-border do-not-display button-size" type="button" id="btnTurnSyncOff"></button>
+      </div>
+    </div>
+    <div class="top-line">
+      <object id="sync-1-4-image" data="icons/sync-content-1-4.svg" type="image/svg+xml" >
+      </object>
+    </div>
+    <div class="add-space-between paragraph-title align-items-center section-padding bottom-line">
+      <div id="sync_extension_section_list_title" i18n="sync_extension_section_title" ></div>
+      <div id="last-updated-on"></div>
+    </div>
+    <p id="sync_extension_no_extension_msg" i18n="sync_extension_no_extension_msg" ></p>
+    <div id="sync-extension-list-div" ></div>
+    <div id="sync-now-div" class="do-not-display">
+      <div id="sync_update_now_title" i18n="sync_update_now_section_title" class="add-space-between paragraph-title align-items-center section-padding  bottom-line" ></div>
+      <div class="align-items-center add-space-between">
+        <h2 class="add-space-between paragraph-title align-items-center section-padding" i18n="sync_now_message"> </h2>
+        <button i18n="sync_now_btn_text" class="btn right red button-size" type="button" id="btnSyncNow"></button>
+      </div>
+    </div>
+  </div>
+</div>

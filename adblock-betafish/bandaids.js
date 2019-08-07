@@ -187,6 +187,29 @@ var run_bandaids = function()
         }
       }
 
+      window.addEventListener("message", receiveMagicCodeMessage, false);
+      function receiveMagicCodeMessage(event)
+      {
+        if (event.data &&
+          typeof event.data.magicCode === "string") {
+          chrome.runtime.sendMessage(event.data, function (response) {
+            // hookup options page link
+            let link = document.getElementById('open-options-page');
+            if (link) {
+              link.onclick = (event) => {
+                if (event.isTrusted === false) {
+                  return;
+                }
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                BGcall('openTab', "options.html");
+              }
+            }
+            window.postMessage(response, "*");
+          });
+        }
+      }
+
       chrome.storage.local.get("userid", function(response)
       {
         if (response.userid)

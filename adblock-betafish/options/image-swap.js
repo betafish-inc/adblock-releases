@@ -68,5 +68,18 @@
 
     loadCurrentSettingsIntoPage();
     $('input.invisible-overlay').change(updateChannelSelection);
+    window.addEventListener("unload", function() {
+      channelsNotifier.off("channels.changed", onChannelsChanged);
+    });
+
+    var onChannelsChanged = function(id, currentValue, previousValue) {
+      var guide = backgroundPage.channels.getGuide();
+      var $channelInput = $(`#${guide[id].name}`);
+      if ($channelInput.is(":checked") === previousValue) {
+        $channelInput.click();
+      }
+    };
+    channelsNotifier.on("channels.changed", onChannelsChanged);
+
   });
 })();

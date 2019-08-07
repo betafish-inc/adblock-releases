@@ -1473,7 +1473,7 @@
   },
   "block_annonyances_on_youtube": {
     "message": "Ergernissen op YouTube™ verwijderen",
-    "description": "Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
+    "description": "Checkbox letting user choose whether to block annoyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
   },
   "show_devtools_panel": {
     "message": "'AdBlock'-venster tonen in ontwikkelaarstools",
@@ -1961,6 +1961,52 @@
     "message": "Selecteer uit de categorieën hieronder, dan vervangt AdBlock af en toe advertenties met eersteklas afbeeldingen om je dag op te fleuren.",
     "description": "The label text for the switch on the MyAdBlock Options page"
   },
+  "myadblock_enrollment_title": {
+    "message": "MyAdBlock is ingesteld voor deze browser!",
+    "description": "The title of the MyAdBlock enrollment box."
+  },
+  "myadblock_enrollment_hide_forever": {
+    "message": "Dit bericht niet meer weergeven",
+    "description": "The label for a checkbox that will hide the enrollment box forever."
+  },
+  "myadblock_enrollment_success": {
+    "message": "Je kunt de magische link gebruiken in je bevestigingsmail om MyAdBlock te ontgrendelen in andere Chrome-browsers.",
+    "description": "MyAdBlock successfully licensed message."
+  },
+  "check_email": {
+    "message": "Controleer je e-mail.",
+    "description": "Prompt the user to check their email for a message from AdBlock"
+  },
+  "please_try_again": {
+    "message": "Probeer het opnieuw.",
+    "description": "Prompt the user to retry the last action."
+  },
+  "contact_support_if_errors_continue": {
+    "message": "Als je deze fout blijft zien, kun je het best contact opnemen met [[support]].",
+    "description": "Warn the user if they continue to see the same error they should contact AdBlock support."
+  },
+  "myadblock_enrollment_resend_success": {
+    "message": "We hebben een magische link gestuurd naar $email$.",
+    "description": "MyAdBlock license email successfully sent message.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "alice@example.com"
+      }
+    }
+  },
+  "myadblock_enrollment_link_info": {
+    "message": "Als je op deze link klikt, kun je MyAdBlock eenvoudig instellen in andere Chrome-browsers.",
+    "description": "Explains what happens when clicking the magic link."
+  },
+  "myadblock_enrollment_resend_error": {
+    "message": "Er was een probleem met het opnieuw sturen van je bevestigingsmail.",
+    "description": "MyAdBlock license email failed to send error message."
+  },
+  "myadblock_enrollment_resend_button": {
+    "message": "link opnieuw sturen",
+    "description": "Text on the MyAdBlock enrollment resend email button"
+  },
   "error_msg_header": {
     "message": "Oeps! Het spijt ons, het AdBlock-menu kon niet worden geladen.",
     "description": "The text on the popup menu when an error has occurred"
@@ -2015,7 +2061,7 @@
   },
   "filter_annoyances_explained": {
     "message": "blokkeert pop-ups op pagina's, sociale media en gerelateerde widgets, en andere irritante zaken",
-    "description": "A filter list explaination"
+    "description": "A filter list explanation"
   },
   "filterwarning_removal2": {
     "message": "Verwijderingslijst adblock-waarschuwingen",
@@ -2023,7 +2069,7 @@
   },
   "filter_warning_removal_explained": {
     "message": "verwijdert waarschuwingen over het gebruik van adblockers",
-    "description": "A filter list explaination"
+    "description": "A filter list explanation"
   },
   "filterlistsrock2": {
     "message": "Met de filterlijsten blokkeer je de meeste advertenties op internet. Je kunt ook...",
@@ -2157,6 +2203,10 @@
     "message": "AdBlocks startpagina",
     "description": "Title for link to AdBlock's website"
   },
+  "twitch_hiding_option": {
+    "message": "Verbergen van advertentie-streams op Twitch™ inschakelen",
+    "description": "Description of option on General tab of the Options page to hide Twitch ads"
+  },
   "callout_new_feature": {
     "message": "NIEUW!",
     "description": "Text to callout a new feature"
@@ -2188,5 +2238,157 @@
   "myadblock_payment_not_available_subtitle": {
     "message": "We konden geen verbinding meer maken met onze servers",
     "description": "The sub-title of an error message box in payment iframe in the Options page."
+  },
+  "sync_tab_item": {
+    "message": "Synchroniseren",
+    "description": "Title of the Sync sub-tab of the Options page"
+  },
+  "myadblock_sync_description": {
+    "message": "Synchroniseer je voorkeuren in meerdere browsers en op meerdere apparaten",
+    "description": "Text on the MyAdBlock tab, Sync panel of the Options page"
+  },
+  "sync_check_status_text": {
+    "message": "Synchroniseer en personaliseer AdBlock tussen al je extensies [[Status controleren]]",
+    "description": "message and button text on the Sync sub-tab of the Options page"
+  },
+  "sync_turn_on_text": {
+    "message": "Synchroniseer en personaliseer AdBlock tussen al je extensies [[Synchroniseren inschakelen]]",
+    "description": "message and button text on the Sync sub-tab of the Options page"
+  },
+  "sync_turn_off_btn_text": {
+    "message": "Uitschakelen",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_turn_on_invalid_name_text": {
+    "message": "Geef deze extensie een naam om door te gaan",
+    "description": "error message text on the Sync sub-tab of the Options page"
+  },
+  "sync_turn_on_duplicate_name_text": {
+    "message": "Deze extensienaam is al in gebruik",
+    "description": "error message text on the Sync sub-tab of the Options page"
+  },
+  "sync_extension_section_title": {
+    "message": "Extensies",
+    "description": "section title text on the Sync sub-tab of the Options page"
+  },
+  "sync_header_message_no_license": {
+    "message": "Geef ons even de tijd om synchroniseren beschikbaar te maken.",
+    "description": "message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
+  },
+  "sync_header_message_getting_license": {
+    "message": "controleren...",
+    "description": "message to users on the sync page when the extension is getting the license"
+  },
+  "sync_header_message_in_progress": {
+    "message": "Bezig met synchroniseren…",
+    "description": "message to users on the options pages when syncing with the server is in progress"
+  },
+  "sync_header_message_sync_complete": {
+    "message": "Synchroniseren voltooid",
+    "description": "message to users on the option pages when syncing with the server server is complete"
+  },
+  "sync_extension_no_extension_msg": {
+    "message": "Je hebt geen gesynchroniseerde extensies.",
+    "description": "message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
+  },
+  "sync_header_message_setup_fail_prefix": {
+    "message": "Synchronisatiefout:",
+    "description": "start of error message to users on the sync page when sync fails."
+  },
+  "sync_header_message_setup_fail_part_2": {
+    "message": "Zet synchroniseren over een paar minuten weer aan.",
+    "description": "message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_error_prefix": {
+    "message": "Deze extensie was niet gesynchroniseerd.",
+    "description": "Start of an sync error message to users on the Options page or AdBlock popup menu."
+  },
+  "sync_header_message_error_suffix": {
+    "message": "Probeer het later opnieuw.",
+    "description": "Part of an sync error message to users on the Options page or AdBlock popup menu."
+  },
+  "sync_header_message_old_commit_version_part_2": {
+    "message": "We hebben deze extensie gesynchroniseerd en je wijzigingen ongedaan gemaakt.",
+    "description": "part 2 of a message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_part_3": {
+    "message": "Wijzig opnieuw.",
+    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_error_revert_message_part_2": {
+    "message": "Je wijzigingen zijn ongedaan gemaakt.",
+    "description": "part 2 of a message to users on the sync page when sending the sync data fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_customize_tab_part_2": {
+    "message": "We hebben deze extensie gesynchroniseerd en zullen je wijzigingen ongedaan maken.",
+    "description": "part 2 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_customize_tab_part_3": {
+    "message": "Kopieer je aangepaste regels naar het klembord, vernieuw de pagina en voer de wijzigingen opnieuw in.",
+    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_error_message_menu_part_3": {
+    "message": "Voer de wijzigingen opnieuw in.",
+    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_show_name_text": {
+    "message": "[[$name$]] is nu gesynchroniseerd",
+    "description": "message to users on the sync page when which includes the name of the extension \/ device",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Device 1"
+      }
+    }
+  },
+  "sync_device_name_list_updated_at_msg": {
+    "message": "laatst bijgewerkt op $timestamp$",
+    "description": "message to users on when the sync page was last updated with the name of the extensions \/ devices (displayed in locale specific format)",
+    "placeholders": {
+      "timestamp": {
+        "content": "$1",
+        "example": "April 30, 2019 6:25 pm for US\/English locale"
+      }
+    }
+  },
+  "sync_extension_name_placeholder": {
+    "message": "Geef deze extensie een naam…",
+    "description": "placeholder text in the extension \/ device name field on the sync page"
+  },
+  "sync_verify_turn_on_text": {
+    "message": "Als je synchroniseren inschakelt, wordt bestaande instellingeninformatie voor deze extensie gewist.",
+    "description": "message text in the extension \/ device name field on the sync page"
+  },
+  "sync_update_now_section_title": {
+    "message": "Handmatig synchroniseren",
+    "description": "section title for the sync now section on the sync page"
+  },
+  "sync_now_message": {
+    "message": "Ik haal updates automatisch op;  je kunt ook",
+    "description": "message text in the on the sync page "
+  },
+  "sync_now_btn_text": {
+    "message": "Nu synchroniseren",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_message_old_version_part_1": {
+    "message": "Je gebruikt een oude versie van AdBlock.",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_message_old_version_part_2": {
+    "message": "[[Update AdBlock]] zodat we je instellingen kunnen synchroniseren.",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "filteracceptable_ads_privacy": {
+    "message": "Privacy Acceptable Ads",
+    "description": "A filter list"
+  },
+  "acceptable_ads_privacy": {
+    "message": "Sta alleen advertenties toe zonder volgen externe partijen",
+    "description": "The text of an Acceptable Ads sub-option in the General tab"
+  },
+  "enable_do_not_track_advice": {
+    "message": "Om deze functie goed te laten werken, moet je Do Not Track (DNT) inschakelen in je browservoorkeuren.",
+    "description": "The text advicing to enable DNT if Acceptable Ads is enabled in the General tab"
   }
 }

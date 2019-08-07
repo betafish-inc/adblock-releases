@@ -33,6 +33,18 @@ function cleanCustomFilter(filters)
 
 function onFilterChange()
 {
+  if (syncErrorCode >= 400) {
+    // disable all the buttons on the page
+    // refreshing the page will re-enable the buttons, etc.
+    $(".accordion-icon .material-icons").css("color", "grey");
+    $('button').removeClass("red").css("background-color", "grey");
+    const newStyle = document.createElement('style');
+    newStyle.type = "text/css";
+    newStyle.appendChild(document.createTextNode(""));
+    document.head.appendChild(newStyle);
+    newStyle.sheet.insertRule('.btn:hover { font-weight: normal !important; cursor: unset !important; box-shadow: none !important; }', 0);
+    return;
+  }
   var userFilters = backgroundPage.getUserFilters();
   if (userFilters &&
     userFilters.length)
@@ -109,7 +121,7 @@ $(function ()
   });
 
   // The add_filter functions
-  $('#btnAddUserFilter').click(function ()
+  $('#btnAddUserFilter').click(checkForSyncError(function()
   {
     var blockCss    = $('#txtUserFilterCss').val().trim();
     var blockDomain = $('#txtUserFilterDomain').val().trim();
@@ -124,9 +136,9 @@ $(function ()
 
     $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
     $(this).prop('disabled', true);
-  });
+  }));
 
-  $('#btnAddExcludeFilter').click(function ()
+  $('#btnAddExcludeFilter').click(checkForSyncError(function()
   {
     var excludeUrl = $('#txtUnblock').val().trim();
 
@@ -140,9 +152,9 @@ $(function ()
 
     $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
     $(this).prop('disabled', true);
-  });
+  }));
 
-  $('#btnAddBlacklist').click(function ()
+  $('#btnAddBlacklist').click(checkForSyncError(function()
   {
     var blacklist = toTildePipeFormat($('#txtBlacklist').val());
 
@@ -162,9 +174,9 @@ $(function ()
     } // just record the deletion
 
     $('#btnAddBlacklist').prop('disabled', true);
-  });
+  }));
 
-  $('#btnAddUrlBlock').click(function ()
+  $('#btnAddUrlBlock').click(checkForSyncError(function()
   {
     var blockUrl    = $('#txtBlockUrl').val().trim();
     var blockDomain = $('#txtBlockUrlDomain').val().trim();
@@ -189,10 +201,10 @@ $(function ()
 
     $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
     $(this).prop('disabled', true);
-  });
+  }));
 
   // The validation functions
-  $('#txtBlacklist').bind('input', function ()
+  $('#txtBlacklist').bind('input', checkForSyncError(function()
   {
     var blacklist = toTildePipeFormat($('#txtBlacklist').val());
 
@@ -217,9 +229,9 @@ $(function ()
 
     $('#btnAddBlacklist').prop('disabled', false);
 
-  });
+  }));
 
-  $('#divUrlBlock input[type=\'text\']').bind('input', function ()
+  $('#divUrlBlock input[type=\'text\']').bind('input', checkForSyncError(function()
   {
     var blockUrl    = $('#txtBlockUrl').val().trim();
     var blockDomain = $('#txtBlockUrlDomain').val().trim();
@@ -235,9 +247,9 @@ $(function ()
 
     var result = parseFilter(blockUrl + blockDomain);
     $('#btnAddUrlBlock').prop('disabled', (result.error) ? true : null);
-  });
+  }));
 
-  $('#divCssBlock input[type=\'text\']').bind('input', function ()
+  $('#divCssBlock input[type=\'text\']').bind('input', checkForSyncError(function()
   {
     var blockCss    = $('#txtUserFilterCss').val().trim();
     var blockDomain = $('#txtUserFilterDomain').val().trim();
@@ -248,9 +260,9 @@ $(function ()
 
     var result = parseFilter(blockDomain + '##' + blockCss);
     $('#btnAddUserFilter').prop('disabled', (result.error) ? true : null);
-  });
+  }));
 
-  $('#divExcludeBlock input[type=\'text\']').bind('input', function ()
+  $('#divExcludeBlock input[type=\'text\']').bind('input', checkForSyncError(function()
   {
     var unblockUrl = $('#txtUnblock').val().trim();
     var result     = parseFilter('@@' + unblockUrl + '$document');
@@ -260,10 +272,10 @@ $(function ()
     }
 
     $('#btnAddExcludeFilter').prop('disabled', (result.error) ? true : null);
-  });
+  }));
 
   // When one presses 'Enter', pretend it was a click on the 'add' button
-  $('.customize-entry-table input[type=\'text\']').keypress(function (event)
+  $('.customize-entry-table input[type=\'text\']').keypress(checkForSyncError(function(event)
   {
     var submitButton = $(this).closest('.customize-entry-table').find('input[type=\'button\']');
     if (event.keyCode === 13 && !submitButton.prop('disabled'))
@@ -271,9 +283,9 @@ $(function ()
       event.preventDefault();
       submitButton.click();
     }
-  });
+  }));
 
-  $('a.controlsLink').click(function (event)
+  $('a.controlsLink').click(checkForSyncError(function(event)
   {
     event.preventDefault();
     var $myControls = $(this).parent('div').find('.addControls');
@@ -294,9 +306,9 @@ $(function ()
         }
       }
     });
-  });
+  }));
 
-  $('#btnEditAdvancedFilters').click(function(event)
+  $('#btnEditAdvancedFilters').click(checkForSyncError(function()
   {
     let headerOffset = $("#header").height() + 10;
     $("body, html").animate({
@@ -306,10 +318,10 @@ $(function ()
     $('#spanSaveButton').show();
     $('#btnEditAdvancedFilters').hide();
     $('#txtFiltersAdvanced').focus();
-  });
+  }));
 
 
-  $('#btnEditExcludeAdvancedFilters').click(function(event)
+  $('#btnEditExcludeAdvancedFilters').click(checkForSyncError(function(event)
   {
     let headerOffset = $("#header").height() + 10;
     $("body, html").animate({
@@ -319,7 +331,7 @@ $(function ()
     $('#spanSaveExcludeButton').show();
     $('#btnEditExcludeAdvancedFilters').hide();
     $('#txtExcludeFiltersAdvanced').focus();
-  });
+  }));
 
   // Update custom filter count in the background.
   // Inputs: customFiltersText:string - string representation of the custom filters
@@ -423,7 +435,7 @@ $(function ()
 
   $('#btnSaveAdvancedFilters').click(saveFilters);
 
-  $('#btnSaveExcludeAdvancedFilters').click(function()
+  $('#btnSaveExcludeAdvancedFilters').click(checkForSyncError(function()
   {
     var exclude_filters_text = $('#txtExcludeFiltersAdvanced').val();
     backgroundPage.ExcludeFilter.setExcludeFilters(exclude_filters_text);
@@ -432,7 +444,7 @@ $(function ()
     $('#spanSaveExcludeButton').hide();
     $('#btnEditExcludeAdvancedFilters').show();
     getExcludeFilters();
-  });
+  }));
 
   var userFilters = backgroundPage.getUserFilters();
   if (userFilters &&

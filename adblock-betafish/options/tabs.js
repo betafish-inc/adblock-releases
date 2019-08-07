@@ -4,6 +4,27 @@ function tabIsLocked(tabID) {
   return !!$locked.length;
 }
 
+const syncMessageDiv = '\
+  <div class="sync-header-message page-title sync-header-message-hidden">\
+    <span>\
+      <i class="material-icons md-24 sync-icon sync-header-error-icon">error_outline</i>\
+      <i class="material-icons md-24 sync-icon sync-header-sync-icon">sync</i>\
+      <i class="material-icons md-24 sync-icon sync-header-done-icon">check_circle</i>\
+    </span>\
+    <span id="themes-sync-header-message" class="sync-header-message-text"></span>\
+  </div>';
+
+function getSyncOutOfDateMessageDiv(id) {
+  return `\
+  <div class="sync-out-of-date-header-message sync-out-of-date-header-message-hidden sync-message-error">\
+    <span>\
+      <i class="material-icons md-24 sync-icon sync-out-of-date-header-error-icon">error_outline</i>\
+    </span>\
+    <span i18n="sync_message_old_version_part_1"></span>&nbsp;\
+    <a i18n="sync_message_old_version_part_2" i18n_replacement_el="oldversionlink_${id}" href="https://help.getadblock.com/support/solutions/articles/6000087857-how-do-i-make-sure-adblock-is-up-to-date-" target="_blank"> <span id="oldversionlink_${id}" class="sync-error-link-text-color"></span> </a>\
+  </div>`;
+}
+
 // Output an array of all tab ids in HTML
 function allTabIDs() {
   return $('.tablink').map(function() {
@@ -110,7 +131,7 @@ function addMyAdBlockTab() {
   }
 
   // Hint: To add an extra subtab, add another <li> element below.
-  // Add class="locked" to li only if the subtab is not clickable for a free user 
+  // Add class="locked" to li only if the subtab is not clickable for a free user
   let myAdBlockTab = '\
   <li id="myadblock-tab">\
     <a href="#mab" class="tablink">\
@@ -129,6 +150,13 @@ function addMyAdBlockTab() {
           <i class="material-icons md-18 unlocked">image</i>\
           <i class="material-icons md-18 locked">lock</i>\
           <span i18n="image_swap"></span>\
+        </a>\
+      </li>\
+      <li class="locked">\
+        <a href="#sync" class="tablink">\
+          <i class="material-icons md-18 unlocked">sync</i>\
+          <i class="material-icons md-18 locked">lock</i>\
+          <span i18n="sync_tab_item"></span>\
         </a>\
       </li>\
     </ul>\
@@ -161,10 +189,15 @@ function loadTabPanelsHTML() {
   let $tabPanels = $('#tab-content .tab');
   $.each($tabPanels, function(i, panel) {
     let panelID = $(panel).attr('id');
+
     let panelHTML = `adblock-options-${ panelID }.html`;
-    $(panel).load(panelHTML, function() {
+    $(panel).load(panelHTML, function( response, status, xhr) {
+      $(panel).prepend(getSyncOutOfDateMessageDiv(i));
+      if ($(panel).attr('syncMessageDiv')) {
+        $(panel).prepend(syncMessageDiv);
+      }
       localizePage();
-    }); 
+    });
   });
 }
 

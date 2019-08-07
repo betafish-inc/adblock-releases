@@ -165,6 +165,37 @@ a:hover {
   margin-top: 5px;
 }
 
+#div_sync_outofdate_error_msg, #div_sync_error_msg {
+  background-color: var(--sync-error-msg-background-color);
+  color: var(--sync-error-msg-color);
+  text-align: center;
+  cursor: unset;
+  line-height: 22px;
+  padding: 0px 4px 0px 10px;
+  font-size: 14px;
+  display: none;
+}
+
+#div_sync_outofdate_error_msg a, #div_sync_outofdate_error_msg a span {
+  background-color: var(--sync-error-msg-background-color);
+  color: var(--sync-error-msg-color);
+  text-align: center;
+  cursor: pointer;
+  line-height: 22px;
+  padding: 0px 4px 0px 10px;
+  font-size: 14px;
+}
+#div_sync_outofdate_error_msg a span {
+  color: var(--link-color);
+  padding: 0px 0px 0px 0px;
+}
+#div_sync_outofdate_error_msg a:hover {
+  font-weight: normal;
+}
+#div_sync_outofdate_error_msg a span:hover {
+  font-weight: normal;
+}
+
 /* Retina & hi DPI displays only */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {}
 

@@ -118,7 +118,7 @@ var sendErrorPayload = function() {
 try {
   var BG = chrome.extension.getBackgroundPage();
   var License = BG.License;
-
+  const SyncService = BG.SyncService;
   const Prefs = BG.Prefs;
   const getBlockedPerPage = BG.getBlockedPerPage;
   const getDecodedHostname = BG.getDecodedHostname;
@@ -218,24 +218,36 @@ try {
           if (info.disabledSite) {
             hide(['div_myadblock_enrollment']);
           }
-          if (License.shouldShowMyAdBlockEnrollment() && !License.isActiveLicense())
-          {
+          if (License.shouldShowMyAdBlockEnrollment() && !License.isActiveLicense()) {
             show(['div_myadblock_enrollment', 'separator-1', 'separator-2']);
           }
-          if (License.isActiveLicense())
-          {
+          if (License.isActiveLicense()) {
             show(['div_myadblock_options', 'separator-1', 'separator-2']);
           }
-          if (License.shouldShowMyAdBlockEnrollment() || License.isActiveLicense())
-          {
-            if (info.disabledSite || info.whitelisted)
-            {
+          if (License.shouldShowMyAdBlockEnrollment() || License.isActiveLicense()) {
+            if (info.disabledSite || info.whitelisted) {
               hide(['separator-2']);
             }
-            if (shown['block_counts'] && Prefs.show_statsinpopup)
-            {
+            if (shown['block_counts'] && Prefs.show_statsinpopup) {
               hide(['separator-1']);
             }
+          }
+          if (info.settings.sync_settings &&
+              SyncService.getLastGetStatusCode() === 400 &&
+              SyncService.getLastGetErrorResponse() &&
+              SyncService.getLastGetErrorResponse().code === "invalid_sync_version") {
+            show(['div_sync_outofdate_error_msg']);
+            SyncService.resetLastGetStatusCode(); // reset the code, so it doesn't show again.
+            SyncService.resetLastGetErrorResponse(); // reset the code, so it doesn't show again.
+          } else if (info.settings.sync_settings && SyncService.getLastPostStatusCode() >= 400) {
+            show(['div_sync_error_msg']);
+            SyncService.resetLastPostStatusCode(); // reset the code, so it doesn't show again.
+          } else if (info.settings.sync_settings && SyncService.getLastPostStatusCode() === 0) {
+            show(['div_sync_error_msg']);
+            $("#div_sync_error_msg").text(translate("sync_header_message_setup_fail_prefix") + " " + translate("sync_header_error_revert_message_part_2") + " " + translate("sync_header_message_error_suffix"));
+            SyncService.resetLastPostStatusCode(); // reset the code, so it doesn't show again.
+          } else {
+            hide(['div_sync_error_msg']);
           }
           if ((window.devicePixelRatio >= 2) && (shown['div_myadblock_options'] || shown['div_myadblock_enrollment'] )) {
             $('#cat_option').attr("src","icons/adblock-picreplacement-images-menu-cat@2x.png");
@@ -245,39 +257,29 @@ try {
             $('#dog_enrollment').attr("src","icons/adblock-picreplacement-images-menu-dog@2x.png");
             $('#landscape_enrollment').attr("src","icons/adblock-picreplacement-images-menu-landscape@2x.png");
           }
-          if (shown['div_myadblock_options'])
-          {
+          if (shown['div_myadblock_options']) {
             var guide = BG.channels.getGuide();
             var anyEnabled = false;
-            for (var id in guide)
-            {
+            for (var id in guide) {
               anyEnabled = anyEnabled || guide[id].enabled;
-              if ((guide[id].name === "CatsChannel" && !guide[id].enabled) || !info.settings.picreplacement)
-              {
-                if (window.devicePixelRatio >= 2)
-                {
+              if ((guide[id].name === "CatsChannel" && !guide[id].enabled) || !info.settings.picreplacement) {
+                if (window.devicePixelRatio >= 2) {
                   $('#cat_option').attr("src","icons/adblock-picreplacement-images-menu-catgrayscale@2x.png");
-                } else
-                {
+                } else {
                   $('#cat_option').attr("src","icons/adblock-picreplacement-images-menu-catgrayscale.png");
                 }
               }
-              if ((guide[id].name === "DogsChannel" && !guide[id].enabled) || !info.settings.picreplacement)
-              {
-                if (window.devicePixelRatio >= 2)
-                {
+              if ((guide[id].name === "DogsChannel" && !guide[id].enabled) || !info.settings.picreplacement) {
+                if (window.devicePixelRatio >= 2) {
                   $('#dog_option').attr("src","icons/adblock-picreplacement-images-menu-doggrayscale@2x.png");
                 } else {
                   $('#dog_option').attr("src","icons/adblock-picreplacement-images-menu-doggrayscale.png");
                 }
               }
-              if ((guide[id].name === "LandscapesChannel" && !guide[id].enabled) || !info.settings.picreplacement)
-              {
-                if (window.devicePixelRatio >= 2)
-                {
+              if ((guide[id].name === "LandscapesChannel" && !guide[id].enabled) || !info.settings.picreplacement) {
+                if (window.devicePixelRatio >= 2) {
                   $('#landscape_option').attr("src","icons/adblock-picreplacement-images-menu-landscapegrayscale@2x.png");
-                } else
-                {
+                } else {
                   $('#landscape_option').attr("src","icons/adblock-picreplacement-images-menu-landscapegrayscale.png");
                 }
               }
@@ -441,15 +443,13 @@ try {
         closeAndReloadPopup();
       });
 
-      $('#div_myadblock_options').click(function ()
-      {
+      $('#div_myadblock_options').click(function () {
         BG.recordGeneralMessage("myadblock_options_clicked");
-        openPage(chrome.extension.getURL('options.html#mab'));
+        openPage(chrome.extension.getURL('options.html#mab-image-swap'));
         closeAndReloadPopup();
       });
-    
-      $('#div_myadblock_enrollment').click(function ()
-      {
+
+      $('#div_myadblock_enrollment').click(function () {
         BG.recordGeneralMessage("myadblock_options_clicked");
         openPage(chrome.extension.getURL('options.html#mab'));
         closeAndReloadPopup();

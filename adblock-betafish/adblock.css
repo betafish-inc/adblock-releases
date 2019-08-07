@@ -41,6 +41,10 @@ Global Styles
   --feature-card-body-bg-color: #f4f4f4;
   --image-swap-section-bg-unselected: #f4f4f4;
   --image-swap-section-bg-selected: white;
+  --sync-error-msg-background-color: #E40D0D;
+  --sync-error-msg-color: #FFFFFF;
+  --sync-msg-background-color: #05BCFC;
+  --sync-msg-color: #FFFFFF;
 }
 
 * {
@@ -58,7 +62,7 @@ a {
   cursor: pointer;
 }
 textarea::-webkit-scrollbar {
-  width: 14px; 
+  width: 14px;
 }
 textarea::-webkit-scrollbar-track {
   box-shadow: none;
@@ -164,3 +168,14 @@ Icons global styling (needs to @import 'fonts/font-face.css')
 /* Rules for using icons as white on a dark background. */
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+

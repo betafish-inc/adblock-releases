@@ -38,6 +38,29 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
     return url;
   };
 
+  // determine if the specified filter list is language specific
+  // returns the boolean language attribue (if found)
+  //         false otherwise
+  var isLanguageSpecific = function(id)
+  {
+    for (var u in abpSubscriptionIdMap)
+    {
+      if (abpSubscriptionIdMap[u].id === id)
+      {
+        return !!abpSubscriptionIdMap[u].language;
+      }
+    }
+
+    for (var u in abSubscriptionIdMap)
+    {
+      if (abSubscriptionIdMap[u].id === id)
+      {
+        return !!abSubscriptionIdMap[u].language;
+      }
+    }
+    return false;
+  };
+
   // Unsubcribe the user from the subscription specified in the arguement
   var unsubscribe = function(options)
   {
@@ -261,7 +284,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
       hidden : false,
     },
 
-    "https://easylist-downloads.adblockplus.org/easyprivacy+easylist.txt" :
+    "https://easylist-downloads.adblockplus.org/easyprivacy.txt" :
     {
       id : "easyprivacy", // EasyPrivacy
       language : false,
@@ -332,7 +355,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
     "https://cdn.adblockcdn.com/filters/adblock_custom.txt" :
     {
       id : "adblock_custom", // AdBlock custom filters
-      language : true,
+      language : false,
       hidden : false,
     },
 
@@ -545,6 +568,7 @@ let SubscriptionAdapter = exports.SubscriptionAdapter = (function()
     getSubscriptionsMinusText,
     getAllSubscriptionsMinusText,
     getIdFromURL,
+    isLanguageSpecific
   };
 
 })();

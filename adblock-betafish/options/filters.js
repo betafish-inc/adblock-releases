@@ -118,7 +118,7 @@ function CheckboxForFilterList(filterList, filterListType, index, container) {
                               .addClass('add-space-between')
                               .addClass('checkbox-indentation')
                               .attr('name', filterList.id)
-  
+
   this._extraInformation = $('<div></div>').addClass('extra-info').addClass('italic')
                               .text(translate('filter_'+filterId+'_explained'));
 }
@@ -128,14 +128,14 @@ CheckboxForFilterList.prototype = {
   // different filter lists.
 
   _bindActions: function () {
-    this._checkBox.change(function () {
+    this._checkBox.change(function(event) {
       var $subscription  = $(this).closest('.subscription');
       var $subscriptionWrapper = $subscription.closest('.filter-subscription-wrapper');
       var checked = $(this).is(':checked');
       var id = $subscription.attr('name');
 
       if (checked) {
-        if (!SubscriptionUtil.validateOverSubscription()) {
+        if (!event.addedViaBackground && !SubscriptionUtil.validateOverSubscription()) {
           $(this).prop('checked', false);
           return;
         }
@@ -467,7 +467,7 @@ LanguageSelectUtil.init = function () {
     }
   }
 
-  $('#language_select').change(function () {
+  $('#language_select').change(function (event) {
     var $this          = $(this);
     var selectedOption = $this.find(':selected');
     var index          = $(selectedOption).data('index');
@@ -477,7 +477,9 @@ LanguageSelectUtil.init = function () {
       selectedOption.remove();
       var $checkbox = $('[name=\'' + entry.id + '\']').find('input');
       $checkbox.prop('checked', true);
-      $checkbox.trigger('change');
+      let newChangeEvent = jQuery.Event("change");
+      newChangeEvent.addedViaBackground = event.addedViaBackground;
+      $checkbox.trigger(newChangeEvent);
     }
   });
 }
@@ -708,6 +710,7 @@ CustomFilterListUploadUtil.bindControls = function () {
 }
 
 function onFilterChangeHandler(action, item) {
+
   var updateEntry = function (entry, eventAction) {
     if (entry) {
       // copy / update relevant properties to the cached entry
@@ -717,14 +720,23 @@ function onFilterChangeHandler(action, item) {
           FilterListUtil.cachedSubscriptions[entry.id][properties[i]] = entry[properties[i]];
         }
       }
+      entry.language = backgroundPage.isLanguageSpecific(entry.id);
 
       if (eventAction &&
           eventAction === "subscription.added") {
         FilterListUtil.cachedSubscriptions[entry.id].subscribed = true;
+        if (entry.language && $("#language_select option[value='" + entry.id + "']").length === 1) {
+          let changeEvent = jQuery.Event("change");
+          changeEvent.addedViaBackground = true;
+          $("#language_select option[value='" + entry.id + "']").prop('selected',true).trigger(changeEvent);
+        }
       }
       if (eventAction &&
           eventAction === "subscription.removed") {
         FilterListUtil.cachedSubscriptions[entry.id].subscribed = false;
+        if (entry.language && $("#language_select option[value='" + entry.id + "']").length === 0) {
+          $("div[name='" + entry.id + "']").find('input').trigger('click');
+        }
       }
 
       // Update checkbox according to the value of the subscribed field
@@ -752,6 +764,9 @@ function onFilterChangeHandler(action, item) {
     } else if (FilterListUtil.cachedSubscriptions['url:' + item.url]) {
       // or user subscribed filter list
       updateItem(item, 'url:' + item.url);
+      return;
+    } else if (action === "subscription.added" && !FilterListUtil.cachedSubscriptions['url:'] && !item.url.startsWith('~user~')) {
+      CustomFilterListUploadUtil._performUpload(item.url, 'url:' + item.url, item.title);
       return;
     } else if (action === 'subscription.title' && param1) {
       // or if the URL changed due to a redirect, we may not be able to determine
@@ -857,6 +872,21 @@ $(function () {
     filterNotifier.off("subscription.updated", onSubUpdated);
     filterNotifier.off("subscription.downloadStatus", onStatusChanged);
     filterNotifier.off("subscription.errors", onError);
+  });
+
+  port.onMessage.addListener((message) => {
+    if (message.type === "subscriptions.respond" && message.args && message.args.length) {
+      if (message.action === "added") {
+        onFilterChangeHandler("subscription.added", message.args[0]);
+      } else if (message.action === "removed") {
+        onFilterChangeHandler("subscription.removed", message.args[0]);
+      }
+    }
+  });
+
+  port.postMessage({
+    type: "subscriptions.listen",
+    filter: ["added", "removed"]
   });
 
   FilterListUtil.updateSubscriptionInfoAll();

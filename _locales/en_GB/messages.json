@@ -1473,7 +1473,7 @@
   },
   "block_annonyances_on_youtube":{
     "message":"Remove annoyances on YouTube™",
-    "description":"Checkbox letting user choose whether to block annonyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
+    "description":"Checkbox letting user choose whether to block annoyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
   },
   "show_devtools_panel":{
     "message":"Show 'AdBlock' panel in the developer tools",
@@ -1961,6 +1961,52 @@
     "message":"Select from the categories below and AdBlock will occasionally replace ads with high-quality images to brighten your day.",
     "description":"The label text for the switch on the MyAdBlock Options page"
   },
+  "myadblock_enrollment_title": {
+    "message": "MyAdBlock is set up on this browser!",
+    "description": "The title of the MyAdBlock enrollment box."
+  },
+  "myadblock_enrollment_hide_forever": {
+    "message": "Don't show this message again",
+    "description": "The label for a checkbox that will hide the enrollment box forever."
+  },
+  "myadblock_enrollment_success": {
+    "message": "You can use the magic link in your confirmation email to unlock MyAdBlock in other Chrome browsers.",
+    "description": "MyAdBlock successfully licensed message."
+  },
+  "check_email": {
+    "message": "Please check your email.",
+    "description": "Prompt the user to check their email for a message from AdBlock"
+  },
+  "please_try_again": {
+    "message": "Please try again.",
+    "description": "Prompt the user to retry the last action."
+  },
+  "contact_support_if_errors_continue": {
+    "message": "If you continue to see this error, please contact [[support]].",
+    "description": "Warn the user if they continue to see the same error they should contact AdBlock support."
+  },
+  "myadblock_enrollment_resend_success": {
+    "message": "We sent a magic link to $email$.",
+    "description": "MyAdBlock license email successfully sent message.",
+    "placeholders":{
+      "email":{
+        "content":"$1",
+        "example":"alice@example.com"
+      }
+    }
+  },
+  "myadblock_enrollment_link_info": {
+    "message": "Clicking the link makes it easy to set up MyAdBlock in other Chrome browsers.",
+    "description": "Explains what happens when clicking the magic link."
+  },
+  "myadblock_enrollment_resend_error": {
+    "message": "There was a problem resending your confirmation email.",
+    "description": "MyAdBlock license email failed to send error message."
+  },
+  "myadblock_enrollment_resend_button": {
+    "message": "resend link",
+    "description": "Text on the MyAdBlock enrollment resend email button"
+  },
   "error_msg_header":{
     "message":"Oops! We're sorry, the AdBlock menu had trouble loading.",
     "description":"The text on the popup menu when an error has occurred"
@@ -2015,7 +2061,7 @@
   },
   "filter_annoyances_explained":{
     "message":"blocks in-page pop-ups, social media and related widgets, and other annoyances",
-    "description":"A filter list explaination"
+    "description":"A filter list explanation"
   },
   "filterwarning_removal2":{
     "message":"Adblock Warning Removal list",
@@ -2023,7 +2069,7 @@
   },
   "filter_warning_removal_explained":{
     "message":"removes warnings about using ad blockers",
-    "description":"A filter list explaination"
+    "description":"A filter list explanation"
   },
   "filterlistsrock2":{
     "message":"The filter lists block most ads on the web. You can also...",
@@ -2139,6 +2185,10 @@
   },
   "sunshine_theme":{
     "message":"Sunshine",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
+  "rebecca_purple_theme":{
+    "message":"Rebecca Purple",
     "description":"Name of a theme in the Themes tab of the Options page"
   },
   "apply_theme":{
@@ -2257,13 +2307,21 @@
     "message":"This extension was out of sync.",
     "description":"Start of an sync error message to users on the Options page or AdBlock popup menu."
   },
+  "sync_header_message_error_suffix":{
+    "message":"Please try again later.",
+    "description":"Part of an sync error message to users on the Options page or AdBlock popup menu."
+  },
   "sync_header_message_old_commit_version_part_2":{
     "message":"We’ve synced this extension and reverted your changes.",
-    "description":"part 2 of a message message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
+    "description":"part 2 of a message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
   },
   "sync_header_message_old_commit_version_part_3":{
     "message":"Please make your changes again.",
-    "description":"part 3 of a message message to users on the sync page when initial setup of sync fails for some unknown reason."
+    "description":"part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_error_revert_message_part_2":{
+    "message":"Your changes were reverted.",
+    "description":"part 2 of a message to users on the sync page when sending the sync data fails for some unknown reason."
   },
   "sync_header_message_old_commit_version_customize_tab_part_2":{
     "message":"We’ve synced this extension and will revert your changes.",
@@ -2322,7 +2380,19 @@
     "description":"button text on the Sync sub-tab of the Options page"
   },
   "sync_message_old_version_part_2":{
-    "message":"Please [[update]] AdBlock so we can sync your settings.",
+    "message":"Please [[update AdBlock]] so we can sync your settings.",
     "description":"button text on the Sync sub-tab of the Options page"
+  },
+  "filteracceptable_ads_privacy":{
+    "message":"Acceptable Ads Privacy",
+    "description":"A filter list"
+  },
+  "acceptable_ads_privacy":{
+    "message":"Only allow ads without third-party tracking",
+    "description":"The text of an Acceptable Ads sub-option in the General tab"
+  },
+  "enable_do_not_track_advice":{
+    "message":"For this feature to work properly, please enable Do Not Track (DNT) in your browser preferences.",
+    "description":"The text advicing to enable DNT if Acceptable Ads is enabled in the General tab"
   }
 }

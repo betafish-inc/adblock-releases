@@ -2,6 +2,8 @@ var $ = require('../jquery/jquery.min');
 const Subscription = require('subscriptionClasses').Subscription;
 const {filterStorage} = require("filterStorage");
 const {imageSizesMap, WIDE, TALL, SKINNYWIDE, SKINNYTALL, BIG, SMALL} = require('./image-sizes-map');
+const {EventEmitter} = require("events");
+let channelsNotifier = new EventEmitter();
 
 var subscription1 = Subscription.fromURL(getUrlFromId("antisocial"));
 var subscription2 = Subscription.fromURL(getUrlFromId("annoyances"));
@@ -48,7 +50,7 @@ Channels.prototype = {
   add: function(data) {
     var klass = window[data.name];
     if (!klass) {
-      return;
+      klass = window["UnknownChannel"];
     }
     var dataParam = JSON.stringify(data.param);
     for (var id in this._channelGuide) {
@@ -96,12 +98,26 @@ Channels.prototype = {
     return results;
   },
 
+  // Return id for channel name
+  getIdByName: function(name) {
+    for (var id in this._channelGuide) {
+      if (this._channelGuide[id].name === name) {
+        return id;
+      }
+    }
+    return undefined;
+  },
+
   getListings: function(id) {
     return this._channelGuide[id].channel.getListings();
   },
   setEnabled: function(id, enabled) {
+    const originalValue = this._channelGuide[id].enabled;
     this._channelGuide[id].enabled = enabled;
     this._saveToStorage();
+    if (originalValue !== enabled) {
+      channelsNotifier.emit("channels.changed", id, enabled, originalValue);
+    }
   },
 
   refreshAllEnabled: function() {
@@ -298,5 +314,6 @@ Channel.prototype = {
 Object.assign(window, {
   Channel,
   Channels,
-  Listing
+  Listing,
+  channelsNotifier
 });

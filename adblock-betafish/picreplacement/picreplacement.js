@@ -40,7 +40,6 @@ var ElementTypes = {
   SUBDOCUMENT: 8,
 };
 
-//
 var onReady = function (callback) {
   if (document.readyState === 'complete')
     window.setTimeout(callback, 0);
@@ -51,9 +50,9 @@ var onReady = function (callback) {
 // when the page has completed loading:
 // 1) get the currently loaded CSS hiding rules
 // 2) find any hidden elements using the hiding rules from #1 that meet the
-//    minimum minimum dimensions required. if so, add them to an array
+//    minimum dimensions required. if so, add them to an array
 // 3) find any hidden elements that were captured from the hideElement() function that meet the
-//    minimum minimum dimensions required. if so, add them to an array
+//    minimum dimensions required. if so, add them to an array
 // 4) sort the array by size and type - we want to replace the large elements first
 // 5) process the sorted array, attempting to do a pic replacment for each element
 onReady(function() {
@@ -144,6 +143,7 @@ onReady(function() {
     }
   };
 });
+
 var picreplacement = {
   // data: {el, elType, blocked}
   augmentIfAppropriate: function(data, callback) {
@@ -445,298 +445,231 @@ var picreplacement = {
       callback(result);
     });
   },
+  // Create a container with the new image and overlay
+  // Return an object with the container and its children nodes
+  createNewPicContainer: function(placement) {
+    // Container, inherit some CSS from replaced element
+    var imageSwapContainer = document.createElement('div');
+    imageSwapContainer.id = `ab-image-swap-container-${ new Date().getTime() }`;
 
+    // Wrapper, necessary to set postition: relative
+    var imageSwapWrapper = document.createElement('div');
+    imageSwapWrapper.classList.add('ab-image-swap-wrapper');
+
+    // New image
+    var newPic = document.createElement('img');
+    newPic.classList.add('picreplacement-image');
+    newPic.src = placement.url;
+
+    // Overlay info card
+    var infoCardOverlay = document.createElement('div');
+    infoCardOverlay.classList.add('picinjection-infocard');
+
+    var overlayLogo = document.createElement('img');
+    overlayLogo.classList.add('ab-logo-header');
+    overlayLogo.src = chrome.extension.getURL('icons/dark_theme/logo.svg');
+
+    var overlayIcons = document.createElement('div');
+    overlayIcons.classList.add('ab-icons-header');
+
+    var seeIcon = document.createElement('i');
+    seeIcon.innerText = 'remove_red_eye';
+    seeIcon.classList.add('ab-material-icons');
+
+    var settingsIcon = document.createElement('i');
+    settingsIcon.innerText = 'settings';
+    settingsIcon.classList.add('ab-material-icons');
+
+    var closeIcon = document.createElement('i');
+    closeIcon.innerText = 'close';
+    closeIcon.classList.add('ab-material-icons');
+
+    overlayIcons.appendChild(seeIcon);
+    overlayIcons.appendChild(settingsIcon);
+    overlayIcons.appendChild(closeIcon);
+    infoCardOverlay.appendChild(overlayLogo);
+    infoCardOverlay.appendChild(overlayIcons);
+    imageSwapWrapper.appendChild(newPic);
+    imageSwapWrapper.appendChild(infoCardOverlay);
+    imageSwapContainer.appendChild(imageSwapWrapper);
+
+    return {
+      container: imageSwapContainer,
+      imageWrapper: imageSwapWrapper,
+      image: newPic,
+      overlay: infoCardOverlay,
+      logo: overlayLogo,
+      icons: overlayIcons,
+      closeIcon: closeIcon,
+      settingsIcon: settingsIcon,
+      seeIcon: seeIcon,
+    };
+  },
+  // Add a <style> tag into the host page's header to style all the HTML we use to replace the ad
+  // including the container, the image, the overlay, the logo and the icons
+  injectCSS: function(el, placement, containerID) {
+    var adblockLogoWidth = placement.type === imageSizesMap.get('skinnywide') ? '81px' : '114px';
+    var adblockLogoHeight = placement.type === imageSizesMap.get('skinnywide') ? '20px' : '29px';
+    var materialIconsURL = chrome.extension.getURL('/icons/MaterialIcons-Regular.woff2');
+    var elComputedStyle = window.getComputedStyle(el);
+    var styleTag = document.createElement('style');
+    styleTag.type = 'text/css';
+    styleTag.textContent = `
+      div#${containerID} {
+        position: ${elComputedStyle.position};
+        width: fit-content;
+        height: fit-content;
+        font-family: 'Lato', Arial, sans-serif;
+        line-height: normal;
+        box-sizing: initial;
+        top: ${elComputedStyle.top};
+        left: ${elComputedStyle.left};
+        right: ${elComputedStyle.right};
+        bottom: ${elComputedStyle.bottom};
+      }
+      div#${containerID} > .ab-image-swap-wrapper {
+        position: relative;
+      }
+      div#${containerID} > .ab-image-swap-wrapper > .picreplacement-image {
+        width: ${placement.width}px;
+        height: ${placement.height}px;
+        background-position: -${placement.left}px -${placement.top}px;
+        background-size: ${placement.x}px ${placement.y}px;
+        margin: ${placement.offsettop}px ${placement.offsetleft}px;
+        /* nytimes.com float:right ad at top is on the left without this */
+        float: ${elComputedStyle.float};
+        border: none; /* some sites borders all imgs */
+      }
+      div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard {
+        display: none;
+        padding: 3px;
+        position: absolute;
+        min-width: ${placement.width}px;
+        min-height: ${placement.height}px;
+        box-sizing: border-box;
+        border: 2px solid rgb(128, 128, 128);
+        color: black;
+        background-color: rgba(0, 0, 0, 0.7);
+        margin: ${placement.offsettop}px ${placement.offsetleft}px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard:hover,
+      div#${containerID} > .ab-image-swap-wrapper > .picreplacement-image:hover ~ .picinjection-infocard {
+        display: block;
+      }
+      div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard > .ab-logo-header {
+        float: left;
+        border: none; /* some sites borders all imgs */
+        margin-top: 0;
+        margin-left: 0;
+        height: ${adblockLogoHeight};
+        width: ${adblockLogoWidth};
+      }
+      div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard > .ab-icons-header {
+        margin-top: 0px;
+        margin-right: 0px;
+        vertical-align: middle;
+        line-height: ${adblockLogoHeight};
+        height: ${adblockLogoHeight};
+        float: right;
+        display: inline;
+      }
+      div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard .ab-material-icons {
+        color: #666666;
+        margin-right: 8px;
+      }
+      div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard .ab-material-icons:hover {
+        color: white;
+      }
+      div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard .ab-material-icons:last-child {
+        margin-right: 0;
+      }
+      div#${containerID} > .ab-image-swap-wrapper .ab-material-icons {
+        font-family: 'Material Icons';
+        color: #999;
+        cursor: pointer;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+        vertical-align: middle;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      @font-face {
+        font-family: 'Material Icons';
+        font-style: normal;
+        font-weight: normal;
+        src: local('Material Icons'), url(${materialIconsURL});
+      }
+    `;
+    document.head.appendChild(styleTag);
+  },
+  setupEventHandlers: function(placement, containerNodes) {
+    containerNodes.image.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }, false);
+    containerNodes.image.addEventListener('error', function() {
+      containerNodes.container.parentNode.removeChild(containerNodes.container);
+      return false;
+    }, false);
+    containerNodes.image.addEventListener('abort', function() {
+      containerNodes.container.parentNode.removeChild(containerNodes.container);
+      return false;
+    }, false);
+    containerNodes.seeIcon.addEventListener('click', function() {
+      var u = encodeURIComponent(placement.attribution_url);
+      var w = placement.listingWidth;
+      var h = placement.listingHeight;
+      BGcall('openTab', `adblock-picreplacement-imageview.html?url=${u}&width=${w}&height=${h}`);
+    });
+    containerNodes.settingsIcon.addEventListener('click', function() {
+      BGcall('openTab', 'options.html#mab-image-swap');
+    });
+    containerNodes.closeIcon.addEventListener('click', function() {
+      containerNodes.container.parentNode.removeChild(containerNodes.container);
+    });
+  },
   // Given a target element, replace it with a picture.
   // Returns the replacement element if replacement works, or null if the target
   // element could not be replaced.
   _replace: function(el, callback) {
     var that = this;
-    this._placementFor(el, function(placement) {
+    that._placementFor(el, function(placement) {
       if (!placement) {
         callback(false);
         return false; // don't know how to replace |el|
       }
-      if (document.getElementsByClassName("picreplacement-image").length > 1 && !(window.top === window && hostname ==="www.facebook.com")) {
+      if (document.getElementsByClassName('picreplacement-image').length > 1 && !(window.top === window && hostname === 'www.facebook.com')) {
         callback(false);
-        return false;//we only want to show 2 ad per page
+        return false; // we only want to show 2 ad per page
       }
 
-      var newPic = document.createElement("img");
-      var iconStyle = document.createElement('style');
-      iconStyle.type = 'text/css';
-      iconStyle.textContent = `\
-      .ab-material-icons {\
-        font-family: 'Material Icons';\
-        color: #999;\
-        cursor: pointer;\
-        font-weight: normal;\
-        font-style: normal;\
-        font-size: 24px;\
-        display: inline-block;\
-        line-height: 1;\
-        text-transform: none;\
-        letter-spacing: normal;\
-        word-wrap: normal;\
-        white-space: nowrap;\
-        direction: ltr;\
-        vertical-align: middle;\
-        -webkit-font-smoothing: antialiased;\
-        text-rendering: optimizeLegibility;\
-      }\
-      @font-face {\
-        font-family: 'Material Icons';\
-        font-style: normal;\
-        font-weight: normal;\
-        src: local('Material Icons'),\
-          url("${ chrome.extension.getURL('/icons/MaterialIcons-Regular.woff2') }");\
-      }`;
-      document.head.appendChild(iconStyle);
-
-      newPic.classList.add("picreplacement-image");
-      var css = {
-        width: placement.width + "px",
-        height: placement.height + "px",
-        backgroundPosition: "-" + placement.left + "px -" + placement.top + "px",
-        backgroundSize: placement.x + "px " + placement.y + "px",
-        margin: placement.offsettop + "px " + placement.offsetleft + "px",
-        // nytimes.com float:right ad at top is on the left without this
-        "float": (window.getComputedStyle(el)["float"] || undefined),
-      };
-      newPic.width = placement.width + "px";
-      newPic.height = placement.height + "px";
-      for (var k in css) {
-        newPic.style[k] = css[k];
-      }
-      // hotmail ad is position:absolute; we must match its placement.
-      // battefield.play4free.net imgs are absolute; ad is not img. match it.
-      // reddit homepage sometimes gets a whole screenful of white if
-      // inserted <img> is inline instead of block like what it replaces.
-      for (var k in {position:1,left:1,top:1,bottom:1,right:1,display:1}) {
-        newPic.style[k] = window.getComputedStyle(el)[k];
-      }
-
-      // Prevent clicking through to ad
-      newPic.addEventListener("click", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }, false);
-
-      // if the image fails to load, remove it
-      newPic.addEventListener("error", function(e) {
-        if (newPic.infoCard) {
-          newPic.removeChild(newPic.infoCard);
-        }
-        newPic.parentNode.removeChild(newPic);
-        return false;
-      }, false);
-
-      newPic.addEventListener("abort", function(e) {
-        if (newPic.infoCard) {
-          newPic.removeChild(newPic.infoCard);
-        }
-        newPic.parentNode.removeChild(newPic);
-        return false;
-      }, false);
-
-      that._addInfoCardTo(newPic, placement);
+      containerNodes = that.createNewPicContainer(placement);
+      that.injectCSS(el, placement, containerNodes.container.id);
+      that.setupEventHandlers(placement, containerNodes);
 
       // No need to hide the replaced element -- regular AdBlock will do that.
-      el.dataset.picreplacementreplaced = "true";
+      el.dataset.picreplacementreplaced = 'true';
 
-      el.parentNode.insertBefore(newPic, el);
-      newPic.src = placement.url;
-      if (window.getComputedStyle(newPic).display === "none") {
-        newPic.style.display = "inline-block";
+      el.parentNode.insertBefore(containerNodes.container, el);
+
+      if (window.getComputedStyle(containerNodes.image).display === 'none') {
+        containerNodes.image.style.display = 'inline-block';
       }
       callback(true);
     });
-  },
-
-  // Add an info card to |newPic| that appears on hover.
-  _addInfoCardTo: function(newPic, placement) {
-    if (newPic.infoCard) {
-      return;
-    }
-
-    // Create the info card the first time the user mouseover's the replaced image.
-    // Then we can use jQuery's mouseenter and mouseleave to control when the
-    // card comes and goes.
-    newPic.addEventListener("mouseover", function(e) {
-      if (newPic.infoCard) {
-        return; // already created card
-      }
-      function after_jquery_is_available() {
-        var cardsize = {
-          width: placement.width,
-          height: placement.height
-        };
-        function position_card(card) {
-          var pos = $(newPic).offset();
-          pos.top += (placement.height - cardsize.height) / 2;
-          pos.left += (placement.width - cardsize.width) / 2;
-          // is this okay, could cause an issue if 'newPic' is render slightly off screen
-          if (pos.top < 0)
-            pos.top = 0;
-          if (pos.left < 0)
-            pos.left = 0;
-          card.css(pos);
-        };
-
-        newPic.infoCard = $("<div>", {
-          "class": "picinjection-infocard",
-          css: {
-            "position": "absolute",
-            "min-width": cardsize.width,
-            "min-height": cardsize.height,
-            "z-index": 1000000,
-            "padding": 3,
-            "box-sizing": "border-box",
-            "border": "2px solid rgb(128, 128, 128)",
-            "font": "'Lato', Arial, sans-serif",
-            "color": "black",
-            "background-color": "rgba(0, 0, 0, 0.7)",
-          } });
-        newPic.infoCard.appendTo("body");
-
-        var adblockImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-AdBlockLogoLarge.png");
-        var adblockImageWidth = "114px";
-        var adblockImageHeight = "29px";
-        var wrapperWidth = "90px";
-        if (placement.type !== imageSizesMap.get("skinnywide") && window.devicePixelRatio >= 2) {
-          adblockImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png");
-        }
-        else if (placement.type === imageSizesMap.get("skinnywide") && window.devicePixelRatio < 2) {
-          adblockImageWidth = "81px";
-          adblockImageHeight = "20px";
-          adblockImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-AdBlockLogoSmall.png");
-        }
-        else if (placement.type === imageSizesMap.get("skinnywide") && window.devicePixelRatio >= 2) {
-          adblockImageWidth = "81px";
-          adblockImageHeight = "20px";
-          adblockImageURL = chrome.extension.getURL("icons/adblock-picreplacement-images-AdBlockLogoSmall@2x.png");
-        }
-        var linkWrapper = $("<div>", {
-          css: {
-            "margin-top": "0px",
-            "margin-right": "0px",
-            "vertical-align": "middle",
-            "line-height" : adblockImageHeight,
-            width: wrapperWidth,
-            height: adblockImageHeight,
-            float: "right",
-            display: "inline",
-          }
-        });
-        linkWrapper
-          .append($("<i></i>", {
-            "class": "ab-material-icons",
-            text: "remove_red_eye",
-            css: {
-              "margin-right": "10px",
-            },
-            click: function() {
-              BGcall("openTab", "adblock-picreplacement-imageview.html" + "?url=" + encodeURIComponent(placement.attribution_url) + "&width=" + placement.listingWidth + "&height=" + placement.listingHeight );
-            },
-            on: {
-              mouseenter: function( event ) {
-                $(this).css('color', 'white');
-              },
-              mouseleave: function( event ) {
-                $(this).css('color', '#666666');
-              }
-            }
-          }))
-          .append($("<i></i>", {
-            "class": "ab-material-icons",
-            text: "settings",
-            css: {
-              "margin-right": "8px",
-            },
-            click: function() {
-              BGcall("openTab", "options.html#mab" );
-            },
-            on: {
-              mouseenter: function( event ) {
-                $(this).css('color', 'white');
-              },
-              mouseleave: function( event ) {
-                $(this).css('color', '#666666');
-              }
-            }
-          }))
-          .append($("<i></i>", {
-            "class": "ab-material-icons",
-            text: "close",
-            click: function() {
-              newPic.infoCard.remove();
-              $(newPic).remove();
-            },
-            on: {
-              mouseenter: function( event ) {
-                $(this).css('color', 'white');
-              },
-              mouseleave: function( event ) {
-                $(this).css('color', '#666666');
-              }
-            }
-          }));
-        linkWrapper.appendTo(newPic.infoCard);
-        if (placement.width > 240) {
-          newPic.infoCard.append($("<img>", {
-            css: {
-              float: "left",
-              // independent.co.uk borders all imgs
-              border: "none",
-              "margin-top": "0px",
-              "margin-left": "0px",
-            },
-            height: adblockImageHeight,
-            width: adblockImageWidth,
-            src: adblockImageURL
-          }));
-        } else {
-          newPic.infoCard.append($("<img>", {
-            css: {
-              // independent.co.uk borders all imgs
-              border: "none",
-              left: "0px",
-              right: "0px",
-              position: "absolute",
-              bottom: "15px",
-              margin: "auto",
-            },
-            height: adblockImageHeight,
-            width: adblockImageWidth,
-            src: adblockImageURL
-          }));
-        }
-        // Now that all the elements are on the card so it knows its height...
-        position_card(newPic.infoCard);
-
-        $(newPic).mouseover(function() {
-          $(".picinjection-infocard:visible").hide();
-          // newPic may have moved relative to the document, so recalculate
-          // position before showing.
-          position_card(newPic.infoCard);
-          newPic.infoCard.show();
-        });
-        // Known bug: mouseleave is not called if you mouse over only 1 pixel
-        // of newPic, then leave.  So infoCard is not removed.
-        newPic.infoCard.mouseleave(function() {
-          $(".picinjection-infocard:visible").hide();
-        });
-      }
-      if (typeof jQuery !== "undefined") {
-        after_jquery_is_available();
-      }
-      else {
-        chrome.extension.sendRequest(
-          { command:"picreplacement_inject_jquery", allFrames: (window !== window.top) }, function() {
-            after_jquery_is_available();
-          });
-      }
-    }, false);
   },
 
   // Returns true if |el| or an ancestor was hidden by an AdBlock hiding rule.
@@ -778,7 +711,6 @@ var picreplacement = {
     if (el.dataset.picreplacementreplaced) {
       return;
     }
-
     var oldCssText = el.style.cssText;
     el.style.setProperty("visibility", "hidden", "important");
     el.style.setProperty("display", "block", "important");

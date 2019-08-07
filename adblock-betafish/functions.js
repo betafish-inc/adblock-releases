@@ -50,6 +50,11 @@ var translate = function (messageID, args) {
     args = args.toString();
   }
 
+  // if VERBOSE_DEBUG is set to true, duplicate (double the length) of the translated strings
+  // used for testing purposes only
+  if (VERBOSE_DEBUG) {
+    return chrome.i18n.getMessage(messageID, args) + " " + chrome.i18n.getMessage(messageID, args);
+  }
   return chrome.i18n.getMessage(messageID, args);
 };
 
@@ -67,6 +72,42 @@ var splitMessageWithReplacementText = function(rawMessageText, messageID) {
     returnObj.anchorPostfixText = rawMessageText.substring(anchorEndPos + 2);
     return returnObj;
 };
+
+const processReplacementChildren = function($element, replacementText, messageID) {
+    // Replace a dummy <a/> inside of localized text with a real element.
+    // Give the real element the same text as the dummy link.
+    var messageID = $element.attr("i18n") || messageID;
+    if (!messageID || typeof messageID !== "string") {
+      $(this).addClass("i18n-replaced");
+      return;
+    }
+    if (!$element.get(0).firstChild) {
+       log("returning, no first child found", $element.attr("i18n"));
+       return;
+    }
+    if (!$element.get(0).lastChild) {
+       log("returning, no last child found", $element.attr("i18n"));
+       return;
+    }
+    var replaceElId = '#' + $element.attr("i18n_replacement_el");
+    if ($(replaceElId).length === 0) {
+      log("returning, no child element found", $element.attr("i18n"), replaceElId);
+      return;
+    }
+    var rawMessageText = chrome.i18n.getMessage(messageID) || "";
+    var messageSplit = splitMessageWithReplacementText(rawMessageText, messageID);
+    $element.get(0).firstChild.nodeValue = messageSplit.anchorPrefixText;
+    $element.get(0).lastChild.nodeValue = messageSplit.anchorPostfixText;
+    if ($(replaceElId).get(0).tagName === "INPUT") {
+      $('#' + $element.attr("i18n_replacement_el")).prop('value', replacementText || messageSplit.anchorText);
+    } else {
+      $('#' + $element.attr("i18n_replacement_el")).text(replacementText || messageSplit.anchorText);
+    }
+
+    // If localizePage is run again, don't let the [i18n] code above
+    // clobber our work
+    $element.addClass("i18n-replaced");
+}
 
 var localizePage = function () {
 
@@ -87,50 +128,18 @@ var localizePage = function () {
         $(this).attr('placeholder', translate($(this).attr('i18n_placeholder')));
     });
 
-  $("[i18n_replacement_el]:not(.i18n-replaced)").each(function() {
-    // Replace a dummy <a/> inside of localized text with a real element.
-    // Give the real element the same text as the dummy link.
-    var messageID = $(this).attr("i18n");
-    if (!messageID || typeof messageID !== "string") {
-      $(this).addClass("i18n-replaced");
-      return;
-    }
-    if (!$(this).get(0).firstChild) {
-       log("returning, no first child found", $(this).attr("i18n"));
-       return;
-    }
-    if (!$(this).get(0).lastChild) {
-       log("returning, no last child found", $(this).attr("i18n"));
-       return;
-    }
-    var replaceElId = '#' + $(this).attr("i18n_replacement_el");
-    if ($(replaceElId).length === 0) {
-      log("returning, no child element found", $(this).attr("i18n"), replaceElId);
-      return;
-    }
-    var rawMessageText = chrome.i18n.getMessage(messageID) || "";
-    var messageSplit = splitMessageWithReplacementText(rawMessageText, messageID);
-    $(this).get(0).firstChild.nodeValue = messageSplit.anchorPrefixText;
-    $(this).get(0).lastChild.nodeValue = messageSplit.anchorPostfixText;
-    if ($(replaceElId).get(0).tagName === "INPUT") {
-      $('#' + $(this).attr("i18n_replacement_el")).prop('value', messageSplit.anchorText);
-    } else {
-      $('#' + $(this).attr("i18n_replacement_el")).text(messageSplit.anchorText);
-    }
+    $("[i18n_replacement_el]:not(.i18n-replaced)").each(function() {
+      processReplacementChildren($(this));
+    });
 
-    // If localizePage is run again, don't let the [i18n] code above
-    // clobber our work
-    $(this).addClass("i18n-replaced");
-  });
-
-  // Make a right-to-left translation for Arabic and Hebrew languages
-  var language = determineUserLanguage();
-  if (language === 'ar' || language === 'he') {
-    $('#main_nav').removeClass('right').addClass('left');
-    $('.adblock-logo').removeClass('left').addClass('right');
-    $('.closelegend').css('float', 'left');
-    document.documentElement.dir = 'rtl';
-  }
+    // Make a right-to-left translation for Arabic and Hebrew languages
+    var language = determineUserLanguage();
+    if (language === 'ar' || language === 'he') {
+      $('#main_nav').removeClass('right').addClass('left');
+      $('.adblock-logo').removeClass('left').addClass('right');
+      $('.closelegend').css('float', 'left');
+      document.documentElement.dir = 'rtl';
+    }
 
 };  // end of localizePage
 

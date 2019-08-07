@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.50.1
+version = 3.51.1
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -16,6 +16,8 @@ browserAction =
   icons/ab-38.png
   icons/ab-40.png
   adblock-button-popup.html
+backgroundScripts += pubnub-min-v4.23.3.js
+
 
 [manifest]
 permissions =
@@ -36,10 +38,7 @@ web_accessible_resources =
   adblock-uiscripts-adblock-wizard.css
   icons/icon24.png
   icons/ab-19.png
-  icons/adblock-picreplacement-images-AdBlockLogoLarge.png
-  icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png
-  icons/adblock-picreplacement-images-AdBlockLogoSmall.png
-  icons/adblock-picreplacement-images-AdBlockLogoSmall@2x.png
+  icons/dark_theme/logo.svg
   localLib/jquery/jquery-1.10.2.min.js.local
   localLib/jquery/jquery-1.11.0.min.js.local
   localLib/jquery/jquery-1.11.1.min.js.local
@@ -84,6 +83,7 @@ CHANGELOG.txt = adblock-betafish/CHANGELOG.txt
 LICENSE = adblock-betafish/LICENSE
 translators.json = adblock-betafish/translators.json
 adblock-jquery.js = adblock-betafish/jquery/jquery.min.js
+pubnub-min-v4.23.3.js = adblock-betafish/pubnub/pubnub-min-v4.23.3.js
 adblock-errorreporting.js = adblock-betafish/errorreporting.js
 adblock-jquery.cookie.js = adblock-betafish/jquery/jquery.cookie.js
 adblock.css = adblock-betafish/adblock.css
@@ -137,6 +137,8 @@ adblock-color-themes.css = adblock-betafish/options/color_themes.css
 adblock-picreplacement-imageview.html = adblock-betafish/picreplacement/options/imageview.html
 adblock-picreplacement-imageview.js = adblock-betafish/picreplacement/options/imageview.js
 adblock-picreplacement-options-imageview.css = adblock-betafish/picreplacement/options/imageview.css
+adblock-options-sync.html = adblock-betafish/options/sync.html
+adblock-options-sync.js = adblock-betafish/options/sync.js
 icons/ab-16.png = icons/adblock-16.png
 icons/ab-16-whitelisted.png = icons/adblock-16-whitelisted.png
 icons/ab-16-grayscale.png = icons/adblock-16-grayscale.png
@@ -208,10 +210,8 @@ icons/abp-38-whitelisted.png = icons/adblock-38-whitelisted.png
 icons/abp-38-grayscale.png = icons/adblock-38-grayscale.png
 icons/abp-38-whitelisted.png = icons/adblock-38-whitelisted.png
 icons/abp-38-grayscale.png = icons/adblock-38-grayscale.png
-icons/adblock-picreplacement-images-AdBlockLogoLarge.png = adblock-betafish/picreplacement/images/AdBlockLogoLarge.png
-icons/adblock-picreplacement-images-AdBlockLogoLarge@2x.png = adblock-betafish/picreplacement/images/AdBlockLogoLarge@2x.png
-icons/adblock-picreplacement-images-AdBlockLogoSmall.png = adblock-betafish/picreplacement/images/AdBlockLogoSmall.png
-icons/adblock-picreplacement-images-AdBlockLogoSmall@2x.png = adblock-betafish/picreplacement/images/AdBlockLogoSmall@2x.png
+icons/sync-content-4.svg = icons/sync-content-4.svg
+icons/sync-content-1-4.svg = icons/sync-content-1-4.svg
 icons/adblock-picreplacement-images-cat.png = adblock-betafish/picreplacement/images/cat.png
 icons/adblock-picreplacement-images-cat-grayscale.png = adblock-betafish/picreplacement/images/cat_grayscale.png
 icons/adblock-picreplacement-images-dog.png = adblock-betafish/picreplacement/images/dog.png
@@ -289,7 +289,9 @@ lib/adblockplus.js +=
   ../adblock-betafish/picreplacement/cat-channel.js
   ../adblock-betafish/picreplacement/dog-channel.js
   ../adblock-betafish/picreplacement/langscape-channel.js
+  ../adblock-betafish/picreplacement/unknown-channel.js
   ../adblock-betafish/picreplacement/check.js
+  ../adblock-betafish/picreplacement/sync-service.js
   ../adblock-betafish/getselectors.js
 lib/adblockplus.js -= lib/filterComposer.js
   lib/subscriptionInit.js
