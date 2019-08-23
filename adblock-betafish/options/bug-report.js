@@ -125,12 +125,12 @@ var bugReportLogic = function() {
   var $expect   = $('#expected-result');
   var $actual   = $('#actual-result');
   var $comments = $('#other-comments');
-  chrome.storage.local.get('user_name', function (response)
+  chrome.storage.local.get('user_name').then((response) =>
   {
     $name.val(response.user_name);
   });
 
-  chrome.storage.local.get('user_email', function (response)
+  chrome.storage.local.get('user_email').then((response) =>
   {
     $email.val(response.user_email);
   });

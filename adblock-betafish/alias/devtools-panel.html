@@ -1,6 +1,6 @@
-<!-- This file is based on this similar ABP file: -->
-<!-- https://github.com/adblockplus/adblockplusui/blob/master/devtools-panel.html -->
 <!DOCTYPE html>
+<!-- This file is based on this similar ABP file: -->
+<!-- adblockpluschrome/adblockplusui/devtools-panel.html -->
 <html>
   <head>
     <meta charset="utf-8">
@@ -9,6 +9,7 @@
     <script src="ext/common.js"></script>
     <script src="ext/content.js"></script>
     <script src="ext/devtools.js"></script>
+    <script src="i18n.js"></script>
     <script src="devtools-panel.js"></script>
   </head>
   <body>
@@ -20,34 +21,31 @@
           <col>
         </colgroup>
         <tr>
-          <td colspan="3">
-            Show
+          <td colspan="3" data-i18n="devtools_header">
             <select id="filter-state">
-              <option value="">all</option>
-              <option>blocked</option>
-              <option>whitelisted</option>
+              <option value="" data-i18n="devtools_header_state_all"></option>
+              <option value="blocked" data-i18n="devtools_header_state_blocked"></option>
+              <option value="whitelisted" data-i18n="devtools_header_state_whitelisted"></option>
             </select>
-            items of
             <select id="filter-type">
-              <option value="">any</option>
+              <option value="" data-i18n="devtools_header_type_any"></option>
             </select>
-            type
           </td>
         </tr>
         <tr>
           <td>
             <div class="request-wrapper">
-              <div class="url">Request</div>
-              <div class="domain">Document domain</div>
+              <div class="url" data-i18n="devtools_request_title"></div>
+              <div class="domain" data-i18n="devtools_request_subtitle"></div>
             </div>
           </td>
           <td>
-            <div class="type">Type</div>
+            <div class="type" data-i18n="devtools_type_title"></div>
           </td>
           <td>
             <div class="filter-wrapper">
-              <div class="filter">Filter</div>
-              <div class="origin">Origin</div>
+              <div class="filter" data-i18n="devtools_filter_title"></div>
+              <div class="origin" data-i18n="devtools_filter_subtitle"></div>
             </div>
           </td>
         </tr>
@@ -64,20 +62,13 @@
         </tbody>
       </table>
     </div>
-    <footer>
-      <a id="reload">Reload</a> page to see effect of filter changes
-    </footer>
+    <footer data-i18n="devtools_footer"></footer>
 
     <template>
       <tr>
         <td>
           <div class="request-wrapper">
-            <div>
-              <a class="resource-link" href="" target="_blank">&nbsp;</a>
-              <span class="rewritten-url" hidden> rewritten to
-                <a href="" target="_blank"></a>
-              </span>
-            </div>
+            <div class="url" data-i18n="devtools_request_url"></div>
             <div class="domain"></div>
           </div>
         </td>

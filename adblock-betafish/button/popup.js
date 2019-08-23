@@ -192,8 +192,7 @@ try {
             chrome.runtime.sendMessage({
               type: "stats.getBlockedPerPage",
               tab: info.tab,
-            },
-            blockedPage => {
+            }).then((blockedPage) => {
               $('#page_blocked_count').text(blockedPage.toLocaleString());
             });
             $('#total_blocked_count').text(Prefs.blocked_total.toLocaleString());

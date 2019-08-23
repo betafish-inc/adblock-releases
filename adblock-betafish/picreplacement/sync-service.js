@@ -19,7 +19,7 @@ const SyncService = (function () {
   settings.onload().then(() => {
     if (getSettings().sync_settings) {
       License.ready().then(() => {
-        chrome.storage.local.get(syncCommitVersionKey, (response) => {
+        chrome.storage.local.get(syncCommitVersionKey).then((response) => {
           syncCommitVersion = response[syncCommitVersionKey] || 0;
           getSyncData();
           enableSync();
@@ -27,7 +27,7 @@ const SyncService = (function () {
       });
     }
     License.ready().then(() => {
-      chrome.storage.local.get(syncExtensionNameKey, (response) => {
+      chrome.storage.local.get(syncExtensionNameKey).then((response) => {
         currentExtensionName = response[syncExtensionNameKey] || '';
       });
     });
@@ -192,7 +192,7 @@ const SyncService = (function () {
       extInfo: getExtensionInfo(),
     };
 
-    chrome.storage.local.get(syncPreviousDataKey, (response) => {
+    chrome.storage.local.get(syncPreviousDataKey).then((response) => {
       const previousData = response[syncPreviousDataKey] || '{}';
       if (objectComparison(payload, JSON.parse(previousData))) {
         return;
@@ -255,7 +255,7 @@ const SyncService = (function () {
   const postDataSyncHandler = debounced(debounceWaitTime, postDataSync);
 
   const revertToPreviousSyncData = function () {
-    chrome.storage.local.get(syncPreviousDataKey, (response) => {
+    chrome.storage.local.get(syncPreviousDataKey).then((response) => {
       const previousData = response[syncPreviousDataKey] || '{}';
       processSyncUpdate(JSON.parse(previousData));
     });
@@ -607,7 +607,7 @@ const SyncService = (function () {
             subscription = Subscription.fromURL(url);
           }
           filterStorage.addSubscription(subscription);
-          Synchronizer.execute(subscription);
+          synchronizer.execute(subscription);
         }
       }
     }

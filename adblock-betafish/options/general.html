@@ -4,19 +4,42 @@
     <h1 i18n="generaloptions2" class="page-title"></h1>
 
     <div id="acceptable_ads_info">
-      <b><span i18n="acceptableadsdisable_done"></span></b>
+      <span i18n="acceptableadsdisable_done"></span>
+      <br>
       <span i18n="acceptableadsdisable_how_to_reenable"></span>
-      <br/>
     </div>
     <ul id="general-option-list">
 
-      <li class="section-padding checkbox-indentation">
-        <span class="checkbox md-stack">
-          <input type="checkbox" class="feature" id="acceptable_ads"/>
-          <i class="unchecked material-icons">lens</i>
-          <i class="checked material-icons circle-icon-bg-24 checkbox-icon">check_circle</i>
-        </span>
-        <label for="acceptable_ads" i18n="acceptableadsoption"></label>
+      <li class="checkbox-indentation">
+        <div class="add-space-between section-padding bottom-line">
+          <div>
+            <span class="checkbox md-stack">
+              <input type="checkbox" class="feature" id="acceptable_ads"/>
+              <i class="unchecked material-icons">lens</i>
+              <i class="checked material-icons circle-icon-bg-24 checkbox-icon">check_circle</i>
+            </span>
+            <label for="acceptable_ads" i18n="acceptableadsoption"></label>
+          </div>
+          <a class="help-link-icon" href="https://help.getadblock.com/support/solutions/articles/6000092027-why-does-adblock-allow-some-ads-to-appear-" target="_blank">
+            <i class="material-icons md-18">live_help</i>
+          </a>
+        </div>
+        <div class="toggle-indentation add-space-between section-padding">
+          <div>
+            <label class="switch" for="acceptable_ads_privacy">
+              <input type="checkbox" class="feature" id="acceptable_ads_privacy">
+              <span class="slider round"></span>
+            </label>
+            <span i18n="acceptable_ads_privacy"></span>
+          </div>
+          <a class="help-link-icon" href="https://help.getadblock.com/support/solutions/articles/6000224547-about-acceptable-ads-and-third-party-tracking/" target="_blank">
+            <i class="material-icons md-18">live_help</i>
+          </a>
+        </div>
+        <div class="toggle-indentation" id="aa-privacy-helper">
+          <span class="toggle-padding" i18n="enable_do_not_track_advice"></span>&nbsp;
+          <a class="link-text-color" href="https://help.getadblock.com/support/solutions/articles/6000224542-using-do-not-track-/" target="_blank"><span i18n="learn_more"></span></a>
+        </div>
       </li>
 
       <li class="section-padding checkbox-indentation">
@@ -29,7 +52,7 @@
           <label for="enable_youtube_channel_whitelist" i18n="allow_whitelisting_youtube_channels2"></label>
         </div>
         <div class="extra-info">
-          <div i18n="require_restart_browser" class="italic no-indent"></div>
+          <div i18n="require_restart_browser" class="italic"></div>
         </div>
       </li>
 

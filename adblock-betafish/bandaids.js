@@ -92,7 +92,7 @@ var getAdblockVersion = function(version) {
         'dev.getadblock.com' === document.location.hostname ||
         'dev1.getadblock.com' === document.location.hostname ||
         'dev2.getadblock.com' === document.location.hostname) {
-      chrome.storage.local.get('userid', function (response) {
+      chrome.storage.local.get('userid').then((response) => {
         var adblock_user_id = response['userid'];
         var adblock_version = chrome.runtime.getManifest().version;
         var elem = document.createElement('script');
@@ -106,7 +106,7 @@ var getAdblockVersion = function(version) {
         } catch(ex) {
         }
       });
-    } 
+    }
 })();
 
 var run_bandaids = function()
@@ -179,9 +179,10 @@ var run_bandaids = function()
       function receiveMessage(event)
       {
         if (event.data &&
+            event.origin === "https://getadblock.com" &&
             event.data.command === "payment_success") {
           window.removeEventListener("message", receiveMessage);
-          chrome.runtime.sendMessage(event.data, function (response) {
+          chrome.runtime.sendMessage({ "command" : "payment_success", "version": 1 }).then((response) => {
             window.postMessage(response, "*");
           });
         }
@@ -191,8 +192,9 @@ var run_bandaids = function()
       function receiveMagicCodeMessage(event)
       {
         if (event.data &&
-          typeof event.data.magicCode === "string") {
-          chrome.runtime.sendMessage(event.data, function (response) {
+            event.origin === "https://getadblock.com" &&
+            typeof event.data.magicCode === "string") {
+          chrome.runtime.sendMessage({ magicCode : event.data.magicCode }).then((response) => {
             // hookup options page link
             let link = document.getElementById('open-options-page');
             if (link) {
@@ -210,7 +212,7 @@ var run_bandaids = function()
         }
       }
 
-      chrome.storage.local.get("userid", function(response)
+      chrome.storage.local.get("userid").then((response) =>
       {
         if (response.userid)
         {
@@ -270,33 +272,33 @@ var run_bandaids = function()
                           "playerIdAds": 0, // Player ID where ads may be displayed (on squads page it's the last id instead of 0)
                           "displayingOptions": false // Either ads options are currently displayed or not
                          };
-      
+
       // Check if there's an ad
       function checkAd()
-      { 
+      {
         var isViewing = Boolean(document.getElementsByClassName("player-video").length);
         if (isViewing === false) return;
-        
+
         // Initialize the ads options if necessary.
         var optionsInitialized = (document.getElementById("_tmads_options") === null) ? false : true;
         if (optionsInitialized === false) adsOptions("init");
-        
+
         var advert = document.getElementsByClassName("player-ad-notice");
-        
+
         if (_tmuteVars.adElapsedTime !== undefined)
         {
           _tmuteVars.adElapsedTime++;
-          if (_tmuteVars.adElapsedTime >= _tmuteVars.adUnlockAt && advert[0] !== undefined) 
+          if (_tmuteVars.adElapsedTime >= _tmuteVars.adUnlockAt && advert[0] !== undefined)
           {
             advert[0].parentNode.removeChild(advert[0]);
           }
         }
-        
-        if ((advert.length >= 1 && _tmuteVars.playerMuted === false) || (_tmuteVars.playerMuted === true && advert.length === 0)) 
+
+        if ((advert.length >= 1 && _tmuteVars.playerMuted === false) || (_tmuteVars.playerMuted === true && advert.length === 0))
         {
           // Update at the start of an ad if the player is already muted or not
-          if (advert.length >= 1) _tmuteVars.alreadyMuted = Boolean(document.getElementsByClassName("player-button--volume")[_tmuteVars.playerIdAds].childNodes[0].className === "unmute-button"); 
-          
+          if (advert.length >= 1) _tmuteVars.alreadyMuted = Boolean(document.getElementsByClassName("player-button--volume")[_tmuteVars.playerIdAds].childNodes[0].className === "unmute-button");
+
           // Keep the player muted/hidden for the minimum ad time set (Twitch started to remove the ad notice before the end of some ads)
           if (advert.length === 0 && _tmuteVars.adElapsedTime !== undefined && _tmuteVars.adElapsedTime < _tmuteVars.adMinTime) return;
 
@@ -323,7 +325,7 @@ var run_bandaids = function()
           }
         }
       }
-      
+
       // Manage ads options
       function adsOptions(changeType = "show")
       {
@@ -347,7 +349,7 @@ var run_bandaids = function()
           // Display the ads options button
           case "init":
             if (document.getElementsByClassName("channel-info-bar__viewers-wrapper")[0] === undefined && document.getElementsByClassName("squad-stream-top-bar__container")[0] === undefined) break;
-            
+
             // Append ads options and events related
             var optionsTemplate = document.createElement("div");
             optionsTemplate.id = "_tmads_options-wrapper";
@@ -358,7 +360,7 @@ var run_bandaids = function()
               <button type="button" id="_tmads_display" style="padding: 0 2px 0 2px; margin-left: 2px; height: 30px;" class="tw-interactive tw-button-icon tw-button-icon--hollow">` + (_tmuteVars.disableDisplay === true ? "Show" : "Hide") + ` player during ads</button>
             </span>
             <button type="button" id="_tmads_showoptions" style="padding: 0 2px 0 2px; margin-left: 2px; height: 30px;" class="tw-interactive tw-button-icon tw-button-icon--hollow">Ads Options</button>`;
-            
+
             // Normal player page
             if (document.getElementsByClassName("channel-info-bar__viewers-wrapper")[0] !== undefined)
             {
@@ -381,20 +383,20 @@ var run_bandaids = function()
               }
               document.getElementsByClassName("squad-stream-top-bar__container")[0].appendChild(optionsTemplate);
             }
-            
+
             document.getElementById("_tmads_showoptions").addEventListener("click", adsOptions, false);
             document.getElementById("_tmads_display").addEventListener("click", function() { adsOptions("display"); }, false);
             document.getElementById("_tmads_unlock").addEventListener("click", function() { adsOptions("unlock"); }, false);
-            
+
             break;
           // Display/Hide the ads options
           case "show":
           default:
             _tmuteVars.displayingOptions = !(_tmuteVars.displayingOptions);
             document.getElementById("_tmads_options").style.display = (_tmuteVars.displayingOptions === false) ? "none" : "inline-block";
-        } 
+        }
       }
-      
+
       BGcall("getSettings", function(settings) {
         if (settings.twitch_hiding) {
           // Start the background check

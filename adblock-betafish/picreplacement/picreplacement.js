@@ -1,12 +1,12 @@
-
 var hostname = window.location.hostname;
-var minDimension = 60;
-var cssRules = [];
-var hideElements = [];
-var hiddenElements = [];
-chrome.runtime.sendMessage({type: "getSelectors"}, response =>
-{
-  if (response.selectors && response.selectors) {
+let totalSwaps = 0;
+let hideElements = [];
+let hiddenElements = [];
+let cssRules = [];
+const minDimension = 60;
+
+chrome.runtime.sendMessage({type: "getSelectors"}).then((response) => {
+  if (response && response.selectors) {
     cssRules = response.selectors;
   }
 });
@@ -14,30 +14,15 @@ chrome.runtime.sendMessage({type: "getSelectors"}, response =>
 // hideElement may get call after the page has completed loading on certain sites that have infinite scroll for example.
 // if the user is on on these infinite scroll sites, such as FB, then attempt to do a pic replacement
 var checkElement = function(element) {
-  if (document.readyState === 'complete' || window.top === window && hostname ==="www.facebook.com") {
-    let mediatype = typeMap.get(element.localName);
-    if (mediatype) {
-      picreplacement.augmentIfAppropriate({el: element, elType: mediatype, blocked: true}, function(response) {
-        if (response) {
-          chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-        }
-      });
-    } else  {
-      picreplacement.augmentDivIfAppropriate({el: element}, function(response) {
-        if (response) {
-          chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-        }
-      });
-    }
+  var data = {
+    el: element,
+    blocked: typeMap.get(element.localName) ? true : false,
+  };
+  if (document.readyState === 'complete' || window.top === window && hostname === "www.facebook.com") {
+    imageSwap.replaceSection(data, imageSwap.done);
   } else {
-    hideElements.push(element);
+    hideElements.push(data);
   }
-};
-
-var ElementTypes = {
-  IMAGE: 2,
-  'OBJECT': 4,
-  SUBDOCUMENT: 8,
 };
 
 var onReady = function (callback) {
@@ -53,144 +38,91 @@ var onReady = function (callback) {
 //    minimum dimensions required. if so, add them to an array
 // 3) find any hidden elements that were captured from the hideElement() function that meet the
 //    minimum dimensions required. if so, add them to an array
-// 4) sort the array by size and type - we want to replace the large elements first
+// 4) sort the array by size -- we want to replace the large elements first
 // 5) process the sorted array, attempting to do a pic replacment for each element
 onReady(function() {
-  var elementObjArray = [];
-  cssRules.
-    forEach(function(selector) {
-      var elems = document.querySelectorAll(selector);
-      for (var i=0; i<elems.length; i++) {
-        var elem = elems[i];
-        var t = picreplacement._targetSize(elem);
-        if (!t.x || !t.y || t.x < minDimension || t.y < minDimension) {
-          return;
-        }
-        // save the size of this element,
-        // it may be used later if we're attempty to do a pic replacment on it's hidding parent
-        // and we may not be able to calculate the parent size, so we'll use this value instead.
-        elem.dataset.adblockSize = JSON.stringify(t);
-        elementObjArray.push({ elem: elem, size: (t.x * t.y), type: 2 });
-      }
-    });
+  let elementsData = [];
 
-  hideElements.forEach(function(elem) {
-    var t = picreplacement._targetSize(elem);
-    if (!t.x || !t.y || t.x < minDimension || t.y < minDimension) {
-      return;
+  // Get elements hidden by cssRules
+  for (let i = 0; i < cssRules.length; i++) {
+    var elements = document.querySelectorAll(cssRules[i]);
+    for (let j = 0; j < elements.length; j++) {
+      var data = { el: elements[j] };
+      hiddenElements.push(data);
     }
-    elementObjArray.push({ elem: elem, size: (t.x * t.y), type: 1});
-  });
-  if (!elementObjArray.length || elementObjArray.length === 0)  {
+  }
+
+  // If no elements to swap, stop
+  if (!hiddenElements.length && !hideElements.length) {
     return;
   }
-  function compareElements(a, b) {
-    // sort type '1' to the top,
-    // then sort by size
-    if (a.type === b.type) {
-       if (b.size >= a.size) {
-         return 1;
-       } else {
-         return -1;
-       }
-    } else {
-       if (b.type >= a.type) {
-         return 1;
-       } else {
-         return -1;
-       }
-    }
-  }
-  elementObjArray = elementObjArray.sort(compareElements);
 
-  var uniqueElementObjArray = [];
-  for (var inx = 0; (inx < elementObjArray.length); inx++) {
-    var addElement = true;
-    for (var jnx = 0; (jnx < elementObjArray.length && addElement); jnx++) {
-      // add check to see the any of the objects are children of other elements in the array, if so, don't add it.
-      if (jnx !== inx) {
-        addElement = !elementObjArray[jnx].elem.contains(elementObjArray[inx].elem);
-      }
+  let allElements = hideElements.concat(hiddenElements);
+
+  for (let i = 0; i < allElements.length; i++) {
+    const data = allElements[i];
+    const size = imageSwap.getSize(data);
+
+    if (imageSwap.isInvalidSize(size)) {
+        continue;
     }
-    if (addElement) {
-      uniqueElementObjArray.push(elementObjArray[inx]);
+
+    data.size = size;
+    data.dimension = (size.x * size.y);
+
+    // Add element only if it is not nested in other
+    // elements and it's not equal to other elements
+    if (!imageSwap.isNested(data.el, allElements)) {
+      elementsData.push(data);
     }
   }
 
-  for (var inx = 0; (inx < uniqueElementObjArray.length); inx++) {
-    var elem =  uniqueElementObjArray[inx].elem;
-    if (uniqueElementObjArray[inx].type === 1) {
-      let mediatype = typeMap.get(elem.localName);
-      picreplacement.augmentIfAppropriate({el: elem, elType: mediatype, blocked: true}, function(response) {
-        if (response) {
-          // on some sites, such as freepik.com with absolute positioning,
-          // the position of other elements is calculated before our pic replacement is injected.
-          // a forced window resize event repaints the page to correctly lay it out
-          window.dispatchEvent(new Event('resize'));
-          chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-        }
-      });
-    } else {
-      picreplacement.augmentIfAppropriate({el: elem}, function(response) {
-        if (response) {
-          // on some sites, such as freepik.com with absolute positioning,
-          // the position of other elements is calculated before our pic replacement is injected.
-          // a forced window resize event repaints the page to correctly lay it out
-          window.dispatchEvent(new Event('resize'));
-          chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
-        }
-      });
-    }
-  };
+  // Put first elements of larger dimensions
+  elementsData = elementsData.sort((a, b) => b.dimension > a.dimension ? 1 : -1);
+
+  for (let i = 0; i < elementsData.length; i++) {
+    imageSwap.replaceSection(elementsData[i], imageSwap.done);
+  }
 });
 
-var picreplacement = {
-  // data: {el, elType, blocked}
-  augmentIfAppropriate: function(data, callback) {
-    if (data.elType in ElementTypes) {
-      this._forceToOriginalSizeAndAugment(data.el, callback);
-    } else if (this._inHiddenSection(data.el)) {
-      this._replaceHiddenSectionContaining(data.el, callback);
-    }
-  },
-  augmentDivIfAppropriate: function(data, callback) {
-    this._replaceNonHiddenSectionContaining(data.el, callback);
-  },
+var imageSwap = {
+  /**
+  * @param {Object} data Information about the element
+  *   @param {Node} data.el
+  *   @param {Boolean} [data.blocked]
+  *   @param {Object} [data.size]
+  *   @param {Number} [data.dimension]
+  *   @param {CSSStyleDeclaration} [data.computedStyle]
+  * @param {Function} callback Called when replacement was done
+  **/
+  replaceSection: function(data, callback) {
+    var el = data.el;
 
-  _forceToOriginalSizeAndAugment: function(el, callback) {
-    // We may have already augmented this element...
-    if (el.dataset.picinjectionaugmented) {
+    // We may have already replaced this section...
+    if (data.picreplacementreplaced)
       return;
+
+    if (data.blocked) {
+      var size = this.getStyle(data, 'backgroundPosition').match(/^(\w+) (\w+)$/);
+      if (size) {
+        // Restore el.width & el.height to whatever they were before AdBlock.
+        var dims = { width: size[1], height: size[2] };
+        for (var dim in dims) {
+          if (dims[dim] === "-1px")
+            el.removeAttribute(dim);
+          else
+            el.setAttribute(dim, dims[dim]);
+        }
+      }
     }
 
     var oldCssText = el.style.cssText;
     el.style.setProperty("visibility", "hidden", "important");
     el.style.setProperty("display", "block", "important");
-    var size = el.style.backgroundPosition.match(/^(\w+) (\w+)$/);
-    if (size) {
-      // Restore el.width&el.height to whatever they were before AdBlock.
-      var dims = { width: size[1], height: size[2] };
-      for (var dim in dims) {
-        if (dims[dim] === "-1px")
-          el.removeAttribute(dim);
-        else
-          el.setAttribute(dim, dims[dim]);
-      }
-    }
 
-    this._replace(el, function(replaced) {
-      if (replaced) {
-        el.style.cssText = oldCssText; // Re-hide the section
-        var addedImgs = document.getElementsByClassName("picinjection-image");
-        for (var i = 0; i < addedImgs.length; i++) {
-          var displayVal = window.getComputedStyle(addedImgs[i])["display"];
-          if (displayVal === 'none') {
-            addedImgs[i].style.display = "";
-          }
-        }
-      }
-      callback(replaced);
-    });
+    this._replace(data, callback);
+
+    el.style.cssText = oldCssText; // Re-hide the section
   },
 
   // Given details about a picture and a target rectangle, return details
@@ -314,7 +246,7 @@ var picreplacement = {
     });
   },
 
-  _dim: function(el, prop) {
+  _dim: function(data, prop) {
     function intFor(val) {
       // Match two or more digits; treat < 10 as missing.  This lets us set
       // dims that look good for e.g. 1px tall ad holders (cnn.com footer.)
@@ -324,40 +256,37 @@ var picreplacement = {
       }
       return parseInt(match[1]);
     }
-    // all of valid elements that we care about should have a tagName
-    if (el.tagName === undefined) {
-      return undefined;
-    }
-    if (typeof el.getAttribute === 'function') {
-      return ( intFor(el.getAttribute(prop)) ||
-               intFor(window.getComputedStyle(el)[prop]) );
-    } else {
-      return intFor(window.getComputedStyle(el)[prop]);
-    }
+    return intFor(imageSwap.getStyle(data, prop));
   },
 
-  _parentDim: function(el, prop) {
-    if (/facebook/.test(document.location.href))
+  _parentDim: function(data, prop) {
+    var el = data.el;
+    if (hostname === 'www.facebook.com')
       return undefined;
     var result = undefined;
     while (!result && el.parentNode) {
-      result = this._dim(el.parentNode, prop);
+      var parentData = { el: el.parentNode };
+      result = this._dim(parentData, prop);
       el = el.parentNode;
     }
     return result;
   },
 
-  _targetSize: function(el) {
-    var t = { x: this._dim(el, "width"), y: this._dim(el, "height") };
-    var el_style = window.getComputedStyle(el);
-    var el_position = el_style.position;
-    t.position = el_position;
+  getSize: function(data) {
+    var el = data.el;
+    var t = {
+      x: this._dim(data, 'width'),
+      y: this._dim(data, 'height'),
+      position: this.getStyle(data, 'position'),
+    };
+
     if (!t.x && !t.y && !typeMap.get(el.localName) && el.hasChildNodes()) {
       // Since we're now injecting a 'user' stylesheet to hide elements, temporarily
       // setting the display to block to unhide the element will not work, so..
       // attempt to determine the size of one of children
       for (var i = 0; i < el.children.length; i++) {
-        t = picreplacement._targetSize(el.children[i]);
+        var nextChildData = { el: el.children[i] };
+        t = imageSwap.getSize(nextChildData);
         if (t.x && t.y) {
           break;
         }
@@ -383,29 +312,30 @@ var picreplacement = {
 
   // Returns placement details to replace |el|, or null
   // if we do not have enough info to replace |el|.
-  _placementFor: function(el, callback) {
-    var t = this._targetSize(el);
+  _placementFor: function(data, callback) {
+    var t;
+    var el = data.el;
     var that = this;
-    // returns true if the elements size is to small or unknown
-    var _checkSize = function(t) {
-      return (!t.x || !t.y || t.x < minDimension || t.y < minDimension);
-    }
-    if (_checkSize(t)) {
-      // if there's previously calculate size, use it
-      if (el.dataset && el.dataset.adblockSize) {
-        t = JSON.parse(el.dataset.adblockSize);
-      }
-      if (_checkSize(t)) {
+
+    // if there's previously calculate size, use it
+    if (data.size != null && Object.keys(data.size).length) {
+      t = data.size;
+    } else {
+      t = this.getSize(data);
+      if (this.isInvalidSize(t)) {
         callback(false);
-        return false; // unknown dims or too small to bother
+        return false;
       }
     }
-    if (window.getComputedStyle(el.parentNode).display === "none") {
+
+    // Let's not go ahead if the parent element of |el| has display none
+    var parent = el.parentNode;
+    if (!(parent.offsetWidth || parent.offsetHeight || parent.getClientRects().length)) {
       callback(false);
       return false;
     }
-    chrome.runtime.sendMessage({ message: 'get_random_listing', opts: { width:t.x, height:t.y, type:t.type, position:t.position } }, function (pic) {
 
+    chrome.runtime.sendMessage({ message: 'get_random_listing', opts: { width:t.x, height:t.y, type:t.type, position:t.position } }).then((pic) => {
       if (!pic || pic.disabledOnPage) {
         callback(false);
         return false;
@@ -423,12 +353,12 @@ var picreplacement = {
       var max = 180000;
       if (t.x && !t.y) {
         var newY = Math.round(Math.min(pic.height * t.x / pic.width, max / t.x));
-        var parentY = that._parentDim(el, "height");
+        var parentY = that._parentDim(data, "height");
         t.y = (parentY ? Math.min(newY, parentY) : newY);
       }
       if (t.y && !t.x) {
         var newX = Math.round(Math.min(pic.width * t.y / pic.height, max / t.y));
-        var parentX = that._parentDim(el, "width");
+        var parentX = that._parentDim(data, "width");
         t.x = (parentX ? Math.min(newX, parentX) : newX);
       }
 
@@ -507,25 +437,24 @@ var picreplacement = {
   },
   // Add a <style> tag into the host page's header to style all the HTML we use to replace the ad
   // including the container, the image, the overlay, the logo and the icons
-  injectCSS: function(el, placement, containerID) {
+  injectCSS: function(data, placement, containerID) {
     var adblockLogoWidth = placement.type === imageSizesMap.get('skinnywide') ? '81px' : '114px';
     var adblockLogoHeight = placement.type === imageSizesMap.get('skinnywide') ? '20px' : '29px';
     var materialIconsURL = chrome.extension.getURL('/icons/MaterialIcons-Regular.woff2');
-    var elComputedStyle = window.getComputedStyle(el);
     var styleTag = document.createElement('style');
     styleTag.type = 'text/css';
     styleTag.textContent = `
       div#${containerID} {
-        position: ${elComputedStyle.position};
+        position: ${this.getStyle(data, 'position')};
         width: fit-content;
         height: fit-content;
         font-family: 'Lato', Arial, sans-serif;
         line-height: normal;
         box-sizing: initial;
-        top: ${elComputedStyle.top};
-        left: ${elComputedStyle.left};
-        right: ${elComputedStyle.right};
-        bottom: ${elComputedStyle.bottom};
+        top: ${this.getStyle(data, 'top')};
+        left: ${this.getStyle(data, 'left')};
+        right: ${this.getStyle(data, 'right')};
+        bottom: ${this.getStyle(data, 'bottom')};
       }
       div#${containerID} > .ab-image-swap-wrapper {
         position: relative;
@@ -537,7 +466,7 @@ var picreplacement = {
         background-size: ${placement.x}px ${placement.y}px;
         margin: ${placement.offsettop}px ${placement.offsetleft}px;
         /* nytimes.com float:right ad at top is on the left without this */
-        float: ${elComputedStyle.float};
+        float: ${this.getStyle(data, 'float')};
         border: none; /* some sites borders all imgs */
       }
       div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard {
@@ -644,83 +573,83 @@ var picreplacement = {
   // Given a target element, replace it with a picture.
   // Returns the replacement element if replacement works, or null if the target
   // element could not be replaced.
-  _replace: function(el, callback) {
+  _replace: function(data, callback) {
     var that = this;
-    that._placementFor(el, function(placement) {
+    that._placementFor(data, function(placement) {
       if (!placement) {
         callback(false);
-        return false; // don't know how to replace |el|
-      }
-      if (document.getElementsByClassName('picreplacement-image').length > 1 && !(window.top === window && hostname === 'www.facebook.com')) {
-        callback(false);
-        return false; // we only want to show 2 ad per page
+        return false; // don't know how to replace |data.el|
       }
 
-      containerNodes = that.createNewPicContainer(placement);
-      that.injectCSS(el, placement, containerNodes.container.id);
+      // We only want to replace 2 ads per page
+      if (totalSwaps > 1 && !(window.top === window && hostname === 'www.facebook.com')) {
+        callback(false);
+        return false;
+      }
+
+      var containerNodes = that.createNewPicContainer(placement);
+      that.injectCSS(data, placement, containerNodes.container.id);
       that.setupEventHandlers(placement, containerNodes);
 
       // No need to hide the replaced element -- regular AdBlock will do that.
-      el.dataset.picreplacementreplaced = 'true';
+      data.picreplacementreplaced = true;
 
-      el.parentNode.insertBefore(containerNodes.container, el);
+      data.el.parentNode.insertBefore(containerNodes.container, data.el);
 
-      if (window.getComputedStyle(containerNodes.image).display === 'none') {
-        containerNodes.image.style.display = 'inline-block';
-      }
+      // Force showing the image in case it was not showing
+      containerNodes.image.style.display = 'inline-block';
       callback(true);
     });
-  },
-
-  // Returns true if |el| or an ancestor was hidden by an AdBlock hiding rule.
-  _inHiddenSection: function(el) {
-    for (var inx = 0; inx < cssRules.length; inx++) {
-      if (el.matches(cssRules[inx])) {
-        return true;
-      }
-    }
-    return false;
-  },
-
-  // Find the ancestor of el that was hidden by AdBlock, and replace it
-  // with a picture.  Assumes _inHiddenSection(el) is true.
-  _replaceHiddenSectionContaining: function(el, callback) {
-    // Find the top hidden node (the one AdBlock originally hid)
-    while (this._inHiddenSection(el.parentNode)){
-      el.parentNode.dataset.adblockSize = el.dataset.adblockSize;
-      el = el.parentNode;
-    }
-    // We may have already replaced this section...
-    if (el.dataset.picreplacementreplaced)
-      return;
-
-    var oldCssText = el.style.cssText;
-    el.style.setProperty("visibility", "hidden", "important");
-    el.style.setProperty("display", "block", "important");
-
-    this._replace(el, callback);
-
-    el.style.cssText = oldCssText; // Re-hide the section
-  },
-
-  // For use when a Div is not yet hidden by the hideElement() function.
-  // The dimensions for hidden DIV and other elements can not be determined, so
-  // we calculate the size before hiding them.
-  _replaceNonHiddenSectionContaining: function(el, callback) {
-    // We may have already replaced this section...
-    if (el.dataset.picreplacementreplaced) {
-      return;
-    }
-    var oldCssText = el.style.cssText;
-    el.style.setProperty("visibility", "hidden", "important");
-    el.style.setProperty("display", "block", "important");
-
-    this._replace(el, callback);
-
-    el.style.cssText = oldCssText; // Re-hide the section
   },
 
   translate: function(key) {
     return chrome.i18n.getMessage(key);
   },
-}; // end picreplacement
+  isInvalidSize: function(size) {
+    return !size.x || !size.y || size.x < minDimension || size.y < minDimension;
+  },
+  // Check if an element is nested in any element in array
+  // Return true if |el| is nested or a duplicate
+  isNested: function(el, elements) {
+    let isNestedElement = false;
+    for (let j = 0; j < elements.length; j++) {
+      let otherElement = elements[j].el;
+      if (el === otherElement) {
+        continue;
+      }
+      if (otherElement.contains(el)) {
+        isNestedElement = true;
+        break;
+      }
+    }
+    return isNestedElement;
+  },
+  // Return property value of the given |data.el|
+  getStyle: function(data, property) {
+    var alreadyComputed = data.computedStyle;
+    if (alreadyComputed) {
+      return alreadyComputed[property]
+    }
+    var inlineValue = data.el.style[property];
+    if (inlineValue) {
+      return inlineValue;
+    }
+    var attribute = data.el.getAttribute(property);
+    if (attribute) {
+      return attribute;
+    }
+    data.computedStyle = window.getComputedStyle(data.el);
+    return data.computedStyle[property]
+  },
+  // Function called after an ad was replaced with an image
+  done: function(replaced) {
+    if (replaced) {
+      // on some sites, such as freepik.com with absolute positioning,
+      // the position of other elements is calculated before our pic replacement is injected.
+      // a forced window resize event repaints the page to correctly lay it out
+      totalSwaps += 1;
+      window.dispatchEvent(new Event('resize'));
+      chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
+    }
+  }
+}; // end imageSwap

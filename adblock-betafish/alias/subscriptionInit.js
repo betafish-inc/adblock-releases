@@ -8,9 +8,10 @@ const {Subscription,
   require("subscriptionClasses");
 const {filterStorage} = require("filterStorage");
 const {filterNotifier} = require("filterNotifier");
+const {recommendations} = require("./recommendations.js");
 const info = require("info");
 const {Prefs} = require("prefs");
-const {Synchronizer} = require("synchronizer");
+const {synchronizer} = require("synchronizer");
 const {Utils} = require("utils");
 const {initNotifications} = require("notificationHelper");
 const {updatesVersion} = require("../../adblockpluschrome/adblockplusui/lib/prefs");
@@ -32,7 +33,7 @@ let dataCorrupted = false;
  */
 function detectFirstRun()
 {
-  firstRun = filterStorage.subscriptionCount == 0;
+  firstRun = filterStorage.getSubscriptionCount() == 0;
 
   if (firstRun && (!filterStorage.firstRun || Prefs.currentVersion))
     reinitialized = true;
@@ -71,86 +72,94 @@ function shouldAddDefaultSubscriptions()
 }
 
 /**
- * @typedef {object} DefaultSubscriptions
- * @property {?Element} ads
- * @property {?Element} circumvention
- */
-/**
  * Finds the elements for the default ad blocking filter subscriptions based
  * on the user's locale.
  *
- * @param {HTMLCollection} subscriptions
- * @return {DefaultSubscriptions}
+ * @param {Array.<object>} subscriptions
+ * @return {Map.<string, object>}
  */
 function chooseFilterSubscriptions(subscriptions)
 {
-  let selectedItem = {};
-  let selectedPrefix = null;
+  let chosenSubscriptions = new Map();
+
+  let selectedLanguage = null;
   let matchCount = 0;
+
   for (let subscription of subscriptions)
   {
-    let prefixes = subscription.getAttribute("prefixes");
-    let prefix = prefixes && prefixes.split(",").find(
+    let {languages, type} = subscription;
+    let language = languages && languages.find(
       lang => new RegExp("^" + lang + "\\b").test(Utils.appLocale)
     );
 
-    let subscriptionType = subscription.getAttribute("type");
+    if ((type == "ads" || type == "circumvention") &&
+        !chosenSubscriptions.has(type))
+    {
+      chosenSubscriptions.set(type, subscription);
+    }
 
-    if ((subscriptionType == "ads" || subscriptionType == "circumvention") &&
-        !selectedItem[subscriptionType])
-      selectedItem[subscriptionType] = subscription;
-
-    if (prefix)
+    if (language)
     {
       // The "ads" subscription is the one driving the selection.
-      if (subscriptionType == "ads")
+      if (type == "ads")
       {
-        if (!selectedPrefix || selectedPrefix.length < prefix.length)
+        if (!selectedLanguage || selectedLanguage.length < language.length)
         {
-          selectedItem[subscriptionType] = subscription;
-          selectedPrefix = prefix;
+          chosenSubscriptions.set(type, subscription);
+          selectedLanguage = language;
           matchCount = 1;
         }
-        else if (selectedPrefix && selectedPrefix.length == prefix.length)
+        else if (selectedLanguage && selectedLanguage.length == language.length)
         {
           matchCount++;
 
-          // If multiple items have a matching prefix of the same length:
+          // If multiple items have a matching language of the same length:
           // Select one of the items randomly, probability should be the same
           // for all items. So we replace the previous match here with
           // probability 1/N (N being the number of matches).
           if (Math.random() * matchCount < 1)
           {
-            selectedItem[subscriptionType] = subscription;
-            selectedPrefix = prefix;
+            chosenSubscriptions.set(type, subscription);
+            selectedLanguage = language;
           }
         }
       }
-      else if (subscriptionType === "circumvention")
+      else if (type == "circumvention")
       {
-        selectedItem[subscriptionType] = subscription;
+        chosenSubscriptions.set(type, subscription);
       }
     }
   }
-  return selectedItem;
+
+  return chosenSubscriptions;
 }
 
-function supportsNotificationsWithButtons() {
-  // Microsoft Edge (as of EdgeHTML 16) doesn't have the notifications API.
-  if (!("notifications" in browser)) {
+function supportsNotificationsWithButtons()
+{
+  // Older versions of Microsoft Edge (EdgeHTML 16) don't have the
+  // notifications API. Newever versions (EdgeHTML 17) seem to crash
+  // when it is used.
+  // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/20146233/
+  if (info.platform == "edgehtml")
     return false;
-  }
+
+  // Opera gives an asynchronous error when buttons are provided (we cannot
+  // detect that behavior without attempting to show a notification).
+  if (info.application == "opera")
+    return false;
 
   // Firefox throws synchronously if the "buttons" option is provided.
   // If buttons are supported (i.e. on Chrome), this fails with
   // an asynchronous error due to missing required options.
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1190681
-  try {
+  try
+  {
     browser.notifications.create({buttons: []}).catch(() => {});
-  } catch (e) {
-    if (e.toString().includes('"buttons" is unsupported')) {
+  }
+  catch (e)
+  {
+    if (e.toString().includes('"buttons" is unsupported'))
       return false;
-    }
   }
 
   return true;
@@ -169,7 +178,7 @@ function getSubscriptions()
   for (let url of Prefs.additional_subscriptions)
     subscriptions.push(Subscription.fromURL(url));
 
-  // Add "acceptable ads" and "anti-adblock messages" subscriptions
+  // Add "acceptable ads", "anti-adblock messages", "AdBlock Custom", and "BitCoing Mining Protection List" subscriptions
   if (firstRun)
   {
     let acceptableAdsSubscription = Subscription.fromURL(
@@ -177,6 +186,14 @@ function getSubscriptions()
     );
     acceptableAdsSubscription.title = "Allow non-intrusive advertising";
     subscriptions.push(acceptableAdsSubscription);
+
+    let abcSubscription = Subscription.fromURL('https://cdn.adblockcdn.com/filters/adblock_custom.txt');
+    abcSubscription.title = "AdBlock custom filters";
+    subscriptions.push(abcSubscription);
+
+    let cplSubscription = Subscription.fromURL('https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt');
+    cplSubscription.title = "Cryptocurrency (Bitcoin) Mining Protection List";
+    subscriptions.push(cplSubscription);
 
     // Only add the anti-adblock messages subscription if
     // the related notification can be shown on this browser.
@@ -194,49 +211,26 @@ function getSubscriptions()
   let addDefaultSubscription = shouldAddDefaultSubscriptions();
   if (addDefaultSubscription || !Prefs.subscriptions_addedanticv)
   {
-    return fetch("subscriptions.xml")
-      .then(response => response.text())
-      .then(text =>
-      {
-        let doc = new DOMParser().parseFromString(text, "application/xml");
-        let nodes = doc.getElementsByTagName("subscription");
+    for (let [, value] of chooseFilterSubscriptions(recommendations()))
+    {
+      let {url, type, title, homepage} = value;
 
-        let defaultSubscriptions = chooseFilterSubscriptions(nodes);
-        if (defaultSubscriptions)
-        {
-          for (let name in defaultSubscriptions)
-          {
-            let node = defaultSubscriptions[name];
-            if (!node)
-              continue;
+      // Make sure that we don't add Easylist again if we want
+      // to just add the Anti-Circumvention subscription.
+      if (!addDefaultSubscription && type != "circumvention")
+        continue;
 
-            let url = node.getAttribute("url");
-            if (url)
-            {
-              // Make sure that we don't add Easylist again if we want
-              // to just add the Anti-Circumvention subscription.
-              let type = node.getAttribute("type");
-              if (!addDefaultSubscription && type != "circumvention")
-                continue;
+      let subscription = Subscription.fromURL(url);
+      subscription.disabled = false;
+      subscription.title = title;
+      subscription.homepage = homepage;
+      subscriptions.push(subscription);
 
-              let subscription = Subscription.fromURL(url);
-              subscription.disabled = false;
-              subscription.title = node.getAttribute("title");
-              subscription.homepage = node.getAttribute("homepage");
-              subscription.type = type;
-              subscriptions.push(subscription);
-              if (subscription.type == "circumvention")
-                Prefs.subscriptions_addedanticv = true;
-            }
-          }
-        }
-        // Add AdBlock specific filter lists
-        let adBlockCustomSubscription = Subscription.fromURL("https://cdn.adblockcdn.com/filters/adblock_custom.txt");
-        subscriptions.push(adBlockCustomSubscription);
-        let nominersSubscription = Subscription.fromURL("https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt");
-        subscriptions.push(nominersSubscription);
-        return subscriptions;
-      });
+      if (subscription.type == "circumvention")
+        Prefs.subscriptions_addedanticv = true;
+    }
+
+    return subscriptions;
   }
 
   return subscriptions;
@@ -252,7 +246,7 @@ function addSubscriptionsAndNotifyUser(subscriptions)
     filterStorage.addSubscription(subscription);
     if (subscription instanceof DownloadableSubscription &&
         !subscription.lastDownload)
-      Synchronizer.execute(subscription);
+      synchronizer.execute(subscription);
   }
 
   // Show first run page or the updates page. The latter is only shown

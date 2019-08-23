@@ -10,7 +10,7 @@ let SURVEY = exports.SURVEY = (function() {
   // Call |callback(tab)|, where |tab| is the active tab, or undefined if
   // there is no active tab.
   var getActiveTab = function(callback) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.query({active: true, currentWindow: true}).then((tabs) => {
       callback(tabs[0]);
     });
   };
@@ -28,13 +28,13 @@ let SURVEY = exports.SURVEY = (function() {
     {
       active: true,
       lastFocusedWindow: true,
-    }, function (pages)
+    }).then((tabs) =>
     {
-      if (pages.length === 0)
+      if (tabs.length === 0)
       {
         return;
       }
-      page = pages[0];
+      page = tabs[0];
       var blockedPerPage = require('stats').getBlockedPerPage(page);
       callback(blockedPerPage);
     });
@@ -130,15 +130,13 @@ let SURVEY = exports.SURVEY = (function() {
         chrome.notifications.onButtonClicked.addListener(buttonNotificationClicked);
         chrome.notifications.onClosed.addListener(closedClicked);
         // show the notification to the user.
-        chrome.notifications.create(lastNotificationID, notificationOptions, function(id) {
-          if (chrome.runtime.lastError) {
-            recordGeneralMessage("error_survey_not_shown", undefined, { sid: surveyData.survey_id });
-            chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-            chrome.notifications.onClicked.removeListener(notificationClicked);
-            chrome.notifications.onClosed.removeListener(closedClicked);
-            return;
-          }
+        chrome.notifications.create(lastNotificationID, notificationOptions).then(() => {
           recordGeneralMessage("survey_shown", undefined, { sid: surveyData.survey_id });
+        }).catch(error => {
+          recordGeneralMessage("error_survey_not_shown", undefined, { sid: surveyData.survey_id });
+          chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
+          chrome.notifications.onClicked.removeListener(notificationClicked);
+          chrome.notifications.onClosed.removeListener(closedClicked);
         });
       });
     };
@@ -222,17 +220,13 @@ let SURVEY = exports.SURVEY = (function() {
       shouldShowSurvey(surveyData, function() {
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
         var validateResponseFromTab = function(response) {
-          if (chrome.runtime.lastError) {
-            if (chrome.runtime.lastError.message) {
-              recordErrorMessage('overlay_message_error', undefined, { errorMessage: chrome.runtime.lastError.message });
-            } else {
-              recordErrorMessage('overlay_message_error', undefined, { errorMessage: JSON.stringify(chrome.runtime.lastError) });
-            }
-          } else if (!response || response.ack !== data.command) {
+          if (!response || response.ack !== data.command) {
             recordErrorMessage('invalid_response_from_notification_overlay_script', undefined, { errorMessage: response });
           }
         };
-        chrome.tabs.sendRequest(tab.id, data, validateResponseFromTab);
+        chrome.tabs.sendMessage(tab.id, data).then(validateResponseFromTab).catch(error => {
+          recordErrorMessage('overlay_message_error', undefined, { errorMessage: JSON.stringify(error) });
+        });
       });
     };
 

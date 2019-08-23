@@ -39,7 +39,7 @@ ExcludeFilter = (function ()
       var index = -1;
       do
       {
-        index = subscription._filters.indexOf(filter, index + 1);
+        index = subscription._filterText.indexOf(filter, index + 1);
         if (index >= 0)
         {
           positions.push(index);
@@ -50,10 +50,10 @@ ExcludeFilter = (function ()
       for (var j = positions.length - 1; j >= 0; j--)
       {
         var position = positions[j];
-        if (subscription._filters[position] === filter)
+        if (subscription._filterText[position] === filter)
         {
-          subscription._filters.splice(position, 1);
-          if (subscription._filters.indexOf(filter) < 0)
+          subscription._filterText.splice(position, 1);
+          if (subscription._filterText.indexOf(filter) < 0)
           {
             var index = filter._subscriptions.indexOf(subscription);
             if (index >= 0)
@@ -101,7 +101,7 @@ ExcludeFilter = (function ()
   function excludeFilterChangeListener(action, item, param1, param2)
   {
     var excludeFiltersKey = 'exclude_filters';
-    chrome.storage.local.get(excludeFiltersKey, function (response)
+    chrome.storage.local.get(excludeFiltersKey).then((response) =>
     {
       if (response[excludeFiltersKey])
       {

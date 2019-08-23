@@ -5,13 +5,12 @@ const Subscription             = backgroundPage.Subscription;
 const SpecialSubscription      = backgroundPage.SpecialSubscription;
 const DownloadableSubscription = backgroundPage.DownloadableSubscription;
 const parseFilter         = backgroundPage.parseFilter;
-const parseFilters        = backgroundPage.parseFilters;
 const filterStorage       = backgroundPage.filterStorage;
 const filterNotifier      = backgroundPage.filterNotifier;
 const settingsNotifier    = backgroundPage.settingsNotifier;
 const channelsNotifier    = backgroundPage.channelsNotifier;
 const Prefs               = backgroundPage.Prefs;
-const Synchronizer        = backgroundPage.Synchronizer;
+const synchronizer        = backgroundPage.synchronizer;
 const Utils               = backgroundPage.Utils;
 const NotificationStorage = backgroundPage.Notification;
 const License             = backgroundPage.License;
@@ -308,8 +307,35 @@ const onSyncDataInitialGettingError = function(errorCode) {
   showSyncMessage(translate("sync_header_message_setup_fail_prefix") + " " + translate("sync_header_message_setup_fail_part_2"), false, true);
 };
 
-$(document).ready(function ()
-{
+// Update Acceptable Ads UI in the General tab. To be called
+// when there is a change in the AA and AA Privacy subscriptions
+// Inputs: - checkAA: Bool, true if we must check AA
+//         - checkAAprivacy: Bool, true if we must check AA privacy
+const updateAcceptableAdsUI = function(checkAA, checkAAprivacy) {
+  let $aaInput = $('input#acceptable_ads');
+  let $aaPrivacyInput = $('input#acceptable_ads_privacy');
+  let $aaPrivacyHelper = $('#aa-privacy-helper');
+  let $aaYellowBanner = $('#acceptable_ads_info');
+
+  if (!checkAA && !checkAAprivacy) {
+    $aaInput.prop('checked', false);
+    $aaPrivacyInput.prop('checked', false);
+    $aaYellowBanner.slideDown();
+    $aaPrivacyHelper.slideUp();
+  } else if (checkAA && checkAAprivacy) {
+    $aaInput.removeClass('feature').prop('checked', true).addClass('feature');
+    $aaPrivacyInput.prop('checked', true);
+    $aaYellowBanner.slideUp();
+    navigator.doNotTrack ? $aaPrivacyHelper.slideUp() : $aaPrivacyHelper.slideDown();
+  } else if (checkAA && !checkAAprivacy) {
+    $aaInput.prop('checked', true);
+    $aaPrivacyInput.prop('checked', false);
+    $aaYellowBanner.slideUp();
+    $aaPrivacyHelper.slideUp();
+  }
+};
+
+$(document).ready(function () {
   var onSettingsChanged = function(name, currentValue, previousValue) {
     if (name === 'color_themes') {
       $('body').attr('id', currentValue.options_page).data('theme', currentValue.options_page);

@@ -94,7 +94,7 @@ var License = (function () {
   // Load the license from persistent storage
   // Should only be called during startup / initialization
   var loadFromStorage = function(callback) {
-    chrome.storage.local.get(licenseStorageKey, function (response) {
+    chrome.storage.local.get(licenseStorageKey).then((response) => {
       var localLicense = storage_get(licenseStorageKey);
       theLicense = response[licenseStorageKey] || localLicense || {};
       if (typeof callback === "function") {
@@ -157,7 +157,7 @@ var License = (function () {
         });
 
         // Create myAdBlock storage if it doesn't already exist
-        chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey, (myAdBlockInfo) => {
+        chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey).then((myAdBlockInfo) => {
           if (!$.isEmptyObject(myAdBlockInfo)) {
             return;
           }
@@ -268,7 +268,7 @@ var License = (function () {
         return;
       }
       License.update();
-      chrome.storage.local.get(installTimestampStorageKey, function (response) {
+      chrome.storage.local.get(installTimestampStorageKey).then((response) => {
         var localTimestamp = storage_get(installTimestampStorageKey);
         var originalInstallTimestamp = response[installTimestampStorageKey] || localTimestamp || Date.now();
         // If the installation timestamp is missing from both storage locations, save an updated version
@@ -294,7 +294,7 @@ var License = (function () {
       if (typeof callback !== "function") {
         return;
       }
-      chrome.storage.local.get(installTimestampStorageKey, function (response) {
+      chrome.storage.local.get(installTimestampStorageKey).then((response) => {
         var localTimestamp = storage_get(installTimestampStorageKey);
         var originalInstallTimestamp = response[installTimestampStorageKey] || localTimestamp;
         if (originalInstallTimestamp) {
@@ -419,16 +419,11 @@ License.ready().then(function() {
       return;
     }
     if (sender.url && sender.url.startsWith("http") && getSettings().picreplacement && channels.isAnyEnabled()) {
-      chrome.tabs.executeScript(sender.tab.id, {file: "adblock-picreplacement-image-sizes-map.js", frameId: sender.frameId, runAt:"document_start"}, function(){
-          if (chrome.runtime.lastError) {
-              log(chrome.runtime.lastError)
-          }
-      });
-      chrome.tabs.executeScript(sender.tab.id, {file: "adblock-picreplacement.js", frameId: sender.frameId, runAt:"document_start"}, function(){
-          if (chrome.runtime.lastError) {
-              log(chrome.runtime.lastError)
-          }
-      });
+      const logError = function(e) {
+        console.error(e);
+      };
+      chrome.tabs.executeScript(sender.tab.id, {file: "adblock-picreplacement-image-sizes-map.js", frameId: sender.frameId, runAt:"document_start"}).catch(logError);
+      chrome.tabs.executeScript(sender.tab.id, {file: "adblock-picreplacement.js", frameId: sender.frameId, runAt:"document_start"}).catch(logError);
     }
     sendResponse({});
   });
@@ -469,16 +464,8 @@ License.ready().then(function() {
     function(request, sender, sendResponse) {
       if (request.command !== "picreplacement_inject_jquery")
         return; // not for us
-      if (sender.url && sender.url.startsWith("http")) {
-        chrome.tabs.executeScript(undefined,
-          {allFrames: request.allFrames, file: "adblock-jquery.js"},
-          function() {
-            if (chrome.runtime.lastError) {
-                log(chrome.runtime.lastError)
-            }
-            sendResponse({});
-          }
-        );
+      if (sender.url && sender.url.startsWith("http") && sender.tab && sender.tab.id) {
+        chrome.tabs.executeScript(sender.tab.id, {allFrames: request.allFrames, file: "adblock-jquery.js"});
       }
     }
   );

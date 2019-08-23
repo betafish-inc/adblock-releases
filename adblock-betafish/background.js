@@ -9,17 +9,15 @@ const Subscription = require("subscriptionClasses").Subscription;
 const DownloadableSubscription = require("subscriptionClasses").DownloadableSubscription;
 const SpecialSubscription = require("subscriptionClasses").SpecialSubscription;
 
-const parseFilter = require('filterValidation').parseFilter;
-const parseFilters = require('filterValidation').parseFilters;
-
 const {filterStorage} = require("filterStorage");
 const {filterNotifier} = require("filterNotifier");
 const Prefs = require('prefs').Prefs;
-const Synchronizer = require('synchronizer').Synchronizer;
+const {synchronizer} = require("synchronizer");
 const Utils = require('utils').Utils;
+const {normalizeHostname, domainSuffixes, URLRequest} = require("../adblockpluschrome/adblockpluscore/lib/url.js");
 const NotificationStorage = require('notification').Notification;
 
-const {RegExpFilter} = require("filterClasses");
+const {RegExpFilter, InvalidFilter} = require("filterClasses");
 
 const {getBlockedPerPage} = require("stats");
 
@@ -32,20 +30,20 @@ const {DataCollectionV2} = require('./datacollection.v2');
 const {LocalCDN} = require('./localcdn');
 const {ServerMessages} = require('./servermessages');
 const {recordGeneralMessage, recordErrorMessage, recordAdreportMessage} = require('./servermessages').ServerMessages;
-const {getUrlFromId, unsubscribe, getSubscriptionsMinusText, getAllSubscriptionsMinusText, getIdFromURL, isLanguageSpecific } = require('./adpsubscriptionadapter').SubscriptionAdapter;
+const {recommendations} = require("./alias/recommendations");
+const {getUrlFromId, unsubscribe, getSubscriptionsMinusText, getAllSubscriptionsMinusText, getIdFromURL, getSubscriptionInfoFromURL, isLanguageSpecific } = require('./adpsubscriptionadapter').SubscriptionAdapter;
 const {uninstallInit} = require('./alias/uninstall');
 
 Object.assign(window, {
   filterStorage,
   filterNotifier,
   Prefs,
-  Synchronizer,
+  synchronizer,
   NotificationStorage,
   Subscription,
   SpecialSubscription,
   DownloadableSubscription,
   parseFilter,
-  parseFilters,
   Filter,
   WhitelistFilter,
   info,
@@ -61,9 +59,11 @@ Object.assign(window, {
   recordAdreportMessage,
   getUrlFromId,
   unsubscribe,
+  recommendations,
   getSubscriptionsMinusText,
   getAllSubscriptionsMinusText,
   getIdFromURL,
+  getSubscriptionInfoFromURL,
 });
 
 // CUSTOM FILTERS
@@ -125,7 +125,7 @@ var tryToUnwhitelist = function (url)
         continue;
       }
 
-      if (!filter.matches(url, RegExpFilter.typeMap.DOCUMENT, false))
+      if (!filter.matches(URLRequest.from(url), RegExpFilter.typeMap.DOCUMENT, false))
       {
         continue;
       }
@@ -232,7 +232,7 @@ var countCache = (function ()
 
     init: function ()
     {
-      chrome.storage.local.get('custom_filter_count', function (response)
+      chrome.storage.local.get('custom_filter_count').then((response) =>
       {
         cache = response.custom_filter_count || {};
       });
@@ -380,7 +380,7 @@ var getCurrentTabInfo = function (callback, secondTime)
     {
       active: true,
       lastFocusedWindow: true,
-    }, tabs =>
+    }).then((tabs) =>
     {
       try
       {
@@ -402,7 +402,7 @@ var getCurrentTabInfo = function (callback, secondTime)
 
           return;
         }
-        chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey, (myAdBlockInfo) =>
+        chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey).then((myAdBlockInfo) =>
         {
           try
           {
@@ -638,7 +638,7 @@ var saveDomainPauses = function(domainPauses)
 
 // If AdBlock was paused on shutdown (adblock_is_paused is true), then
 // unpause / remove the white-list all entry at startup.
-chrome.storage.local.get(pausedKey, function (response)
+chrome.storage.local.get(pausedKey).then((response) =>
 {
   if (response[pausedKey])
   {
@@ -658,7 +658,7 @@ chrome.storage.local.get(pausedKey, function (response)
 
 // If AdBlock was domain paused on shutdown, then unpause / remove
 // all domain pause white-list entries at startup.
-chrome.storage.local.get(domainPausedKey, function (response)
+chrome.storage.local.get(domainPausedKey).then((response) =>
 {
   try
   {
@@ -748,19 +748,12 @@ if (chrome.runtime.id)
   var openUpdatedPage = function()
   {
     var updatedURL = getUpdatedURL();
-    chrome.tabs.create({ url: updatedURL }, function(tab)
+    chrome.tabs.create({ url: updatedURL }).then((tab) =>
     {
       // if we couldn't open a tab to '/updated_tab', send a message
-      if (chrome.runtime.lastError || !tab)
+      if (!tab)
       {
-        if (chrome.runtime.lastError && chrome.runtime.lastError.message)
-        {
-          recordErrorMessage('updated_tab_failed_to_open', undefined, { errorMessage: chrome.runtime.lastError.message });
-        }
-        else
-        {
-          recordErrorMessage('updated_tab_failed_to_open');
-        }
+        recordErrorMessage('updated_tab_failed_to_open');
         chrome.tabs.onCreated.removeListener(waitForUserAction);
         chrome.tabs.onCreated.addListener(waitForUserAction);
         return;
@@ -769,6 +762,12 @@ if (chrome.runtime.id)
       {
         recordGeneralMessage('updated_tab_retry_success_count_' + updateTabRetryCount);
       }
+    }).catch(error =>
+    {
+      // if we couldn't open a tab to '/updated_tab', send a message
+      recordErrorMessage('updated_tab_failed_to_open');
+      chrome.tabs.onCreated.removeListener(waitForUserAction);
+      chrome.tabs.onCreated.addListener(waitForUserAction);
     });
   };
 }
@@ -812,12 +811,8 @@ chrome.tabs.onCreated.addListener(function (tab)
   {
     return;
   }
-  chrome.tabs.get(tab.id, function (tabs)
+  chrome.tabs.get(tab.id).then((tabs) =>
   {
-    if (chrome.runtime.lastError)
-    {
-      return;
-    }
     if (tabs && tabs.url && tabs.id)
     {
       runChannelWhitelist(tabs.url, tabs.id);
@@ -837,7 +832,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab)
     {
       return;
     }
-    chrome.tabs.get(tabId, function (tabs)
+    chrome.tabs.get(tabId).then((tabs) =>
     {
       if (tabs && tabs.url && tabs.id)
       {
@@ -870,7 +865,7 @@ var youTubeHistoryStateUpdateHanlder = function(details) {
       myFrame._url = myURL;
       var currentWhitelistState = checkWhitelisted(myPage);
       if (!currentWhitelistState && (currentWhitelistState !== previousWhitelistState)) {
-        myPage.sendMessage({type: "reloadStyleSheet"});
+        chrome.tabs.sendMessage(details.tabId, {type: "reloadStyleSheet"});
       }
       if (myURL.pathname === "/") {
         ytChannelNamePages.set(myPage.id, "");
@@ -1084,24 +1079,25 @@ var getDebugInfo = function (callback) {
   response.other_info.license_version = License.get().lv;
 
   // Get total pings
-  chrome.storage.local.get('total_pings', function (storageResponse) {
+  chrome.storage.local.get('total_pings').then((storageResponse) =>
+  {
     response.other_info.total_pings = storageResponse.total_pings || 0;
 
     // Now, add exclude filters (if there are any)
     var excludeFiltersKey = 'exclude_filters';
-    chrome.storage.local.get(excludeFiltersKey, function (secondResponse) {
+    chrome.storage.local.get(excludeFiltersKey).then((secondResponse) => {
       if (secondResponse && secondResponse[excludeFiltersKey]) {
         response.excluded_filters = secondResponse[excludeFiltersKey];
       }
       // Now, add JavaScript exception error (if there is one)
       var errorKey = 'errorkey';
-      chrome.storage.local.get(errorKey, function (errorResponse) {
+      chrome.storage.local.get(errorKey).then((errorResponse) => {
         if (errorResponse && errorResponse[errorKey]) {
           response.other_info[errorKey] = errorResponse[errorKey];
         }
         // Now, add the migration messages (if there are any)
         var migrateLogMessageKey = 'migrateLogMessageKey';
-        chrome.storage.local.get(migrateLogMessageKey, function (migrateLogMessageResponse) {
+        chrome.storage.local.get(migrateLogMessageKey).then((migrateLogMessageResponse) => {
           if (migrateLogMessageResponse && migrateLogMessageResponse[migrateLogMessageKey]) {
             messages = migrateLogMessageResponse[migrateLogMessageKey].split('\n');
             for (var i = 0; i < messages.length; i++) {
@@ -1154,7 +1150,7 @@ function updateFilterLists()
   for (let subscription of filterStorage.subscriptions()) {
     if (subscription instanceof DownloadableSubscription)
     {
-      Synchronizer.execute(subscription, true, true);
+      synchronizer.execute(subscription, true, true);
     }
   }
 }
@@ -1169,15 +1165,37 @@ function getUserFilters()
     {
       continue;
     }
-
-    for (var j = 0; j < subscription._filters.length; j++)
+    for (var j = 0; j < subscription._filterText.length; j++)
     {
-      var filter = subscription._filters[j];
-      filters.push(filter.text);
+      var filter = subscription._filterText[j];
+      filters.push(filter);
     }
   }
 
   return filters;
+}
+
+function parseFilter(text)
+{
+  let filter = null;
+  let error = null;
+
+  text = Filter.normalize(text);
+  if (text)
+  {
+    if (text[0] == "[")
+    {
+      error = "unexpected_filter_list_header";
+    }
+    else
+    {
+      filter = Filter.fromText(text);
+      if (filter instanceof InvalidFilter)
+        error = filter.reason;
+    }
+  }
+
+  return { filter, error };
 }
 
 
@@ -1192,7 +1210,8 @@ chrome.runtime.onInstalled.addListener(function (details)
 {
   if (details.reason === 'install')
   {
-    chrome.storage.local.get("blockage_stats", function(response) {
+    chrome.storage.local.get("blockage_stats").then((response) =>
+    {
       var blockage_stats = response.blockage_stats;
       if (!blockage_stats)
       {
@@ -1241,6 +1260,19 @@ function checkPingResponseForProtect(responseData) {
   }
 }
 
+function isAcceptableAds(filterList) {
+  if (!filterList) {
+    return;
+  }
+  return filterList.id === 'acceptable_ads';
+};
+
+function isAcceptableAdsPrivacy(filterList) {
+  if (!filterList) {
+    return;
+  }
+  return filterList.id === 'acceptable_ads_privacy';
+};
 
 // Attach methods to window
 Object.assign(window, {
@@ -1276,5 +1308,7 @@ Object.assign(window, {
   checkPingResponseForProtect,
   pausedFilterText1,
   pausedFilterText2,
-  isLanguageSpecific
+  isLanguageSpecific,
+  isAcceptableAds,
+  isAcceptableAdsPrivacy,
 });

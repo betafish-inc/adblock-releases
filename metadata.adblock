@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.51.1
+version = 3.53.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -34,6 +34,7 @@ permissions =
   alarms
 optional_permissions =
   management
+minimum_chrome_version = 53.0
 web_accessible_resources =
   adblock-uiscripts-adblock-wizard.css
   icons/icon24.png
@@ -92,7 +93,6 @@ adblock-bandaids.js = adblock-betafish/bandaids.js
 adblock-datacollection-contentscript.js = adblock-betafish/datacollection-contentscript.js
 adblock-ytchannel.js = adblock-betafish/ytchannel.js
 adblock-notificationoverlay.js = adblock-betafish/notificationoverlay.js
-adblock-subscriptions.xml = adblock-betafish/subscriptions.xml
 adblock-options-tabs.css = adblock-betafish/options/tabs.css
 adblock-options-tabs.js = adblock-betafish/options/tabs.js
 options.html = adblock-betafish/options/index.html
@@ -261,16 +261,16 @@ fonts/lato-ext-bold.woff = adblock-betafish/fonts/lato-ext-bold.woff
 fonts/lato-bold.woff = adblock-betafish/fonts/lato-bold.woff
 icons/MaterialIcons-Regular.woff2 = icons/MaterialIcons-Regular.woff2
 icons/adblock-icons.woff2 = icons/adblock-icons.woff2
+devtools-panel.html = adblock-betafish/alias/devtools-panel.html
 devtools.js = adblock-betafish/alias/devtools.js
 devtools-panel.css = adblockpluschrome/adblockplusui/skin/devtools-panel.css
-devtools-panel.html = adblock-betafish/alias/devtools-panel.html
 snippets.js = adblock-betafish/alias/snippets.js
 fonts/font-face.css = adblock-betafish/fonts/font-face.css
 
 [module_alias]
-options = ../../adblock-betafish/alias/options.js
-subscriptionInit = ../../adblock-betafish/alias/subscriptionInit.js
-uninstall = ../../adblock-betafish/alias/uninstall.js
+subscriptionInit = ../../../adblock-betafish/alias/subscriptionInit.js
+uninstall = ../../../adblock-betafish/alias/uninstall.js
+recommendations = ../../../adblock-betafish/alias/recommendations.js
 
 [bundles]
 lib/adblockplus.js +=
@@ -296,7 +296,6 @@ lib/adblockplus.js +=
 lib/adblockplus.js -= lib/filterComposer.js
   lib/subscriptionInit.js
   lib/uninstall.js
-  lib/options.js
 include.postload.js -= blockElement.postload.js composer.postload.js
 
 include.preload.js +=

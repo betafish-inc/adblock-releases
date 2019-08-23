@@ -26,7 +26,7 @@ function Settings()
   var _this = this;
   this._init = new Promise(function(resolve)
   {
-    chrome.storage.local.get(_this._settingsKey, function(response)
+    chrome.storage.local.get(_this._settingsKey).then((response) =>
     {
       var settings = response.settings || {};
       _this._data = $.extend(_this._defaults, settings);
@@ -55,7 +55,7 @@ Settings.prototype = {
     var _this = this;
 
     // Don't store defaults that the user hasn't modified
-    chrome.storage.local.get(this._settingsKey, function(response)
+    chrome.storage.local.get(this._settingsKey).then((response) =>
     {
       var storedData = response.settings || {};
 

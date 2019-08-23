@@ -7,7 +7,7 @@ var removeBottomLine = function(section) {
   let classToRemove = 'bottom-line';
 
   if (section === 'all' || section === 'ads_and_languages') {
-    let $adBlockingFilters = $('#ad_blocking_list > div:visible');
+    let $adBlockingFilters = $('#ad_blocking_list > div:visible').not('.no-bottom-line');
     let $languageFilters = $('#language_list > div:visible');
     let $sectionFilters = $adBlockingFilters.add($languageFilters);
     $sectionFilters.addClass(classToRemove).last().removeClass(classToRemove);
@@ -24,103 +24,172 @@ var removeBottomLine = function(section) {
   }
 }
 
+function getDefaultFilterUI(filterList, checkboxID, filterListType) {
+  var isAcceptableAds = backgroundPage.isAcceptableAds(filterList)
+  var isLanguageFilter = filterListType === 'language_filter_list';
+  var aaPrivacy = FilterListUtil.cachedSubscriptions['acceptable_ads_privacy'];
+  var isSelected = filterList.subscribed;
+  var filterListUrl = filterList.url;
+
+  if (isAcceptableAds && aaPrivacy.subscribed) {
+    isSelected = true;
+    filterListUrl = aaPrivacy.url;
+  }
+
+  var $filterListIcon = $('<i>')
+    .addClass('material-icons')
+    .addClass('md-24')
+    .text('format_list_bulleted');
+
+  var $checkBox = $('<input>')
+    .attr('type', 'checkbox')
+    .attr('id', checkboxID)
+    .prop('checked', isSelected);
+
+  var $checkBoxIcons = $('\
+    <i class="unchecked material-icons">lens</i>\
+    <i class="checked material-icons circle-icon-bg-24 checkbox-icon">check_circle</i>'
+  )
+  var $checkBoxWrapper = $('<span>')
+    .addClass('checkbox')
+    .addClass('md-stack')
+    .append($checkBox)
+    .append($checkBoxIcons)
+
+  var $label = $('<label></label>')
+    .text(filterList.label || filterList.title || filterList.url.substr(0,40) + '...')
+    .attr('title', filterList.url)
+    .attr('for', checkboxID)
+    .append($link);
+
+  var $link = $('<a>')
+    .addClass('filter-list-link')
+    .css('display', $('#btnShowLinks').prop('disabled') ? 'inline' : 'none')
+    .attr('target', '_blank')
+    .attr('href', filterListUrl)
+    .append($filterListIcon)
+
+  var $infoSpan = $('<span>')
+    .addClass('subscription_info')
+    .addClass('light-grey-text')
+    .text(filterList.subscribed && !filterList.lastDownload ? translate('fetchinglabel') : '');
+
+  var $removeFilterListLabel = filterList.user_submitted ? $('<a>')
+    .addClass('remove_filterList')
+    .css('font-size', '10px')
+    .css('display', filterList.subscribed ? 'none' : 'inline')
+    .attr('href', '#')
+    .text(translate('removefromlist'))
+    .click(function (event)
+    {
+      event.preventDefault();
+      var $subscription = $(this).closest('.subscription');
+      var $subscriptionWrapper = $subscription.closest('.filter-subscription-wrapper');
+      var subscriptionId = $subscription.attr('name');
+      SubscriptionUtil.unsubscribe(subscriptionId, filter, true);
+      $subscriptionWrapper.remove();
+      removeBottomLine('custom_filters');
+    }) : null;
+
+  var $checkboxAndLabel = $('<div>')
+    .addClass('label-max-width')
+    .append($checkBoxWrapper)
+    .append($label)
+    .append($link)
+
+  var $extraInformations = $('<div>')
+    .append($infoSpan)
+    .append($removeFilterListLabel)
+
+  var $checkboxHeaderLine = $('<div>')
+    .addClass('subscription')
+    .addClass(filterListType)
+    .addClass('add-space-between')
+    .addClass(isAcceptableAds ? 'section-padding': '')
+    .addClass(isAcceptableAds ? 'bottom-line' : '')
+    .attr('name', filterList.id)
+    .append($checkboxAndLabel)
+    .append($extraInformations)
+  
+  var $extraInformation = $('<div>')
+    .addClass('extra-info')
+    .addClass('italic')
+    .text(translate(`filter_${filterList.id}_explained`));
+
+  var $filterWrapper = $('<div>')
+    .addClass('checkbox-indentation')
+    .addClass('filter-subscription-wrapper')
+    .addClass(isAcceptableAds ? '' : 'section-padding')
+    .addClass(isAcceptableAds ? 'no-bottom-line' : 'bottom-line')
+    .css('display', isLanguageFilter && !filterList.subscribed ? 'none' : 'block')
+    .append($checkboxHeaderLine)
+    .append($extraInformation)
+
+  return {
+    checkbox : $checkBox,
+    filter : $filterWrapper
+  }
+}
+
+function getToggleFilterUI(filterList, checkboxID) {
+  var $checkBox = $('<input>')
+    .attr('type', 'checkbox')
+    .attr('id', checkboxID)
+    .prop('checked', filterList.subscribed ? true : false);
+
+  var $spanSlider = $('<span>')
+    .addClass('slider')
+    .addClass('round');
+
+  var $label =  $('<label>')
+    .addClass('switch')
+    .attr('title', filterList.url)
+    .attr('for', checkboxID)
+    .append($checkBox)
+    .append($spanSlider);
+
+  var $spanText = $('<span>')
+    .text(translate('acceptable_ads_privacy'));
+
+  var $toggleItem = $('<div>')
+    .addClass('filter-toggle-indentation')
+    .addClass('section-padding')
+    .addClass('subscription')
+    .addClass('bottom-line')
+    .attr('name', filterList.id)
+    .append($label)
+    .append($spanText);
+
+  return {
+    checkbox : $checkBox,
+    filter : $toggleItem
+  }
+}
+
 // Represents the checkbox controlling subscription to a specific filter list,
 // as well as the UI that goes along with it (e.g. status label and removal link.)
 // Inputs:
-//   filter_list:object - An entry from a filterListSections array.
+//   filterList:object - An entry from a filterListSections array.
 //   filterListType:string - A key from filterListSections describing the section
 //       where this checkbox will appear, e.g. 'languageFilterList'.
 //   index:int - The position in the section where this checkbox should appear.
 //   container:jQuery - The DOM element for the section in which this checkbox
 //       should appear.
 function CheckboxForFilterList(filterList, filterListType, index, container) {
+  this._filterListUI = undefined;
   this._container  = container;
   this._filterList = filterList;
-  var id           = filterListType + '_' + index;
-  var filterId     = this._filterList.id;
-  var filterListIcon = $('<i></i>')
-    .addClass('material-icons')
-    .addClass('md-24')
-    .text('format_list_bulleted');
+  var id = filterListType + '_' + index;
+  var uiItems = {};
 
-  this._div = $('<div></div>').addClass('section-padding').addClass('bottom-line').addClass('filter-subscription-wrapper')
-                  .css('display', filterListType === 'language_filter_list' ? (filterList.subscribed ? 'block' : 'none') : 'block');
+  if (backgroundPage.isAcceptableAdsPrivacy(this._filterList))  {
+    uiItems = getToggleFilterUI(this._filterList, id);
+  } else {
+    uiItems = getDefaultFilterUI(this._filterList, id, filterListType);
+  }
 
-  this._checkBox = $('<input />').attr('type', 'checkbox')
-              .attr('id', id)
-              .prop('checked', filterList.subscribed ? true : null)
-              .addClass('filter_list_control');
-  this._checkBoxIcons = $('\
-    <i class="unchecked material-icons">lens</i>\
-    <i class="checked material-icons circle-icon-bg-24 checkbox-icon">check_circle</i>'
-  )
-  this._checkBoxWrapper = $('<span></span>')
-              .addClass('checkbox')
-              .addClass('md-stack')
-              .append(this._checkBox)
-              .append(this._checkBoxIcons)
-
-  this._label = $('<label></label>')
-  .text(filterList.label || filterList.title || filterList.url.substr(0,40)+'...')
-  .attr('title', filterList.url)
-  .attr('for', id)
-  .append(this._link);
-
-  this._link = $('<a></a>').addClass('filter-list-link')
-            .css('display', $('#btnShowLinks')
-            .prop('disabled') ? 'inline' : 'none')
-            .attr('target', '_blank')
-            .attr('data-URL', filterList.url)
-            .append(filterListIcon)
-            .click(function (e)
-              {
-              var url = $(this).attr('data-URL');
-              $(this).attr('href', url);
-            });
-
-  this._infospan = $('<span></span>')
-      .addClass('subscription_info')
-      .addClass('light-grey-text')
-      .text(filterList.subscribed && !filterList.lastDownload ? (translate('fetchinglabel')) : '');
-
-  this._removeFilterListLabel = filterList.user_submitted ? $('<a>')
-                                          .css('font-size', '10px')
-                                          .css('display', filterList.subscribed ? 'none' : 'inline')
-                                          .attr('href', '#')
-                                          .addClass('remove_filterList').
-                                          text(translate('removefromlist'))
-                                          .click(function (event)
-                                          {
-                                            event.preventDefault();
-                                            var $subscription = $(this).closest('.subscription');
-                                            var $subscriptionWrapper = $subscription.closest('.filter-subscription-wrapper');
-                                            var subscriptionId = $subscription.attr('name');
-                                            SubscriptionUtil.unsubscribe(subscriptionId, filterList, true);
-                                            $subscriptionWrapper.remove();
-                                            removeBottomLine('custom_filters');
-                                          }) : null;
-
-  this._checkboxAndLabel = $('<div></div>')
-                              .addClass('label-max-width')
-                              .append(this._checkBoxWrapper)
-                              .append(this._label)
-                              .append(this._link)
-
-  this._extraInformations = $('<div></div>')
-                              .append(this._infospan)
-                              .append(this._removeFilterListLabel)
-
-  this._checkboxHeaderLine = $('<div></div>')
-                              .append(this._checkboxAndLabel)
-                              .append(this._extraInformations)
-                              .addClass('subscription')
-                              .addClass(filterListType)
-                              .addClass('add-space-between')
-                              .addClass('checkbox-indentation')
-                              .attr('name', filterList.id)
-
-  this._extraInformation = $('<div></div>').addClass('extra-info').addClass('italic')
-                              .text(translate('filter_'+filterId+'_explained'));
+  this._filterListUI = uiItems.filter;
+  this._checkBox = uiItems.checkbox;
 }
 
 CheckboxForFilterList.prototype = {
@@ -128,22 +197,27 @@ CheckboxForFilterList.prototype = {
   // different filter lists.
 
   _bindActions: function () {
-    this._checkBox.change(function(event) {
+    var that = this;
+    this._checkBox.change(function (event) {
       var $subscription  = $(this).closest('.subscription');
       var $subscriptionWrapper = $subscription.closest('.filter-subscription-wrapper');
       var checked = $(this).is(':checked');
       var id = $subscription.attr('name');
-
       if (checked) {
-        if (!event.addedViaBackground && !SubscriptionUtil.validateOverSubscription()) {
+        const stopSelection = !SubscriptionUtil.validateOverSubscription(that._filterList);
+        if (!event.addedViaBackground && stopSelection) {
           $(this).prop('checked', false);
           return;
         }
-        $('.subscription_info', $subscription).text(translate('fetchinglabel'));
+        if (backgroundPage.isAcceptableAdsPrivacy(that._filterList)) {
+          $('.subscription_info', '[name=acceptable_ads]').text(translate('fetchinglabel'));
+        } else {
+          $('.subscription_info', $subscription).text(translate('fetchinglabel'));
+        }
         SubscriptionUtil.subscribe(id);
         FilterListUtil.cachedSubscriptions[id].subscribed = true;
       } else {
-        if (!SubscriptionUtil.validateUnderSubscription()) {
+        if (!SubscriptionUtil.validateUnderSubscription(that._filterList)) {
           $(this).prop('checked', true);
           return;
         }
@@ -178,26 +252,13 @@ CheckboxForFilterList.prototype = {
         }
       }
     });
-
-    if (this._filterList.user_submitted) {
-      this._removeFilterListLabel.click(function (event) {
-        event.preventDefault();
-        var parent = $(this).parent().parent();
-        var id     = parent.attr('name');
-        SubscriptionUtil.unsubscribe(id, parent._filterList, true);
-        parent.remove();
-      });
-    }
-
   },
 
   // Create the actual check box div and append in the container.
   // Inputs:
   //   isChecked:boolean - Flag that will indicate that this checkbox is checked by default.
   createCheckbox: function (isChecked) {
-    this._div.append(this._checkboxHeaderLine).append(this._extraInformation);
-
-    this._container.append(this._div);
+    this._container.append(this._filterListUI);
     this._bindActions();
 
     if (isChecked) {
@@ -279,10 +340,25 @@ function FilterListUtil() {
 }
 
 FilterListUtil.sortFilterListArrays = function () {
+  // Sort alphabetically
   for (var filterList in filterListSections) {
     filterListSections[filterList].array.sort(function (a, b) {
       return a.label > b.label ? 1 : (a.label === b.label ? 0 : -1);
     });
+  }
+  // Move AA privacy after AA
+  var sectionList = filterListSections['adblock_filter_list'].array;
+  var aaPrivacyIndex = sectionList.findIndex((filterList) => {
+    return backgroundPage.isAcceptableAdsPrivacy(filterList);
+  });
+  if (aaPrivacyIndex > -1) {
+    var aaPrivacyFilter = sectionList.splice(aaPrivacyIndex, 1)[0];
+    var aaIndex = sectionList.findIndex((filterList) => {
+      return backgroundPage.isAcceptableAds(filterList);
+    });
+    if (aaIndex > -1) {
+      sectionList.splice(++aaIndex, 0, aaPrivacyFilter);
+    };
   }
 }
 
@@ -294,7 +370,8 @@ FilterListUtil.getFilterListType = function (filterList) {
   if (filterList.id === 'adblock_custom' ||
       filterList.id === 'easylist' ||
       filterList.id === 'anticircumvent' ||
-      filterList.id === 'acceptable_ads') {
+      filterList.id === 'acceptable_ads' ||
+      filterList.id === 'acceptable_ads_privacy') {
     filterListType = 'adblock_filter_list';
   } else if (filterList.id === 'easyprivacy' ||
              filterList.id === 'antisocial' ||
@@ -360,7 +437,9 @@ FilterListUtil.updateSubscriptionInfoForId = function (id) {
   if (subscription.subscribed === false) {
     return;
   }
-
+  if (backgroundPage.isAcceptableAdsPrivacy(subscription)) {
+    $div = $('[name=acceptable_ads]');
+  }
   var $infoLabel   = $('.subscription_info', $div);
   var text        = $infoLabel.text();
   var lastUpdate = subscription.lastDownload || subscription._lastDownload;
@@ -368,7 +447,7 @@ FilterListUtil.updateSubscriptionInfoForId = function (id) {
   if ($infoLabel.text() === translate('invalidListUrl')) {
     return;
   }
-  if (Synchronizer.isExecuting(subscription.url)) {
+  if (synchronizer.isExecuting(subscription.url)) {
     text = translate('fetchinglabel');
   } else if (subscription.downloadStatus && subscription.downloadStatus != 'synchronize_ok') {
     var map = {
@@ -417,11 +496,27 @@ FilterListUtil.updateSubscriptionInfoForId = function (id) {
 //    id:String - Id of the filter list to be updated, also the name of the containing div in display.
 FilterListUtil.updateCheckbox = function (filterList, id) {
   var $containingDiv = $('div[name=\'' + id + '\']');
-  var checkbox      = $($containingDiv).find('input');
+  var $checkbox      = $($containingDiv).find('input');
+  var $filterLink    = $($containingDiv).find('a.filter-list-link');
+  var aaPrivacy      = FilterListUtil.cachedSubscriptions['acceptable_ads_privacy'];
+  var isAcceptableAds = backgroundPage.isAcceptableAds(filterList);
+
+  // Keep AA checkbox selected when AA Privacy is subscribed
+  // and assign the AA Privacy filter URL to the AA link icon
+  if (isAcceptableAds && aaPrivacy.subscribed) {
+    $checkbox.prop('checked', true);
+    $filterLink.attr('href', aaPrivacy.url);
+    return;
+  }
+
+  // Re-assign the AA filter URL to the AA link icon if AA Privacy unsubscribed
+  if (isAcceptableAds) {
+    $filterLink.attr('href', filterList.url);
+  }
 
   // Check if subscribed and checkbox staus is equal, if not, update checkbox status according to subscribed status.
-  if (checkbox.is(':checked') !== filterList.subscribed) {
-    checkbox.prop('checked', filterList.subscribed ? true : null);
+  if ($checkbox.is(':checked') !== filterList.subscribed) {
+    $checkbox.prop('checked', filterList.subscribed ? true : null);
 
     // Force update current info label since status is already updated in the background.
     $('.subscription_info', $containingDiv).text(filterList.subscribed ? translate('fetchinglabel') : translate('unsubscribedlabel'));
@@ -499,8 +594,18 @@ function SubscriptionUtil() {
 
 // Returns true if the user knows what they are doing, subscribing to many
 // filter lists.
-SubscriptionUtil.validateOverSubscription = function () {
-  if ($('.subscription :checked').length <= 6) {
+SubscriptionUtil.validateOverSubscription = function(clicked) {
+  const totalSelected = $('.subscription :checked').length;
+  const aaSelected = $('[name=acceptable_ads] :checked').length;
+  const aaPrivacyClicked = backgroundPage.isAcceptableAdsPrivacy(clicked);
+
+  if (totalSelected <= 6) {
+    return true;
+  }
+
+  // No need to show the dialog window because we change from AA to
+  // AA Privacy without altering the total number of subscriptions
+  if (aaSelected && aaPrivacyClicked) {
     return true;
   }
 
@@ -520,8 +625,17 @@ SubscriptionUtil.validateOverSubscription = function () {
 
 // Returns true if the user knows what they are doing, unsubscribing from
 // all filter lists.
-SubscriptionUtil.validateUnderSubscription = function () {
-  if ($('.subscription :checked').length >= 1) {
+SubscriptionUtil.validateUnderSubscription = function (clicked) {
+  const totalSelected = $('.subscription :checked').length;
+  const aaClicked = backgroundPage.isAcceptableAds(clicked);
+  const aaPrivacySelected = $('[name=acceptable_ads_privacy] :checked').length;
+
+  // If the user unsubscribe to AA while the only other selection is AA Privacy
+  // we want to show the dialog window because we're going to force the
+  // unsubscription of AA Privacy and the totalSelection will actually be 0
+  const aaPrivacyIsLast = totalSelected === 1 && aaClicked && aaPrivacySelected;
+
+  if (totalSelected >= 1 && !(aaPrivacyIsLast)) {
     return true;
   }
 
@@ -544,9 +658,10 @@ SubscriptionUtil.validateUnderSubscription = function () {
 //   id:string - Id of the filter list to be subscribed to.
 SubscriptionUtil.subscribe = function (id, title) {
   SubscriptionUtil._updateCacheValue(id);
-  var subscription = FilterListUtil.cachedSubscriptions[id];
-  if (subscription) {
-    subscription = Subscription.fromURL(subscription.url);
+  var cachedSubscription = FilterListUtil.cachedSubscriptions[id];
+  var subscription;
+  if (cachedSubscription) {
+    subscription = Subscription.fromURL(cachedSubscription.url);
   } else {
     // Working with an unknown list: create the list entry
     if (/^url\:.*/.test(id)) {
@@ -563,12 +678,17 @@ SubscriptionUtil.subscribe = function (id, title) {
 
   filterStorage.addSubscription(subscription);
   if (subscription instanceof DownloadableSubscription) {
-    Synchronizer.execute(subscription);
+    synchronizer.execute(subscription);
   }
 
-  if (id === 'acceptable_ads') {
-    $('#acceptable_ads_info').slideUp();
-    $('#acceptable_ads').prop('checked', true);
+  if (backgroundPage.isAcceptableAds(cachedSubscription)) {
+    updateAcceptableAdsUI(true, false);
+  }
+
+  if (backgroundPage.isAcceptableAdsPrivacy(cachedSubscription)) {
+    var aa = FilterListUtil.cachedSubscriptions['acceptable_ads'];
+    filterStorage.removeSubscription(Subscription.fromURL(aa.url));
+    updateAcceptableAdsUI(true, true);
   }
 
   if (id === 'easylist') {
@@ -578,20 +698,26 @@ SubscriptionUtil.subscribe = function (id, title) {
 
 // Unsubscribe to the filter list with the given |id|.
 // Input:
-//   id:string - Id of the filter list to be subscribed to.
+//   id:string - Id of the filter list to unsubscribe
 //   del:boolean - Flag to indicate if filter list should be deleted in the background.
 SubscriptionUtil.unsubscribe = function (id) {
   SubscriptionUtil._updateCacheValue(id);
-  var subscription = FilterListUtil.cachedSubscriptions[id];
-  subscription     = Subscription.fromURL(subscription.url);
-
+  var cachedSubscription = FilterListUtil.cachedSubscriptions[id];
+  var subscription     = Subscription.fromURL(cachedSubscription.url);
   setTimeout(function () {
     filterStorage.removeSubscription(subscription);
   }, 1);
 
-  if (id === 'acceptable_ads') {
-    $('#acceptable_ads_info').slideDown();
-    $('#acceptable_ads').prop('checked', false);
+  if (backgroundPage.isAcceptableAds(cachedSubscription)) {
+    var aaPrivacy = FilterListUtil.cachedSubscriptions['acceptable_ads_privacy'];
+    filterStorage.removeSubscription(Subscription.fromURL(aaPrivacy.url));
+    updateAcceptableAdsUI(false, false);
+  }
+
+  if (backgroundPage.isAcceptableAdsPrivacy(cachedSubscription)) {
+    SubscriptionUtil.subscribe('acceptable_ads');
+    FilterListUtil.cachedSubscriptions['acceptable_ads'].subscribed = true;
+    updateAcceptableAdsUI(true, false);
   }
 
   if (id === 'easylist') {
@@ -714,7 +840,7 @@ function onFilterChangeHandler(action, item) {
   var updateEntry = function (entry, eventAction) {
     if (entry) {
       // copy / update relevant properties to the cached entry
-      var properties = ['downloadStatus', 'label', 'lastDownload', '_downloadStatus', 'language'];
+      const properties = ['downloadStatus', 'label', 'lastDownload', '_downloadStatus', 'language'];
       for (var i = 0; i < properties.length; i++) {
         if (entry[properties[i]]) {
           FilterListUtil.cachedSubscriptions[entry.id][properties[i]] = entry[properties[i]];
@@ -822,7 +948,6 @@ function translateIDs(id) {
 $(function () {
   // Retrieves list of filter lists from the background.
   var subs = backgroundPage.getAllSubscriptionsMinusText();
-
   // Initialize page using subscriptions from the background.
   // Copy from update subscription list + setsubscriptionlist
   FilterListUtil.prepareSubscriptions(subs);

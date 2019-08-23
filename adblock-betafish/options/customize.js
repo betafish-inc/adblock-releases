@@ -62,7 +62,7 @@ $(function ()
 
   var getExcludeFilters = function() {
     var excludeFiltersKey = 'exclude_filters';
-    chrome.storage.local.get(excludeFiltersKey, function(response)
+    chrome.storage.local.get(excludeFiltersKey).then((response) =>
     {
       if (response[excludeFiltersKey])
       {
@@ -74,7 +74,7 @@ $(function ()
   getExcludeFilters();
 
   // Display any migration error messages to the user
-  chrome.storage.local.get('custom_filters_errors', function(response) {
+  chrome.storage.local.get('custom_filters_errors').then((response) => {
     if (response['custom_filters_errors'])
     {
       $("#txtMigrationErrorMessage").val(response['custom_filters_errors']);
@@ -121,7 +121,7 @@ $(function ()
   });
 
   // The add_filter functions
-  $('#btnAddUserFilter').click(checkForSyncError(function()
+  $('#btnAddUserFilter').click(checkForSyncError(function(event)
   {
     var blockCss    = $('#txtUserFilterCss').val().trim();
     var blockDomain = $('#txtUserFilterDomain').val().trim();
@@ -134,11 +134,11 @@ $(function ()
       appendCustomFilter(blockDomain + '##' + blockCss);
     }
 
-    $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
-    $(this).prop('disabled', true);
+    $(event.target).closest('.customize-entry-table').find('input[type=\'text\']').val('');
+    $(event.target).prop('disabled', true);
   }));
 
-  $('#btnAddExcludeFilter').click(checkForSyncError(function()
+  $('#btnAddExcludeFilter').click(checkForSyncError(function(event)
   {
     var excludeUrl = $('#txtUnblock').val().trim();
 
@@ -150,11 +150,11 @@ $(function ()
 
     appendCustomFilter('@@' + excludeUrl + '$document');
 
-    $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
-    $(this).prop('disabled', true);
+    $(event.target).closest('.customize-entry-table').find('input[type=\'text\']').val('');
+    $(event.target).prop('disabled', true);
   }));
 
-  $('#btnAddBlacklist').click(checkForSyncError(function()
+  $('#btnAddBlacklist').click(checkForSyncError(function(event)
   {
     var blacklist = toTildePipeFormat($('#txtBlacklist').val());
 
@@ -176,7 +176,7 @@ $(function ()
     $('#btnAddBlacklist').prop('disabled', true);
   }));
 
-  $('#btnAddUrlBlock').click(checkForSyncError(function()
+  $('#btnAddUrlBlock').click(checkForSyncError(function(event)
   {
     var blockUrl    = $('#txtBlockUrl').val().trim();
     var blockDomain = $('#txtBlockUrlDomain').val().trim();
@@ -199,12 +199,12 @@ $(function ()
       appendCustomFilter(blockUrl + '$domain=' + blockDomain);
     }
 
-    $(this).closest('.customize-entry-table').find('input[type=\'text\']').val('');
-    $(this).prop('disabled', true);
+    $(event.target).closest('.customize-entry-table').find('input[type=\'text\']').val('');
+    $(event.target).prop('disabled', true);
   }));
 
   // The validation functions
-  $('#txtBlacklist').bind('input', checkForSyncError(function()
+  $('#txtBlacklist').bind('input', checkForSyncError(function(event)
   {
     var blacklist = toTildePipeFormat($('#txtBlacklist').val());
 
@@ -231,7 +231,7 @@ $(function ()
 
   }));
 
-  $('#divUrlBlock input[type=\'text\']').bind('input', checkForSyncError(function()
+  $('#divUrlBlock input[type=\'text\']').bind('input', checkForSyncError(function(event)
   {
     var blockUrl    = $('#txtBlockUrl').val().trim();
     var blockDomain = $('#txtBlockUrlDomain').val().trim();
@@ -249,7 +249,7 @@ $(function ()
     $('#btnAddUrlBlock').prop('disabled', (result.error) ? true : null);
   }));
 
-  $('#divCssBlock input[type=\'text\']').bind('input', checkForSyncError(function()
+  $('#divCssBlock input[type=\'text\']').bind('input', checkForSyncError(function(event)
   {
     var blockCss    = $('#txtUserFilterCss').val().trim();
     var blockDomain = $('#txtUserFilterDomain').val().trim();
@@ -262,7 +262,7 @@ $(function ()
     $('#btnAddUserFilter').prop('disabled', (result.error) ? true : null);
   }));
 
-  $('#divExcludeBlock input[type=\'text\']').bind('input', checkForSyncError(function()
+  $('#divExcludeBlock input[type=\'text\']').bind('input', checkForSyncError(function(event)
   {
     var unblockUrl = $('#txtUnblock').val().trim();
     var result     = parseFilter('@@' + unblockUrl + '$document');
@@ -277,7 +277,7 @@ $(function ()
   // When one presses 'Enter', pretend it was a click on the 'add' button
   $('.customize-entry-table input[type=\'text\']').keypress(checkForSyncError(function(event)
   {
-    var submitButton = $(this).closest('.customize-entry-table').find('input[type=\'button\']');
+    var submitButton = $(event.target).closest('.customize-entry-table').find('input[type=\'button\']');
     if (event.keyCode === 13 && !submitButton.prop('disabled'))
     {
       event.preventDefault();
@@ -288,16 +288,16 @@ $(function ()
   $('a.controlsLink').click(checkForSyncError(function(event)
   {
     event.preventDefault();
-    var $myControls = $(this).parent('div').find('.addControls');
+    var $myControls = $(event.target).parent('div').find('.addControls');
     $('.addControls').not($myControls).slideUp({
       complete: function() {
-        $(this).parent('div').find('.accordion-icon').removeClass('upward');
+        $(event.target).parent('div').find('.accordion-icon').removeClass('upward');
       }
     });
     $myControls.slideToggle({
       complete: function() {
-        let $icon = $(this).parent('div').find('.accordion-icon');
-        let isExpanded = $(this).css('display') !== 'none';
+        let $icon = $(event.target).parent('div').find('.accordion-icon');
+        let isExpanded = $(event.target).css('display') !== 'none';
 
         if (isExpanded) {
           $icon.addClass('upward');
@@ -308,7 +308,7 @@ $(function ()
     });
   }));
 
-  $('#btnEditAdvancedFilters').click(checkForSyncError(function()
+  $('#btnEditAdvancedFilters').click(checkForSyncError(function(event)
   {
     let headerOffset = $("#header").height() + 10;
     $("body, html").animate({
@@ -372,7 +372,7 @@ $(function ()
         var result = parseFilter(filter);
         if (result.error)
         {
-          filterErrorMessage = translate('customfilterserrormessage', [filter, result.error.reason || result.error]);
+          filterErrorMessage = translate('customfilterserrormessage', [result.filter.text, result.error]);
         }
       }
     }
@@ -435,7 +435,7 @@ $(function ()
 
   $('#btnSaveAdvancedFilters').click(saveFilters);
 
-  $('#btnSaveExcludeAdvancedFilters').click(checkForSyncError(function()
+  $('#btnSaveExcludeAdvancedFilters').click(checkForSyncError(function(event)
   {
     var exclude_filters_text = $('#txtExcludeFiltersAdvanced').val();
     backgroundPage.ExcludeFilter.setExcludeFilters(exclude_filters_text);

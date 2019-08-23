@@ -25,7 +25,7 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
     {
       return;
     }
-    if (!tabInfo || !tabInfo.url || !tabInfo.url.startsWith("http:"))
+    if (!tabInfo || !tabInfo.url || !tabInfo.url.startsWith("http"))
     {
       return;
     }
@@ -35,12 +35,6 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
       {
           file: 'adblock-datacollection-contentscript.js',
           allFrames: true,
-      }, function()
-      {
-        if (chrome.runtime.lastError)
-        {
-          return;
-        }
       });
     }
   };
@@ -51,27 +45,31 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
     {
       if (getSettings().data_collection_v2 && !adblockIsPaused() && !adblockIsDomainPaused({"url": sender.page.url, "id": sender.page.id}))
       {
+
         var selectors = message.selectors;
         var docDomain = extractHostFromFrame(sender.frame);
+        for (let subscription of filterStorage.subscriptions())
+        {
+          if (subscription.disabled) {
+            continue;
+          }
+          for (let text of subscription.filterText())
+          {
+            let filter = Filter.fromText(text);
 
-        filterStorage.knownSubscriptions.forEach(function(subscription) {
-          if (!subscription.disabled) {
-            for (let filter of subscription._filters) {
-              // We only know the exact filter in case of element hiding emulation.
-              // For regular element hiding filters, the content script only knows
-              // the selector, so we have to find a filter that has an identical
-              // selector and is active on the domain the match was reported from.
-              let isActiveElemHideFilter = filter instanceof ElemHideFilter &&
-                                           selectors.includes(filter.selector) &&
-                                           filter.isActiveOnDomain(docDomain);
+            // We only know the exact filter in case of element hiding emulation.
+            // For regular element hiding filters, the content script only knows
+            // the selector, so we have to find a filter that has an identical
+            // selector and is active on the domain the match was reported from.
+            let isActiveElemHideFilter = filter instanceof ElemHideFilter &&
+                                         selectors.includes(filter.selector) &&
+                                         filter.isActiveOnDomain(docDomain);
 
-              if (isActiveElemHideFilter)
-              {
-                addFilterToCache(filter, sender.page);
-              }
+            if (isActiveElemHideFilter) {
+              addFilterToCache(filter, sender.page);
             }
           }
-        });
+        }
       }
     });
   };
@@ -93,12 +91,12 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
   {
     if (filter && filter.text && (typeof filter.text === 'string') && page && page.url && page.url.hostname)
     {
-      var domain = page.url.hostname;
+      let domain = page.url.hostname;
       if (!domain)
       {
         return;
       }
-      var text = filter.text;
+      let text = filter.text;
 
       if (!(text in dataCollectionCache.filters))
       {
@@ -125,18 +123,11 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
         }
         dataCollectionCache.filters[text].firstParty[domain].hits++;
       }
-      if (filter.subscriptionCount > 0)
+      for (let sub of filterStorage.subscriptions(text))
       {
-        let iterator = filter.subscriptions();
-        let result = iterator.next();
-        while (!result.done)
+        if (!sub.disabled && sub.url && dataCollectionCache.filters[text].subscriptions.indexOf(sub.url) === -1)
         {
-          const sub = result.value;
-          if (sub.url && dataCollectionCache.filters[text].subscriptions.indexOf(sub.url) === -1)
-          {
-            dataCollectionCache.filters[text].subscriptions.push(sub.url);
-          }
-          result = iterator.next();
+          dataCollectionCache.filters[text].subscriptions.push(sub.url);
         }
       }
     }
@@ -195,7 +186,7 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
               domains:                 dataCollectionCache.domains,
               filters:                 dataCollectionCache.filters
             };
-            chrome.storage.local.get(TIME_LAST_PUSH_KEY, function(response) {
+            chrome.storage.local.get(TIME_LAST_PUSH_KEY).then((response) => {
               var timeLastPush = "n/a";
               if (response[TIME_LAST_PUSH_KEY]) {
                 var serverTimestamp = new Date(response[TIME_LAST_PUSH_KEY]);

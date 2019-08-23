@@ -4,7 +4,7 @@ const Prefs = require('prefs').Prefs;
 
 var updateButtonUIAndContextMenus = function ()
 {
-  chrome.tabs.query({}, tabs =>
+  chrome.tabs.query({}).then((tabs) =>
   {
     for (let tab of tabs) {
       const page = new ext.Page(tab);
@@ -200,13 +200,10 @@ var emitPageBroadcast = (function () {
     // If there's anything to inject, inject the next item and recurse.
     if (data.include.length > injectedSoFar) {
       details.file = data.include[injectedSoFar];
-      chrome.tabs.executeScript(undefined, details, function () {
-        if (chrome.runtime.lastError) {
-          log(chrome.runtime.lastError);
-          return;
-        }
-
+      chrome.tabs.executeScript(undefined, details).then(() => {
         executeOnTab(fnName, parameter, injectedSoFar + 1);
+      }).catch(error => {
+        log(error);
       });
     } else {
       // Nothing left to inject, so execute the function.

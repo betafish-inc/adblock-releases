@@ -1019,6 +1019,14 @@
     "message":"Brazilian Portuguese",
     "description":"A filter list"
   },
+  "filtereasylist_plus_portuguese":{
+    "message":"Portuguese + EasyList",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_indian":{
+    "message":"IndianList + EasyList",
+    "description":"A filter list"
+  },
   "other":{
     "message":"Other",
     "description":"Multiple choice option"
@@ -2007,6 +2015,18 @@
     "message": "resend link",
     "description": "Text on the MyAdBlock enrollment resend email button"
   },
+  "myadblock_feedback_title": {
+    "message": "We'd love to hear from you!",
+    "description": "Title for MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_info": {
+    "message": "If you have any feedback or feature requests for us, please use our feedback page.",
+    "description": "Text describing the MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_button": {
+    "message": "Submit Feedback",
+    "description": "Text on the MyAdBlock feedback button"
+  },
   "error_msg_header":{
     "message":"Oops! We're sorry, the AdBlock menu had trouble loading.",
     "description":"The text on the popup menu when an error has occurred"
@@ -2394,5 +2414,73 @@
   "enable_do_not_track_advice":{
     "message":"For this feature to work properly, please enable Do Not Track (DNT) in your browser preferences.",
     "description":"The text advicing to enable DNT if Acceptable Ads is enabled in the General tab"
+  },
+  "devtools_action_block": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Block item"
+  },
+  "devtools_action_remove": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Remove rule"
+  },
+  "devtools_action_unblock": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Add exception"
+  },
+  "devtools_filter_origin_custom": {
+    "description": "sub-title text of the rule showing the source of the rule as custom rules",
+    "message": "user-defined"
+  },
+  "devtools_filter_origin_none": {
+    "description": "sub-title text of the rule showing the source of the rule as a unamed filter list",
+    "message": "unnamed subscription"
+  },
+  "devtools_filter_subtitle": {
+    "description": "sub-title text of the rule showing the source of the rule a named filter list",
+    "message": "Origin"
+  },
+  "devtools_filter_title": {
+    "description": "Text of the filter that was applied to the list item.",
+    "message": "Filter"
+  },
+  "devtools_footer": {
+    "description": "message on the bottom of the panel",
+    "message": "<a0>Reload</a0> page to see effect of filter changes"
+  },
+  "devtools_header": {
+    "description": "Text on the top of the dev tools panel to show all items of any type; slot0 and slot1 are two seperate drop down lists",
+    "message": "Show <slot0></slot0> items of <slot1></slot1> type"
+  },
+  "devtools_header_state_all": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "all"
+  },
+  "devtools_header_state_blocked": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "blocked"
+  },
+  "devtools_header_state_whitelisted": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "whitelisted"
+  },
+  "devtools_header_type_any": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "any"
+  },
+  "devtools_request_subtitle": {
+    "description": "sub title text for the request-column header of the dev tools panel",
+    "message": "Document domain"
+  },
+  "devtools_request_title": {
+    "description": "title text for the request-column header of the dev tools panel",
+    "message": "Request"
+  },
+  "devtools_request_url": {
+    "description": "sub title text for the request-column of the dev tools panel when the request is rewritten e.g. http://example.com/foo rewritten to http://example.com/bar",
+    "message": "<a0></a0> rewritten to <a1></a1>"
+  },
+  "devtools_type_title": {
+    "description": "Type column header text",
+    "message": "Type"
   }
 }

@@ -10,7 +10,7 @@ function* genFunc()
   }
 }
 
-chrome.runtime.sendMessage({type: "getSelectors"}, response =>
+chrome.runtime.sendMessage({type: "getSelectors"}).then((response) =>
 {
   if (document.readyState != "loading")
   {

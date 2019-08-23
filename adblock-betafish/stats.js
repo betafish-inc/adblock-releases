@@ -79,8 +79,8 @@ let STATS = exports.STATS = (function()
   function readUserIDPromisified() {
     return new Promise(
       function (resolve, reject) {
-        chrome.storage.local.get(STATS.userIDStorageKey,
-          (response) => {
+        chrome.storage.local.get(STATS.userIDStorageKey).then((response) =>
+        {
             var localuserid = storage_get(STATS.userIDStorageKey);
             if (!response[STATS.userIDStorageKey] && !localuserid)
             {
@@ -135,7 +135,7 @@ let STATS = exports.STATS = (function()
     {
       return;
     }
-    chrome.storage.local.get(STATS.totalPingStorageKey, function(response)
+    chrome.storage.local.get(STATS.totalPingStorageKey).then((response) =>
     {
       var settingsObj = getSettings();
       var localTotalPings = storage_get(STATS.totalPingStorageKey);
@@ -174,14 +174,22 @@ let STATS = exports.STATS = (function()
         data["extid"] = chrome.runtime.id;
       }
       var subs = getAllSubscriptionsMinusText();
-      if (subs["acceptable_ads"])
-      {
-        data["aa"] = subs["acceptable_ads"].subscribed ? '1' : '0';
+      if (subs) {
+        var aa = subs["acceptable_ads"];
+        var aaPrivacy = subs["acceptable_ads_privacy"];
+
+        if (!aa && !aaPrivacy) {
+          data.aa = 'u'; // Both filter lists unavailable
+        } else if (aa.subscribed) {
+          data.aa = '1';
+        } else if (aaPrivacy.subscribed) {
+          data.aa = '2';
+        } else if (!aa.subscribed && !aaPrivacy.subscribed) {
+          data.aa = '0'; // Both filter lists unsubscribed
+        }
       }
-      else
-      {
-        data["aa"] = 'u';
-      }
+
+
       data["dc"] = dataCorrupt ? '1' : '0';
       SURVEY.types(function(response)
       {
@@ -258,7 +266,7 @@ let STATS = exports.STATS = (function()
   // Called just after we ping the server, to schedule our next ping.
   var scheduleNextPing = function()
   {
-    chrome.storage.local.get(STATS.totalPingStorageKey, function(response)
+    chrome.storage.local.get(STATS.totalPingStorageKey).then((response) =>
     {
       var localTotalPings = storage_get(totalPingStorageKey);
       localTotalPings = isNaN(localTotalPings) ? 0 : localTotalPings;
@@ -283,9 +291,9 @@ let STATS = exports.STATS = (function()
       var nextPingTime = Date.now() + millis;
 
       // store in redundant location
-      chromeStorageSetHelper(STATS.nextPingTimeStorageKey, nextPingTime, function()
+      chromeStorageSetHelper(STATS.nextPingTimeStorageKey, nextPingTime, function(error)
       {
-        if (chrome.runtime.lastError)
+        if (error)
         {
           dataCorrupt = true;
         }
@@ -315,7 +323,7 @@ let STATS = exports.STATS = (function()
     // Wait 10 seconds to allow the previous 'set' to finish
     window.setTimeout(function()
     {
-      chrome.storage.local.get(STATS.nextPingTimeStorageKey, function(response)
+      chrome.storage.local.get(STATS.nextPingTimeStorageKey).then((response) =>
       {
         var local_next_ping_time = storage_get(STATS.nextPingTimeStorageKey);
         local_next_ping_time = isNaN(local_next_ping_time) ? 0 : local_next_ping_time;
@@ -412,7 +420,7 @@ let STATS = exports.STATS = (function()
       {
         // Do 'stuff' when we're first installed...
         // - send a message
-        chrome.storage.local.get(STATS.totalPingStorageKey, function(response)
+        chrome.storage.local.get(STATS.totalPingStorageKey).then((response) =>
         {
           if (!response[STATS.totalPingStorageKey])
           {

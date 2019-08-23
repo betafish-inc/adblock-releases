@@ -1,3 +1,1 @@
-chrome.runtime.sendMessage({ message: 'load_my_adblock' }, function () {
-
-});
+chrome.runtime.sendMessage({ message: 'load_my_adblock' });

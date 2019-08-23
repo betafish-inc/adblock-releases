@@ -17,7 +17,11 @@ var initialize = function () {
   //if the user is currently subscribed to AA
   //then 'check' the acceptable ads button.
   if ('acceptable_ads' in subs && subs.acceptable_ads.subscribed) {
-    $('#acceptable_ads').prop('checked', true);
+    updateAcceptableAdsUI(true, false);
+  }
+
+  if ('acceptable_ads_privacy' in subs && subs.acceptable_ads_privacy.subscribed) {
+    updateAcceptableAdsUI(true, true);
   }
 
   for (var name in optionalSettings) {
@@ -36,6 +40,11 @@ var initialize = function () {
     var isEnabled = $(this).is(':checked');
     if (this.id === 'acceptable_ads') {
       acceptableAdsClicked(isEnabled);
+      return;
+    }
+
+    if (this.id === 'acceptable_ads_privacy') {
+      acceptableAdsPrivacyClicked(isEnabled);
       return;
     }
 
@@ -84,25 +93,46 @@ var initialize = function () {
   });
 };
 
-var acceptableAdsClicked = function (isEnabled)
-{
+var acceptableAdsPrivacyClicked = function(isEnabled) {
+  let acceptableAds = Subscription.fromURL(Prefs.subscriptions_exceptionsurl);
+  let acceptableAdsPrivacy = Subscription.fromURL(Prefs.subscriptions_exceptionsurl_privacy);
+
+  if (isEnabled) {
+    if (acceptableAdsPrivacy instanceof DownloadableSubscription) {
+      synchronizer.execute(acceptableAdsPrivacy);
+    }
+    filterStorage.addSubscription(acceptableAdsPrivacy);
+    filterStorage.removeSubscription(acceptableAds);
+    updateAcceptableAdsUI(true, true);
+  } else {
+    filterStorage.addSubscription(acceptableAds);
+    filterStorage.removeSubscription(acceptableAdsPrivacy);
+    updateAcceptableAdsUI(true, false);
+  }
+}
+var acceptableAdsClicked = function (isEnabled) {
   var subscription = Subscription.fromURL(Prefs.subscriptions_exceptionsurl);
+  var acceptableAdsPrivacy = Subscription.fromURL(Prefs.subscriptions_exceptionsurl_privacy);
+
   if (isEnabled)
   {
     filterStorage.addSubscription(subscription);
     if (subscription instanceof DownloadableSubscription)
     {
-      Synchronizer.execute(subscription);
+      synchronizer.execute(subscription);
     }
-    $('#acceptable_ads_info').slideUp();
+    updateAcceptableAdsUI(true, false);
   } else
   {
     filterStorage.removeSubscription(subscription);
-    $('#acceptable_ads_info').slideDown();
+    filterStorage.removeSubscription(acceptableAdsPrivacy);
+    updateAcceptableAdsUI(false, false);
   }
+};
+
+var showSeparators = function () {
   let $allGeneralOptions = $("#general-option-list li");
   let $lastVisibleOption = $("#general-option-list li:visible:last");
-
   $allGeneralOptions.addClass('bottom-line');
   $lastVisibleOption.removeClass('bottom-line');
 };
@@ -129,6 +159,7 @@ $('#enable_show_advanced_options').change(function ()
 
 $(document).ready(function() {
   initialize();
+  showSeparators();
 });
 
 var onSettingsChanged = function(name, currentValue, previousValue) {
@@ -162,15 +193,31 @@ port.onMessage.addListener((message) => {
 });
 
 var onSubAdded = function(item) {
-  if (item && item.url === backgroundPage.Prefs.subscriptions_exceptionsurl && !$('#acceptable_ads').prop('checked')) {
-    $('#acceptable_ads').prop('checked', true);
+  const acceptableAds = backgroundPage.Prefs.subscriptions_exceptionsurl;
+  const acceptableAdsPrivacy = backgroundPage.Prefs.subscriptions_exceptionsurl_privacy;
+
+  if (item && item.url === acceptableAds) {
+    updateAcceptableAdsUI(true, false);
+  } else if (item && item.url === acceptableAdsPrivacy) {
+    updateAcceptableAdsUI(true, true);
   }
 };
 filterNotifier.on("subscription.added", onSubAdded);
 
 var onSubRemoved = function(item) {
-  if (item && item.url === backgroundPage.Prefs.subscriptions_exceptionsurl && $('#acceptable_ads').prop('checked')) {
-    $('#acceptable_ads').prop('checked', false);
+  const aa = backgroundPage.Prefs.subscriptions_exceptionsurl;
+  const aaPrivacy = backgroundPage.Prefs.subscriptions_exceptionsurl_privacy;
+  const aaSubscribed = filterStorage.knownSubscriptions.has(aa);
+  const aaPrivacySubscribed = filterStorage.knownSubscriptions.has(aaPrivacy);
+
+  if (item && item.url === aa && !aaPrivacySubscribed) {
+    updateAcceptableAdsUI(false, false);
+  } else if (item && item.url === aa && aaPrivacySubscribed) {
+    updateAcceptableAdsUI(true, true);
+  } else if (item && item.url === aaPrivacy && !aaSubscribed) {
+    updateAcceptableAdsUI(false, false);
+  } else if (item && item.url === aaPrivacy && aaSubscribed) {
+    updateAcceptableAdsUI(true, false);
   }
 };
 filterNotifier.on("subscription.removed", onSubRemoved);

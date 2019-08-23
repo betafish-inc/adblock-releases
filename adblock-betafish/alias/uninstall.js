@@ -31,7 +31,7 @@ let uninstallInit = exports.uninstallInit = function()
         };
         var updateUninstallURL = function()
         {
-          chrome.storage.local.get("blockage_stats", function(data)
+          chrome.storage.local.get("blockage_stats").then((data) =>
           {
             var url = uninstallURL;
             if (data &&

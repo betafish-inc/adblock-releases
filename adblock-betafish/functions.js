@@ -260,7 +260,11 @@ var BGcall = function()
     command : "call",
     fn : fn,
     args : args
-  }, callback);
+  }).then((response) => {
+    if (has_callback) {
+      callback(response);
+    }
+  });
 };
 
 // Inputs: key:string.
@@ -296,18 +300,28 @@ var chromeStorageSetHelper = function(key, value, callback)
 {
     let items = {};
     items[key] = value;
-    chrome.storage.local.set(items, callback);
+    chrome.storage.local.set(items).then(() =>
+    {
+      if (typeof callback === "function")
+      {
+        callback();
+      }
+    }).catch(error =>
+    {
+      if (typeof callback === "function")
+      {
+        callback(error);
+      }
+    });
 };
 
 function chromeStorageGetHelper(storageKey) {
   return new Promise(function(resolve, reject) {
-    chrome.storage.local.get(storageKey, function(items) {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError.message);
-        reject(chrome.runtime.lastError.message);
-      } else {
-        resolve(items[storageKey]);
-      }
+    chrome.storage.local.get(storageKey).then((items) => {
+      resolve(items[storageKey]);
+    }).catch(error => {
+        console.error(error);
+        reject(error);
     });
   });
 };
@@ -326,8 +340,8 @@ function chromeLocalStorageOnChangedHelper(storageKey, callback) {
 var reloadOptionsPageTabs = function() {
   var optionTabQuery = {
     url: 'chrome-extension://' + chrome.runtime.id + '/options.html*'
-  }
-  chrome.tabs.query(optionTabQuery, function(tabs) {
+  };
+  chrome.tabs.query(optionTabQuery).then((tabs) => {
     for (var i in tabs) {
       chrome.tabs.reload(tabs[i].id);
     }
@@ -337,8 +351,8 @@ var reloadOptionsPageTabs = function() {
 var reloadAllOpenedTabs = function() {
   var optionTabQuery = {
     url: 'chrome-extension://' + chrome.runtime.id + '/*'
-  }
-  chrome.tabs.query(optionTabQuery, function(tabs) {
+  };
+  chrome.tabs.query(optionTabQuery).then((tabs) => {
     for (var i in tabs) {
       chrome.tabs.reload(tabs[i].id);
     }

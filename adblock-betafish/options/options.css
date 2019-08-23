@@ -32,6 +32,7 @@ body {
 a {
   color: var(--main-text-color);
 }
+a.link-text-color:hover,
 a:hover .link-text-color,
 a .link-text-color:hover {
   color: var(--link-hovered-color);
@@ -228,13 +229,19 @@ a .link-text-color:hover {
   line-height: 25px;
   margin-top: 1em;
   margin-bottom: 1em;
-  padding: 15px 25px;
+  padding: 12px 24px;
   background-color: #FFCA00;
-  border: 2px solid #FF9700;
   border-radius: 6px;
-  width: 95%;
-  font-size: 18px;
+  width: 100%;
+  font-size: 16px;
   color: #333333;
+}
+#acceptable_ads_info > span[i18n]:first-child {
+  font-weight: bold;
+}
+#acceptable_ads_info > span[i18n]:last-child  {
+  font-size: 14px;
+  line-height: 20px;
 }
 #general-option-list {
   padding: 0px;
@@ -253,6 +260,13 @@ a .link-text-color:hover {
 }
 .icons-preview .svg-icon {
   margin: 0;
+}
+#aa-privacy-helper {
+  display: none;
+  font-size: 14px;
+  line-height: 20px;
+  font-style: italic;
+  padding-bottom: 10px;
 }
 
 /* FILTER TAB */
@@ -936,6 +950,66 @@ div.wide-themes-row {
 }
 #bug-report-page-content {
   margin-left: var(--defaul-sidebar-width, 204px);
+}
+
+/* TOGGLE */
+
+.toggle-indentation {
+  padding-left: 50px;
+  text-indent: -50px;
+}
+.filter-toggle-indentation {
+  padding-left: 85px;
+  text-indent: -50px;
+}
+.toggle-padding {
+  padding-left: 50px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 12px;
+  vertical-align: middle;
+  margin-right: 20px;
+}
+.switch input {
+  display: none;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e6e6e6;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: -8px;
+  bottom: -3px;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border: solid 1px var(--unselected-toggle-border-color);
+  background-color: #ffffff;
+}
+input:checked + .slider::before {
+  -webkit-transform: translateX(26px);
+  transform: translateX(26px);
+  background-color: #03bcfc;
+  border-color: #03bcfc;
+}
+.slider.round {
+  border-radius: 9px;
+}
+.slider.round::before {
+  border-radius: 50%;
 }
 
 /* Retina & hi DPI displays only */
