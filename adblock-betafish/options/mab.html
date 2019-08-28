@@ -1,80 +1,82 @@
 <!DOCTYPE html>
-<div class="option-page-box" id="mab-page">
+
+<div class="option-page-box mab-page-box">
   <div class="option-page-content">
-    <h1 i18n="myadblock_options_page_header" class="page-title"></h1>
+    <section>
+      <h1 i18n="myadblock_options_page_header" class="page-title"></h1>
 
-    <div id="mab-enrollment-section" style="display: none">
-      <header>
-        <h1 i18n="myadblock_enrollment_title"></h1>
-        <form>
-          <input type="checkbox" id="mab-enrollment-hide-forever">
-          <label for="mab-enrollment-hide-forever" i18n="myadblock_enrollment_hide_forever"></label>
-        </form>
-      </header>
-      <section id="mab-link-section">
-        <p id="mab-enrollment-success" i18n="myadblock_enrollment_success"></p>
-        <i id="mab-enrollment-resend-success-icon" style="display: none" class="material-icons md-24">check_circle</i>
-        <p id="mab-enrollment-resend-success" style="display: none">
-          <span i18n="check_email"></span>
-          <span id="mab-enrollment-resend-success-email" i18n="myadblock_enrollment_resend_success"></span>
-          <span i18n="myadblock_enrollment_link_info"></span>
-        </p>
-        <i id="mab-enrollment-resend-error-icon" style="display: none" class="material-icons md-24">cancel</i>
-        <p id="mab-enrollment-resend-error" style="display: none">
-          <span i18n="myadblock_enrollment_resend_error"></span>
-          <span i18n="please_try_again"></span>
-          <span i18n="contact_support_if_errors_continue" i18n_replacement_el="mab-enrollment-resend-error-link">
-            <a id="mab-enrollment-resend-error-link" href="https://help.getadblock.com/" target="_blank"></a>
-          </span>
-        </p>
-        <div>
-          <button id="mab-enrollment-resend" i18n="myadblock_enrollment_resend_button"></button>
-          <div id="mab-enrollment-progress" class="lds-ellipsis" style="display: none"><div></div><div></div><div></div><div></div></div>
-        </div>
-      </section>
-      <button id="mab-enrollment-close"><i class="material-icons md-18">close</i><span class="sr-only" i18n="close"></span></button>
-    </div>
-
-    <div id="myadblock-features">
-
-      <!-- START: Themes tab feature -->
-      <div class="mab-feature hover-shadow">
-        <a href="#mab-themes">
-          <section class="mab-feature-header">
-            <i class="material-icons md-24 header-icon">featured_video</i>
-            <span i18n="themes">Themes</span>
-          </section>
-          <section class="mab-feature-body">
-            <span i18n="myadblock_themes_description"></span>
-            <img id="themes-preview"/>
-          </section>
-        </a>
+      <div id="mab-enrollment-section" style="display: none">
+        <header>
+          <h1 i18n="myadblock_enrollment_title"></h1>
+          <form>
+            <input type="checkbox" id="mab-enrollment-hide-forever">
+            <label for="mab-enrollment-hide-forever" i18n="myadblock_enrollment_hide_forever"></label>
+          </form>
+        </header>
+        <section id="mab-link-section">
+          <p id="mab-enrollment-success" i18n="myadblock_enrollment_success"></p>
+          <i id="mab-enrollment-resend-success-icon" style="display: none" class="material-icons md-24">check_circle</i>
+          <p id="mab-enrollment-resend-success" style="display: none">
+            <span i18n="check_email"></span>
+            <span id="mab-enrollment-resend-success-email" i18n="myadblock_enrollment_resend_success"></span>
+            <span i18n="myadblock_enrollment_link_info"></span>
+          </p>
+          <i id="mab-enrollment-resend-error-icon" style="display: none" class="material-icons md-24">cancel</i>
+          <p id="mab-enrollment-resend-error" style="display: none">
+            <span i18n="myadblock_enrollment_resend_error"></span>
+            <span i18n="please_try_again"></span>
+            <span i18n="contact_support_if_errors_continue" i18n_replacement_el="mab-enrollment-resend-error-link">
+              <a id="mab-enrollment-resend-error-link" href="https://help.getadblock.com/" target="_blank"></a>
+            </span>
+          </p>
+          <div>
+            <button id="mab-enrollment-resend" i18n="myadblock_enrollment_resend_button"></button>
+            <div id="mab-enrollment-progress" class="lds-ellipsis" style="display: none"><div></div><div></div><div></div><div></div></div>
+          </div>
+        </section>
+        <button id="mab-enrollment-close"><i class="material-icons md-18">close</i><span class="sr-only" i18n="close"></span></button>
       </div>
-      <!-- END: Themes tab feature -->
 
-      <!-- START: Image Swap tab feature -->
-      <div class="mab-feature locked">
-        <a href="#mab-image-swap">
-          <section class="mab-feature-header">
-            <i class="material-icons md-24 header-icon">photo</i>
-            <span i18n="image_swap">Image Swap</span>
-            <img id="landscape-icon" class="mab-icon" />
-            <img id="dog-icon" class="mab-icon" />
-            <img id="cat-icon" class="mab-icon" />
-          </section>
-          <section class="mab-feature-body">
-            <span i18n="myadblock_pic_replacemenet_description"></span>
-            <img id="image-swap-preview"/>
-          </section>
-        </a>
+      <div id="myadblock-features">
 
-        <div class="hover-overlay">
-          <i class="material-icons md-64 hover-locked-icon">lock</i>
-          <span i18n="myadblock_subscribe_invite"></span>
+        <!-- START: Themes tab feature -->
+        <div class="mab-feature hover-shadow">
+          <a href="#mab-themes">
+            <section class="mab-feature-header">
+              <i class="material-icons md-24 header-icon">featured_video</i>
+              <span i18n="themes">Themes</span>
+            </section>
+            <section class="mab-feature-body">
+              <span i18n="myadblock_themes_description"></span>
+              <img id="themes-preview"/>
+            </section>
+          </a>
         </div>
-        <i class="adblock-icon feature-locked-icon">lock_circle</i>
-      </div>
-      <!-- END: Image Swap tab feature -->
+        <!-- END: Themes tab feature -->
+
+        <!-- START: Image Swap tab feature -->
+        <div class="mab-feature locked">
+          <a href="#mab-image-swap">
+            <section class="mab-feature-header">
+              <i class="material-icons md-24 header-icon">photo</i>
+              <span i18n="image_swap">Image Swap</span>
+              <img id="landscape-icon" class="mab-icon" />
+              <img id="dog-icon" class="mab-icon" />
+              <img id="cat-icon" class="mab-icon" />
+            </section>
+            <section class="mab-feature-body">
+              <span i18n="myadblock_pic_replacemenet_description"></span>
+              <img id="image-swap-preview"/>
+            </section>
+          </a>
+
+          <div class="hover-overlay">
+            <i class="material-icons md-64 hover-locked-icon">lock</i>
+            <span i18n="myadblock_subscribe_invite"></span>
+          </div>
+          <i class="adblock-icon feature-locked-icon">lock_circle</i>
+        </div>
+        <!-- END: Image Swap tab feature -->
 
       <!-- START: Sync tab feature -->
       <div class="mab-feature locked">
@@ -109,8 +111,18 @@
       </div>
       <!-- END: Teaser -->
 
-    </div>
-    <div class="translation_credits italic do-not-display"></div>
+      </div>
+      <div class="translation_credits italic do-not-display"></div>
+    </section>
+    <footer style="display: none;">
+      <section>
+        <h2 i18n="myadblock_feedback_title"></h2>
+        <p i18n="myadblock_feedback_info"></p>
+      </section>
+      <div>
+        <button class="mab-feedback-button" i18n="myadblock_feedback_button"></button>
+      </div>
+    </footer>
   </div>
 
   <!-- START: payment iframe block -->

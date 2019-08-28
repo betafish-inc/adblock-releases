@@ -34,6 +34,41 @@ var translateErrorMsg = function(key) {
   var msg = text[key] || {};
   return msg[locale] || msg["en"];
 };
+
+// selected attaches a click and keydown event handler to the matching selector and calls
+// the handler if a click or keydown event occurs (with a CR or space is pressed). We support
+// both mouse and keyboard events to increase accessibility of the popup menu.
+function selected(selector, handler) {
+  let $matched = $(selector);
+  $matched.click(handler);
+  $matched.keydown(function(event) {
+    if (event.which === 13 || event.which === 32) {
+      handler(event);
+    }
+  });
+}
+
+// selectedOnce adds event listeners to the given element for mouse click or keydown CR or space events
+// which runs the handler and immediately removes the event handlers so it can not fire again.
+function selectedOnce(element, handler) {
+  if (!element) {
+    return;
+  }
+  let clickHandler = function() {
+    element.removeEventListener('click', clickHandler);
+    handler();
+  }
+  element.addEventListener('click', clickHandler);
+
+  let keydownHandler = function(event) {
+    if (event.keyCode === 13 || event.keyCode === 32) {
+      element.removeEventListener('keydown', keydownHandler);
+      handler();
+    }
+  }
+  element.addEventListener('keydown', keydownHandler);
+}
+
 var errorOccurred = false;
 var processError = function(err, stack, message) {
   errorOccurred = true;
@@ -48,35 +83,31 @@ var processError = function(err, stack, message) {
   var errorMsgDiv = document.getElementById('div_status_error');
   if (errorMsgDiv) {
 
-    var sendErrorReport = document.getElementById('errorreport');
-    var clickHandler = function() {
-      sendErrorReport.removeEventListener('click', clickHandler);
+    selectedOnce(document.getElementById('errorreport'), function() {
+      sendErrorReport.removeEventListener('keydown', clickHandler);
       sendErrorPayload();
       var first_msg = document.getElementById('first_msg');
       first_msg.style.display = 'none';
       var second_msg = document.getElementById('second_msg');
       second_msg.style.display = 'block';
-    };
-    sendErrorReport.addEventListener('click', clickHandler);
+    });
 
-    var reloadAnchor = document.getElementById('reload');
+    let reloadAnchor = document.getElementById('reload');
     if (chrome && chrome.runtime && chrome.runtime.reload) {
-      var reloadClickHandler = function() {
-        reloadAnchor.removeEventListener('click', reloadClickHandler);
+      selectedOnce(reloadAnchor, function() {
         try {
           chrome.runtime.reload();
         } catch(e) {
-          var reloadMsg = document.getElementById('reload_msg');
+          let reloadMsg = document.getElementById('reload_msg');
           if (reloadMsg) {
             reloadMsg.style.display = "none";
           }
-          var thirdMsg = document.getElementById('third_msg');
+          let thirdMsg = document.getElementById('third_msg');
           if (thirdMsg) {
             thirdMsg.style.display = "block";
           }
         }
-      };
-      reloadAnchor.addEventListener('click', reloadClickHandler);
+      });
     } else {
       reloadAnchor.style.display = "none";
     }
@@ -120,8 +151,8 @@ try {
   var License = BG.License;
   const SyncService = BG.SyncService;
   const Prefs = BG.Prefs;
-  const getBlockedPerPage = BG.getBlockedPerPage;
-  const getDecodedHostname = BG.getDecodedHostname;
+  const userClosedCta = storage_get(License.popupMenuCtaClosedKey);
+  let shown = {};
 
   // the tab/page object, which contains |id| and |url| of
   // the current tab
@@ -135,6 +166,18 @@ try {
     chrome.tabs.create({url});
   };
 
+  const show = function(elementIds) {
+    elementIds.forEach(function (elementId) {
+      shown[elementId] = true;
+    });
+  };
+
+  const hide = function(elementIds) {
+    elementIds.forEach(function (elementId) {
+      shown[elementId] = false;
+    });
+  };
+
   $(function () {
     try {
       localizePage();
@@ -145,6 +188,9 @@ try {
 
       BG.getCurrentTabInfo(function (info) {
         try {
+
+          License.setIconBadgeCTA(stopShowing=true);
+
           if (info.settings) {
             popupMenuTheme = info.settings.color_themes.popup_menu;
           }
@@ -159,25 +205,14 @@ try {
               BG.recordGeneralMessage("popup_closed");
             }
           });
+
           // Cache tab object for later use
           page = info.page;
           pageInfo = info;
-          var shown = {};
-          function show(L) {
-            L.forEach(function (x) {
-              shown[x] = true;
-            });
-          }
-
-          function hide(L) {
-            L.forEach(function (x) {
-              shown[x] = false;
-            });
-          }
-
-          show(['svg_options']);
           var paused = BG.adblockIsPaused();
           var domainPaused = BG.adblockIsDomainPaused({"url": page.url.href, "id": page.id});
+
+          show(['svg_options']);
           if (paused) {
             show(['div_status_paused', 'separator0', 'div_paused_adblock', 'svg_options', 'help_link']);
           } else if (domainPaused) {
@@ -214,23 +249,31 @@ try {
             show(['div_status_beta']);
           }
 
-          if (info.disabledSite) {
-            hide(['div_myadblock_enrollment']);
-          }
-          if (License.shouldShowMyAdBlockEnrollment() && !License.isActiveLicense()) {
-            show(['div_myadblock_enrollment', 'separator-1', 'separator-2']);
-          }
           if (License.isActiveLicense()) {
+            // Show paid user menu option and hide CTAs
             show(['div_myadblock_options', 'separator-1', 'separator-2']);
+            hide(['div_myadblock_enrollment_v2']);
+            hide(['div_myadblock_enrollment']);
+          } else if (userClosedCta) {
+            // Don't show any CTA
+            hide(['div_myadblock_enrollment_v2']);
+            hide(['div_myadblock_enrollment']);
+          } else if (License.displayPopupMenuNewCTA()) {
+            // Show new CTA
+            show(['div_myadblock_enrollment_v2', 'separator-1', 'separator-2']);
+            hide(['div_myadblock_enrollment']);
+          } else if (License.shouldShowMyAdBlockEnrollment()) {
+            // Show old CTA
+            show(['div_myadblock_enrollment', 'separator-1', 'separator-2']);
+            hide(['div_myadblock_enrollment_v2']);
           }
-          if (License.shouldShowMyAdBlockEnrollment() || License.isActiveLicense()) {
-            if (info.disabledSite || info.whitelisted) {
-              hide(['separator-2']);
-            }
-            if (shown['block_counts'] && Prefs.show_statsinpopup) {
-              hide(['separator-1']);
-            }
+
+          if (shown['block_counts'] && Prefs.show_statsinpopup) {
+            hide(['separator-1']);
+          } else if (info.disabledSite || info.whitelisted) {
+            hide(['separator-2']);
           }
+
           if (info.settings.sync_settings &&
               SyncService.getLastGetStatusCode() === 400 &&
               SyncService.getLastGetErrorResponse() &&
@@ -319,14 +362,14 @@ try {
       }
 
       // Click handlers
-      $('#bugreport').click(function () {
+      selected('#bugreport', function () {
         BG.recordGeneralMessage("bugreport_clicked");
         var supportURL = 'https://help.getadblock.com/support/tickets/new';
         openPage(supportURL);
         closeAndReloadPopup();
       });
 
-      $('.header-logo').click(function () {
+      selected('.header-logo', function () {
         BG.recordGeneralMessage("titletext_clicked");
         var chrome_url = 'https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom';
         openPage(chrome_url);
@@ -334,7 +377,7 @@ try {
         closeAndReloadPopup();
       });
 
-      $('#div_enable_adblock_on_this_page').click(function () {
+      selected('#div_enable_adblock_on_this_page', function () {
         BG.recordGeneralMessage("enable_adblock_clicked");
         if (BG.tryToUnwhitelist(page.url.href)) {
           chrome.tabs.reload();
@@ -344,21 +387,21 @@ try {
         }
       });
 
-      $('#div_paused_adblock').click(function () {
+      selected('#div_paused_adblock', function () {
         BG.recordGeneralMessage("unpause_clicked");
         BG.adblockIsPaused(false);
         BG.updateButtonUIAndContextMenus();
         closeAndReloadPopup();
       });
 
-      $('#div_domain_paused_adblock').click(function () {
+      selected('#div_domain_paused_adblock', function () {
         BG.recordGeneralMessage("domain_unpause_clicked");
         BG.adblockIsDomainPaused({"url": page.url.href, "id": page.id}, false);
         BG.updateButtonUIAndContextMenus();
         closeAndReloadPopup();
       });
 
-      $('#div_undo').click(function () {
+      selected('#div_undo', function () {
         BG.recordGeneralMessage("undo_clicked");
         var host = page.url.hostname;
         activeTab = page;
@@ -366,14 +409,14 @@ try {
         closeAndReloadPopup();
       });
 
-      $('#div_whitelist_channel').click(function () {
+      selected('#div_whitelist_channel', function () {
         BG.recordGeneralMessage("whitelist_youtube_clicked");
         BG.createWhitelistFilterForYoutubeChannel(page.url.href);
         closeAndReloadPopup();
         chrome.tabs.reload();
       });
 
-      $('#div_pause_adblock').click(function () {
+      selected('#div_pause_adblock', function () {
         BG.recordGeneralMessage("pause_clicked");
         try {
           if (pageInfo.settings.safari_content_blocking) {
@@ -389,14 +432,14 @@ try {
         }
       });
 
-      $('#div_domain_pause_adblock').click(function () {
+      selected('#div_domain_pause_adblock', function () {
         BG.recordGeneralMessage("domain_pause_clicked");
         BG.adblockIsDomainPaused({"url": page.url.href, "id": page.id}, true);
         BG.updateButtonUIAndContextMenus();
         closeAndReloadPopup();
       });
 
-      $('#div_blacklist').click(function () {
+      selected('#div_blacklist', function () {
         BG.recordGeneralMessage("blacklist_clicked");
         BG.emitPageBroadcast({
             fn: 'top_open_blacklist_ui',
@@ -410,7 +453,7 @@ try {
         closeAndReloadPopup();
       });
 
-      $('#div_whitelist').click(function () {
+      selected('#div_whitelist', function () {
         BG.recordGeneralMessage("whitelist_domain_clicked");
         BG.emitPageBroadcast({
             fn: 'top_open_whitelist_ui',
@@ -422,56 +465,76 @@ try {
         closeAndReloadPopup();
       });
 
-      $('#div_whitelist_page').click(function () {
+      selected('#div_whitelist_page', function () {
         BG.recordGeneralMessage("whitelist_page_clicked");
         BG.createPageWhitelistFilter(page.url.href);
         closeAndReloadPopup();
         chrome.tabs.reload();
       });
 
-      $('#div_troubleshoot_an_ad').click(function () {
+      selected('#div_troubleshoot_an_ad', function () {
         BG.recordGeneralMessage("troubleshoot_ad_clicked");
         var url = 'https://help.getadblock.com/support/solutions/articles/6000109812-report-an-unblocked-ad';
         openPage(url);
         closeAndReloadPopup();
       });
 
-      $('#svg_options').click(function () {
+      selected('#svg_options', function () {
         BG.recordGeneralMessage("options_clicked");
         openPage(chrome.extension.getURL('options.html'));
         closeAndReloadPopup();
       });
 
-      $('#div_myadblock_options').click(function () {
-        BG.recordGeneralMessage("myadblock_options_clicked");
-        openPage(chrome.extension.getURL('options.html#mab-image-swap'));
-        closeAndReloadPopup();
-      });
-
-      $('#div_myadblock_enrollment').click(function () {
+      selected('#div_myadblock_options', function () {
         BG.recordGeneralMessage("myadblock_options_clicked");
         openPage(chrome.extension.getURL('options.html#mab'));
         closeAndReloadPopup();
       });
 
-      $('#help_link').click(function () {
+      selected('#div_myadblock_enrollment, #div_myadblock_enrollment_v2', function () {
+        BG.recordGeneralMessage("myadblock_cta_clicked");
+        openPage(chrome.extension.getURL('options.html#mab'));
+        closeAndReloadPopup();
+      });
+
+      selected('#mabNewCtaClose', function(event) {
+        event.stopPropagation();
+        BG.recordGeneralMessage("myadblock_cta_closed");
+        $('#div_myadblock_enrollment_v2').slideUp();
+        $('#separator-2').hide();
+        storage_set(License.popupMenuCtaClosedKey, true);
+      });
+
+      selected('#help_link', function () {
         BG.recordGeneralMessage("feedback_clicked");
         openPage("http://help.getadblock.com/");
         closeAndReloadPopup();
       });
 
-      $('#link_open').click(function () {
+      selected('#link_open', function () {
         BG.recordGeneralMessage("link_clicked");
         var linkHref = "https://getadblock.com/pay/?exp=7003&u=" + BG.STATS.userId();
         openPage(linkHref);
         closeAndReloadPopup();
       });
 
-      $('#protect_enrollment_btn').click(function () {
+      selected('#protect_enrollment_btn', function () {
         BG.recordGeneralMessage("protect_enrollment_btn_clicked");
         BG.setSetting("show_protect_enrollment", false);
         openPage("https://chrome.google.com/webstore/detail/adblock-protect/fpkpgcabihmjieiegmejiloplfdmpcee");
         closeAndReloadPopup();
+      });
+
+      $('#div_myadblock_enrollment_v2').hover(() => {
+        $('#separator-1').addClass('hide-on-new-cta-hover');
+        $('#separator-2').addClass('hide-on-new-cta-hover');
+        $('#separator0').addClass(shown['separator0'] ? 'hide-on-new-cta-hover' : '');
+        $('#mabNewCtaText').text(translate('new_cta_hovered_text'));
+      }, () => {
+        $('#separator-1').removeClass('hide-on-new-cta-hover');
+        $('#separator-2').removeClass('hide-on-new-cta-hover');
+        $('#separator0').removeClass('hide-on-new-cta-hover');
+        $('#mabNewCtaText').text(translate('new_cta_default_text'));
       });
     } catch(err) {
       processError(err);

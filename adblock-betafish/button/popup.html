@@ -13,8 +13,8 @@
           <img class="header-logo"/>
 
           <span id="header-icons" >
-            <i class="material-icons md-18" id="help_link">live_help</i>
-            <i class="material-icons md-18" id="svg_options">settings</i>
+            <i tabindex="10" class="material-icons md-18" id="help_link">live_help</i>
+            <i tabindex="10" class="material-icons md-18" id="svg_options">settings</i>
           </span>
         </div>
 
@@ -30,11 +30,11 @@
           </p>
           <span id="reload_msg" i18n_error="error_msg_reload" >
           </span>
-          <a id="reload" style="cursor: pointer;" i18n_error="error_msg_here"></a>
+          <a tabindex="0" id="reload" style="cursor: pointer;" i18n_error="error_msg_here"></a>
           <br /><br />
           <span i18n_error="error_msg_help" >
           </span>
-          <a i18n_error="error_msg_here" style="cursor: pointer;" href="https://help.getadblock.com/support/solutions/articles/6000137757-the-adblock-menu-doesn-t-open-or-contains-only-a-donation-request-or-icons-in-chrome" target="_blank" ></a>
+          <a tabindex="0" i18n_error="error_msg_here" style="cursor: pointer;" href="https://help.getadblock.com/support/solutions/articles/6000137757-the-adblock-menu-doesn-t-open-or-contains-only-a-donation-request-or-icons-in-chrome" target="_blank" ></a>
         </div>
 
         <!-- ************ Status messages and block counter *********** -->
@@ -44,7 +44,7 @@
         <div id="div_status_beta" class="menu-status" style="display:none;">
             <span style="font-size: 12px;">
                You are using AdBlock Beta!<br>
-               If you find a bug, please <a id="bugreport" href="#" >report it</a>!
+               If you find a bug, please <a tabindex="0" id="bugreport" href="#" >report it</a>!
             </span>
         </div>
 
@@ -64,7 +64,7 @@
 
         <div id="div_sync_outofdate_error_msg" >
           <span i18n="sync_message_old_version_part_1"></span>
-          <a i18n="sync_message_old_version_part_2" i18n_replacement_el="oldversionlink" href="https://help.getadblock.com/support/solutions/articles/6000087857-how-do-i-make-sure-adblock-is-up-to-date-" target="_blank"> <span id="oldversionlink" class="link-text-color"></span> </a>
+          <a tabindex="0" i18n="sync_message_old_version_part_2" i18n_replacement_el="oldversionlink" href="https://help.getadblock.com/support/solutions/articles/6000087857-how-do-i-make-sure-adblock-is-up-to-date-" target="_blank"> <span id="oldversionlink" class="link-text-color"></span> </a>
         </div>
 
         <div id="div_status_whitelisted" class="menu-status-italic">
@@ -81,19 +81,25 @@
 
         <div id="div_adblock_protect_enrollment" class="menu-entry">
           <span id="protect_enrollment_text" i18n="adblockprotectenrollmenttext"></span>
-          <div id="protect_enrollment_btn" i18n="adblockprotectenrollmentbutton"></div>
+          <div tabindex="0" id="protect_enrollment_btn" i18n="adblockprotectenrollmentbutton"></div>
         </div>
 
         <div id="separator-1" class="separator"></div>
 
-        <div id="div_myadblock_enrollment" class="menu-entry">
+        <div tabindex="0" id="div_myadblock_enrollment" class="menu-entry">
           <span id="newText" i18n="newmyadblockenrollment"></span>&nbsp<span i18n="myadblockenrollment"></span>
           <img id="landscape_enrollment" class="myadblocklogo landscape" src="icons/adblock-picreplacement-images-menu-landscape.png" />
           <img id="dog_enrollment" class="myadblocklogo dog" src="icons/adblock-picreplacement-images-menu-dog.png" />
           <img id="cat_enrollment" class="myadblocklogo cat" src="icons/adblock-picreplacement-images-menu-cat.png" />
         </div>
 
-        <div id="div_myadblock_options" class="menu-entry">
+        <div id="div_myadblock_enrollment_v2" class="menu-entry">
+          <span id="newText_v2" i18n="new_badge"></span>
+          <span id="mabNewCtaText" i18n="new_cta_default_text"><span></span></span>
+          <span id="mabNewCtaClose"><i class="material-icons md-18">close</i></span>
+        </div>
+
+        <div tabindex="0" id="div_myadblock_options" class="menu-entry">
           <span id="myadblockoptionstext" i18n="myadblockoptions"></span>
           <img id="landscape_option" class="myadblocklogo landscape" src="icons/adblock-picreplacement-images-menu-landscape.png" />
           <img id="dog_option" class="myadblocklogo dog" src="icons/adblock-picreplacement-images-menu-dog.png" />
@@ -104,43 +110,43 @@
 
         <!-- ************ Standard menu entries *********** -->
 
-        <div i18n="undo_last_block_site" id="div_undo" class="menu-entry">
+        <div tabindex="0" i18n="undo_last_block_site" id="div_undo" class="menu-entry">
         </div>
 
-        <div id="div_whitelist_channel" class="menu-entry">
+        <div tabindex="0" id="div_whitelist_channel" class="menu-entry">
         </div>
 
         <div id="separator0" class="separator"></div>
 
-        <div i18n="enable_adblock" id="div_enable_adblock_on_this_page" class="menu-entry">
+        <div tabindex="0" i18n="enable_adblock" id="div_enable_adblock_on_this_page" class="menu-entry">
         </div>
 
-        <div i18n="domain_pause_adblock" id="div_domain_pause_adblock" class="menu-entry">
+        <div tabindex="0" i18n="domain_pause_adblock" id="div_domain_pause_adblock" class="menu-entry">
         </div>
 
-        <div i18n="resume_blocking_ads" id="div_domain_paused_adblock" class="menu-entry">
+        <div tabindex="0" i18n="resume_blocking_ads" id="div_domain_paused_adblock" class="menu-entry">
         </div>
 
-        <div i18n="pause_adblock_everywhere" id="div_pause_adblock" class="menu-entry">
+        <div tabindex="0" i18n="pause_adblock_everywhere" id="div_pause_adblock" class="menu-entry">
         </div>
 
-        <div i18n="resume_blocking_ads" id="div_paused_adblock" class="menu-entry">
+        <div tabindex="0" i18n="resume_blocking_ads" id="div_paused_adblock" class="menu-entry">
         </div>
 
         <div id="separator4" class="separator"></div>
 
-        <div i18n="block_an_ad_on_this_page" id="div_blacklist" class="menu-entry">
+        <div tabindex="0" i18n="block_an_ad_on_this_page" id="div_blacklist" class="menu-entry">
         </div>
 
-        <div i18n="dont_run_on_this_page" id="div_whitelist_page" class="menu-entry">
+        <div tabindex="0" i18n="dont_run_on_this_page" id="div_whitelist_page" class="menu-entry">
         </div>
 
-        <div id="div_whitelist" class="menu-entry" i18n="dont_run_on_pages_on_site">
+        <div tabindex="0" id="div_whitelist" class="menu-entry" i18n="dont_run_on_pages_on_site">
         </div>
 
         <div id="separator3" class="separator"></div>
 
-        <div id="div_troubleshoot_an_ad" class="menu-entry" i18n="troubleshoot_an_ad">
+        <div tabindex="0" id="div_troubleshoot_an_ad" class="menu-entry" i18n="troubleshoot_an_ad">
         </div>
 
         <div id="separator1" class="separator"></div>
@@ -153,7 +159,7 @@
 
       <div id="div_slideout" style="cursor: pointer;">
         <div style="margin: 5px 0px;">
-          <a id="link_open" i18n="donate_to_adblock"></a>
+          <a href="#" tabindex="0" id="link_open" i18n="donate_to_adblock"></a>
         </div>
       </div>
     </div> <!-- wrapper -->

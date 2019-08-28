@@ -9,9 +9,11 @@ let licenseNotifier = new EventEmitter();
 
 var License = (function () {
   const isProd = true;
-  var licenseStorageKey = 'license';
-  var installTimestampStorageKey = 'install_timestamp';
-  var myAdBlockEnrollmentFeatureKey = 'myAdBlockFeature';
+  const licenseStorageKey = 'license';
+  const installTimestampStorageKey = 'install_timestamp';
+  const myAdBlockEnrollmentFeatureKey = 'myAdBlockFeature';
+  const statsInIconKey = 'current_show_statsinicon';
+  const popupMenuCtaClosedKey = 'popup_menu_cta_closed';
   var licenseAlarmName = 'licenseAlarm';
   var theLicense = undefined;
   var oneDayInMinutes = 1140;
@@ -126,10 +128,10 @@ var License = (function () {
       return pingData;
   };
 
-
   return {
     licenseStorageKey: licenseStorageKey,
     myAdBlockEnrollmentFeatureKey: myAdBlockEnrollmentFeatureKey,
+    popupMenuCtaClosedKey: popupMenuCtaClosedKey,
     initialized: initialized,
     licenseAlarmName: licenseAlarmName,
     licenseTimer: undefined, // the license update timer token
@@ -153,7 +155,10 @@ var License = (function () {
       if (pingData.myadblock_enrollment === true) {
         loadFromStorage(function() {
           theLicense.myadblock_enrollment = true;
+          theLicense.var = pingData.var;
+          theLicense.exp = pingData.exp;
           License.set(theLicense);
+          License.setIconBadgeCTA();
         });
 
         // Create myAdBlock storage if it doesn't already exist
@@ -330,6 +335,40 @@ var License = (function () {
     shouldShowMyAdBlockEnrollment: function() {
       return License.isMyAdBlockEnrolled() && !License.isActiveLicense();
     },
+    displayPopupMenuNewCTA: function() {
+      const isNotActive = !License.isActiveLicense();
+      const variant = License.get() ? License.get().var : undefined;
+      return License && isNotActive && [3, 4].includes(variant);
+    },
+    /**
+     * Handles the display of the New badge on the toolbar icon.
+     * - Add it if the 'pingData.var' was 2 or 4
+     * - Remove it if the 'pingData.var' was 1, 3 or undefined
+     * - Remove it if the popup menu opened
+     * @param {Boolean} [stopShowing]
+     */
+    setIconBadgeCTA: function(stopShowing) {
+      if (!License || !License.get() || !License.get().var) {
+        return;
+      }
+      const varCTA = License.get().var; // 1, 2, 3, 4 or undefined
+      const showNewBadge = varCTA === 2 || varCTA === 4;
+
+      if (showNewBadge && !stopShowing) {
+        storage_set(statsInIconKey, Prefs.show_statsinicon);
+        Prefs.show_statsinicon = false;
+        chrome.browserAction.setBadgeBackgroundColor({color: '#03bcfc'})
+        chrome.browserAction.setBadgeText({text: translate('new_badge')});
+      } else {
+        const storedValue = storage_get(statsInIconKey);
+
+        // Restore show_statsinicon if we previously stored its value
+        if (typeof storedValue === 'boolean') {
+          Prefs.show_statsinicon = storedValue;
+        }
+        chrome.browserAction.setBadgeText({text: ''});
+      }
+    },
     // fetchLicenseAPI automates the common steps required to call the /license/api endpoint. POST bodies
     // will always automatically contain the command, license and userid so only provide the missing fields
     // in the body parameter. The ok callback handler receives the data returned by the API and the fail
@@ -409,6 +448,7 @@ chrome.runtime.onMessage.addListener(
         });
       }
     }
+
     return true;
 });
 

@@ -68,6 +68,7 @@
 
     loadCurrentSettingsIntoPage();
     $('input.invisible-overlay').change(updateChannelSelection);
+
     window.addEventListener("unload", function() {
       channelsNotifier.off("channels.changed", onChannelsChanged);
     });

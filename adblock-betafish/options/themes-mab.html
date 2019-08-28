@@ -1,182 +1,193 @@
 <!doctype html>
-<div class="option-page-box" id="themes-page">
+
+<div class="option-page-box mab-page-box">
   <div class="option-page-content">
+    <section>
+      <div class="page-title align-items-center">
+        <i id="video-icon" class="material-icons md-24">featured_video</i>
+        <h1 id="themes-title" i18n="themes" class="page-title"></h1>
+      </div>
 
-    <div class="page-title align-items-center">
-      <i id="video-icon" class="material-icons md-24">featured_video</i>
-      <h1 id="themes-title" i18n="themes" class="page-title"></h1>
-    </div>
+      <div id="themes-sections" class="theme-row">
+        <section id="popup-menu-themes">
+          <h2 i18n="popup_menu_theme" class="paragraph-title bottom-line"></h2>
+          <div class="theme-section-row">
 
-    <div id="themes-sections" class="theme-row">
-      <section id="popup-menu-themes">
-        <h2 i18n="popup_menu_theme" class="paragraph-title bottom-line"></h2>
-        <div class="theme-section-row">
+            <div class="theme-wrapper">
+              <div class="theme-box default-theme" data-key="popup_menu" data-theme="default_theme">
+                <div class="theme-box-top">
+                  <img src="icons/default_theme/minicard.svg" />
+                </div>
+                <div class="theme-box-bottom">
+                  <div i18n="default_theme" class="theme-name"></div>
+                  <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
+                </div>
+                <div class="theme-hover-overlay">
+                  <div class="theme-hover-overlay-top"></div>
+                  <i class="material-icons md-64 search">search</i>
+                </div>
+              </div>
+              <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
+            </div>
 
-          <div class="theme-wrapper">
-            <div class="theme-box default-theme" data-key="popup_menu" data-theme="default_theme">
+            <div class="theme-wrapper">
+              <div class="theme-box dark-theme" data-key="popup_menu" data-theme="dark_theme">
+                <div class="theme-box-top">
+                  <img src="icons/dark_theme/minicard.svg" />
+                </div>
+                <div class="theme-box-bottom">
+                  <div i18n="dark_theme" class="theme-name"></div>
+                  <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
+                </div>
+                <div class="theme-hover-overlay">
+                  <div class="theme-hover-overlay-top"></div>
+                  <i class="material-icons md-64 search">search</i>
+                </div>
+              </div>
+              <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
+            </div>
+
+            <div class="theme-wrapper locked">
+              <div class="theme-box watermelon-theme" data-key="popup_menu" data-theme="watermelon_theme">
+                <div class="theme-box-top">
+                  <img src="icons/watermelon_theme/minicard.svg" />
+                </div>
+                <div class="theme-box-bottom align-items-center">
+                  <i class="theme-name-lock watermelon-theme material-icons md-16">lock</i>
+                  <div i18n="watermelon_theme" class="theme-name"></div>
+                  <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
+                </div>
+                <div class="theme-hover-overlay">
+                  <div class="theme-hover-overlay-top"></div>
+                  <i class="material-icons md-64 search">search</i>
+                </div>
+              </div>
+              <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
+              <i class="adblock-icons circle-icon-bg-24 theme-locked-icon">lock_circle</i>
+            </div>
+
+            <div class="theme-wrapper locked">
+              <div class="theme-box solarized-theme" data-key="popup_menu" data-theme="solarized_theme">
+                <div class="theme-box-top">
+                  <img src="icons/solarized_theme/minicard.svg" />
+                </div>
+                <div class="theme-box-bottom align-items-center">
+                  <i class="theme-name-lock solarized-theme material-icons md-16">lock</i>
+                  <div i18n="solarized_theme" class="theme-name"></div>
+                  <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
+                </div>
+                <div class="theme-hover-overlay">
+                  <div class="theme-hover-overlay-top"></div>
+                  <i class="material-icons md-64 search">search</i>
+                </div>
+              </div>
+              <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
+              <i class="adblock-icons circle-icon-bg-24 theme-locked-icon">lock_circle</i>
+            </div>
+
+            <div class="theme-wrapper locked">
+              <div class="theme-box ocean-theme" data-key="popup_menu" data-theme="ocean_theme">
+                <div class="theme-box-top">
+                  <img src="icons/ocean_theme/minicard.svg" />
+                </div>
+                <div class="theme-box-bottom align-items-center">
+                  <i class="theme-name-lock ocean-theme material-icons md-16">lock</i>
+                  <div i18n="ocean_theme" class="theme-name"></div>
+                  <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
+                </div>
+                <div class="theme-hover-overlay">
+                  <div class="theme-hover-overlay-top"></div>
+                  <i class="material-icons md-64 search">search</i>
+                </div>
+              </div>
+              <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
+              <i class="adblock-icons circle-icon-bg-24 theme-locked-icon">lock_circle</i>
+            </div>
+
+            <div class="theme-wrapper locked">
+              <div class="theme-box sunshine-theme" data-key="popup_menu" data-theme="sunshine_theme">
+                <div class="theme-box-top">
+                  <img src="icons/sunshine_theme/minicard.svg" />
+                </div>
+                <div class="theme-box-bottom align-items-center">
+                  <i class="theme-name-lock sunshine-theme material-icons md-16">lock</i>
+                  <div i18n="sunshine_theme" class="theme-name"></div>
+                  <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
+                </div>
+                <div class="theme-hover-overlay">
+                  <div class="theme-hover-overlay-top"></div>
+                  <i class="material-icons md-64 search">search</i>
+                </div>
+              </div>
+              <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
+              <i class="adblock-icons circle-icon-bg-24 theme-locked-icon">lock_circle</i>
+            </div>
+          </div>
+        </section>
+
+        <section id="options-page-themes">
+          <h2 i18n="options_page_theme" class="paragraph-title bottom-line"></h2>
+          <div class="theme-section-row narrow-themes-row">
+
+            <div class="theme-wrapper">
+              <div class="theme-box default-theme" data-key="options_page" data-theme="default_theme">
+                <div class="theme-box-top">
+                  <img src="icons/default_theme/minicard.svg" />
+                </div>
+                <div class="theme-box-bottom">
+                  <div i18n="default_theme" class="theme-name"></div>
+                  <input type="radio" name="options-page-theme" class="invisible-radio-button" />
+                </div>
+                <div class="theme-hover-overlay">
+                  <div class="theme-hover-overlay-top"></div>
+                  <i class="material-icons md-64 search">search</i>
+                </div>
+              </div>
+              <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
+            </div>
+
+            <div class="theme-wrapper">
+              <div class="theme-box dark-theme" data-key="options_page" data-theme="dark_theme">
+                <div class="theme-box-top">
+                  <img src="icons/dark_theme/minicard.svg" />
+                </div>
+                <div class="theme-box-bottom">
+                  <div i18n="dark_theme" class="theme-name"></div>
+                  <input type="radio" name="options-page-theme" class="invisible-radio-button" />
+                </div>
+                <div class="theme-hover-overlay">
+                  <div class="theme-hover-overlay-top"></div>
+                  <i class="material-icons md-64 search">search</i>
+                </div>
+              </div>
+              <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
+            </div>
+
+            <div class="theme-box teaser">
               <div class="theme-box-top">
-                <img src="icons/default_theme/minicard.svg" />
+                <img src="icons/blank-minicard.svg" />
+                <span i18n="more_themes_on_the_way" class="break-text"></span>
               </div>
               <div class="theme-box-bottom">
-                <div i18n="default_theme" class="theme-name"></div>
-                <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
-              </div>
-              <div class="theme-hover-overlay">
-                <div class="theme-hover-overlay-top"></div>
-                <i class="material-icons md-64 search">search</i>
+                <span i18n="stay_tuned" class="break-text"></span>
               </div>
             </div>
-            <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
-          </div>
 
-          <div class="theme-wrapper">
-            <div class="theme-box dark-theme" data-key="popup_menu" data-theme="dark_theme">
-              <div class="theme-box-top">
-                <img src="icons/dark_theme/minicard.svg" />
-              </div>
-              <div class="theme-box-bottom">
-                <div i18n="dark_theme" class="theme-name"></div>
-                <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
-              </div>
-              <div class="theme-hover-overlay">
-                <div class="theme-hover-overlay-top"></div>
-                <i class="material-icons md-64 search">search</i>
-              </div>
-            </div>
-            <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
           </div>
+        </section>
+      </div>
 
-          <div class="theme-wrapper locked">
-            <div class="theme-box watermelon-theme" data-key="popup_menu" data-theme="watermelon_theme">
-              <div class="theme-box-top">
-                <img src="icons/watermelon_theme/minicard.svg" />
-              </div>
-              <div class="theme-box-bottom align-items-center">
-                <i class="theme-name-lock watermelon-theme material-icons md-16">lock</i>
-                <div i18n="watermelon_theme" class="theme-name"></div>
-                <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
-              </div>
-              <div class="theme-hover-overlay">
-                <div class="theme-hover-overlay-top"></div>
-                <i class="material-icons md-64 search">search</i>
-              </div>
-            </div>
-            <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
-            <i class="adblock-icons circle-icon-bg-24 theme-locked-icon">lock_circle</i>
-          </div>
-
-          <div class="theme-wrapper locked">
-            <div class="theme-box solarized-theme" data-key="popup_menu" data-theme="solarized_theme">
-              <div class="theme-box-top">
-                <img src="icons/solarized_theme/minicard.svg" />
-              </div>
-              <div class="theme-box-bottom align-items-center">
-                <i class="theme-name-lock solarized-theme material-icons md-16">lock</i>
-                <div i18n="solarized_theme" class="theme-name"></div>
-                <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
-              </div>
-              <div class="theme-hover-overlay">
-                <div class="theme-hover-overlay-top"></div>
-                <i class="material-icons md-64 search">search</i>
-              </div>
-            </div>
-            <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
-            <i class="adblock-icons circle-icon-bg-24 theme-locked-icon">lock_circle</i>
-          </div>
-
-          <div class="theme-wrapper locked">
-            <div class="theme-box ocean-theme" data-key="popup_menu" data-theme="ocean_theme">
-              <div class="theme-box-top">
-                <img src="icons/ocean_theme/minicard.svg" />
-              </div>
-              <div class="theme-box-bottom align-items-center">
-                <i class="theme-name-lock ocean-theme material-icons md-16">lock</i>
-                <div i18n="ocean_theme" class="theme-name"></div>
-                <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
-              </div>
-              <div class="theme-hover-overlay">
-                <div class="theme-hover-overlay-top"></div>
-                <i class="material-icons md-64 search">search</i>
-              </div>
-            </div>
-            <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
-            <i class="adblock-icons circle-icon-bg-24 theme-locked-icon">lock_circle</i>
-          </div>
-
-          <div class="theme-wrapper locked">
-            <div class="theme-box sunshine-theme" data-key="popup_menu" data-theme="sunshine_theme">
-              <div class="theme-box-top">
-                <img src="icons/sunshine_theme/minicard.svg" />
-              </div>
-              <div class="theme-box-bottom align-items-center">
-                <i class="theme-name-lock sunshine-theme material-icons md-16">lock</i>
-                <div i18n="sunshine_theme" class="theme-name"></div>
-                <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
-              </div>
-              <div class="theme-hover-overlay">
-                <div class="theme-hover-overlay-top"></div>
-                <i class="material-icons md-64 search">search</i>
-              </div>
-            </div>
-            <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
-            <i class="adblock-icons circle-icon-bg-24 theme-locked-icon">lock_circle</i>
-          </div>
-        </div>
+      <div class="translation_credits italic do-not-display"></div>
+    </section>
+    <footer style="display: none;">
+      <section>
+        <h2 i18n="myadblock_feedback_title"></h2>
+        <p i18n="myadblock_feedback_info"></p>
       </section>
-
-      <section id="options-page-themes">
-        <h2 i18n="options_page_theme" class="paragraph-title bottom-line"></h2>
-        <div class="theme-section-row narrow-themes-row">
-
-          <div class="theme-wrapper">
-            <div class="theme-box default-theme" data-key="options_page" data-theme="default_theme">
-              <div class="theme-box-top">
-                <img src="icons/default_theme/minicard.svg" />
-              </div>
-              <div class="theme-box-bottom">
-                <div i18n="default_theme" class="theme-name"></div>
-                <input type="radio" name="options-page-theme" class="invisible-radio-button" />
-              </div>
-              <div class="theme-hover-overlay">
-                <div class="theme-hover-overlay-top"></div>
-                <i class="material-icons md-64 search">search</i>
-              </div>
-            </div>
-            <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
-          </div>
-
-          <div class="theme-wrapper">
-            <div class="theme-box dark-theme" data-key="options_page" data-theme="dark_theme">
-              <div class="theme-box-top">
-                <img src="icons/dark_theme/minicard.svg" />
-              </div>
-              <div class="theme-box-bottom">
-                <div i18n="dark_theme" class="theme-name"></div>
-                <input type="radio" name="options-page-theme" class="invisible-radio-button" />
-              </div>
-              <div class="theme-hover-overlay">
-                <div class="theme-hover-overlay-top"></div>
-                <i class="material-icons md-64 search">search</i>
-              </div>
-            </div>
-            <i class="material-icons circle-icon-bg-24 theme-selected-icon">check_circle</i>
-          </div>
-
-          <div class="theme-box teaser">
-            <div class="theme-box-top">
-              <img src="icons/blank-minicard.svg" />
-              <span i18n="more_themes_on_the_way" class="break-text"></span>
-            </div>
-            <div class="theme-box-bottom">
-              <span i18n="stay_tuned" class="break-text"></span>
-            </div>
-          </div>
-
-        </div>
-      </section>
-    </div>
-
-    <div class="translation_credits italic do-not-display"></div>
+      <div>
+        <button class="mab-feedback-button" i18n="myadblock_feedback_button"></button>
+      </div>
+    </footer>
   </div>
 
   <!-- START: payment iframe block -->

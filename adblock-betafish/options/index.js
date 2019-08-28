@@ -73,7 +73,7 @@ function displayTranslationCredit() {
 
     if (translators.length > 0) {
       var $translatorsCreditBubble = $('.translation_credits');
-      var $translatorCreditDiv = $('<div></div');
+      var $translatorCreditDiv = $('<div></div>');
       var $translatorNamesDiv = $('<div></div>');
 
       $translatorCreditDiv.addClass('speech-bubble-content').text(translate('translator_credit2'));

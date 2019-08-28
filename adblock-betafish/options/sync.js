@@ -207,6 +207,5 @@ const onSyncDataInitialGetError = function(errorCode) {
         }
         $("#turn-on-div").show();
     }
-
   });
 })();

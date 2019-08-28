@@ -181,22 +181,55 @@ function addMyAdBlockTab() {
     $('#themes-tab').show();
     return false;
   }
-};
+}
+
+
+// displayMABFeedbackCTA checks if the user has set their language to english and displays the feedback call to action on MyAdBlock related options pages:
+//
+// MyAdBlock
+// MAB - Themes
+// MAB - Image Swap
+// MAB - Sync
+const displayMABFeedbackCTA = function() {
+  let lang = chrome.i18n.getUILanguage();
+  if (lang === 'en' || lang.startsWith('en-')) {
+    $('div.mab-page-box > .option-page-content > footer').removeAttr('style');
+    let $feedbackButton = $('.mab-feedback-button');
+    $feedbackButton.click(function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      let url = 'https://getadblock.typeform.com/to/zKDlkc';
+      if (License.isActiveLicense()) {
+        url = 'https://getadblock.typeform.com/to/VUFngU';
+      }
+      chrome.tabs.create({url});
+      $feedbackButton.blur();
+    });
+  }
+}
 
 // Load all HTML templates in respective tab panels
 // and translate strings on load completion
 function loadTabPanelsHTML() {
   let $tabPanels = $('#tab-content .tab');
+  let tabsLoaded = 1; // track the tabs that are loaded
   $.each($tabPanels, function(i, panel) {
+    let $panel = $(panel);
     let panelID = $(panel).attr('id');
 
     let panelHTML = `adblock-options-${ panelID }.html`;
-    $(panel).load(panelHTML, function( response, status, xhr) {
-      $(panel).prepend(getSyncOutOfDateMessageDiv(i));
-      if ($(panel).attr('syncMessageDiv')) {
-        $(panel).prepend(syncMessageDiv);
+    $panel.load(panelHTML, function( response, status, xhr) {
+      $panel.prepend(getSyncOutOfDateMessageDiv(i));
+      if ($panel.attr('syncMessageDiv')) {
+        $panel.prepend(syncMessageDiv);
       }
       localizePage();
+      tabsLoaded++;
+      if (tabsLoaded >= $tabPanels.length) {
+        // all tabs have been loaded and localized - call
+        // any post processing handlers here.
+        displayMABFeedbackCTA();
+      }
     });
   });
 }
@@ -229,4 +262,8 @@ $(document).ready(function () {
     let tabID = $(this).attr('href');
     activateTab(tabID, myAdBlockTabAdded);
   });
+
+  // 5. Display CTA - a future library update will support
+  // automatically injecting the CTA HTML as well.
+  displayMABFeedbackCTA();
 });

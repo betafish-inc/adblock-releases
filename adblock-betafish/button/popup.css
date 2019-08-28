@@ -17,6 +17,9 @@ body {
   opacity: 0.5;
   margin: 0px 10px;
 }
+.separator.hide-on-new-cta-hover {
+  background-color: var(--background-color);
+}
 .menu-entry {
   padding: 0px 4px 0px 10px;
   cursor: pointer;
@@ -69,9 +72,6 @@ body {
 }
 a {
   color: var(--link-color);
-}
-a:focus {
-  outline: none;
 }
 a:hover {
   font-weight: bold;
@@ -135,6 +135,46 @@ a:hover {
   font-weight: bold;
   font-size: 14px;
 }
+#newText_v2 {
+  color: white;
+  background-color: #03bcfc;
+  font-weight: bold;
+  font-size: 13px;
+  border-radius: 3px;
+  padding: 1px 5px;
+  line-height: normal;
+  margin: 0 5px 0 0;
+}
+#mabNewCtaClose {
+  display: none;
+  height: 100%;
+  width: 28px;
+  text-align: center;
+  vertical-align: center;
+}
+#mabNewCtaClose > i {
+  color: white;
+}
+#div_myadblock_enrollment_v2 {
+  display: flex;
+  align-items: center;
+}
+#div_myadblock_enrollment_v2:hover {
+  padding-right: 0;
+  color: white;
+  background-color: #2284f7;
+}
+#div_myadblock_enrollment_v2:hover > #mabNewCtaText > span {
+  display: none;
+}
+#div_myadblock_enrollment_v2:hover > #mabNewCtaText::after {
+  font-weight: bold;
+}
+#div_myadblock_enrollment_v2:hover > #mabNewCtaClose {
+  display: inline-block;
+  background-color: #03bcfc;
+  margin-left: auto;
+}
 .right {
   float: right;
 }
@@ -157,6 +197,12 @@ a:hover {
 #header-icons .material-icons:hover {
   opacity: 1;
 }
+
+#header-icons .material-icons:focus {
+  outline: var(--link-color) auto 5px;
+  opacity: 1;
+}
+
 .myadblocklogo {
   float: right;
   height: 18px;

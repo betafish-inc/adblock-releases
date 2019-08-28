@@ -408,7 +408,6 @@ var getCurrentTabInfo = function (callback, secondTime)
           {
             const page = new ext.Page(tab);
             var disabledSite = pageIsUnblockable(page.url.href);
-            var displayStats = Prefs.show_statsinicon;
 
             var result =
             {
