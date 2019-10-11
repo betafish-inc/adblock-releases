@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global chrome, require, exports, STATS, log, getSettings, Prefs, openTab */
 
-// if the ping reponse indicates a survey (tab or overlay)
+// if the ping response indicates a survey (tab or overlay)
 // gracefully processes the request
 const stats = require('stats');
 const { recordGeneralMessage, recordErrorMessage } = require('./servermessages').ServerMessages;
