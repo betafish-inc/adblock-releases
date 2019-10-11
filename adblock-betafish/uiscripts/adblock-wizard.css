@@ -1,225 +1,202 @@
-/*
-** For reducing clashing of styling rules with host websites
-** we need to start all our selectors with '#adblock-dialog'.
-** This is necessary if we support Chrome versions < 53.
-*/
+:host {
+  all: initial;
 
-@import 'fonts/font-face.css'; /* Fallback for older Chrome */
-
-#adblock-dialog,
-#adblock-dialog div,
-#adblock-dialog h1,
-#adblock-dialog p,
-#adblock-dialog span,
-#adblock-dialog button,
-#adblock-dialog header,
-#adblock-dialog footer,
-#adblock-dialog section {
-    all: initial;
+  --border-radius: 6px;
+  --border: #999999;
+  --background-color: white;
+  --text-color: #333333;
+  --button-color: white;
+  --button-background: #f30d12;
+  --button-background-hover: #e40d0d;
+  --button-cancel-background: #999999;
+  --button-cancel-background-hover: #666666;
+  --options-header-bg-color: #f1f1f1;
+  --options-footer-bg-color: #f1f1f1;
+  --check-checked: #05bcfc;
+  --unchecked-circle: #e6e6e6;
 }
 
-#adblock-dialog {
-    font-family: "Lato", Arial, sans-serif;
-    font-size: 16px;
-    --border-radius: 6px;
-    --border: #999999;
-    --background-color: white;
-    --text-color: #333333;
-    --button-color: white;
-    --button-background: #F30D12;
-    --button-background-hover: #E40D0D;
-    --button-cancel-background: #999999;
-    --button-cancel-background-hover: #666666;
-    --options-header-bg-color: #F1F1F1;
-    --options-footer-bg-color: #F1F1F1;
-    --check-checked: #05BCFC;
-    --unchecked-circle: #e6e6e6;
-
-    position: fixed;
-    top: 55px;
-    left: 75px;
-    width: 550px;
-    min-width: 525px;
-    background: var(--background-color);
-    border: 1px solid var(--border);
-    color: var(--text-color);
-    z-index: 2147483647;
-    border-radius: var(--border-radius);
+* {
+  font-family: "Lato", Arial, sans-serif;
+  font-size: 16px;
 }
 
-#adblock-dialog .adblock,
-#adblock-dialog .adblock * {
-    font-family: "Lato", Arial, sans-serif;
-    font-size: 16px;
+/* RTL language */
+
+[dir="rtl"] {
+  left: auto;
+  right: 75px;
 }
 
-#adblock-dialog header.adblock {
-    display: flex;
-    cursor: move;
-    background: var(--options-header-bg-color);
-    color: var(--text-color);
-    border-top-right-radius: var(--border-radius);
-    border-top-left-radius: var(--border-radius);
-    padding: 8px
+#wizard {
+  position: fixed;
+  top: 55px;
+  left: 75px;
+  width: 550px;
+  min-width: 525px;
+  background: var(--background-color);
+  border: 1px solid var(--border);
+  color: var(--text-color);
+  z-index: 2147483647;
+  border-radius: var(--border-radius);
 }
 
-#adblock-dialog header.adblock img.adblock {
-    height: 24px;
-    width: 24px;
+header {
+  display: flex;
+  align-items: center;
+  cursor: move;
+  background: var(--options-header-bg-color);
+  color: var(--text-color);
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
+  padding: 0 8px;
 }
 
-#adblock-dialog header.adblock h1.adblock {
-    display: inline-block;
-    cursor: move;
-    padding: 4px 12px;
+header > img {
+  height: 24px;
+  width: 24px;
 }
 
-#adblock-dialog section.adblock {
-    display: block;
-    padding: 6px 12px;
-    margin-top: 12px;
-    min-height: 40px;
+header > h1 {
+  display: inline-block;
+  cursor: move;
+  padding: 4px 12px;
+  font-size: 16px;
 }
 
-#adblock-dialog footer.adblock {
-    display: flex;
-    justify-content: flex-end;
-    background: var(--options-footer-bg-color);
-    color: var(--text-color);
-    border-bottom-right-radius: var(--border-radius);
-    border-bottom-left-radius: var(--border-radius);
-    padding: 12px
+section {
+  display: block;
+  padding: 6px 12px;
+  margin-top: 12px;
+  min-height: 40px;
 }
 
-#adblock-dialog p.adblock {
-    padding: 20px 0;
+footer {
+  display: flex;
+  justify-content: flex-end;
+  background: var(--options-footer-bg-color);
+  color: var(--text-color);
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+  padding: 12px;
 }
 
-#adblock-dialog input[type="range"].adblock {
-    vertical-align: middle;
+fieldset {
+  border: none;
 }
 
-#adblock-dialog fieldset.adblock {
-    border: none;
+button {
+  color: var(--button-color);
+  background-color: var(--button-background);
+  border: 1px solid #dcdcdc;
+  display: inline-block;
+  font-style: normal;
+  text-decoration: none;
+  text-align: center;
+  border-radius: var(--border-radius);
+  padding: 6px 12px;
+  margin: 0 12px;
 }
 
-#adblock-dialog button.adblock {
-    color: var(--button-color);
-    background-color: var(--button-background);
-    border: 1px solid #dcdcdc;
-    display: inline-block;
-    font-style: normal;
-    text-decoration: none;
-    text-align: center;
-    border-radius: var(--border-radius);
-    padding: 6px 12px;
-    margin: 0 12px;
+button:hover {
+  background-color: var(--button-background-hover);
+  box-shadow: none;
+  -webkit-box-shadow: none;
 }
 
-#adblock-dialog button.adblock:hover {
-    background-color: var(--button-background-hover);
-    box-shadow: none;
-    -webkit-box-shadow: none;
+button:active {
+  position: relative;
+  top: 1px;
 }
 
-#adblock-dialog button.adblock.cancel {
-    background-color: var(--button-cancel-background);
+button:focus {
+  outline: none;
+  box-shadow: none;
 }
 
-#adblock-dialog button.adblock.cancel:hover {
-    background-color: var(--button-cancel-background-hover);
+button.cancel {
+  background-color: var(--button-cancel-background);
 }
 
-#adblock-dialog button.adblock:active {
-    position: relative;
-    top: 1px;
+button.cancel:hover {
+  background-color: var(--button-cancel-background-hover);
 }
 
-#adblock-dialog button.adblock:focus {
-    outline: none;
-    box-shadow: none;
+div > label {
+  margin-left: 7px;
 }
 
-#adblock-dialog div.adblock > label.adblock {
-    margin-left: 7px;
+label {
+  cursor: pointer;
 }
 
-#adblock-dialog label.adblock {
-    cursor: pointer;
+input[type="checkbox"] {
+  height: 16px;
+  width: 16px;
+  vertical-align: top;
 }
 
-#adblock-dialog #adblock-sliders div {
-    display: inline-block;
-}
-
-#adblock-dialog input[type=checkbox] {
-    height: 16px;
-    width: 16px;
-    vertical-align: top;
+input[type="range"] {
+  vertical-align: middle;
 }
 
 /* Whitelist specific */
 
-#adblock-dialog #adblock-wizard-form {
-    padding: 16px 12px;
+#adblock-wizard-form {
+  margin: 16px 12px;
 }
 
-#adblock-dialog #adblock-parts {
-    padding: 30px 12px;
+#adblock-parts > li {
+  display: inline-block;
+  font-style: italic;
 }
 
-#adblock-dialog #adblock-parts li.adblock-part-item {
-    display: inline-block;
-    font-style: italic;
+#adblock-sliders {
+  padding: 5px 0;
 }
 
-#adblock-dialog  #adblock-sliders {
-    padding: 5px 0;
+#adblock-sliders div {
+  display: inline-block;
 }
 
-#adblock-dialog  #adblock-checkboxes {
-    padding: 10px 0;
-}
-
-#adblock-dialog #adblock-sliders div {
-    display: inline-block;
+#adblock-checkboxes {
+  padding: 10px 0;
 }
 
 /* Blacklist specific */
 
-#adblock-dialog  #slider {
-    width: calc(100% - 30px);
-    margin: 15px 15px 0 15px;
-}
-#adblock-dialog  #selected_data .node_attr {
-    margin-left: 10px;
-}
-#adblock-dialog #count {
-    background: #eeeeee;
-    border: 1px solid #dddddd;
-    padding: 3px;
-    line-height: 25px;
-}
-#adblock-dialog  button.adblock.edit.advanced-user {
-    display: none; /* Default */
-}
-#adblock-dialog  #filter_warning {
-    font-weight: bold;
-    color: var(--button-background);
-}
-#adblock-dialog  #summary {
-    display: block;
-    margin: 10px;
-    word-break: break-all;
-}
-#adblock-dialog #adblock-details > div {
-    display: block;
-    margin: 3px 0;
+#slider {
+  width: calc(100% - 30px);
+  margin: 15px 15px 0 15px;
 }
 
-/* RTL languages CSS */
+#selected-data .node_attr {
+  margin-left: 10px;
+}
 
-#adblock-dialog[dir='rtl'] {
-    left: auto;
-    right: 75px;
+#count {
+  background: #eeeeee;
+  border: 1px solid #dddddd;
+  padding: 3px;
+  line-height: 25px;
+}
+
+button.edit.advanced-user {
+  display: none; /* Default */
+}
+
+#filter-warning {
+  font-weight: bold;
+  color: var(--button-background);
+}
+
+#summary {
+  display: block;
+  margin: 10px;
+  word-break: break-all;
+}
+
+#adblock-details > div {
+  display: block;
+  margin: 3px 0;
 }

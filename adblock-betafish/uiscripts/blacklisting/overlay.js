@@ -1,47 +1,55 @@
-Overlay = function(options) {
+'use strict';
 
-  var el = $(options.dom_element);
+function Overlay(options) {
+  const el = $(options.domElement);
 
-  this.image = $("<div class='adblock-killme-overlay'></div>").
-    css({
-      "left": el.position().left,
-      "top": el.position().top,
-      "background-color": "transparent !important",
-      "position": "absolute",
-      "z-index": 1000000
-    }).
-    width(el.width()).
-    height(el.height());
-  this.el = el;
-  this.click_handler = options.click_handler;
-
-  this.image.
-    bind("mouseenter",function() {
-      // crbug.com/110084
-      this.style.setProperty("background-color", "rgba(130, 180, 230, 0.5)", "important");
-    }).
-    bind("mouseleave",function() {
-      // crbug.com/110084
-      this.style.setProperty("background-color", "transparent", "important");
+  this.image = $("<div class='adblock-killme-overlay'></div>")
+    .css({
+      left: el.position().left,
+      top: el.position().top,
+      'background-color': 'transparent !important',
+      position: 'absolute',
+      'z-index': 1000000,
     })
+    .width(el.width())
+    .height(el.height());
+  this.el = el;
+  this.clickHandler = options.clickHandler;
+
+  this.image
+    .bind('mouseenter', function onEnter() {
+      // crbug.com/110084
+      this.style.setProperty('background-color', 'rgba(130, 180, 230, 0.5)', 'important');
+    })
+    .bind('mouseleave', function onLeave() {
+      // crbug.com/110084
+      this.style.setProperty('background-color', 'transparent', 'important');
+    });
 
   Overlay.instances.push(this);
 }
+
 Overlay.instances = [];
-Overlay.removeAll = function() {
-  $.each(Overlay.instances, function(i,overlay) {
+
+Overlay.removeAll = function removeAllOverlays() {
+  $.each(Overlay.instances, (i, overlay) => {
     overlay.image.remove();
   });
   Overlay.instances = [];
-}
-Overlay.prototype.display = function() {
-  var that = this;
-  this.image.
-    appendTo(that.el.parent()).
-    click(function() {
-      that.click_handler(that.el);
+};
+
+Overlay.prototype.display = function displayOverlay() {
+  const that = this;
+  this.image
+    .appendTo(that.el.parent())
+    .click(() => {
+      that.clickHandler(that.el);
       return false;
     });
-}
+};
 
-//@ sourceURL=/uiscripts/blacklisting/overlay.js
+// required return value for tabs.executeScript
+/* eslint-disable-next-line no-unused-expressions */
+'';
+
+//# sourceURL=/uiscripts/blacklisting/overlay.js

@@ -1,13 +1,20 @@
+'use strict';
+
+/* For ESLint: List any global identifiers used in this file below */
+/* global chrome, BGcall, translate, BlacklistUi, bindEnterClickToDefault, mayOpenDialogUi:true,
+   setLangAndDirAttributes, rightClickedItem:true, loadWizardResources */
+
 // Global lock so we can't open more than once on a tab.
-if (typeof may_open_dialog_ui === 'undefined')
-  may_open_dialog_ui = true;
+if (typeof window.mayOpenDialogUi === 'undefined') {
+  window.mayOpenDialogUi = true;
+}
 
-// This script is injected each time the white list wizard is selected. Until we switch to ES6 modules (aka import)
-// we need to protect the code in a namespace so classes aren't declared multiple times.
-var top_open_blacklist_ui = (function() {
-
-  // DragElement makes a given DOM element draggable. It assumes the element is positioned absolutely
-  // and adjusts the element's `top` and `left` styles directly.
+// This script is injected each time the white list wizard is selected. Until we switch to ES6
+// modules (aka import) we need to protect the code in a namespace so classes aren't declared
+// multiple times.
+function topOpenBlacklistUI(options) {
+  // DragElement makes a given DOM element draggable. It assumes the element is positioned
+  // absolutely and adjusts the element's `top` and `left` styles directly.
   // Inputs:
   //    - el : DOM element that activates dragging on mousedown (e.g. wizard header)
   //    - elementToDrag : DOM element that should drag while dragging (e.g. entire wizard)
@@ -19,16 +26,17 @@ var top_open_blacklist_ui = (function() {
       this.pos4 = 0;
       this.el = elementToDrag;
       this.dragging = false;
+      this.activationElement = el;
 
-      if (document.getElementById(el.d + 'header')) {
-        document.getElementById(el.id + 'header').onmousedown = this.dragMouseDown.bind(this);
+      if (document.getElementById(`${el.d}header`)) {
+        document.getElementById(`${el.id}header`).onmousedown = this.dragMouseDown.bind(this);
       } else {
-        el.onmousedown = this.dragMouseDown.bind(this);
+        this.activationElement.onmousedown = this.dragMouseDown.bind(this);
       }
     }
 
     dragMouseDown(e) {
-      let event = e || window.event;
+      const event = e || window.event;
       event.preventDefault();
       this.pos3 = event.clientX;
       this.pos4 = event.clientY;
@@ -38,16 +46,16 @@ var top_open_blacklist_ui = (function() {
     }
 
     elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
+      const event = e || window.event;
+      event.preventDefault();
       // calculate the new cursor position:
-      this.pos1 = this.pos3 - e.clientX;
-      this.pos2 = this.pos4 - e.clientY;
-      this.pos3 = e.clientX;
-      this.pos4 = e.clientY;
+      this.pos1 = this.pos3 - event.clientX;
+      this.pos2 = this.pos4 - event.clientY;
+      this.pos3 = event.clientX;
+      this.pos4 = event.clientY;
       // set the element's new position:
-      this.el.style.top = (this.el.offsetTop - this.pos2) + 'px';
-      this.el.style.left = (this.el.offsetLeft - this.pos1) + 'px';
+      this.el.style.top = `${this.el.offsetTop - this.pos2}px`;
+      this.el.style.left = `${this.el.offsetLeft - this.pos1}px`;
     }
 
     closeDragElement() {
@@ -58,156 +66,144 @@ var top_open_blacklist_ui = (function() {
     }
   }
 
-  function top_open_blacklist_ui(options) {
-    if (!may_open_dialog_ui)
-      return;
-
-    may_open_dialog_ui = false;
-
-    // Get Flash objects out of the way of our UI
-    BGcall('emitPageBroadcast', {fn:'send_content_to_back', options:{}});
-
-    // A empty base <div> is appended to the page's DOM and then a shadow is hosted in it.
-    // The shadow protects our dialog from outside CSS 'leaking' in.
-    // Existing page styles are reset in the shadow/base at the top of `adblock-wizard.css`
-    // using `:host` to select our base and the CCS rule `all:initial;` to perform the reset.
-    const base = document.createElement('div');
-    base.setAttribute('id', 'adblock-host');
-    let $base;
-    if ('attachShadow' in base) {
-      // allow forcing the fallback using feature flag
-      if (sessionStorage.getItem("adblock.wizard.shadow") === 'ignore') {
-        $base = $(base);
-      } else {
-        $base = $(base.attachShadow({mode: 'open'}));
-      }
-    } else {
-      // fallback to using the host node as a poor man's shadow
-      $base = $(base);
-    }
-    load_wizard_resources($base, () => {
-
-      // If they chose 'Block an ad on this page...' ask them to click the ad
-      if (options.nothing_clicked)
-        rightclicked_item = null;
-
-      // If they right clicked in a frame in Chrome, use the frame instead
-      if (options.info && options.info.frameUrl) {
-        var frame = $('iframe').filter(function(i, el) {
-          return el.src == options.info.frameUrl;
-        });
-        if (frame.length == 1)
-          rightclicked_item = frame[0];
-      }
-      if (rightclicked_item && rightclicked_item.nodeName == 'BODY')
-        rightclicked_item = null;
-
-      //check if we're running on website with a frameset, if so, tell
-      //the user we can't run on it.
-      if ($('frameset').length >= 1) {
-          alert(translate('wizardcantrunonframesets'));
-          may_open_dialog_ui = true;
-          return;
-      }
-
-      let html = `
-      <div id='adblock-dialog'>
-
-        <div class='adblock page' id='page_0'>
-          <header class='adblock'>
-            <img class='adblock' aria-hidden='true' src='${chrome.extension.getURL('/icons/icon24.png')}'>
-            <h1 class='adblock'>${translate('blockanadtitle')}</h1>
-          </header>
-          <section class='adblock'>
-            <p class='adblock'>${translate('clickthead')}</p>
-          </section>
-          <footer class='adblock'>
-            <button class='adblock cancel'>${translate('buttoncancel')}</button>
-          </footer>
-        </div>
-
-        <div class='adblock page' id='page_1' style='display:none;'>
-          <header class='adblock'>
-            <img class='adblock' aria-hidden='true' src='${chrome.extension.getURL('/icons/icon24.png')}'>
-            <h1 class='adblock'>${translate('slidertitle')}</h1>
-          </header>
-          <section class='adblock'>
-            <p class='adblock'>${translate('sliderexplanation')}</p>
-            <input class='adblock' id='slider' type='range' min='0' value='0'/>
-          </section>
-          <section class='adblock' id='selected_data'>
-            <b class='adblock'>${translate('blacklisterblockedelement')}</b>
-            <br><br>
-            <span class='adblock'>&lt;&nbsp;</span><i class='adblock' id='selected_node_name'></i>
-            <iclass='adblock' id='selected_closing_tag'>&nbsp;&gt;</i>
-          </section>
-          <footer class='adblock'>
-            <button class='adblock primary looks-good adblock-default-button'>${translate('buttonlooksgood')}</button>
-            <button class='adblock cancel'>${translate('buttoncancel')}</button>
-          </footer>
-        </div>
-
-        <div class='adblock page' id='page_2' style='display:none;'>
-          <header class='adblock'>
-            <img class='adblock' aria-hidden='true' src='${chrome.extension.getURL('/icons/icon24.png')}'>
-            <h1 class='adblock'>${translate('blacklisteroptionstitle')}</h1>
-          </header>
-          <section class='adblock'>
-            <div>${translate('blacklisteroptions1')}</div>
-            <div id='adblock-details'></div>
-          </section>
-          <center class='adblock' id='count'></center>
-          <section class='adblock'>
-            <div>${translate('blacklisternotsure')}</div>
-            <div>${translate('blacklisterthefilter')}</div>
-            <div>
-              <div id='summary'></div><br/>
-              <div id='filter_warning'></div>
-            </div>
-          </section>
-          <footer class='adblock'>
-            <button class='adblock primary block-it adblock-default-button'>${translate('buttonblockit')}</button>
-            <button class='adblock edit advanced-user'>${translate("buttonedit")}</button>
-            <button class='adblock back'>${translate("buttonback")}</button>
-            <button class='adblock cancel'>${translate('buttoncancel')}</button>
-          </footer>
-        </div>
-
-      </div>
-      `;
-      let $dialog = $(html);
-      $dialog.find('header').each((i, header) => {
-        new DragElement(header, $dialog.get(0));
-      });
-      $dialog.find('button.cancel').click(() => {
-        may_open_dialog_ui = true;
-        (document.body || document.documentElement).removeChild(base);
-      });
-
-      setTextDirection($dialog);
-      bindEnterClickToDefault($dialog);
-
-      $base.append($dialog);
-
-      BGcall('getSettings', function(settings) {
-        var advanced_user = settings.show_advanced_options;
-        var blacklist_ui = new BlacklistUi(rightclicked_item, advanced_user, $dialog);
-        blacklist_ui.cancel(function() {
-          may_open_dialog_ui = true;
-        });
-        blacklist_ui.block(function() {
-          may_open_dialog_ui = true;
-          // In case of frames, reload, as the frame might contain matches too.
-          if ($('iframe, frameset, frame').filter(':visible').length > 0)
-            document.location.reload();
-        });
-        blacklist_ui.show();
-      });
-    });
-    (document.body || document.documentElement).appendChild(base);
+  if (!mayOpenDialogUi) {
+    return;
   }
 
-return top_open_blacklist_ui;
-})();
+  mayOpenDialogUi = false;
 
-//@ sourceURL=/uiscripts/top_open_blacklist_ui.js
+  // Get Flash objects out of the way of our UI
+  BGcall('emitPageBroadcast', { fn: 'sendContentToBack', options: {} });
+
+  // A empty base <div> is appended to the page's DOM and then a shadow is hosted in it.
+  // The shadow protects our dialog from outside CSS 'leaking' in.
+  // Existing page styles are reset in the shadow/base at the top of `adblock-wizard.css`
+  // using `:host` to select our base and the CCS rule `all:initial;` to perform the reset.
+  const base = document.createElement('div');
+  const $base = $(base.attachShadow({ mode: 'open' }));
+
+  loadWizardResources($base, () => {
+    // If they chose 'Block an ad on this page...' ask them to click the ad
+    if (options.nothingClicked) {
+      rightClickedItem = null;
+    }
+
+    // If they right clicked in a frame in Chrome, use the frame instead
+    if (options.info && options.info.frameUrl) {
+      const frame = $('iframe').filter((i, el) => el.src === options.info.frameUrl);
+      if (frame.length === 1) {
+        rightClickedItem = frame.get(0);
+      }
+    }
+    if (rightClickedItem && rightClickedItem.nodeName === 'BODY') {
+      rightClickedItem = null;
+    }
+
+    // check if we're running on website with a frameset, if so, tell
+    // the user we can't run on it.
+    if ($('frameset').length >= 1) {
+      // eslint-disable-next-line no-alert
+      alert(translate('wizardcantrunonframesets'));
+      mayOpenDialogUi = true;
+      return;
+    }
+    const html = `
+    <div id='wizard'>
+      <div class='page' id='page_0'>
+        <header>
+          <img aria-hidden='true' src='${chrome.extension.getURL('/icons/icon24.png')}'>
+          <h1>${translate('blockanadtitle')}</h1>
+        </header>
+        <section>
+          <p>${translate('clickthead')}</p>
+        </section>
+        <footer>
+          <button class='cancel'>${translate('buttoncancel')}</button>
+        </footer>
+      </div>
+      <div class='page' id='page_1' style='display:none;'>
+        <header>
+          <img aria-hidden='true' src='${chrome.extension.getURL('/icons/icon24.png')}'>
+          <h1>${translate('slidertitle')}</h1>
+        </header>
+        <section>
+          <p>${translate('sliderexplanation')}</p>
+          <input id='slider' type='range' min='0' value='0'/>
+        </section>
+        <section id='selected-data'>
+          <b>${translate('blacklisterblockedelement')}</b>
+          <br><br>
+          <span>&lt;&nbsp;</span><i id='selected_node_name'></i>
+          <i id='selected_closing_tag'>&nbsp;&gt;</i>
+        </section>
+        <footer>
+          <button class='primary looks-good adblock-default-button'>${translate('buttonlooksgood')}</button>
+          <button class='cancel'>${translate('buttoncancel')}</button>
+        </footer>
+      </div>
+      <div class='page' id='page_2' style='display:none;'>
+        <header>
+          <img aria-hidden='true' src='${chrome.extension.getURL('/icons/icon24.png')}'>
+          <h1>${translate('blacklisteroptionstitle')}</h1>
+        </header>
+        <section>
+          <div>${translate('blacklisteroptions1')}</div>
+          <div id='adblock-details'></div>
+        </section>
+        <center id='count'></center>
+        <section>
+          <div>${translate('blacklisternotsure')}</div>
+          <div>${translate('blacklisterthefilter')}</div>
+          <div>
+            <div id='summary'></div><br/>
+            <div id='filter-warning'></div>
+          </div>
+        </section>
+        <footer>
+          <button class='primary block-it adblock-default-button'>${translate('buttonblockit')}</button>
+          <button class='edit advanced-user'>${translate('buttonedit')}</button>
+          <button class='back'>${translate('buttonback')}</button>
+          <button class='cancel'>${translate('buttoncancel')}</button>
+        </footer>
+      </div>
+    </div>
+    `;
+    const $dialog = $(html);
+    $dialog.find('header').each((i, header) => {
+      // eslint-disable-next-line no-new
+      new DragElement(header, $dialog.get(0));
+    });
+    $dialog.find('button.cancel').click(() => {
+      mayOpenDialogUi = true;
+      (document.body || document.documentElement).removeChild(base);
+    });
+
+    setLangAndDirAttributes($dialog.get(0));
+    bindEnterClickToDefault($dialog);
+
+    $base.append($dialog);
+
+    BGcall('getSettings', (settings) => {
+      const advancedUser = settings.show_advanced_options;
+      const blacklistUI = new BlacklistUi(rightClickedItem, advancedUser, $dialog);
+      blacklistUI.cancel(() => {
+        mayOpenDialogUi = true;
+      });
+      blacklistUI.block(() => {
+        mayOpenDialogUi = true;
+        // In case of frames, reload, as the frame might contain matches too.
+        if ($('iframe, frameset, frame').filter(':visible').length > 0) {
+          document.location.reload();
+        }
+      });
+      blacklistUI.show();
+    });
+  });
+  (document.body || document.documentElement).appendChild(base);
+}
+
+// required return value for tabs.executeScript
+/* eslint-disable-next-line no-unused-expressions */
+'';
+
+//# sourceURL=/uiscripts/top_open_blacklist_ui.js

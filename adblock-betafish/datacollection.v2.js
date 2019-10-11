@@ -1,229 +1,219 @@
-﻿const {postFilterStatsToLogServer} = require('./servermessages').ServerMessages;
+'use strict';
 
-let DataCollectionV2 = exports.DataCollectionV2 = (function()
-{
+/* For ESLint: List any global identifiers used in this file below */
+/* global chrome, require, ext, exports, chromeStorageSetHelper, getSettings, adblockIsPaused,
+   adblockIsDomainPaused, filterStorage, Filter, parseUri, settings, getAllSubscriptionsMinusText,
+   getUserFilters, Utils */
 
-  "use strict";
-  const {extractHostFromFrame} = require("url");
-  const {RegExpFilter,
-         WhitelistFilter,
-         ElemHideFilter} = require("filterClasses");
-  const {filterNotifier} = require("filterNotifier");
-  const {port} = require("messaging");
-  const {idleHandler} = require('./idlehandler');
+const { extractHostFromFrame } = require('url');
+const { ElemHideFilter } = require('filterClasses');
+const { filterNotifier } = require('filterNotifier');
+const { port } = require('messaging');
+const { postFilterStatsToLogServer } = require('./servermessages').ServerMessages;
+const info = require('../buildtools/info');
+const { idleHandler } = require('./idlehandler.js');
+
+const DataCollectionV2 = (function getDataCollectionV2() {
   const HOUR_IN_MS = 1000 * 60 * 60;
-  const TIME_LAST_PUSH_KEY = "timeLastPush";
+  const TIME_LAST_PUSH_KEY = 'timeLastPush';
 
   // Setup memory cache
-  var dataCollectionCache = {};
+  let dataCollectionCache = {};
   dataCollectionCache.filters = {};
   dataCollectionCache.domains = {};
 
-  var handleTabUpdated = function(tabId, changeInfo, tabInfo)
-  {
-    if (chrome.runtime.lastError)
-    {
+  const handleTabUpdated = function (tabId, changeInfo, tabInfo) {
+    if (chrome.runtime.lastError) {
       return;
     }
-    if (!tabInfo || !tabInfo.url || !tabInfo.url.startsWith("http"))
-    {
+    if (!tabInfo || !tabInfo.url || !tabInfo.url.startsWith('http')) {
       return;
     }
-    if (getSettings().data_collection_v2 && !adblockIsPaused() && !adblockIsDomainPaused({"url": tabInfo.url, "id": tabId}) && changeInfo.status === 'complete'  )
-    {
+    if (
+      getSettings().data_collection_v2
+      && !adblockIsPaused()
+      && !adblockIsDomainPaused({ url: tabInfo.url, id: tabId })
+      && changeInfo.status === 'complete'
+    ) {
       chrome.tabs.executeScript(tabId,
-      {
+        {
           file: 'adblock-datacollection-contentscript.js',
           allFrames: true,
-      });
+        });
     }
   };
 
-  var addMessageListener = function()
-  {
-    port.on("datacollection.elementHide", (message, sender) =>
-    {
-      if (getSettings().data_collection_v2 && !adblockIsPaused() && !adblockIsDomainPaused({"url": sender.page.url, "id": sender.page.id}))
-      {
-
-        var selectors = message.selectors;
-        var docDomain = extractHostFromFrame(sender.frame);
-        for (let subscription of filterStorage.subscriptions())
-        {
-          if (subscription.disabled) {
-            continue;
-          }
-          for (let text of subscription.filterText())
-          {
-            let filter = Filter.fromText(text);
-
-            // We only know the exact filter in case of element hiding emulation.
-            // For regular element hiding filters, the content script only knows
-            // the selector, so we have to find a filter that has an identical
-            // selector and is active on the domain the match was reported from.
-            let isActiveElemHideFilter = filter instanceof ElemHideFilter &&
-                                         selectors.includes(filter.selector) &&
-                                         filter.isActiveOnDomain(docDomain);
-
-            if (isActiveElemHideFilter) {
-              addFilterToCache(filter, sender.page);
-            }
-          }
-        }
-      }
-    });
-  };
-
-  var webRequestListener = function(details)
-  {
-    if (details.url && details.type === "main_frame" && !adblockIsPaused() && !adblockIsDomainPaused({"url": details.url, "id": details.id}))
-    {
-      var domain = parseUri(details.url).host;
-      if (!dataCollectionCache.domains[domain]) {
-        dataCollectionCache.domains[domain] = {};
-        dataCollectionCache.domains[domain].pages = 0;
-      }
-      dataCollectionCache.domains[domain].pages++;
-    }
-  };
-
-  var addFilterToCache = function(filter, page)
-  {
-    if (filter && filter.text && (typeof filter.text === 'string') && page && page.url && page.url.hostname)
-    {
-      let domain = page.url.hostname;
-      if (!domain)
-      {
+  const addFilterToCache = function (filter, page) {
+    const validFilterText = filter && filter.text && (typeof filter.text === 'string');
+    if (validFilterText && page && page.url && page.url.hostname) {
+      const domain = page.url.hostname;
+      if (!domain) {
         return;
       }
-      let text = filter.text;
+      const { text } = filter;
 
-      if (!(text in dataCollectionCache.filters))
-      {
+      if (!(text in dataCollectionCache.filters)) {
         dataCollectionCache.filters[text] = {};
         dataCollectionCache.filters[text].firstParty = {};
         dataCollectionCache.filters[text].thirdParty = {};
         dataCollectionCache.filters[text].subscriptions = [];
       }
-      if (filter.thirdParty)
-      {
-        if (!dataCollectionCache.filters[text].thirdParty[domain])
-        {
+      if (filter.thirdParty) {
+        if (!dataCollectionCache.filters[text].thirdParty[domain]) {
           dataCollectionCache.filters[text].thirdParty[domain] = {};
           dataCollectionCache.filters[text].thirdParty[domain].hits = 0;
         }
-        dataCollectionCache.filters[text].thirdParty[domain].hits++;
-      }
-      else
-      {
-        if (!dataCollectionCache.filters[text].firstParty[domain])
-        {
+        dataCollectionCache.filters[text].thirdParty[domain].hits += 1;
+      } else {
+        if (!dataCollectionCache.filters[text].firstParty[domain]) {
           dataCollectionCache.filters[text].firstParty[domain] = {};
           dataCollectionCache.filters[text].firstParty[domain].hits = 0;
         }
-        dataCollectionCache.filters[text].firstParty[domain].hits++;
+        dataCollectionCache.filters[text].firstParty[domain].hits += 1;
       }
-      for (let sub of filterStorage.subscriptions(text))
-      {
-        if (!sub.disabled && sub.url && dataCollectionCache.filters[text].subscriptions.indexOf(sub.url) === -1)
-        {
+      for (const sub of filterStorage.subscriptions(text)) {
+        const dataCollectionSubscriptions = dataCollectionCache.filters[text].subscriptions;
+        if (!sub.disabled && sub.url && dataCollectionSubscriptions.indexOf(sub.url) === -1) {
           dataCollectionCache.filters[text].subscriptions.push(sub.url);
         }
       }
     }
   };
 
-  var filterListener = function(item, newValue, oldValue, tabIds)
-  {
-    if (getSettings().data_collection_v2 && !adblockIsPaused())
-    {
-      for (let tabId of tabIds)
-      {
-        let page = new ext.Page({id: tabId});
-        if (page && !adblockIsDomainPaused({"url": page.url.href, "id": page.id})) {
+  const addMessageListener = function () {
+    port.on('datacollection.elementHide', (message, sender) => {
+      const dataCollectionEnabled = getSettings().data_collection_v2;
+      const domainInfo = { url: sender.page.url, id: sender.page.id };
+      if (dataCollectionEnabled && !adblockIsPaused() && !adblockIsDomainPaused(domainInfo)) {
+        const { selectors } = message;
+        const docDomain = extractHostFromFrame(sender.frame);
+        for (const subscription of filterStorage.subscriptions()) {
+          if (!subscription.disabled) {
+            for (const text of subscription.filterText()) {
+              const filter = Filter.fromText(text);
+              // We only know the exact filter in case of element hiding emulation.
+              // For regular element hiding filters, the content script only knows
+              // the selector, so we have to find a filter that has an identical
+              // selector and is active on the domain the match was reported from.
+              const isActiveElemHideFilter = filter instanceof ElemHideFilter
+                                           && selectors.includes(filter.selector)
+                                           && filter.isActiveOnDomain(docDomain);
+              if (isActiveElemHideFilter) {
+                addFilterToCache(filter, sender.page);
+              }
+            }
+          }
+        }
+      }
+    });
+    port.on('datacollection.exceptionElementHide', (message, sender) => {
+      const domainInfo = { url: sender.page.url, id: sender.page.id };
+      if (
+        getSettings().data_collection_v2
+          && !adblockIsPaused()
+          && !adblockIsDomainPaused(domainInfo)) {
+        const selectors = message.exceptions;
+        for (const text of selectors) {
+          const filter = Filter.fromText(text);
+          addFilterToCache(filter, sender.page);
+        }
+      }
+    });
+  };
+
+  const webRequestListener = function (details) {
+    if (details.url && details.type === 'main_frame' && !adblockIsPaused() && !adblockIsDomainPaused({ url: details.url, id: details.id })) {
+      const domain = parseUri(details.url).host;
+      if (!dataCollectionCache.domains[domain]) {
+        dataCollectionCache.domains[domain] = {};
+        dataCollectionCache.domains[domain].pages = 0;
+      }
+      dataCollectionCache.domains[domain].pages += 1;
+    }
+  };
+
+  const filterListener = function (item, newValue, oldValue, tabIds) {
+    if (getSettings().data_collection_v2 && !adblockIsPaused()) {
+      for (const tabId of tabIds) {
+        const page = new ext.Page({ id: tabId });
+        if (page && !adblockIsDomainPaused({ url: page.url.href, id: page.id })) {
           addFilterToCache(item, page);
         }
       }
-    }
-    else if (!getSettings().data_collection_v2)
-    {
-      filterNotifier.off("filter.hitCount", filterListener);
+    } else if (!getSettings().data_collection_v2) {
+      filterNotifier.off('filter.hitCount', filterListener);
     }
   };
 
   // If enabled at startup periodic saving of memory cache &
   // sending of data to the log server
-  settings.onload().then(function()
-  {
-    if (getSettings().data_collection_v2)
-    {
-      window.setInterval(function()
-      {
-        idleHandler.scheduleItemOnce(function()
-        {
-          if (getSettings().data_collection_v2 && Object.keys(dataCollectionCache.filters).length > 0)
-          {
-            var subscribedSubs = [];
-            var subs = getAllSubscriptionsMinusText();
-            for (var id in subs) {
+  settings.onload().then(() => {
+    const dataCollectionEnabled = getSettings().data_collection_v2;
+    if (dataCollectionEnabled) {
+      window.setInterval(() => {
+        idleHandler.scheduleItemOnce(() => {
+          if (dataCollectionEnabled && Object.keys(dataCollectionCache.filters).length > 0) {
+            const subscribedSubs = [];
+            const subs = getAllSubscriptionsMinusText();
+            for (const id in subs) {
               if (subs[id].subscribed) {
                 subscribedSubs.push(subs[id].url);
               }
             }
             if (getUserFilters().length) {
-              subscribedSubs.push("customlist");
+              subscribedSubs.push('customlist');
             }
-            var data = {
-              version:                 "4",
-              addonName:               require("info").addonName,
-              addonVersion:            require("info").addonVersion,
-              application:             require("info").application,
-              applicationVersion:      require("info").applicationVersion,
-              platform:                require("info").platform,
-              platformVersion:         require("info").platformVersion,
-              appLocale:               Utils.appLocale,
+            const data = {
+              version: '5',
+              addonName: info.addonName,
+              addonVersion: info.addonVersion,
+              application: info.application,
+              applicationVersion: info.applicationVersion,
+              platform: info.platform,
+              platformVersion: info.platformVersion,
+              appLocale: Utils.appLocale,
               filterListSubscriptions: subscribedSubs,
-              domains:                 dataCollectionCache.domains,
-              filters:                 dataCollectionCache.filters
+              domains: dataCollectionCache.domains,
+              filters: dataCollectionCache.filters,
             };
             chrome.storage.local.get(TIME_LAST_PUSH_KEY).then((response) => {
-              var timeLastPush = "n/a";
+              let timeLastPush = 'n/a';
               if (response[TIME_LAST_PUSH_KEY]) {
-                var serverTimestamp = new Date(response[TIME_LAST_PUSH_KEY]);
+                const serverTimestamp = new Date(response[TIME_LAST_PUSH_KEY]);
                 // Format the timeLastPush
-                var yearStr = serverTimestamp.getUTCFullYear() + "";
-                var monthStr = (serverTimestamp.getUTCMonth() + 1) + "";
-                var dateStr = serverTimestamp.getUTCDate() + "";
-                var hourStr = serverTimestamp.getUTCHours() + "";
+                const yearStr = `${serverTimestamp.getUTCFullYear()}`;
+                let monthStr = `${serverTimestamp.getUTCMonth() + 1}`;
+                let dateStr = `${serverTimestamp.getUTCDate()}`;
+                let hourStr = `${serverTimestamp.getUTCHours()}`;
                 // round the minutes up to the nearest 10
-                var minStr = (Math.floor(serverTimestamp.getUTCMinutes() / 10) * 10) + "";
+                let minStr = `${Math.floor(serverTimestamp.getUTCMinutes() / 10) * 10}`;
 
                 if (monthStr.length === 1) {
-                   monthStr = "0" + monthStr;
+                  monthStr = `0${monthStr}`;
                 }
                 if (dateStr.length === 1) {
-                   dateStr = "0" + dateStr;
+                  dateStr = `0${dateStr}`;
                 }
                 if (hourStr.length === 1) {
-                   hourStr = "0" + hourStr;
+                  hourStr = `0${hourStr}`;
                 }
                 if (minStr.length === 1) {
-                   minStr = "0" + minStr;
+                  minStr = `0${minStr}`;
                 }
-                if (minStr === "60") {
-                   minStr = "00";
+                if (minStr === '60') {
+                  minStr = '00';
                 }
-                timeLastPush = yearStr + "-" + monthStr + "-" + dateStr + " " + hourStr + ":" + minStr + ":00";
+                timeLastPush = `${yearStr}-${monthStr}-${dateStr} ${hourStr}:${minStr}:00`;
               }
               data.timeOfLastPush = timeLastPush;
-              postFilterStatsToLogServer( data, function(text, status, xhr) {
-                var nowTimestamp = (new Date()).toGMTString();
-                if (xhr && typeof xhr.getResponseHeader === "function") {
+              postFilterStatsToLogServer(data, (text, status, xhr) => {
+                let nowTimestamp = (new Date()).toGMTString();
+                if (xhr && typeof xhr.getResponseHeader === 'function') {
                   try {
-                    if (xhr.getResponseHeader("Date")) {
-                      nowTimestamp = xhr.getResponseHeader("Date");
+                    if (xhr.getResponseHeader('Date')) {
+                      nowTimestamp = xhr.getResponseHeader('Date');
                     }
-                  } catch(e) {
+                  } catch (e) {
                     nowTimestamp = (new Date()).toGMTString();
                   }
                 }
@@ -233,39 +223,44 @@ let DataCollectionV2 = exports.DataCollectionV2 = (function()
                 dataCollectionCache.filters = {};
                 dataCollectionCache.domains = {};
               });
-            });  // end of TIME_LAST_PUSH_KEY
+            }); // end of TIME_LAST_PUSH_KEY
           }
         });
       }, HOUR_IN_MS);
-      filterNotifier.on("filter.hitCount", filterListener);
-      chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["http://*/*", "https://*/*"],types: ["main_frame"] });
+      filterNotifier.on('filter.hitCount', filterListener);
+      chrome.webRequest.onBeforeRequest.addListener(webRequestListener, {
+        urls: ['http://*/*', 'https://*/*'],
+        types: ['main_frame'],
+      });
       chrome.tabs.onUpdated.addListener(handleTabUpdated);
       addMessageListener();
     }
   });// End of then
 
-  var returnObj = {};
-  returnObj.start = function()
-  {
+  const returnObj = {};
+  returnObj.start = function returnObjStart() {
     dataCollectionCache.filters = {};
     dataCollectionCache.domains = {};
-    filterNotifier.on("filter.hitCount", filterListener);
-    chrome.webRequest.onBeforeRequest.addListener(webRequestListener, { urls:  ["http://*/*", "https://*/*"],types: ["main_frame"] });
+    filterNotifier.on('filter.hitCount', filterListener);
+    chrome.webRequest.onBeforeRequest.addListener(webRequestListener, {
+      urls: ['http://*/*', 'https://*/*'],
+      types: ['main_frame'],
+    });
     chrome.tabs.onUpdated.addListener(handleTabUpdated);
     addMessageListener();
   };
-  returnObj.end = function()
-  {
+  returnObj.end = function returnObjEnd() {
     dataCollectionCache = {};
-    filterNotifier.off("filter.hitCount", filterListener);
+    filterNotifier.off('filter.hitCount', filterListener);
     chrome.webRequest.onBeforeRequest.removeListener(webRequestListener);
     chrome.storage.local.remove(TIME_LAST_PUSH_KEY);
     chrome.tabs.onUpdated.removeListener(handleTabUpdated);
   };
-  returnObj.getCache = function()
-  {
+  returnObj.getCache = function returnObjGetCache() {
     return dataCollectionCache;
   };
 
   return returnObj;
-})();
+}());
+
+exports.DataCollectionV2 = DataCollectionV2;

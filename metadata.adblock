@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.54.0
+version = 3.58.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -188,7 +188,6 @@ icons/watermelon_theme/previewcard.svg = icons/themes/watermelon/previewcard.svg
 icons/blank-minicard.svg = icons/themes/blank-minicard.svg
 icons/loader.gif = icons/loader.gif
 icons/replaceads_heroimage.png = icons/replaceads_heroimage.png
-icons/themes.svg = icons/themes/themes.svg
 icons/abp-16.png = icons/adblock-16.png
 icons/abp-16-whitelisted.png = icons/adblock-16-whitelisted.png
 icons/abp-16-grayscale.png = icons/adblock-16-grayscale.png
@@ -210,8 +209,11 @@ icons/abp-38-whitelisted.png = icons/adblock-38-whitelisted.png
 icons/abp-38-grayscale.png = icons/adblock-38-grayscale.png
 icons/abp-38-whitelisted.png = icons/adblock-38-whitelisted.png
 icons/abp-38-grayscale.png = icons/adblock-38-grayscale.png
-icons/sync-content-4.svg = icons/sync-content-4.svg
 icons/sync-content-1-4.svg = icons/sync-content-1-4.svg
+icons/sync-preview.svg = icons/sync-preview.svg
+icons/themes-preview.svg = icons/themes-preview.svg
+icons/image-swap-preview.png = icons/image-swap-preview.png
+icons/image-swap-preview@2x.png = icons/image-swap-preview@2x.png
 icons/adblock-picreplacement-images-cat.png = adblock-betafish/picreplacement/images/cat.png
 icons/adblock-picreplacement-images-cat-grayscale.png = adblock-betafish/picreplacement/images/cat_grayscale.png
 icons/adblock-picreplacement-images-dog.png = adblock-betafish/picreplacement/images/dog.png
@@ -230,8 +232,6 @@ icons/adblock-picreplacement-images-menu-doggrayscale@2x.png = adblock-betafish/
 icons/adblock-picreplacement-images-menu-doggrayscale.png = adblock-betafish/picreplacement/images/menu/doggrayscale.png
 icons/adblock-picreplacement-images-menu-landscapegrayscale@2x.png = adblock-betafish/picreplacement/images/menu/landscapegrayscale@2x.png
 icons/adblock-picreplacement-images-menu-landscapegrayscale.png = adblock-betafish/picreplacement/images/menu/landscapegrayscale.png
-icons/adblock-picreplacement-image-swap.png = adblock-betafish/picreplacement/images/image_swap.png
-icons/adblock-picreplacement-image-swap@2x.png = adblock-betafish/picreplacement/images/image_swap@2x.png
 localLib/jquery/jquery-1.10.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.10.2.min.js.local
 localLib/jquery/jquery-1.11.0.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.0.min.js.local
 localLib/jquery/jquery-1.11.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.1.min.js.local
@@ -288,7 +288,7 @@ lib/adblockplus.js +=
   ../adblock-betafish/picreplacement/channels.js
   ../adblock-betafish/picreplacement/cat-channel.js
   ../adblock-betafish/picreplacement/dog-channel.js
-  ../adblock-betafish/picreplacement/langscape-channel.js
+  ../adblock-betafish/picreplacement/landscape-channel.js
   ../adblock-betafish/picreplacement/unknown-channel.js
   ../adblock-betafish/picreplacement/check.js
   ../adblock-betafish/picreplacement/sync-service.js

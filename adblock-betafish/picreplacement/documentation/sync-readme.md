@@ -68,7 +68,7 @@ The sync server will attempt to do a merge of custom filter rules strings if an 
   Setting the sync commit version to a lower value is one way to cause sync post errors (Error Code 409)
 
 - Use the following code to change the stored user id:
-  `storage_set(STATS.userIDStorageKey, "bad");`
+  `storageSet(STATS.userIDStorageKey, "bad");`
   `chromeStorageSetHelper(STATS.userIDStorageKey, "bad");`
 
   The extension will need to be reloaded in the browser (the ping / STATS ping logic reads the user from storage at start up).

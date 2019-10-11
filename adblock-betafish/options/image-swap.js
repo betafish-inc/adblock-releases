@@ -1,28 +1,34 @@
 'use strict';
 
-(function(){
-  const updateUI = function() {
-    let $selected = $('.image-box.selected');
-    let $sectionCard = $('#image-swap-selection');
+/* For ESLint: List any global identifiers used in this file below */
+/* global backgroundPage, channelsNotifier, License, localizePage */
+
+
+(function onImageSwapLoaded() {
+  const { channels } = backgroundPage;
+
+  const updateUI = function () {
+    const $selected = $('.image-box.selected');
+    const $sectionCard = $('#image-swap-selection');
     if ($selected.length) {
       $sectionCard.addClass('shadow').removeClass('hover-shadow');
     } else {
       $sectionCard.removeClass('shadow').addClass('hover-shadow');
     }
-  }
-  const updatePicReplacementSetting = function() {
+  };
+  const updatePicReplacementSetting = function () {
     const $selected = $('.image-box.selected');
-    let picReplacementEnabled = !!$selected.length;
+    const picReplacementEnabled = !!$selected.length;
 
     backgroundPage.setSetting('picreplacement', picReplacementEnabled);
-  }
-  const loadCurrentSettingsIntoPage = function() {
-    let guide = backgroundPage.channels.getGuide();
+  };
+  const loadCurrentSettingsIntoPage = function () {
+    const guide = backgroundPage.channels.getGuide();
     const picReplacementEnabled = backgroundPage.getSettings().picreplacement;
 
-    for (let id in guide) {
-      let $channelInput = $(`#${guide[id].name}`);
-      let isEnabled = guide[id].enabled && picReplacementEnabled;
+    for (const id in guide) {
+      const $channelInput = $(`#${guide[id].name}`);
+      const isEnabled = guide[id].enabled && picReplacementEnabled;
 
       $channelInput.prop('checked', isEnabled);
       $channelInput.data('channel-id', id);
@@ -36,13 +42,12 @@
       }
     }
     updateUI();
-  }
-  const updateChannelSelection = function(event) {
-    let channels = backgroundPage.channels;
+  };
+  const updateChannelSelection = function (event) {
     const $eventTarget = $(event.target);
-    let channelId = $eventTarget.data('channel-id');
-    let enabled = $eventTarget.is(":checked");
-    let $image = $eventTarget.parent('.image-box');
+    const channelId = $eventTarget.data('channel-id');
+    const enabled = $eventTarget.is(':checked');
+    const $image = $eventTarget.parent('.image-box');
 
     if (enabled) {
       $image.addClass('selected');
@@ -57,9 +62,9 @@
     channels.setEnabled(channelId, enabled);
     updatePicReplacementSetting();
     updateUI();
-  }
+  };
 
-  $(document).ready(function () {
+  $(document).ready(() => {
     localizePage();
 
     if (!License || $.isEmptyObject(License)) {
@@ -69,18 +74,18 @@
     loadCurrentSettingsIntoPage();
     $('input.invisible-overlay').change(updateChannelSelection);
 
-    window.addEventListener("unload", function() {
-      channelsNotifier.off("channels.changed", onChannelsChanged);
-    });
-
-    var onChannelsChanged = function(id, currentValue, previousValue) {
-      var guide = backgroundPage.channels.getGuide();
-      var $channelInput = $(`#${guide[id].name}`);
-      if ($channelInput.is(":checked") === previousValue) {
+    const onChannelsChanged = function (id, currentValue, previousValue) {
+      const guide = backgroundPage.channels.getGuide();
+      const $channelInput = $(`#${guide[id].name}`);
+      if ($channelInput.is(':checked') === previousValue) {
         $channelInput.click();
       }
     };
-    channelsNotifier.on("channels.changed", onChannelsChanged);
 
+    window.addEventListener('unload', () => {
+      channelsNotifier.off('channels.changed', onChannelsChanged);
+    });
+
+    channelsNotifier.on('channels.changed', onChannelsChanged);
   });
-})();
+}());

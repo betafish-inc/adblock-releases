@@ -1,27 +1,31 @@
-<!doctype html>
+<!DOCTYPE html>
 <div class="sync-header-message page-title sync-header-message-hidden">
   <span>
-    <i class="material-icons md-24 sync-icon sync-header-error-icon">error_outline</i>
-    <i class="material-icons md-24 sync-icon sync-header-sync-icon">sync</i>
-    <i class="material-icons md-24 sync-icon sync-header-done-icon">check_circle</i>
+    <i class="material-icons md-24 sync-icon sync-header-error-icon" role="img" aria-hidden="true"
+      >error_outline</i
+    >
+    <i class="material-icons md-24 sync-icon sync-header-sync-icon" role="img" aria-hidden="true"
+      >sync</i
+    >
+    <i class="material-icons md-24 sync-icon sync-header-done-icon" role="img" aria-hidden="true"
+      >check_circle</i
+    >
   </span>
   <span id="customize-sync-header-message" class="sync-header-message-text"></span>
 </div>
 <div class="option-page-box">
   <div class="option-page-content">
-
     <h1 i18n="tabcustomizetitle" class="page-title"></h1>
     <div i18n="filterlistsrock2"></div>
 
     <div id="divAddNewFilter">
-
       <h2 i18n="blockmoreads2" class="paragraph-title"></h2>
 
       <div>
         <a class="add-space-between align-items-center controlsLink" href="#">
           <span i18n="linkblockadbyurl"></span>
           <span class="accordion-icon">
-            <i class="material-icons md-18">arrow_drop_down_circle</i>
+            <i class="material-icons md-18" role="img" aria-hidden="true">arrow_drop_down_circle</i>
           </span>
         </a>
         <div id="divUrlBlock" class="addControls" style="display:none;">
@@ -30,17 +34,26 @@
               <td i18n="blockurlwithtext" colspan="2" class="italic light-grey-text"></td>
               <td i18n="blockdomain" colspan="3" class="italic light-grey-text"></td>
             </tr>
+            <tr></tr>
             <tr>
-            </tr>
-            <tr>
-              <td><input id="txtBlockUrl" type="text" placeholder=".com/flashAd" /></td>
+              <td>
+                <input id="txtBlockUrl" type="text" placeholder=".com/flashAd" />
+              </td>
               <td class="italic light-grey-text center">$domain=</td>
-              <td colspan="3"><input id="txtBlockUrlDomain" placeholder="*" type="text"/></td>
+              <td colspan="3">
+                <input id="txtBlockUrlDomain" placeholder="*" type="text" />
+              </td>
             </tr>
             <tr>
               <td colspan="4"></td>
               <td colspan="2">
-                <button id="btnAddUrlBlock" class="btn short red right" type="button" i18n="buttonblockit" disabled="disabled"/>
+                <button
+                  id="btnAddUrlBlock"
+                  class="btn short red right"
+                  type="button"
+                  i18n="buttonblockit"
+                  disabled="disabled"
+                />
               </td>
             </tr>
           </table>
@@ -52,7 +65,7 @@
         <a class="add-space-between align-items-center controlsLink" href="#">
           <span i18n="linkhidesection"></span>
           <span class="accordion-icon">
-            <i class="material-icons md-18">arrow_drop_down_circle</i>
+            <i class="material-icons md-18" role="img" aria-hidden="true">arrow_drop_down_circle</i>
           </span>
         </a>
         <div id="divCssBlock" class="addControls" style="display:none;">
@@ -62,17 +75,30 @@
               <td i18n="blockdomain" colspan="3" class="italic light-grey-text"></td>
               <td i18n="csstomatch" colspan="3" class="italic light-grey-text"></td>
             </tr>
+            <tr></tr>
             <tr>
-            </tr>
-            <tr>
-              <td colspan="2"><input id="txtUserFilterDomain" type="text" placeholder="*"/></td>
+              <td colspan="2">
+                <input id="txtUserFilterDomain" type="text" placeholder="*" />
+              </td>
               <td class="center italic light-grey-text">##</td>
-              <td colspan="3"><input id="txtUserFilterCss" type="text" placeholder='div[class*="exampleClass"][id="someBigAd"]'/></td>
+              <td colspan="3">
+                <input
+                  id="txtUserFilterCss"
+                  type="text"
+                  placeholder='div[class*="exampleClass"][id="someBigAd"]'
+                />
+              </td>
             </tr>
             <tr>
               <td colspan="4"></td>
               <td colspan="2">
-                <button id="btnAddUserFilter" class="btn short red right" type="button" i18n="buttonblockit" disabled="disabled"/>
+                <button
+                  id="btnAddUserFilter"
+                  class="btn short red right"
+                  type="button"
+                  i18n="buttonblockit"
+                  disabled="disabled"
+                />
               </td>
             </tr>
           </table>
@@ -82,10 +108,10 @@
       <h2 i18n="stop_blocking_ads2" class="paragraph-title"></h2>
 
       <div>
-        <a class="add-space-between align-items-center controlsLink" href="#" >
+        <a class="add-space-between align-items-center controlsLink" href="#">
           <span i18n="linkunblock"></span>
           <span class="accordion-icon">
-            <i class="material-icons md-18">arrow_drop_down_circle</i>
+            <i class="material-icons md-18" role="img" aria-hidden="true">arrow_drop_down_circle</i>
           </span>
         </a>
         <div id="divExcludeBlock" class="addControls" style="display:none;">
@@ -94,17 +120,24 @@
               <td></td>
               <td colspan="3" i18n="excludedomainorurl" class="italic light-grey-text"></td>
             </tr>
-            <tr>
-            </tr>
+            <tr></tr>
             <tr>
               <td class="center italic light-grey-text">@@</td>
-              <td colspan="4"><input id="txtUnblock" type="text" placeholder="http://example.com" /></td>
+              <td colspan="4">
+                <input id="txtUnblock" type="text" placeholder="http://example.com" />
+              </td>
               <td class="center italic light-grey-text">$document</td>
             </tr>
             <tr>
               <td colspan="4"></td>
               <td colspan="2">
-                <button id="btnAddExcludeFilter" class="btn short red right" type="button" i18n="buttonok" disabled="disabled"/>
+                <button
+                  id="btnAddExcludeFilter"
+                  class="btn short red right"
+                  type="button"
+                  i18n="buttonok"
+                  disabled="disabled"
+                />
               </td>
             </tr>
           </table>
@@ -116,14 +149,18 @@
         <a class="add-space-between align-items-center controlsLink" href="#">
           <span i18n="show_ads_except_for"></span>
           <span class="accordion-icon">
-            <i class="material-icons md-18">arrow_drop_down_circle</i>
+            <i class="material-icons md-18" role="img" aria-hidden="true">arrow_drop_down_circle</i>
           </span>
         </a>
         <div id="divBlacklistBlock" class="addControls" style="display:none;">
           <table class="customize-entry-table">
             <tr>
               <td></td>
-              <td colspan="5" i18n="only_block_ads_on_these_sites" class="italic light-grey-text"></td>
+              <td
+                colspan="5"
+                i18n="only_block_ads_on_these_sites"
+                class="italic light-grey-text"
+              ></td>
             </tr>
             <tr>
               <td></td>
@@ -131,23 +168,35 @@
             </tr>
             <tr>
               <td class="center italic light-grey-text">@@*$document,domain=</td>
-              <td colspan="5"><input id="txtBlacklist" type="text"/></td>
+              <td colspan="5"><input id="txtBlacklist" type="text" /></td>
             </tr>
             <tr>
               <td></td>
-              <td colspan="3"><div id="messageBlacklist" class="bold preserve-whitespace"></div></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td colspan=3><div class="standout-message bold italic preserve-whitespace" i18n="warning_overrules_filters"></div></td>
-              <td colspan=2><button id="btnAddBlacklist" class="btn short red right" type="button" i18n="buttonok" disabled="disabled"/>
+              <td colspan="3">
+                <div id="messageBlacklist" class="bold preserve-whitespace"></div>
               </td>
             </tr>
-            </table>
-
+            <tr>
+              <td></td>
+              <td colspan="3">
+                <div
+                  class="standout-message bold italic preserve-whitespace"
+                  i18n="warning_overrules_filters"
+                ></div>
+              </td>
+              <td colspan="2">
+                <button
+                  id="btnAddBlacklist"
+                  class="btn short red right"
+                  type="button"
+                  i18n="buttonok"
+                  disabled="disabled"
+                />
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
-
     </div>
 
     <div class="space-between-line">
@@ -156,19 +205,32 @@
         <button class="btn short red" type="button" id="btnEditAdvancedFilters" i18n="buttonedit" />
         <span id="spanSaveButton" style="display:none;">
           <span class="savereminder bold standout-message" i18n="savereminder"></span>
-          <button type="button" id="btnSaveAdvancedFilters" i18n="savebutton" class="btn short red inline" />
+          <button
+            type="button"
+            id="btnSaveAdvancedFilters"
+            i18n="savebutton"
+            class="btn short red inline"
+          />
         </span>
       </span>
     </div>
 
     <div class="add-top-down-space">
       <div i18n="filtersavewarning_part1"></div>
-      <a i18n="filtersavewarning_part2" i18n_replacement_el="filtersavewarning_part2" href="https://adblockplus.org/filters" target="_blank">
+      <a
+        i18n="filtersavewarning_part2"
+        i18n_replacement_el="filtersavewarning_part2"
+        href="https://adblockplus.org/filters"
+        target="_blank"
+      >
         <span id="filtersavewarning_part2" class="link-text-color"></span>
       </a>
     </div>
 
-    <div id="messagecustom" class="preserve-whitespace bold error-message do-not-display add-top-down-space"></div>
+    <div
+      id="messagecustom"
+      class="preserve-whitespace bold error-message do-not-display add-top-down-space"
+    ></div>
 
     <div>
       <textarea id="txtFiltersAdvanced" class="widest" disabled></textarea>
@@ -176,25 +238,39 @@
 
     <div id="migrationErrorMessageDiv" style="display: none">
       <p i18n="migration_error_message"></p>
-      <input type="button" id="btnDeleteMigrationErrorMessage" i18n_value="delete_migration_error_messages" />
+      <input
+        type="button"
+        id="btnDeleteMigrationErrorMessage"
+        i18n_value="delete_migration_error_messages"
+      />
       <textarea id="txtMigrationErrorMessage" class="widest" disabled></textarea>
     </div>
 
     <div id="divExcludeFilters" style="display:none;">
-        <div class="space-between-line">
-          <h2 i18n="manualexcludefilteredit2" class="paragraph-title"></h2>
-          <span>
-            <button class="btn short red" type="button" id="btnEditExcludeAdvancedFilters" i18n="buttonedit" />
-            <span id="spanSaveExcludeButton" style="display:none;">
-              <span class="savereminder bold standout-message" i18n="savereminder"></span>
-              <button type="button" id="btnSaveExcludeAdvancedFilters" i18n="savebutton" class="btn short red inline" />
-            </span>
+      <div class="space-between-line">
+        <h2 i18n="manualexcludefilteredit2" class="paragraph-title"></h2>
+        <span>
+          <button
+            class="btn short red"
+            type="button"
+            id="btnEditExcludeAdvancedFilters"
+            i18n="buttonedit"
+          />
+          <span id="spanSaveExcludeButton" style="display:none;">
+            <span class="savereminder bold standout-message" i18n="savereminder"></span>
+            <button
+              type="button"
+              id="btnSaveExcludeAdvancedFilters"
+              i18n="savebutton"
+              class="btn short red inline"
+            />
           </span>
-        </div>
+        </span>
+      </div>
 
-        <div>
-          <textarea id="txtExcludeFiltersAdvanced" class="widest" disabled></textarea>
-        </div>
+      <div>
+        <textarea id="txtExcludeFiltersAdvanced" class="widest" disabled></textarea>
+      </div>
     </div>
 
     <div class="translation_credits italic do-not-display"></div>

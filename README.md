@@ -60,6 +60,22 @@ is present in this repository, it should not be modified here directly. Instead
 modifications should be made to the script in the `buildtools` repository, the
 copy here can then be updated from there.
 
+## Code Style
+
+We use a standard code style enforced by [eslint](https://eslint.org) for JavaScript and [Prettier](https://prettier.io) for HTML, CSS and JSON. To use these tools, install [Node.js](https://nodejs.org) and run the following command in the project directory:
+
+```bash
+npm install
+```
+
+Specifically, the standard JavaScript code style we've adopted is the [Airbnb JavaScript style guide](https://github.com/airbnb/javascript/blob/master/README.md)
+
+The following npm commands are then available:
+
+* `npm run lint` runs eslint and prints out all JavaScript violations.
+* `npm run lint-fix` runs eslint and automatically fixes JavaScript style violations in place (be sure to commit before running this command in case you need to revert the changes eslint makes).
+* `npm run prettier` runs prettier on HTML, CSS, and JSON files in the adblock-betafish directory and list all files that need to be Prettier.
+* `npm run prettier-fix` runs prettier and automatically replaces with Prettier versions for HTML, CSS, and JSON files in the adblock-betafish directory.
 
 ## Development
 
@@ -108,7 +124,7 @@ more advanced usage I recommend taking a look at
 
 There is now the ability to add any key/value pairs to the manifest.json file by
 adding them to the [manifest] section of the metadata.adblock file. The
-following rules apply: 
+following rules apply:
         * An option's key may be declared as a series of nested dictionary keys,
           seperated by '.'.
         * Declaring an option's value in a new line (even if only one is given)
@@ -140,4 +156,56 @@ following rules apply:
         is.integer = number:1           "float": 1.4
         is.float = number:1.4         }
                                     }
+
+## Developer Guide
+
+General guidelines for developing AdBlock specific code.
+
+### Icons and Graphics
+
+All graphics use SVG when at all possible. The current exception is the extension toolbar icon which is currently a PNG. There is work in progress to replace this image with SVG.
+
+Icons use SVG web fonts. We primarily use [Material Design Icons](https://www.material.io/resources/icons/?style=baseline) and provide a few custom icons via the AdBlock Icons project. Standard markup to display the "settings" icon would be:
+
+```html
+<i class="material-icons">settings</i>
+```
+
+For <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> compliance, we use <abbr title="Accessible Rich Internet Applications">ARIA</abbr> content to make the web icons accessible for screen readers. Read the [full description](https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA24) for details, but  a summary of the steps are:
+
+* mark the web icon element using attribute `role="img"`
+* if the web icon is purely visual, use `aria-hidden="true"`
+* if the web icon is semantic, use `aria-label="Settings"` to provide the screen reader description of the icon.
+
+An example of an icon used as a button:
+
+```html
+<i class="material-icons" role="img" aria-label="Extension settings">settings</i>
+```
+
+An example of an icon that "decorates" text and does not need to be read by the screen reader:
+
+```html
+<i class="material-icons" role="img" aria-hidden="true">check_circle</i> We are OK
+```
+
+### Accessibility
+
+The following are notes for improving the accessibility of the AdBlock user interface.
+
+#### Assistive Technologies
+
+Assistive Technologies (<abbr>AT</abbr>) such as screen readers present the web content to users dramatically differently than the visual renderer.
+
+It is important to optimize AT UX for "skipping" content. Important information should be presented first, followed by additional details. This allows the user to skip the reading of the detailed information if they are trying to navigate to particular sections of the UI.
+
+AT use the HTML document structure and the semantic meaning associated with different HTML elements to assist in making content easy to understand. Many AT and their end users create custom stylesheets assigning different presentations (volumes, tone, etc) to different element types (i.e. `<h1>` elements may be spoken more loudly and with a deeper tone). Whenever possible use appropriate HTML elements to assist these stylesheets.
+
+AT present the screen content as a "snapshot" of the content at the point in time when the element is visited. Dynamic content should carefully consider what the AT presentation should be when presented, and whether it's worth the distraction to the user when deciding if alerting the user of a change is desired. Content that should be dynamic should be marked the appropriate ARIA [live region roles](https://www.w3.org/TR/wai-aria-1.1/#live_region_roles) and [live region attributes](https://www.w3.org/TR/wai-aria-1.1/#attrs_liveregions). It is much harder for a user of a AT to "ignore" notifications.
+
+`tabindex` is a good "quick fix" for controlling AT focus. Assign a value of `0` for items that should receive keyboard focus, and a `-1` for items that normally receive focus but should not for an AT. However, `tabindex` is a crutch - elements that receive focus should use the proper HTML elements and ARIA `role` attribute so the browser can automatically and "naturally" determine focus. Many users will have custom stylesheets for their AT that helps with their particular disability and those will be bypassed by using `div` elements for everything and brute forcing particular AT behaviors. We should consider the presence of `tabindex` as an "automatic technical debt" for improving the HTML in the future.
+
+`tabindex` trivia: `tabindex` set on the `label` for an `input` transfers the focus to the `input`. Focus on the `input` reads it's `label`. The AT won't go into a loop or double-read the `label`. So setting a `tabindex` on the label reads the label when the input gets focus. Entering tab will go to the `label` but the AT won't read anything - so it feels like the tab is "broken/stuck" for the AT (visually you see the focus switch but the AT does not speak anything). The third tab then moves to the next input. Setting `tabindex="-1"` on the `input` and `tabindex="0"` on the `label` looks more correct - the label highlights and is spoken when it gets focus and keyboard input toggles (in the case of a checkbox) the input. However (on Chrome) the AT freaks out and reads all the `label` entries that are "nearby" in the DOM when the first input gets focus and then does not read anything else as focus moves in the "nearby group" (aka don't do it).
+
+It is important to test using a screen reader. There is no substitute for experiencing and trying to operate the UI regularly using AT. Some small changes create amazing improvements to the AT UX and some unexpected outputs can be unusually annoying when using an AT. On Mac, use `cmd-F5` to toggle Voice Over on/off (or open System Preferences | Accessibility | Voice Over) and use the keyboard for navigation. TODO Windows and Linux testing options?
 

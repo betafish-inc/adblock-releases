@@ -1,24 +1,30 @@
+'use strict';
+
+/* For ESLint: List any global identifiers used in this file below */
+/* global Overlay */
+
 // Requires overlay.js and jquery
 
 // Highlight DOM elements with an overlayed box, similar to Webkit's inspector.
 // Creates an absolute-positioned div that is translated & scaled following
 // mousemove events. Holds a pointer to target DOM element.
 function Highlighter() {
-  var target = null;
-  var enabled = false;
-  var then = Date.now();
-  var box = $("<div id='overlay-box' class='adblock-highlight-node'></div>");
+  let target = null;
+  let enabled = false;
+  let then = Date.now();
+  let box = $("<div id='overlay-box' class='adblock-highlight-node'></div>");
   box.css({
     'background-color': 'rgba(130, 180, 230, 0.5)',
-    'outline': 'solid 1px #0F4D9A',
     'box-sizing': 'border-box',
-    'position': 'absolute'
+    outline: 'solid 1px #0F4D9A',
+    position: 'absolute',
   });
   box.appendTo($(document.body));
 
   function handler(e) {
-    var offset, el = e.target;
-    var now = Date.now();
+    let el = e.target;
+    const now = Date.now();
+
     if (now - then < 25) {
       return;
     }
@@ -31,39 +37,40 @@ function Highlighter() {
       box.show();
       return;
     }
-    if (el === document.body || el.className === "adblock-killme-overlay") {
+    if (el === document.body || el.className === 'adblock-killme-overlay') {
       box.hide();
       return;
     }
-    el = $(el);
-    target = el[0];
-    offset = el.offset();
+    target = el;
+
+    const $el = $(el);
+    const offset = $el.offset();
     box.css({
-      height: el.outerHeight(),
-      width: el.outerWidth(),
+      height: $el.outerHeight(),
+      width: $el.outerWidth(),
       left: offset.left,
-      top: offset.top
+      top: offset.top,
     });
     box.show();
   }
 
-  this.getCurrentNode = function(el) {
+  this.getCurrentNode = function getCurrentNode(el) {
     return el === box[0] ? target : el;
   };
-  this.enable = function() {
+  this.enable = function enable() {
     if (box && !enabled) {
-      $("body").bind("mousemove", handler);
+      $(document.body).bind('mousemove', handler);
     }
     enabled = true;
   };
-  this.disable = function() {
+  this.disable = function disable() {
     if (box && enabled) {
       box.hide();
-      $("body").unbind("mousemove", handler);
+      $(document.body).unbind('mousemove', handler);
     }
     enabled = false;
   };
-  this.destroy = function() {
+  this.destroy = function destroy() {
     this.disable();
     if (box) {
       box.remove();
@@ -75,86 +82,94 @@ function Highlighter() {
 // Class that watches the whole page for a click, including iframes and
 // objects.  Shows a modal while doing so.
 function ClickWatcher() {
-  this._callbacks = { 'cancel': [], 'click': [] };
-  this._clicked_element = null;
-  this._highlighter = new Highlighter();
-}
-ClickWatcher.prototype.cancel = function(callback) {
-  this._callbacks.cancel.push(callback);
-}
-ClickWatcher.prototype.click = function(callback) {
-  this._callbacks.click.push(callback);
-}
-ClickWatcher.prototype._fire = function(eventName, arg) {
-  var callbacks = this._callbacks[eventName];
-  for (var i = 0; i < callbacks.length; i++)
-    callbacks[i](arg);
+  this.callbacks = { cancel: [], click: [] };
+  this.clickedElement = null;
+  this.highlighter = new Highlighter();
 }
 
-ClickWatcher.prototype.enable = function() {
-  var that = this;
-  that._highlighter.enable();
-  that._eventsListener();
-}
+ClickWatcher.prototype.cancel = function cancel(callback) {
+  this.callbacks.cancel.push(callback);
+};
+ClickWatcher.prototype.click = function click(callback) {
+  this.callbacks.click.push(callback);
+};
+ClickWatcher.prototype.fire = function fire(eventName, arg) {
+  const callbacks = this.callbacks[eventName];
+  for (let i = 0; i < callbacks.length; i++) {
+    callbacks[i](arg);
+  }
+};
+
+ClickWatcher.prototype.enable = function enable() {
+  const that = this;
+  that.highlighter.enable();
+  that.eventsListener();
+};
 
 // Called externally to close ClickWatcher.  Doesn't cause any events to
 // fire.
-ClickWatcher.prototype.close = function() {
+ClickWatcher.prototype.close = function close() {
   // Delete our event listeners so we don't fire any cancel events
-  this._callbacks.cancel = [];
-}
+  this.callbacks.cancel = [];
+};
 
 // The dialog is closing, either because the user clicked cancel, or the
 // close button, or because they clicked an item.
-ClickWatcher.prototype._onClose = function() {
-  if (this._clicked_element == null) {
+ClickWatcher.prototype.onClose = function onClose() {
+  if (!this.clickedElement) {
     // User clicked Cancel button or X
-    this._fire('cancel');
+    this.fire('cancel');
   } else {
     // User clicked a page item
-    this._fire('click', this._clicked_element);
+    this.fire('click', this.clickedElement);
   }
-  this._highlighter.destroy();
-}
+  this.highlighter.destroy();
+};
 
 // Catches clicks on elements and mouse hover on the wizard
-// when element is clicked we stored the element in _clicked_element
+// when element is clicked we stored the element in clickedElement
 // and close all ClickWatcher processes
-ClickWatcher.prototype._eventsListener = function() {
-  var that = this;
+ClickWatcher.prototype.eventsListener = function eventsListener() {
+  const that = this;
 
-  function click_catch_this() {
-    return click_catch(this);
+  function clickCatchThis() {
+    // eslint-disable-next-line no-use-before-define
+    return clickCatch(this);
   }
 
-  function click_catch(element) {
-    that._clicked_element = that._highlighter.getCurrentNode(element);
-    $("body").off("click",
-    ".adblock-killme-overlay, .adblock-highlight-node", click_catch_this);
+  function clickCatch(element) {
+    that.clickedElement = that.highlighter.getCurrentNode(element);
+    $('body').off('click',
+      '.adblock-killme-overlay, .adblock-highlight-node', clickCatchThis);
     Overlay.removeAll();
-    that._onClose();
+    that.onClose();
     return false;
   }
 
   // Most things can be blacklisted with a simple click handler.
-  $("body").on("click", ".adblock-killme-overlay, .adblock-highlight-node", click_catch_this);
+  $('body').on('click', '.adblock-killme-overlay, .adblock-highlight-node', clickCatchThis);
 
   // Since iframes that will get clicked will almost always be an entire
   // ad, and I *really* don't want to figure out inter-frame communication
   // so that the blacklist UI's slider works between multiple layers of
   // iframes... just overlay iframes and treat them as a giant object.
-  $("object,embed,iframe,[onclick]:empty").
-      each(function(i, el) {
-        // Don't add overlay's for hidden elements
-        if (el.style && el.style.display === "none") {
-          return;
-        }
-        var killme_overlay = new Overlay({
-          dom_element: el,
-          click_handler: click_catch
-        });
-        killme_overlay.display();
-  });
-}
+  $('object,embed,iframe,[onclick]:empty')
+    .each((i, el) => {
+      // Don't add overlay's for hidden elements
+      if (el.style && el.style.display === 'none') {
+        return;
+      }
+      const killmeOverlay = new Overlay({
+        domElement: el,
+        clickHandler: clickCatch,
+      });
+      killmeOverlay.display();
+    });
+};
 
-//@ sourceURL=/uiscripts/blacklisting/clickwatcher.js
+
+// required return value for tabs.executeScript
+/* eslint-disable-next-line no-unused-expressions */
+'';
+
+//# sourceURL=/uiscripts/blacklisting/clickwatcher.js

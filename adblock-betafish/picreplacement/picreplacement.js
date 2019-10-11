@@ -1,91 +1,22 @@
-var hostname = window.location.hostname;
+'use strict';
+
+/* For ESLint: List any global identifiers used in this file below */
+/* global chrome, translate, onReady, typeMap, imageSizesMap, BGcall, */
+
+const { hostname } = window.location;
 let totalSwaps = 0;
-let hideElements = [];
-let hiddenElements = [];
+const hideElements = [];
+const hiddenElements = [];
 let cssRules = [];
 const minDimension = 60;
 
-chrome.runtime.sendMessage({type: "getSelectors"}).then((response) => {
+chrome.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
   if (response && response.selectors) {
     cssRules = response.selectors;
   }
 });
 
-// hideElement may get call after the page has completed loading on certain sites that have infinite scroll for example.
-// if the user is on on these infinite scroll sites, such as FB, then attempt to do a pic replacement
-var checkElement = function(element) {
-  var data = {
-    el: element,
-    blocked: typeMap.get(element.localName) ? true : false,
-  };
-  if (document.readyState === 'complete' || window.top === window && hostname === "www.facebook.com") {
-    imageSwap.replaceSection(data, imageSwap.done);
-  } else {
-    hideElements.push(data);
-  }
-};
-
-var onReady = function (callback) {
-  if (document.readyState === 'complete')
-    window.setTimeout(callback, 0);
-  else
-    window.addEventListener('load', callback, false);
-};
-
-// when the page has completed loading:
-// 1) get the currently loaded CSS hiding rules
-// 2) find any hidden elements using the hiding rules from #1 that meet the
-//    minimum dimensions required. if so, add them to an array
-// 3) find any hidden elements that were captured from the hideElement() function that meet the
-//    minimum dimensions required. if so, add them to an array
-// 4) sort the array by size -- we want to replace the large elements first
-// 5) process the sorted array, attempting to do a pic replacment for each element
-onReady(function() {
-  let elementsData = [];
-
-  // Get elements hidden by cssRules
-  for (let i = 0; i < cssRules.length; i++) {
-    var elements = document.querySelectorAll(cssRules[i]);
-    for (let j = 0; j < elements.length; j++) {
-      var data = { el: elements[j] };
-      hiddenElements.push(data);
-    }
-  }
-
-  // If no elements to swap, stop
-  if (!hiddenElements.length && !hideElements.length) {
-    return;
-  }
-
-  let allElements = hideElements.concat(hiddenElements);
-
-  for (let i = 0; i < allElements.length; i++) {
-    const data = allElements[i];
-    const size = imageSwap.getSize(data);
-
-    if (imageSwap.isInvalidSize(size)) {
-        continue;
-    }
-
-    data.size = size;
-    data.dimension = (size.x * size.y);
-
-    // Add element only if it is not nested in other
-    // elements and it's not equal to other elements
-    if (!imageSwap.isNested(data.el, allElements)) {
-      elementsData.push(data);
-    }
-  }
-
-  // Put first elements of larger dimensions
-  elementsData = elementsData.sort((a, b) => b.dimension > a.dimension ? 1 : -1);
-
-  for (let i = 0; i < elementsData.length; i++) {
-    imageSwap.replaceSection(elementsData[i], imageSwap.done);
-  }
-});
-
-var imageSwap = {
+const imageSwap = {
   /**
   * @param {Object} data Information about the element
   *   @param {Node} data.el
@@ -94,33 +25,35 @@ var imageSwap = {
   *   @param {Number} [data.dimension]
   *   @param {CSSStyleDeclaration} [data.computedStyle]
   * @param {Function} callback Called when replacement was done
-  **/
-  replaceSection: function(data, callback) {
-    var el = data.el;
+  * */
+  replaceSection(data, callback) {
+    const { el } = data;
 
     // We may have already replaced this section...
-    if (data.picreplacementreplaced)
+    if (data.picreplacementreplaced) {
       return;
+    }
 
     if (data.blocked) {
-      var size = this.getStyle(data, 'backgroundPosition').match(/^(\w+) (\w+)$/);
+      const size = this.getStyle(data, 'backgroundPosition').match(/^(\w+) (\w+)$/);
       if (size) {
         // Restore el.width & el.height to whatever they were before AdBlock.
-        var dims = { width: size[1], height: size[2] };
-        for (var dim in dims) {
-          if (dims[dim] === "-1px")
+        const dims = { width: size[1], height: size[2] };
+        for (const dim in dims) {
+          if (dims[dim] === '-1px') {
             el.removeAttribute(dim);
-          else
+          } else {
             el.setAttribute(dim, dims[dim]);
+          }
         }
       }
     }
 
-    var oldCssText = el.style.cssText;
-    el.style.setProperty("visibility", "hidden", "important");
-    el.style.setProperty("display", "block", "important");
+    const oldCssText = el.style.cssText;
+    el.style.setProperty('visibility', 'hidden', 'important');
+    el.style.setProperty('display', 'block', 'important');
 
-    this._replace(data, callback);
+    this.replace(data, callback);
 
     el.style.cssText = oldCssText; // Re-hide the section
   },
@@ -150,8 +83,9 @@ var imageSwap = {
   //   offsettop  - amount to pad with blank space above picture
   //   offsetleft - amount to pad with blank space to left of picture
   //                These are used to center a picture in a tall or wide target
-  _fit: function (pic, target) {
-    var p=pic, t=target;
+  fit(pic, target) {
+    const p = pic;
+    const t = target;
     // Step 0: if t.ratio > p.ratio, rotate |p| and |t| about their NW<->SE axes.
     if (!p.x) {
       p.x = p.width;
@@ -179,14 +113,14 @@ var imageSwap = {
     }
     // Our math in Step 1 and beyond relies on |t| being skinner than |p|.  We
     // rotate |t| and |p| about their NW<->SE axis if needed to make that true.
-    var t_ratio = t.x / t.y;
-    var p_ratio = p.x / p.y;
+    const tRatio = t.x / t.y;
+    const pRatio = p.x / p.y;
 
-    if (t_ratio > p_ratio) {
-      var rotate = this._rotate;
+    if (tRatio > pRatio) {
+      const { rotate } = this;
       rotate(pic);
       rotate(target);
-      var result = this._fit(pic, target);
+      const result = this.fit(pic, target);
       rotate(pic);
       rotate(target);
       rotate(result);
@@ -194,10 +128,10 @@ var imageSwap = {
     }
 
     // |t| is skinnier than |p|, so we need to crop the picture horizontally.
-    // Step 1: Calculate |crop_x|: total horizontal crop needed.
-    var crop_max = Math.max(p.left + p.right, .001);
+    // Step 1: Calculate |cropX|: total horizontal crop needed.
+    const cropMax = Math.max(p.left + p.right, 0.001);
     // Crop as much as we must, but not past the max allowed crop.
-    var crop_x = Math.min(p.x - p.y * t_ratio, crop_max);
+    const cropX = Math.min(p.x - p.y * tRatio, cropMax);
 
     // Step 2: Calculate how much of that crop should be done on the left side
     // of the picture versus the right.
@@ -206,21 +140,21 @@ var imageSwap = {
     // so we only have to calculate the left crop and the right crop will happen
     // naturally due to the size of the target area not fitting the entire image.
 
-    var crop_left = p.left * (crop_x / crop_max);
+    const cropLeft = p.left * (cropX / cropMax);
 
     // Step 3: Calculate how much we must scale up or down the original picture.
 
-    var scale = t.x / (p.x - crop_x);
+    const scale = t.x / (p.x - cropX);
 
     // Scale the original picture and crop amounts in order to determine the width
     // and height of the visible display area, the x and y dimensions of the image
     // to display in it, and the crop amount to offset the image.  The end result
     // is an image positioned to show the correct pixels in the target area.
 
-    var result = {};
+    const result = {};
     result.x = Math.round(p.x * scale);
     result.y = Math.round(p.y * scale);
-    result.left = Math.round(crop_left * scale);
+    result.left = Math.round(cropLeft * scale);
     result.width = Math.round(t.x);
     result.height = Math.round(result.y);
 
@@ -235,48 +169,51 @@ var imageSwap = {
   },
 
   // Rotate a picture/target about its NW<->SE axis.
-  _rotate: function(o) {
-    var pairs = [ ["x", "y"], ["top", "left"], ["bot", "right"],
-                  ["offsettop", "offsetleft"], ["width", "height"] ];
-    pairs.forEach(function(pair) {
-      var a = pair[0], b = pair[1], tmp;
+  rotate(objectToRotate) {
+    const o = objectToRotate;
+    const pairs = [['x', 'y'], ['top', 'left'], ['bot', 'right'],
+      ['offsettop', 'offsetleft'], ['width', 'height']];
+    pairs.forEach((pair) => {
+      const [a, b] = pair;
+      let tmp;
       if (o[a] || o[b]) {
         tmp = o[b]; o[b] = o[a]; o[a] = tmp; // swap
       }
     });
   },
 
-  _dim: function(data, prop) {
+  dim(data, prop) {
     function intFor(val) {
       // Match two or more digits; treat < 10 as missing.  This lets us set
       // dims that look good for e.g. 1px tall ad holders (cnn.com footer.)
-      var match = (val || "").match(/^([1-9][0-9]+)(px)?$/);
+      const match = (val || '').match(/^([1-9][0-9]+)(px)?$/);
       if (!match) {
         return undefined;
       }
-      return parseInt(match[1]);
+      return parseInt(match[1], 10);
     }
     return intFor(imageSwap.getStyle(data, prop));
   },
 
-  _parentDim: function(data, prop) {
-    var el = data.el;
-    if (hostname === 'www.facebook.com')
+  parentDim(data, prop) {
+    let { el } = data;
+    if (hostname === 'www.facebook.com') {
       return undefined;
-    var result = undefined;
+    }
+    let result;
     while (!result && el.parentNode) {
-      var parentData = { el: el.parentNode };
-      result = this._dim(parentData, prop);
+      const parentData = { el: el.parentNode };
+      result = this.dim(parentData, prop);
       el = el.parentNode;
     }
     return result;
   },
 
-  getSize: function(data) {
-    var el = data.el;
-    var t = {
-      x: this._dim(data, 'width'),
-      y: this._dim(data, 'height'),
+  getSize(data) {
+    const { el } = data;
+    let t = {
+      x: this.dim(data, 'width'),
+      y: this.dim(data, 'height'),
       position: this.getStyle(data, 'position'),
     };
 
@@ -284,8 +221,8 @@ var imageSwap = {
       // Since we're now injecting a 'user' stylesheet to hide elements, temporarily
       // setting the display to block to unhide the element will not work, so..
       // attempt to determine the size of one of children
-      for (var i = 0; i < el.children.length; i++) {
-        var nextChildData = { el: el.children[i] };
+      for (let i = 0; i < el.children.length; i++) {
+        const nextChildData = { el: el.children[i] };
         t = imageSwap.getSize(nextChildData);
         if (t.x && t.y) {
           break;
@@ -295,27 +232,32 @@ var imageSwap = {
 
     // Make it rectangular if ratio is appropriate, or if we only know one dim
     // and it's so big that the 180k pixel max will force the pic to be skinny.
-    if (t.x && !t.y && t.x > 400)
-      t.type = imageSizesMap.get("wide");
-    else if (t.y && !t.x && t.y > 400)
-      t.type = imageSizesMap.get("tall");
-    else if ((Math.max(t.x,t.y) / Math.min(t.x,t.y) >= 1.5)  && (Math.max(t.x,t.y) / Math.min(t.x,t.y) < 7)) // false unless (t.x && t.y)
-      t.type = (t.x > t.y ? imageSizesMap.get("wide") : imageSizesMap.get("tall"));
-    else if (Math.max(t.x,t.y) / Math.min(t.x,t.y) > 7) // false unless (t.x && t.y)
-      t.type = (t.x > t.y ? imageSizesMap.get("skinnywide") : imageSizesMap.get("skinnytall"));
+    if (t.x && !t.y && t.x > 400) {
+      t.type = imageSizesMap.get('wide');
+    } else if (t.y && !t.x && t.y > 400) {
+      t.type = imageSizesMap.get('tall');
+    } else if ( // false unless (t.x && t.y)
+      (Math.max(t.x, t.y) / Math.min(t.x, t.y) >= 1.5)
+      && (Math.max(t.x, t.y) / Math.min(t.x, t.y) < 7)
+    ) {
+      t.type = (t.x > t.y ? imageSizesMap.get('wide') : imageSizesMap.get('tall'));
+    } else if (Math.max(t.x, t.y) / Math.min(t.x, t.y) > 7) { // false unless (t.x && t.y)
+      t.type = (t.x > t.y ? imageSizesMap.get('skinnywide') : imageSizesMap.get('skinnytall'));
+    }
 
-    if (!t.type) // we didn't choose wide/tall
-      t.type = ((t.x || t.y) > 125 ? imageSizesMap.get("big") : imageSizesMap.get("small"));
+    if (!t.type) { // we didn't choose wide/tall
+      t.type = ((t.x || t.y) > 125 ? imageSizesMap.get('big') : imageSizesMap.get('small'));
+    }
 
     return t;
   },
 
   // Returns placement details to replace |el|, or null
   // if we do not have enough info to replace |el|.
-  _placementFor: function(data, callback) {
-    var t;
-    var el = data.el;
-    var that = this;
+  placementFor(data, callback) {
+    let t;
+    const { el } = data;
+    const that = this;
 
     // if there's previously calculate size, use it
     if (data.size != null && Object.keys(data.size).length) {
@@ -329,88 +271,100 @@ var imageSwap = {
     }
 
     // Let's not go ahead if the parent element of |el| has display none
-    var parent = el.parentNode;
+    const parent = el.parentNode;
     if (!(parent.offsetWidth || parent.offsetHeight || parent.getClientRects().length)) {
       callback(false);
       return false;
     }
 
-    chrome.runtime.sendMessage({ message: 'get_random_listing', opts: { width:t.x, height:t.y, type:t.type, position:t.position } }).then((pic) => {
+    chrome.runtime.sendMessage({
+      message: 'get_random_listing',
+      opts: {
+        width: t.x, height: t.y, type: t.type, position: t.position,
+      },
+    }).then((picture) => {
+      const pic = picture;
       if (!pic || pic.disabledOnPage) {
         callback(false);
         return false;
       }
-      if (typeof pic.height === "string") {
+      if (typeof pic.height === 'string') {
         pic.height = Number(pic.height);
       }
-      if (typeof pic.width === "string") {
+      if (typeof pic.width === 'string') {
         pic.width = Number(pic.width);
       }
 
       // If we only have one dimension, we may choose to use the picture's ratio;
       // but don't go over 180k pixels (so e.g. 1000x__ doesn't insert a 1000x1000
       // picture (cnn.com)).  And if an ancestor has a size, don't exceed that.
-      var max = 180000;
+      const max = 180000;
       if (t.x && !t.y) {
-        var newY = Math.round(Math.min(pic.height * t.x / pic.width, max / t.x));
-        var parentY = that._parentDim(data, "height");
+        const newY = Math.round(Math.min(pic.height * t.x / pic.width, max / t.x));
+        const parentY = that.parentDim(data, 'height');
         t.y = (parentY ? Math.min(newY, parentY) : newY);
       }
       if (t.y && !t.x) {
-        var newX = Math.round(Math.min(pic.width * t.y / pic.height, max / t.y));
-        var parentX = that._parentDim(data, "width");
+        const newX = Math.round(Math.min(pic.width * t.y / pic.height, max / t.y));
+        const parentX = that.parentDim(data, 'width');
         t.x = (parentX ? Math.min(newX, parentX) : newX);
       }
 
-      var result = that._fit(pic, t);
+      const result = that.fit(pic, t);
 
       result.url = pic.url;
-      result.attribution_url = pic.attribution_url;
-      result.photo_title = pic.title;
-      result.info_url =  pic.attribution_url;
+      result.attributionUrl = pic.attributionUrl;
+      result.photoTitle = pic.title;
+      result.infoUrl = pic.attributionUrl;
       result.type = t.type;
       result.t = t;
       result.listingHeight = pic.listingHeight;
       result.listingWidth = pic.listingWidth;
+      result.channelName = pic.channelName;
       callback(result);
+      return true;
     });
+    return undefined;
   },
   // Create a container with the new image and overlay
   // Return an object with the container and its children nodes
-  createNewPicContainer: function(placement) {
+  createNewPicContainer(placement) {
     // Container, inherit some CSS from replaced element
-    var imageSwapContainer = document.createElement('div');
-    imageSwapContainer.id = `ab-image-swap-container-${ new Date().getTime() }`;
+    const imageSwapContainer = document.createElement('div');
+    imageSwapContainer.id = `ab-image-swap-container-${new Date().getTime()}`;
 
     // Wrapper, necessary to set postition: relative
-    var imageSwapWrapper = document.createElement('div');
+    const imageSwapWrapper = document.createElement('div');
     imageSwapWrapper.classList.add('ab-image-swap-wrapper');
 
     // New image
-    var newPic = document.createElement('img');
+    const newPic = document.createElement('img');
     newPic.classList.add('picreplacement-image');
     newPic.src = placement.url;
+    newPic.alt = translate('image_of_channel', translate(placement.channelName));
+
 
     // Overlay info card
-    var infoCardOverlay = document.createElement('div');
+    const infoCardOverlay = document.createElement('div');
     infoCardOverlay.classList.add('picinjection-infocard');
 
-    var overlayLogo = document.createElement('img');
+    const overlayLogo = document.createElement('img');
     overlayLogo.classList.add('ab-logo-header');
     overlayLogo.src = chrome.extension.getURL('icons/dark_theme/logo.svg');
+    overlayLogo.alt = translate('adblock_logo');
 
-    var overlayIcons = document.createElement('div');
+    const overlayIcons = document.createElement('div');
     overlayIcons.classList.add('ab-icons-header');
 
-    var seeIcon = document.createElement('i');
+    const seeIcon = document.createElement('i');
     seeIcon.innerText = 'remove_red_eye';
     seeIcon.classList.add('ab-material-icons');
 
-    var settingsIcon = document.createElement('i');
+    const settingsIcon = document.createElement('i');
     settingsIcon.innerText = 'settings';
     settingsIcon.classList.add('ab-material-icons');
 
-    var closeIcon = document.createElement('i');
+    const closeIcon = document.createElement('i');
     closeIcon.innerText = 'close';
     closeIcon.classList.add('ab-material-icons');
 
@@ -430,18 +384,18 @@ var imageSwap = {
       overlay: infoCardOverlay,
       logo: overlayLogo,
       icons: overlayIcons,
-      closeIcon: closeIcon,
-      settingsIcon: settingsIcon,
-      seeIcon: seeIcon,
+      closeIcon,
+      settingsIcon,
+      seeIcon,
     };
   },
   // Add a <style> tag into the host page's header to style all the HTML we use to replace the ad
   // including the container, the image, the overlay, the logo and the icons
-  injectCSS: function(data, placement, containerID) {
-    var adblockLogoWidth = placement.type === imageSizesMap.get('skinnywide') ? '81px' : '114px';
-    var adblockLogoHeight = placement.type === imageSizesMap.get('skinnywide') ? '20px' : '29px';
-    var materialIconsURL = chrome.extension.getURL('/icons/MaterialIcons-Regular.woff2');
-    var styleTag = document.createElement('style');
+  injectCSS(data, placement, containerID) {
+    const adblockLogoWidth = placement.type === imageSizesMap.get('skinnywide') ? '81px' : '114px';
+    const adblockLogoHeight = placement.type === imageSizesMap.get('skinnywide') ? '20px' : '29px';
+    const materialIconsURL = chrome.extension.getURL('/icons/MaterialIcons-Regular.woff2');
+    const styleTag = document.createElement('style');
     styleTag.type = 'text/css';
     styleTag.textContent = `
       div#${containerID} {
@@ -543,39 +497,42 @@ var imageSwap = {
     `;
     document.head.appendChild(styleTag);
   },
-  setupEventHandlers: function(placement, containerNodes) {
-    containerNodes.image.addEventListener('click', function(e) {
+  setupEventHandlers(placement, containerNodes) {
+    containerNodes.image.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
       return false;
     }, false);
-    containerNodes.image.addEventListener('error', function() {
+    containerNodes.image.addEventListener('error', () => {
       containerNodes.container.parentNode.removeChild(containerNodes.container);
       return false;
     }, false);
-    containerNodes.image.addEventListener('abort', function() {
+    containerNodes.image.addEventListener('abort', () => {
       containerNodes.container.parentNode.removeChild(containerNodes.container);
       return false;
     }, false);
-    containerNodes.seeIcon.addEventListener('click', function() {
-      var u = encodeURIComponent(placement.attribution_url);
-      var w = placement.listingWidth;
-      var h = placement.listingHeight;
-      BGcall('openTab', `adblock-picreplacement-imageview.html?url=${u}&width=${w}&height=${h}`);
+    containerNodes.seeIcon.addEventListener('click', () => {
+      const url = encodeURIComponent(placement.attributionUrl);
+      const width = placement.listingWidth;
+      const height = placement.listingHeight;
+      const channel = placement.channelName;
+      const queryStrings = `url=${url}&width=${width}&height=${height}&channel=${channel}`;
+      BGcall('openTab', `adblock-picreplacement-imageview.html?${queryStrings}`);
     });
-    containerNodes.settingsIcon.addEventListener('click', function() {
+    containerNodes.settingsIcon.addEventListener('click', () => {
       BGcall('openTab', 'options.html#mab-image-swap');
     });
-    containerNodes.closeIcon.addEventListener('click', function() {
+    containerNodes.closeIcon.addEventListener('click', () => {
       containerNodes.container.parentNode.removeChild(containerNodes.container);
     });
   },
   // Given a target element, replace it with a picture.
   // Returns the replacement element if replacement works, or null if the target
   // element could not be replaced.
-  _replace: function(data, callback) {
-    var that = this;
-    that._placementFor(data, function(placement) {
+  replace(elementData, callback) {
+    const that = this;
+    const data = elementData;
+    that.placementFor(data, (placement) => {
       if (!placement) {
         callback(false);
         return false; // don't know how to replace |data.el|
@@ -587,7 +544,7 @@ var imageSwap = {
         return false;
       }
 
-      var containerNodes = that.createNewPicContainer(placement);
+      const containerNodes = that.createNewPicContainer(placement);
       that.injectCSS(data, placement, containerNodes.container.id);
       that.setupEventHandlers(placement, containerNodes);
 
@@ -599,25 +556,23 @@ var imageSwap = {
       // Force showing the image in case it was not showing
       containerNodes.image.style.display = 'inline-block';
       callback(true);
+      return true;
     });
   },
 
-  translate: function(key) {
+  translate(key) {
     return chrome.i18n.getMessage(key);
   },
-  isInvalidSize: function(size) {
+  isInvalidSize(size) {
     return !size.x || !size.y || size.x < minDimension || size.y < minDimension;
   },
   // Check if an element is nested in any element in array
   // Return true if |el| is nested or a duplicate
-  isNested: function(el, elements) {
+  isNested(el, elements) {
     let isNestedElement = false;
     for (let j = 0; j < elements.length; j++) {
-      let otherElement = elements[j].el;
-      if (el === otherElement) {
-        continue;
-      }
-      if (otherElement.contains(el)) {
+      const otherElement = elements[j].el;
+      if (el !== otherElement && otherElement.contains(el)) {
         isNestedElement = true;
         break;
       }
@@ -625,24 +580,25 @@ var imageSwap = {
     return isNestedElement;
   },
   // Return property value of the given |data.el|
-  getStyle: function(data, property) {
-    var alreadyComputed = data.computedStyle;
+  getStyle(elementData, property) {
+    const data = elementData;
+    const alreadyComputed = data.computedStyle;
     if (alreadyComputed) {
-      return alreadyComputed[property]
+      return alreadyComputed[property];
     }
-    var inlineValue = data.el.style[property];
+    const inlineValue = data.el.style[property];
     if (inlineValue) {
       return inlineValue;
     }
-    var attribute = data.el.getAttribute(property);
+    const attribute = data.el.getAttribute(property);
     if (attribute) {
       return attribute;
     }
     data.computedStyle = window.getComputedStyle(data.el);
-    return data.computedStyle[property]
+    return data.computedStyle[property];
   },
   // Function called after an ad was replaced with an image
-  done: function(replaced) {
+  done(replaced) {
     if (replaced) {
       // on some sites, such as freepik.com with absolute positioning,
       // the position of other elements is calculated before our pic replacement is injected.
@@ -651,5 +607,73 @@ var imageSwap = {
       window.dispatchEvent(new Event('resize'));
       chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
     }
-  }
+  },
 }; // end imageSwap
+
+// hideElement may get call after the page has completed loading on certain sites that have infinite
+// scroll for example. If the user is on on these infinite scroll sites, such as FB, then attempt
+// to do a pic replacement
+const checkElement = function (element) {
+  const data = {
+    el: element,
+    blocked: !!typeMap.get(element.localName),
+  };
+  if (
+    document.readyState === 'complete'
+    || (window.top === window && hostname === 'www.facebook.com')
+  ) {
+    imageSwap.replaceSection(data, imageSwap.done);
+  } else {
+    hideElements.push(data);
+  }
+};
+
+// when the page has completed loading:
+// 1) get the currently loaded CSS hiding rules
+// 2) find any hidden elements using the hiding rules from #1 that meet the
+//    minimum dimensions required. if so, add them to an array
+// 3) find any hidden elements that were captured from the hideElement() function that meet the
+//    minimum dimensions required. if so, add them to an array
+// 4) sort the array by size -- we want to replace the large elements first
+// 5) process the sorted array, attempting to do a pic replacment for each element
+onReady(() => {
+  let elementsData = [];
+
+  // Get elements hidden by cssRules
+  for (let i = 0; i < cssRules.length; i++) {
+    const elements = document.querySelectorAll(cssRules[i]);
+    for (let j = 0; j < elements.length; j++) {
+      const data = { el: elements[j] };
+      hiddenElements.push(data);
+    }
+  }
+
+  // If no elements to swap, stop
+  if (!hiddenElements.length && !hideElements.length) {
+    return;
+  }
+
+  const allElements = hideElements.concat(hiddenElements);
+
+  for (let i = 0; i < allElements.length; i++) {
+    const data = allElements[i];
+    const size = imageSwap.getSize(data);
+
+    if (!imageSwap.isInvalidSize(size)) {
+      data.size = size;
+      data.dimension = (size.x * size.y);
+      // Add element only if it is not nested in other
+      // elements and it's not equal to other elements
+      if (!imageSwap.isNested(data.el, allElements)) {
+        elementsData.push(data);
+      }
+    }
+  }
+
+  // Put first elements of larger dimensions
+  elementsData = elementsData.sort((a, b) => (b.dimension > a.dimension ? 1 : -1));
+
+  for (let i = 0; i < elementsData.length; i++) {
+    imageSwap.replaceSection(elementsData[i], imageSwap.done);
+  }
+});

@@ -1,56 +1,63 @@
-const Prefs = require('prefs').Prefs;
-const {LocalCDN} = require('./localcdn');
-const {SURVEY} = require('./survey');
-const {recordGeneralMessage, recordErrorMessage} = require('./servermessages').ServerMessages;
 // Allows interaction with the server to track install rate
 // and log messages.
-let STATS = exports.STATS = (function()
-{
-  var userIDStorageKey = "userid";
-  var totalPingStorageKey = "total_pings";
-  var nextPingTimeStorageKey = "next_ping_time";
-  var stats_url = "https://ping.getadblock.com/stats/";
 
-  var FiftyFiveMinutes = 3300000;
+'use strict';
 
-  var dataCorrupt = false;
+/* For ESLint: List any global identifiers used in this file below */
+/* global chrome, exports, require, log, getSettings, determineUserLanguage,
+   replacedCounts, chromeStorageSetHelper, getAllSubscriptionsMinusText,
+   checkPingResponseForProtect, License, channels */
+
+const { Prefs } = require('prefs');
+const { LocalCDN } = require('./localcdn');
+const { SURVEY } = require('./survey');
+const { recordGeneralMessage, recordErrorMessage } = require('./servermessages').ServerMessages;
+
+const STATS = (function exportStats() {
+  const userIDStorageKey = 'userid';
+  const totalPingStorageKey = 'total_pings';
+  const nextPingTimeStorageKey = 'next_ping_time';
+  const statsUrl = 'https://ping.getadblock.com/stats/';
+  const FiftyFiveMinutes = 3300000;
+  let dataCorrupt = false;
 
   // Get some information about the version, os, and browser
-  var version = chrome.runtime.getManifest().version;
-  var match = navigator.userAgent.match(/(CrOS\ \w+|Windows\ NT|Mac\ OS\ X|Linux)\ ([\d\._]+)?/);
-  var os = (match || [])[1] || "Unknown";
-  var osVersion = (match || [])[2] || "Unknown";
-  var flavor = "E"; // Chrome
-  match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d\.]+)/);
-  var edgeMatch = navigator.userAgent.match(/(?:Edg|Version)\/([\d\.]+)/);
+  const { version } = chrome.runtime.getManifest();
+  let match = navigator.userAgent.match(/(CrOS \w+|Windows NT|Mac OS X|Linux) ([\d._]+)?/);
+  const os = (match || [])[1] || 'Unknown';
+  const osVersion = (match || [])[2] || 'Unknown';
+  let flavor = 'E'; // Chrome
+  match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d.]+)/);
+  const edgeMatch = navigator.userAgent.match(/(?:Edg|Version)\/([\d.]+)/);
   if (edgeMatch) { // null in Chrome browsers
-    flavor = "M"; // MS - Edge
+    flavor = 'M'; // MS - Edge
     match = edgeMatch;
   }
-  var browserVersion = (match || [])[1] || "Unknown";
+  const browserVersion = (match || [])[1] || 'Unknown';
 
-  var firstRun = false;
+  const firstRun = false;
 
-  var user_ID;
+  let userID;
 
   // Inputs: key:string.
   // Returns value if key exists, else undefined.
   // Note: "_alt" is appended to the key to make it the key different
   // from the previous items stored in localstorage
-  var storage_get = function(key) {
-    var store = localStorage;
+  const storageGet = function (key) {
+    const storageKey = `${key}_alt`;
+    const store = localStorage;
     if (store === undefined) {
-        return undefined;
-    }
-    key = key + "_alt";
-    var json = store.getItem(key);
-    if (json == null)
       return undefined;
+    }
+    const json = store.getItem(storageKey);
+    if (json == null) {
+      return undefined;
+    }
     try {
       return JSON.parse(json);
     } catch (ex) {
       if (ex && ex.message) {
-        recordErrorMessage('storage_get_error ', undefined, { errorMessage: ex.message});
+        recordErrorMessage('storage_get_error ', undefined, { errorMessage: ex.message });
       }
       return undefined;
     }
@@ -61,15 +68,16 @@ let STATS = exports.STATS = (function()
   // from the previous items stored in localstorage
   // If value === undefined, removes key from storage.
   // Returns undefined.
-  var storage_set = function(key, value) {
-    var store = localStorage;
-    key = key + "_alt";
+  const storageSet = function (key, value) {
+    const storageKey = `${key}_alt`;
+    const store = localStorage;
+
     if (value === undefined) {
-      store.removeItem(key);
+      store.removeItem(storageKey);
       return;
     }
     try {
-      store.setItem(key, JSON.stringify(value));
+      store.setItem(storageKey, JSON.stringify(value));
     } catch (ex) {
       dataCorrupt = true;
     }
@@ -78,82 +86,70 @@ let STATS = exports.STATS = (function()
   // Give the user a userid if they don't have one yet.
   function readUserIDPromisified() {
     return new Promise(
-      function (resolve, reject) {
-        chrome.storage.local.get(STATS.userIDStorageKey).then((response) =>
-        {
-            var localuserid = storage_get(STATS.userIDStorageKey);
-            if (!response[STATS.userIDStorageKey] && !localuserid)
-            {
-              STATS.firstRun = true;
-              var time_suffix = (Date.now()) % 1e8; // 8 digits from end of
-                                                    // timestamp
-              var alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
-              var result = [];
-              for (var i = 0; i < 8; i++)
-              {
-                var choice = Math.floor(Math.random() * alphabet.length);
-                result.push(alphabet[choice]);
-              }
-              user_ID = result.join('') + time_suffix;
-              // store in redundant locations
-              chromeStorageSetHelper(STATS.userIDStorageKey, user_ID);
-              storage_set(STATS.userIDStorageKey, user_ID);
+      ((resolve) => {
+        chrome.storage.local.get(STATS.userIDStorageKey).then((response) => {
+          const localuserid = storageGet(STATS.userIDStorageKey);
+          if (!response[STATS.userIDStorageKey] && !localuserid) {
+            STATS.firstRun = true;
+            const timeSuffix = (Date.now()) % 1e8; // 8 digits from end of
+            // timestamp
+            const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            const result = [];
+            for (let i = 0; i < 8; i++) {
+              const choice = Math.floor(Math.random() * alphabet.length);
+              result.push(alphabet[choice]);
             }
-            else
-            {
-              user_ID = response[STATS.userIDStorageKey] || localuserid;
-              if (!response[STATS.userIDStorageKey] && localuserid)
-              {
-                chromeStorageSetHelper(STATS.userIDStorageKey, user_ID);
-              }
-              if (response[STATS.userIDStorageKey] && !localuserid)
-              {
-                storage_set(STATS.userIDStorageKey, user_ID);
-              }
+            userID = result.join('') + timeSuffix;
+            // store in redundant locations
+            chromeStorageSetHelper(STATS.userIDStorageKey, userID);
+            storageSet(STATS.userIDStorageKey, userID);
+          } else {
+            userID = response[STATS.userIDStorageKey] || localuserid;
+            if (!response[STATS.userIDStorageKey] && localuserid) {
+              chromeStorageSetHelper(STATS.userIDStorageKey, userID);
             }
-            resolve(user_ID);
-          });
+            if (response[STATS.userIDStorageKey] && !localuserid) {
+              storageSet(STATS.userIDStorageKey, userID);
+            }
+          }
+          resolve(userID);
         });
+      }),
+    );
   }
 
-  chrome.runtime.onMessage.addListener(function(message, sender, sendResponse)
-  {
-    if (message.command !== "get_adblock_user_id")
-    {
-      return;
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (message.command !== 'get_adblock_user_id') {
+      return undefined;
     }
-    readUserIDPromisified().then(function(userID)
-    {
-      sendResponse(userID);
+    readUserIDPromisified().then((resolvedUserID) => {
+      sendResponse(resolvedUserID);
     });
     return true;
   });
 
-  var getPingData = function(callbackFN)
-  {
-    if (!callbackFN && (typeof callbackFN !== 'function'))
-    {
+  const getPingData = function (callbackFN) {
+    if (!callbackFN && (typeof callbackFN !== 'function')) {
       return;
     }
-    chrome.storage.local.get(STATS.totalPingStorageKey).then((response) =>
-    {
-      var settingsObj = getSettings();
-      var localTotalPings = storage_get(STATS.totalPingStorageKey);
-      var total_pings = response[STATS.totalPingStorageKey] || localTotalPings || 0;
-      var themeOptionsPage = settingsObj.color_themes.options_page.replace('_theme', '');
-      var themePopupMenu = settingsObj.color_themes.popup_menu.replace('_theme', '');
-      var data = {
-        u : user_ID,
-        v : version,
-        f : flavor,
-        o : os,
-        bv : browserVersion,
-        ov : osVersion,
-        ad: settingsObj.show_advanced_options ? '1': '0',
-        yt: settingsObj.youtube_channel_whitelist ? '1': '0',
-        l : determineUserLanguage(),
-        pc : total_pings,
-        dcv2 : settingsObj.data_collection_v2 ? '1' : '0',
+    chrome.storage.local.get(STATS.totalPingStorageKey).then((response) => {
+      const settingsObj = getSettings();
+      const localTotalPings = storageGet(STATS.totalPingStorageKey);
+      const totalPings = response[STATS.totalPingStorageKey] || localTotalPings || 0;
+      const themeOptionsPage = settingsObj.color_themes.options_page.replace('_theme', '');
+      const themePopupMenu = settingsObj.color_themes.popup_menu.replace('_theme', '');
+      const data = {
+        u: userID,
+        v: version,
+        f: flavor,
+        o: os,
+        bv: browserVersion,
+        ov: osVersion,
+        ad: settingsObj.show_advanced_options ? '1' : '0',
+        yt: settingsObj.youtube_channel_whitelist ? '1' : '0',
+        l: determineUserLanguage(),
+        pc: totalPings,
+        dcv2: settingsObj.data_collection_v2 ? '1' : '0',
         cdn: settingsObj.local_cdn ? '1' : '0',
         cdnr: LocalCDN.getRedirectCount(),
         cdnd: LocalCDN.getDataCount(),
@@ -164,19 +160,18 @@ let STATS = exports.STATS = (function()
         ir: channels.isAnyEnabled() ? '1' : '0',
         twh: settingsObj.twitch_hiding ? '1' : '0',
       };
+
       // only on Chrome
-      if (flavor === "E" && Prefs.blocked_total)
-      {
-        data["b"] = Prefs.blocked_total;
+      if (flavor === 'E' && Prefs.blocked_total) {
+        data.b = Prefs.blocked_total;
       }
-      if (chrome.runtime.id)
-      {
-        data["extid"] = chrome.runtime.id;
+      if (chrome.runtime.id) {
+        data.extid = chrome.runtime.id;
       }
-      var subs = getAllSubscriptionsMinusText();
+      const subs = getAllSubscriptionsMinusText();
       if (subs) {
-        var aa = subs["acceptable_ads"];
-        var aaPrivacy = subs["acceptable_ads_privacy"];
+        const aa = subs.acceptable_ads;
+        const aaPrivacy = subs.acceptable_ads_privacy;
 
         if (!aa && !aaPrivacy) {
           data.aa = 'u'; // Both filter lists unavailable
@@ -189,257 +184,227 @@ let STATS = exports.STATS = (function()
         }
       }
 
-
-      data["dc"] = dataCorrupt ? '1' : '0';
-      SURVEY.types(function(response)
-      {
-          data["st"] = response;
-          callbackFN(data);
+      data.dc = dataCorrupt ? '1' : '0';
+      SURVEY.types((res) => {
+        data.st = res;
+        callbackFN(data);
       });
     });
   };
   // Tell the server we exist.
-  var pingNow = function()
-  {
-    getPingData(function(data)
-    {
-      if (!data.u)
-      {
+  const pingNow = function () {
+    const handlePingResponse = function (responseData) {
+      SURVEY.maybeSurvey(responseData);
+      License.checkPingResponse(responseData);
+      checkPingResponseForProtect(responseData);
+    };
+
+    getPingData((data) => {
+      const pingData = data;
+
+      if (!pingData.u) {
         return;
       }
       // attempt to stop users that are pinging us 'alot'
       // by checking the current ping count,
       // if the ping count is above a theshold,
       // then only ping 'occasionally'
-      if (data.pc > 5000)
-      {
-        if (data.pc > 5000 && data.pc < 100000 && ((data.pc % 5000) !== 0))
-        {
+      if (pingData.pc > 5000) {
+        if (pingData.pc > 5000 && pingData.pc < 100000 && ((pingData.pc % 5000) !== 0)) {
           return;
         }
-        if (data.pc >= 100000 && ((data.pc % 50000) !== 0))
-        {
+        if (pingData.pc >= 100000 && ((pingData.pc % 50000) !== 0)) {
           return;
         }
       }
-      data["cmd"] = 'ping';
-      var ajaxOptions = {
-        type : 'POST',
-        url : stats_url,
-        data : data,
-        success : handlePingResponse, // TODO: Remove when we no longer do a/b
-                                      // tests
-        error : function(e)
-        {
-          console.log("Ping returned error: ", e.status);
+      pingData.cmd = 'ping';
+      const ajaxOptions = {
+        type: 'POST',
+        url: statsUrl,
+        data: pingData,
+        success: handlePingResponse, // TODO: Remove when we no longer do a/b
+        // tests
+        error(e) {
+          // eslint-disable-next-line no-console
+          console.log('Ping returned error: ', e.status);
         },
       };
 
-      if (chrome.management && chrome.management.getSelf)
-      {
-        chrome.management.getSelf(function(info)
-        {
-          data["it"] = info.installType.charAt(0);
+      if (chrome.management && chrome.management.getSelf) {
+        chrome.management.getSelf((info) => {
+          pingData.it = info.installType.charAt(0);
           $.ajax(ajaxOptions);
         });
-      }
-      else
-      {
+      } else {
         $.ajax(ajaxOptions);
       }
 
-      var missedVersions = LocalCDN.getMissedVersions();
-      if (missedVersions)
-      {
-        recordGeneralMessage("cdn_miss_stats", undefined, {"cdnm": missedVersions});
+      const missedVersions = LocalCDN.getMissedVersions();
+      if (missedVersions) {
+        recordGeneralMessage('cdn_miss_stats', undefined, { cdnm: missedVersions });
       }
     });
   };
 
-  var handlePingResponse = function(responseData, textStatus, jqXHR)
-  {
-    SURVEY.maybeSurvey(responseData);
-    License.checkPingResponse(responseData);
-    checkPingResponseForProtect(responseData);
-  };
-
   // Called just after we ping the server, to schedule our next ping.
-  var scheduleNextPing = function()
-  {
-    chrome.storage.local.get(STATS.totalPingStorageKey).then((response) =>
-    {
-      var localTotalPings = storage_get(totalPingStorageKey);
-      localTotalPings = isNaN(localTotalPings) ? 0 : localTotalPings;
-      var total_pings = response[STATS.totalPingStorageKey]
-      total_pings = isNaN(total_pings) ? 0 : total_pings;
-      total_pings = Math.max(localTotalPings, total_pings);
-      total_pings += 1;
+  const scheduleNextPing = function () {
+    chrome.storage.local.get(STATS.totalPingStorageKey).then((response) => {
+      let localTotalPings = storageGet(totalPingStorageKey);
+      if (!localTotalPings || Number.isNaN(localTotalPings)) {
+        localTotalPings = 0;
+      }
+      let totalPings = response[STATS.totalPingStorageKey];
+      if (!totalPings || Number.isNaN(totalPings)) {
+        totalPings = 0;
+      }
+      totalPings = Math.max(localTotalPings, totalPings);
+      totalPings += 1;
       // store in redundant locations
-      chromeStorageSetHelper(STATS.totalPingStorageKey, total_pings);
-      storage_set(STATS.totalPingStorageKey, total_pings);
+      chromeStorageSetHelper(STATS.totalPingStorageKey, totalPings);
+      storageSet(STATS.totalPingStorageKey, totalPings);
 
-      var delay_hours;
-      if (total_pings == 1) // Ping one hour after install
-        delay_hours = 1;
-      else if (total_pings < 9) // Then every day for a week
-        delay_hours = 24;
-      else
-        // Then weekly forever
-        delay_hours = 24 * 7;
+      let delayHours;
+      if (totalPings === 1) { // Ping one hour after install
+        delayHours = 1;
+      } else if (totalPings < 9) { // Then every day for a week
+        delayHours = 24;
+      } else { // Then weekly forever
+        delayHours = 24 * 7;
+      }
 
-      var millis = 1000 * 60 * 60 * delay_hours;
-      var nextPingTime = Date.now() + millis;
+      const millis = 1000 * 60 * 60 * delayHours;
+      const nextPingTime = Date.now() + millis;
 
       // store in redundant location
-      chromeStorageSetHelper(STATS.nextPingTimeStorageKey, nextPingTime, function(error)
-      {
-        if (error)
-        {
+      chromeStorageSetHelper(STATS.nextPingTimeStorageKey, nextPingTime, (error) => {
+        if (error) {
           dataCorrupt = true;
-        }
-        else
-        {
+        } else {
           dataCorrupt = false;
         }
       });
-      storage_set(STATS.nextPingTimeStorageKey, nextPingTime);
+      storageSet(STATS.nextPingTimeStorageKey, nextPingTime);
     });
   };
 
   // Return the number of milliseconds until the next scheduled ping.
-  var millisTillNextPing = function(callbackFN)
-  {
-    if (!callbackFN || (typeof callbackFN !== 'function'))
-    {
+  const millisTillNextPing = function (callbackFN) {
+    if (!callbackFN || (typeof callbackFN !== 'function')) {
       return;
     }
     // If we've detected data corruption issues,
     // then default to a 55 minute ping interval
-    if (dataCorrupt)
-    {
+    if (dataCorrupt) {
       callbackFN(FiftyFiveMinutes);
       return;
     }
     // Wait 10 seconds to allow the previous 'set' to finish
-    window.setTimeout(function()
-    {
-      chrome.storage.local.get(STATS.nextPingTimeStorageKey).then((response) =>
-      {
-        var local_next_ping_time = storage_get(STATS.nextPingTimeStorageKey);
-        local_next_ping_time = isNaN(local_next_ping_time) ? 0 : local_next_ping_time;
-        var next_ping_time = isNaN(response[STATS.nextPingTimeStorageKey]) ? 0 : response[STATS.nextPingTimeStorageKey];
-        next_ping_time = Math.max(local_next_ping_time, next_ping_time);
+    window.setTimeout(() => {
+      chrome.storage.local.get(STATS.nextPingTimeStorageKey).then((response) => {
+        let localNextPingTime = storageGet(STATS.nextPingTimeStorageKey);
+        if (!localNextPingTime || Number.isNaN(localNextPingTime)) {
+          localNextPingTime = 0;
+        }
+        let nextPingTimeStored = response[STATS.nextPingTimeStorageKey];
+        if (!nextPingTimeStored || Number.isNaN(nextPingTimeStored)) {
+          nextPingTimeStored = 0;
+        }
+        const nextPingTime = Math.max(localNextPingTime, nextPingTimeStored);
         // if this is the first time we've run (just installed), millisTillNextPing is 0
-        if (next_ping_time === 0 && STATS.firstRun)
-        {
+        if (nextPingTime === 0 && STATS.firstRun) {
           callbackFN(0);
           return;
         }
         // if we don't have a 'next ping time', or it's not a valid number,
         // default to 55 minute ping interval
-        if (next_ping_time === 0 || isNaN(next_ping_time))
-        {
+        if (nextPingTime === 0 || !nextPingTime || Number.isNaN(nextPingTime)) {
           callbackFN(FiftyFiveMinutes);
           return;
         }
-        callbackFN(next_ping_time - Date.now());
+        callbackFN(nextPingTime - Date.now());
       }); // end of get
     }, 10000);
   };
 
   // Used to rate limit .message()s. Rate limits reset at startup.
-  var throttle = {
+  const throttle = {
     // A small initial amount in case the server is bogged down.
     // The server will tell us the correct amount.
-    max_events_per_hour : 3, // null if no limit
+    maxEventsPerHour: 3, // null if no limit
     // Called when attempting an event. If not rate limited, returns
     // true and records the event.
-    attempt : function()
-    {
-      var now = Date.now(), one_hour = 1000 * 60 * 60;
-      var times = this._event_times, mph = this.max_events_per_hour;
+    attempt() {
+      const now = Date.now();
+      const oneHour = 1000 * 60 * 60;
+      const times = this.eventTimes;
+      const mph = this.maxEventsPerHour;
       // Discard old or irrelevant events
-      while (times[0] && (times[0] + one_hour < now || mph === null))
+      while (times[0] && (times[0] + oneHour < now || mph === null)) {
         times.shift();
-      if (mph === null)
-        return true; // no limit
-      if (times.length >= mph)
-        return false; // used our quota this hour
+      }
+      if (mph === null) {
+        return true;
+      } // no limit
+      if (times.length >= mph) {
+        return false;
+      } // used our quota this hour
       times.push(now);
       return true;
     },
-    _event_times : []
+    eventTimes: [],
   };
 
   return {
-    userIDStorageKey : userIDStorageKey,
-    totalPingStorageKey : totalPingStorageKey,
-    nextPingTimeStorageKey : nextPingTimeStorageKey,
-    // True if AdBlock was just installed.
-    firstRun : firstRun,
-    userId : function()
-    {
-      return user_ID;
+    userIDStorageKey,
+    totalPingStorageKey,
+    nextPingTimeStorageKey,
+    firstRun, // True if AdBlock was just installed.
+    userId() {
+      return userID;
     },
-    version : version,
-    flavor : flavor,
-    browser : ({
-      E : "Chrome"
+    version,
+    flavor,
+    browser: ({
+      E: 'Chrome',
     })[flavor],
-    browserVersion : browserVersion,
-    os : os,
-    osVersion : osVersion,
-    pingNow : pingNow,
-    statsUrl : stats_url,
-    untilLoaded : function(callback)
-    {
-      readUserIDPromisified().then(function(userID) {
-        if (typeof callback === 'function')
-        {
-          callback(userID);
+    browserVersion,
+    os,
+    osVersion,
+    pingNow,
+    statsUrl,
+    untilLoaded(callback) {
+      readUserIDPromisified().then((resUserId) => {
+        if (typeof callback === 'function') {
+          callback(resUserId);
         }
       });
     },
     // Ping the server when necessary.
-    startPinging : function()
-    {
-      function sleepThenPing()
-      {
-        millisTillNextPing(function(delay)
-        {
-          window.setTimeout(function()
-          {
+    startPinging() {
+      function sleepThenPing() {
+        millisTillNextPing((delay) => {
+          window.setTimeout(() => {
             pingNow();
             scheduleNextPing();
             sleepThenPing();
           }, delay);
         });
-      };
+      }
 
-      readUserIDPromisified().then(function(userID)
-      {
+      readUserIDPromisified().then(() => {
         // Do 'stuff' when we're first installed...
         // - send a message
-        chrome.storage.local.get(STATS.totalPingStorageKey).then((response) =>
-        {
-          if (!response[STATS.totalPingStorageKey])
-          {
-            if (chrome.management && chrome.management.getSelf)
-            {
-              chrome.management.getSelf(function(info)
-              {
-                if (info)
-                {
-                  recordGeneralMessage('new_install_' + info.installType);
-                }
-                else
-                {
+        chrome.storage.local.get(STATS.totalPingStorageKey).then((response) => {
+          if (!response[STATS.totalPingStorageKey]) {
+            if (chrome.management && chrome.management.getSelf) {
+              chrome.management.getSelf((info) => {
+                if (info) {
+                  recordGeneralMessage(`new_install_${info.installType}`);
+                } else {
                   recordGeneralMessage('new_install');
                 }
               });
-            }
-            else
-            {
+            } else {
               recordGeneralMessage('new_install');
             }
           }
@@ -451,42 +416,41 @@ let STATS = exports.STATS = (function()
     },
 
     // Record some data, if we are not rate limited.
-    msg : function(message)
-    {
-      if (!throttle.attempt())
-      {
-        log("Rate limited:", message);
+    msg(message) {
+      if (!throttle.attempt()) {
+        log('Rate limited:', message);
         return;
       }
-      var data = {
-        cmd : "msg2",
-        m : message,
-        u : user_ID,
-        v : version,
-        fr : firstRun,
-        f : flavor,
-        bv : browserVersion,
-        o : os,
-        ov : osVersion
+      const data = {
+        cmd: 'msg2',
+        m: message,
+        u: userID,
+        v: version,
+        fr: firstRun,
+        f: flavor,
+        bv: browserVersion,
+        o: os,
+        ov: osVersion,
       };
-      if (chrome.runtime.id)
-      {
-        data["extid"] = chrome.runtime.id;
+      if (chrome.runtime.id) {
+        data.extid = chrome.runtime.id;
       }
-      $.ajax(stats_url, {
-        type : "POST",
-        data : data,
-        complete : function(xhr)
-        {
-          var mph = parseInt(xhr.getResponseHeader("X-RateLimit-MPH"), 10);
-          if (isNaN(mph) || mph < -1) // Server is sick
+      $.ajax(statsUrl, {
+        type: 'POST',
+        data,
+        complete(xhr) {
+          let mph = parseInt(xhr.getResponseHeader('X-RateLimit-MPH'), 10);
+          if (Number.isNaN(mph) || mph < -1) { // Server is sick
             mph = 1;
-          if (mph === -1)
-            mph = null; // no rate limit
-          throttle.max_events_per_hour = mph;
-        }
+          }
+          if (mph === -1) {
+            mph = null;
+          } // no rate limit
+          throttle.maxEventsPerHour = mph;
+        },
       });
-    }
+    },
   };
+}());
 
-})();
+exports.STATS = STATS;

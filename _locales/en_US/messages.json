@@ -327,6 +327,16 @@
       }
     }
   },
+  "updatedtimestamp":{
+    "message": "updated on $ts$",
+    "description": "Label for filter list subscription last updated timestamp",
+    "placeholders":{
+      "ts": {
+        "content": "$1",
+        "example": "8/26/2019 10:23:44 PM"
+      }
+    }
+  },
   "updatedminuteago":{
     "message":"updated 1 minute ago",
     "description":"Label for filter list subscription"
@@ -390,6 +400,10 @@
   "filterlistlink":{
     "message":"Don't subscribe to more than you need -- every one slows you down a tiny bit! Credits and more lists can be found [[here]].",
     "description":"Filter lists tab explanation and link to filter list credits."
+  },
+  "filterviewsource": {
+    "message": "View filter list",
+    "description": "Title for links to view filter lists on website"
   },
   "updatenowmessage2":{
     "message":"I will fetch updates automatically; you can also [[update now]]",
@@ -2343,6 +2357,14 @@
     "message":"Your changes were reverted.",
     "description":"part 2 of a message to users on the sync page when sending the sync data fails for some unknown reason."
   },
+  "sync_header_error_save_message_part_2":{
+    "message":"We could not sync your changes.",
+    "description":"part 2 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
+  },
+  "sync_header_error_save_message_part_3":{
+    "message":"Please try to manually sync later.",
+    "description":"part 3 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
+  },
   "sync_header_message_old_commit_version_customize_tab_part_2":{
     "message":"We’ve synced this extension and will revert your changes.",
     "description":"part 2 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
@@ -2387,8 +2409,12 @@
     "message":"Manual Sync",
     "description":"section title for the sync now section on the sync page"
   },
-  "sync_now_message":{
-    "message":"I will fetch updates automatically; you can also",
+  "sync_now_message_part_I":{
+    "message":"I'll update automatically.",
+    "description":"message text in the on the sync page "
+  },
+  "sync_now_message_part_II":{
+    "message":"You can also manually sync.",
     "description":"message text in the on the sync page "
   },
   "sync_now_btn_text":{
@@ -2494,5 +2520,353 @@
   "new_cta_hovered_text":{
     "message":"Enjoy better browsing",
     "description":"Text of a temporary call-to-action hovered item in the popup menu."
+  },
+  "myadblock_page_title":{
+    "message":"MyAdBlock: A better way to browse the internet.",
+    "description":"The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_short_description_to_pay":{
+    "message":"You’ll be an ad blocking pro with these easy-to-use add-ons.",
+    "description":"The text next to the 'Get It Now' button on top of the MyAdBlock Options page"
+  },
+  "get_it_now":{
+    "message":"Get It Now",
+    "description":"The text in a button visible to locked users in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_title":{
+    "message":"Make AdBlock Yours",
+    "description":"The title of a feature box in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_description":{
+    "message":"You’re in control of the look, feel, and font size of AdBlock with easy-to-use controls.",
+    "description":"The main text of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_title":{
+    "message":"See Photos, Not Ads",
+    "description":"The title of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_description":{
+    "message":"We’ll still block ads, but we’ll replace some with pretty pictures of cats, dogs, and nature.",
+    "description":"The main text of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_title":{
+    "message":"Sync Your Settings",
+    "description":"The title of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_description":{
+    "message":"Take your custom ad blocking rules, settings, and whitelists with you on whatever computer you use.",
+    "description":"The main text of a feature box in the MyAdBlock Options page"
+  },
+  "how_can_we_help":{
+    "message":"How can we help?",
+    "description":"Message for help flow in popup menu."
+  },
+  "see_ad":{
+    "message":"I see an ad",
+    "description":"Message for help flow in popup menu."
+  },
+  "website_broken":{
+    "message":"The website is broken",
+    "description":"Message for help flow in popup menu."
+  },
+  "dont_know_help_me":{
+    "message":"I don't know. Help me!",
+    "description":"Message for help flow in popup menu."
+  },
+  "first_time_seeing_ad":{
+    "message":"This is my first time seeing this ad",
+    "description":"Message for help flow in popup menu."
+  },
+  "see_ad_everywhere":{
+    "message":"I see this ad everywhere",
+    "description":"Message for help flow in popup menu."
+  },
+  "ad_everywhere_malware":{
+    "message":"If you're seeing this ad everywhere, you might be infected with malware.",
+    "description":"Message for help flow in popup menu."
+  },
+  "learn_more_to_resolve":{
+    "message":"You can [[learn more here]] to help resolve that.",
+    "description":"Message for help flow in popup menu."
+  },
+  "got_it":{
+    "message":"Got it.",
+    "description":"Message for help flow in popup menu."
+  },
+  "check_whitelist":{
+    "message":"Let's check your whitelist to see if that might be the problem.",
+    "description":"Message for help flow in popup menu."
+  },
+  "ok":{
+    "message":"OK",
+    "description":"Message for help flow in popup menu."
+  },
+  "page_is_whitelisted":{
+    "message":"This page is on your whitelist, which is why you're seeing an ad.",
+    "description":"Message for help flow in popup menu."
+  },
+  "want_to_remove":{
+    "message":"Do you want to remove it?",
+    "description":"Message for help flow in popup menu."
+  },
+  "wont_change_anything":{
+    "message":"We won't change anything so you'll continue to see the ad.",
+    "description":"Message for help flow in popup menu."
+  },
+  "removed_url":{
+    "message":"OK! We've removed the URL from your whitelist.",
+    "description":"Message for help flow in popup menu."
+  },
+  "reload_not_see_ad":{
+    "message":"Reload the page so you won't see that ad anymore!",
+    "description":"Message for help flow in popup menu."
+  },
+  "reload_the_page":{
+    "message":"Reload the page",
+    "description":"Message for help flow in popup menu."
+  },
+  "page_not_whitelisted":{
+    "message":"This page is not on your whitelist.",
+    "description":"Message for help flow in popup menu."
+  },
+  "updating_filter_lists":{
+    "message":"AdBlock is updating your filter lists now to see if that might be the problem.",
+    "description":"Message for help flow in popup menu."
+  },
+  "done_reload_page":{
+    "message":"As soon as we're done, please reload the page.",
+    "description":"Message for help flow in popup menu."
+  },
+  "checked_basics":{
+    "message":"We've checked the basics, and updated your filter lists.",
+    "description":"Message for help flow in popup menu."
+  },
+  "still_see_ad":{
+    "message":"Do you still see the ad?",
+    "description":"Message for help flow in popup menu."
+  },
+  "problem_solved":{
+    "message":"Awesome! Problem solved.",
+    "description":"Message for help flow in popup menu."
+  },
+  "done":{
+    "message":"Done",
+    "description":"Message for help flow in popup menu."
+  },
+  "something_not_working":{
+    "message":"Hmm, something's not working.",
+    "description":"Message for help flow in popup menu."
+  },
+  "try_manual_update":{
+    "message":"Please try [[manually updating your filter lists]].",
+    "description":"Message for help flow in popup menu."
+  },
+  "additional_help":{
+    "message":"Need additional help?",
+    "description":"Message for help flow in popup menu."
+  },
+  "contact_support":{
+    "message":"[[Contact our Support team!]]",
+    "description":"Message for help flow in popup menu."
+  },
+  "english_site":{
+    "message":"Are you on an English language website?",
+    "description":"Message for help flow in popup menu."
+  },
+  "edit_filter_lists":{
+    "message":"You may need to [[edit your filter lists]].",
+    "description":"Message for help flow in popup menu."
+  },
+  "learn_more_filter_lists":{
+    "message":"You may also want to [[learn more about filter lists]].",
+    "description":"Message for help flow in popup menu."
+  },
+  "visit_help_center":{
+    "message":"You may want to [[visit our Help Center]] for more troubleshooting options.",
+    "description":"Message for help flow in popup menu."
+  },
+  "try_pausing":{
+    "message":"OK, let's try pausing AdBlock.",
+    "description":"Message for help flow in popup menu."
+  },
+  "reload_when_ready":{
+    "message":"Please click below to reload the page when you are ready.",
+    "description":"Message for help flow in popup menu."
+  },
+  "website_still_broken":{
+    "message":"Is the website still broken?",
+    "description":"Message for help flow in popup menu."
+  },
+  "issue_unrelated_adblock":{
+    "message":"It seems that there's an issue with the site unrelated to AdBlock.",
+    "description":"Message for help flow in popup menu."
+  },
+  "contact_the_site":{
+    "message":"We recommend getting in touch with the site.",
+    "description":"Message for help flow in popup menu."
+  },
+  "something_else_going_on":{
+    "message":"Hmm, something else must be going on.",
+    "description":"Message for help flow in popup menu."
+  },
+  "additional_troubleshooting":{
+    "message":"Here are some [[additional troubleshooting steps]] you can take to resolve this issue.",
+    "description":"Message for help flow in popup menu."
+  },
+  "paused_site_issue":{
+    "message":"AdBlock is currently paused, so it seems there's an issue with the site unrelated to AdBlock.",
+    "description":"Message for help flow in popup menu."
+  },
+  "paused_not_blocking":{
+    "message":"AdBlock is currently paused, so we're not blocking any ads.",
+    "description":"Message for help flow in popup menu."
+  },
+  "resume_reload":{
+    "message":"Do you want to resume blocking ads and reload the page?",
+    "description":"Message for help flow in popup menu."
+  },
+  "no_changes_see_ad":{
+    "message":"We won't change anything so you'll continue to see ads.",
+    "description":"Message for help flow in popup menu."
+  },
+  "unpaused_reload":{
+    "message":"We just unpaused AdBlock and reloaded the page.",
+    "description":"Message for help flow in popup menu."
+  },
+  "thanks":{
+    "message":"Thanks",
+    "description":"Message for help flow in popup menu."
+  },
+  "adblock_logo":{
+    "message":"AdBlock logo",
+    "description":"Text in the alt attribute of an AdBlock logo image."
+  },
+  "example_themes":{
+    "message":"Example themes",
+    "description":"Text in the alt attribute of an image in the Options page mab that visualizes the themes feature."
+  },
+  "image_swap_example":{
+    "message":"Image swap example",
+    "description":"Text in the alt attribute of an image in the Options page mab that visualizes the Image Swap feature."
+  },
+  "sync_example":{
+    "message":"Sync example",
+    "description":"Text in the alt attribute of an image in the Options page mab that visualizes the Sync feature."
+  },
+  "adblock_home":{
+    "message":"AdBlock home",
+    "description":"Text in the alt attribute of an AdBlock logo / icon that links to getadblock.com."
+  },
+  "preview_channel_image":{
+    "message":"Preview image of $image_category$",
+    "description":"Text in the alt attribute of an image previewed as part of the Image Swap feature.",
+    "placeholders":{
+      "image_category":{
+        "content":"$1",
+        "example":"Cats"
+      }
+    }
+  },
+  "image_of_channel":{
+    "message":"Image of $image_category$",
+    "description":"Text in the alt attribute of an image injected into a page as part of the Image Swap feature.",
+    "placeholders":{
+      "image_category":{
+        "content":"$1",
+        "example":"Dogs"
+      }
+    }
+  },
+  "a_theme_preview":{
+    "message":"$theme_name$ theme preview for $extension_page$",
+    "description":"Text in the alt attribute of the image previewing a theme on an extension page.",
+    "placeholders":{
+      "theme_name":{
+        "content":"$1",
+        "example":"Dark"
+      },
+      "extension_page":{
+        "content":"$2",
+        "example":"pop-up menu"
+      }
+    }
+  },
+  "preview_a_theme":{
+    "message":"Preview $theme_name$ theme for $extension_page$",
+    "description":"Text in the aria-label attribute of an icon indicating that clicking will show the preview image of a theme on an extension page.",
+    "placeholders":{
+      "theme_name":{
+        "content":"$1",
+        "example":"Dark"
+      },
+      "extension_page":{
+        "content":"$2",
+        "example":"options page"
+      }
+    }
+  },
+  "help":{
+    "message":"Help",
+    "description":"Text in the aria-label attribute of the support icon on the pop-up menu."
+  },
+  "settings":{
+    "message":"Settings",
+    "description":"Text in the aria-label attribute of the gear icon on the pop-up menu."
+  },
+  "success":{
+    "message":"Success",
+    "description":"Text in the aria-label attribute of an icon indicating successful results."
+  },
+  "error":{
+    "message":"Error",
+    "description":"Text in the aria-label attribute of an icon indicating an error occurred."
+  },
+  "locked":{
+    "message":"Locked",
+    "description":"Text in the aria-label attribute of an icon showing a feature/option is locked."
+  },
+  "selected":{
+    "message":"Selected",
+    "description":"Text in the aria-label attribute of an icon showing an option is selected."
+  },
+  "learn_more_without_period":{
+    "message":"Learn more",
+    "description":"Text in the aria-label attribute of an icon linking to extra information about an option."
+  },
+  "update_filter_lists_now":{
+    "message":"Update Filter Lists Now",
+    "description":"Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
+  },
+  "popup_menu":{
+    "message":"pop-up menu",
+    "description":"General text used to define the pop-up menu."
+  },
+  "options_page":{
+    "message":"options page",
+    "description":"General text used to define the extension options page."
+  },
+  "pause_on_this_site":{
+    "message":"Pause on this site.",
+    "description":"First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+  },
+  "adblock_will_pause_on_this_site":{
+    "message":"If clicked, AdBlock will stop blocking ads on this site.",
+    "description":"Second sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+  },
+  "pause_on_all_sites":{
+    "message":"Pause on all sites.",
+    "description":"First sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_pause_on_all_sites":{
+    "message":"If clicked, AdBlock will stop blocking ads on all sites.",
+    "description":"Second sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_block_ads_again":{
+    "message":"If clicked, AdBlock will block ads again.",
+    "description":"Second sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "resume_blocking_ads_period":{
+    "message":"Resume blocking ads.",
+    "description":"First sentence in the aria-label of the pop-up menu action to resume blocking ads."
   }
 }

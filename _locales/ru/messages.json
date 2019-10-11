@@ -12,7 +12,7 @@
     "message": "AdBlock development build"
   },
   "name_releasebuild": {
-    "description": "Extension name to be shown for release \/ published builds.  Should not be translated",
+    "description": "Extension name to be shown for release / published builds.  Should not be translated",
     "message": "AdBlock"
   },
   "description_edge": {
@@ -64,7 +64,7 @@
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2": {
-    "message": "Чтобы скрыть кнопку, перейдите на opera:\/\/extensions и отметьте галочку на «Скрыть с панели инструментов». Вы можете показать ее снова, сняв галочку.",
+    "message": "Чтобы скрыть кнопку, перейдите на opera://extensions и отметьте галочку на «Скрыть с панели инструментов». Вы можете показать ее снова, сняв галочку.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
   },
   "safaributton_how_to_hide2": {
@@ -189,7 +189,7 @@
   },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock не будет работать на этой странице:",
-    "description": "Message displayed when the whitelist wizard will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
+    "description": "Message displayed when the whitelist wizard will whitelist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change": {
     "message": "Перемещайте ползунок, чтобы максимально точно задать границы белого списка.",
@@ -197,7 +197,7 @@
   },
   "whitelistertitle2": {
     "message": "Не запускать AdBlock...",
-    "description": "The title of the whitelist wizard (Don't run on this page\/pages on this domain)"
+    "description": "The title of the whitelist wizard (Don't run on this page/pages on this domain)"
   },
   "buttonexclude": {
     "message": "Исключить",
@@ -208,8 +208,8 @@
     "description": "Checkbox in the whitelist wizard"
   },
   "wizardcantrunonframesets": {
-    "message": "Эта функция AdBlock не может быть использована, потому что сайт создан с использованием устаревших технологий. Используйте вкладку \"Настроить\" в меню \"Параметры\", чтобы вручную вносить сайты в черный\/белый список.",
-    "description": "Alert shown when the user tries to use a blacklist\/whitelist wizard on an old website"
+    "message": "Эта функция AdBlock не может быть использована, потому что сайт создан с использованием устаревших технологий. Используйте вкладку \"Настроить\" в меню \"Параметры\", чтобы вручную вносить сайты в черный/белый список.",
+    "description": "Alert shown when the user tries to use a blacklist/whitelist wizard on an old website"
   },
   "subscribeconfirm": {
     "message": "Вы уверены, что хотите подписаться на список фильтров $title$?",
@@ -327,6 +327,16 @@
       }
     }
   },
+  "updatedtimestamp": {
+    "message": "дата обновления: $ts$",
+    "description": "Label for filter list subscription last updated timestamp",
+    "placeholders": {
+      "ts": {
+        "content": "$1",
+        "example": "8/26/2019 10:23:44 PM"
+      }
+    }
+  },
   "updatedminuteago": {
     "message": "обновлялось 1 минуту назад",
     "description": "Label for filter list subscription"
@@ -390,6 +400,10 @@
   "filterlistlink": {
     "message": "Не используйте слишком много фильтров -- каждый из них замедляет работу расширения! Узнать о разработчиках больше и посмотреть дополнительные списки можно [[здесь]].",
     "description": "Filter lists tab explanation and link to filter list credits."
+  },
+  "filterviewsource": {
+    "message": "Просмотреть список фильтров",
+    "description": "Title for links to view filter lists on website"
   },
   "updatenowmessage2": {
     "message": "Я буду искать обновления автоматически, но вы можете [[обновить прямо сейчас]]",
@@ -617,11 +631,11 @@
   },
   "malwarewarning": {
     "message": "Возможно, ваш компьютер заражен вредоносными программами. [[Здесь]] можно узнать подробности.",
-    "description": "On the ad report page, the ads the user is seeing might be caused by malware\/adware"
+    "description": "On the ad report page, the ads the user is seeing might be caused by malware/adware"
   },
   "malwarenotfound": {
     "message": "Вредоносного ПО не обнаружено.",
-    "description": "On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
+    "description": "On the ad report page, the ads the user is seeing are probably not caused by malware/adware"
   },
   "disableaa": {
     "message": "Проверить Приемлемую рекламу:",
@@ -1019,6 +1033,14 @@
     "message": "Бразильский португальский",
     "description": "A filter list"
   },
+  "filtereasylist_plus_portuguese": {
+    "message": "Португальский + EasyList",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_indian": {
+    "message": "IndianList + EasyList",
+    "description": "A filter list"
+  },
   "other": {
     "message": "Иное",
     "description": "Multiple choice option"
@@ -1043,7 +1065,7 @@
   },
   "checkinfirefoxorchrometitle": {
     "message": "Проверка в Firefox или Chrome",
-    "description": "Tell a user to see if a reported ad also appears in Firefox\/Chrome"
+    "description": "Tell a user to see if a reported ad also appears in Firefox/Chrome"
   },
   "checkinfirefox_1": {
     "message": "Установите Firefox, если еще этого не сделали.",
@@ -1059,19 +1081,19 @@
   },
   "checkinfirefoxorchrome_2": {
     "message": "В Firefox установите Adblock Plus (в Chrome установите AdBlock), если еще этого не сделали.",
-    "description": "Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
   },
   "checkinfirefox_3": {
     "message": "В указанном браузере подпишитесь на аналогичный текущему список фильтров.",
-    "description": "Instruction for how to check Firefox\/Chrome for a reported ad"
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
   },
   "checkinfirefox_4": {
     "message": "Загрузите страницу с рекламой в указанном браузере.",
-    "description": "Instruction for how to check Firefox\/Chrome for a reported ad"
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
   },
   "checkinfirefox_5": {
     "message": "Вы видите рекламу?",
-    "description": "Instruction for how to check Firefox\/Chrome for a reported ad"
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
   },
   "ff_checkinchrometitle": {
     "message": "Проверка в Chrome",
@@ -1168,7 +1190,7 @@
     "description": "A resource type"
   },
   "typemedia": {
-    "message": "аудио\/видео",
+    "message": "аудио/видео",
     "description": "A resource type"
   },
   "typepage": {
@@ -1196,7 +1218,7 @@
     "description": "Title of the final ad report question if the ad didn't appear in Firefox"
   },
   "cantblockflashwarning": {
-    "message": "Реклама всплывает во время или до показа фильма\/работы плагина, вроде Flash-игры?",
+    "message": "Реклама всплывает во время или до показа фильма/работы плагина, вроде Flash-игры?",
     "description": "Text of the final ad report question"
   },
   "cantblockflash": {
@@ -1317,7 +1339,7 @@
   },
   "options": {
     "message": "Параметры",
-    "description": "The text of the link on chrome:\/\/chrome\/extensions that takes you to the Options page"
+    "description": "The text of the link on chrome://chrome/extensions that takes you to the Options page"
   },
   "hide_this_button": {
     "message": "Скрыть эту кнопку",
@@ -1357,7 +1379,7 @@
   },
   "translators": {
     "message": "Узнайте больше о том, как помочь перевести AdBlock [[here]]",
-    "description": "A link on the Options page \/ translators tab to a KB article about how to help translate AdBlock"
+    "description": "A link on the Options page / translators tab to a KB article about how to help translate AdBlock"
   },
   "report_ad_on_page": {
     "message": "Пожаловаться на рекламу на странице",
@@ -1527,7 +1549,7 @@
   },
   "whitelist_all_youtube_channels": {
     "message": "Добавить в белый список все мои каналы YouTube™",
-    "description": "Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled."
+    "description": "Toolbar button menu entry, displayed only on youtube.com/feed/subscriptions and if the YouTube channel whitelisting option is enabled."
   },
   "one_moment_all_youtube_channels": {
     "message": "Секундочку, подсчитываем ваши подписки",
@@ -1539,7 +1561,7 @@
   },
   "allow_ads_all_youtube_channels": {
     "message": "Показывать рекламу на всех моих каналах YouTube™",
-    "description": "Toolbar button menu entry, displayed only on youtube.com\/feed\/subscriptions and if the YouTube channel whitelisting option is enabled"
+    "description": "Toolbar button menu entry, displayed only on youtube.com/feed/subscriptions and if the YouTube channel whitelisting option is enabled"
   },
   "whitelist_youtube_channel": {
     "message": "Добавить канал $name$ в белый список",
@@ -1579,7 +1601,7 @@
   },
   "englishonly": {
     "message": "Только на английском языке",
-    "description": "Lets the user know that a link\/page is only available in English."
+    "description": "Lets the user know that a link/page is only available in English."
   },
   "foundbug": {
     "message": "Нашли ошибку?",
@@ -2007,6 +2029,18 @@
     "message": "Отправить еще раз",
     "description": "Text on the MyAdBlock enrollment resend email button"
   },
+  "myadblock_feedback_title": {
+    "message": "Поделитесь впечатлениями!",
+    "description": "Title for MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_info": {
+    "message": "Воспользуйтесь формой для обратной связи, если хотите поделиться с нами своим мнением или о чем-то спросить.",
+    "description": "Text describing the MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_button": {
+    "message": "Отправить сообщение",
+    "description": "Text on the MyAdBlock feedback button"
+  },
   "error_msg_header": {
     "message": "Ой-ой! Простите, но AdBlock не смог загрузить меню.",
     "description": "The text on the popup menu when an error has occurred"
@@ -2323,6 +2357,14 @@
     "message": "Ваши изменения сброшены.",
     "description": "part 2 of a message to users on the sync page when sending the sync data fails for some unknown reason."
   },
+  "sync_header_error_save_message_part_2": {
+    "message": "Не удалось синхронизировать изменения.",
+    "description": "part 2 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
+  },
+  "sync_header_error_save_message_part_3": {
+    "message": "Попробуйте синхронизировать их вручную позже.",
+    "description": "part 3 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
+  },
   "sync_header_message_old_commit_version_customize_tab_part_2": {
     "message": "Расширение синхронизировано, изменения будут сброшены.",
     "description": "part 2 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
@@ -2337,7 +2379,7 @@
   },
   "sync_show_name_text": {
     "message": "[[$name$]] синхронизируется",
-    "description": "message to users on the sync page when which includes the name of the extension \/ device",
+    "description": "message to users on the sync page when which includes the name of the extension / device",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -2347,28 +2389,32 @@
   },
   "sync_device_name_list_updated_at_msg": {
     "message": "последнее обновление: $timestamp$",
-    "description": "message to users on when the sync page was last updated with the name of the extensions \/ devices (displayed in locale specific format)",
+    "description": "message to users on when the sync page was last updated with the name of the extensions / devices (displayed in locale specific format)",
     "placeholders": {
       "timestamp": {
         "content": "$1",
-        "example": "April 30, 2019 6:25 pm for US\/English locale"
+        "example": "April 30, 2019 6:25 pm for US/English locale"
       }
     }
   },
   "sync_extension_name_placeholder": {
     "message": "Назовите расширение…",
-    "description": "placeholder text in the extension \/ device name field on the sync page"
+    "description": "placeholder text in the extension / device name field on the sync page"
   },
   "sync_verify_turn_on_text": {
     "message": "Включение синхронизации приведет к сбросу настроек этого расширения.",
-    "description": "message text in the extension \/ device name field on the sync page"
+    "description": "message text in the extension / device name field on the sync page"
   },
   "sync_update_now_section_title": {
     "message": "Синхронизировать вручную",
     "description": "section title for the sync now section on the sync page"
   },
-  "sync_now_message": {
-    "message": "Я буду автоматически искать обновления, но вы можете",
+  "sync_now_message_part_I": {
+    "message": "Я обновлю автоматически.",
+    "description": "message text in the on the sync page "
+  },
+  "sync_now_message_part_II": {
+    "message": "Вы можете синхронизировать вручную.",
     "description": "message text in the on the sync page "
   },
   "sync_now_btn_text": {
@@ -2394,5 +2440,433 @@
   "enable_do_not_track_advice": {
     "message": "Для корректной работы функции включите в настройках браузера Do Not Track (DNT).",
     "description": "The text advicing to enable DNT if Acceptable Ads is enabled in the General tab"
+  },
+  "devtools_action_block": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Заблокировать"
+  },
+  "devtools_action_remove": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Удалить правило"
+  },
+  "devtools_action_unblock": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Добавить исключение"
+  },
+  "devtools_filter_origin_custom": {
+    "description": "sub-title text of the rule showing the source of the rule as custom rules",
+    "message": "пользовательское"
+  },
+  "devtools_filter_origin_none": {
+    "description": "sub-title text of the rule showing the source of the rule as a unamed filter list",
+    "message": "безымянный список"
+  },
+  "devtools_filter_subtitle": {
+    "description": "sub-title text of the rule showing the source of the rule a named filter list",
+    "message": "Происхождение"
+  },
+  "devtools_filter_title": {
+    "description": "Text of the filter that was applied to the list item.",
+    "message": "Фильтр"
+  },
+  "devtools_footer": {
+    "description": "message on the bottom of the panel",
+    "message": "<a0>Перезагрузите</a0> страницу, чтобы увидеть эффект от смены фильтров"
+  },
+  "devtools_header": {
+    "description": "Text on the top of the dev tools panel to show all items of any type; slot0 and slot1 are two seperate drop down lists",
+    "message": "Показывать <slot0></slot0> объекты типа <slot1></slot1>"
+  },
+  "devtools_header_state_all": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "все"
+  },
+  "devtools_header_state_blocked": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "заблокированные"
+  },
+  "devtools_header_state_whitelisted": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "разрешенные"
+  },
+  "devtools_header_type_any": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "любой"
+  },
+  "devtools_request_subtitle": {
+    "description": "sub title text for the request-column header of the dev tools panel",
+    "message": "Домен документа"
+  },
+  "devtools_request_title": {
+    "description": "title text for the request-column header of the dev tools panel",
+    "message": "Запрос"
+  },
+  "devtools_request_url": {
+    "description": "sub title text for the request-column of the dev tools panel when the request is rewritten e.g. http://example.com/foo rewritten to http://example.com/bar",
+    "message": "<a0></a0> переписано на <a0></a0>"
+  },
+  "devtools_type_title": {
+    "description": "Type column header text",
+    "message": "Тип"
+  },
+  "new_badge": {
+    "message": "Новинка",
+    "description": "DO NOT TRANSLATE. Max 4 characters. Text in the badge of our extension toolbar icon."
+  },
+  "new_cta_default_text": {
+    "message": "Обновите AdBlock",
+    "description": "Text of a temporary call-to-action item in the popup menu."
+  },
+  "new_cta_hovered_text": {
+    "message": "Интернет станет комфортнее",
+    "description": "Text of a temporary call-to-action hovered item in the popup menu."
+  },
+  "myadblock_page_title": {
+    "message": "MyAdBlock: Комфортный интернет.",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_short_description_to_pay": {
+    "message": "Удобные и простые расширения — блокируйте все, что хотите!",
+    "description": "The text next to the 'Get It Now' button on top of the MyAdBlock Options page"
+  },
+  "get_it_now": {
+    "message": "Скачать сейчас",
+    "description": "The text in a button visible to locked users in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_title": {
+    "message": "Сделайте AdBlock персонально вашим",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_description": {
+    "message": "Сами решайте, как должен выглядеть ваш AdBlock.",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_title": {
+    "message": "Фотографии вместо рекламы",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_description": {
+    "message": "Мы не просто заблокируем объявления: мы заменим их фотографиями котиков и собачек.",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_title": {
+    "message": "Синхронизируйте настройки",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_description": {
+    "message": "Переносите на новый компьютер все настройки, а также белые и черные списки.",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "how_can_we_help": {
+    "message": "Чем мы можем помочь?",
+    "description": "Message for help flow in popup menu."
+  },
+  "see_ad": {
+    "message": "Я вижу рекламу",
+    "description": "Message for help flow in popup menu."
+  },
+  "website_broken": {
+    "message": "Сайт сломался",
+    "description": "Message for help flow in popup menu."
+  },
+  "dont_know_help_me": {
+    "message": "Я не знаю, но помогите!",
+    "description": "Message for help flow in popup menu."
+  },
+  "first_time_seeing_ad": {
+    "message": "Я вижу эту рекламу впервые",
+    "description": "Message for help flow in popup menu."
+  },
+  "see_ad_everywhere": {
+    "message": "Я постоянно вижу эту рекламу",
+    "description": "Message for help flow in popup menu."
+  },
+  "ad_everywhere_malware": {
+    "message": "Если вы постоянно видите эту рекламу, то, возможно, ваш компьютер заражен зловредной программой.",
+    "description": "Message for help flow in popup menu."
+  },
+  "learn_more_to_resolve": {
+    "message": "Узнать об этом больше можно [[здесь]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "got_it": {
+    "message": "Понятно.",
+    "description": "Message for help flow in popup menu."
+  },
+  "check_whitelist": {
+    "message": "Давайте проверим ваш список исключений, чтобы понять, в чем может быть проблема.",
+    "description": "Message for help flow in popup menu."
+  },
+  "ok": {
+    "message": "ОК",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_is_whitelisted": {
+    "message": "Вы добавили этот сайт в белый список, поэтому вы видите рекламные объявления.",
+    "description": "Message for help flow in popup menu."
+  },
+  "want_to_remove": {
+    "message": "Хотите убрать его из белого списка?",
+    "description": "Message for help flow in popup menu."
+  },
+  "wont_change_anything": {
+    "message": "Мы ничего не поменяли, так что вы продолжите видеть рекламу.",
+    "description": "Message for help flow in popup menu."
+  },
+  "removed_url": {
+    "message": "ОК! Мы убрали этот URL из списка исключений.",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_not_see_ad": {
+    "message": "Перезагрузите страницу, и больше эта реклама вас не потревожит!",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_the_page": {
+    "message": "Перезагрузить страницу",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_not_whitelisted": {
+    "message": "Мы не нашли этого сайта в вашем белом списке.",
+    "description": "Message for help flow in popup menu."
+  },
+  "updating_filter_lists": {
+    "message": "AdBlock обновляет списки фильтров, чтобы понять, в чем может быть проблема.",
+    "description": "Message for help flow in popup menu."
+  },
+  "done_reload_page": {
+    "message": "Перезагрузите страницу, как только мы закончим.",
+    "description": "Message for help flow in popup menu."
+  },
+  "checked_basics": {
+    "message": "Мы обновили список ваших фильтров.",
+    "description": "Message for help flow in popup menu."
+  },
+  "still_see_ad": {
+    "message": "Вы все еще видите рекламу?",
+    "description": "Message for help flow in popup menu."
+  },
+  "problem_solved": {
+    "message": "Вот и ладушки!",
+    "description": "Message for help flow in popup menu."
+  },
+  "done": {
+    "message": "Готово",
+    "description": "Message for help flow in popup menu."
+  },
+  "something_not_working": {
+    "message": "Кажется, что-то не работает.",
+    "description": "Message for help flow in popup menu."
+  },
+  "try_manual_update": {
+    "message": "Попробуйте [[вручную обновить список фильтров]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "additional_help": {
+    "message": "Нужна дополнительная помощь?",
+    "description": "Message for help flow in popup menu."
+  },
+  "contact_support": {
+    "message": "[[Свяжитесь с нашей технической поддержкой!]]",
+    "description": "Message for help flow in popup menu."
+  },
+  "english_site": {
+    "message": "Сайт на английском языке?",
+    "description": "Message for help flow in popup menu."
+  },
+  "edit_filter_lists": {
+    "message": "Возможно, вам понадобится [[изменить список фильтров]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "learn_more_filter_lists": {
+    "message": "Здесь вы можете больше узнать [[о списках фильтров]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "visit_help_center": {
+    "message": "Если идеи кончились, то вы всегда можете посетить наш [[центр помощи]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "try_pausing": {
+    "message": "Попробуем приостановить работу AdBlock.",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_when_ready": {
+    "message": "Когда будете готовы, нажмите ниже, чтобы перезагрузить страницу.",
+    "description": "Message for help flow in popup menu."
+  },
+  "website_still_broken": {
+    "message": "Сайт все еще не работает?",
+    "description": "Message for help flow in popup menu."
+  },
+  "issue_unrelated_adblock": {
+    "message": "Кажется, что проблема в сайте, который не имеет отношения к AdBlock.",
+    "description": "Message for help flow in popup menu."
+  },
+  "contact_the_site": {
+    "message": "Мы рекомендуем связаться с представителями сайта.",
+    "description": "Message for help flow in popup menu."
+  },
+  "something_else_going_on": {
+    "message": "Хм, должно быть что-то еще.",
+    "description": "Message for help flow in popup menu."
+  },
+  "additional_troubleshooting": {
+    "message": "Вы можете предпринять [[дополнительные шаги по устранению неполадок]], которые могут решить вашу проблему.",
+    "description": "Message for help flow in popup menu."
+  },
+  "paused_site_issue": {
+    "message": "Работа AdBlock временно приостановлена — значит, что проблема связна с сайтом, а не с AdBlock.",
+    "description": "Message for help flow in popup menu."
+  },
+  "paused_not_blocking": {
+    "message": "Работа AdBlock приостановлена — мы не блокируем рекламу на данный момент.",
+    "description": "Message for help flow in popup menu."
+  },
+  "resume_reload": {
+    "message": "Перезагрузить страницу, чтобы возобновить блокировку рекламы?",
+    "description": "Message for help flow in popup menu."
+  },
+  "no_changes_see_ad": {
+    "message": "Мы ничего не поменяли, так что вы продолжите видеть рекламу.",
+    "description": "Message for help flow in popup menu."
+  },
+  "unpaused_reload": {
+    "message": "Мы запустили AdBlock и перезагрузили страницу.",
+    "description": "Message for help flow in popup menu."
+  },
+  "thanks": {
+    "message": "Спасибо",
+    "description": "Message for help flow in popup menu."
+  },
+  "adblock_logo": {
+    "message": "Логотип AdBlock",
+    "description": "Text in the alt attribute of an AdBlock logo image."
+  },
+  "example_themes": {
+    "message": "Примеры тем",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the themes feature."
+  },
+  "image_swap_example": {
+    "message": "Пример замены изображений",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Image Swap feature."
+  },
+  "sync_example": {
+    "message": "Пример синхронизации",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Sync feature."
+  },
+  "adblock_home": {
+    "message": "Главная страница AdBlock",
+    "description": "Text in the alt attribute of an AdBlock logo / icon that links to getadblock.com."
+  },
+  "preview_channel_image": {
+    "message": "Превью изображения: $image_category$",
+    "description": "Text in the alt attribute of an image previewed as part of the Image Swap feature.",
+    "placeholders": {
+      "image_category": {
+        "content": "$1",
+        "example": "Cats"
+      }
+    }
+  },
+  "image_of_channel": {
+    "message": "Изображение: $image_category$",
+    "description": "Text in the alt attribute of an image injected into a page as part of the Image Swap feature.",
+    "placeholders": {
+      "image_category": {
+        "content": "$1",
+        "example": "Dogs"
+      }
+    }
+  },
+  "a_theme_preview": {
+    "message": "Превью темы «$theme_name$» для расширения: $extension_page$",
+    "description": "Text in the alt attribute of the image previewing a theme on an extension page.",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dark"
+      },
+      "extension_page": {
+        "content": "$2",
+        "example": "pop-up menu"
+      }
+    }
+  },
+  "preview_a_theme": {
+    "message": "Показать превью темы «$theme_name$» для: $extension_page$",
+    "description": "Text in the aria-label attribute of an icon indicating that clicking will show the preview image of a theme on an extension page.",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dark"
+      },
+      "extension_page": {
+        "content": "$2",
+        "example": "options page"
+      }
+    }
+  },
+  "help": {
+    "message": "Помощь",
+    "description": "Text in the aria-label attribute of the support icon on the pop-up menu."
+  },
+  "settings": {
+    "message": "Параметры",
+    "description": "Text in the aria-label attribute of the gear icon on the pop-up menu."
+  },
+  "success": {
+    "message": "Успешно",
+    "description": "Text in the aria-label attribute of an icon indicating successful results."
+  },
+  "error": {
+    "message": "Ошибка",
+    "description": "Text in the aria-label attribute of an icon indicating an error occurred."
+  },
+  "locked": {
+    "message": "Недоступно",
+    "description": "Text in the aria-label attribute of an icon showing a feature/option is locked."
+  },
+  "selected": {
+    "message": "Выбрано",
+    "description": "Text in the aria-label attribute of an icon showing an option is selected."
+  },
+  "learn_more_without_period": {
+    "message": "Узнать больше",
+    "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
+  },
+  "update_filter_lists_now": {
+    "message": "Обновить список фильтров",
+    "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
+  },
+  "popup_menu": {
+    "message": "всплывающее меню",
+    "description": "General text used to define the pop-up menu."
+  },
+  "options_page": {
+    "message": "страница параметров",
+    "description": "General text used to define the extension options page."
+  },
+  "pause_on_this_site": {
+    "message": "Приостановить на этом сайте.",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+  },
+  "adblock_will_pause_on_this_site": {
+    "message": "Если выбрать, AdBlock прекратит блокировать рекламу на этом сайте.",
+    "description": "Second sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+  },
+  "pause_on_all_sites": {
+    "message": "Приостановить на всех сайтах.",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_pause_on_all_sites": {
+    "message": "Если выбрать, AdBlock прекратит блокировать рекламу на всех сайтах.",
+    "description": "Second sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_block_ads_again": {
+    "message": "Если выбрать, AdBlock возобновит блокировать рекламу.",
+    "description": "Second sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "resume_blocking_ads_period": {
+    "message": "Возобновить блокировку рекламы.",
+    "description": "First sentence in the aria-label of the pop-up menu action to resume blocking ads."
   }
 }

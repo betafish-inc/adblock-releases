@@ -1,38 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <div class="option-page-box">
   <div class="option-page-content">
-
     <div id="message_holder" class="failed_fetch error-message"></div>
 
     <h1 i18n="filterstabtitle" class="page-title"></h1>
-    <a class="section-padding bottom-line" i18n="filterlistlink" i18n_replacement_el="filterlistlink" href="https://adblockplus.org/en/subscriptions" target="_blank">
+    <a
+      class="section-padding bottom-line"
+      i18n="filterlistlink"
+      i18n_replacement_el="filterlistlink"
+      href="https://adblockplus.org/en/subscriptions"
+      target="_blank"
+    >
       <span id="filterlistlink" class="link-text-color"></span>
     </a>
 
-    <div i18n="updatenowmessage2" i18n_replacement_el="btnUpdateNow" class="add-space-between align-items-center section-padding">
-      <button class="btn red long right" type="button" id="btnUpdateNow"></button>
+    <div
+      i18n="updatenowmessage2"
+      i18n_replacement_el="btnUpdateNow"
+      class="add-space-between align-items-center section-padding"
+    >
+      <button
+        class="btn red long right"
+        type="button"
+        id="btnUpdateNow"
+        i18n-aria-label="update_filter_lists_now"
+      ></button>
     </div>
 
     <div id="filter_subscriptions">
-
       <h2 i18n="adblockinglist" class="paragraph-title"></h2>
 
       <div id="easylist_info">
         <b><span i18n="easylist_disable_done"></span></b>
         <span i18n="easylist_disable_how_to_reenable"></span>
-        <br/>
+        <br />
       </div>
       <div id="ad_blocking_list"></div>
       <div id="language_list"></div>
       <div id="language_dropdown_container">
         <span i18n="languagedropdowndescription"></span>
         <div id="language-select-box">
-          <select id='language_select'>
+          <select id="language_select" aria-labelledby="language_dropdown_container">
             <option value="" i18n="selectlanguage2"></option>
           </select>
-          <i class="material-icons md-18">arrow_drop_down_circle</i>
+          <i class="material-icons md-18" role="img" aria-hidden="true">arrow_drop_down_circle</i>
         </div>
-
       </div>
 
       <h2 i18n="otherfilters" class="paragraph-title"></h2>
@@ -44,13 +56,15 @@
 
     <div class="space-between-line">
       <input id="txtNewSubscriptionUrl" type="text" />
-      <button class="btn red long" type="button" id="btnNewSubscriptionUrl" i18n="subscribebutton" />
+      <button
+        class="btn red long"
+        type="button"
+        id="btnNewSubscriptionUrl"
+        i18n="subscribebutton"
+      />
     </div>
 
-
-    <p id="btnShowLinks" class="advanced">
-    <span id="btnShowLinks" i18n="showlinkstolists2"></span>
-    </p>
+    <a id="btnShowLinks" class="advanced" href="#" i18n="showlinkstolists2"></a>
 
     <div class="translation_credits italic do-not-display"></div>
   </div>

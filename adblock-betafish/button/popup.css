@@ -35,7 +35,7 @@ body {
   font-style: italic;
   display: none;
   line-height: 28px;
- }
+}
 #div_status_beta {
   padding-left: 10px;
 }
@@ -92,7 +92,7 @@ a:hover {
 }
 #div_adblock_protect_enrollment {
   height: 98px;
-  background-color: #2283F3;
+  background-color: #2283f3;
   cursor: text;
   margin: 0px;
   padding: 5px 10px;
@@ -101,7 +101,7 @@ a:hover {
 }
 #protect_enrollment_text {
   letter-spacing: -0.09px;
-  color: #FFFFFF;
+  color: #ffffff;
   height: 37px;
   font-size: 14px;
   line-height: normal;
@@ -118,7 +118,7 @@ a:hover {
   font-size: 11px;
   line-height: normal;
   color: #502907;
-  background: #FDD705;
+  background: #fdd705;
   border-radius: 6px;
   height: 24px;
   text-transform: uppercase;
@@ -128,10 +128,10 @@ a:hover {
   cursor: pointer;
 }
 #protect_enrollment_btn:hover {
-  background: #FFAE00;
+  background: #ffae00;
 }
 #newText {
-  color: #E7B202;
+  color: #e7b202;
   font-weight: bold;
   font-size: 14px;
 }
@@ -211,7 +211,8 @@ a:hover {
   margin-top: 5px;
 }
 
-#div_sync_outofdate_error_msg, #div_sync_error_msg {
+#div_sync_outofdate_error_msg,
+#div_sync_error_msg {
   background-color: var(--sync-error-msg-background-color);
   color: var(--sync-error-msg-color);
   text-align: center;
@@ -222,7 +223,8 @@ a:hover {
   display: none;
 }
 
-#div_sync_outofdate_error_msg a, #div_sync_outofdate_error_msg a span {
+#div_sync_outofdate_error_msg a,
+#div_sync_outofdate_error_msg a span {
   background-color: var(--sync-error-msg-background-color);
   color: var(--sync-error-msg-color);
   text-align: center;
@@ -243,7 +245,8 @@ a:hover {
 }
 
 /* Retina & hi DPI displays only */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+}
 
 #default_theme .header-logo {
   content: url(icons/default_theme/logo.svg);

@@ -1,122 +1,106 @@
-var $ = require('./jquery/jquery.min');
-window.jQuery = $;
-window.$ = $;
-const {LocalCDN} = require('./localcdn');
-const {EventEmitter} = require("events");
-let settingsNotifier = new EventEmitter();
+'use strict';
+
+/* For ESLint: List any global identifiers used in this file below */
+/* global chrome, require, log, chromeStorageSetHelper, logging */
+
+const { EventEmitter } = require('events');
+const { LocalCDN } = require('./localcdn');
+const minjQuery = require('./jquery/jquery.min');
+
+const settingsNotifier = new EventEmitter();
+const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];
+const validThemes = ['default_theme', 'dark_theme', 'watermelon_theme', 'solarized_theme', 'ocean_theme', 'sunshine_theme'];
+
+window.jQuery = minjQuery;
+window.$ = minjQuery;
 
 // OPTIONAL SETTINGS
-function Settings()
-{
-  this._settingsKey = 'settings';
-  this._defaults = {
-    debug_logging : false,
-    youtube_channel_whitelist : false,
-    show_advanced_options : false,
-    show_block_counts_help_link : true,
-    show_survey : true,
-    local_cdn : false,
-    picreplacement : false,
-    twitch_hiding : false,
+function Settings() {
+  this.settingsKey = 'settings';
+  this.defaults = {
+    debug_logging: false,
+    youtube_channel_whitelist: false,
+    show_advanced_options: false,
+    show_block_counts_help_link: true,
+    show_survey: true,
+    local_cdn: false,
+    picreplacement: false,
+    twitch_hiding: false,
     color_themes: {
       popup_menu: 'default_theme',
-      options_page: 'default_theme'
-    }
+      options_page: 'default_theme',
+    },
   };
-  var _this = this;
-  this._init = new Promise(function(resolve)
-  {
-    chrome.storage.local.get(_this._settingsKey).then((response) =>
-    {
-      var settings = response.settings || {};
-      _this._data = $.extend(_this._defaults, settings);
-      if (settings.debug_logging)
-      {
+  const that = this;
+  this.init = new Promise(((resolve) => {
+    chrome.storage.local.get(that.settingsKey).then((response) => {
+      const settings = response.settings || {};
+      that.data = $.extend(that.defaults, settings);
+      if (settings.debug_logging) {
         logging(true);
       }
-      if (settings.local_cdn)
-      {
+      if (settings.local_cdn) {
         LocalCDN.start();
       }
 
       resolve();
     });
-  }).then(function()
-  {
+  })).then(() => {
     log('\n===SETTINGS FINISHED LOADING===\n\n');
   });
 }
 
 Settings.prototype = {
-  set : function(name, isEnabled, callback)
-  {
-    const originalValue = this._data[name];
-    this._data[name] = isEnabled;
-    var _this = this;
+  set(name, isEnabled, callback) {
+    const originalValue = this.data[name];
+    this.data[name] = isEnabled;
+    const that = this;
 
     // Don't store defaults that the user hasn't modified
-    chrome.storage.local.get(this._settingsKey).then((response) =>
-    {
-      var storedData = response.settings || {};
+    chrome.storage.local.get(this.settingsKey).then((response) => {
+      const storedData = response.settings || {};
 
       storedData[name] = isEnabled;
-      chromeStorageSetHelper(_this._settingsKey, storedData);
-      if (originalValue !== isEnabled)
-      {
-        settingsNotifier.emit("settings.changed", name, isEnabled, originalValue);
+      chromeStorageSetHelper(that.settingsKey, storedData);
+      if (originalValue !== isEnabled) {
+        settingsNotifier.emit('settings.changed', name, isEnabled, originalValue);
       }
-      if (callback !== undefined && typeof callback === 'function')
-      {
+      if (callback !== undefined && typeof callback === 'function') {
         callback();
       }
     });
   },
 
-  get_all : function()
-  {
-    return this._data;
+  getAll() {
+    return this.data;
   },
 
-  onload : function()
-  {
-    return this._init;
+  onload() {
+    return this.init;
   },
 
 };
 
-var settings = new Settings();
+const settings = new Settings();
 settings.onload();
 
-var getSettings = function()
-{
-  return settings.get_all();
+const getSettings = function () {
+  return settings.getAll();
 };
 
-var setSetting = function(name, isEnabled, callback)
-{
+const setSetting = function (name, isEnabled, callback) {
   settings.set(name, isEnabled, callback);
 
-  if (name === 'debug_logging')
-  {
+  if (name === 'debug_logging') {
     logging(isEnabled);
   }
 };
 
-var disableSetting = function(name)
-{
+const disableSetting = function (name) {
   settings.set(name, false);
 };
 
-const isValidTheme = (themeName) => {
-  return validThemes.includes(themeName);
-}
-
-const validThemes = [
-  'default_theme', 'dark_theme', 'watermelon_theme',
-  'solarized_theme', 'ocean_theme', 'sunshine_theme'
-];
-
-const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];
+const isValidTheme = themeName => validThemes.includes(themeName);
 
 // Attach methods to window
 Object.assign(window, {
@@ -126,5 +110,5 @@ Object.assign(window, {
   settings,
   settingsNotifier,
   isValidTheme,
-  abpPrefPropertyNames
+  abpPrefPropertyNames,
 });

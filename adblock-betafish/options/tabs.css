@@ -13,7 +13,7 @@
   margin-left: 41px;
   border-radius: 3px 0px 0px 3px;
   opacity: 0;
-  transition: opacity .2s linear;
+  transition: opacity 0.2s linear;
 }
 #sidebar-tabs ul[data-parent-tab] li.locked a {
   color: #999999;
@@ -32,7 +32,7 @@
 }
 #sidebar-tabs li a:not(.active):hover,
 #sidebar-tabs li a:not(.active):hover > i.material-icons {
-  color: var(--link-hovered-color, #F30D12);
+  color: var(--link-hovered-color, #f30d12);
 }
 #sidebar-tabs li a {
   width: calc(100% - 8px);
@@ -48,7 +48,7 @@
 #sidebar-tabs li.locked a i {
   line-height: 25px;
   color: #999999;
-  cursor: default
+  cursor: default;
 }
 #sidebar-tabs li a i:not(.unlocked):not(.locked) + span {
   margin-left: 15px;
@@ -90,8 +90,8 @@
     min-width: 188px;
     color: var(--active-tab-color, #666);
     background-color: var(--background-color, white);
-    -webkit-box-shadow:0px 5px 15px rgba(10,14,71,0.2);
-    box-shadow:0px 5px 15px rgba(10,14,71,0.2);
+    -webkit-box-shadow: 0px 5px 15px rgba(10, 14, 71, 0.2);
+    box-shadow: 0px 5px 15px rgba(10, 14, 71, 0.2);
   }
   #sidebar-tabs ul[data-parent-tab] {
     margin-left: 15px;

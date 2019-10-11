@@ -1,30 +1,30 @@
+'use strict';
+
+/* For ESLint: List any global identifiers used in this file below */
+/* global exports:true */
+
 // Used by both channels.js and picreplacement.js
 // Since this file is conditional loaded, and not part of the content script web pack,
 // 'exports' may not be defined, so we use this hack
-if (typeof exports === "undefined") {
-  var exports = {};
+if (typeof exports === 'undefined') {
+  const overrideExports = {};
+  window.exports = overrideExports;
 }
 
-const imageSizesMap =
-exports.imageSizesMap = new Map([
-  ["NONE", 0],
-  ["wide", 1],
-  ["tall", 2],
-  ["skinnywide", 4],
-  ["skinnytall", 8],
-  ["big", 16],
-  ["small", 32]
+const imageSizesMap = new Map([
+  ['NONE', 0],
+  ['wide', 1],
+  ['tall', 2],
+  ['skinnywide', 4],
+  ['skinnytall', 8],
+  ['big', 16],
+  ['small', 32],
 ]);
 
-const WIDE =
-exports.WIDE = imageSizesMap.get("wide");
-const TALL =
-exports.TALL = imageSizesMap.get("tall");
-const SKINNYWIDE =
-exports.SKINNYWIDE = imageSizesMap.get("skinnywide");
-const SKINNYTALL =
-exports.SKINNYTALL = imageSizesMap.get("skinnytall");
-const BIG =
-exports.BIG = imageSizesMap.get("big");
-const SMALL =
-exports.SMALL = imageSizesMap.get("small");
+exports.imageSizesMap = imageSizesMap;
+exports.WIDE = imageSizesMap.get('wide');
+exports.TALL = imageSizesMap.get('tall');
+exports.BIG = imageSizesMap.get('big');
+exports.SMALL = imageSizesMap.get('small');
+exports.SKINNYWIDE = imageSizesMap.get('skinnywide');
+exports.SKINNYTALL = imageSizesMap.get('skinnytall');

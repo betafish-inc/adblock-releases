@@ -1,42 +1,49 @@
+'use strict';
+
+/* For ESLint: List any global identifiers used in this file below */
+/* global chrome, exports, log */
+
 // Schedules a function to be executed once when the computer is idle.
 // Call idleHandler.scheduleItem to schedule a function for exection upon idle
 // inputs: theFunction: function to be executed
 //         seconds: maximum time to wait upon idle, in seconds. 600 if omitted.
-let idleHandler = exports.idleHandler = {
-  scheduleItemOnce : function(callback, seconds) {
+const idleHandler = {
+  scheduleItemOnce(callback, seconds) {
     // Schedule the item to be executed
-    idleHandler._scheduledItems.push({
-      callback : callback,
-      runAt : new Date(Date.now() + 1000 * (seconds || 600))
+    idleHandler.scheduledItems.push({
+      callback,
+      runAt: new Date(Date.now() + 1000 * (seconds || 600)),
     });
-    if (!idleHandler._timer) {
-      idleHandler._timer = window.setInterval(idleHandler._runIfIdle, 5000);
+    if (!idleHandler.timer) {
+      idleHandler.timer = window.setInterval(idleHandler.runIfIdle, 5000);
     }
   },
-  _timer : null,
-  _scheduledItems : [],
-  _runIfIdle : function() {
+  timer: null,
+  scheduledItems: [],
+  runIfIdle() {
     // Checks if the browser is idle. If so, it executes all waiting functions
     // Otherwise, it checks if an item has waited longer than allowed, and
     // executes the ones who should be executed
-    chrome.idle.queryState(15, function(state) {
-      if (state === "idle") {
-        while (idleHandler._scheduledItems.length) {
-          idleHandler._scheduledItems.shift().callback();
+    chrome.idle.queryState(15, (state) => {
+      if (state === 'idle') {
+        while (idleHandler.scheduledItems.length) {
+          idleHandler.scheduledItems.shift().callback();
         }
       } else {
-        var now = Date.now();
+        const now = Date.now();
         // Inversed loop, to prevent splice() making it skip the item after an
         // executed item.
-        for (var i = idleHandler._scheduledItems.length - 1; i >= 0; i--) {
-          if (idleHandler._scheduledItems[i].runAt <= now) {
-            idleHandler._scheduledItems.splice(i, 1)[0].callback();
+        for (let i = idleHandler.scheduledItems.length - 1; i >= 0; i--) {
+          if (idleHandler.scheduledItems[i].runAt <= now) {
+            idleHandler.scheduledItems.splice(i, 1)[0].callback();
           }
         }
       }
-      if (!idleHandler._scheduledItems.length) {
-        idleHandler._timer = window.clearInterval(idleHandler._timer);
+      if (!idleHandler.scheduledItems.length) {
+        idleHandler.timer = window.clearInterval(idleHandler.timer);
       }
-    })
-  }
+    });
+  },
 };
+
+exports.idleHandler = idleHandler;

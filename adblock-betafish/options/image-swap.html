@@ -3,8 +3,8 @@
 <div class="option-page-box mab-page-box">
   <div class="option-page-content">
     <section>
-      <div class="align-items-center" >
-        <i id="photo-icon" class="material-icons md-24">photo</i>
+      <div class="align-items-center">
+        <i id="photo-icon" class="material-icons md-24" role="img" aria-hidden="true">photo</i>
         <h1 i18n="image_swap" class="page-title">Image Swap</h1>
       </div>
 
@@ -12,55 +12,83 @@
         <span i18n="myadblock_pic_replacemenet_description"></span>
       </div>
 
-      <img id="cover-image-feature-preview" />
+      <img id="cover-image-feature-preview" i18n-alt="image_swap_example" />
 
-    <div id="image-swap-selection">
-      <div i18n="myadblock_picreplacement_exlained" id="image-swap-description"></div>
-      <div id="channel-options">
-        <div id="channels">
-
-          <div class="image-box">
-            <img id="cats" data-channelId="CatsChannel" class="channel-image"/>
-            <span class="overlay">
-              <span>
-                <i class="material-icons circle-icon-bg-24 selected-icon">check_circle</i>
+      <div id="image-swap-selection">
+        <div i18n="myadblock_picreplacement_exlained" id="image-swap-description"></div>
+        <div id="channel-options">
+          <div id="channels">
+            <div class="image-box">
+              <img
+                id="cats"
+                data-channelId="CatsChannel"
+                class="channel-image"
+                i18n-alt="catchannelswitchlabel"
+              />
+              <span class="overlay">
+                <span>
+                  <i
+                    class="material-icons circle-icon-bg-24 selected-icon"
+                    role="img"
+                    i18n-aria-label="selected"
+                    >check_circle</i
+                  >
+                </span>
+                <span i18n="catchannelswitchlabel" class="channel-name"></span>
               </span>
-              <span i18n="catchannelswitchlabel" class="channel-name"></span>
-            </span>
-            <input id="CatsChannel" type="checkbox" class="invisible-overlay" >
-          </div>
+              <input id="CatsChannel" type="checkbox" class="invisible-overlay" />
+            </div>
 
-          <div class="image-box">
-            <img id="dogs" data-channelId="DogsChannel" class="channel-image"/>
-            <span class="overlay">
-              <span>
-                <i class="material-icons circle-icon-bg-24 selected-icon">check_circle</i>
+            <div class="image-box">
+              <img
+                id="dogs"
+                data-channelId="DogsChannel"
+                class="channel-image"
+                i18n-alt="dogchannelswitchlabel"
+              />
+              <span class="overlay">
+                <span>
+                  <i
+                    class="material-icons circle-icon-bg-24 selected-icon"
+                    role="img"
+                    i18n-aria-label="selected"
+                    >check_circle</i
+                  >
+                </span>
+                <span i18n="dogchannelswitchlabel" class="channel-name"></span>
               </span>
-              <span i18n="dogchannelswitchlabel" class="channel-name"></span>
-            </span>
-            <input id="DogsChannel" type="checkbox" class="invisible-overlay" >
-          </div>
+              <input id="DogsChannel" type="checkbox" class="invisible-overlay" />
+            </div>
 
-          <div class="image-box">
-            <img id="landscapes" data-channelId="CatsChannel" class="channel-image"/>
-            <span class="overlay">
-              <span>
-                <i class="material-icons circle-icon-bg-24 selected-icon">check_circle</i>
+            <div class="image-box">
+              <img
+                id="landscapes"
+                data-channelId="LandscapesChannel"
+                class="channel-image"
+                i18n-alt="landscapechannelswitchlabel"
+              />
+              <span class="overlay">
+                <span>
+                  <i
+                    class="material-icons circle-icon-bg-24 selected-icon"
+                    role="img"
+                    i18n-aria-label="selected"
+                    >check_circle</i
+                  >
+                </span>
+                <span i18n="landscapechannelswitchlabel" class="channel-name"></span>
               </span>
-              <span i18n="landscapechannelswitchlabel" class="channel-name"></span>
-            </span>
-            <input id="LandscapesChannel" type="checkbox" class="invisible-overlay" >
-          </div>
+              <input id="LandscapesChannel" type="checkbox" class="invisible-overlay" />
+            </div>
 
-          <div class="image-box">
-            <span class="overlay">
-              <div id="coming-soon-photo">
-                <i class="material-icons md-64">photo</i>
-              </div>
-              <div i18n="images_coming_soon" class="coming-soon-text"></div>
-            </span>
-          </div>
-
+            <div class="image-box">
+              <span class="overlay">
+                <div id="coming-soon-photo">
+                  <i class="material-icons md-64" role="img" aria-hidden="true">photo</i>
+                </div>
+                <div i18n="images_coming_soon" class="coming-soon-text"></div>
+              </span>
+            </div>
           </div>
         </div>
       </div>

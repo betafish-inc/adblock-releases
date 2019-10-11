@@ -1,6 +1,6 @@
 /* Core AdBlock stylesheet. */
 
-@import 'fonts/font-face.css';
+@import "fonts/font-face.css";
 
 /*
 -----------------------------------------------------------------------------
@@ -11,40 +11,41 @@ Global Styles
 :root {
   --main-text-color: #666666;
   --popup-menu--main-text-color: #333333;
-  --popup-menu--entry-hovered-bg-color: #E6E6E6;
+  --popup-menu--entry-hovered-bg-color: #e6e6e6;
   --popup-menu--block-ads-bg-color: #f4f4f4;
-  --block-count-color: #CE0707;
+  --block-count-color: #ce0707;
   --background-color: white;
-  --options-header-bg-color: #F1F1F1;
-  --options-footer-bg-color: #F1F1F1;
+  --options-header-bg-color: #f1f1f1;
+  --options-footer-bg-color: #f1f1f1;
   --options-page-title-color: #333333;
   --teaser-theme-box-color: #666666;
-  --not-selected-checkbox-bg-color: #E6E6E6;
-  --bottom-line-color: #E6E6E6;
-  --speech-bubble-border-color: #E6E6E6;
+  --not-selected-checkbox-bg-color: #e6e6e6;
+  --bottom-line-color: #e6e6e6;
+  --speech-bubble-border-color: #e6e6e6;
   --help-icon-color: #999999;
   --help-icon-color-hovered: #666666;
-  --link-color: #1855ED;
-  --link-hovered-color: #F30D12;
+  --link-color: #1855ed;
+  --link-hovered-color: #f30d12;
   --text-link-hovered-color: #333333;
   --language-dropdown-menu-icon-color: #666666;
-  --customize-dropdown-menu-icon-color: #F30D12;
-  --standout-text-color: #F30D12;
+  --customize-dropdown-menu-icon-color: #f30d12;
+  --standout-text-color: #f30d12;
   --active-tab-color: #666666;
-  --locked-toggle-color: #E6E6E6;
+  --locked-toggle-color: #e6e6e6;
   --header-social-icons: #666666;
   --adblock-logo-url: url(icons/default_theme/logo.svg);
   --select-language-border-top-width: 1px;
-  --feature-card-header-text-color: #666666;
-  --teaser-card-header-text-color: #999999;
-  --feature-card-header-bg-color: #e6e6e6;
-  --feature-card-body-bg-color: #f4f4f4;
   --image-swap-section-bg-unselected: #f4f4f4;
   --image-swap-section-bg-selected: white;
-  --sync-error-msg-background-color: #E40D0D;
-  --sync-error-msg-color: #FFFFFF;
-  --sync-msg-background-color: #05BCFC;
-  --sync-msg-color: #FFFFFF;
+  --sync-error-msg-background-color: #e40d0d;
+  --sync-error-msg-color: #ffffff;
+  --sync-msg-background-color: #05bcfc;
+  --sync-msg-color: #ffffff;
+  --yellow-btn-color: #ffca00;
+  --mab-feature-card-header-locked-bg: #e6e6e6;
+  --mab-feature-card-header-unlocked-bg: #666;
+  --mab-feature-card-text-color: #666;
+  --mab-feature-card-body-bg: #f4f4f4;
 }
 
 * {
@@ -55,7 +56,7 @@ body {
   margin: 0;
   font-size: 16px;
   font-style: normal;
-  font-family: 'Lato', Arial, sans-serif;
+  font-family: "Lato", Arial, sans-serif;
 }
 a {
   text-decoration: none;
@@ -70,7 +71,7 @@ textarea::-webkit-scrollbar-track {
 }
 textarea::-webkit-scrollbar-thumb {
   border-radius: 6px;
-  background-color: #E6E6E6;
+  background-color: #e6e6e6;
   background-clip: content-box;
   border: 3px solid transparent;
 }
@@ -83,11 +84,11 @@ Icons global styling (needs to @import 'fonts/font-face.css')
 
 .adblock-icon,
 .adblock-icons {
-  font-family:'AdBlock Icons';
+  font-family: "AdBlock Icons";
 }
 
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
 }
 
 .adblock-icon,
@@ -97,7 +98,7 @@ Icons global styling (needs to @import 'fonts/font-face.css')
   cursor: pointer;
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 24px; /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -117,7 +118,7 @@ Icons global styling (needs to @import 'fonts/font-face.css')
   -moz-osx-font-smoothing: grayscale;
 
   /* Support for IE. */
-  font-feature-settings: 'liga';
+  font-feature-settings: "liga";
 }
 
 /* Stacking 2 icons */
@@ -140,34 +141,78 @@ Icons global styling (needs to @import 'fonts/font-face.css')
 }
 
 /* Rules for sizing the icon. */
-.material-icons.md-14 { font-size: 18px; }
-.material-icons.md-18 { font-size: 18px; }
-.material-icons.md-24 { font-size: 24px; }
-.material-icons.md-36 { font-size: 36px; }
-.material-icons.md-48 { font-size: 48px; }
-.material-icons.md-64 { font-size: 64px; }
+.material-icons.md-14 {
+  font-size: 18px;
+}
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+}
+.material-icons.md-64 {
+  font-size: 64px;
+}
 
-.adblock-icon.md-14 { font-size: 18px; }
-.adblock-icon.md-18 { font-size: 18px; }
-.adblock-icon.md-24 { font-size: 24px; }
-.adblock-icon.md-36 { font-size: 36px; }
-.adblock-icon.md-48 { font-size: 48px; }
-.adblock-icon.md-64 { font-size: 64px; }
+.adblock-icon.md-14 {
+  font-size: 18px;
+}
+.adblock-icon.md-18 {
+  font-size: 18px;
+}
+.adblock-icon.md-24 {
+  font-size: 24px;
+}
+.adblock-icon.md-36 {
+  font-size: 36px;
+}
+.adblock-icon.md-48 {
+  font-size: 48px;
+}
+.adblock-icon.md-64 {
+  font-size: 64px;
+}
 
-.adblock-icons.md-14 { font-size: 18px; }
-.adblock-icons.md-18 { font-size: 18px; }
-.adblock-icons.md-24 { font-size: 24px; }
-.adblock-icons.md-36 { font-size: 36px; }
-.adblock-icons.md-48 { font-size: 48px; }
-.adblock-icons.md-64 { font-size: 64px; }
+.adblock-icons.md-14 {
+  font-size: 18px;
+}
+.adblock-icons.md-18 {
+  font-size: 18px;
+}
+.adblock-icons.md-24 {
+  font-size: 24px;
+}
+.adblock-icons.md-36 {
+  font-size: 36px;
+}
+.adblock-icons.md-48 {
+  font-size: 48px;
+}
+.adblock-icons.md-64 {
+  font-size: 64px;
+}
 
 /* Rules for using icons as black on a light background. */
-.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
-.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+.material-icons.md-dark {
+  color: rgba(0, 0, 0, 0.54);
+}
+.material-icons.md-dark.md-inactive {
+  color: rgba(0, 0, 0, 0.26);
+}
 
 /* Rules for using icons as white on a dark background. */
-.material-icons.md-light { color: rgba(255, 255, 255, 1); }
-.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+.material-icons.md-light {
+  color: rgba(255, 255, 255, 1);
+}
+.material-icons.md-light.md-inactive {
+  color: rgba(255, 255, 255, 0.3);
+}
 
 /* Screen reader only content */
 .sr-only {
@@ -178,4 +223,3 @@ Icons global styling (needs to @import 'fonts/font-face.css')
   height: 1px;
   overflow: hidden;
 }
-
