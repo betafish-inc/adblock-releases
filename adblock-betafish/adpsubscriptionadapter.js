@@ -45,7 +45,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
     for (const subscription of recommendations()) {
       const { id } = subscription;
       if (id === searchID) {
-        return id.language;
+        return subscription.language;
       }
     }
     return false;

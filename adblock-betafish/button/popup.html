@@ -3,11 +3,31 @@
   <head>
     <title i18n="popup_menu_title"></title>
     <link rel="stylesheet" href="adblock-button-popup.css" />
+    <link rel="stylesheet" href="adblock-button-help.css" />
     <script src="polyfill.js"></script>
     <script src="adblock-jquery.js"></script>
+    <script src="adblock-purify.min.js"></script>
     <script src="adblock-functions.js"></script>
   </head>
   <body style="overflow:hidden;">
+    <div id="help_overlay">
+      <div id="help_container">
+        <div id="header">
+          <span class="back-button">
+            <i tabindex="0" id="back_icon" class="material-icons md-18">chevron_left</i>
+          </span>
+          <span id="help_title"></span>
+          <span class="close-button">
+            <i tabindex="0" id="close_icon" class="material-icons md-18">close</i>
+          </span>
+        </div>
+        <div id="separator_help" class="separator"></div>
+        <div id="help_content"></div>
+        <div class="popup-footer">
+          <a href="https://help.getadblock.com/" target="_blank" tabindex="0" id="help_footer"></a>
+        </div>
+      </div>
+    </div>
     <div id="wrapper">
       <div id="menu-items">
         <div id="titletext">
@@ -263,20 +283,6 @@
         ></div>
 
         <div id="separator3" class="separator"></div>
-
-        <div
-          tabindex="0"
-          id="div_troubleshoot_an_ad"
-          class="menu-entry"
-          role="link"
-          i18n="troubleshoot_an_ad"
-        ></div>
-
-        <div id="separator1" class="separator"></div>
-
-        <!-- **************** Extras ************** -->
-
-        <div class="separator" id="separator2"></div>
       </div>
       <!-- menu-items-->
 
@@ -289,4 +295,6 @@
     <!-- wrapper -->
   </body>
   <script src="adblock-button-popup.js"></script>
+  <script src="adblock-button-help-action.js"></script>
+  <script src="adblock-button-help.js"></script>
 </html>

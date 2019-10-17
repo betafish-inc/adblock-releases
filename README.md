@@ -209,3 +209,23 @@ AT present the screen content as a "snapshot" of the content at the point in tim
 
 It is important to test using a screen reader. There is no substitute for experiencing and trying to operate the UI regularly using AT. Some small changes create amazing improvements to the AT UX and some unexpected outputs can be unusually annoying when using an AT. On Mac, use `cmd-F5` to toggle Voice Over on/off (or open System Preferences | Accessibility | Voice Over) and use the keyboard for navigation. TODO Windows and Linux testing options?
 
+### Help Flow Map
+
+The help flow structure is defined in `help-map.json`. Each entry represents a page in the help flow, and the key for each entry needs to be unique.
+
+Each page can contain any combination of the following:
+  * `title`: displayed at the top of page, i18n string key, max one per page
+  * `seques`: displayed first in body of page, can have multiple per page
+    * `content`: i18n string key, max one per segue
+    * `segueTo`: key for help flow page to transition to on click, max one per segue
+    * `sequeToIfPaused`: key for help flow page to transition to on click if paused, max one per segue
+    * `segueToIfWhitelisted`: key for help flow page to transition to on click if whitelisted, max one per segue
+  * `sections`: displayed second in body of page, can have multiple per page
+    * `content`: array of objects representing sentences to be displayed as a paragraph, can have multiple per section
+      * `text`: i18n string key
+      * `linkURL`: URL to be subbed into a string with link placeholders ("[[" and "]]")
+  * `buttons`: displayed third in body of page, can have multiple per page
+    * `text`: i18n string key
+    * `action`: function from `help-action.js` to be called on click
+    * `icon`: material icons key of icon to be displayed on button, displayed before text
+  * `footer`: displayed at bottom of page, i18n string key, max one per page

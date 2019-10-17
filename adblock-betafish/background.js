@@ -58,6 +58,7 @@ Object.assign(window, {
   DownloadableSubscription,
   Filter,
   WhitelistFilter,
+  checkWhitelisted,
   info,
   getBlockedPerPage,
   Utils,
@@ -442,7 +443,8 @@ const getCurrentTabInfo = function (callback, secondTime) {
 // Returns true if the page is whitelisted.
 // Called from a content script
 const pageIsWhitelisted = function (sender) {
-  return (checkWhitelisted(sender.page) !== undefined);
+  const whitelisted = checkWhitelisted(sender.page);
+  return (whitelisted !== undefined && whitelisted !== null);
 };
 
 const parseFilter = function (filterText) {
@@ -1100,6 +1102,22 @@ function updateFilterLists() {
   }
 }
 
+// Checks if the filter lists are currently in the process of
+// updating and if there were errors the last time they were
+// updated
+function checkUpdateProgress() {
+  let inProgress = false;
+  let filterError = false;
+  for (const subscription of filterStorage.subscriptions()) {
+    if (synchronizer.isExecuting(subscription.url)) {
+      inProgress = true;
+    } else if (subscription.downloadStatus && subscription.downloadStatus !== 'synchronize_ok') {
+      filterError = true;
+    }
+  }
+  return { inProgress, filterError };
+}
+
 STATS.untilLoaded(() => {
   STATS.startPinging();
   uninstallInit();
@@ -1181,6 +1199,7 @@ Object.assign(window, {
   createPageWhitelistFilter,
   getUserFilters,
   updateFilterLists,
+  checkUpdateProgress,
   getDebugInfo,
   createWhitelistFilterForYoutubeChannel,
   openTab,

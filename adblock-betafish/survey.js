@@ -1,9 +1,9 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, exports, STATS, log, getSettings, Prefs, openTab */
+/* global chrome, require, exports, STATS, log, getSettings, Prefs, openTab, License */
 
-// if the ping reponse indicates a survey (tab or overlay)
+// if the ping response indicates a survey (tab or overlay)
 // gracefully processes the request
 const stats = require('stats');
 const { recordGeneralMessage, recordErrorMessage } = require('./servermessages').ServerMessages;
@@ -67,6 +67,7 @@ const SURVEY = (function getSurvey() {
         }
         if (data && data.should_survey === 'true' && surveyAllowed) {
           surveyAllowed = false;
+          License.checkPingResponse(responseData);
           callback(data);
         }
       });

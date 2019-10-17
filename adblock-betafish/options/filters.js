@@ -652,7 +652,7 @@ CheckboxForFilterList.prototype = {
         });
         if (!checked) {
           const $this = $(this);
-          const index = $this.attr('id').split('_')[3];
+          const index = $this.attr('id').split('_')[1];
           const entry = filterListSections.languageFilterList.array[index];
           if (!Object.prototype.hasOwnProperty.call(entry, 'label')) {
             entry.label = translateIDs(id);

@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 3.58.0
+version = 3.59.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -17,7 +17,6 @@ browserAction =
   icons/ab-40.png
   adblock-button-popup.html
 backgroundScripts += pubnub-min-v4.23.3.js
-
 
 [manifest]
 permissions =
@@ -84,6 +83,7 @@ CHANGELOG.txt = adblock-betafish/CHANGELOG.txt
 LICENSE = adblock-betafish/LICENSE
 translators.json = adblock-betafish/translators.json
 adblock-jquery.js = adblock-betafish/jquery/jquery.min.js
+adblock-purify.min.js = adblock-betafish/lib/purify.min.js
 pubnub-min-v4.23.3.js = adblock-betafish/pubnub/pubnub-min-v4.23.3.js
 adblock-errorreporting.js = adblock-betafish/errorreporting.js
 adblock-jquery.cookie.js = adblock-betafish/jquery/jquery.cookie.js
@@ -113,6 +113,13 @@ adblock-options-bug-report.html = adblock-betafish/options/bug-report.html
 adblock-button-popup.html = adblock-betafish/button/popup.html
 adblock-button-popup.js = adblock-betafish/button/popup.js
 adblock-button-popup.css = adblock-betafish/button/popup.css
+adblock-button-help-segue.html = adblock-betafish/button/help-segue.html
+adblock-button-help-section.html = adblock-betafish/button/help-section.html
+adblock-button-help-button.html = adblock-betafish/button/help-button.html
+adblock-button-help.js = adblock-betafish/button/help.js
+adblock-button-help.css = adblock-betafish/button/help.css
+adblock-button-help-map.json = adblock-betafish/button/help-map.json
+adblock-button-help-action.js = adblock-betafish/button/help-action.js
 adblock-uiscripts-adblock-wizard.css = adblock-betafish/uiscripts/adblock-wizard.css
 adblock-uiscripts-load_wizard_resources.js = adblock-betafish/uiscripts/load_wizard_resources.js
 adblock-uiscripts-top_open_blacklist_ui.js = adblock-betafish/uiscripts/top_open_blacklist_ui.js

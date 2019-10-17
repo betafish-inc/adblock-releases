@@ -390,14 +390,24 @@ const reloadAllOpenedTabs = function () {
 // selected attaches a click and keydown event handler to the matching selector and calls
 // the handler if a click or keydown event occurs (with a CR or space is pressed). We support
 // both mouse and keyboard events to increase accessibility of the popup menu.
+// Returns a reference to the keydown handler for future removal.
 const selected = function (selector, handler) {
   const $matched = $(selector);
   $matched.click(handler);
-  $matched.keydown((event) => {
+  function keydownHandler(event) {
     if (event.which === 13 || event.which === 32) {
       handler(event);
     }
-  });
+  }
+  $matched.keydown(keydownHandler);
+  return keydownHandler;
+};
+
+// selectedOff removes a click and keydown event handler from the matching selector.
+const selectedOff = function (selector, clickHandler, keydownHandler) {
+  const $matched = $(selector);
+  $matched.off('click', clickHandler);
+  $matched.off('keydown', keydownHandler);
 };
 
 // selectedOnce adds event listeners to the given element for mouse click or keydown CR or space

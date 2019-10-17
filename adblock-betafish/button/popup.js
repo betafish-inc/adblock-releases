@@ -1,8 +1,8 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, translate, Prefs, storageGet, localizePage, storageSet, selected, selectedOnce,
-   i18nJoin */
+/* global chrome, translate, Prefs, storageGet, localizePage, storageSet,
+  selected, selectedOnce, showHelpSetupPage, i18nJoin */
 
 let errorOccurred = false;
 
@@ -120,8 +120,11 @@ const processError = function (err, stack, message) {
   }
 };
 
+let BG = null;
+let page = null;
+
 try {
-  const BG = chrome.extension.getBackgroundPage();
+  BG = chrome.extension.getBackgroundPage();
   const { License } = BG;
   const { SyncService } = BG;
   const { Prefs } = BG;
@@ -131,7 +134,6 @@ try {
 
   // the tab/page object, which contains |id| and |url| of
   // the current tab
-  let page = null;
   let pageInfo = null;
   let activeTab = null;
   let popupMenuTheme = 'default_theme';
@@ -215,7 +217,7 @@ try {
           } else if (info.whitelisted) {
             show(['div_status_whitelisted', 'div_enable_adblock_on_this_page', 'separator0', 'div_pause_adblock', 'svg_options', 'help_link']);
           } else {
-            show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'div_troubleshoot_an_ad', 'separator3', 'separator4', 'svg_options', 'block_counts', 'help_link']);
+            show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'separator3', 'separator4', 'svg_options', 'block_counts', 'help_link']);
 
             chrome.runtime.sendMessage({
               type: 'stats.getBlockedPerPage',
@@ -517,8 +519,11 @@ try {
 
       selected('#help_link', () => {
         BG.recordGeneralMessage('feedback_clicked');
-        openPage('http://help.getadblock.com/');
-        closeAndReloadPopup();
+        if (!pageInfo.disabledSite) {
+          showHelpSetupPage();
+        } else {
+          openPage('http://help.getadblock.com/');
+        }
       });
 
       selected('#link_open', () => {
