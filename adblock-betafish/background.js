@@ -676,11 +676,12 @@ if (chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
 }
 
 const updateStorageKey = 'last_known_version';
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === 'update' || details.reason === 'install') {
-    localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
-  }
-});
+// Commented out only during /update releases
+// chrome.runtime.onInstalled.addListener((details) => {
+//   if (details.reason === 'update' || details.reason === 'install') {
+//     localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
+//   }
+// });
 
 const openTab = function (url) {
   chrome.tabs.create({ url });
@@ -723,6 +724,46 @@ if (chrome.runtime.id) {
       chrome.tabs.onCreated.addListener(waitForUserAction);
     });
   };
+  const shouldShowUpdate = function () {
+    const checkQueryState = function () {
+      chrome.idle.queryState(60, (state) => {
+        if (state === 'active') {
+          openUpdatedPage();
+        } else {
+          chrome.tabs.onCreated.removeListener(waitForUserAction);
+          chrome.tabs.onCreated.addListener(waitForUserAction);
+        }
+      });
+    };
+    if (chrome.management && chrome.management.getSelf) {
+      chrome.management.getSelf((extensionInfo) => {
+        if (extensionInfo && extensionInfo.installType !== 'admin') {
+          checkQueryState();
+        } else if (extensionInfo && extensionInfo.installType === 'admin') {
+          recordGeneralMessage('update_tab_not_shown_admin_user');
+        }
+      });
+    } else {
+      checkQueryState();
+    }
+  };
+  const slashUpdateReleases = ['3.60.0'];
+  // Display updated page after each updat
+  chrome.runtime.onInstalled.addListener((details) => {
+    const lastKnownVersion = localStorage.getItem(updateStorageKey);
+    const currentVersion = chrome.runtime.getManifest().version;
+    if (
+      details.reason === 'update'
+      && slashUpdateReleases.includes(currentVersion)
+      && !slashUpdateReleases.includes(lastKnownVersion)
+      && chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
+    ) {
+      STATS.untilLoaded(() => {
+        Prefs.untilLoaded.then(shouldShowUpdate);
+      });
+    }
+    localStorage.setItem(updateStorageKey, currentVersion);
+  });
 }
 
 // Creates a custom filter entry that whitelists a YouTube channel
