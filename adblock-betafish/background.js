@@ -399,38 +399,37 @@ const getCurrentTabInfo = function (callback, secondTime) {
 
           return;
         }
-        chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey).then((myAdBlockInfo) => {
-          try {
-            const page = new ext.Page(tab);
-            const disabledSite = pageIsUnblockable(page.url.href);
+        try {
+          const page = new ext.Page(tab);
+          const disabledSite = pageIsUnblockable(page.url.href);
 
-            const result = {
-              page,
-              tab,
-              disabledSite,
-              settings: getSettings(),
-              myAdBlockInfo,
-            };
+          const result = {
+            page,
+            tab,
+            disabledSite,
+            settings: getSettings(),
+          };
 
-            if (!disabledSite) {
-              result.whitelisted = checkWhitelisted(page);
-            }
-            if (getSettings().youtube_channel_whitelist
-                && parseUri(tab.url).hostname === 'www.youtube.com') {
-              result.youTubeChannelName = ytChannelNamePages.get(page.id);
-              // handle the odd occurence of when the  YT Channel Name
-              // isn't available in the ytChannelNamePages map
-              // obtain the channel name from the URL
-              // for instance, when the forward / back button is clicked
-              if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
-                result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
-              }
-            }
-            callback(result);
-          } catch (err) {
-            callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
+          if (!disabledSite) {
+            result.whitelisted = checkWhitelisted(page);
           }
-        });// end of chrome.storage.local.get
+          if (
+            getSettings().youtube_channel_whitelist
+            && parseUri(tab.url).hostname === 'www.youtube.com'
+          ) {
+            result.youTubeChannelName = ytChannelNamePages.get(page.id);
+            // handle the odd occurence of when the  YT Channel Name
+            // isn't available in the ytChannelNamePages map
+            // obtain the channel name from the URL
+            // for instance, when the forward / back button is clicked
+            if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
+              result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
+            }
+          }
+          callback(result);
+        } catch (err) {
+          callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
+        }
       } catch (err) {
         callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
       }

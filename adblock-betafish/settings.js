@@ -9,7 +9,7 @@ const minjQuery = require('./jquery/jquery.min');
 
 const settingsNotifier = new EventEmitter();
 const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];
-const validThemes = ['default_theme', 'dark_theme', 'watermelon_theme', 'solarized_theme', 'ocean_theme', 'sunshine_theme'];
+const validThemes = ['default_theme', 'dark_theme', 'watermelon_theme', 'solarized_theme', 'solarized_light_theme', 'rebecca_purple_theme', 'ocean_theme', 'sunshine_theme'];
 
 window.jQuery = minjQuery;
 window.$ = minjQuery;

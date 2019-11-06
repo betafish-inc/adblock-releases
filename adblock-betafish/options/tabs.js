@@ -159,7 +159,7 @@ function addMyAdBlockTab() {
           <span i18n="themes"></span>
         </a>
       </li>
-      <li class="locked">
+      <li>
         <a href="#mab-image-swap" class="tablink">
           <i class="material-icons md-18 unlocked" role="img" aria-hidden="true">image</i>
           <i class="material-icons md-18 locked" role="img" i18n-aria-label="locked">lock</i>

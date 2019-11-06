@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, log, License, openTab, runBandaids */
+/* global chrome, log, License, runBandaids, openTab */
 
 // Set to true to get noisier console.log statements
 const VERBOSE_DEBUG = false;
@@ -43,24 +43,28 @@ onReady(() => {
   }
 });
 
-const translate = function (messageID, ...args) {
-  let params = args;
-  if (Array.isArray(params)) {
-    for (let i = 0; i < params.length; i++) {
-      if (typeof params[i] !== 'string') {
-        params[i] = params[i].toString();
+// Inputs:
+//   - messageName : Str
+//   - substitutions : Array of Str or a String
+const translate = function (messageName, substitutions) {
+  let parts = substitutions;
+  if (Array.isArray(parts)) {
+    for (let i = 0; i < parts.length; i++) {
+      if (typeof parts[i] !== 'string') {
+        parts[i] = parts[i].toString();
       }
     }
-  } else if (params && typeof params !== 'string') {
-    params = params.toString();
+  } else if (parts && typeof parts !== 'string') {
+    parts = parts.toString();
   }
 
   // if VERBOSE_DEBUG is set to true, duplicate (double the length) of the translated strings
   // used for testing purposes only
   if (VERBOSE_DEBUG) {
-    return `${chrome.i18n.getMessage(messageID, args)} ${chrome.i18n.getMessage(messageID, args)}`;
+    return `${chrome.i18n.getMessage(messageName, parts)}
+            ${chrome.i18n.getMessage(messageName, parts)}`;
   }
-  return chrome.i18n.getMessage(messageID, args);
+  return chrome.i18n.getMessage(messageName, parts);
 };
 
 const splitMessageWithReplacementText = function (rawMessageText, messageID) {

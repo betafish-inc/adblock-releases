@@ -2,7 +2,7 @@
 @import "adblock-color-themes.css";
 
 body {
-  color: var(--popup-menu--main-text-color);
+  color: var(--popup-main-text-color);
   background-color: var(--background-color);
 }
 #wrapper {
@@ -13,7 +13,7 @@ body {
 }
 .separator {
   height: 1px;
-  background-color: var(--popup-menu--main-text-color);
+  background-color: var(--popup-accent-color);
   opacity: 0.5;
   margin: 0px 10px;
 }
@@ -28,7 +28,7 @@ body {
 .menu-entry:hover {
   transition: all 0.3s ease-out;
   -webkit-transition: all 0.3s ease-out;
-  background-color: var(--popup-menu--entry-hovered-bg-color);
+  background-color: var(--popup-entry-hovered-bg-color);
 }
 .menu-status-italic {
   padding: 0px 2px 0px 10px;
@@ -48,7 +48,7 @@ body {
 .box {
   margin: 0px;
   padding: 10px;
-  background-color: var(--popup-menu--block-ads-bg-color);
+  background-color: var(--popup-block-ads-bg-color);
 }
 #link_open {
   padding: 3px 0px 3px 10px;
@@ -75,7 +75,7 @@ a {
 }
 a:hover {
   font-weight: bold;
-  color: var(--block-count-color);
+  color: var(--popup-link-hovered);
 }
 .preserve-whitespace {
   white-space: pre-wrap;
@@ -101,7 +101,7 @@ a:hover {
 }
 #protect_enrollment_text {
   letter-spacing: -0.09px;
-  color: #ffffff;
+  color: white;
   height: 37px;
   font-size: 14px;
   line-height: normal;
@@ -191,7 +191,7 @@ a:hover {
   justify-content: space-between;
 }
 #header-icons .material-icons {
-  color: var(--popup-menu--main-text-color);
+  color: var(--popup-accent-color);
   opacity: 0.5;
 }
 #header-icons .material-icons:hover {
@@ -259,6 +259,12 @@ a:hover {
 }
 #solarized_theme .header-logo {
   content: url(icons/solarized_theme/logo.svg);
+}
+#solarized_light_theme .header-logo {
+  content: url(icons/solarized_light_theme/logo.svg);
+}
+#rebecca_purple_theme .header-logo {
+  content: url(icons/rebecca_purple_theme/logo.svg);
 }
 #sunshine_theme .header-logo {
   content: url(icons/sunshine_theme/logo.svg);

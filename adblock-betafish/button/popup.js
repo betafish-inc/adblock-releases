@@ -130,7 +130,6 @@ try {
   const { Prefs } = BG;
   const userClosedCta = storageGet(License.popupMenuCtaClosedKey);
   const shown = {};
-  const stopShowingCTA = true;
 
   // the tab/page object, which contains |id| and |url| of
   // the current tab
@@ -138,10 +137,6 @@ try {
   let activeTab = null;
   let popupMenuTheme = 'default_theme';
   let itemClicked = false;
-
-  const openPage = function (url) {
-    chrome.tabs.create({ url });
-  };
 
   const show = function (elementIds) {
     elementIds.forEach((elementId) => {
@@ -184,7 +179,7 @@ try {
 
       BG.getCurrentTabInfo((info) => {
         try {
-          License.setIconBadgeCTA(stopShowingCTA);
+          License.showIconBadgeCTA(false);
 
           if (info.settings) {
             popupMenuTheme = info.settings.color_themes.popup_menu;
@@ -250,24 +245,43 @@ try {
             show(['div_status_beta']);
           }
 
+          // START: MAB menu items
           if (License.isActiveLicense()) {
-            // Show paid user menu option and hide CTAs
+            // Show paid user menu option and hide CTA
             show(['div_myadblock_options', 'separator-1', 'separator-2']);
             hide(['div_myadblock_enrollment_v2']);
-            hide(['div_myadblock_enrollment']);
+
+            // Show correct icons on the paid user menu option
+            const guide = BG.channels.getGuide();
+            for (const id in guide) {
+              const { name, enabled } = guide[id];
+              const prefix = 'icons/adblock-picreplacement-images-menu-';
+              const suffix = window.devicePixelRatio >= 2 ? '@2x' : '';
+
+              if (info.settings.picreplacement && (name === 'CatsChannel' && enabled)) {
+                $('#cat_option').attr('src', `${prefix}cat${suffix}.png`);
+              } else if (name === 'CatsChannel') {
+                $('#cat_option').attr('src', `${prefix}catgrayscale${suffix}.png`);
+              }
+              if (info.settings.picreplacement && (name === 'DogsChannel' && enabled)) {
+                $('#dog_option').attr('src', `${prefix}dog${suffix}.png`);
+              } else if (name === 'DogsChannel') {
+                $('#dog_option').attr('src', `${prefix}doggrayscale${suffix}.png`);
+              }
+              if (info.settings.picreplacement && (name === 'LandscapesChannel' && enabled)) {
+                $('#landscape_option').attr('src', `${prefix}landscape${suffix}.png`);
+              } else if (name === 'LandscapesChannel') {
+                $('#landscape_option').attr('src', `${prefix}landscapegrayscale${suffix}.png`);
+              }
+            }
           } else if (userClosedCta) {
-            // Don't show any CTA
+            // Don't show the CTA
             hide(['div_myadblock_enrollment_v2']);
-            hide(['div_myadblock_enrollment']);
-          } else if (License.displayPopupMenuNewCTA()) {
-            // Show new CTA
-            show(['div_myadblock_enrollment_v2', 'separator-1', 'separator-2']);
-            hide(['div_myadblock_enrollment']);
           } else if (License.shouldShowMyAdBlockEnrollment()) {
-            // Show old CTA
-            show(['div_myadblock_enrollment', 'separator-1', 'separator-2']);
-            hide(['div_myadblock_enrollment_v2']);
+            // Show CTA
+            show(['div_myadblock_enrollment_v2', 'separator-1', 'separator-2']);
           }
+          // END: MAB menu items
 
           if (shown.block_counts && Prefs.show_statsinpopup) {
             hide(['separator-1']);
@@ -293,54 +307,6 @@ try {
             SyncService.resetLastPostStatusCode(); // reset the code, so it doesn't show again.
           } else {
             hide(['div_sync_error_msg']);
-          }
-          if (
-            window.devicePixelRatio >= 2
-            && (shown.div_myadblock_options || shown.div_myadblock_enrollment)
-          ) {
-            $('#cat_option').attr('src', 'icons/adblock-picreplacement-images-menu-cat@2x.png');
-            $('#dog_option').attr('src', 'icons/adblock-picreplacement-images-menu-dog@2x.png');
-            $('#landscape_option').attr('src', 'icons/adblock-picreplacement-images-menu-landscape@2x.png');
-            $('#cat_enrollment').attr('src', 'icons/adblock-picreplacement-images-menu-cat@2x.png');
-            $('#dog_enrollment').attr('src', 'icons/adblock-picreplacement-images-menu-dog@2x.png');
-            $('#landscape_enrollment').attr('src', 'icons/adblock-picreplacement-images-menu-landscape@2x.png');
-          }
-          if (shown.div_myadblock_options) {
-            const guide = BG.channels.getGuide();
-            let anyEnabled = false;
-            for (const id in guide) {
-              anyEnabled = anyEnabled || guide[id].enabled;
-              if (
-                (guide[id].name === 'CatsChannel' && !guide[id].enabled)
-                || !info.settings.picreplacement
-              ) {
-                if (window.devicePixelRatio >= 2) {
-                  $('#cat_option').attr('src', 'icons/adblock-picreplacement-images-menu-catgrayscale@2x.png');
-                } else {
-                  $('#cat_option').attr('src', 'icons/adblock-picreplacement-images-menu-catgrayscale.png');
-                }
-              }
-              if (
-                (guide[id].name === 'DogsChannel' && !guide[id].enabled)
-                || !info.settings.picreplacement
-              ) {
-                if (window.devicePixelRatio >= 2) {
-                  $('#dog_option').attr('src', 'icons/adblock-picreplacement-images-menu-doggrayscale@2x.png');
-                } else {
-                  $('#dog_option').attr('src', 'icons/adblock-picreplacement-images-menu-doggrayscale.png');
-                }
-              }
-              if (
-                (guide[id].name === 'LandscapesChannel' && !guide[id].enabled)
-                || !info.settings.picreplacement
-              ) {
-                if (window.devicePixelRatio >= 2) {
-                  $('#landscape_option').attr('src', 'icons/adblock-picreplacement-images-menu-landscapegrayscale@2x.png');
-                } else {
-                  $('#landscape_option').attr('src', 'icons/adblock-picreplacement-images-menu-landscapegrayscale.png');
-                }
-              }
-            }
           }
 
           if (info.settings.show_protect_enrollment) {
@@ -376,14 +342,14 @@ try {
       selected('#bugreport', () => {
         BG.recordGeneralMessage('bugreport_clicked');
         const supportURL = 'https://help.getadblock.com/support/tickets/new';
-        openPage(supportURL);
+        BG.openTab(supportURL);
         closeAndReloadPopup();
       });
 
       selected('.header-logo', () => {
         BG.recordGeneralMessage('titletext_clicked');
         const chromeUrl = 'https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom';
-        openPage(chromeUrl);
+        BG.openTab(chromeUrl);
 
         closeAndReloadPopup();
       });
@@ -487,25 +453,25 @@ try {
       selected('#div_troubleshoot_an_ad', () => {
         BG.recordGeneralMessage('troubleshoot_ad_clicked');
         const url = 'https://help.getadblock.com/support/solutions/articles/6000109812-report-an-unblocked-ad';
-        openPage(url);
+        BG.openTab(url);
         closeAndReloadPopup();
       });
 
       selected('#svg_options', () => {
         BG.recordGeneralMessage('options_clicked');
-        openPage(chrome.extension.getURL('options.html'));
+        BG.openTab(chrome.extension.getURL('options.html'));
         closeAndReloadPopup();
       });
 
       selected('#div_myadblock_options', () => {
         BG.recordGeneralMessage('myadblock_options_clicked');
-        openPage(chrome.extension.getURL('options.html#mab'));
+        BG.openTab(chrome.extension.getURL('options.html#mab'));
         closeAndReloadPopup();
       });
 
-      selected('#div_myadblock_enrollment, #div_myadblock_enrollment_v2', () => {
+      selected('#div_myadblock_enrollment_v2', () => {
         BG.recordGeneralMessage('myadblock_cta_clicked');
-        openPage(License.MAB_CONFIG.payURL);
+        BG.openTab(License.MAB_CONFIG.payURL);
         closeAndReloadPopup();
       });
 
@@ -522,21 +488,21 @@ try {
         if (!pageInfo.disabledSite) {
           showHelpSetupPage();
         } else {
-          openPage('http://help.getadblock.com/');
+          BG.openTab('http://help.getadblock.com/');
         }
       });
 
       selected('#link_open', () => {
         BG.recordGeneralMessage('link_clicked');
         const linkHref = `https://getadblock.com/pay/?exp=7003&u=${BG.STATS.userId()}`;
-        openPage(linkHref);
+        BG.openTab(linkHref);
         closeAndReloadPopup();
       });
 
       selected('#protect_enrollment_btn', () => {
         BG.recordGeneralMessage('protect_enrollment_btn_clicked');
         BG.setSetting('show_protect_enrollment', false);
-        openPage('https://chrome.google.com/webstore/detail/adblock-protect/fpkpgcabihmjieiegmejiloplfdmpcee');
+        BG.openTab('https://chrome.google.com/webstore/detail/adblock-protect/fpkpgcabihmjieiegmejiloplfdmpcee');
         closeAndReloadPopup();
       });
 

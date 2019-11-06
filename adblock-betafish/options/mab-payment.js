@@ -34,6 +34,7 @@ const MABPayment = (function mabPayment() {
       $paySection.hide();
       $('.mab-feature.locked').removeClass('locked').addClass('hover-shadow');
       $('.theme-wrapper.locked').removeClass('locked');
+      $('.overlay-icon').text('check');
     },
   };
 }());

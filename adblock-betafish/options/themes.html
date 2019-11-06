@@ -4,129 +4,153 @@
   <div class="option-page-content">
     <section>
       <div class="page-title align-items-center">
-        <h1 id="themes-title" i18n="themes" class="page-title"></h1>
+        <h1 i18n="themes" class="page-title themes-title"></h1>
       </div>
 
-      <div id="themes-sections" class="theme-row">
-        <section id="popup-menu-themes">
-          <h2 i18n="popup_menu_theme" class="paragraph-title bottom-line"></h2>
-          <div class="theme-section-row wide-themes-row">
-            <div class="theme-wrapper">
-              <div class="theme-box default-theme" data-key="popup_menu" data-theme="default_theme">
-                <div class="theme-box-top">
-                  <img src="icons/default_theme/minicard.svg" aria-hidden="true" />
+      <div>
+        <h2 i18n="popup_menu_theme" class="paragraph-title theme-section-title-top"></h2>
+        <section class="theme-section popup-menu-themes">
+          <div class="theme-selection">
+            <h2 i18n="popup_menu_theme" class="paragraph-title theme-section-title"></h2>
+            <div class="theme-section-row">
+              <div class="theme-wrapper">
+                <div
+                  class="theme-box default-theme"
+                  data-key="popup_menu"
+                  data-theme="default_theme"
+                >
+                  <img src="icons/default_theme/tinycard.svg" aria-hidden="true" />
+                  <input
+                    type="radio"
+                    name="options-page-theme"
+                    class="invisible-radio-button"
+                    i18n-aria-label="default_theme"
+                  />
+                  <div class="theme-hover-overlay">
+                    <div class="theme-hover-overlay-mask"></div>
+                    <i class="material-icons md-64 overlay-icon" role="img">check</i>
+                  </div>
                 </div>
-                <div class="theme-box-bottom">
-                  <div i18n="default_theme" class="theme-name"></div>
-                  <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
-                </div>
-                <div class="theme-hover-overlay">
-                  <div class="theme-hover-overlay-top"></div>
-                  <i class="material-icons md-64 search" role="img">search</i>
-                </div>
+                <i
+                  class="material-icons circle-icon-bg-24 theme-selected-icon"
+                  role="img"
+                  i18n-aria-label="selected"
+                  >check_circle</i
+                >
               </div>
-              <i
-                class="material-icons circle-icon-bg-24 theme-selected-icon"
-                role="img"
-                i18n-aria-label="selected"
-                >check_circle</i
-              >
-            </div>
 
-            <div class="theme-wrapper">
-              <div class="theme-box dark-theme" data-key="popup_menu" data-theme="dark_theme">
-                <div class="theme-box-top">
-                  <img src="icons/dark_theme/minicard.svg" aria-hidden="true" />
+              <div class="theme-wrapper">
+                <div class="theme-box dark-theme" data-key="popup_menu" data-theme="dark_theme">
+                  <img src="icons/dark_theme/tinycard.svg" aria-hidden="true" />
+                  <input
+                    type="radio"
+                    name="options-page-theme"
+                    class="invisible-radio-button"
+                    i18n-aria-label="dark_theme"
+                  />
+                  <div class="theme-hover-overlay">
+                    <div class="theme-hover-overlay-mask"></div>
+                    <i class="material-icons md-64 overlay-icon" role="img">check</i>
+                  </div>
                 </div>
-                <div class="theme-box-bottom">
-                  <div i18n="dark_theme" class="theme-name"></div>
-                  <input type="radio" name="popup-menu-theme" class="invisible-radio-button" />
-                </div>
-                <div class="theme-hover-overlay">
-                  <div class="theme-hover-overlay-top"></div>
-                  <i class="material-icons md-64 search" role="img">search</i>
-                </div>
+                <i
+                  class="material-icons circle-icon-bg-24 theme-selected-icon"
+                  role="img"
+                  i18n-aria-label="selected"
+                  >check_circle</i
+                >
               </div>
-              <i
-                class="material-icons circle-icon-bg-24 theme-selected-icon"
-                role="img"
-                i18n-aria-label="selected"
-                >check_circle</i
-              >
-            </div>
 
-            <div class="theme-box teaser">
-              <div class="theme-box-top">
-                <img src="icons/blank-minicard.svg" aria-hidden="true" />
-                <span i18n="more_themes_on_the_way" class="break-text"></span>
-              </div>
-              <div class="theme-box-bottom">
-                <span i18n="stay_tuned" class="break-text"></span>
+              <div class="theme-wrapper">
+                <div
+                  class="theme-box rebecca-purple-theme"
+                  data-key="popup_menu"
+                  data-theme="rebecca_purple_theme"
+                >
+                  <img src="icons/rebecca_purple_theme/tinycard.svg" aria-hidden="true" />
+                  <input
+                    type="radio"
+                    name="options-page-theme"
+                    class="invisible-radio-button"
+                    i18n-aria-label="rebecca_purple_theme"
+                  />
+                  <div class="theme-hover-overlay">
+                    <div class="theme-hover-overlay-mask"></div>
+                    <i class="material-icons md-64 overlay-icon" role="img">check</i>
+                  </div>
+                </div>
+                <i
+                  class="material-icons circle-icon-bg-24 theme-selected-icon"
+                  role="img"
+                  i18n-aria-label="selected"
+                  >check_circle</i
+                >
               </div>
             </div>
           </div>
+          <div class="theme-preview">
+            <h3 class="theme-title popup-menu-theme-title"></h3>
+            <img class="theme-image popup-menu-theme-preview" />
+          </div>
         </section>
 
-        <section id="options-page-themes">
-          <h2 i18n="options_page_theme" class="paragraph-title bottom-line"></h2>
-          <div class="theme-section-row wide-themes-row">
-            <div class="theme-wrapper">
-              <div
-                class="theme-box default-theme"
-                data-key="options_page"
-                data-theme="default_theme"
-              >
-                <div class="theme-box-top">
-                  <img src="icons/default_theme/minicard.svg" aria-hidden="true" />
+        <h2 i18n="options_page_theme" class="paragraph-title theme-section-title-top"></h2>
+        <section class="theme-section options-page-themes">
+          <div class="theme-selection">
+            <h2 i18n="options_page_theme" class="paragraph-title theme-section-title"></h2>
+            <div class="theme-section-row">
+              <div class="theme-wrapper">
+                <div
+                  class="theme-box default-theme"
+                  data-key="options_page"
+                  data-theme="default_theme"
+                >
+                  <img src="icons/default_theme/tinycard.svg" aria-hidden="true" />
+                  <input
+                    type="radio"
+                    name="options-page-theme"
+                    class="invisible-radio-button"
+                    i18n-aria-label="default_theme"
+                  />
+                  <div class="theme-hover-overlay">
+                    <div class="theme-hover-overlay-mask"></div>
+                    <i class="material-icons md-64 overlay-icon" role="img">check</i>
+                  </div>
                 </div>
-                <div class="theme-box-bottom">
-                  <div i18n="default_theme" class="theme-name"></div>
-                  <input type="radio" name="options-page-theme" class="invisible-radio-button" />
-                </div>
-                <div class="theme-hover-overlay">
-                  <div class="theme-hover-overlay-top"></div>
-                  <i class="material-icons md-64 search" role="img">search</i>
-                </div>
+                <i
+                  class="material-icons circle-icon-bg-24 theme-selected-icon"
+                  role="img"
+                  i18n-aria-label="selected"
+                  >check_circle</i
+                >
               </div>
-              <i
-                class="material-icons circle-icon-bg-24 theme-selected-icon"
-                role="img"
-                i18n-aria-label="selected"
-                >check_circle</i
-              >
-            </div>
 
-            <div class="theme-wrapper">
-              <div class="theme-box dark-theme" data-key="options_page" data-theme="dark_theme">
-                <div class="theme-box-top">
-                  <img src="icons/dark_theme/minicard.svg" aria-hidden="true" />
+              <div class="theme-wrapper">
+                <div class="theme-box dark-theme" data-key="options_page" data-theme="dark_theme">
+                  <img src="icons/dark_theme/tinycard.svg" aria-hidden="true" />
+                  <input
+                    type="radio"
+                    name="options-page-theme"
+                    class="invisible-radio-button"
+                    i18n-aria-label="dark_theme"
+                  />
+                  <div class="theme-hover-overlay">
+                    <div class="theme-hover-overlay-mask"></div>
+                    <i class="material-icons md-64 overlay-icon" role="img">check</i>
+                  </div>
                 </div>
-                <div class="theme-box-bottom">
-                  <div i18n="dark_theme" class="theme-name"></div>
-                  <input type="radio" name="options-page-theme" class="invisible-radio-button" />
-                </div>
-                <div class="theme-hover-overlay">
-                  <div class="theme-hover-overlay-top"></div>
-                  <i class="material-icons md-64 search" role="img">search</i>
-                </div>
-              </div>
-              <i
-                class="material-icons circle-icon-bg-24 theme-selected-icon"
-                role="img"
-                i18n-aria-label="selected"
-                >check_circle</i
-              >
-            </div>
-
-            <div class="theme-box teaser">
-              <div class="theme-box-top">
-                <img src="icons/blank-minicard.svg" aria-hidden="true" />
-                <span i18n="more_themes_on_the_way" class="break-text"></span>
-              </div>
-              <div class="theme-box-bottom">
-                <span i18n="stay_tuned" class="break-text"></span>
+                <i
+                  class="material-icons circle-icon-bg-24 theme-selected-icon"
+                  role="img"
+                  i18n-aria-label="selected"
+                  >check_circle</i
+                >
               </div>
             </div>
+          </div>
+          <div class="theme-preview">
+            <h3 class="theme-title options-page-theme-title"></h3>
+            <img class="theme-image options-page-theme-preview" />
           </div>
         </section>
       </div>

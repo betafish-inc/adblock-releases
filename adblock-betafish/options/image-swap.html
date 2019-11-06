@@ -1,98 +1,117 @@
 <!DOCTYPE html>
 
 <div class="option-page-box mab-page-box">
-  <div class="option-page-content">
-    <section>
-      <div class="align-items-center">
-        <i id="photo-icon" class="material-icons md-24" role="img" aria-hidden="true">photo</i>
-        <h1 i18n="image_swap" class="page-title">Image Swap</h1>
-      </div>
-
-      <div class="section-title bottom-line">
-        <span i18n="myadblock_pic_replacemenet_description"></span>
-      </div>
-
-      <img id="cover-image-feature-preview" i18n-alt="image_swap_example" />
-
-      <div id="image-swap-selection">
-        <div i18n="myadblock_picreplacement_exlained" id="image-swap-description"></div>
-        <div id="channel-options">
-          <div id="channels">
-            <div class="image-box">
-              <img
-                id="cats"
-                data-channelId="CatsChannel"
-                class="channel-image"
-                i18n-alt="catchannelswitchlabel"
-              />
-              <span class="overlay">
-                <span>
-                  <i
-                    class="material-icons circle-icon-bg-24 selected-icon"
-                    role="img"
-                    i18n-aria-label="selected"
-                    >check_circle</i
-                  >
-                </span>
-                <span i18n="catchannelswitchlabel" class="channel-name"></span>
-              </span>
-              <input id="CatsChannel" type="checkbox" class="invisible-overlay" />
-            </div>
-
-            <div class="image-box">
-              <img
-                id="dogs"
-                data-channelId="DogsChannel"
-                class="channel-image"
-                i18n-alt="dogchannelswitchlabel"
-              />
-              <span class="overlay">
-                <span>
-                  <i
-                    class="material-icons circle-icon-bg-24 selected-icon"
-                    role="img"
-                    i18n-aria-label="selected"
-                    >check_circle</i
-                  >
-                </span>
-                <span i18n="dogchannelswitchlabel" class="channel-name"></span>
-              </span>
-              <input id="DogsChannel" type="checkbox" class="invisible-overlay" />
-            </div>
-
-            <div class="image-box">
-              <img
-                id="landscapes"
-                data-channelId="LandscapesChannel"
-                class="channel-image"
-                i18n-alt="landscapechannelswitchlabel"
-              />
-              <span class="overlay">
-                <span>
-                  <i
-                    class="material-icons circle-icon-bg-24 selected-icon"
-                    role="img"
-                    i18n-aria-label="selected"
-                    >check_circle</i
-                  >
-                </span>
-                <span i18n="landscapechannelswitchlabel" class="channel-name"></span>
-              </span>
-              <input id="LandscapesChannel" type="checkbox" class="invisible-overlay" />
-            </div>
-
-            <div class="image-box">
-              <span class="overlay">
-                <div id="coming-soon-photo">
-                  <i class="material-icons md-64" role="img" aria-hidden="true">photo</i>
-                </div>
-                <div i18n="images_coming_soon" class="coming-soon-text"></div>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="option-page-content mab-sub-tab">
+    <!-- Start: Payment section visible only to free MAB users -->
+    <section id="locked-user-pay-section-image-swap" class="bottom-line" style="display: none;">
+      <p i18n="myadblock_short_description_to_pay"></p>
+      <a
+        id="get-it-now-image-swap"
+        i18n="get_it_now"
+        class="btn yellow long"
+        target="_blank"
+        href="https://getadblock.com/myadblock/enrollment/v4/"
+      ></a>
     </section>
+    <!-- End: Payment section visible only to free MAB users -->
+
+    <div class="align-items-center">
+      <i id="photo-icon" class="material-icons md-24" role="img" aria-hidden="true">photo</i>
+      <h1 i18n="image_swap" class="page-title"></h1>
+    </div>
+
+    <h3 class="paragraph-title" i18n="myadblock_pic_replacemenet_description"></h3>
+
+    <p class="section-title" i18n="myadblock_picreplacement_exlained"></p>
+
+    <ul id="channel-options">
+      <li class="channel-box">
+        <p i18n="do_not_swap_ads"></p>
+        <i class="material-icons circle-icon-bg-24 selected-icon">check_circle</i>
+        <input id="no-channel" data-channel-id="none" type="checkbox" class="invisible-overlay" />
+      </li>
+
+      <li class="channel-box">
+        <a
+          id="get-it-now-cats"
+          target="_blank"
+          href="https://getadblock.com/myadblock/enrollment/v4/"
+        ></a>
+        <img id="cats" class="channel-image" i18n-alt="catchannelswitchlabel" />
+        <i
+          class="material-icons circle-icon-bg-24 selected-icon"
+          role="img"
+          i18n-aria-label="selected"
+          >check_circle</i
+        >
+        <i class="adblock-icon circle-icon-bg-24 locked-icon" role="img" i18n-aria-label="selected"
+          >lock_circle</i
+        >
+        <i class="material-icons md-64 hovered" role="img" aria-hidden="true">lock_open</i>
+        <input
+          id="CatsChannel"
+          type="checkbox"
+          class="invisible-overlay"
+          i18n-aria-label="catchannelswitchlabel"
+        />
+      </li>
+
+      <li class="channel-box">
+        <a
+          id="get-it-now-dogs"
+          target="_blank"
+          href="https://getadblock.com/myadblock/enrollment/v4/"
+        ></a>
+        <img id="dogs" class="channel-image" i18n-alt="dogchannelswitchlabel" />
+        <i
+          class="material-icons circle-icon-bg-24 selected-icon"
+          role="img"
+          i18n-aria-label="selected"
+          >check_circle</i
+        >
+        <i class="adblock-icon circle-icon-bg-24 locked-icon" role="img" i18n-aria-label="selected"
+          >lock_circle</i
+        >
+        <i class="material-icons md-64 hovered" role="img" aria-hidden="true">lock_open</i>
+
+        <input
+          id="DogsChannel"
+          type="checkbox"
+          class="invisible-overlay"
+          i18n-aria-label="dogchannelswitchlabel"
+        />
+      </li>
+
+      <li class="channel-box">
+        <a
+          id="get-it-now-landscapes"
+          target="_blank"
+          href="https://getadblock.com/myadblock/enrollment/v4/"
+        ></a>
+        <img id="landscapes" class="channel-image" i18n-alt="landscapechannelswitchlabel" />
+        <i
+          class="material-icons circle-icon-bg-24 selected-icon"
+          role="img"
+          i18n-aria-label="selected"
+          >check_circle</i
+        >
+        <i class="adblock-icon circle-icon-bg-24 locked-icon" role="img" i18n-aria-label="selected"
+          >lock_circle</i
+        >
+        <i class="material-icons md-64 hovered" role="img" aria-hidden="true">lock_open</i>
+        <input
+          id="LandscapesChannel"
+          type="checkbox"
+          class="invisible-overlay"
+          i18n-aria-label="landscapechannelswitchlabel"
+        />
+      </li>
+
+      <li class="channel-box coming-soon">
+        <p i18n="images_coming_soon"></p>
+      </li>
+    </ul>
+
     <div class="translation_credits italic do-not-display"></div>
     <footer style="display: none;">
       <section>

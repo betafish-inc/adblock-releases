@@ -10,9 +10,8 @@
   --button-background-hover: #e40d0d;
   --button-cancel-background: #999999;
   --button-cancel-background-hover: #666666;
-  --options-header-bg-color: #f1f1f1;
-  --options-footer-bg-color: #f1f1f1;
-  --check-checked: #05bcfc;
+  --options-bg-color: #f1f1f1;
+  --check-checked: #03bcfc;
   --unchecked-circle: #e6e6e6;
 }
 
@@ -45,7 +44,7 @@ header {
   display: flex;
   align-items: center;
   cursor: move;
-  background: var(--options-header-bg-color);
+  background: var(--options-bg-color);
   color: var(--text-color);
   border-top-right-radius: var(--border-radius);
   border-top-left-radius: var(--border-radius);
@@ -74,7 +73,7 @@ section {
 footer {
   display: flex;
   justify-content: flex-end;
-  background: var(--options-footer-bg-color);
+  background: var(--options-bg-color);
   color: var(--text-color);
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);

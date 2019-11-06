@@ -151,11 +151,20 @@ Channels.prototype = {
     return false;
   },
 
+  disableAllChannels() {
+    for (const id in this.channelGuide) {
+      if (this.channelGuide[id].enabled) {
+        this.channelGuide[id].enabled = false;
+        channelsNotifier.emit('channels.changed', id, false, true);
+      }
+    }
+  },
+
   // Returns a random Listing from all enabled channels or from channel
   // |channelId| if specified, trying to match the ratio of |width| and
   // |height| decently.  Returns undefined if there are no enabled channels.
   randomListing(opts) {
-    if (!getSettings().picreplacement && !this.isAnyEnabled()) {
+    if (!getSettings().picreplacement) {
       return undefined;
     }
     // if the element to be replace is 'fixed' in position, it may make for bad pic
@@ -265,7 +274,7 @@ Channels.prototype = {
       this.add({
         name: 'CatsChannel',
         param: undefined,
-        enabled: true,
+        enabled: false,
       });
       this.add({
         name: 'LandscapesChannel',

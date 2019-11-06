@@ -17,7 +17,6 @@ const License = (function getLicense() {
   const isProd = true;
   const licenseStorageKey = 'license';
   const installTimestampStorageKey = 'install_timestamp';
-  const myAdBlockEnrollmentFeatureKey = 'myAdBlockFeature';
   const statsInIconKey = 'current_show_statsinicon';
   const popupMenuCtaClosedKey = 'popup_menu_cta_closed';
   const licenseAlarmName = 'licenseAlarm';
@@ -125,7 +124,6 @@ const License = (function getLicense() {
 
   return {
     licenseStorageKey,
-    myAdBlockEnrollmentFeatureKey,
     popupMenuCtaClosedKey,
     initialized,
     licenseAlarmName,
@@ -150,23 +148,8 @@ const License = (function getLicense() {
       if (pingData.myadblock_enrollment === true) {
         loadFromStorage(() => {
           theLicense.myadblock_enrollment = true;
-          theLicense.var = pingData.var;
-          theLicense.exp = pingData.exp;
           License.set(theLicense);
-          License.setIconBadgeCTA();
-        });
-
-        // Create myAdBlock storage if it doesn't already exist
-        chrome.storage.local.get(License.myAdBlockEnrollmentFeatureKey).then((myAdBlockInfo) => {
-          if (!$.isEmptyObject(myAdBlockInfo)) {
-            return;
-          }
-          const myAdBlockFeature = {
-            version: MY_ADBLOCK_FEATURE_VERSION,
-            displayPopupMenuBanner: true,
-            takeUserToMyAdBlockTab: false,
-          };
-          chrome.storage.local.set({ myAdBlockFeature });
+          License.showIconBadgeCTA(true);
         });
       }
     },
@@ -327,7 +310,7 @@ const License = (function getLicense() {
           License.updatePeriodically();
         }, delay);
       }
-      setSetting('picreplacement', true);
+      setSetting('picreplacement', false);
     },
     isActiveLicense() {
       return License && License.get() && License.get().status === 'active';
@@ -345,27 +328,17 @@ const License = (function getLicense() {
     },
     /**
      * Handles the display of the New badge on the toolbar icon.
-     * - Add it if the 'pingData.var' was 2 or 4
-     * - Remove it if the 'pingData.var' was 1, 3 or undefined
-     * - Remove it if the popup menu opened
-     * @param {Boolean} [stopShowing]
+     * @param {Boolean} [showBadge] true shows the badge, false removes the badge
      */
-    setIconBadgeCTA(stopShowing) {
-      if (!License || !License.get() || !License.get().var) {
-        return;
-      }
-      const varCTA = License.get().var; // 1, 2, 3, 4 or undefined
-      const showNewBadge = varCTA === 2 || varCTA === 4;
-
-      if (showNewBadge && !stopShowing) {
+    showIconBadgeCTA(showBadge) {
+      if (showBadge) {
         storageSet(statsInIconKey, Prefs.show_statsinicon);
         Prefs.show_statsinicon = false;
         chrome.browserAction.setBadgeBackgroundColor({ color: '#03bcfc' });
         chrome.browserAction.setBadgeText({ text: translate('new_badge') });
       } else {
-        const storedValue = storageGet(statsInIconKey);
-
         // Restore show_statsinicon if we previously stored its value
+        const storedValue = storageGet(statsInIconKey);
         if (typeof storedValue === 'boolean') {
           Prefs.show_statsinicon = storedValue;
         }
@@ -505,12 +478,7 @@ License.ready().then(() => {
     if (!(request.message === 'load_my_adblock')) {
       return;
     }
-    if (
-      sender.url
-      && sender.url.startsWith('http')
-      && getSettings().picreplacement
-      && channels.isAnyEnabled()
-    ) {
+    if (sender.url && sender.url.startsWith('http') && getSettings().picreplacement) {
       const logError = function (e) {
         // eslint-disable-next-line no-console
         console.error(e);
