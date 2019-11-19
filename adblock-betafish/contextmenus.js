@@ -190,6 +190,14 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
   }
 });
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'sendContentToBack') {
+    return;
+  } // not for us
+  emitPageBroadcast({ fn: 'sendContentToBack', options: {} });
+  sendResponse({});
+});
+
 // Update browser actions and context menus when whitelisting might have
 // changed. That is now when initally loading the filters and later when
 // importing backups or saving filter changes.

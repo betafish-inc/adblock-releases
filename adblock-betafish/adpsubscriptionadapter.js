@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global require, exports, recommendations, Subscription
-   DownloadableSubscription */
+   DownloadableSubscription, chrome */
 
 const { filterStorage } = require('filterStorage');
 const subClasses = require('subscriptionClasses');
@@ -42,6 +42,12 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
   // returns the boolean language attribue (if found)
   //         false otherwise
   const isLanguageSpecific = function (searchID) {
+    // check for EasyList, as it is a language-specific list (en), but
+    // shouldn't be treated as such by the AdBlock code
+    if (searchID === 'easylist') {
+      return false;
+    }
+
     for (const subscription of recommendations()) {
       const { id } = subscription;
       if (id === searchID) {
@@ -137,7 +143,13 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
     }
     return userSubs;
   };
-
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.command !== 'unsubscribe' || !message.id) {
+      return;
+    }
+    unsubscribe({ id: message.id });
+    sendResponse({});
+  });
 
   return {
     getSubscriptionInfoFromURL,

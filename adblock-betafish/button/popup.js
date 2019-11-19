@@ -245,43 +245,11 @@ try {
             show(['div_status_beta']);
           }
 
-          // START: MAB menu items
-          if (License.isActiveLicense()) {
-            // Show paid user menu option and hide CTA
-            show(['div_myadblock_options', 'separator-1', 'separator-2']);
-            hide(['div_myadblock_enrollment_v2']);
-
-            // Show correct icons on the paid user menu option
-            const guide = BG.channels.getGuide();
-            for (const id in guide) {
-              const { name, enabled } = guide[id];
-              const prefix = 'icons/adblock-picreplacement-images-menu-';
-              const suffix = window.devicePixelRatio >= 2 ? '@2x' : '';
-
-              if (info.settings.picreplacement && (name === 'CatsChannel' && enabled)) {
-                $('#cat_option').attr('src', `${prefix}cat${suffix}.png`);
-              } else if (name === 'CatsChannel') {
-                $('#cat_option').attr('src', `${prefix}catgrayscale${suffix}.png`);
-              }
-              if (info.settings.picreplacement && (name === 'DogsChannel' && enabled)) {
-                $('#dog_option').attr('src', `${prefix}dog${suffix}.png`);
-              } else if (name === 'DogsChannel') {
-                $('#dog_option').attr('src', `${prefix}doggrayscale${suffix}.png`);
-              }
-              if (info.settings.picreplacement && (name === 'LandscapesChannel' && enabled)) {
-                $('#landscape_option').attr('src', `${prefix}landscape${suffix}.png`);
-              } else if (name === 'LandscapesChannel') {
-                $('#landscape_option').attr('src', `${prefix}landscapegrayscale${suffix}.png`);
-              }
-            }
-          } else if (userClosedCta) {
-            // Don't show the CTA
+          if (userClosedCta) {
             hide(['div_myadblock_enrollment_v2']);
           } else if (License.shouldShowMyAdBlockEnrollment()) {
-            // Show CTA
             show(['div_myadblock_enrollment_v2', 'separator-1', 'separator-2']);
           }
-          // END: MAB menu items
 
           if (shown.block_counts && Prefs.show_statsinpopup) {
             hide(['separator-1']);
@@ -459,13 +427,7 @@ try {
 
       selected('#svg_options', () => {
         BG.recordGeneralMessage('options_clicked');
-        BG.openTab(chrome.extension.getURL('options.html'));
-        closeAndReloadPopup();
-      });
-
-      selected('#div_myadblock_options', () => {
-        BG.recordGeneralMessage('myadblock_options_clicked');
-        BG.openTab(chrome.extension.getURL('options.html#mab'));
+        BG.openTab(chrome.runtime.getURL('options.html'));
         closeAndReloadPopup();
       });
 

@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, BGcall, translate, bindEnterClickToDefault, mayOpenDialogUi:true,
+/* global chrome, translate, bindEnterClickToDefault, mayOpenDialogUi:true,
    setLangAndDirAttributes, loadWizardResources, parseUri */
 
 
@@ -151,7 +151,7 @@ function topOpenWhitelistUI() {
   mayOpenDialogUi = false;
 
   // Get Flash objects out of the way of our UI
-  BGcall('emitPageBroadcast', { fn: 'sendContentToBack', options: {} });
+  chrome.runtime.sendMessage({ command: 'sendContentToBack' });
 
   // A empty base <div> is appended to the page's DOM and then a shadow is hosted in it.
   // The shadow protects our dialog from outside CSS "leaking" in.
@@ -173,7 +173,7 @@ function topOpenWhitelistUI() {
     const html = `
 <div id="wizard">
   <header >
-    <img aria-hidden="true" src="${chrome.extension.getURL('/icons/icon24.png')}">
+    <img aria-hidden="true" src="${chrome.runtime.getURL('/icons/icon24.png')}">
     <h1 >${translate('whitelistertitle2')}</h1>
   </header>
   <section >
@@ -244,7 +244,7 @@ function topOpenWhitelistUI() {
 
     $dialog.find('button.primary').click(() => {
       const filter = `@@||${domainFilter.generateUrl(false, $domainSlider.valueAsNumber, $pathSlider.valueAsNumber)}$document`;
-      BGcall('addCustomFilter', filter, () => {
+      chrome.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then(() => {
         if ($dialog.find('#adblock-reload-page').is(':checked')) {
           document.location.reload();
         } else {

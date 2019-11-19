@@ -58,7 +58,7 @@ function displayTranslationCredit() {
   }
   const translators = [];
 
-  $.getJSON(chrome.extension.getURL('translators.json'), (response) => {
+  $.getJSON(chrome.runtime.getURL('translators.json'), (response) => {
     const lang = navigator.language;
     let matchFound = false;
     for (const id in response) {
@@ -171,21 +171,16 @@ const requestSyncMessageRemoval = function (delayTime) {
   }
   setTimeout(() => {
     $('.sync-header-message-text').text('');
-    $('.sync-header-done-icon').hide();
-    $('.sync-header-error-icon').hide();
-    $('.sync-header-sync-icon').hide();
-    $('.sync-out-of-date-header-error-icon').hide();
     $('.sync-header-message')
       .removeClass('sync-message-good')
       .removeClass('sync-message-error')
-      .addClass('sync-header-message-hidden');
-    $('.sync-out-of-date-header-message').addClass('sync-out-of-date-header-message-hidden');
+      .addClass('sync-message-hidden');
+    $('.sync-out-of-date-header-message').addClass('sync-message-hidden');
   }, delayTime);
 };
 
 const showOutOfDateExtensionError = function () {
-  $('.sync-out-of-date-header-error-icon').show();
-  $('.sync-out-of-date-header-message').removeClass('sync-out-of-date-header-message-hidden');
+  $('.sync-out-of-date-header-message').removeClass('sync-message-hidden');
   requestSyncMessageRemoval(TWENTY_SECONDS);
 };
 
@@ -194,25 +189,24 @@ const showSyncMessage = function (msgText, doneIndicator, errorIndicator) {
     return;
   }
   $('.sync-header-message-text').text(msgText);
-  $('.sync-icon').hide();
   if (!doneIndicator && errorIndicator) {
-    $('.sync-header-error-icon').show();
+    $('.sync-icon').text('error_outline');
     $('.sync-header-message')
-      .removeClass('sync-header-message-hidden')
+      .removeClass('sync-message-hidden')
       .removeClass('sync-message-good')
       .addClass('sync-message-error');
     requestSyncMessageRemoval(TWENTY_SECONDS);
   } else if (doneIndicator && !errorIndicator) {
-    $('.sync-header-done-icon').show();
+    $('.sync-icon').text('check_circle');
     $('.sync-header-message')
-      .removeClass('sync-header-message-hidden')
+      .removeClass('sync-message-hidden')
       .removeClass('sync-message-error')
       .addClass('sync-message-good');
     requestSyncMessageRemoval(FIVE_SECONDS);
   } else {
-    $('.sync-header-sync-icon').show();
+    $('.sync-icon').text('sync');
     $('.sync-header-message')
-      .removeClass('sync-header-message-hidden')
+      .removeClass('sync-message-hidden')
       .removeClass('sync-message-error')
       .addClass('sync-message-good');
   }
@@ -236,7 +230,9 @@ const onPostDataSent = function () {
 const onPostDataSentError = function (errorCode, initialGet) {
   const setupFailMsgPrefix = translate('sync_header_message_setup_fail_prefix');
   const setupFailMsg2 = translate('sync_header_message_setup_fail_part_2');
-  const $customizeSyncHeader = $('#customize-sync-header-message');
+  const $customizeSyncHeaderText = $('#customize .sync-header-message-text');
+  const $customizeSyncHeaderIcon = $('#customize .sync-icon');
+  $customizeSyncHeaderIcon.text('error_outline');
 
   if (errorCode === 409) {
     const errMsgPrefix = translate('sync_header_message_error_prefix');
@@ -247,20 +243,20 @@ const onPostDataSentError = function (errorCode, initialGet) {
     if ($('#customize').is(':visible')) {
       const customize2 = translate('sync_header_message_old_commit_version_customize_tab_part_2');
       const customize3 = translate('sync_header_message_old_commit_version_customize_tab_part_3');
-      $customizeSyncHeader.text(`${errMsgPrefix} ${customize2} ${customize3}`);
+      $customizeSyncHeaderText.text(`${errMsgPrefix} ${customize2} ${customize3}`);
       syncErrorCode = errorCode;
     }
   } else if (initialGet && [0, 401, 404, 500].includes(errorCode)) {
     showSyncMessage(`${setupFailMsgPrefix} ${setupFailMsg2}`, false, true);
     if ($('#customize').is(':visible')) {
-      $customizeSyncHeader.text(`${setupFailMsgPrefix} ${setupFailMsg2}`);
+      $customizeSyncHeaderText.text(`${setupFailMsgPrefix} ${setupFailMsg2}`);
       syncErrorCode = errorCode;
     }
   } else if (!initialGet && [0, 401, 404, 500].includes(errorCode)) {
     const revertMsg2 = translate('sync_header_error_save_message_part_2');
     const revertMsg3 = translate('sync_header_error_save_message_part_3');
     showSyncMessage(`${setupFailMsgPrefix} ${revertMsg2} ${revertMsg3}`, false, true);
-    $customizeSyncHeader.text(`${setupFailMsgPrefix} ${revertMsg2} ${revertMsg3}`);
+    $customizeSyncHeaderText.text(`${setupFailMsgPrefix} ${revertMsg2} ${revertMsg3}`);
     syncErrorCode = errorCode;
   }
 };

@@ -1,4 +1,3 @@
-
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
@@ -146,6 +145,9 @@ countCache.init();
 const addCustomFilter = function (filterText) {
   try {
     const filter = Filter.fromText(filterText);
+    if (filter instanceof InvalidFilter) {
+      return { error: filter.reason };
+    }
     filterStorage.addFilter(filter);
     if (isSelectorFilter(filterText)) {
       countCache.addCustomFilterCount(filterText);
@@ -158,6 +160,12 @@ const addCustomFilter = function (filterText) {
     return ex.toString();
   }
 };
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'addCustomFilter' || !message.filterTextToAdd) {
+    return;
+  }
+  sendResponse({ response: addCustomFilter(message.filterTextToAdd) });
+});
 
 // Creates a custom filter entry that whitelists a given page
 // Inputs: pageUrl:string url of the page
@@ -308,27 +316,6 @@ const isSelectorExcludeFilter = function (text) {
   return /#@#./.test(text);
 };
 
-(function dispatchBGcall() {
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.command !== 'call') {
-      return;
-    } // not for us
-
-    const fn = window[message.fn];
-    if (!fn) {
-      // eslint-disable-next-line no-console
-      console.log('FN not found, message', message, sender);
-    }
-
-    if (message.args && message.args.push) {
-      message.args.push(sender);
-    }
-
-    const result = fn.apply(window, message.args);
-    sendResponse(result);
-  });
-}());
-
 const getAdblockUserId = function () {
   return STATS.userId();
 };
@@ -337,10 +324,24 @@ const getAdblockUserId = function () {
 const addGABTabListeners = function (sender) {
   gabQuestion.addGABTabListeners(sender);
 };
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'addGABTabListeners') {
+    return;
+  }
+  addGABTabListeners();
+  sendResponse({});
+});
 
 const removeGABTabListeners = function (saveState) {
   gabQuestion.removeGABTabListeners(saveState);
 };
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'removeGABTabListeners' || !message.saveState) {
+    return;
+  }
+  gabQuestion.removeGABTabListeners(message.saveState);
+  sendResponse({});
+});
 
 // INFO ABOUT CURRENT PAGE
 
@@ -445,6 +446,12 @@ const pageIsWhitelisted = function (sender) {
   const whitelisted = checkWhitelisted(sender.page);
   return (whitelisted !== undefined && whitelisted !== null);
 };
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'pageIsWhitelisted') {
+    return;
+  }
+  sendResponse({ response: pageIsWhitelisted(sender) });
+});
 
 const parseFilter = function (filterText) {
   let filter = null;
@@ -462,6 +469,12 @@ const parseFilter = function (filterText) {
   }
   return { filter, error };
 };
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'parseFilter' || !message.filterTextToParse) {
+    return;
+  }
+  sendResponse(parseFilter(message.filterTextToParse));
+});
 
 const pausedKey = 'paused';
 // white-list all blocking requests regardless of frame / document, but still allows element hiding
@@ -659,7 +672,7 @@ chrome.commands.onCommand.addListener((command) => {
 const readfile = function (file) {
   // A bug in jquery prevents local files from being read, so use XHR.
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', chrome.extension.getURL(file), false);
+  xhr.open('GET', chrome.runtime.getURL(file), false);
   xhr.send();
   return xhr.responseText;
 };
@@ -686,10 +699,18 @@ const openTab = function (url) {
   chrome.tabs.create({ url });
 };
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'openTab' || !message.urlToOpen) {
+    return;
+  }
+  openTab(message.urlToOpen);
+  sendResponse({});
+});
+
 if (chrome.runtime.id) {
   let updateTabRetryCount = 0;
   const getUpdatedURL = function () {
-    const encodedVersion = encodeURIComponent(chrome.runtime.getManifest().version);
+    const encodedVersion = encodeURIComponent('3.60.0');
     let updatedURL = `https://getadblock.com/update/${encodedVersion}/?u=${STATS.userId()}`;
     updatedURL = `${updatedURL}&bc=${Prefs.blocked_total}`;
     updatedURL = `${updatedURL}&rt=${updateTabRetryCount}`;
@@ -746,7 +767,7 @@ if (chrome.runtime.id) {
       checkQueryState();
     }
   };
-  const slashUpdateReleases = ['3.60.0'];
+  const slashUpdateReleases = ['3.60.0', '3.61.0', '3.61.1', '3.62.0'];
   // Display updated page after each updat
   chrome.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);
@@ -782,35 +803,54 @@ const createWhitelistFilterForYoutubeChannel = function (url) {
   return undefined;
 };
 
-// YouTube Channel Whitelist and AdBlock Bandaids
+// YouTube Channel Whitelist
 const runChannelWhitelist = function (tabUrl, tabId) {
-  const isYouTube = parseUri(tabUrl).hostname === 'www.youtube.com';
-  const abChannel = parseUri.parseSearch(tabUrl).ab_channel;
-  if (isYouTube && getSettings().youtube_channel_whitelist && !abChannel) {
-    chrome.tabs.executeScript(tabId,
-      {
+  if (
+    getSettings().youtube_channel_whitelist
+    && parseUri(tabUrl).hostname === 'www.youtube.com'
+    && !parseUri.parseSearch(tabUrl).ab_channel
+  ) {
+    // if a channel name isn't stored for that tab id,
+    // then we probably haven't inject the content script, so we shall
+    chrome.tabs.sendMessage(tabId, { message: 'ping_yt_content_script' }).then((response) => {
+      const resp = response || {};
+      if (resp.status !== 'yes') {
+        chrome.tabs.executeScript(tabId, {
+          file: 'adblock-ytchannel.js',
+          runAt: 'document_start',
+        });
+      }
+    }).catch(() => {
+      chrome.tabs.executeScript(tabId, {
         file: 'adblock-ytchannel.js',
         runAt: 'document_start',
       });
+    });
   }
 };
 
-chrome.tabs.onCreated.addListener((tab) => {
+const ytChannelOnCreatedListener = function (tab) {
   if (chrome.runtime.lastError) {
     return;
   }
   chrome.tabs.get(tab.id).then((tabs) => {
+    if (chrome.runtime.lastError) {
+      return;
+    }
     if (tabs && tabs.url && tabs.id) {
       runChannelWhitelist(tabs.url, tabs.id);
     }
   });
-});
+};
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+const ytChannelOnUpdatedListener = function (tabId, changeInfo, tab) {
   if (chrome.runtime.lastError) {
     return;
   }
-  if (changeInfo.status === 'loading') {
+  if (!getSettings().youtube_channel_whitelist) {
+    return;
+  }
+  if (changeInfo.status === 'loading' && changeInfo.url) {
     if (chrome.runtime.lastError) {
       return;
     }
@@ -820,76 +860,76 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
       }
     });
   }
-});
+  if (ytChannelNamePages.get(tabId) && parseUri(tab.url).hostname !== 'www.youtube.com') {
+    ytChannelNamePages.delete(tabId);
+  }
+};
+
+const ytChannelOnRemovedListener = function (tabId) {
+  if (!getSettings().youtube_channel_whitelist) {
+    return;
+  }
+  ytChannelNamePages.delete(tabId);
+};
+
+const addYTChannelListeners = function () {
+  chrome.tabs.onCreated.addListener(ytChannelOnCreatedListener);
+  chrome.tabs.onUpdated.addListener(ytChannelOnUpdatedListener);
+  chrome.tabs.onRemoved.addListener(ytChannelOnRemovedListener);
+};
+
+const removeYTChannelListeners = function () {
+  chrome.tabs.onCreated.removeListener(ytChannelOnCreatedListener);
+  chrome.tabs.onUpdated.removeListener(ytChannelOnUpdatedListener);
+  chrome.tabs.onRemoved.removeListener(ytChannelOnRemovedListener);
+};
 
 // On single page sites, such as YouTube, that update the URL using the History API pushState(),
 // they don't actually load a new page, we need to get notified when this happens
 // and update the URLs in the Page and Frame objects
-const youTubeHistoryStateUpdateHanlder = function (details) {
+const youTubeHistoryStateUpdateHandler = function (details) {
   if (details
       && Object.prototype.hasOwnProperty.call(details, 'frameId')
       && Object.prototype.hasOwnProperty.call(details, 'tabId')
       && Object.prototype.hasOwnProperty.call(details, 'url')
-      && Object.prototype.hasOwnProperty.call(details, 'transitionType')
       && details.transitionType === 'link') {
     const myURL = new URL(details.url);
     if (myURL.hostname === 'www.youtube.com') {
       const myFrame = ext.getFrame(details.tabId, details.frameId);
       const myPage = ext.getPage(details.tabId);
-      const previousWhitelistState = checkWhitelisted(myPage);
-      myPage.url = myURL;
+      myPage._url = myURL;
       myFrame.url = myURL;
       myFrame._url = myURL;
-      const currentWhitelistState = checkWhitelisted(myPage);
-      if (!currentWhitelistState && (currentWhitelistState !== previousWhitelistState)) {
-        chrome.tabs.sendMessage(details.tabId, { type: 'reloadStyleSheet' });
-      }
-      if (myURL.pathname === '/') {
-        ytChannelNamePages.set(myPage.id, '');
+      if (!/ab_channel/.test(details.url) && myURL.pathname === '/watch') {
+        chrome.tabs.sendMessage(details.tabId, { command: 'updateURLWithYouTubeChannelName' });
+      } else if (/ab_channel/.test(details.url) && myURL.pathname !== '/watch') {
+        chrome.tabs.sendMessage(details.tabId, { command: 'removeYouTubeChannelName' });
       }
     }
   }
 };
 
-const addYouTubeHistoryStateUpdateHanlder = function () {
-  chrome.webNavigation.onHistoryStateUpdated.addListener(youTubeHistoryStateUpdateHanlder);
+const addyouTubeHistoryStateUpdateHandler = function () {
+  chrome.webNavigation.onHistoryStateUpdated.addListener(youTubeHistoryStateUpdateHandler);
 };
 
-const removeYouTubeHistoryStateUpdateHanlder = function () {
-  chrome.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHanlder);
+const removeyouTubeHistoryStateUpdateHandler = function () {
+  chrome.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHandler);
 };
 
 settings.onload().then(() => {
   if (getSettings().youtube_channel_whitelist) {
-    addYouTubeHistoryStateUpdateHanlder();
-    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-      if (!getSettings().youtube_channel_whitelist) {
-        return;
-      }
-      if (ytChannelNamePages.get(tabId) && parseUri(tab.url).hostname !== 'www.youtube.com') {
-        ytChannelNamePages.delete(tabId);
-      }
-    });
-    chrome.tabs.onRemoved.addListener((tabId) => {
-      if (!getSettings().youtube_channel_whitelist) {
-        return;
-      }
-      ytChannelNamePages.delete(tabId);
-    });
+    addYTChannelListeners();
+    addyouTubeHistoryStateUpdateHandler();
   }
 });
 
 let previousYTchannelId = '';
-let previousYTvideoId = '';
+const previousYTvideoId = '';
 let previousYTuserId = '';
 
 // Listen for the message from the ytchannel.js content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command === 'updateYouTubeChannelName' && message.args === false) {
-    ytChannelNamePages.set(sender.tab.id, '');
-    sendResponse({});
-    return;
-  }
   if (message.command === 'updateYouTubeChannelName' && message.channelName) {
     ytChannelNamePages.set(sender.tab.id, message.channelName);
     sendResponse({});
@@ -909,39 +949,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           // Got name of the channel
           if (json && json.items && json.items[0]) {
             const channelName = json.items[0].snippet.title;
-            ytChannelNamePages.set(sender.tab.id, channelName);
-            chrome.tabs.sendMessage(sender.tab.id, {
-              command: 'updateURLWithYouTubeChannelName',
-              channelName,
-            });
-          }
-        }
-      };
-      xhr.send();
-      sendResponse({});
-      return;
-    }
-    chrome.tabs.sendMessage(sender.tab.id, {
-      command: 'updateURLWithYouTubeChannelName',
-      channelName: ytChannelNamePages.get(sender.tab.id),
-    });
-    sendResponse({});
-    return;
-  }
-  if (message.command === 'get_channel_name_by_video_id' && message.videoId) {
-    if (previousYTvideoId !== message.videoId) {
-      previousYTvideoId = message.videoId;
-      const xhr = new XMLHttpRequest();
-      const { videoId } = message;
-      const key = atob('QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz');
-      const url = 'https://www.googleapis.com/youtube/v3/videos';
-      xhr.open('GET', `${url}?part=snippet&id=${videoId}&key=${key}`);
-      xhr.onload = function xhrOnload() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          const json = JSON.parse(xhr.response);
-          // Got name of the channel
-          if (json && json.items && json.items[0]) {
-            const channelName = json.items[0].snippet.channelTitle;
             ytChannelNamePages.set(sender.tab.id, channelName);
             chrome.tabs.sendMessage(sender.tab.id, {
               command: 'updateURLWithYouTubeChannelName',
@@ -1261,8 +1268,10 @@ Object.assign(window, {
   isSelectorFilter,
   isWhitelistFilter,
   isSelectorExcludeFilter,
-  addYouTubeHistoryStateUpdateHanlder,
-  removeYouTubeHistoryStateUpdateHanlder,
+  addYTChannelListeners,
+  removeYTChannelListeners,
+  addyouTubeHistoryStateUpdateHandler,
+  removeyouTubeHistoryStateUpdateHandler,
   ytChannelNamePages,
   checkPingResponseForProtect,
   pausedFilterText1,

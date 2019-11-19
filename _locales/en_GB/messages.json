@@ -12,8 +12,8 @@
     "message":"AdBlock development build"
   },
   "name_releasebuild":{
-    "description":"Extension name to be shown for release \/ published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dashes should be translated",
-    "message":"AdBlock——best ad blocker"
+    "description":"Extension name to be shown for release \/ published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message":"AdBlock — best ad blocker"
   },
   "description_edge":{
     "message":"AdBlock. The #1 ad blocker with over 200 million downloads. Blocks ads all over the web.",
@@ -2225,6 +2225,10 @@
     "message":"Rebecca Purple",
     "description":"Name of a theme in the Themes tab of the Options page"
   },
+  "solarized_light_theme":{
+    "message":"Solarized Light",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
   "apply_theme":{
     "message":"Apply Theme",
     "description":"Text of clickable element that applies the theme of a theme box in the Themes tab of the Options page"
@@ -2278,24 +2282,8 @@
     "description":"The sub-title of an error message box in payment iframe in the Options page."
   },
   "sync_tab_item":{
-    "message":"Sync",
+    "message":"Backup & Sync",
     "description":"Title of the Sync sub-tab of the Options page"
-  },
-  "myadblock_sync_description":{
-    "message":"Sync your preferences across multiple browsers and devices",
-    "description":"Text on the MyAdBlock tab, Sync panel of the Options page"
-  },
-  "sync_check_status_text":{
-    "message":"Sync and personalize AdBlock across your extensions  [[Check status]]",
-    "description":"message and button text on the Sync sub-tab of the Options page"
-  },
-  "sync_turn_on_text":{
-    "message":"Sync and personalize AdBlock across your extensions  [[Turn on sync]]",
-    "description":"message and button text on the Sync sub-tab of the Options page"
-  },
-  "sync_turn_off_btn_text":{
-    "message":"Turn off",
-    "description":"button text on the Sync sub-tab of the Options page"
   },
   "sync_turn_on_invalid_name_text":{
     "message":"Please name this extension to continue",
@@ -2310,7 +2298,7 @@
     "description":"section title text on the Sync sub-tab of the Options page"
   },
   "sync_header_message_no_license":{
-    "message":"Please give us a few moments to make sync available.",
+    "message":"Please give us a few moments to get Sync ready for you.",
     "description":"message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
   },
   "sync_header_message_getting_license":{
@@ -2318,7 +2306,7 @@
     "description":"message to users on the sync page when the extension is getting the license"
   },
   "sync_header_message_in_progress":{
-    "message":"Sync in progress…",
+    "message":"Sync in progress...",
     "description":"message to users on the options pages when syncing with the server is in progress"
   },
   "sync_header_message_sync_complete":{
@@ -2334,35 +2322,27 @@
     "description":"start of error message to users on the sync page when sync fails."
   },
   "sync_header_message_setup_fail_part_2":{
-    "message":"Please try turning on sync again in a few minutes.",
+    "message":"Please try adding this extension again in a few minutes.",
     "description":"message to users on the sync page when initial setup of sync fails for some unknown reason."
   },
   "sync_header_message_error_prefix":{
     "message":"This extension was out of sync.",
     "description":"Start of an sync error message to users on the Options page or AdBlock popup menu."
   },
-  "sync_header_message_error_suffix":{
-    "message":"Please try again later.",
-    "description":"Part of an sync error message to users on the Options page or AdBlock popup menu."
-  },
   "sync_header_message_old_commit_version_part_2":{
     "message":"We’ve synced this extension and reverted your changes.",
     "description":"part 2 of a message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
   },
   "sync_header_message_old_commit_version_part_3":{
-    "message":"Please make your changes again.",
+    "message":"Please reload the page and make your changes again.",
     "description":"part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
   },
-  "sync_header_error_revert_message_part_2":{
-    "message":"Your changes were reverted.",
-    "description":"part 2 of a message to users on the sync page when sending the sync data fails for some unknown reason."
-  },
   "sync_header_error_save_message_part_2":{
-    "message":"We could not sync your changes.",
+    "message":"This extension is out of sync.",
     "description":"part 2 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
   },
   "sync_header_error_save_message_part_3":{
-    "message":"Please try to manually sync later.",
+    "message":"Please try manual sync later.",
     "description":"part 3 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
   },
   "sync_header_message_old_commit_version_customize_tab_part_2":{
@@ -2372,20 +2352,6 @@
   "sync_header_message_old_commit_version_customize_tab_part_3":{
     "message":"Please copy your custom rules to the clipboard, reload the page, and make your changes again.",
     "description":"part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
-  },
-  "sync_header_error_message_menu_part_3":{
-    "message":"Please make your changes again.",
-    "description":"part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
-  },
-  "sync_show_name_text":{
-    "message":"[[$name$]] is now synced",
-    "description":"message to users on the sync page when which includes the name of the extension / device",
-    "placeholders":{
-      "name":{
-        "content":"$1",
-        "example":"Device 1"
-      }
-    }
   },
   "sync_device_name_list_updated_at_msg":{
     "message":"last updated on $timestamp$",
@@ -2398,24 +2364,12 @@
     }
   },
   "sync_extension_name_placeholder":{
-    "message":"Name this extension…",
+    "message":"Name this extension so you can tell it apart from your others...",
     "description":"placeholder text in the extension / device name field on the sync page"
   },
   "sync_verify_turn_on_text":{
-    "message":"Turning on sync will clear existing settings information for this extension.",
+    "message":"Turning on Backup & Sync will clear existing settings information from this extension.",
     "description":"message text in the extension / device name field on the sync page"
-  },
-  "sync_update_now_section_title":{
-    "message":"Manual Sync",
-    "description":"section title for the sync now section on the sync page"
-  },
-  "sync_now_message_part_I":{
-    "message":"I'll update automatically.",
-    "description":"message text in the on the sync page "
-  },
-  "sync_now_message_part_II":{
-    "message":"You can also manually sync.",
-    "description":"message text in the on the sync page "
   },
   "sync_now_btn_text":{
     "message":"Sync now",
@@ -2428,6 +2382,54 @@
   "sync_message_old_version_part_2":{
     "message":"Please [[update AdBlock]] so we can sync your settings.",
     "description":"button text on the Sync sub-tab of the Options page"
+  },
+  "sync_premium_cta":{
+    "message":"You’ll be an ad blocking pro with Premium features like Sync.",
+    "description":"AdBlock Premium CTA on the Sync tab"
+  },
+  "backup_sync_settings":{
+    "message":"Automatically back up and sync your AdBlock settings across all your devices.",
+    "description":"Description of Sync on Sync tab"
+  },
+  "set_preferences_once":{
+    "message":"Set your preferences once, and never worry about data loss or making the same change on multiple extensions again.",
+    "description":"Description of Sync on Sync tab"
+  },
+  "get_sync":{
+    "message":"Get Sync",
+    "description":"Link to pay for Sync (part of AdBlock Premium)"
+  },
+  "check_sync_status":{
+    "message":"Check Sync Status",
+    "description":"Button on Sync tab that checks the status of the Sync feature"
+  },
+  "show_details":{
+    "message":"Show Details",
+    "description":"Toggle that shows the details section"
+  },
+  "hide_details":{
+    "message":"Hide Details",
+    "description":"Toggle that hides the details section"
+  },
+  "add_this_extension":{
+    "message":"Add this Extension",
+    "description":"Button on Sync tab that adds this extension to the Sync process"
+  },
+  "add":{
+    "message":"Add",
+    "description":"Button on Sync tab that adds an entered name for this extension to the list of synced extensions"
+  },
+  "this_extension":{
+    "message":"(this extension)",
+    "description":"description for name of the current extension"
+  },
+  "confirm_delete_extension":{
+    "message":"Are you sure you want to delete this extension?",
+    "description":"Warning/confirmation message shown when the user clicks on the delete icon for this extension"
+  },
+  "delete":{
+    "message":"Delete",
+    "description":"Text on a delete button"
   },
   "filteracceptable_ads_privacy":{
     "message":"Acceptable Ads Privacy",
@@ -2511,7 +2513,7 @@
   },
   "new_badge":{
     "message":"New",
-    "description":"DO NOT TRANSLATE. Max 4 characters. Text in the badge of our extension toolbar icon."
+    "description":"Max 4 characters. If it's not possible to translate in four characters or less, please don't translate. Text in the badge of our extension toolbar icon."
   },
   "new_cta_default_text":{
     "message":"Upgrade your AdBlock",
@@ -2830,7 +2832,7 @@
     "description":"Text in the aria-label attribute of an icon showing an option is selected."
   },
   "learn_more_without_period":{
-    "message":"Learn more",
+    "message":"Learn More",
     "description":"Text in the aria-label attribute of an icon linking to extra information about an option."
   },
   "update_filter_lists_now":{
@@ -2872,5 +2874,97 @@
   "do_not_swap_ads":{
     "message":"Don't swap ads",
     "description":"Text of a clickable option to stop swapping ads with images in the Options page Image Swap tab."
+  },
+  "premium":{
+    "message":"Premium",
+    "description": "Abbreviated name of the AdBlock upgrade."
+  },
+  "adblock_premium":{
+    "message":"AdBlock Premium",
+    "description": "Full name of the AdBlock upgrade."
+  },
+  "premium_enrollment_title": {
+    "message": "AdBlock Premium is set up on this browser!",
+    "description": "DO NOT TRANSLATE. The title of the AdBlock Premium enrollment box."
+  },
+  "premium_enrollment_success": {
+    "message": "You can use the magic link in your confirmation email to unlock AdBlock Premium in other Chrome browsers.",
+    "description": "DO NOT TRANSLATE. AdBlock Premium successfully licensed message."
+  },
+  "premium_enrollment_link_info": {
+    "message": "Clicking the link makes it easy to set up AdBlock Premium in other Chrome browsers.",
+    "description": "DO NOT TRANSLATE. Explains what happens when clicking the magic link."
+  },
+  "premium_page_title":{
+    "message":"AdBlock Premium: A better way to browse the internet.",
+    "description":"The text of the header the AdBlock Premium Options page"
+  },
+  "premium_benefits_explained":{
+    "message":"In exchange for supporting us by enabling AdBlock Premium, you'll get access to the latest tools and features as soon as they're released.",
+    "description":"Main text of the teaser AdBlock Premium feature in the AdBlock Premium tab of the Options page"
+  },
+  "manage_subscription":{
+    "message":"Manage your subscription",
+    "description":"Text of link to manage the user's Premium subscription on the Premium tab of the Options page"
+  },
+  "save_custom_settings_cta":{
+    "message":"Do you want to save your custom ad blocking settings and use them in every browser?",
+    "description":"Part 1 of a Premium call-to-action on the Options page"
+  },
+  "try_backup_sync":{
+    "message":"If so, try our Backup & Sync feature.",
+    "description":"Part 2 of a Premium call-to-action on the Options page"
+  },
+  "wont_show_again":{
+    "message":"OK, we won't show you this message again.",
+    "description":"Message shown when user opts out of call-to-action"
+  },
+  "check_out_premium":{
+    "message":"If you want to find out more, check out [[Premium]].",
+    "description":"Part 2 of message shown when user opts out of call-to-action"
+  },
+  "successfully_whitelisted":{
+    "message":"You have successfully whitelisted this URL.",
+    "description":"Part of a message on the whitelist wizard"
+  },
+  "future_show_ads":{
+    "message":"In future, these pages will continue to show ads.",
+    "description":"Part of a message on the whitelist wizard"
+  },
+  "change_behavior_settings":{
+    "message":"You can change this behavior in your [[settings]].",
+    "description":"Part of a message on the whitelist and blacklist wizards"
+  },
+  "whitelisted_a_site":{
+    "message":"You just whitelisted a site!",
+    "description":"Part 1 of a call-to-action on the whitelist wizard"
+  },
+  "never_lose_settings":{
+    "message":"Apply this setting to all of your devices and ensure you never lose your AdBlock settings with Backup & Sync.",
+    "description":"Part 2 of a call-to-action on the whitelist and blacklist wizards"
+  },
+  "successfully_blocked_ad":{
+    "message":"You have successfully blocked this ad.",
+    "description":"Part of a message on the blacklist wizard"
+  },
+  "future_ads_blocked":{
+    "message":"In future, ads that match these rules will continue to be blocked.",
+    "description":"Part of a message on the blacklist wizard"
+  },
+  "rule_added_filters":{
+    "message":"The following rule has been added to your filters:",
+    "description":"Part of a message on the blacklist wizard"
+  },
+  "blocked_something":{
+    "message":"You just blocked something on this site!",
+    "description":"Part 1 of a call-to-action on the blacklist wizard"
+  },
+  "adblock_looked_like_this":{
+    "message":"What if AdBlock looked like this?",
+    "description":"Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_themes":{
+    "message":"Check out themes!",
+    "description":"Part 2 of a call-to-action on the Popup menu"
   }
 }

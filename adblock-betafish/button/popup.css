@@ -83,13 +83,6 @@ a:hover {
 .italic {
   font-style: italic;
 }
-.myadblocklogo {
-  float: right;
-  height: 18px;
-  width: 18px;
-  margin-right: 7px;
-  margin-top: 5px;
-}
 #div_adblock_protect_enrollment {
   height: 98px;
   background-color: #2283f3;
@@ -203,38 +196,26 @@ a:hover {
   opacity: 1;
 }
 
-.myadblocklogo {
-  float: right;
-  height: 18px;
-  width: 18px;
-  margin-right: 7px;
-  margin-top: 5px;
-}
-
 #div_sync_outofdate_error_msg,
-#div_sync_error_msg {
-  background-color: var(--sync-error-msg-background-color);
-  color: var(--sync-error-msg-color);
-  text-align: center;
-  cursor: unset;
-  line-height: 22px;
-  padding: 0px 4px 0px 10px;
-  font-size: 14px;
-  display: none;
-}
-
+#div_sync_error_msg,
 #div_sync_outofdate_error_msg a,
 #div_sync_outofdate_error_msg a span {
   background-color: var(--sync-error-msg-background-color);
-  color: var(--sync-error-msg-color);
+  color: var(--sync-msg-color);
   text-align: center;
   cursor: pointer;
   line-height: 22px;
   padding: 0px 4px 0px 10px;
   font-size: 14px;
 }
+#div_sync_outofdate_error_msg,
+#div_sync_error_msg {
+  cursor: unset;
+  display: none;
+}
 #div_sync_outofdate_error_msg a span {
-  color: var(--link-color);
+  color: var(--sync-msg-color);
+  text-decoration: underline;
   padding: 0px 0px 0px 0px;
 }
 #div_sync_outofdate_error_msg a:hover {

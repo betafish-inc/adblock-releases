@@ -10,7 +10,6 @@ const { checkWhitelisted } = require('whitelisting');
 const { EventEmitter } = require('events');
 const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
 
-const MY_ADBLOCK_FEATURE_VERSION = 0;
 const licenseNotifier = new EventEmitter();
 
 const License = (function getLicense() {
@@ -34,17 +33,20 @@ const License = (function getLicense() {
       licenseURL: 'https://myadblock-licensing.firebaseapp.com/license/',
       syncURL: 'https://myadblock.sync.getadblock.com/v1/sync',
       subscribeKey: 'sub-c-9eccffb2-8c6a-11e9-97ab-aa54ad4b08ec',
-      payURL: 'https://getadblock.com/myadblock/enrollment/v4/',
+      payURL: 'https://getadblock.com/premium/enrollment/',
     },
     dev: {
       licenseURL: 'https://dev.myadblock.licensing.getadblock.com/license/',
       syncURL: 'https://dev.myadblock.sync.getadblock.com/v1/sync',
       subscribeKey: 'sub-c-9e0a7270-83e7-11e9-99de-d6d3b84c4a25',
-      payURL: 'https://getadblock.com/myadblock/enrollment/v4/?testmode=true',
+      payURL: 'https://getadblock.com/premium/enrollment/?testmode=true',
     },
   };
+  STATS.untilLoaded((userID) => {
+    mabConfig.prod.payURL = `${mabConfig.prod.payURL}?u=${userID}`;
+    mabConfig.dev.payURL = `${mabConfig.dev.payURL}&u=${userID}`;
+  });
   const MAB_CONFIG = isProd ? mabConfig.prod : mabConfig.dev;
-
 
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm && alarm.name === licenseAlarmName) {
@@ -295,7 +297,7 @@ const License = (function getLicense() {
     },
     // activate the current license and configure the extension in licensed mode.
     // Call with an optional delay parameter (in milliseconds) if the first license
-    // update should be delayed by a custom delay (default is 30 minutes).
+    // update should be delayed by a custom delay (default is 0 minutes).
     activate(delayMs) {
       let delay = delayMs;
       const currentLicense = License.get() || {};
@@ -303,7 +305,7 @@ const License = (function getLicense() {
       License.set(currentLicense);
       reloadOptionsPageTabs();
       if (typeof delay !== 'number') {
-        delay = 30 * 60 * 1000; // 30 minutes
+        delay = 0; // 0 minutes
       }
       if (!this.licenseTimer) {
         this.licenseTimer = window.setTimeout(() => {
@@ -417,7 +419,7 @@ chrome.runtime.onMessage.addListener(
             // Set up extension with MAB enrollment
             License.checkPingResponse(JSON.stringify({ myadblock_enrollment: true }));
             // Assume the magic link activates the license and update immediately
-            License.activate(0);
+            License.activate();
           } else {
             sendResponse({ ack: false, status });
           }
@@ -521,17 +523,6 @@ License.ready().then(() => {
       }
     }
   });
-
-  chrome.extension.onRequest.addListener(
-    (request, sender) => {
-      if (request.command !== 'picreplacement_inject_jquery') {
-        return;
-      } // not for us
-      if (sender.url && sender.url.startsWith('http') && sender.tab && sender.tab.id) {
-        chrome.tabs.executeScript(sender.tab.id, { allFrames: request.allFrames, file: 'adblock-jquery.js' });
-      }
-    },
-  );
 });
 
 License.initialize(() => {

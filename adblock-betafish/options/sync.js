@@ -2,12 +2,11 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global backgroundPage, License, localizePage, SyncService, translate, FIVE_SECONDS,
-   settingsNotifier, processReplacementChildren */
+   settingsNotifier, processReplacementChildren, MABPayment, storageSet, storageGet */
 
 const onSyncDataInitialGetError = function () {
   $('#show-name-div').hide();
-  $('#sync-now-div').hide();
-  $('#turn-on-div').show();
+  $('#last-sync-now').hide();
   SyncService.disableSync();
   SyncService.syncNotifier.off('sync.data.getting.error.initial.fail', onSyncDataInitialGetError);
 };
@@ -18,40 +17,99 @@ const onSyncDataInitialGetError = function () {
     month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit',
   };
   const MAX_NAME_LENGTH = 40;
+  let showSyncDetails = true;
+  const storedShowSyncDetails = storageGet('showSyncDetails');
+  if (storedShowSyncDetails !== undefined) {
+    showSyncDetails = storedShowSyncDetails;
+  }
 
-  $(document).ready(() => {
-    localizePage();
-
-    const getAllExtensionNames = function () {
-      SyncService.getAllExtensionNames((extensionNameResponse) => {
-        if (extensionNameResponse && extensionNameResponse.hasData && extensionNameResponse.data) {
-          $('#sync_extension_no_extension_msg').hide();
-          $('.extension-name-item').remove();
-          deviceNameArray = [];
-          for (let inx = 0; inx < extensionNameResponse.data.length; inx++) {
-            const deviceInfo = extensionNameResponse.data[inx];
-            if (deviceInfo && deviceInfo.deviceName) {
-              deviceNameArray.push(deviceInfo.deviceName);
-              $('#sync-extension-list-div')
-                .append($('<p></p>')
-                  .text(deviceInfo.deviceName)
-                  .addClass('extension-name-item')
-                  .addClass('bottom-line'));
-            }
-          }
-          const now = new Date();
-          const timestampMsg = translate(
-            'sync_device_name_list_updated_at_msg',
-            now.toLocaleString(navigator.languages[0], dateFormatOptions),
-          );
-          $('#last-updated-on').text(timestampMsg);
-          if (!deviceNameArray.length) {
-            $('#sync_extension_no_extension_msg').show();
+  const getAllExtensionNames = function () {
+    SyncService.getAllExtensionNames((extensionNameResponse) => {
+      if (extensionNameResponse && extensionNameResponse.hasData && extensionNameResponse.data) {
+        $('#sync_extension_no_extension_msg').hide();
+        $('.extension-name-item').remove();
+        deviceNameArray = [];
+        const currentExtensionName = SyncService.getCurrentExtensionName();
+        if (currentExtensionName) {
+          $('#current-extension-name').text(currentExtensionName);
+          $('#current-extension-name-block').show();
+        }
+        for (let inx = 0; inx < extensionNameResponse.data.length; inx++) {
+          const deviceInfo = extensionNameResponse.data[inx];
+          if (
+            deviceInfo
+            && deviceInfo.deviceName
+            && deviceInfo.deviceName !== currentExtensionName
+          ) {
+            deviceNameArray.push(deviceInfo.deviceName);
+            $('#sync-extension-list-div')
+              .append($('<p></p>')
+                .text(deviceInfo.deviceName)
+                .addClass('extension-name-item'));
           }
         }
-      });
-    };
+        const now = new Date();
+        const timestampMsg = translate(
+          'sync_device_name_list_updated_at_msg',
+          now.toLocaleString(navigator.languages[0], dateFormatOptions),
+        );
+        $('#last-updated-on').text(timestampMsg);
+        if (!deviceNameArray.length && !currentExtensionName) {
+          $('#sync_extension_no_extension_msg').show();
+        }
+      }
+    });
+  };
 
+  const onLicenseUpdating = function () {
+    $('.sync-header-message-text').text(translate('sync_header_message_getting_license'));
+    $('#sync-tab-message')
+      .removeClass('sync-message-good')
+      .addClass('sync-message-hidden');
+    $('.sync-header-message')
+      .removeClass('sync-message-hidden')
+      .addClass('sync-message-good')
+      .removeClass('sync-message-error');
+  };
+
+  const onLicenseUpdated = function () {
+    // eslint-disable-next-line no-use-before-define
+    removeSyncListeners();
+    window.location.reload();
+  };
+
+  const onLicenseUpdatedError = function () {
+    // Currently commented out:
+    // get error handling beyond the above code is not defined for this version
+  };
+
+  const removeSyncListeners = function () {
+    // eslint-disable-next-line no-use-before-define
+    settingsNotifier.off('settings.changed', onSettingsChanged);
+    License.licenseNotifier.off('license.updating', onLicenseUpdating);
+    License.licenseNotifier.off('license.updated', onLicenseUpdated);
+    License.licenseNotifier.off('license.updated.error', onLicenseUpdatedError);
+    SyncService.syncNotifier.off(
+      'sync.data.getting.error.initial.fail',
+      onSyncDataInitialGetError,
+    );
+  };
+
+  const showOrHideSyncDetails = function () {
+    if (showSyncDetails) {
+      $('#toggle-sync-details p').text(translate('hide_details'));
+      $('#toggle-sync-details i').text('keyboard_arrow_up');
+      $('#sync-box').show();
+      $('#sync-title-block').removeClass('details-hidden');
+    } else {
+      $('#toggle-sync-details p').text(translate('show_details'));
+      $('#toggle-sync-details i').text('keyboard_arrow_down');
+      $('#sync-box').hide();
+      $('#sync-title-block').addClass('details-hidden');
+    }
+  };
+
+  const documentEventsHandling = () => {
     const observer = new MutationObserver(((mutations) => {
       for (const mutation of mutations) {
         if ($('#sync').is(':visible') && mutation.attributeName === 'style') {
@@ -59,69 +117,17 @@ const onSyncDataInitialGetError = function () {
         }
       }
     }));
+
     const target = document.querySelector('#sync');
     observer.observe(target, {
       attributes: true,
     });
 
-    const onLicenseUpdating = function () {
-      $('.sync-header-message-text').text(translate('sync_header_message_getting_license'));
-      $('.sync-header-error-icon').hide();
-      $('.sync-header-message')
-        .removeClass('sync-header-message-hidden')
-        .addClass('sync-header-message-normal')
-        .removeClass('sync-message-error');
-    };
-
-    const onSettingsChanged = function (name, currentValue) {
-      if (!$('#sync').is(':visible')) {
-        return;
-      }
-      // if another options page is opened, and a change is made to the sync setting,
-      // reload this page
-      if (name === 'sync_settings' && currentValue && !$('#btnTurnSyncOff').is(':visible')) {
-        // eslint-disable-next-line no-use-before-define
-        removeSyncListeners();
-        window.location.reload();
-      }
-      if (name === 'sync_settings' && !currentValue && $('#btnTurnSyncOff').is(':visible')) {
-        // eslint-disable-next-line no-use-before-define
-        removeSyncListeners();
-        window.location.reload();
-      }
-    };
-
-    const onLicenseUpdated = function () {
-      // eslint-disable-next-line no-use-before-define
-      removeSyncListeners();
-      window.location.reload();
-    };
-
-    const onLicenseUpdatedError = function () {
-      // Currently commented out:
-      // get error handling beyond the above code is not defined for this version
-    };
-
-    const removeSyncListeners = function () {
-      settingsNotifier.off('settings.changed', onSettingsChanged);
-      License.licenseNotifier.off('license.updating', onLicenseUpdating);
-      License.licenseNotifier.off('license.updated', onLicenseUpdated);
-      License.licenseNotifier.off('license.updated.error', onLicenseUpdatedError);
-      SyncService.syncNotifier.off(
-        'sync.data.getting.error.initial.fail',
-        onSyncDataInitialGetError,
-      );
-    };
-
-    settingsNotifier.on('settings.changed', onSettingsChanged);
     SyncService.syncNotifier.on('sync.data.getting.error.initial.fail', onSyncDataInitialGetError);
 
-    window.addEventListener('unload', () => {
-      removeSyncListeners();
-    });
-
+    // Click handlers
     $('#btnCheckStatus').click(() => {
-      $('#btnCheckStatus').removeClass('red').addClass('grey');
+      $('#btnCheckStatus').addClass('grey');
       $('#btnCheckStatus').attr('disabled', true);
       License.licenseNotifier.on('license.updating', onLicenseUpdating);
       License.licenseNotifier.on('license.updated', onLicenseUpdated);
@@ -129,50 +135,68 @@ const onSyncDataInitialGetError = function () {
       License.updatePeriodically();
     });
 
-    $('#btnTurnSyncOn').click(() => {
-      $('#turn-on-div').fadeOut('slow', () => {
+    $('#toggle-sync-details').click(() => {
+      showSyncDetails = !showSyncDetails;
+      storageSet('showSyncDetails', showSyncDetails);
+      showOrHideSyncDetails();
+    });
+
+    $('#btnAddThisExtension').click(() => {
+      $('#btnAddThisExtension').fadeOut('slow', () => {
         if (deviceNameArray.length === 0) {
-          $('#error-message').text('');
           $('#enter-name-div').show();
-          $('#enter-name-sub-div').css('display', 'flex');
+          $('#btnCancelSyncName').show();
         } else {
-          $('#verify-overwrite-div').css('display', 'flex');
+          $('#show-verify-message').show();
+          $('#verify-overwrite-div').show();
+          $('#sync_extension_section_list_title').hide();
         }
       });
     });
 
     $('#btnVerifyCancel').click(() => {
       $('#verify-overwrite-div').fadeOut('slow', () => {
-        $('#btnTurnSyncOn').addClass('red');
-        $('#turn-on-div').fadeIn('slow');
+        $('#show-verify-message').hide();
+        $('#btnAddThisExtension').show();
+        $('#sync_extension_section_list_title').show();
       });
     });
 
     $('#btnVerifyOK').click(() => {
       $('#verify-overwrite-div').fadeOut('slow', () => {
-        $('#error-message').text('');
+        $('#show-verify-message').hide();
+        $('#sync_extension_section_list_title').show();
         $('#enter-name-div').show();
-        $('#enter-name-sub-div').css('display', 'flex');
+        $('#btnCancelSyncName').show();
       });
     });
 
-    $('#btnTurnSyncOff').click(() => {
-      const currentExtensionName = SyncService.getCurrentExtensionName();
-      $(`p:contains("${currentExtensionName}")`).remove();
-      $('#sync-now-div').hide();
+    $('#extension-delete-icon').click(() => {
+      $('#extension-delete-icon').fadeOut('slow', () => {
+        $('#extension-delete-block').show();
+      });
+    });
+
+    $('#extension-delete-cancel').click(() => {
+      $('#extension-delete-block').fadeOut('slow', () => {
+        $('#extension-delete-icon').show();
+      });
+    });
+
+    $('#extension-delete-button').click(() => {
+      $('#last-sync-now').hide();
       backgroundPage.setSetting('sync_settings', false);
       SyncService.removeCurrentExtensionName();
       SyncService.disableSync();
       removeSyncListeners();
+      $('#current-extension-name-block').fadeOut('slow', () => {
+        $('#extension-delete-block').hide();
+        $('#extension-delete-icon').show();
+        $('#btnAddThisExtension').fadeIn('slow');
+      });
       setTimeout(() => {
         getAllExtensionNames();
       }, FIVE_SECONDS); // wait 5 seconds to allow the above remove to complete
-      $('#show-name-div').fadeOut('slow', () => {
-        $('#error-message').text('');
-        $('#btnTurnSyncOn').addClass('red');
-        $('#turn-on-div').fadeIn('slow');
-        $('#extension-name').val('');
-      });
     });
 
     $('#btnSaveSyncName').click(() => {
@@ -180,6 +204,7 @@ const onSyncDataInitialGetError = function () {
       let extensionName = $('#extension-name').val().trim();
       if (!extensionName) {
         $('#error-message').text(translate('sync_turn_on_invalid_name_text'));
+        $('#extension-name').addClass('input-error').removeClass('accent-text');
         return;
       }
       if (extensionName.length > MAX_NAME_LENGTH) {
@@ -187,14 +212,18 @@ const onSyncDataInitialGetError = function () {
       }
       if (deviceNameArray.includes(extensionName)) {
         $('#error-message').text(translate('sync_turn_on_duplicate_name_text'));
+        $('#extension-name').addClass('input-error').removeClass('accent-text');
         return;
       }
+      $('#extension-name').addClass('accent-text').removeClass('input-error');
       SyncService.setCurrentExtensionName(extensionName);
       SyncService.enableSync(true);
       $('#enter-name-div').fadeOut('slow', () => {
-        processReplacementChildren($('#show-name-message'), extensionName, 'sync_show_name_text');
-        $('#show-name-div').show();
-        $('#sync-now-div').show();
+        $('#current-extension-name').text(extensionName);
+        $('#current-extension-name-block').show();
+        $('#last-sync-now').show();
+        $('#sync_extension_no_extension_msg').hide();
+        $('#btnCancelSyncName').hide();
       });
       setTimeout(() => {
         getAllExtensionNames();
@@ -203,8 +232,8 @@ const onSyncDataInitialGetError = function () {
 
     $('#btnCancelSyncName').click(() => {
       $('#enter-name-div').fadeOut('slow', () => {
-        $('#turn-on-div').fadeIn('slow');
-        $('#btnTurnSyncOn').addClass('red');
+        $('#btnCancelSyncName').hide();
+        $('#btnAddThisExtension').fadeIn('slow');
       });
     });
 
@@ -213,24 +242,69 @@ const onSyncDataInitialGetError = function () {
         SyncService.processUserSyncRequest();
       }, 0);
     });
+  };
 
-    if (License.isActiveLicense() && License.get() && !License.get().licenseId) {
-      $('#sync-tab-no-license-message').text(translate('sync_header_message_no_license'));
-      $('.sync-tab-message')
-        .removeClass('sync-tab-message-hidden')
-        .addClass('sync-tab-message-normal');
-      $('#no-license-div').show();
-    } else if (License.isActiveLicense() && License.get() && License.get().licenseId) {
-      getAllExtensionNames();
-      const currentExtensionName = SyncService.getCurrentExtensionName();
-      if (currentExtensionName && backgroundPage.getSettings().sync_settings) {
-        const $nameMessageEl = $('#show-name-message');
-        processReplacementChildren($nameMessageEl, currentExtensionName, 'sync_show_name_text');
-        $('#show-name-div').show();
-        $('#sync-now-div').show();
-        return;
-      }
-      $('#turn-on-div').show();
+  $(document).ready(() => {
+    if (!License || $.isEmptyObject(License) || !MABPayment) {
+      return;
     }
+
+    const payInfo = MABPayment.initialize('sync');
+    if (License.shouldShowMyAdBlockEnrollment()) {
+      MABPayment.freeUserLogic(payInfo);
+    } else if (License.isActiveLicense()) {
+      MABPayment.paidUserLogic(payInfo);
+    }
+
+    if (License.isActiveLicense() && License.get()) {
+      $('#toggle-sync-details').show();
+      if (!License.get().licenseId) {
+        $('#sync-tab-no-license-message').text(translate('sync_header_message_no_license'));
+        $('#sync-tab-message')
+          .removeClass('sync-message-hidden')
+          .addClass('sync-message-good');
+        $('#btnCheckStatus').show();
+      } else {
+        getAllExtensionNames();
+        const currentExtensionName = SyncService.getCurrentExtensionName();
+        $('#sync-info-block').show();
+        if (currentExtensionName && backgroundPage.getSettings().sync_settings) {
+          $('#last-sync-now').show();
+          $('#btnAddThisExtension').hide();
+        } else {
+          $('#btnAddThisExtension').show();
+          $('#last-sync-now').hide();
+        }
+      }
+    } else {
+      $('#get-sync').attr('href', License.MAB_CONFIG.payURL).show();
+    }
+
+    showOrHideSyncDetails();
+    documentEventsHandling();
+  });
+
+  const onSettingsChanged = function (name, currentValue) {
+    if (!$('#sync').is(':visible')) {
+      return;
+    }
+    // if another options page is opened, and a change is made to the sync setting,
+    // reload this page
+    if (name === 'sync_settings' && currentValue && !$('#current-extension-name-block').is(':visible')) {
+      // eslint-disable-next-line no-use-before-define
+      removeSyncListeners();
+      window.location.reload();
+    }
+    if (name === 'sync_settings' && !currentValue && $('#current-extension-name-block').is(':visible')) {
+      // eslint-disable-next-line no-use-before-define
+      removeSyncListeners();
+      window.location.reload();
+    }
+  };
+
+  settingsNotifier.on('settings.changed', onSettingsChanged);
+
+  window.addEventListener('unload', () => {
+    removeSyncListeners();
   });
 }());

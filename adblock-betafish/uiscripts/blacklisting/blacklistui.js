@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global ClickWatcher, ElementChain, translate, BGcall */
+/* global ClickWatcher, ElementChain, translate, chrome */
 
 // Requires clickwatcher.js and elementchain.js and jQuery
 
@@ -189,21 +189,21 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
         if (!/##/.test(customFilter)) {
           customFilter = `##${customFilter}`;
         }
-        BGcall('parseFilter', customFilter, (result) => {
-          if (result.filter) {
-            BGcall('addCustomFilter', result.filter.text, (ex) => {
-              if (!ex) {
+        chrome.runtime.sendMessage({ command: 'parseFilter', filterTextToParse: customFilter }).then((parseResult) => {
+          if (parseResult && parseResult.filter && !parseResult.error) {
+            chrome.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: parseResult.filter.text }).then((response) => {
+              if (!response.error) {
                 that.blockListViaCSS([customFilter.substr(customFilter.indexOf('##') + 2)]);
                 that.fire('block');
                 $pageTwoCancelBtn.click();
               } else {
                 // eslint-disable-next-line no-alert
-                alert(translate('blacklistereditinvalid1', ex));
+                alert(translate('blacklistereditinvalid1', response.error));
               }
             });
-          } else if (result.error && result.error.type) {
+          } else if (parseResult.error) {
             // eslint-disable-next-line no-alert
-            alert(translate('blacklistereditinvalid1', result.error.type));
+            alert(translate('blacklistereditinvalid1', parseResult.error));
           }
         });
       }
@@ -213,10 +213,15 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
   $pageTwoBlockItBtn.click(() => {
     if ($summary.text().length > 0) {
       const filter = `${document.location.hostname}##${$summary.text()}`;
-      BGcall('addCustomFilter', filter, () => {
-        that.blockListViaCSS([$summary.text()]);
-        that.fire('block');
-        $pageTwoCancelBtn.click();
+      chrome.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then((response) => {
+        if (!response.error) {
+          that.blockListViaCSS([$summary.text()]);
+          that.fire('block');
+          $pageTwoCancelBtn.click();
+        } else {
+          // eslint-disable-next-line no-alert
+          alert(translate('blacklistereditinvalid1', response.error));
+        }
       });
     } else {
       // eslint-disable-next-line no-alert

@@ -88,7 +88,7 @@ $(document).ready(() => {
   // Show the changelog
   selected('#whatsnew_link', () => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', chrome.extension.getURL('CHANGELOG.txt'), false);
+    xhr.open('GET', chrome.runtime.getURL('CHANGELOG.txt'), false);
     xhr.send();
     const object = xhr.responseText;
     $('#changes').text(object).css({ width: '670px', height: '200px' }).fadeIn();

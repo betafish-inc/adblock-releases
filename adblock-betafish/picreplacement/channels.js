@@ -80,7 +80,6 @@ Channels.prototype = {
     this.saveToStorage();
     const that = this;
     minjQuery(channel).bind('updated', () => {
-      chrome.extension.sendRequest({ command: 'channel-updated', id });
       if (that.channelGuide[id].enabled) {
         that.channelGuide[id].channel.prefetch();
       }

@@ -274,30 +274,6 @@ const sessionStorageSet = function (key, value) {
   }
 };
 
-// Run a function on the background page.
-// Inputs (positional):
-// first, a string - the name of the function to call
-// then, any arguments to pass to the function (optional)
-// then, a callback:function(return_value:any) (optional)
-const BGcall = function (...args) {
-  const params = [];
-  for (let i = 0; i < args.length; i++) {
-    params.push(args[i]);
-  }
-  const fn = params.shift();
-  const hasCallback = (typeof params[params.length - 1] === 'function');
-  const callback = (hasCallback ? params.pop() : function callback() {});
-  chrome.runtime.sendMessage({
-    command: 'call',
-    fn,
-    args: params,
-  }).then((response) => {
-    if (hasCallback) {
-      callback(response);
-    }
-  });
-};
-
 // Inputs: key:string.
 // Returns object from localStorage.
 // The following two functions should only be used when
@@ -455,7 +431,6 @@ Object.assign(window, {
   sessionStorageGet,
   storageGet,
   storageSet,
-  BGcall,
   parseUri,
   determineUserLanguage,
   getUILanguage,

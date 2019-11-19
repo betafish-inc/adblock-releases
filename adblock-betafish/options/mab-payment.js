@@ -14,7 +14,7 @@ const MABPayment = (function mabPayment() {
       return {
         id: `locked-user-pay-section-${page}`,
         linkId: `get-it-now-${page}`,
-        url: License.MAB_CONFIG.payUrl,
+        url: License.MAB_CONFIG.payURL,
       };
     },
     // Called if the user hasn't paid and MAB is locked

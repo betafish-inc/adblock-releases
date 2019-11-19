@@ -13,6 +13,7 @@ body {
   font-size: 24px;
   font-weight: bold;
   font-style: normal;
+  margin: 20px 0;
   color: var(--options-page-accent-text);
 }
 .paragraph-title {
@@ -48,6 +49,9 @@ a .link-text-color:hover {
 ::placeholder,
 ::-webkit-input-placeholder {
   color: #999999;
+}
+.sync-message-container {
+  height: 40px;
 }
 
 /* GENERAL */
@@ -188,6 +192,10 @@ a .link-text-color:hover {
 .btn.red:hover {
   background-color: var(--options-button-bg-hover);
 }
+.btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
 .btn.yellow {
   color: var(--mab-button-text);
   background-color: var(--mab-button-bg);
@@ -212,7 +220,7 @@ a .link-text-color:hover {
 .option-page-content {
   display: flex;
   flex-direction: column;
-  margin: 24px 20px;
+  margin: 0 20px 24px 20px;
   max-width: 711px;
   width: 711px;
 }

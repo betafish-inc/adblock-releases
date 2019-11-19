@@ -59,6 +59,10 @@
     $('input.invisible-overlay').prop('hidden', true);
     $('.channel-box > a[id^=get-it-now]').closest('li').addClass('locked');
     $('.channel-box').first().closest('li').addClass('selected');
+    $('.locked > a[id^=get-it-now]').each((i, linkWithoutUserId) => {
+      const link = linkWithoutUserId;
+      link.href = License.MAB_CONFIG.payURL;
+    });
 
     // Events
     $('.locked > a[id^=get-it-now]').hover(

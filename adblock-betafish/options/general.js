@@ -124,8 +124,10 @@ const initialize = function init() {
     if (name === 'youtube_channel_whitelist') {
       if (isEnabled) {
         backgroundPage.addYouTubeHistoryStateUpdateHanlder();
+        backgroundPage.addYTChannelListeners();
       } else {
         backgroundPage.removeYouTubeHistoryStateUpdateHanlder();
+        backgroundPage.removeYTChannelListeners();
       }
     }
 

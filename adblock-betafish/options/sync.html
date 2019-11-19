@@ -1,133 +1,186 @@
 <!DOCTYPE html>
-<div class="sync-tab-message page-title sync-tab-message-hidden">
-  <span id="sync-tab-no-license-message" class="sync-tab-message-text"></span>
+
+<div class="sync-message-container">
+  <div id="sync-tab-message" class="sync-message-hidden">
+    <div class="sync-message-box">
+      <i class="material-icons md-24" role="img" aria-hidden="true">access_time</i>
+      <span class="sync-tab-message-text" i18n="sync_header_message_no_license"></span>
+    </div>
+  </div>
 </div>
+
 <div class="option-page-box mab-page-box">
-  <div class="option-page-content">
+  <div class="option-page-content mab-sub-tab">
     <section>
-      <!-- Icon & Title -->
-      <div class="align-items-center">
-        <i
-          id="sync-icon"
-          class="material-icons black md-24 header-icon"
-          role="img"
-          aria-hidden="true"
-          >sync</i
-        >
-        <h1 i18n="sync_tab_item" class="page-title"></h1>
-      </div>
-      <!--Step 0: wait for license -->
-      <div class="do-not-display" id="no-license-div">
-        <div
-          i18n="sync_check_status_text"
-          i18n_replacement_el="btnCheckStatus"
-          class="add-space-between align-items-center section-padding sync-sub-header"
-        >
-          <button class="btn right red button-size" type="button" id="btnCheckStatus"></button>
-        </div>
-      </div>
-      <!--Step 1a: Turn on -->
-      <div class="do-not-display" id="turn-on-div">
-        <div
-          i18n="sync_turn_on_text"
-          i18n_replacement_el="btnTurnSyncOn"
-          class="add-space-between align-items-center section-padding sync-sub-header"
-        >
-          <button class="btn right red button-size" type="button" id="btnTurnSyncOn"></button>
-        </div>
-      </div>
-      <!--Step 1b: verify with user to overwrite -->
-      <div class="do-not-display" id="verify-overwrite-div">
+      <!-- Start: Payment section visible only to free MAB users -->
+      <section id="locked-user-pay-section-sync" class="bottom-line" style="display: none;">
+        <p i18n="sync_premium_cta"></p>
+        <a
+          id="get-it-now-sync"
+          i18n="get_it_now"
+          class="btn yellow long"
+          target="_blank"
+          href="https://getadblock.com/premium/enrollment/"
+        ></a>
+      </section>
+      <!-- End: Payment section visible only to free MAB users -->
+
+      <div id="sync-title-block" class="content-block">
         <div class="align-items-center">
-          <h2
-            i18n="sync_verify_turn_on_text"
-            class="add-space-between paragraph-title section-padding"
-            id="show-verify-message"
-          ></h2>
-          <button
-            i18n="buttonok"
-            class="btn right red do-not-display button-size"
-            type="button"
-            id="btnVerifyOK"
-          ></button>
-          <button
-            i18n="buttoncancel"
-            class="btn right do-not-display button-size"
-            type="button"
-            id="btnVerifyCancel"
-          ></button>
-        </div>
-      </div>
-      <!--Step 2: Enter name -->
-      <div class="do-not-display" id="enter-name-div">
-        <p class="error-message" id="error-message"></p>
-        <div id="enter-name-child-div" class="align-items-center widest">
-          <input
-            type="text"
-            id="extension-name"
-            i18n_placeholder="sync_extension_name_placeholder"
-          />
-          <button
-            i18n="buttoncancel"
-            class="btn right do-not-display button-size"
-            type="button"
-            id="btnCancelSyncName"
-          ></button>
-          <button
-            i18n="savebutton"
-            class="btn right red do-not-display button-size"
-            type="button"
-            id="btnSaveSyncName"
-          ></button>
-        </div>
-      </div>
-      <!--Step 3: show name -->
-      <div class="do-not-display" id="show-name-div">
-        <div class="align-items-center add-space-between">
-          <h2
-            class="paragraph-title section-padding"
-            id="show-name-message"
-            i18n_replacement_el="extension-name-txt"
+          <i id="sync-icon" class="material-icons md-24 accent-text" role="img" aria-hidden="true"
+            >sync</i
           >
-            <span id="extension-name-txt"> </span>
-          </h2>
-          <button
-            i18n="sync_turn_off_btn_text"
-            class="btn grey right off-border do-not-display button-size"
-            type="button"
-            id="btnTurnSyncOff"
-          ></button>
+          <h1 id="sync-title" i18n="sync_tab_item" class="page-title"></h1>
+        </div>
+        <div id="toggle-sync-details" class="content-block" style="display: none;">
+          <p></p>
+          <i class="material-icons md-24" role="img" aria-hidden="true"></i>
         </div>
       </div>
-      <div class="top-line">
-        <object id="sync-1-4-image" data="icons/sync-content-1-4.svg" type="image/svg+xml">
-        </object>
+
+      <div id="sync-box" class="accent-box main-text content-block">
+        <div id="sync-text">
+          <div id="sync-description">
+            <span i18n="backup_sync_settings"></span>
+            <span i18n="set_preferences_once"></span>
+          </div>
+          <a
+            class="link-text-color"
+            href="https://help.getadblock.com/support/solutions/articles/6000225588-using-myadblock-s-sync-feature"
+            target="_blank"
+            i18n="learn_more_without_period"
+          ></a>
+        </div>
+        <img id="sync-image" i18n-alt="" />
       </div>
-      <div class="add-space-between paragraph-title align-items-center section-padding bottom-line">
-        <div id="sync_extension_section_list_title" i18n="sync_extension_section_title"></div>
-        <div id="last-updated-on"></div>
-      </div>
-      <p id="sync_extension_no_extension_msg" i18n="sync_extension_no_extension_msg"></p>
-      <div id="sync-extension-list-div"></div>
-      <div id="sync-now-div" class="do-not-display">
+
+      <a
+        id="get-sync"
+        i18n="get_sync"
+        class="btn yellow"
+        target="_blank"
+        href="https://getadblock.com/premium/enrollment/"
+        style="display: none;"
+      ></a>
+      <button
+        id="btnCheckStatus"
+        class="btn"
+        i18n="check_sync_status"
+        type="button"
+        style="display: none;"
+      ></button>
+
+      <div id="sync-info-block" style="display: none;">
+        <div id="sync-extension-block" class="bottom-line content-block">
+          <div
+            id="sync_extension_section_list_title"
+            class="accent-text main-text"
+            i18n="sync_extension_section_title"
+          ></div>
+          <div id="last-sync-now" class="content-block">
+            <div id="last-updated-on"></div>
+            <button
+              id="btnSyncNow"
+              i18n="sync_now_btn_text"
+              class="btn non-focused-btn"
+              type="button"
+            ></button>
+          </div>
+          <button
+            id="btnAddThisExtension"
+            i18n="add_this_extension"
+            class="btn red"
+            type="button"
+          ></button>
+          <button
+            id="btnCancelSyncName"
+            i18n="buttoncancel"
+            class="btn non-focused-btn"
+            type="button"
+            style="display: none;"
+          ></button>
+          <div id="show-verify-message" class="content-block" style="display: none;">
+            <i id="alert-icon" class="material-icons md-24" role="img" aria-hidden="true"
+              >warning</i
+            >
+            <div i18n="sync_verify_turn_on_text"></div>
+          </div>
+          <div id="verify-overwrite-div" class="content-block" style="display: none;">
+            <button
+              i18n="buttonok"
+              class="btn red button-pair"
+              type="button"
+              id="btnVerifyOK"
+            ></button>
+            <button
+              i18n="buttoncancel"
+              class="btn button-pair non-focused-btn"
+              type="button"
+              id="btnVerifyCancel"
+            ></button>
+          </div>
+        </div>
+        <p
+          id="sync_extension_no_extension_msg"
+          class="accent-text main-text"
+          i18n="sync_extension_no_extension_msg"
+        ></p>
+        <div id="sync-extension-list-div"></div>
         <div
-          id="sync_update_now_title"
-          i18n="sync_update_now_section_title"
-          class="add-space-between paragraph-title align-items-center section-padding  bottom-line"
-        ></div>
-        <div class="align-items-center add-space-between">
-          <h2 class="paragraph-title align-items-center section-padding">
-            <span i18n="sync_now_message_part_I"></span>&nbsp;
-            <span i18n="sync_now_message_part_II"></span>
-          </h2>
-          <button
-            i18n="sync_now_btn_text"
-            class="btn right red button-size"
-            type="button"
-            id="btnSyncNow"
-          ></button>
+          id="current-extension-name-block"
+          class="accent-box main-text content-block"
+          style="display: none;"
+        >
+          <div id="extension-name-block" class="content-block">
+            <p id="current-extension-name" class="accent-text"></p>
+            <p id="this-extension" i18n="this_extension"></p>
+          </div>
+          <i
+            id="extension-delete-icon"
+            class="material-icons md-24 delete-icon"
+            role="img"
+            aria-hidden="true"
+            >delete</i
+          >
+          <div id="extension-delete-block" class="content-block" style="display: none;">
+            <p
+              id="extension-delete-warning"
+              i18n="confirm_delete_extension"
+              class="error-message main-text"
+            ></p>
+            <button id="extension-delete-button" class="btn red button-pair" type="button">
+              <i
+                id="extension-delete-button-icon"
+                class="material-icons md-24 delete-icon"
+                role="img"
+                aria-hidden="true"
+                >delete</i
+              >
+              <p id="extension-delete-text" i18n="delete"></p>
+            </button>
+            <button
+              id="extension-delete-cancel"
+              i18n="buttoncancel"
+              class="btn button-pair non-focused-btn"
+              type="button"
+            ></button>
+          </div>
+        </div>
+        <div id="enter-name-div" style="display: none;">
+          <div id="enter-name-child-div">
+            <input
+              id="extension-name"
+              class="accent-text"
+              type="text"
+              i18n_placeholder="sync_extension_name_placeholder"
+            />
+            <button id="btnSaveSyncName" i18n="add" class="btn red" type="button"></button>
+          </div>
+          <p class="error-message" id="error-message"></p>
         </div>
       </div>
+
+      <div class="translation_credits italic do-not-display"></div>
     </section>
     <footer style="display: none;">
       <section>

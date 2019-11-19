@@ -118,10 +118,8 @@
     window.removeEventListener('message', receiveMessage);
   };
 
-  chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
-    if (request.command === 'showoverlay'
-        && request.overlayURL
-        && request.tabURL === document.location.href) {
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.command === 'showoverlay' && request.overlayURL && request.tabURL === document.location.href) {
       showOverlay(request.overlayURL);
       sendResponse({ ack: request.command });
     }

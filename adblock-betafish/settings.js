@@ -88,6 +88,13 @@ const getSettings = function () {
   return settings.getAll();
 };
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'getSettings') {
+    return;
+  } // not for us
+  sendResponse(getSettings());
+});
+
 const setSetting = function (name, isEnabled, callback) {
   settings.set(name, isEnabled, callback);
 
@@ -95,6 +102,14 @@ const setSetting = function (name, isEnabled, callback) {
     logging(isEnabled);
   }
 };
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'setSetting' || !message.name || (typeof message.isEnabled === 'undefined')) {
+    return;
+  }
+  setSetting(message.name, message.isEnabled);
+  sendResponse({});
+});
 
 const disableSetting = function (name) {
   settings.set(name, false);

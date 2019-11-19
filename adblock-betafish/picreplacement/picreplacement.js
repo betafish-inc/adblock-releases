@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, translate, onReady, typeMap, imageSizesMap, BGcall, */
+/* global chrome, translate, onReady, typeMap, imageSizesMap, */
 
 const { hostname } = window.location;
 let totalSwaps = 0;
@@ -350,7 +350,7 @@ const imageSwap = {
 
     const overlayLogo = document.createElement('img');
     overlayLogo.classList.add('ab-logo-header');
-    overlayLogo.src = chrome.extension.getURL('icons/dark_theme/logo.svg');
+    overlayLogo.src = chrome.runtime.getURL('icons/dark_theme/logo.svg');
     overlayLogo.alt = translate('adblock_logo');
 
     const overlayIcons = document.createElement('div');
@@ -394,7 +394,7 @@ const imageSwap = {
   injectCSS(data, placement, containerID) {
     const adblockLogoWidth = placement.type === imageSizesMap.get('skinnywide') ? '81px' : '114px';
     const adblockLogoHeight = placement.type === imageSizesMap.get('skinnywide') ? '20px' : '29px';
-    const materialIconsURL = chrome.extension.getURL('/icons/MaterialIcons-Regular.woff2');
+    const materialIconsURL = chrome.runtime.getURL('/icons/MaterialIcons-Regular.woff2');
     const styleTag = document.createElement('style');
     styleTag.type = 'text/css';
     styleTag.textContent = `
@@ -517,10 +517,10 @@ const imageSwap = {
       const height = placement.listingHeight;
       const channel = placement.channelName;
       const queryStrings = `url=${url}&width=${width}&height=${height}&channel=${channel}`;
-      BGcall('openTab', `adblock-picreplacement-imageview.html?${queryStrings}`);
+      chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: `adblock-picreplacement-imageview.html?${queryStrings}` });
     });
     containerNodes.settingsIcon.addEventListener('click', () => {
-      BGcall('openTab', 'options.html#mab-image-swap');
+      chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab-image-swap' });
     });
     containerNodes.closeIcon.addEventListener('click', () => {
       containerNodes.container.parentNode.removeChild(containerNodes.container);

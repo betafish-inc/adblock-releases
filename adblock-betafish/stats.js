@@ -250,11 +250,11 @@ const STATS = (function exportStats() {
   const scheduleNextPing = function () {
     chrome.storage.local.get(STATS.totalPingStorageKey).then((response) => {
       let localTotalPings = storageGet(totalPingStorageKey);
-      if (!localTotalPings || Number.isNaN(localTotalPings)) {
+      if (typeof localTotalPings !== 'number' || Number.isNaN(localTotalPings)) {
         localTotalPings = 0;
       }
       let totalPings = response[STATS.totalPingStorageKey];
-      if (!totalPings || Number.isNaN(totalPings)) {
+      if (typeof totalPings !== 'number' || Number.isNaN(totalPings)) {
         totalPings = 0;
       }
       totalPings = Math.max(localTotalPings, totalPings);
@@ -302,11 +302,11 @@ const STATS = (function exportStats() {
     window.setTimeout(() => {
       chrome.storage.local.get(STATS.nextPingTimeStorageKey).then((response) => {
         let localNextPingTime = storageGet(STATS.nextPingTimeStorageKey);
-        if (!localNextPingTime || Number.isNaN(localNextPingTime)) {
+        if (typeof localNextPingTime !== 'number' || Number.isNaN(localNextPingTime)) {
           localNextPingTime = 0;
         }
         let nextPingTimeStored = response[STATS.nextPingTimeStorageKey];
-        if (!nextPingTimeStored || Number.isNaN(nextPingTimeStored)) {
+        if (typeof nextPingTimeStored !== 'number' || Number.isNaN(nextPingTimeStored)) {
           nextPingTimeStored = 0;
         }
         const nextPingTime = Math.max(localNextPingTime, nextPingTimeStored);
@@ -317,7 +317,11 @@ const STATS = (function exportStats() {
         }
         // if we don't have a 'next ping time', or it's not a valid number,
         // default to 55 minute ping interval
-        if (nextPingTime === 0 || !nextPingTime || Number.isNaN(nextPingTime)) {
+        if (
+          typeof nextPingTime !== 'number'
+          || nextPingTime === 0
+          || Number.isNaN(nextPingTime)
+        ) {
           callbackFN(FiftyFiveMinutes);
           return;
         }
@@ -440,7 +444,7 @@ const STATS = (function exportStats() {
         data,
         complete(xhr) {
           let mph = parseInt(xhr.getResponseHeader('X-RateLimit-MPH'), 10);
-          if (Number.isNaN(mph) || mph < -1) { // Server is sick
+          if (typeof mph !== 'number' || Number.isNaN(mph) || mph < -1) { // Server is sick
             mph = 1;
           }
           if (mph === -1) {

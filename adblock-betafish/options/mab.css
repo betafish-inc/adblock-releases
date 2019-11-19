@@ -337,7 +337,7 @@ div.mab-page-box > .option-page-content > footer {
   flex-wrap: wrap;
   position: relative;
   border-top: 1px solid var(--speech-bubble-border-color);
-  margin: 30px -15px -15px -15px;
+  margin: 60px -15px -15px -15px;
 }
 
 div.mab-page-box > .option-page-content > footer::before,
@@ -404,6 +404,7 @@ div.mab-page-box > .option-page-content > footer > div {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 40px;
 }
 
 [id^="locked-user-pay-section-"] > p {
@@ -413,7 +414,7 @@ div.mab-page-box > .option-page-content > footer > div {
   line-height: normal;
   color: var(--options-page-accent-text);
   overflow-wrap: break-word;
-  max-width: 470px;
+  max-width: 776px;
 }
 
 [id^="locked-user-pay-section-"] > a {
@@ -556,154 +557,217 @@ input.invisible-overlay {
 }
 
 /* Sync */
-
-#no-license-div,
-#turn-on-div {
-  padding-top: 52px;
+.main-text,
+.extension-name-item {
+  font-size: 18px;
 }
-#no-license-div,
-#turn-on-div,
-#enter-name-div {
-  padding-bottom: 18px;
+#sync-box {
+  min-height: 243px;
+  flex-wrap: wrap;
+  margin: 15px 0 64px 0;
+  line-height: normal;
+  justify-content: space-between;
+}
+#sync-text {
+  margin: 24px 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 365px;
+}
+#sync-description {
+  margin-bottom: 22px;
+}
+#sync-image {
+  content: url(icons/sync-image.svg);
+  margin: 24px 32px 24px 59px;
+}
+#get-sync,
+#btnCheckStatus {
+  width: 362px;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 auto 30px auto;
+}
+#btnCheckStatus {
+  color: var(--sync-msg-color);
+  background-color: var(--sync-msg-background-color);
+}
+.content-block {
+  display: flex;
+  align-items: center;
+}
+#extension-name-block,
+#show-verify-message {
+  justify-content: flex-start;
+}
+#extension-delete-block,
+#verify-overwrite-div,
+#last-sync-now {
+  justify-content: flex-end;
+}
+#sync-title-block {
+  justify-content: space-between;
+}
+#sync-title-block.details-hidden {
+  margin-bottom: 20px;
+}
+#toggle-sync-details {
+  cursor: pointer;
+  justify-content: flex-end;
+}
+#toggle-sync-details i {
+  margin-left: 9px;
+}
+#sync-extension-block {
+  border-bottom-color: var(--main-text-color);
+  margin-bottom: 26px;
+  padding: 17px 0;
+  justify-content: space-between;
+}
+#sync-info-block .btn {
+  height: 40px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 24px;
+}
+.non-focused-btn {
+  width: 176px;
+  background: var(--background-color);
+  color: var(--main-text-color);
+  border: 1px solid var(--help-icon-color);
+}
+#btnAddThisExtension {
+  width: 240px;
+}
+#btnSaveSyncName {
+  width: 176px;
+  margin: 8px 0 8px 24px;
+}
+#alert-icon {
+  margin-right: 16px;
+  color: var(--options-button-bg);
+}
+.button-pair {
+  width: 113px;
+}
+#sync_extension_section_list_title {
+  font-weight: bold;
+}
+#sync-icon {
+  margin-right: 16px;
+}
+#sync_extension_no_extension_msg {
+  line-height: normal;
+  margin-bottom: 20px;
+}
+.extension-name-item,
+.accent-text {
+  color: var(--options-page-accent-text);
+}
+#enter-name-child-div {
+  display: flex;
 }
 #extension-name {
   flex-grow: 1;
+  height: 40px;
+  font-size: 16px;
 }
-#extension-name-txt {
-  font-weight: bold;
+#extension-name::placeholder {
+  color: var(--options-page-accent-text);
+  font-style: italic;
+  font-size: 16px;
+}
+#extension-name.error-state {
+  border-color: var(--standout-text-color);
 }
 #error-message {
-  margin-block-end: 0;
-  margin-block-start: 0;
-  height: 25px;
-}
-#last-updated-on {
-  height: 17px;
   font-size: 14px;
+  margin: 0 14px;
+  line-height: normal;
+}
+.accent-box {
+  background-color: var(--sidebar-bg-color);
+  width: 100%;
+  border-radius: 6px;
+}
+#current-extension-name-block {
+  height: 56px;
+  margin: 6px 0 20px 0;
+  justify-content: space-between;
+}
+.delete-icon {
+  margin-right: 8px;
+}
+#extension-delete-button-icon {
+  color: var(--sync-msg-color);
+}
+#current-extension-name {
+  margin-left: 8px;
+}
+#this-extension {
+  margin-left: 4px;
+  font-style: italic;
+}
+#extension-delete-text {
+  margin: 0;
 }
 
-.sync-sub-header {
-  height: 25px;
-  font-size: 21px;
-}
-#sync-overview-image {
-  width: 630px;
-  height: 157px;
-}
-
-#sync-icon {
-  color: var(--options-page-accent-text);
-}
-
-#sync-1-4-image {
-  padding-top: 22px;
-  padding-bottom: 60px;
-}
-
-.button-size {
-  padding-left: 16px;
-  padding-right: 16px;
-  min-width: 128px;
-  height: 40px;
-  font-size: 18px;
-  white-space: nowrap;
-}
-
-.sync-out-of-date-header-message,
-.sync-tab-message {
-  z-index: 5;
-  top: -54px;
-}
-
-#customize .sync-header-message,
-.sync-out-of-date-header-message {
-  top: -27px;
-}
-
-#customize .sync-out-of-date-header-message {
-  top: 0;
-}
-
-.sync-header-message,
-.sync-out-of-date-header-message,
-.sync-tab-message {
-  min-height: 27px;
+/* Sync Messages/Errors */
+.sync-message-container {
   font-family: Lato;
   font-size: 16px;
   font-weight: bold;
-  text-align: center;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  position: relative;
   opacity: 1;
   margin-left: -5px;
   z-index: 5;
 }
-
-.sync-header-message-normal,
-.sync-out-of-date-header-message,
-.sync-tab-message-normal {
-  color: white;
-  background-color: black;
+.sync-message-good,
+.sync-message-error,
+.sync-out-of-date-header-message {
+  display: flex;
+  justify-content: center;
 }
-
-.sync-header-message-hidden,
-.sync-out-of-date-header-message-hidden,
-.sync-tab-message-hidden {
-  opacity: 0;
+.sync-message-good .sync-message-box,
+.sync-message-error .sync-message-box,
+.sync-out-of-date-header-message .sync-message-box {
+  display: flex;
+  align-items: center;
+  color: var(--sync-msg-color);
+  min-height: 40px;
+  max-width: 800px;
 }
-
+#mab-image-swap .sync-message-box,
+#sync .sync-message-box,
+#mab-themes .sync-message-box {
+  max-width: 1500px;
+}
+.sync-message-good i,
+.sync-message-error i,
+.sync-out-of-date-header-message i {
+  margin-right: 8px;
+  color: var(--sync-msg-color);
+}
 .sync-out-of-date-header-message a {
-  background-color: var(--sync-error-msg-background-color);
-  color: var(--sync-error-msg-color);
+  color: var(--sync-msg-color);
   cursor: pointer;
 }
-
 .sync-message-good {
-  display: block;
   background-color: var(--sync-msg-background-color);
-  color: var(--sync-msg-color);
 }
-
 .sync-message-error {
-  display: block;
   background-color: var(--sync-error-msg-background-color);
-  color: var(--sync-error-msg-color);
 }
-
-.sync-header-sync-icon,
-.sync-header-done-icon {
-  background-color: var(--sync-msg-background-color);
-  color: var(--sync-msg-color);
+.sync-message-link {
+  text-decoration: underline;
 }
-
-.sync-header-sync-icon:hover,
-.sync-header-done-icon:hover {
-  color: var(--sync-msg-color);
-}
-
-.sync-header-error-icon,
-.sync-out-of-date-header-error-icon {
-  background-color: var(--sync-error-msg-background-color);
-  color: var(--sync-error-msg-color);
-}
-
-.sync-header-error-icon:hover,
-.sync-out-of-date-header-error-icon:hover {
-  color: var(--sync-error-msg-color);
-}
-
-.sync-icon {
-  cursor: unset;
+.sync-message-hidden {
   display: none;
-}
-
-.sync-error-link-text-color:hover {
-  color: #4ecdf9;
-}
-.sync-error-link-text-color {
-  color: #4ecdf9;
 }
 
 /* Screen size support */

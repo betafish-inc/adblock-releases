@@ -10,7 +10,7 @@ window.addEventListener('error', (e) => {
     return;
   }
   let str = `Error: ${
-    (e.filename || 'anywhere').replace(chrome.extension.getURL(''), '')
+    (e.filename || 'anywhere').replace(chrome.runtime.getURL(''), '')
   }:${e.lineno || 'anywhere'
   }:${e.colno || 'anycol'}`;
   if (e.message) {

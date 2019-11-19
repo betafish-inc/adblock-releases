@@ -124,11 +124,14 @@ const SURVEY = (function getSurvey() {
             return;
           }
         }
-        if (!surveyData.notification_options
-            || !surveyData.notification_options.type
-            || !surveyData.notification_options.message
-            || !surveyData.notification_options.icon_url
-            || Number.isNaN(surveyData.notification_options.priority)) {
+        if (
+          !surveyData.notification_options
+          || !surveyData.notification_options.type
+          || !surveyData.notification_options.message
+          || !surveyData.notification_options.icon_url
+          || typeof surveyData.notification_options.priority !== 'number'
+          || Number.isNaN(surveyData.notification_options.priority)
+        ) {
           recordGeneralMessage('invalid_survey_data', undefined, { sid: surveyData.survey_id });
           return;
         }
@@ -233,12 +236,10 @@ const SURVEY = (function getSurvey() {
       }, fiveMinutes);
     };
     // check (again) if we still have permission to show a notification
-    if (chrome
-        && chrome.notifications
-        && chrome.notifications.getPermissionLevel) {
+    if (chrome && chrome.notifications && chrome.notifications.getPermissionLevel) {
       chrome.notifications.getPermissionLevel((permissionLevel) => {
         if (permissionLevel === 'granted') {
-          if (Number.isNaN(surveyData.block_count_limit)) {
+          if (typeof surveyData.block_count_limit !== 'number' || Number.isNaN(surveyData.block_count_limit)) {
             log('invalid block_count_limit', surveyData.block_count_limit);
             return;
           }

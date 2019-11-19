@@ -115,6 +115,14 @@ const ServerMessages = (function serverMessages() {
     recordMessageWithUserID(msg, 'adreport', callback, additionalParams);
   };
 
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.command !== 'recordGeneralMessage' || !message.msg) {
+      return;
+    }
+    recordGeneralMessage(message.msg, undefined, message.additionalParams);
+    sendResponse({});
+  });
+
   return {
     recordErrorMessage,
     recordAnonymousMessage,

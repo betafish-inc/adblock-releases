@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, BGcall, adblock_installed, adblock_userid, adblock_version */
+/* global chrome, adblock_installed, adblock_userid, adblock_version */
 
 const invalidGUIDChars = /[^a-z0-9]/g;
 
@@ -163,11 +163,11 @@ const runBandaids = function () {
       }`, 0);
     },
     getadblockquestion() {
-      BGcall('addGABTabListeners');
+      chrome.runtime.sendMessage({ command: 'addGABTabListeners' });
       const personalBtn = document.getElementById('personal-use');
       const enterpriseBtn = document.getElementById('enterprise-use');
       const buttonListener = function () {
-        BGcall('removeGABTabListeners', true);
+        chrome.runtime.sendMessage({ command: 'removeGABTabListeners', saveState: true });
         if (enterpriseBtn) {
           enterpriseBtn.removeEventListener('click', buttonListener);
         }
@@ -213,7 +213,7 @@ const runBandaids = function () {
                 }
                 clickEvent.stopImmediatePropagation();
                 clickEvent.preventDefault();
-                BGcall('openTab', 'options.html');
+                chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html' });
               };
             }
             window.postMessage(response, '*');
@@ -234,7 +234,7 @@ const runBandaids = function () {
       const enableShowSurvey = document.getElementById('enable_show_survey');
       if (enableShowSurvey) {
         enableShowSurvey.onclick = function showSurvey() {
-          BGcall('setSetting', 'show_survey', !enableShowSurvey.checked, true);
+          chrome.runtime.sendMessage({ command: 'setSetting', name: 'show_survey', isEnabled: !enableShowSurvey.checked });
         };
       }
       const aaElements = document.querySelectorAll('#disableacceptableads');
@@ -245,12 +245,9 @@ const runBandaids = function () {
               return;
             }
             event.preventDefault();
-            BGcall('unsubscribe', {
-              id: 'acceptable_ads',
-              del: false,
-            }, () => {
-              BGcall('recordGeneralMessage', 'disableacceptableads_clicked', undefined, undefined, () => {
-                BGcall('openTab', 'options.html?aadisabled=true#general');
+            chrome.runtime.sendMessage({ command: 'unsubscribe', id: 'acceptable_ads' }).then(() => {
+              chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'disableacceptableads_clicked' }).then(() => {
+                chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html?aadisabled=true#general' });
               });
             });
           };
@@ -267,7 +264,7 @@ const runBandaids = function () {
             }
             event.stopImmediatePropagation();
             event.preventDefault();
-            BGcall('openTab', 'options.html#mab');
+            chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
           };
         }
       }
@@ -469,8 +466,7 @@ const runBandaids = function () {
           mutePlayer();
         }
       }
-
-      BGcall('getSettings', (settings) => {
+      chrome.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
         if (settings.twitch_hiding) {
           // Start the background check
           tmuteVars.autoCheck = setInterval(checkAd, tmuteVars.timerCheck);

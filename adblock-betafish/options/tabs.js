@@ -9,25 +9,25 @@ function tabIsLocked(tabID) {
   return !!$locked.length;
 }
 
+const syncMessageContainer = '<div class="sync-message-container"></div>';
+
 const syncMessageDiv = `
-  <div class="sync-header-message page-title sync-header-message-hidden">
-    <span>
-      <i class="material-icons md-24 sync-icon sync-header-error-icon" role="img" aria-hidden="true">error_outline</i>
-      <i class="material-icons md-24 sync-icon sync-header-sync-icon" role="img" aria-hidden="true">sync</i>
-      <i class="material-icons md-24 sync-icon sync-header-done-icon" role="img" aria-hidden="true">check_circle</i>
-    </span>
-    <span id="themes-sync-header-message" class="sync-header-message-text"></span>
+  <div class="sync-header-message sync-message-hidden">
+    <div class="sync-message-box">
+      <i class="material-icons md-24 sync-icon" role="img" aria-hidden="true"></i>
+      <span class="sync-header-message-text"></span>
+    </div>
   </div>`;
 
 function getSyncOutOfDateMessageDiv(id) {
   return `
-  <div class="sync-out-of-date-header-message sync-out-of-date-header-message-hidden sync-message-error">
-    <span>
-      <i class="material-icons md-24 sync-icon sync-out-of-date-header-error-icon" role="img" aria-hidden="true">error_outline</i>
-    </span>
-    <span i18n="sync_message_old_version_part_1"></span>&nbsp;
-    <a i18n="sync_message_old_version_part_2" i18n_replacement_el="oldversionlink_${id}"
-    href="https://help.getadblock.com/support/solutions/articles/6000087857-how-do-i-make-sure-adblock-is-up-to-date-" target="_blank"> <span id="oldversionlink_${id}" class="sync-error-link-text-color"></span> </a>
+  <div class="sync-out-of-date-header-message sync-message-hidden sync-message-error">
+    <div class="sync-message-box">
+      <i class="material-icons md-24" role="img" aria-hidden="true">error_outline</i>
+      <span i18n="sync_message_old_version_part_1"></span>&nbsp;
+      <a i18n="sync_message_old_version_part_2" i18n_replacement_el="oldversionlink_${id}"
+      href="https://help.getadblock.com/support/solutions/articles/6000087857-how-do-i-make-sure-adblock-is-up-to-date-" target="_blank"> <span id="oldversionlink_${id}" class="sync-message-link"></span> </a>
+    </div>
   </div>`;
 }
 
@@ -150,7 +150,7 @@ function addMyAdBlockTab() {
   <li id="myadblock-tab">
     <a href="#mab" class="tablink">
       <i class="material-icons md-18" role="img" aria-hidden="true">account_circle</i>
-      <span i18n="myadblockoptions"></span>
+      <span i18n="premium"></span>
     </a>
     <ul data-parent-tab="#mab">
       <li>
@@ -166,10 +166,9 @@ function addMyAdBlockTab() {
           <span i18n="image_swap"></span>
         </a>
       </li>
-      <li class="locked">
+      <li>
         <a href="#sync" class="tablink">
           <i class="material-icons md-18 unlocked" role="img" aria-hidden="true">sync</i>
-          <i class="material-icons md-18 locked" role="img" i18n-aria-label="locked">lock</i>
           <span i18n="sync_tab_item"></span>
         </a>
       </li>
@@ -233,9 +232,13 @@ function loadTabPanelsHTML() {
 
     const panelHTML = `adblock-options-${panelID}.html`;
     $panel.load(panelHTML, () => {
-      $panel.prepend(getSyncOutOfDateMessageDiv(i));
+      if ($panel.find('.sync-message-container').length === 0) {
+        $panel.prepend(syncMessageContainer);
+      }
+      const $messageContainer = $panel.find('.sync-message-container');
+      $messageContainer.prepend(getSyncOutOfDateMessageDiv(i));
       if ($panel.attr('syncMessageDiv')) {
-        $panel.prepend(syncMessageDiv);
+        $messageContainer.prepend(syncMessageDiv);
       }
       localizePage();
       tabsLoaded += 1;

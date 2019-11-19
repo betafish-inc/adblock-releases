@@ -21,7 +21,7 @@
     }
     const $selectedTheme = $(changeEvent.target).closest('.theme-box');
     if ($selectedTheme.closest('.theme-wrapper').hasClass('locked')) {
-      backgroundPage.openTab('https://getadblock.com/myadblock/enrollment/v4/');
+      backgroundPage.openTab(License.MAB_CONFIG.payURL);
       return;
     }
     const $otherThemes = $selectedTheme.closest('section').find('.theme-box').not($selectedTheme);
@@ -85,25 +85,39 @@
     $('.options-page-theme-preview').attr('alt', translate('a_theme_preview', translate(optionsPageTheme), translate('options_page')));
   };
 
+  const showShadowOnLockedHover = ($themeBox) => {
+    if ($themeBox.parent().hasClass('locked')) {
+      $('#get-it-now-themes').addClass('shadow');
+    }
+  };
+
+  const hideShadowNoHover = () => {
+    $('#get-it-now-themes').removeClass('shadow');
+  };
+
   const documentEventsHandling = () => {
     // Hover events
     $('.popup-menu-themes .theme-box:not(.selected)').hover(
       function handleIn() {
         showHoveredPopupThemePreview($(this));
+        showShadowOnLockedHover($(this));
       },
       // eslint-disable-next-line prefer-arrow-callback
       function handleOut() {
         showSelectedPopupThemePreview();
+        hideShadowNoHover();
       },
     );
 
     $('.options-page-themes .theme-box:not(.selected)').hover(
       function handleIn() {
         showHoveredOptionsThemePreview($(this));
+        showShadowOnLockedHover($(this));
       },
       // eslint-disable-next-line prefer-arrow-callback
       function handleOut() {
         showSelectedOptionsThemePreview();
+        hideShadowNoHover();
       },
     );
 
@@ -116,7 +130,7 @@
     if (backgroundPage && backgroundPage.getSettings()) {
       colorThemes = backgroundPage.getSettings().color_themes;
     }
-    $('.theme-hover-overlay .search[role=img]').each(function i18nSupport() {
+    $('.theme-wrapper:not(.locked) .overlay-icon').each(function i18nSupport() {
       const $preview = $(this);
       const theme = $preview.closest('.theme-box').data('theme');
       const component = $preview.closest('.theme-box').data('key');
