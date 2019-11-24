@@ -47,6 +47,11 @@ onReady(() => {
 //   - messageName : Str
 //   - substitutions : Array of Str or a String
 const translate = function (messageName, substitutions) {
+  if (!messageName || typeof messageName !== 'string') {
+    console.trace('missing messageName');
+    return '';
+  }
+
   let parts = substitutions;
   if (Array.isArray(parts)) {
     for (let i = 0; i < parts.length; i++) {

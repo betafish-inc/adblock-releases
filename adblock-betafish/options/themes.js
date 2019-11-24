@@ -58,7 +58,7 @@
 
     $('.popup-menu-theme-title').text(translate(`${hoveredTheme}`));
     $('.popup-menu-theme-preview').attr('src', `icons/${hoveredTheme}/previewcard.svg`);
-    $('.popup-menu-theme-preview').attr('alt', translate('a_theme_preview', translate(hoveredTheme), translate('popup_menu')));
+    $('.popup-menu-theme-preview').attr('alt', translate('a_theme_preview', translate(`${hoveredTheme}`), translate('popup_menu')));
   };
 
   const showSelectedPopupThemePreview = () => {
@@ -66,7 +66,7 @@
 
     $('.popup-menu-theme-title').text(translate(`${popupMenuTheme}`));
     $('.popup-menu-theme-preview').attr('src', `icons/${popupMenuTheme}/previewcard.svg`);
-    $('.popup-menu-theme-preview').attr('alt', translate('a_theme_preview', translate(popupMenuTheme), translate('popup_menu')));
+    $('.popup-menu-theme-preview').attr('alt', translate('a_theme_preview', translate(`${popupMenuTheme}`), translate('popup_menu')));
   };
 
   const showHoveredOptionsThemePreview = ($themeBox) => {
@@ -74,7 +74,7 @@
 
     $('.options-page-theme-title').text(translate(`${hoveredTheme}`));
     $('.options-page-theme-preview').attr('src', `icons/${hoveredTheme}/optionscard.svg`);
-    $('.options-page-theme-preview').attr('alt', translate('a_theme_preview', translate(hoveredTheme), translate('options_page')));
+    $('.options-page-theme-preview').attr('alt', translate('a_theme_preview', translate(`${hoveredTheme}`), translate('options_page')));
   };
 
   const showSelectedOptionsThemePreview = () => {
@@ -82,7 +82,7 @@
 
     $('.options-page-theme-title').text(translate(`${optionsPageTheme}`));
     $('.options-page-theme-preview').attr('src', `icons/${optionsPageTheme}/optionscard.svg`);
-    $('.options-page-theme-preview').attr('alt', translate('a_theme_preview', translate(optionsPageTheme), translate('options_page')));
+    $('.options-page-theme-preview').attr('alt', translate('a_theme_preview', translate(`${optionsPageTheme}`), translate('options_page')));
   };
 
   const showShadowOnLockedHover = ($themeBox) => {
@@ -135,8 +135,8 @@
       const theme = $preview.closest('.theme-box').data('theme');
       const component = $preview.closest('.theme-box').data('key');
       $preview.attr('aria-label', translate('preview_a_theme', [
-        translate(theme),
-        translate(component),
+        translate(`${theme}`),
+        translate(`${component}`),
       ]));
     });
     selectCurrentThemes(colorThemes);

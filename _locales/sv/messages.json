@@ -1,6 +1,6 @@
 {
   "description": {
-    "message": "Det mest populära Chrome-tillägget, med över 60 miljoner användare! Blockerar annonser över hela nätet.",
+    "message": "Blockera reklam, pop-ups på YouTube, Facebook, Twitch och dina andra favoritsidor.",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
   "description2": {
@@ -12,8 +12,8 @@
     "message": "AdBlock-utvecklingsbygge"
   },
   "name_releasebuild": {
-    "description": "Extension name to be shown for release / published builds.  Should not be translated",
-    "message": "AdBlock"
+    "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message": "AdBlock — den bästa annonsblockeraren"
   },
   "description_edge": {
     "message": "AdBlock. Den bästa annonsblockeraren med över 200 miljoner nedladdningar. Blockerar annonser över hela nätet.",
@@ -2225,6 +2225,10 @@
     "message": "Rebecca Purple",
     "description": "Name of a theme in the Themes tab of the Options page"
   },
+  "solarized_light_theme": {
+    "message": "Solariserat ljus",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
   "apply_theme": {
     "message": "Välj tema",
     "description": "Text of clickable element that applies the theme of a theme box in the Themes tab of the Options page"
@@ -2278,24 +2282,8 @@
     "description": "The sub-title of an error message box in payment iframe in the Options page."
   },
   "sync_tab_item": {
-    "message": "Synka",
+    "message": "Säkerhetskopiering & synkronisering",
     "description": "Title of the Sync sub-tab of the Options page"
-  },
-  "myadblock_sync_description": {
-    "message": "Synka dina preferenser över flera webbläsare och enheter",
-    "description": "Text on the MyAdBlock tab, Sync panel of the Options page"
-  },
-  "sync_check_status_text": {
-    "message": "Synka och skräddarsy AdBlock över dina tillägg [[Kontrollera status]]",
-    "description": "message and button text on the Sync sub-tab of the Options page"
-  },
-  "sync_turn_on_text": {
-    "message": "Synka och skräddarsy AdBlock över dina tillägg [[Aktivera synkning]]",
-    "description": "message and button text on the Sync sub-tab of the Options page"
-  },
-  "sync_turn_off_btn_text": {
-    "message": "Stäng av",
-    "description": "button text on the Sync sub-tab of the Options page"
   },
   "sync_turn_on_invalid_name_text": {
     "message": "Ge tillägget ett namn för att fortsätta",
@@ -2310,7 +2298,7 @@
     "description": "section title text on the Sync sub-tab of the Options page"
   },
   "sync_header_message_no_license": {
-    "message": "Det kan ta ett par minuter innan synkningen blir tillgänglig.",
+    "message": "Vänta medan vi förbereder synkningen.",
     "description": "message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
   },
   "sync_header_message_getting_license": {
@@ -2318,7 +2306,7 @@
     "description": "message to users on the sync page when the extension is getting the license"
   },
   "sync_header_message_in_progress": {
-    "message": "Synkning pågår…",
+    "message": "Synkning pågår...",
     "description": "message to users on the options pages when syncing with the server is in progress"
   },
   "sync_header_message_sync_complete": {
@@ -2334,31 +2322,23 @@
     "description": "start of error message to users on the sync page when sync fails."
   },
   "sync_header_message_setup_fail_part_2": {
-    "message": "Prova att aktivera synkning på nytt om ett par minuter.",
+    "message": "Prova att lägga till det här tillägget på nytt om ett par minuter.",
     "description": "message to users on the sync page when initial setup of sync fails for some unknown reason."
   },
   "sync_header_message_error_prefix": {
     "message": "Det här tillägget var inte synkat.",
     "description": "Start of an sync error message to users on the Options page or AdBlock popup menu."
   },
-  "sync_header_message_error_suffix": {
-    "message": "Försök igen senare.",
-    "description": "Part of an sync error message to users on the Options page or AdBlock popup menu."
-  },
   "sync_header_message_old_commit_version_part_2": {
     "message": "Vi har synkat det här tillägget och återställt dina ändringar.",
     "description": "part 2 of a message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
   },
   "sync_header_message_old_commit_version_part_3": {
-    "message": "Försök att göra dina ändringar på nytt.",
+    "message": "Ladda om sidan och gör dina ändringar på nytt.",
     "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
   },
-  "sync_header_error_revert_message_part_2": {
-    "message": "Dina ändringar har återställts.",
-    "description": "part 2 of a message to users on the sync page when sending the sync data fails for some unknown reason."
-  },
   "sync_header_error_save_message_part_2": {
-    "message": "Vi kunde inte synka dina ändringar.",
+    "message": "Det här tillägget är inte synkat.",
     "description": "part 2 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
   },
   "sync_header_error_save_message_part_3": {
@@ -2373,20 +2353,6 @@
     "message": "Kopiera dina skräddarsydda regler, ladda om sidan och gör om dina ändringar.",
     "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
   },
-  "sync_header_error_message_menu_part_3": {
-    "message": "Gör dina ändringar på nytt.",
-    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
-  },
-  "sync_show_name_text": {
-    "message": "[[$name$]] har nu synkats",
-    "description": "message to users on the sync page when which includes the name of the extension / device",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Device 1"
-      }
-    }
-  },
   "sync_device_name_list_updated_at_msg": {
     "message": "senaste uppdateringen skedde den $timestamp$",
     "description": "message to users on when the sync page was last updated with the name of the extensions / devices (displayed in locale specific format)",
@@ -2398,24 +2364,12 @@
     }
   },
   "sync_extension_name_placeholder": {
-    "message": "Ge tillägget ett namn…",
+    "message": "Döp tillägget så att du kan skilja det från dina andra...",
     "description": "placeholder text in the extension / device name field on the sync page"
   },
   "sync_verify_turn_on_text": {
-    "message": "Aktivering av synkning kommer att radera aktuella inställningar för det här tillägget.",
+    "message": "Aktivering av säkerhetskopiering & synkning kommer att radera aktuella inställningar för det här tillägget.",
     "description": "message text in the extension / device name field on the sync page"
-  },
-  "sync_update_now_section_title": {
-    "message": "Manuell synkning",
-    "description": "section title for the sync now section on the sync page"
-  },
-  "sync_now_message_part_I": {
-    "message": "Jag uppdaterar automatiskt.",
-    "description": "message text in the on the sync page "
-  },
-  "sync_now_message_part_II": {
-    "message": "Du kan även synka manuellt.",
-    "description": "message text in the on the sync page "
   },
   "sync_now_btn_text": {
     "message": "Synka nu",
@@ -2428,6 +2382,54 @@
   "sync_message_old_version_part_2": {
     "message": "[[Uppdatera AdBlock]] så att vi kan synka dina inställningar.",
     "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_premium_cta": {
+    "message": "Du blir ett blockeringsproffs med Premium-funktioner som t.ex. synkronisering.",
+    "description": "AdBlock Premium CTA on the Sync tab"
+  },
+  "backup_sync_settings": {
+    "message": "Säkerhetskopiera och synka dina AdBlock-inställningar automatiskt på alla dina enheter.",
+    "description": "Description of Sync on Sync tab"
+  },
+  "set_preferences_once": {
+    "message": "Gör dina inställningen en gång och slipp sedan oroa dig för att förlora data eller behöva göra samma inställningar på flera enheter.",
+    "description": "Description of Sync on Sync tab"
+  },
+  "get_sync": {
+    "message": "Skaffa synkronisering",
+    "description": "Link to pay for Sync (part of AdBlock Premium)"
+  },
+  "check_sync_status": {
+    "message": "Kontrollera synkronimeringsstatus",
+    "description": "Button on Sync tab that checks the status of the Sync feature"
+  },
+  "show_details": {
+    "message": "Visa detaljer",
+    "description": "Toggle that shows the details section"
+  },
+  "hide_details": {
+    "message": "Dölj detaljer",
+    "description": "Toggle that hides the details section"
+  },
+  "add_this_extension": {
+    "message": "Lägg till det här tillägget",
+    "description": "Button on Sync tab that adds this extension to the Sync process"
+  },
+  "add": {
+    "message": "Lägg till",
+    "description": "Button on Sync tab that adds an entered name for this extension to the list of synced extensions"
+  },
+  "this_extension": {
+    "message": "(det här tillägget)",
+    "description": "description for name of the current extension"
+  },
+  "confirm_delete_extension": {
+    "message": "Vill du verkligen radera det här tillägget?",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for this extension"
+  },
+  "delete": {
+    "message": "Radera",
+    "description": "Text on a delete button"
   },
   "filteracceptable_ads_privacy": {
     "message": "Sekretess för godkänd reklam",
@@ -2511,7 +2513,7 @@
   },
   "new_badge": {
     "message": "Ny",
-    "description": "DO NOT TRANSLATE. Max 4 characters. Text in the badge of our extension toolbar icon."
+    "description": "Max 4 characters. If it's not possible to translate in four characters or less, please don't translate. Text in the badge of our extension toolbar icon."
   },
   "new_cta_default_text": {
     "message": "Uppgradera ditt AdBlock",
@@ -2868,5 +2870,101 @@
   "resume_blocking_ads_period": {
     "message": "Återuppta blockering av annonser.",
     "description": "First sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "do_not_swap_ads": {
+    "message": "Byt inte annonser",
+    "description": "Text of a clickable option to stop swapping ads with images in the Options page Image Swap tab."
+  },
+  "premium": {
+    "message": "Premium",
+    "description": "Abbreviated name of the AdBlock upgrade."
+  },
+  "adblock_premium": {
+    "message": "AdBlock Premium",
+    "description": "Full name of the AdBlock upgrade."
+  },
+  "premium_enrollment_title": {
+    "message": "AdBlock Premium är aktiverat i den här webbläsaren!",
+    "description": "DO NOT TRANSLATE. The title of the AdBlock Premium enrollment box."
+  },
+  "premium_enrollment_success": {
+    "message": "Du kan följa den magiska länken i ditt bekräftelsemail för att låsa upp AdBlock Premium i andra Chrome-webbläsare.",
+    "description": "DO NOT TRANSLATE. AdBlock Premium successfully licensed message."
+  },
+  "premium_enrollment_link_info": {
+    "message": "Följ länken för att enkelt installera AdBlock Premium i andra Chrome-webbläsare.",
+    "description": "DO NOT TRANSLATE. Explains what happens when clicking the magic link."
+  },
+  "premium_page_title": {
+    "message": "AdBlock Premium: Ett bättre sätt att surfa på.",
+    "description": "The text of the header the AdBlock Premium Options page"
+  },
+  "premium_benefits_explained": {
+    "message": "I utbyte mot att du stödjer oss genom att låsa upp AdBlock Premium får du tillgång till de senaste verktygen och funktionerna så fort de lanseras.",
+    "description": "Main text of the teaser AdBlock Premium feature in the AdBlock Premium tab of the Options page"
+  },
+  "manage_subscription": {
+    "message": "Hantera din prenumeration",
+    "description": "Text of link to manage the user's Premium subscription on the Premium tab of the Options page"
+  },
+  "save_custom_settings_cta": {
+    "message": "Vill du spara dina blockeringsinställningar och använda dem i alla dina webbläsare?",
+    "description": "Part 1 of a Premium call-to-action on the Options page"
+  },
+  "try_backup_sync": {
+    "message": "Prova då vår funktion Säkerhetskopiering & synkronisering.",
+    "description": "Part 2 of a Premium call-to-action on the Options page"
+  },
+  "wont_show_again": {
+    "message": "OK, vi kommer inte att visa det här meddelandet igen.",
+    "description": "Message shown when user opts out of call-to-action"
+  },
+  "check_out_premium": {
+    "message": "Om du vill veta mer, kolla in [[Premium]].",
+    "description": "Part 2 of message shown when user opts out of call-to-action"
+  },
+  "successfully_whitelisted": {
+    "message": "Du har vitlistat den här adressen.",
+    "description": "Part of a message on the whitelist wizard"
+  },
+  "future_show_ads": {
+    "message": "Dessa sidor kommer att fortsätta visa annonser.",
+    "description": "Part of a message on the whitelist wizard"
+  },
+  "change_behavior_settings": {
+    "message": "Du kan ändra detta beteende i dina [[inställningar]].",
+    "description": "Part of a message on the whitelist and blacklist wizards"
+  },
+  "whitelisted_a_site": {
+    "message": "Du har vitlistat en webbplats!",
+    "description": "Part 1 of a call-to-action on the whitelist wizard"
+  },
+  "never_lose_settings": {
+    "message": "Ange denna inställning för alla dina enheter och se till att du aldrig förlorar dina AdBlock-inställningar med Säkerhetskopiering & synkronisering.",
+    "description": "Part 2 of a call-to-action on the whitelist and blacklist wizards"
+  },
+  "successfully_blocked_ad": {
+    "message": "Du har blockerat den här annonsen.",
+    "description": "Part of a message on the blacklist wizard"
+  },
+  "future_ads_blocked": {
+    "message": "Annonser som matchar de här reglerna kommer att fortsätta blockeras.",
+    "description": "Part of a message on the blacklist wizard"
+  },
+  "rule_added_filters": {
+    "message": "Följande regel har lagts till i dina filter:",
+    "description": "Part of a message on the blacklist wizard"
+  },
+  "blocked_something": {
+    "message": "Du blockerade nyss någonting på den här webbplatsen!",
+    "description": "Part 1 of a call-to-action on the blacklist wizard"
+  },
+  "adblock_looked_like_this": {
+    "message": "Tänk om AdBlock såg ut såhär?",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_themes": {
+    "message": "Kolla in våra teman!",
+    "description": "Part 2 of a call-to-action on the Popup menu"
   }
 }

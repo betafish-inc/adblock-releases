@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global ext, chrome, require, storageGet, storageSet, log, STATS, Channels, Prefs,
-   getSettings, setSetting, translate, reloadOptionsPageTabs */
+   getSettings, setSetting, translate, reloadOptionsPageTabs, filterNotifier */
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
@@ -34,12 +34,14 @@ const License = (function getLicense() {
       syncURL: 'https://myadblock.sync.getadblock.com/v1/sync',
       subscribeKey: 'sub-c-9eccffb2-8c6a-11e9-97ab-aa54ad4b08ec',
       payURL: 'https://getadblock.com/premium/enrollment/',
+      subscriptionURL: 'https://getadblock.com/premium/manage-subscription/',
     },
     dev: {
       licenseURL: 'https://dev.myadblock.licensing.getadblock.com/license/',
       syncURL: 'https://dev.myadblock.sync.getadblock.com/v1/sync',
       subscribeKey: 'sub-c-9e0a7270-83e7-11e9-99de-d6d3b84c4a25',
       payURL: 'https://getadblock.com/premium/enrollment/?testmode=true',
+      subscriptionURL: 'https://dev.getadblock.com/premium/manage-subscription/',
     },
   };
   STATS.untilLoaded((userID) => {
@@ -98,32 +100,6 @@ const License = (function getLicense() {
     });
   };
 
-  // Check the response from a ping to see if it contains valid show MyAdBlock enrollment
-  // instructions. If so, return an object containing data. Otherwise, return null.
-  // Inputs:
-  //   responseData: string response from a ping
-  const myAdBlockDataFrom = function (responseData) {
-    if (responseData.length === 0 || responseData.trim().length === 0) {
-      return null;
-    }
-    let pingData;
-    try {
-      pingData = JSON.parse(responseData);
-      if (!pingData) {
-        return null;
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log('Something went wrong with parsing survey data.');
-      // eslint-disable-next-line no-console
-      console.log('error', e);
-      // eslint-disable-next-line no-console
-      console.log('response data', responseData);
-      return null;
-    }
-    return pingData;
-  };
-
   return {
     licenseStorageKey,
     popupMenuCtaClosedKey,
@@ -133,27 +109,18 @@ const License = (function getLicense() {
     licenseNotifier,
     MAB_CONFIG,
     isProd,
-    checkPingResponse(pingResponseData) {
-      if (pingResponseData.length === 0 || pingResponseData.trim().length === 0) {
-        loadFromStorage(() => {
-          if (theLicense.myadblock_enrollment === true) {
-            theLicense.myadblock_enrollment = false;
-            License.set(theLicense);
-          }
-        });
-        return;
-      }
-      const pingData = myAdBlockDataFrom(pingResponseData);
-      if (!pingData) {
-        return;
-      }
-      if (pingData.myadblock_enrollment === true) {
-        loadFromStorage(() => {
+    enrollUser(enrollReason) {
+      loadFromStorage(() => {
+        // only enroll users if they were not previously enrolled
+        if (typeof theLicense.myadblock_enrollment === 'undefined') {
           theLicense.myadblock_enrollment = true;
           License.set(theLicense);
-          License.showIconBadgeCTA(true);
-        });
-      }
+          // only process updates for now
+          if (enrollReason === 'update') {
+            License.showIconBadgeCTA(true);
+          }
+        }
+      });
     },
     get() {
       return theLicense;
@@ -317,6 +284,9 @@ const License = (function getLicense() {
     isActiveLicense() {
       return License && License.get() && License.get().status === 'active';
     },
+    isLicenseCodeValid() {
+      return License && License.get().code && typeof License.get().code === 'string';
+    },
     isMyAdBlockEnrolled() {
       return License && License.get() && License.get().myadblock_enrollment === true;
     },
@@ -334,10 +304,30 @@ const License = (function getLicense() {
      */
     showIconBadgeCTA(showBadge) {
       if (showBadge) {
+        let newBadgeText = translate('new_badge');
+        // 'New' Badge Text that exceeds 4 characters is truncated on the toolbar badge,
+        // so we default to English
+        if (!newBadgeText || newBadgeText.length >= 5) {
+          newBadgeText = 'New';
+        }
         storageSet(statsInIconKey, Prefs.show_statsinicon);
         Prefs.show_statsinicon = false;
-        chrome.browserAction.setBadgeBackgroundColor({ color: '#03bcfc' });
-        chrome.browserAction.setBadgeText({ text: translate('new_badge') });
+        // wait 10 seconds to allow any other ABP setup tasks to finish
+        setTimeout(() => {
+          // process currrently opened tabs
+          chrome.tabs.query({}).then((tabs) => {
+            for (const tab of tabs) {
+              const page = new ext.Page(tab);
+              page.browserAction.setBadge({
+                color: '#03bcfc',
+                number: newBadgeText,
+              });
+            }
+            // set for new tabs
+            chrome.browserAction.setBadgeBackgroundColor({ color: '#03bcfc' });
+            chrome.browserAction.setBadgeText({ text: newBadgeText });
+          });
+        }, 10000); // 10 seconds
       } else {
         // Restore show_statsinicon if we previously stored its value
         const storedValue = storageGet(statsInIconKey);
@@ -381,57 +371,15 @@ const License = (function getLicense() {
           fail(err);
         });
     },
-    // resendEmail that contains license information and a "magic link" to activate other
-    // extensions. This is a workaround for MAB not being generally available so other extensions
-    // needing MAB must be enrolled somehow in MAB. The license is sent to the currently registered
-    // email for the original license purchase and is returned to the `ok` handler for UI display.
-    // If an error sending the email occurs, the `fail` handler is called with the failure error.
-    resendEmail(ok, fail) {
-      License.fetchLicenseAPI('resend_email', {}, (data) => {
-        if (data && data.email) {
-          ok(data.email);
-        } else {
-          fail();
-        }
-      }, (err) => {
-        fail(err);
-      });
-    },
   };
 }());
 
-chrome.runtime.onMessage.addListener(
-  (request, sender, sendResponse) => {
-    if (request.command === 'payment_success' && request.version === 1) {
-      License.activate();
-      sendResponse({ ack: true });
-    } else if (typeof request.magicCode === 'string') {
-      // Find MAB status: justInstalled | alreadyActive
-      const status = License.isMyAdBlockEnrolled() ? 'alreadyActive' : 'justInstalled';
-      if (status === 'alreadyActive') {
-        sendResponse({ ack: true, status });
-      } else {
-        // We need to validate the magic code
-        License.fetchLicenseAPI('validate_magic_code', { magiccode: request.magicCode }, (data) => {
-          if (data && data.success === true) {
-            // Not sure if we should do something with the `data`
-            sendResponse({ ack: true, status });
-            // Set up extension with MAB enrollment
-            License.checkPingResponse(JSON.stringify({ myadblock_enrollment: true }));
-            // Assume the magic link activates the license and update immediately
-            License.activate();
-          } else {
-            sendResponse({ ack: false, status });
-          }
-        }, (err) => {
-          sendResponse({ ack: false, status, error: err });
-        });
-      }
-    }
-
-    return true;
-  },
-);
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'payment_success' && request.version === 1) {
+    License.activate();
+    sendResponse({ ack: true });
+  }
+});
 
 const replacedPerPage = new ext.PageMap();
 
@@ -473,6 +421,27 @@ const replacedCounts = (function getReplacedCount() {
     },
   };
 }());
+
+// for use in the premium enrollment process
+// de-coupled from the `License.ready().then` code below because the delay
+// prevents the addListener from being fired in a timely fashion.
+const onInstalledPromise = new Promise(((resolve) => {
+  chrome.runtime.onInstalled.addListener((details) => {
+    resolve(details);
+  });
+}));
+const onBehaviorPromise = new Promise(((resolve) => {
+  filterNotifier.on('filter.behaviorChanged', () => {
+    resolve();
+  });
+}));
+// the order of Promises below dictacts the order of the data in the detailsArray
+Promise.all([onInstalledPromise, License.ready(), onBehaviorPromise]).then((detailsArray) => {
+  // Enroll existing users in Premium
+  if (detailsArray.length > 0 && detailsArray[0].reason) {
+    License.enrollUser(detailsArray[0].reason);
+  }
+});
 
 let channels = {};
 License.ready().then(() => {

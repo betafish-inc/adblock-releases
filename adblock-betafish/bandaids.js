@@ -199,29 +199,6 @@ const runBandaids = function () {
 
       window.addEventListener('message', receiveMessage, false);
 
-      function receiveMagicCodeMessage(event) {
-        if (event.data
-            && event.origin === 'https://getadblock.com'
-            && typeof event.data.magicCode === 'string') {
-          chrome.runtime.sendMessage({ magicCode: event.data.magicCode }).then((response) => {
-            // hookup options page link
-            const link = document.getElementById('open-options-page');
-            if (link) {
-              link.onclick = (clickEvent) => {
-                if (clickEvent.isTrusted === false) {
-                  return;
-                }
-                clickEvent.stopImmediatePropagation();
-                clickEvent.preventDefault();
-                chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html' });
-              };
-            }
-            window.postMessage(response, '*');
-          });
-        }
-      }
-      window.addEventListener('message', receiveMagicCodeMessage, false);
-
       chrome.storage.local.get('userid').then((response) => {
         if (response.userid) {
           const elemDiv = document.createElement('div');

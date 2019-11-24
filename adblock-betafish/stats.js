@@ -195,7 +195,6 @@ const STATS = (function exportStats() {
   const pingNow = function () {
     const handlePingResponse = function (responseData) {
       SURVEY.maybeSurvey(responseData);
-      License.checkPingResponse(responseData);
       checkPingResponseForProtect(responseData);
     };
 

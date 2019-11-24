@@ -539,7 +539,7 @@ const imageSwap = {
       }
 
       // We only want to replace 2 ads per page
-      if (totalSwaps > 1 && !(window.top === window && hostname === 'www.facebook.com')) {
+      if (totalSwaps > 1) {
         callback(false);
         return false;
       }

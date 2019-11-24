@@ -1,4 +1,10 @@
-/* MAB page */
+/* Premium page */
+
+#premium-tab-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
 
 #myadblock-features {
   margin-top: 20px;
@@ -118,201 +124,6 @@
 }
 #sync-preview {
   content: url(icons/sync-preview.svg);
-}
-
-/* MAB enrollment "magic box" */
-#mab-enrollment-section {
-  border-radius: 6px;
-  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
-  padding: 17px 24px 20px 24px;
-  position: relative;
-  margin-top: 5px;
-}
-
-#mab-enrollment-section header {
-  display: flex;
-  flex-wrap: wrap-reverse;
-  justify-content: space-between;
-  border-bottom: 1px solid #e6e6e6;
-  margin: -10px;
-  padding-right: 35px;
-  position: relative;
-}
-
-#mab-enrollment-section header::before,
-#mab-enrollment-section header::after {
-  background-color: var(--background-color);
-  content: "";
-  display: block;
-  height: 3px;
-  position: absolute;
-  width: 10px;
-}
-
-#mab-enrollment-section header::before {
-  bottom: -1px;
-  left: -1px;
-}
-
-#mab-enrollment-section header::after {
-  bottom: -1px;
-  right: -1px;
-}
-
-#mab-enrollment-section header h1 {
-  font-size: 18px;
-  flex: 1 1 auto;
-  width: min-content;
-  min-width: 300px;
-  padding: 0 0 13px 0;
-  margin: 10px;
-  color: var(--options-page-accent-text);
-}
-
-#mab-enrollment-section header form {
-  margin: 10px;
-  font-size: 14px;
-  color: var(--hide-mab-enrollment);
-}
-
-#mab-link-section {
-  display: flex;
-  flex-wrap: wrap;
-  margin: -15px;
-  padding-top: 15px;
-}
-
-#mab-link-section > div {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 0 0 5px 0;
-  margin: 15px;
-  flex: 1 0 auto;
-}
-
-#mab-link-section > i {
-  margin: 17px 0 0 15px;
-  height: 24px;
-  cursor: default;
-}
-
-#mab-link-section a {
-  color: var(--link-color);
-}
-
-#mab-enrollment-resend-error-icon {
-  color: var(--standout-text-color);
-  background-color: white;
-  clip-path: circle(10px at 50%);
-  -webkit-clip-path: circle(9.5px at 50%);
-}
-
-#mab-enrollment-resend-success-icon {
-  color: var(--mab-enrollment-success);
-  background-color: white;
-  clip-path: circle(10px at 50%);
-  -webkit-clip-path: circle(9.5px at 50%);
-}
-
-#mab-link-section > p {
-  margin: 15px;
-  width: min-content;
-  min-width: 300px;
-  font-size: 18px;
-  flex: 20 1 auto;
-}
-
-#mab-enrollment-resend {
-  border-radius: 6px;
-  border: 1px solid #e5e5e6;
-  width: 256px;
-  min-width: 256px;
-  padding: 10px 0;
-  font-size: 16px;
-  color: var(--options-page-accent-text);
-  cursor: pointer;
-  background: var(--background-color);
-}
-
-#mab-enrollment-resend:hover {
-  -moz-box-shadow: 0 5px 15px rgba(10, 14, 71, 0.2);
-  -webkit-box-shadow: 0 5px 15px rgba(10, 14, 71, 0.2);
-  box-shadow: 0 5px 15px rgba(10, 14, 71, 0.2);
-}
-
-#mab-enrollment-close {
-  border: none;
-  position: absolute;
-  top: 20px;
-  right: 12px;
-  color: var(--options-page-accent-text);
-  cursor: pointer;
-  background: var(--background-color);
-}
-
-#mab-enrollment-close i {
-  color: var(--main-text-color);
-}
-
-/* Loading Animation "ellipsis" from loading.io */
-
-.lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 256px;
-  margin: 0;
-  padding: 0;
-}
-
-.lds-ellipsis div {
-  position: absolute;
-  top: -25px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--loading-ellipsis);
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-  left: 96px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-  left: 96px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-  left: 116px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-  left: 135px;
-  animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(19px, 0);
-  }
 }
 
 /* Start: MAB Feedback CTA */
@@ -452,6 +263,7 @@ div.mab-page-box > .option-page-content > footer > div {
   color: #666666;
   text-align: center;
   margin: 12px;
+  padding: 0 16px;
 }
 .channel-box.coming-soon {
   background-color: #e6e6e6;

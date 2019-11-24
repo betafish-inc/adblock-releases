@@ -1,6 +1,6 @@
 {
   "description": {
-    "message": "L'extension Chrome la plus populaire, avec plus de 60 millions d'utilisateurs ! Bloque les publicités partout sur le web.",
+    "message": "Bloquez les publicités et pop-ups sur YouTube, Facebook, Twitch et tous vos sites préférés.",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
   "description2": {
@@ -12,8 +12,8 @@
     "message": "Version de développement AdBlock"
   },
   "name_releasebuild": {
-    "description": "Extension name to be shown for release / published builds.  Should not be translated",
-    "message": "AdBlock"
+    "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message": "AdBlock — le meilleur bloqueur de pubs"
   },
   "description_edge": {
     "message": "AdBlock. Le No.1 des bloqueurs de publicités avec plus 200 millions de téléchargements. Bloque les publicités partout sur le web.",
@@ -2225,6 +2225,10 @@
     "message": "Violet Rebecca",
     "description": "Name of a theme in the Themes tab of the Options page"
   },
+  "solarized_light_theme": {
+    "message": "Lumière solarisée",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
   "apply_theme": {
     "message": "Appliquer le thème",
     "description": "Text of clickable element that applies the theme of a theme box in the Themes tab of the Options page"
@@ -2278,24 +2282,8 @@
     "description": "The sub-title of an error message box in payment iframe in the Options page."
   },
   "sync_tab_item": {
-    "message": "Synchro",
+    "message": "Sauvegarde et Synchro",
     "description": "Title of the Sync sub-tab of the Options page"
-  },
-  "myadblock_sync_description": {
-    "message": "Synchronisez vos préférences sur de multiples navigateurs et appareils",
-    "description": "Text on the MyAdBlock tab, Sync panel of the Options page"
-  },
-  "sync_check_status_text": {
-    "message": "Synchronisez et personnalisez AdBlock sur vos extensions  [[Vérifier statut]]",
-    "description": "message and button text on the Sync sub-tab of the Options page"
-  },
-  "sync_turn_on_text": {
-    "message": "Synchronisez et personnalisez AdBlock sur vos extensions  [[Activer synchro]]",
-    "description": "message and button text on the Sync sub-tab of the Options page"
-  },
-  "sync_turn_off_btn_text": {
-    "message": "Désactiver",
-    "description": "button text on the Sync sub-tab of the Options page"
   },
   "sync_turn_on_invalid_name_text": {
     "message": "Pour continuer, nommez cette extension",
@@ -2310,7 +2298,7 @@
     "description": "section title text on the Sync sub-tab of the Options page"
   },
   "sync_header_message_no_license": {
-    "message": "Veuillez patienter quelques instants pour que la synchro soit disponible.",
+    "message": "Veuillez patienter quelques instants le temps de préparer la synchro.",
     "description": "message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
   },
   "sync_header_message_getting_license": {
@@ -2318,7 +2306,7 @@
     "description": "message to users on the sync page when the extension is getting the license"
   },
   "sync_header_message_in_progress": {
-    "message": "Synchro en cours…",
+    "message": "Synchro en cours...",
     "description": "message to users on the options pages when syncing with the server is in progress"
   },
   "sync_header_message_sync_complete": {
@@ -2334,35 +2322,27 @@
     "description": "start of error message to users on the sync page when sync fails."
   },
   "sync_header_message_setup_fail_part_2": {
-    "message": "Essayez de réactiver la synchro dans quelques minutes.",
+    "message": "Veuillez réessayer d'ajouter cette extension dans quelques minutes.",
     "description": "message to users on the sync page when initial setup of sync fails for some unknown reason."
   },
   "sync_header_message_error_prefix": {
     "message": "Cette extension n'était pas synchronisée.",
     "description": "Start of an sync error message to users on the Options page or AdBlock popup menu."
   },
-  "sync_header_message_error_suffix": {
-    "message": "Veuillez réessayer plus tard.",
-    "description": "Part of an sync error message to users on the Options page or AdBlock popup menu."
-  },
   "sync_header_message_old_commit_version_part_2": {
     "message": "Nous avons synchronisé cette extension et annulé vos modifications.",
     "description": "part 2 of a message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
   },
   "sync_header_message_old_commit_version_part_3": {
-    "message": "Veuillez rétablir vos modifications.",
+    "message": "Veuillez rafraîchir la page et refaire vos modifications.",
     "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
   },
-  "sync_header_error_revert_message_part_2": {
-    "message": "Vos modifications ont été annulées.",
-    "description": "part 2 of a message to users on the sync page when sending the sync data fails for some unknown reason."
-  },
   "sync_header_error_save_message_part_2": {
-    "message": "Nous n'avons pas pu synchroniser vos modifications.",
+    "message": "Cette extension n'est pas synchronisée.",
     "description": "part 2 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
   },
   "sync_header_error_save_message_part_3": {
-    "message": "Veuillez essayer une synchronisation manuelle plus tard.",
+    "message": "Veuillez essayer une synchro manuelle plus tard.",
     "description": "part 3 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
   },
   "sync_header_message_old_commit_version_customize_tab_part_2": {
@@ -2372,20 +2352,6 @@
   "sync_header_message_old_commit_version_customize_tab_part_3": {
     "message": "Copiez vos règles personnalisées dans le presse-papiers, rechargez la page et rétablissez vos modifications.",
     "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
-  },
-  "sync_header_error_message_menu_part_3": {
-    "message": "Veuillez rétablir vos modifications.",
-    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
-  },
-  "sync_show_name_text": {
-    "message": "[[$name$]] est maintenant synchro",
-    "description": "message to users on the sync page when which includes the name of the extension / device",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Device 1"
-      }
-    }
   },
   "sync_device_name_list_updated_at_msg": {
     "message": "dernière mise à jour le $timestamp$",
@@ -2398,24 +2364,12 @@
     }
   },
   "sync_extension_name_placeholder": {
-    "message": "Nommez cette extension…",
+    "message": "Donnez un nom à cette extension pour la différencier des autres...",
     "description": "placeholder text in the extension / device name field on the sync page"
   },
   "sync_verify_turn_on_text": {
-    "message": "L'activation de la synchro effacera les informations de paramètres qui existent pour cette extension.",
+    "message": "L'activation de Sauvegarde & Synchro effacera les informations de paramètres qui existent pour cette extension.",
     "description": "message text in the extension / device name field on the sync page"
-  },
-  "sync_update_now_section_title": {
-    "message": "Synchro manuelle",
-    "description": "section title for the sync now section on the sync page"
-  },
-  "sync_now_message_part_I": {
-    "message": "Je ferai des mises à jour automatiques.",
-    "description": "message text in the on the sync page "
-  },
-  "sync_now_message_part_II": {
-    "message": "Vous pouvez également faire une synchro manuelle.",
-    "description": "message text in the on the sync page "
   },
   "sync_now_btn_text": {
     "message": "Synchroniser maintenant",
@@ -2428,6 +2382,54 @@
   "sync_message_old_version_part_2": {
     "message": "Veuillez [[mettre à jour AdBlock]] pour que vos paramètres soient synchronisés.",
     "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_premium_cta": {
+    "message": "Avec les fonctionnalités Premium telles que la Synchro, vous bloquerez les publicités comme un pro.",
+    "description": "AdBlock Premium CTA on the Sync tab"
+  },
+  "backup_sync_settings": {
+    "message": "Sauvegardez et synchronisez automatiquement vos paramètres AdBlock sur tous vos appareils.",
+    "description": "Description of Sync on Sync tab"
+  },
+  "set_preferences_once": {
+    "message": "Réglez vos préférences une fois, et ne vous inquiétez plus de perdre des données ou de devoir répéter une modification sur des extensions multiples.",
+    "description": "Description of Sync on Sync tab"
+  },
+  "get_sync": {
+    "message": "Obtenir la Synchro",
+    "description": "Link to pay for Sync (part of AdBlock Premium)"
+  },
+  "check_sync_status": {
+    "message": "Vérifier le statut de synchro",
+    "description": "Button on Sync tab that checks the status of the Sync feature"
+  },
+  "show_details": {
+    "message": "Afficher les détails",
+    "description": "Toggle that shows the details section"
+  },
+  "hide_details": {
+    "message": "Masquer les détails",
+    "description": "Toggle that hides the details section"
+  },
+  "add_this_extension": {
+    "message": "Ajouter cette extension",
+    "description": "Button on Sync tab that adds this extension to the Sync process"
+  },
+  "add": {
+    "message": "Ajouter",
+    "description": "Button on Sync tab that adds an entered name for this extension to the list of synced extensions"
+  },
+  "this_extension": {
+    "message": "(cette extension)",
+    "description": "description for name of the current extension"
+  },
+  "confirm_delete_extension": {
+    "message": "Voulez-vous vraiment supprimer cette extension ?",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for this extension"
+  },
+  "delete": {
+    "message": "Supprimer",
+    "description": "Text on a delete button"
   },
   "filteracceptable_ads_privacy": {
     "message": "Publicité Acceptable et vie privée",
@@ -2511,7 +2513,7 @@
   },
   "new_badge": {
     "message": "Nouveau ",
-    "description": "DO NOT TRANSLATE. Max 4 characters. Text in the badge of our extension toolbar icon."
+    "description": "Max 4 characters. If it's not possible to translate in four characters or less, please don't translate. Text in the badge of our extension toolbar icon."
   },
   "new_cta_default_text": {
     "message": "Améliorez votre AdBlock",
@@ -2868,5 +2870,101 @@
   "resume_blocking_ads_period": {
     "message": "Reprendre le blocage des publicités.",
     "description": "First sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "do_not_swap_ads": {
+    "message": "Ne pas changer les pubs",
+    "description": "Text of a clickable option to stop swapping ads with images in the Options page Image Swap tab."
+  },
+  "premium": {
+    "message": "Premium",
+    "description": "Abbreviated name of the AdBlock upgrade."
+  },
+  "adblock_premium": {
+    "message": "AdBlock Premium",
+    "description": "Full name of the AdBlock upgrade."
+  },
+  "premium_enrollment_title": {
+    "message": "AdBlock Premium est installé sur ce navigateur !",
+    "description": "DO NOT TRANSLATE. The title of the AdBlock Premium enrollment box."
+  },
+  "premium_enrollment_success": {
+    "message": "Vous pouvez cliquer sur le lien magique dans votre e-mail de confirmation pour débloquer AdBlock Premium dans d'autres navigateurs Chrome.",
+    "description": "DO NOT TRANSLATE. AdBlock Premium successfully licensed message."
+  },
+  "premium_enrollment_link_info": {
+    "message": "En cliquant sur ce lien, vous facilitez l'installation d'AdBlock Premium dans d'autres navigateurs Chrome.",
+    "description": "DO NOT TRANSLATE. Explains what happens when clicking the magic link."
+  },
+  "premium_page_title": {
+    "message": "AdBlock Premium : Une meilleur façon de naviguer sur Internet.",
+    "description": "The text of the header the AdBlock Premium Options page"
+  },
+  "premium_benefits_explained": {
+    "message": "En échange de votre soutien par l'activation d'AdBlock Premium, vous aurez accès aux derniers outils et fonctionnalités dès leur sortie.",
+    "description": "Main text of the teaser AdBlock Premium feature in the AdBlock Premium tab of the Options page"
+  },
+  "manage_subscription": {
+    "message": "Gérer votre abonnement",
+    "description": "Text of link to manage the user's Premium subscription on the Premium tab of the Options page"
+  },
+  "save_custom_settings_cta": {
+    "message": "Vous voulez sauvegarder vos paramètres personnalisés de blocage de pubs et les appliquer à tous les navigateurs ?",
+    "description": "Part 1 of a Premium call-to-action on the Options page"
+  },
+  "try_backup_sync": {
+    "message": "Dans ce cas, essayez notre fonctionnalité Sauvegarde et Synchro.",
+    "description": "Part 2 of a Premium call-to-action on the Options page"
+  },
+  "wont_show_again": {
+    "message": "D'accord, nous n'afficherons plus ce message.",
+    "description": "Message shown when user opts out of call-to-action"
+  },
+  "check_out_premium": {
+    "message": "Si vous voulez en savoir plus, consultez notre page [[Premium]].",
+    "description": "Part 2 of message shown when user opts out of call-to-action"
+  },
+  "successfully_whitelisted": {
+    "message": "Cette URL a été mise sur liste blanche avec succès.",
+    "description": "Part of a message on the whitelist wizard"
+  },
+  "future_show_ads": {
+    "message": "À l'avenir, ces pages continueront d'afficher des publicités.",
+    "description": "Part of a message on the whitelist wizard"
+  },
+  "change_behavior_settings": {
+    "message": "Vous pouvez modifier cette option dans vos [[paramètres]].",
+    "description": "Part of a message on the whitelist and blacklist wizards"
+  },
+  "whitelisted_a_site": {
+    "message": "Vous venez de mettre un site sur liste blanche !",
+    "description": "Part 1 of a call-to-action on the whitelist wizard"
+  },
+  "never_lose_settings": {
+    "message": "Appliquez ce paramètre sur tous vos appareils et assurez-vous de ne jamais perdre vos préférences AdBlock grâce à Sauvegarde et Synchro.",
+    "description": "Part 2 of a call-to-action on the whitelist and blacklist wizards"
+  },
+  "successfully_blocked_ad": {
+    "message": "Cette publicité a été bloquée avec succès.",
+    "description": "Part of a message on the blacklist wizard"
+  },
+  "future_ads_blocked": {
+    "message": "À l'avenir, les publicités répondant à ces règles continueront d'être bloquées.",
+    "description": "Part of a message on the blacklist wizard"
+  },
+  "rule_added_filters": {
+    "message": "La règle suivante a été ajoutée à vos filtres :",
+    "description": "Part of a message on the blacklist wizard"
+  },
+  "blocked_something": {
+    "message": "Vous venez de bloquer quelque chose sur ce site !",
+    "description": "Part 1 of a call-to-action on the blacklist wizard"
+  },
+  "adblock_looked_like_this": {
+    "message": "Et si AdBlock ressemblait à ça ?",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_themes": {
+    "message": "Découvrez des thèmes !",
+    "description": "Part 2 of a call-to-action on the Popup menu"
   }
 }

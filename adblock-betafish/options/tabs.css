@@ -14,6 +14,7 @@
   border-radius: 3px 0px 0px 3px;
   opacity: 0;
   transition: opacity 0.2s linear;
+  padding-top: 5px;
 }
 #sidebar-tabs ul[data-parent-tab] li.locked a {
   color: #999999;
@@ -42,11 +43,9 @@
   text-align: left;
 }
 #sidebar-tabs li a i {
-  line-height: 25px;
   color: var(--main-text-color);
 }
 #sidebar-tabs li.locked a i {
-  line-height: 25px;
   color: #999999;
   cursor: default;
 }
@@ -57,7 +56,7 @@
   margin-left: 15px;
 }
 #sidebar-tabs .tablink {
-  padding: 3px 11px;
+  padding: 2px 11px;
   text-decoration: none;
   border-radius: 8px 0px 0px 8px;
 }
@@ -67,6 +66,10 @@
   cursor: default;
   color: var(--active-tab-color, #666);
   background-color: var(--background-color, white);
+}
+#sidebar-tabs .tablink > span {
+  line-height: normal;
+  word-break: break-word;
 }
 
 /* Tab content */

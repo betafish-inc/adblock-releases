@@ -21,9 +21,8 @@ body {
   background-color: var(--background-color);
 }
 .menu-entry {
-  padding: 0px 4px 0px 10px;
+  padding: 2px 4px 2px 10px;
   cursor: pointer;
-  line-height: 28px;
 }
 .menu-entry:hover {
   transition: all 0.3s ease-out;
@@ -31,10 +30,9 @@ body {
   background-color: var(--popup-entry-hovered-bg-color);
 }
 .menu-status-italic {
-  padding: 0px 2px 0px 10px;
+  padding: 2px 2px 2px 10px;
   font-style: italic;
   display: none;
-  line-height: 28px;
 }
 #div_status_beta {
   padding-left: 10px;
@@ -128,6 +126,12 @@ a:hover {
   font-weight: bold;
   font-size: 14px;
 }
+.cta-description {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  padding: 4px 4px 4px 10px;
+}
 #newText_v2 {
   color: white;
   background-color: #03bcfc;
@@ -138,35 +142,38 @@ a:hover {
   line-height: normal;
   margin: 0 5px 0 0;
 }
-#mabNewCtaClose {
+button#mabNewCtaClose {
   display: none;
-  height: 100%;
   width: 28px;
-  text-align: center;
-  vertical-align: center;
+  height: auto;
+  background-color: #03bcfc;
+  border-radius: 0;
+}
+button#mabNewCtaClose:hover {
+  box-shadow: none;
 }
 #mabNewCtaClose > i {
   color: white;
 }
-#div_myadblock_enrollment_v2 {
+#div_myadblock_enrollment_v2.menu-entry {
   display: flex;
-  align-items: center;
+  align-items: stretch;
+  padding: 0;
 }
 #div_myadblock_enrollment_v2:hover {
-  padding-right: 0;
   color: white;
   background-color: #2284f7;
 }
-#div_myadblock_enrollment_v2:hover > #mabNewCtaText > span {
+#div_myadblock_enrollment_v2:hover #mabNewCtaText > span {
   display: none;
 }
-#div_myadblock_enrollment_v2:hover > #mabNewCtaText::after {
+#div_myadblock_enrollment_v2:hover #mabNewCtaText::after {
   font-weight: bold;
 }
-#div_myadblock_enrollment_v2:hover > #mabNewCtaClose {
-  display: inline-block;
-  background-color: #03bcfc;
-  margin-left: auto;
+#div_myadblock_enrollment_v2:hover #mabNewCtaClose {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .right {
   float: right;

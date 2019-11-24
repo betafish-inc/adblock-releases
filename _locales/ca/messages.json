@@ -1,8 +1,4 @@
 {
-  "description":{
-    "message":"L'extensió més popular de Chrome, amb més de 60 milions d'usuaris! Bloqueja els anuncis de tota la xarxa.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
   "description2":{
     "message":"L'extensió més popular de Chrome, amb més de 60 milions d'usuaris! Bloqueja els anuncis de tota la xarxa.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
@@ -10,10 +6,6 @@
   "name_devbuild":{
     "description":"Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
     "message":"AdBlock development build"
-  },
-  "name_releasebuild":{
-    "description":"Extension name to be shown for release / published builds.  Should not be translated",
-    "message":"L'AdBlock"
   },
   "description_edge":{
     "message":"AdBlock. El millor bloquejador de publicitat amb més de 200 milions de baixades. Bloqueja tota la publicitat de la xarxa.",
@@ -327,6 +319,16 @@
       }
     }
   },
+  "updatedtimestamp":{
+    "message":"actualitzat el $ts$",
+    "description":"Label for filter list subscription last updated timestamp",
+    "placeholders":{
+      "ts":{
+        "content":"$1",
+        "example":"8/26/2019 10:23:44 PM"
+      }
+    }
+  },
   "updatedminuteago":{
     "message":"actualitzat fa 1 minut",
     "description":"Label for filter list subscription"
@@ -390,6 +392,10 @@
   "filterlistlink":{
     "message":"No us subscriviu a més del que necessiteu –– cada una alenteix una mica més! Els crèdits i més llistes es poden trobar [[aquí]].",
     "description":"Filter lists tab explanation and link to filter list credits."
+  },
+  "filterviewsource":{
+    "message":"Mostra la llista de filtres",
+    "description":"Title for links to view filter lists on website"
   },
   "updatenowmessage2":{
     "message":"Obtindré les actualitzacions automàticament; si voleu podeu [[actualitzar ara]]",
@@ -1019,6 +1025,14 @@
     "message":"Portuguès brasiler",
     "description":"A filter list"
   },
+  "filtereasylist_plus_portuguese":{
+    "message":"Portuguese + EasyList",
+    "description":"A filter list"
+  },
+  "filtereasylist_plus_indian":{
+    "message":"IndianList + EasyList",
+    "description":"A filter list"
+  },
   "other":{
     "message":"Altre",
     "description":"Multiple choice option"
@@ -1114,6 +1128,10 @@
   "fixityourself":{
     "message":"D'acord, encara podeu bloquejar aquest anunci vosaltres mateixos a la pàgina d'opcions. Gràcies!",
     "description":"Telling users who won't report an ad to us how to handle it for themselves"
+  },
+  "popup_menu_title":{
+    "message":"Menú emergent de l'AdBlock",
+    "description":"Title for the popup menu."
   },
   "block_an_ad_on_this_page":{
     "message":"Bloqueja un anunci en aquesta pàgina",
@@ -1957,6 +1975,64 @@
     "message":"Seleccioneu una de les categories següents i l'AdBlock reemplaçarà ocasionalment els anuncis amb imatges d'alta qualitat per alegrar-vos el dia.",
     "description":"The label text for the switch on the MyAdBlock Options page"
   },
+  "myadblock_enrollment_title":{
+    "message":"El MyAdBlock està configurat en aquest navegador!",
+    "description":"The title of the MyAdBlock enrollment box."
+  },
+  "myadblock_enrollment_hide_forever":{
+    "message":"No tornis a mostrar aquest missatge",
+    "description":"The label for a checkbox that will hide the enrollment box forever."
+  },
+  "myadblock_enrollment_success":{
+    "message":"Podeu utilitzar l'enllaç màgic al vostre correu de confirmació per desbloquejar MyAdBlock en altres navegadors Chrome.",
+    "description":"MyAdBlock successfully licensed message."
+  },
+  "check_email":{
+    "message":"Reviseu el vostre correu.",
+    "description":"Prompt the user to check their email for a message from AdBlock"
+  },
+  "please_try_again":{
+    "message":"Torneu a provar-ho.",
+    "description":"Prompt the user to retry the last action."
+  },
+  "contact_support_if_errors_continue":{
+    "message":"Si continueu veient aquest error, contacteu amb [[support]].",
+    "description":"Warn the user if they continue to see the same error they should contact AdBlock support."
+  },
+  "myadblock_enrollment_resend_success":{
+    "message":"Hem enviat un enllaç màgic a $email$.",
+    "description":"MyAdBlock license email successfully sent message.",
+    "placeholders":{
+      "email":{
+        "content":"$1",
+        "example":"alice@example.com"
+      }
+    }
+  },
+  "myadblock_enrollment_link_info":{
+    "message":"En fer clic a l'enllaç, és més fàcil configurar el MyAdBlock en altres navegadors Chrome.",
+    "description":"Explains what happens when clicking the magic link."
+  },
+  "myadblock_enrollment_resend_error":{
+    "message":"S'ha produït un problema en enviar el correu de confirmació.",
+    "description":"MyAdBlock license email failed to send error message."
+  },
+  "myadblock_enrollment_resend_button":{
+    "message":"reenvia l'enllaç",
+    "description":"Text on the MyAdBlock enrollment resend email button"
+  },
+  "myadblock_feedback_title":{
+    "message":"Ens encanten els vostres comentaris!",
+    "description":"Title for MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_info":{
+    "message":"Si teniu cap comentari o voleu sol·licitar una funció, utilitzeu la nostra pàgina de comentaris.",
+    "description":"Text describing the MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_button":{
+    "message":"Envia comentaris",
+    "description":"Text on the MyAdBlock feedback button"
+  },
   "error_msg_header":{
     "message":"Vaja! El menú de l'AdBlock ha tingut problemes per carregar-se.",
     "description":"The text on the popup menu when an error has occurred"
@@ -2089,8 +2165,20 @@
     "message":"Torneu aviat, properament hi haurà més temes!",
     "description":"Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
   },
+  "more_themes_on_the_way":{
+    "message":"Més temes ben aviat!",
+    "description":"Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
+  },
+  "myadblock_themes_description":{
+    "message":"Canvieu l'aparença de l'AdBlock, incloent la mida de la lletra i l'esquema de colors",
+    "description":"Text briefly describing what themes do on the MyAdBlock tab of the Options page"
+  },
   "stay_tuned":{
     "message":"Estigueu atents",
+    "description":"Text in theme box of the Themes tab of the Options page (no more than 30 characters)"
+  },
+  "support_to_unlock":{
+    "message":"Ajuda per desbloquejar",
     "description":"Text in theme box of the Themes tab of the Options page (no more than 30 characters)"
   },
   "header":{
@@ -2109,20 +2197,586 @@
     "message":"Fosc",
     "description":"Name of a theme in the Themes tab of the Options page"
   },
+  "watermelon_theme":{
+    "message":"Síndria",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
+  "solarized_theme":{
+    "message":"Solaritzat",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
+  "ocean_theme":{
+    "message":"Oceà",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
+  "sunshine_theme":{
+    "message":"Llum del sol",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
+  "rebecca_purple_theme":{
+    "message":"Rebecca Violeta",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
   "apply_theme":{
     "message":"Aplica el tema",
     "description":"Text of clickable element that applies the theme of a theme box in the Themes tab of the Options page"
+  },
+  "adblock_twitter":{
+    "message":"AdBlock al Twitter",
+    "description":"Title for link to AdBlock's Twitter account"
+  },
+  "adblock_facebook":{
+    "message":"AdBlock al Facebook",
+    "description":"Title for link to AdBlock's Facebook account"
+  },
+  "adblock_website":{
+    "message":"Pàgina inicial de l'AdBlock",
+    "description":"Title for link to AdBlock's website"
+  },
+  "twitch_hiding_option":{
+    "message":"Activa l'ocultació de la transmissió d'anuncis al Twitch ™",
+    "description":"Description of option on General tab of the Options page to hide Twitch ads"
+  },
+  "callout_new_feature":{
+    "message":"NOU!",
+    "description":"Text to callout a new feature"
+  },
+  "myadblock_short_description":{
+    "message":"Experimenteu un AdBlock millorat amb funcions noves i exclusives per als donants",
+    "description":"Text substitle of myAdBlock page in the options page"
+  },
+  "image_swap":{
+    "message":"Canvia la imatge",
+    "description":"Title of the Image Swap sub-tab of the Options page"
+  },
+  "myadblock_subscribe_invite":{
+    "message":"Subscriu-vos al MyAdBlock per desbloquejar-ho",
+    "description":"Text on hover of a locked MyAdBlock feature in the MyAdBlock tab of the Options page"
   },
   "myadblock_more_coming_soon":{
     "message":"¡Més característiques ben aviat!",
     "description":"Title of the teaser MyAdBlock feature box in the MyAdBlock tab of the Options page"
   },
+  "myadblock_benefits_explained":{
+    "message":"A canvi de donar-nos suport en activar el MyAdBlock, obtindreu accés a les últimes eines i característiques tan aviat com es publiquin.",
+    "description":"Main text of the teaser MyAdBlock feature in the MyAdBlock tab of the Options page"
+  },
+  "myadblock_payment_not_available_callout":{
+    "message":"Vaja!",
+    "description":"The text notifying something is wrong in the payment iframe in the Options page."
+  },
+  "myadblock_payment_not_available_subtitle":{
+    "message":"No hem pogut connectar-nos als nostres servidors",
+    "description":"The sub-title of an error message box in payment iframe in the Options page."
+  },
+  "sync_turn_on_invalid_name_text":{
+    "message":"Nomeneu aquesta extensió per continuar",
+    "description":"error message text on the Sync sub-tab of the Options page"
+  },
+  "sync_turn_on_duplicate_name_text":{
+    "message":"Aquest nom d'extensió ja s'està utilitzant",
+    "description":"error message text on the Sync sub-tab of the Options page"
+  },
+  "sync_extension_section_title":{
+    "message":"Extensions",
+    "description":"section title text on the Sync sub-tab of the Options page"
+  },
+  "sync_header_message_getting_license":{
+    "message":"s'està comprovant...",
+    "description":"message to users on the sync page when the extension is getting the license"
+  },
+  "sync_header_message_in_progress":{
+    "message":"Sincronització en curs…",
+    "description":"message to users on the options pages when syncing with the server is in progress"
+  },
+  "sync_header_message_sync_complete":{
+    "message":"Sincronització finalitzada",
+    "description":"message to users on the option pages when syncing with the server server is complete"
+  },
+  "sync_extension_no_extension_msg":{
+    "message":"No teniu extensions sincronitzades.",
+    "description":"message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
+  },
+  "sync_header_message_setup_fail_prefix":{
+    "message":"Error de sincronització:",
+    "description":"start of error message to users on the sync page when sync fails."
+  },
+  "sync_header_message_error_prefix":{
+    "message":"Aquesta extensió no estava sincronitzada.",
+    "description":"Start of an sync error message to users on the Options page or AdBlock popup menu."
+  },
+  "sync_header_message_old_commit_version_part_2":{
+    "message":"Hem sincronitzat aquesta extensió i revertit els canvis.",
+    "description":"part 2 of a message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_customize_tab_part_2":{
+    "message":"Hem sincronitzat aquesta extensió i revertirem els canvis.",
+    "description":"part 2 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_customize_tab_part_3":{
+    "message":"Copieu les regles personalitzades al porta-retalls, recarregueu la pàgina i torneu a fer els canvis.",
+    "description":"part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_device_name_list_updated_at_msg":{
+    "message":"última actualització el $timestamp$",
+    "description":"message to users on when the sync page was last updated with the name of the extensions / devices (displayed in locale specific format)",
+    "placeholders":{
+      "timestamp":{
+        "content":"$1",
+        "example":"April 30, 2019 6:25 pm for US/English locale"
+      }
+    }
+  },
+  "sync_now_btn_text":{
+    "message":"Sincronitza ara",
+    "description":"button text on the Sync sub-tab of the Options page"
+  },
+  "sync_message_old_version_part_1":{
+    "message":"Utilitzeu una versió antiga de l'AdBlock.",
+    "description":"button text on the Sync sub-tab of the Options page"
+  },
+  "sync_message_old_version_part_2":{
+    "message":"[[Actualitza l'AdBlock]] per tal de sincronitzar la vostra configuració.",
+    "description":"button text on the Sync sub-tab of the Options page"
+  },
+  "filteracceptable_ads_privacy":{
+    "message":"Privadesa d'anuncis acceptables",
+    "description":"A filter list"
+  },
+  "acceptable_ads_privacy":{
+    "message":"Només permet anuncis sense el seguiment de tercers",
+    "description":"The text of an Acceptable Ads sub-option in the General tab"
+  },
+  "enable_do_not_track_advice":{
+    "message":"Perquè aquesta funció funcioni correctament, activeu Do Not Track (DNT) en les preferències del navegador.",
+    "description":"The text advicing to enable DNT if Acceptable Ads is enabled in the General tab"
+  },
+  "devtools_action_block":{
+    "description":"Button text on the dev tools panel.",
+    "message":"Bloqueja l'element"
+  },
+  "devtools_action_remove":{
+    "description":"Button text on the dev tools panel.",
+    "message":"Suprimeix la regla"
+  },
+  "devtools_action_unblock":{
+    "description":"Button text on the dev tools panel.",
+    "message":"Afegeix una excepció"
+  },
+  "devtools_filter_origin_custom":{
+    "description":"sub-title text of the rule showing the source of the rule as custom rules",
+    "message":"user-defined"
+  },
+  "devtools_filter_origin_none":{
+    "description":"sub-title text of the rule showing the source of the rule as a unamed filter list",
+    "message":"unnamed subscription"
+  },
+  "devtools_filter_subtitle":{
+    "description":"sub-title text of the rule showing the source of the rule a named filter list",
+    "message":"Origen"
+  },
+  "devtools_filter_title":{
+    "description":"Text of the filter that was applied to the list item.",
+    "message":"Filtre"
+  },
+  "devtools_footer":{
+    "description":"message on the bottom of the panel",
+    "message":"<a0>Actualitza</a0> la pàgina per veure l'efecte dels canvis del filtre"
+  },
+  "devtools_header":{
+    "description":"Text on the top of the dev tools panel to show all items of any type; slot0 and slot1 are two seperate drop down lists",
+    "message":"Mostra <slot0></slot0> els elements del <slot1></slot1> tipus"
+  },
+  "devtools_header_state_all":{
+    "description":"one of the items in the drop down list in the header of the dev tools panel",
+    "message":"all"
+  },
+  "devtools_header_state_blocked":{
+    "description":"one of the items in the drop down list in the header of the dev tools panel",
+    "message":"blocked"
+  },
+  "devtools_header_state_whitelisted":{
+    "description":"one of the items in the drop down list in the header of the dev tools panel",
+    "message":"whitelisted"
+  },
+  "devtools_header_type_any":{
+    "description":"one of the items in the drop down list in the header of the dev tools panel",
+    "message":"any"
+  },
+  "devtools_request_subtitle":{
+    "description":"sub title text for the request-column header of the dev tools panel",
+    "message":"Domini del document"
+  },
+  "devtools_request_title":{
+    "description":"title text for the request-column header of the dev tools panel",
+    "message":"Sol·licitud"
+  },
+  "devtools_request_url":{
+    "description":"sub title text for the request-column of the dev tools panel when the request is rewritten e.g. http://example.com/foo rewritten to http://example.com/bar",
+    "message":"<a0></a0> reescrit a <a1></a1>"
+  },
   "devtools_type_title":{
     "description":"Type column header text",
     "message":"Tipus"
   },
+  "new_badge":{
+    "message":"Nou",
+    "description":"Max 4 characters. If it's not possible to translate in four characters or less, please don't translate. Text in the badge of our extension toolbar icon."
+  },
+  "new_cta_default_text":{
+    "message":"Actualitzeu el vostre AdBlock",
+    "description":"Text of a temporary call-to-action item in the popup menu."
+  },
+  "new_cta_hovered_text":{
+    "message":"Gaudiu d'una millor navegació",
+    "description":"Text of a temporary call-to-action hovered item in the popup menu."
+  },
+  "myadblock_page_title":{
+    "message":"MyAdBlock: Una manera millor de navegar per Internet.",
+    "description":"The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_short_description_to_pay":{
+    "message":"Sereu un professional de bloqueig d'anuncis amb aquests complements fàcils d'utilitzar.",
+    "description":"The text next to the 'Get It Now' button on top of the MyAdBlock Options page"
+  },
+  "get_it_now":{
+    "message":"Obteniu-ho ara",
+    "description":"The text in a button visible to locked users in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_title":{
+    "message":"Feu l'AdBlock vostre",
+    "description":"The title of a feature box in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_description":{
+    "message":"Controleu l'aspecte, el comportament i la mida de la font de l'AdBlock amb controls fàcils d'utilitzar.",
+    "description":"The main text of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_title":{
+    "message":"Veieu fotos, no anuncis",
+    "description":"The title of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_description":{
+    "message":"Continuarem bloquejat els anuncis, però substituirem alguns per boniques imatges de gats, gossos i natura.",
+    "description":"The main text of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_title":{
+    "message":"Sincronitza la vostra configuració",
+    "description":"The title of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_description":{
+    "message":"Emporteu-vos les vostres regles de bloqueig d'anuncis personalitzades, configuracions i llistes blanques a qualsevol ordinador que utilitzeu.",
+    "description":"The main text of a feature box in the MyAdBlock Options page"
+  },
+  "how_can_we_help":{
+    "message":"Com us podem ajudar?",
+    "description":"Message for help flow in popup menu."
+  },
+  "see_ad":{
+    "message":"Veig un anunci",
+    "description":"Message for help flow in popup menu."
+  },
+  "website_broken":{
+    "message":"El lloc web no es mostra correctament",
+    "description":"Message for help flow in popup menu."
+  },
+  "dont_know_help_me":{
+    "message":"No ho sé. Ajudeu-me!",
+    "description":"Message for help flow in popup menu."
+  },
+  "first_time_seeing_ad":{
+    "message":"És la primera vegada que veig aquest anunci",
+    "description":"Message for help flow in popup menu."
+  },
+  "see_ad_everywhere":{
+    "message":"Veig aquest anunci a tot arreu",
+    "description":"Message for help flow in popup menu."
+  },
+  "ad_everywhere_malware":{
+    "message":"Si veieu aquest anunci a tot arreu, podríeu estar infectat amb programari maliciós.",
+    "description":"Message for help flow in popup menu."
+  },
+  "learn_more_to_resolve":{
+    "message":"Podeu [[obtenir més informació aquí]] per resoldre-ho.",
+    "description":"Message for help flow in popup menu."
+  },
+  "got_it":{
+    "message":"Entesos.",
+    "description":"Message for help flow in popup menu."
+  },
+  "check_whitelist":{
+    "message":"Comproveu la vostra llista blanca per veure si podria ser el problema.",
+    "description":"Message for help flow in popup menu."
+  },
   "ok":{
     "message":"D'acord",
     "description":"Message for help flow in popup menu."
+  },
+  "page_is_whitelisted":{
+    "message":"Aquesta pàgina es troba a la vostra llista blanca i és per això que veieu un anunci.",
+    "description":"Message for help flow in popup menu."
+  },
+  "want_to_remove":{
+    "message":"Voleu eliminar-lo?",
+    "description":"Message for help flow in popup menu."
+  },
+  "wont_change_anything":{
+    "message":"No canviarem res així que continuareu veient l'anunci.",
+    "description":"Message for help flow in popup menu."
+  },
+  "removed_url":{
+    "message":"D'acord! Hem eliminat l'URL de la vostra llista blanca.",
+    "description":"Message for help flow in popup menu."
+  },
+  "reload_not_see_ad":{
+    "message":"Recarregueu la pàgina per no veure'l més!",
+    "description":"Message for help flow in popup menu."
+  },
+  "reload_the_page":{
+    "message":"Recarrega la pàgina",
+    "description":"Message for help flow in popup menu."
+  },
+  "page_not_whitelisted":{
+    "message":"Aquesta pàgina no es troba a la vostra llista blanca.",
+    "description":"Message for help flow in popup menu."
+  },
+  "updating_filter_lists":{
+    "message":"L'AdBlock està actualitzant les vostres llistes de filtres per veure si podria ser el problema.",
+    "description":"Message for help flow in popup menu."
+  },
+  "done_reload_page":{
+    "message":"Una vegada hàgiu acabat, recarregueu la pàgina.",
+    "description":"Message for help flow in popup menu."
+  },
+  "checked_basics":{
+    "message":"Hem comprovat els conceptes bàsics i actualitzat les vostres llistes de filtres.",
+    "description":"Message for help flow in popup menu."
+  },
+  "still_see_ad":{
+    "message":"Encara veieu l'anunci?",
+    "description":"Message for help flow in popup menu."
+  },
+  "problem_solved":{
+    "message":"Impressionant! Problema resolt.",
+    "description":"Message for help flow in popup menu."
+  },
+  "done":{
+    "message":"Fet",
+    "description":"Message for help flow in popup menu."
+  },
+  "something_not_working":{
+    "message":"Hmm, quelcom no funciona.",
+    "description":"Message for help flow in popup menu."
+  },
+  "try_manual_update":{
+    "message":"Proveu a [[actualitzar manualment les vostres llistes de filtres]].",
+    "description":"Message for help flow in popup menu."
+  },
+  "additional_help":{
+    "message":"Necessiteu ajuda addicional?",
+    "description":"Message for help flow in popup menu."
+  },
+  "contact_support":{
+    "message":"[[Contacteu amb el nostre equip d'assistència!]]",
+    "description":"Message for help flow in popup menu."
+  },
+  "english_site":{
+    "message":"Esteu en un lloc web en anglès?",
+    "description":"Message for help flow in popup menu."
+  },
+  "edit_filter_lists":{
+    "message":"És possible que hàgiu d'[[editar les vostres llistes de filtres]].",
+    "description":"Message for help flow in popup menu."
+  },
+  "learn_more_filter_lists":{
+    "message":"També podeu [[aprendre més sobre les llistes de filtres]].",
+    "description":"Message for help flow in popup menu."
+  },
+  "visit_help_center":{
+    "message":"És possible que vulgueu [[visitar el nostre centre d'ajuda]] per obtenir més opcions de resolució de problemes.",
+    "description":"Message for help flow in popup menu."
+  },
+  "try_pausing":{
+    "message":"D'acord, intentem aturar l'AdBlock.",
+    "description":"Message for help flow in popup menu."
+  },
+  "reload_when_ready":{
+    "message":"Feu clic a continuació per recarregar la pàgina quan estigueu llestos.",
+    "description":"Message for help flow in popup menu."
+  },
+  "website_still_broken":{
+    "message":"Encara es mostra malament el lloc web?",
+    "description":"Message for help flow in popup menu."
+  },
+  "issue_unrelated_adblock":{
+    "message":"Sembla que hi ha un problema amb el lloc no relacionat amb l'AdBlock.",
+    "description":"Message for help flow in popup menu."
+  },
+  "contact_the_site":{
+    "message":"Us recomanem que us poseu en contacte amb el lloc.",
+    "description":"Message for help flow in popup menu."
+  },
+  "something_else_going_on":{
+    "message":"Hmm, alguna cosa més ha de passar.",
+    "description":"Message for help flow in popup menu."
+  },
+  "additional_troubleshooting":{
+    "message":"A continuació, es mostren alguns [[passos addicionals]] per resoldre aquest problema.",
+    "description":"Message for help flow in popup menu."
+  },
+  "paused_site_issue":{
+    "message":"L'AdBlock està actualment en pausa, sembla que hi ha un problema amb el lloc no relacionat amb l'AdBlock.",
+    "description":"Message for help flow in popup menu."
+  },
+  "paused_not_blocking":{
+    "message":"L'AdBlock està actualment en pausa, no estem bloquejant cap anunci.",
+    "description":"Message for help flow in popup menu."
+  },
+  "resume_reload":{
+    "message":"Voleu tornar a bloquejar els anuncis i recarregar la pàgina?",
+    "description":"Message for help flow in popup menu."
+  },
+  "no_changes_see_ad":{
+    "message":"No canviarem res així que continuareu veient els anuncis.",
+    "description":"Message for help flow in popup menu."
+  },
+  "unpaused_reload":{
+    "message":"Acabem d'activar l'AdBlock i vam tornar a carregar la pàgina.",
+    "description":"Message for help flow in popup menu."
+  },
+  "thanks":{
+    "message":"Gràcies",
+    "description":"Message for help flow in popup menu."
+  },
+  "adblock_logo":{
+    "message":"Logo de l'AdBlock",
+    "description":"Text in the alt attribute of an AdBlock logo image."
+  },
+  "example_themes":{
+    "message":"Temes d'exemple",
+    "description":"Text in the alt attribute of an image in the Options page mab that visualizes the themes feature."
+  },
+  "image_swap_example":{
+    "message":"Exemple de canvi d'imatges",
+    "description":"Text in the alt attribute of an image in the Options page mab that visualizes the Image Swap feature."
+  },
+  "sync_example":{
+    "message":"Exemple de sincronització",
+    "description":"Text in the alt attribute of an image in the Options page mab that visualizes the Sync feature."
+  },
+  "adblock_home":{
+    "message":"Inici de l'AdBlock",
+    "description":"Text in the alt attribute of an AdBlock logo / icon that links to getadblock.com."
+  },
+  "preview_channel_image":{
+    "message":"Imatge de vista prèvia de $image_category$",
+    "description":"Text in the alt attribute of an image previewed as part of the Image Swap feature.",
+    "placeholders":{
+      "image_category":{
+        "content":"$1",
+        "example":"Cats"
+      }
+    }
+  },
+  "image_of_channel":{
+    "message":"Imatge de $image_category$",
+    "description":"Text in the alt attribute of an image injected into a page as part of the Image Swap feature.",
+    "placeholders":{
+      "image_category":{
+        "content":"$1",
+        "example":"Dogs"
+      }
+    }
+  },
+  "a_theme_preview":{
+    "message":"$theme_name$ vista prèvia del tema per $extension_page$",
+    "description":"Text in the alt attribute of the image previewing a theme on an extension page.",
+    "placeholders":{
+      "theme_name":{
+        "content":"$1",
+        "example":"Dark"
+      },
+      "extension_page":{
+        "content":"$2",
+        "example":"pop-up menu"
+      }
+    }
+  },
+  "preview_a_theme":{
+    "message":"Vista prèvia $theme_name$ del tema per a $extension_page$",
+    "description":"Text in the aria-label attribute of an icon indicating that clicking will show the preview image of a theme on an extension page.",
+    "placeholders":{
+      "theme_name":{
+        "content":"$1",
+        "example":"Dark"
+      },
+      "extension_page":{
+        "content":"$2",
+        "example":"options page"
+      }
+    }
+  },
+  "help":{
+    "message":"Ajuda",
+    "description":"Text in the aria-label attribute of the support icon on the pop-up menu."
+  },
+  "settings":{
+    "message":"Configuració",
+    "description":"Text in the aria-label attribute of the gear icon on the pop-up menu."
+  },
+  "success":{
+    "message":"Éxit",
+    "description":"Text in the aria-label attribute of an icon indicating successful results."
+  },
+  "error":{
+    "message":"Error",
+    "description":"Text in the aria-label attribute of an icon indicating an error occurred."
+  },
+  "locked":{
+    "message":"Bloquejat",
+    "description":"Text in the aria-label attribute of an icon showing a feature/option is locked."
+  },
+  "selected":{
+    "message":"Seleccionat",
+    "description":"Text in the aria-label attribute of an icon showing an option is selected."
+  },
+  "learn_more_without_period":{
+    "message":"Més informació",
+    "description":"Text in the aria-label attribute of an icon linking to extra information about an option."
+  },
+  "update_filter_lists_now":{
+    "message":"Actualitza les llistes de filtres ara",
+    "description":"Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
+  },
+  "popup_menu":{
+    "message":"menú emergent",
+    "description":"General text used to define the pop-up menu."
+  },
+  "options_page":{
+    "message":"pàgina d'opcions",
+    "description":"General text used to define the extension options page."
+  },
+  "pause_on_this_site":{
+    "message":"Atura en aquest lloc.",
+    "description":"First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+  },
+  "adblock_will_pause_on_this_site":{
+    "message":"En fer clic, l'AdBlock deixarà de bloquejar els anuncis en aquest lloc.",
+    "description":"Second sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+  },
+  "pause_on_all_sites":{
+    "message":"Atura a tots els llocs.",
+    "description":"First sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_pause_on_all_sites":{
+    "message":"En fer clic, l'AdBlock deixarà de bloquejar els anuncis a tots els llocs.",
+    "description":"Second sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_block_ads_again":{
+    "message":"En fer clic, l'AdBlock bloquejarà de nou els anuncis.",
+    "description":"Second sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "resume_blocking_ads_period":{
+    "message":"Reprèn el bloqueig d'anuncis.",
+    "description":"First sentence in the aria-label of the pop-up menu action to resume blocking ads."
   }
 }
