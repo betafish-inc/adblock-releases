@@ -68,6 +68,20 @@ const getAdblockVersion = function (version) {
   adblock_version = version;
 };
 
+function receiveMessage(event) {
+  if (
+    event.data
+    && event.origin === 'https://getadblock.com'
+    && event.data.command === 'payment_success'
+  ) {
+    window.removeEventListener('message', receiveMessage);
+    chrome.runtime.sendMessage({ command: 'payment_success', version: 1 })
+      .then((response) => {
+        window.postMessage(response, '*');
+      });
+  }
+}
+
 (function onLoad() {
   if (abort) {
     return;
@@ -103,10 +117,14 @@ const getAdblockVersion = function (version) {
     }
   };
 
-  if (document.location.hostname === 'getadblock.com'
-        || document.location.hostname === 'dev.getadblock.com'
-        || document.location.hostname === 'dev1.getadblock.com'
-        || document.location.hostname === 'dev2.getadblock.com') {
+  if (
+    (document.location.hostname === 'getadblock.com'
+       || document.location.hostname === 'dev.getadblock.com'
+       || document.location.hostname === 'dev1.getadblock.com'
+       || document.location.hostname === 'dev2.getadblock.com')
+      && window.top === window.self
+  ) {
+    window.addEventListener('message', receiveMessage, false);
     chrome.storage.local.get('userid').then((response) => {
       let adblockUserId = response.userid;
       if (adblockUserId.match(invalidGUIDChars)) {
@@ -183,22 +201,6 @@ const runBandaids = function () {
       }
     },
     getadblock() {
-      function receiveMessage(event) {
-        if (
-          event.data
-          && event.origin === 'https://getadblock.com'
-          && event.data.command === 'payment_success'
-        ) {
-          window.removeEventListener('message', receiveMessage);
-          chrome.runtime.sendMessage({ command: 'payment_success', version: 1 })
-            .then((response) => {
-              window.postMessage(response, '*');
-            });
-        }
-      }
-
-      window.addEventListener('message', receiveMessage, false);
-
       chrome.storage.local.get('userid').then((response) => {
         if (response.userid) {
           const elemDiv = document.createElement('div');

@@ -767,7 +767,7 @@ if (chrome.runtime.id) {
       checkQueryState();
     }
   };
-  const slashUpdateReleases = ['3.60.0', '3.61.0', '3.61.1', '3.62.0', '4.0.0'];
+  const slashUpdateReleases = ['3.60.0', '3.61.0', '3.61.1', '3.62.0', '4.0.0', '4.0.1'];
   // Display updated page after each updat
   chrome.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);
@@ -780,6 +780,11 @@ if (chrome.runtime.id) {
     ) {
       STATS.untilLoaded(() => {
         Prefs.untilLoaded.then(shouldShowUpdate);
+      });
+    }
+    if (details.reason === 'update') {
+      STATS.untilLoaded(() => {
+        recordGeneralMessage('extension_updated');
       });
     }
     localStorage.setItem(updateStorageKey, currentVersion);
