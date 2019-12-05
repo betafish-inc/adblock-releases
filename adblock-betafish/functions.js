@@ -48,6 +48,7 @@ onReady(() => {
 //   - substitutions : Array of Str or a String
 const translate = function (messageName, substitutions) {
   if (!messageName || typeof messageName !== 'string') {
+    // eslint-disable-next-line no-console
     console.trace('missing messageName');
     return '';
   }

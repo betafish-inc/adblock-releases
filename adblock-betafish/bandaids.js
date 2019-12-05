@@ -249,8 +249,8 @@ const runBandaids = function () {
       }
     },
 
-    // The following Twitch-related code is used under the terms of the MIT license
-    // from https://greasyfork.org/en/scripts/371186-twitch-mute-ads-and-optionally-hide-them
+    // The following Twitch-related code is used under the terms of the MIT license from (v1.12):
+    // https://greasyfork.org/en/scripts/371186-twitch-mute-ads-and-optionally-hide-them/code?version=752525
     twitch() {
       const tmuteVars = {
         // Checking rate of ad in progress (in ms ; EDITABLE)
@@ -272,22 +272,43 @@ const runBandaids = function () {
         adMinTime: 15,
         // Either the current page is a squad page or not
         squadPage: false,
-        // Player ID where ads may be displayed (on squads page it's the last id instead of 0)
+        // Player ID where ads may be displayed (default 0, varying on squads page)
         playerIdAds: 0,
         // Either ads options are currently displayed or not
         displayingOptions: false,
+        // If you've the Highwind Player or not (automatically checked)
+        highwindPlayer: undefined,
       };
+
+      // Selectors for the old player and the highwind one
+      const tmuteSelectors = {
+        old: {
+          player: 'player-video', // Player class
+          playerVideo: '.player-video', // Player video selector
+          muteButton: '.player-button--volume', // (un)mute button selector
+          adNotice: 'player-ad-notice', // Ad notice class
+        },
+        hw: {
+          player: 'highwind-video-player__container', // Player class
+          playerVideo: '.highwind-video-player__container video', // Player video selector
+          muteButton: "button[data-a-target='player-mute-unmute-button']", // (un)mute button selector
+          adNotice: 'tw-absolute tw-c-background-overlay tw-c-text-overlay tw-inline-block tw-left-0 tw-pd-1 tw-top-0', // Ad notice class
+        },
+      };
+
+      // Current selector (either old or highwind player, automatically set below)
+      let currentSelector;
 
       // (un)Mute Player
       function mutePlayer() {
-        const buttonVolume = document.getElementsByClassName('player-button--volume');
-        const playerVideo = document.getElementsByClassName('player-video');
-        if (buttonVolume.length >= 1) {
+        const muteButton = document.querySelectorAll(currentSelector.muteButton);
+        const playerVideo = document.querySelectorAll(currentSelector.playerVideo);
+        if (muteButton.length >= 1) {
           if (tmuteVars.alreadyMuted === false) {
-            buttonVolume[tmuteVars.playerIdAds].click();
-          } // If the player is already muted before an ad, we avoid to unmute it.
+            // If the player is already muted before an ad, we avoid to unmute it.
+            muteButton[tmuteVars.playerIdAds].click();
+          }
           tmuteVars.playerMuted = !(tmuteVars.playerMuted);
-
           if (tmuteVars.playerMuted === true) {
             tmuteVars.adsDisplayed += 1;
             tmuteVars.adElapsedTime = 1;
@@ -306,29 +327,28 @@ const runBandaids = function () {
       // Manage ads options
       function adsOptions(changeType = 'show') {
         const optionsTemplate = document.createElement('div');
-        const advert = document.getElementsByClassName('player-ad-notice');
-        const tmadsDisplay = document.getElementById('_tmads_display');
-        const tmadsShowOptions = document.getElementById('_tmads_showoptions');
-        const tmadsUnlock = document.getElementById('_tmads_unlock');
-        const tmadsDisplayText = tmuteVars.disableDisplay === true ? 'Show' : 'Hide';
-        const viewerWrappers = document.getElementsByClassName('channel-info-bar__viewers-wrapper');
-        const channelContainer = document.getElementsByClassName('squad-stream-top-bar__container');
-        const tmuteDisplayCSS = (tmuteVars.displayingOptions === false) ? 'none' : 'inline-block';
+        const playerVideo = document.querySelectorAll(currentSelector.playerVideo);
+        const playerVideoVisability = (tmuteVars.disableDisplay === true) ? 'hidden' : 'visible';
+        const tmadsDisplayInnerText = (tmuteVars.disableDisplay === true ? 'Show' : 'Hide');
+        const advert = document.getElementsByClassName(currentSelector.adNotice);
+        const viewerWrapper = document.getElementsByClassName('channel-info-bar__viewers-wrapper');
+        const channelContainer = document.getElementsByClassName('squad-stream-top-bar__contaichannel-info-bar__viewers-wrapperner');
+        const tmuteDisplayCSS = (tmuteVars.displayingOptions === false) ? 'none' : 'inline-flex';
 
         switch (changeType) {
-          // Manage player display during an ad (either hiding the ads or still showing them)
+        // Manage player display during an ad (either hiding the ads or still showing them)
           case 'display':
             tmuteVars.disableDisplay = !(tmuteVars.disableDisplay);
             // Update the player display if an ad is supposedly in progress
             if (tmuteVars.playerMuted === true) {
-              const playerVideos = document.getElementsByClassName('player-video');
-              const cssDisplayRule = (tmuteVars.disableDisplay === true) ? 'hidden' : 'visible';
-              playerVideos[tmuteVars.playerIdAds].style.visibility = cssDisplayRule;
+              playerVideo[tmuteVars.playerIdAds].style.visibility = playerVideoVisability;
             }
-            tmadsDisplay.innerText = `${tmadsDisplayText} player during ads`;
+            document.getElementById('_tmads_display').innerText = `
+              ${tmadsDisplayInnerText} player during ads
+            `;
             break;
-          // Force a player unlock if Twitch didn't remove the ad notice properly
-          // instead of waiting the auto unlock
+          // Force a player unlock if Twitch didn't remove the ad notice properly instead of
+          // waiting the auto unlock
           case 'unlock':
             if (tmuteVars.adElapsedTime !== undefined || advert[0] !== undefined) {
               // We set the elapsed time to the unlock timer to trigger it during the next check.
@@ -337,49 +357,47 @@ const runBandaids = function () {
             break;
           // Display the ads options button
           case 'init':
-            if (viewerWrappers[0] === undefined && channelContainer[0] === undefined) {
+            if (viewerWrapper[0] === undefined && channelContainer[0] === undefined) {
               break;
             }
-
             // Append ads options and events related
             optionsTemplate.id = '_tmads_options-wrapper';
-            optionsTemplate.className = 'tw-mg-r-1';
+            optionsTemplate.className = 'tw-inline-flex';
             // eslint-disable-next-line no-unsanitized/property
             optionsTemplate.innerHTML = `
             <span id="_tmads_options" style="display: none;">
               <button type="button" id="_tmads_unlock"
-                style="padding: 0 2px 0 2px; margin-left: 2px; height: 30px;"
-                class="tw-interactive tw-button-icon tw-button-icon--hollow">
-                  Unlock player
+                      style="padding: 0 2px 0 2px; margin-left: 2px; height: 16px; width: unset;"
+                      class="tw-interactive tw-button-icon tw-button-icon--hollow">
+                Unlock player
               </button>
               <button type="button" id="_tmads_display"
-                style="padding: 0 2px 0 2px; margin-left: 2px; height: 30px;"
-                class="tw-interactive tw-button-icon tw-button-icon--hollow">
-                  ${tmadsDisplayText} player during ads
+                      style="padding: 0 2px 0 2px; margin-left: 2px; height: 16px; width: unset;"
+                      class="tw-interactive tw-button-icon tw-button-icon--hollow">
+                ${tmadsDisplayInnerText} player during ads
               </button>
             </span>
             <button type="button" id="_tmads_showoptions"
-              style="padding: 0 2px 0 2px; margin-left: 2px; height: 30px;"
-              class="tw-interactive tw-button-icon tw-button-icon--hollow">
-                Ads Options
+                    style="padding: 0 2px 0 2px; margin-left: 2px; height: 16px; width: unset;"
+                    class="tw-interactive tw-button-icon tw-button-icon--hollow">
+              Ads Options
             </button>`;
 
             // Normal player page
-            if (viewerWrappers[0] !== undefined) {
+            if (viewerWrapper[0] !== undefined) {
               tmuteVars.squadPage = false;
               tmuteVars.playerIdAds = 0;
-              viewerWrappers[0].parentNode.parentNode.appendChild(optionsTemplate);
+              viewerWrapper[0].parentNode.appendChild(optionsTemplate);
             // Squad page
             } else if (channelContainer[0] !== undefined) {
               tmuteVars.squadPage = true;
               tmuteVars.playerIdAds = 0;
-              const totalPlayerVideos = document.getElementsByClassName('player-video').length;
               // Since the primary player is never at the same place, we've to find it.
-              for (let i = 0; i < parseInt(totalPlayerVideos, 10); i++) {
-                const containerClass = 'multi-stream-player-layout__player-container';
-                const primaryClass = 'multi-stream-player-layout__player-primary';
-                const multiStream = document.getElementsByClassName(containerClass);
-                if (multiStream[0].childNodes[i].classList.contains(primaryClass)) {
+              for (let i = 0; i < parseInt(playerVideo.length, 10); i++) {
+                const playerContainerClass = 'multi-stream-player-layout__player-container';
+                const playerPrimaryClass = 'multi-stream-player-layout__player-primary';
+                const playerContainer = document.getElementsByClassName(playerContainerClass);
+                if (playerContainer[0].childNodes[i].classList.contains(playerPrimaryClass)) {
                   tmuteVars.playerIdAds = i;
                   break;
                 }
@@ -387,11 +405,11 @@ const runBandaids = function () {
               channelContainer[0].appendChild(optionsTemplate);
             }
 
-            tmadsShowOptions.addEventListener('click', adsOptions, false);
-            tmadsDisplay.addEventListener('click', () => {
+            document.getElementById('_tmads_showoptions').addEventListener('click', adsOptions, false);
+            document.getElementById('_tmads_display').addEventListener('click', () => {
               adsOptions('display');
             }, false);
-            tmadsUnlock.addEventListener('click', () => {
+            document.getElementById('_tmads_unlock').addEventListener('click', () => {
               adsOptions('unlock');
             }, false);
 
@@ -406,9 +424,26 @@ const runBandaids = function () {
 
       // Check if there's an ad
       function checkAd() {
-        const isViewing = Boolean(document.getElementsByClassName('player-video').length);
-        if (isViewing === false) {
-          return;
+        // Check if you're watching a stream, useless to continue if not
+        if (tmuteVars.highwindPlayer === undefined) {
+          const isOldPlayer = document.getElementsByClassName(tmuteSelectors.old.player).length;
+          const isHwPlayer = document.getElementsByClassName(tmuteSelectors.hw.player).length;
+          const isViewing = Boolean(isOldPlayer + isHwPlayer);
+          if (isViewing === false) {
+            return;
+          }
+          // We set the type of player currently used (old or highwind one)
+          tmuteVars.highwindPlayer = Boolean(isHwPlayer);
+          if (tmuteVars.highwindPlayer === true) {
+            currentSelector = tmuteSelectors.hw;
+          } else {
+            currentSelector = tmuteSelectors.old;
+          }
+        } else {
+          const isViewing = Boolean(document.getElementsByClassName(currentSelector.player).length);
+          if (isViewing === false) {
+            return;
+          }
         }
 
         // Initialize the ads options if necessary.
@@ -416,8 +451,7 @@ const runBandaids = function () {
         if (optionsInitialized === false) {
           adsOptions('init');
         }
-
-        const advert = document.getElementsByClassName('player-ad-notice');
+        const advert = document.getElementsByClassName(currentSelector.adNotice);
 
         if (tmuteVars.adElapsedTime !== undefined) {
           tmuteVars.adElapsedTime += 1;
@@ -426,25 +460,34 @@ const runBandaids = function () {
           }
         }
 
-        if ((advert.length >= 1 && tmuteVars.playerMuted === false)
-          || (tmuteVars.playerMuted === true && advert.length === 0)) {
+        if (
+          (advert.length >= 1 && tmuteVars.playerMuted === false)
+          || (tmuteVars.playerMuted === true && advert.length === 0)
+        ) {
           // Update at the start of an ad if the player is already muted or not
           if (advert.length >= 1) {
-            const playerVolume = document.getElementsByClassName('player-button--volume');
-            const playerVolumeFirstChild = playerVolume[tmuteVars.playerIdAds].childNodes[0];
-            tmuteVars.alreadyMuted = Boolean(playerVolumeFirstChild.className === 'unmute-button');
+            // eslint-disable-next-line max-len
+            const muteButton = document.querySelectorAll(currentSelector.muteButton)[tmuteVars.playerIdAds];
+            if (tmuteVars.highwindPlayer === true) {
+              tmuteVars.alreadyMuted = Boolean(muteButton.getAttribute('aria-label') === 'Unmute (m)');
+            } else {
+              tmuteVars.alreadyMuted = Boolean(muteButton.childNodes[0].className === 'unmute-button');
+            }
           }
 
-          // Keep the player muted/hidden for the minimum ad time set
-          // (Twitch started to remove the ad notice before the end of some ads)
-          if (advert.length === 0 && tmuteVars.adElapsedTime !== undefined
-            && tmuteVars.adElapsedTime < tmuteVars.adMinTime) {
+          // Keep the player muted/hidden for the minimum ad time set (Twitch started to remove
+          // the ad notice before the end of some ads)
+          if (
+            advert.length === 0
+            && tmuteVars.adElapsedTime !== undefined
+            && tmuteVars.adElapsedTime < tmuteVars.adMinTime
+          ) {
             return;
           }
-
           mutePlayer();
         }
       }
+
       chrome.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
         if (settings.twitch_hiding) {
           // Start the background check

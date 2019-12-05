@@ -251,6 +251,10 @@
     "message":"Povolit prohlížeči Safari blokování obsahu",
     "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
   },
+  "datacollectionoption":{
+    "message":"Povolit AdBlocku shromažďovat data o využití seznamu filtrů a informace o obsahu zablokovaném seznamy filtrů",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
   "updatedrightnow":{
     "message":"aktualizováno právě teď",
     "description":"Label for filter list subscription"
@@ -356,7 +360,7 @@
     "description":"Filter lists tab explanation and link to filter list credits."
   },
   "updatenowmessage2":{
-    "message":"Aktualizuji se automaticky; můžete mě také [[aktualizovat nyní]]",
+    "message":"Aktualizuji se automaticky, ale také mě můžete [[aktualizovat nyní]]",
     "description":"Update filters text and button"
   },
   "orenteraurl":{
@@ -1252,7 +1256,7 @@
     "description":"Entry in the AdBlock button menu"
   },
   "acceptableadsoption":{
-    "message":"Povolit nějaké nerušivé reklamy",
+    "message":"Povolit některé nerušivé reklamy",
     "description":"Checkbox on the 'General' tab of the Options page to enable the Acceptable Ads filter list"
   },
   "advanced_options2":{
@@ -1881,6 +1885,10 @@
     "message":"Brzy se vraťte, nové motivy jsou na cestě!",
     "description":"Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
   },
+  "more_themes_on_the_way":{
+    "message":"Více motivů na cestě!",
+    "description":"Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
+  },
   "stay_tuned":{
     "message":"Zůstaňte naladěni",
     "description":"Text in theme box of the Themes tab of the Options page (no more than 30 characters)"
@@ -1901,13 +1909,33 @@
     "message":"Tmavý",
     "description":"Name of a theme in the Themes tab of the Options page"
   },
+  "watermelon_theme":{
+    "message":"Vodní meloun",
+    "description":"Name of a theme in the Themes tab of the Options page"
+  },
   "apply_theme":{
     "message":"Použít motiv",
     "description":"Text of clickable element that applies the theme of a theme box in the Themes tab of the Options page"
   },
+  "twitch_hiding_option":{
+    "message":"Povolit skrývání streamovacích reklam na Twitch™",
+    "description":"Description of option on General tab of the Options page to hide Twitch ads"
+  },
+  "image_swap":{
+    "message":"Nahrazování obrázky",
+    "description":"Title of the Image Swap sub-tab of the Options page"
+  },
   "myadblock_more_coming_soon":{
     "message":"Více funkcí již brzy!",
     "description":"Title of the teaser MyAdBlock feature box in the MyAdBlock tab of the Options page"
+  },
+  "sync_tab_item":{
+    "message":"Zálohování a synchronizace",
+    "description":"Title of the Sync sub-tab of the Options page"
+  },
+  "acceptable_ads_privacy":{
+    "message":"Povolit reklamy pouze bez trackingu od třetí strany",
+    "description":"The text of an Acceptable Ads sub-option in the General tab"
   },
   "devtools_type_title":{
     "description":"Type column header text",
@@ -1916,6 +1944,10 @@
   "ok":{
     "message":"OK",
     "description":"Message for help flow in popup menu."
+  },
+  "image_swap_example":{
+    "message":"Příklad nahrazování obrázky",
+    "description":"Text in the alt attribute of an image in the Options page mab that visualizes the Image Swap feature."
   },
   "help":{
     "message":"Pomoc",
@@ -1932,5 +1964,13 @@
   "learn_more_without_period":{
     "message":"Zjistěte více",
     "description":"Text in the aria-label attribute of an icon linking to extra information about an option."
+  },
+  "do_not_swap_ads":{
+    "message":"Nenahrazovat reklamy",
+    "description":"Text of a clickable option to stop swapping ads with images in the Options page Image Swap tab."
+  },
+  "adblock_premium":{
+    "message":"AdBlock Premium",
+    "description":"Full name of the AdBlock upgrade."
   }
 }
