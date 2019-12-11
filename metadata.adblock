@@ -1,6 +1,6 @@
 [general]
 author = Michael Gundlach
-version = 4.0.2
+version = 4.1.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -107,7 +107,6 @@ adblock-options-customize.html = adblock-betafish/options/customize.html
 adblock-options-support.js = adblock-betafish/options/support.js
 adblock-options-support.html = adblock-betafish/options/support.html
 adblock-options-themes.js = adblock-betafish/options/themes.js
-adblock-options-themes.html = adblock-betafish/options/themes.html
 adblock-options-bug-report.js = adblock-betafish/options/bug-report.js
 adblock-options-bug-report.html = adblock-betafish/options/bug-report.html
 adblock-button-popup.html = adblock-betafish/button/popup.html
@@ -124,6 +123,7 @@ adblock-uiscripts-adblock-wizard.css = adblock-betafish/uiscripts/adblock-wizard
 adblock-uiscripts-load_wizard_resources.js = adblock-betafish/uiscripts/load_wizard_resources.js
 adblock-uiscripts-top_open_blacklist_ui.js = adblock-betafish/uiscripts/top_open_blacklist_ui.js
 adblock-uiscripts-top_open_whitelist_ui.js = adblock-betafish/uiscripts/top_open_whitelist_ui.js
+adblock-uiscripts-top_open_whitelist_completion_ui.js = adblock-betafish/uiscripts/top_open_whitelist_completion_ui.js
 adblock-uiscripts-send_content_to_back.js = adblock-betafish/uiscripts/send_content_to_back.js
 adblock-uiscripts-blacklisting-overlay.js = adblock-betafish/uiscripts/blacklisting/overlay.js
 adblock-uiscripts-rightclick_hook.js = adblock-betafish/uiscripts/blacklisting/rightclick_hook.js
@@ -139,7 +139,7 @@ adblock-options-mab-image-swap.html = adblock-betafish/options/image-swap.html
 adblock-options-mab-image-swap.js = adblock-betafish/options/image-swap.js
 adblock-options-mab-themes.html = adblock-betafish/options/themes-mab.html
 adblock-options-mab-themes.js = adblock-betafish/options/themes.js
-adblock-options-mab-payment.js = adblock-betafish/options/mab-payment.js
+adblock-options-premium-payment.js = adblock-betafish/options/premium-payment.js
 adblock-color-themes.css = adblock-betafish/options/color_themes.css
 adblock-picreplacement-imageview.html = adblock-betafish/picreplacement/options/imageview.html
 adblock-picreplacement-imageview.js = adblock-betafish/picreplacement/options/imageview.js
@@ -304,3 +304,6 @@ include.preload.js +=
   ../adblock-betafish/alias/include.preload.js
   ../adblock-betafish/picreplacement/contentscript-loader.js
 include.preload.js -= include.preload.js
+
+[import_ab_locales]
+_locales/*/messages.json = *

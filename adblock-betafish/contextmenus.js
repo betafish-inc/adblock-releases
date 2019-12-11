@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global chrome, require, ext, adblockIsPaused, adblockIsDomainPaused
-   recordGeneralMessage, log */
+   recordGeneralMessage, log, License, reloadTab */
 
 const { checkWhitelisted } = require('whitelisting');
 const { filterNotifier } = require('filterNotifier');
@@ -33,6 +33,15 @@ const emitPageBroadcast = (function emitBroadcast() {
           'adblock-uiscripts-top_open_whitelist_ui.js',
         ],
       },
+    topOpenWhitelistCompletionUI:
+      {
+        allFrames: false,
+        include: [
+          'adblock-jquery.js',
+          'adblock-uiscripts-load_wizard_resources.js',
+          'adblock-uiscripts-top_open_whitelist_completion_ui.js',
+        ],
+      },
     topOpenBlacklistUI:
       {
         allFrames: false,
@@ -54,12 +63,14 @@ const emitPageBroadcast = (function emitBroadcast() {
   };
 
   // Inject the required scripts to execute fnName(parameter) in
-  // the current tab.
+  // the given tab.
   // Inputs: fnName:string name of function to execute on tab.
   //         fnName must exist in injectMap above.
   //         parameter:object to pass to fnName.  Must be JSON.stringify()able.
   //         alreadyInjected?:int used to recursively inject required scripts.
-  const executeOnTab = function (fnName, parameter, alreadyInjected) {
+  //         tabID:int representing the ID of the tab to execute in.
+  //         tabID defaults to the active tab
+  const executeOnTab = function (fnName, parameter, alreadyInjected, tabID) {
     const injectedSoFar = alreadyInjected || 0;
     const data = injectMap[fnName];
     const details = { allFrames: data.allFrames };
@@ -67,8 +78,8 @@ const emitPageBroadcast = (function emitBroadcast() {
     // If there's anything to inject, inject the next item and recurse.
     if (data.include.length > injectedSoFar) {
       details.file = data.include[injectedSoFar];
-      chrome.tabs.executeScript(undefined, details).then(() => {
-        executeOnTab(fnName, parameter, injectedSoFar + 1);
+      chrome.tabs.executeScript(tabID, details).then(() => {
+        executeOnTab(fnName, parameter, injectedSoFar + 1, tabID);
       }).catch((error) => {
         log(error);
       });
@@ -76,13 +87,13 @@ const emitPageBroadcast = (function emitBroadcast() {
       // Nothing left to inject, so execute the function.
       const param = JSON.stringify(parameter);
       details.code = `${fnName}(${param});`;
-      chrome.tabs.executeScript(undefined, details);
+      chrome.tabs.executeScript(tabID, details);
     }
   };
 
   // The emitPageBroadcast() function
   const theFunction = function (request) {
-    executeOnTab(request.fn, request.options);
+    executeOnTab(request.fn, request.options, 0, request.tabID);
   };
 
   return theFunction;
@@ -134,10 +145,16 @@ const contextMenuItem = (() => ({
       title: chrome.i18n.getMessage('block_this_ad'),
       contexts: ['all'],
       onclick(info, tab) {
-        emitPageBroadcast(
-          { fn: 'topOpenBlacklistUI', options: { info } },
-          { tab },
-        );
+        emitPageBroadcast({
+          fn: 'topOpenBlacklistUI',
+          options: {
+            info,
+            isActiveLicense: License.isActiveLicense(),
+            showBlacklistCTA: License.shouldShowBlacklistCTA(),
+          },
+        }, {
+          tab,
+        });
       },
     },
   blockAnAd:
@@ -145,10 +162,16 @@ const contextMenuItem = (() => ({
       title: chrome.i18n.getMessage('block_an_ad_on_this_page'),
       contexts: ['all'],
       onclick(info, tab) {
-        emitPageBroadcast(
-          { fn: 'topOpenBlacklistUI', options: { nothingClicked: true } },
-          { tab },
-        );
+        emitPageBroadcast({
+          fn: 'topOpenBlacklistUI',
+          options: {
+            nothingClicked: true,
+            isActiveLicense: License.isActiveLicense(),
+            showBlacklistCTA: License.shouldShowBlacklistCTA(),
+          },
+        }, {
+          tab,
+        });
       },
     },
 }))();
@@ -196,6 +219,38 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   } // not for us
   emitPageBroadcast({ fn: 'sendContentToBack', options: {} });
   sendResponse({});
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'reloadTabForWhitelist') {
+    reloadTab(sender.tab.id, () => {
+      emitPageBroadcast({
+        fn: 'topOpenWhitelistCompletionUI',
+        options: {
+          rule: request.rule,
+          isActiveLicense: License.isActiveLicense(),
+          showWhitelistCTA: License.shouldShowWhitelistCTA(),
+        },
+        tabID: sender.tab.id,
+      });
+    });
+    sendResponse({});
+  }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'showWhitelistCompletion') {
+    emitPageBroadcast({
+      fn: 'topOpenWhitelistCompletionUI',
+      options: {
+        rule: request.rule,
+        isActiveLicense: License.isActiveLicense(),
+        showWhitelistCTA: License.shouldShowWhitelistCTA(),
+      },
+      tabID: sender.tab.id,
+    });
+    sendResponse({});
+  }
 });
 
 // Update browser actions and context menus when whitelisting might have

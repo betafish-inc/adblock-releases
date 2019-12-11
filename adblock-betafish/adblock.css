@@ -71,6 +71,14 @@ Global Styles
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
+  /* Aliases for Themes CTA:
+     normally these are defined by other custom properties, but here they are set
+     with the solarized colors since it's the default Theme CTA to use */
+  --popup-themes-cta-icon: #00a498;
+  --popup-themes-cta-text: #90a2a2;
+  --popup-themes-cta-background: #003643;
+  --popup-themes-cta-background-on-hover: #00a498;
+  --popup-themes-cta-color-on-hover: #003643;
 }
 
 * {
@@ -167,7 +175,7 @@ Icons global styling (needs to @import 'fonts/font-face.css')
 
 /* Rules for sizing the icon. */
 .material-icons.md-14 {
-  font-size: 18px;
+  font-size: 14px;
 }
 .material-icons.md-18 {
   font-size: 18px;

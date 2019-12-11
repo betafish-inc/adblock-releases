@@ -767,7 +767,8 @@ if (chrome.runtime.id) {
       checkQueryState();
     }
   };
-  const slashUpdateReleases = ['3.60.0', '3.61.0', '3.61.1', '3.62.0', '4.0.0', '4.0.1', '4.0.2'];
+  const slashUpdateReleases = ['3.60.0', '3.61.0', '3.61.1', '3.62.0', '4.0.0', '4.0.1', '4.0.2', '4.1.0'];
+
   // Display updated page after each updat
   chrome.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);
@@ -877,18 +878,6 @@ const ytChannelOnRemovedListener = function (tabId) {
   ytChannelNamePages.delete(tabId);
 };
 
-const addYTChannelListeners = function () {
-  chrome.tabs.onCreated.addListener(ytChannelOnCreatedListener);
-  chrome.tabs.onUpdated.addListener(ytChannelOnUpdatedListener);
-  chrome.tabs.onRemoved.addListener(ytChannelOnRemovedListener);
-};
-
-const removeYTChannelListeners = function () {
-  chrome.tabs.onCreated.removeListener(ytChannelOnCreatedListener);
-  chrome.tabs.onUpdated.removeListener(ytChannelOnUpdatedListener);
-  chrome.tabs.onRemoved.removeListener(ytChannelOnRemovedListener);
-};
-
 // On single page sites, such as YouTube, that update the URL using the History API pushState(),
 // they don't actually load a new page, we need to get notified when this happens
 // and update the URLs in the Page and Frame objects
@@ -914,18 +903,23 @@ const youTubeHistoryStateUpdateHandler = function (details) {
   }
 };
 
-const addyouTubeHistoryStateUpdateHandler = function () {
+const addYTChannelListeners = function () {
+  chrome.tabs.onCreated.addListener(ytChannelOnCreatedListener);
+  chrome.tabs.onUpdated.addListener(ytChannelOnUpdatedListener);
+  chrome.tabs.onRemoved.addListener(ytChannelOnRemovedListener);
   chrome.webNavigation.onHistoryStateUpdated.addListener(youTubeHistoryStateUpdateHandler);
 };
 
-const removeyouTubeHistoryStateUpdateHandler = function () {
+const removeYTChannelListeners = function () {
+  chrome.tabs.onCreated.removeListener(ytChannelOnCreatedListener);
+  chrome.tabs.onUpdated.removeListener(ytChannelOnUpdatedListener);
+  chrome.tabs.onRemoved.removeListener(ytChannelOnRemovedListener);
   chrome.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHandler);
 };
 
 settings.onload().then(() => {
   if (getSettings().youtube_channel_whitelist) {
     addYTChannelListeners();
-    addyouTubeHistoryStateUpdateHandler();
   }
 });
 
@@ -1066,8 +1060,7 @@ const getDebugInfo = function (callback) {
   if (window.blockCounts) {
     response.otherInfo.blockCounts = blockCounts.get();
   }
-  if (localStorage
-      && localStorage.length) {
+  if (localStorage && localStorage.length) {
     response.otherInfo.localStorageInfo = {};
     response.otherInfo.localStorageInfo.length = localStorage.length;
     let inx = 1;
@@ -1275,8 +1268,6 @@ Object.assign(window, {
   isSelectorExcludeFilter,
   addYTChannelListeners,
   removeYTChannelListeners,
-  addyouTubeHistoryStateUpdateHandler,
-  removeyouTubeHistoryStateUpdateHandler,
   ytChannelNamePages,
   checkPingResponseForProtect,
   pausedFilterText1,

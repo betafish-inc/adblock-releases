@@ -3,7 +3,8 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global chrome, backgroundPage, synchronizer, optionalSettings, Subscription, filterStorage,
    filterNotifier, translate, DownloadableSubscription, updateAcceptableAdsUI, port,
-   delayedSubscriptionSelection, startSubscriptionSelection, selected */
+   delayedSubscriptionSelection, startSubscriptionSelection, selected, activateTab, License,
+   MABPayment */
 
 // Contains all filter lists and their respective containers.
 const filterListSections = {
@@ -409,9 +410,11 @@ function getDefaultFilterUI(filterList, checkboxID, filterListType) {
   const isAcceptableAds = backgroundPage.isAcceptableAds(filterList);
   const isLanguageFilter = filterListType === 'languageFilterList';
   const aaPrivacy = FilterListUtil.cachedSubscriptions.acceptable_ads_privacy;
+  let isSelected = filterList.subscribed;
   let filterListUrl = filterList.url;
 
   if (isAcceptableAds && aaPrivacy.subscribed) {
+    isSelected = true;
     filterListUrl = aaPrivacy.url;
   }
 
@@ -425,7 +428,7 @@ function getDefaultFilterUI(filterList, checkboxID, filterListType) {
   const $checkBox = $('<input>')
     .attr('type', 'checkbox')
     .attr('id', checkboxID)
-    .prop('checked', !!filterList.subscribed);
+    .prop('checked', isSelected);
 
   const $checkBoxIcons = $(`
     <i role="img" aria-hidden="true" class="unchecked material-icons">lens</i>
@@ -871,6 +874,13 @@ CustomFilterListUploadUtil.bindControls = () => {
 };
 
 function onFilterChangeHandler(action, item) {
+  // A user can either add, remove or update a filter list from the UI.
+  // Each 'subscription.added' action leads to a 'subscription.updated' so we
+  // can show the CTAs simply when a subscription is either removed or updated
+  if (['subscription.removed', 'subscription.updated'].includes(action)) {
+    MABPayment.displaySyncCTAs(true);
+  }
+
   const updateEntry = function (entryToUpdate, eventAction) {
     const entry = entryToUpdate;
     if (entry) {
@@ -1058,4 +1068,21 @@ $(document).ready(() => {
   const $txtInputCustomURL = $('#txtNewSubscriptionUrl');
   $txtInputCustomURL.attr('placeholder', translate('enter_url'));
   removeBottomLine('all');
+
+  if (!License || $.isEmptyObject(License) || !MABPayment) {
+    return;
+  }
+  const payInfo = MABPayment.initialize('filters');
+  if (License.shouldShowMyAdBlockEnrollment()) {
+    MABPayment.freeUserLogic(payInfo);
+  } else if (License.isActiveLicense()) {
+    MABPayment.paidUserLogic(payInfo);
+  }
+
+  MABPayment.displaySyncCTAs();
+  $('.sync-cta #get-it-now-filters').click(MABPayment.userClickedSyncCTA);
+  $('.sync-cta #close-sync-cta-filters').click(MABPayment.userClosedSyncCTA);
+  $('a.link-to-tab').click((event) => {
+    activateTab($(event.target).attr('href'));
+  });
 });

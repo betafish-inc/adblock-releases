@@ -1,4 +1,36 @@
 <!DOCTYPE html>
+
+<!-- Start: Premium Sync CTA -->
+<section class="sync-cta bottom-line" style="display: none;">
+  <section class="get-sync-cta" id="locked-user-pay-section-filters">
+    <p>
+      <span i18n="save_custom_settings_cta"></span>
+      <span i18n="try_backup_sync"></span>
+    </p>
+    <section class="user-actions">
+      <a
+        id="get-it-now-filters"
+        i18n="get_it_now"
+        class="btn yellow long"
+        target="_blank"
+        href="https://getadblock.com/premium/enrollment/"
+      ></a>
+      <button id="close-sync-cta-filters">
+        <i class="material-icons" role="img" i18n-aria-label="close">close</i>
+      </button>
+    </section>
+  </section>
+  <section class="goodbye-sync-cta" style="display: none;">
+    <p>
+      <span i18n="wont_show_again"></span>
+      <span i18n="check_out_premium" i18n_replacement_el="premium-from-filters">
+        <a href="#mab" id="premium-from-filters" class="link-text-color link-to-tab"></a>
+      </span>
+    </p>
+  </section>
+</section>
+<!-- End: Premium Sync CTA -->
+
 <div class="option-page-box">
   <div class="option-page-content">
     <div id="message_holder" class="failed_fetch error-message"></div>
@@ -61,7 +93,7 @@
         type="button"
         id="btnNewSubscriptionUrl"
         i18n="subscribebutton"
-      />
+      ></button>
     </div>
 
     <a id="btnShowLinks" class="advanced" href="#" i18n="showlinkstolists2"></a>

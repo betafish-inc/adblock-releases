@@ -3,7 +3,16 @@
 import os
 import sys
 import subprocess
+import glob
+import io
 import json
+import os
+import re
+import struct
+import subprocess
+import sys
+import random
+import posixpath
 import re
 import errno
 from collections import OrderedDict
@@ -17,6 +26,34 @@ def get_metadata_path(base_dir, type):
 
 def get_dev_env_path(base_dir, type):
     return os.path.join(BASE_DIR, "devenv")
+
+def import_ab_locales(params, files):
+    for item in params['metadata'].items('import_ab_locales'):
+        filename = item[0]
+        for sourceFile in glob.glob(os.path.join(os.path.dirname(item.source),
+                                                 *filename.split('/'))):
+            keys = item[1]
+            locale = sourceFile.split(os.path.sep)[-2]
+            targetFile = posixpath.join('_locales', locale, 'messages.json')
+            data = json.loads(files.get(targetFile, '{}').decode('utf-8'))
+
+            try:
+                with io.open(sourceFile, 'r', encoding='utf-8') as handle:
+                    sourceData = json.load(handle)
+
+                # Resolve wildcard imports
+                if keys == '*':
+                    importList = sourceData.keys()
+                    importList = filter(lambda k: not k.startswith('_'), importList)
+                    keys = ' '.join(importList)
+
+                for stringID in keys.split():
+                    if stringID in sourceData:
+                        data.setdefault(stringID, sourceData[stringID])
+            except Exception as e:
+                print 'Warning: error importing locale data from %s: %s' % (sourceFile, e)
+
+            files[targetFile] = toJson(data)
 
 def load_translation(locale):
     filename = os.path.join(BASE_DIR, "_locales", locale, "messages.json")
@@ -57,6 +94,8 @@ buildtools.packager.getMetadataPath = get_metadata_path
 buildtools.packager.getDevEnvPath = get_dev_env_path
 import buildtools.packagerChrome
 buildtools.packagerChrome.processFile = process_file
+buildtools.packagerChrome.import_locales = import_ab_locales
+toJson = buildtools.packagerChrome.toJson
 
 originalGetIgnoredFiles = buildtools.packagerChrome.getIgnoredFiles
 

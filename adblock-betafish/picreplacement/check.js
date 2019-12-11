@@ -2,7 +2,8 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global ext, chrome, require, storageGet, storageSet, log, STATS, Channels, Prefs,
-   getSettings, setSetting, translate, reloadOptionsPageTabs, filterNotifier */
+   getSettings, setSetting, translate, reloadOptionsPageTabs, filterNotifier, openTab,
+   emitPageBroadcast */
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
@@ -17,7 +18,11 @@ const License = (function getLicense() {
   const licenseStorageKey = 'license';
   const installTimestampStorageKey = 'install_timestamp';
   const statsInIconKey = 'current_show_statsinicon';
+  const userClosedSyncCTAKey = 'user_closed_sync_cta';
+  const userSawSyncCTAKey = 'user_saw_sync_cta';
+  const pageReloadedOnSettingChangeKey = 'page_reloaded_on_user_settings_change';
   const popupMenuCtaClosedKey = 'popup_menu_cta_closed';
+  const showPopupMenuThemesCtaKey = 'popup_menu_themes_cta';
   const licenseAlarmName = 'licenseAlarm';
   let theLicense;
   const fiveMinutes = 300000;
@@ -27,7 +32,10 @@ const License = (function getLicense() {
   const licensePromise = new Promise(((resolve) => {
     readyComplete = resolve;
   }));
-
+  const themesForCTA = [
+    'solarized_theme', 'solarized_light_theme', 'watermelon_theme', 'sunshine_theme', 'ocean_theme',
+  ];
+  let currentThemeIndex = 0;
   const mabConfig = {
     prod: {
       licenseURL: 'https://myadblock-licensing.firebaseapp.com/license/',
@@ -103,6 +111,11 @@ const License = (function getLicense() {
   return {
     licenseStorageKey,
     popupMenuCtaClosedKey,
+    userClosedSyncCTAKey,
+    userSawSyncCTAKey,
+    showPopupMenuThemesCtaKey,
+    themesForCTA,
+    pageReloadedOnSettingChangeKey,
     initialized,
     licenseAlarmName,
     licenseTimer: undefined, // the license update timer token
@@ -140,6 +153,12 @@ const License = (function getLicense() {
         }
         readyComplete();
       });
+    },
+    getCurrentPopupMenuThemeCTA() {
+      const theme = License.themesForCTA[currentThemeIndex];
+      const lastThemeIndex = License.themesForCTA.length - 1;
+      currentThemeIndex = lastThemeIndex === currentThemeIndex ? 0 : currentThemeIndex += 1;
+      return theme || '';
     },
     // Get the latest license data from the server, and talk to the user if needed.
     update() {
@@ -292,6 +311,34 @@ const License = (function getLicense() {
     },
     shouldShowMyAdBlockEnrollment() {
       return License.isMyAdBlockEnrolled() && !License.isActiveLicense();
+    },
+    shouldShowBlacklistCTA(newValue) {
+      const currentLicense = License.get() || {};
+      if (typeof newValue === 'boolean') {
+        currentLicense.showBlacklistCTA = newValue;
+        License.set(currentLicense);
+        return null;
+      }
+
+      if (typeof currentLicense.showBlacklistCTA === 'undefined') {
+        currentLicense.showBlacklistCTA = true;
+        License.set(currentLicense);
+      }
+      return License && License.get() && License.get().showBlacklistCTA === true;
+    },
+    shouldShowWhitelistCTA(newValue) {
+      const currentLicense = License.get() || {};
+      if (typeof newValue === 'boolean') {
+        currentLicense.showWhitelistCTA = newValue;
+        License.set(currentLicense);
+        return null;
+      }
+
+      if (typeof currentLicense.showWhitelistCTA === 'undefined') {
+        currentLicense.showWhitelistCTA = true;
+        License.set(currentLicense);
+      }
+      return License && License.get() && License.get().showWhitelistCTA === true;
     },
     displayPopupMenuNewCTA() {
       const isNotActive = !License.isActiveLicense();
@@ -490,6 +537,31 @@ License.ready().then(() => {
       if (License.isActiveLicense()) {
         replacedCounts.recordOneAdReplaced(sender.tab.id);
       }
+    }
+  });
+
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.command === 'setBlacklistCTAStatus') {
+      if (typeof request.isEnabled === 'boolean') {
+        License.shouldShowBlacklistCTA(request.isEnabled);
+      }
+      sendResponse({});
+    }
+  });
+
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.command === 'setWhitelistCTAStatus') {
+      if (typeof request.isEnabled === 'boolean') {
+        License.shouldShowWhitelistCTA(request.isEnabled);
+      }
+      sendResponse({});
+    }
+  });
+
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.command === 'openPremiumPayURL') {
+      openTab(License.MAB_CONFIG.payURL);
+      sendResponse({});
     }
   });
 });

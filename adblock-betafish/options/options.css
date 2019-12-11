@@ -784,9 +784,6 @@ section .theme-section-row {
   max-width: 448px;
   min-width: 336px;
 }
-#themes section .theme-section-row {
-  min-width: 224px;
-}
 .theme-section {
   display: flex;
   flex-wrap: wrap-reverse;
@@ -797,12 +794,6 @@ section .theme-section-row {
 }
 #mab-themes .options-page-themes .theme-selection {
   flex: 1 1 48.6%;
-}
-#themes .popup-menu-themes .theme-selection {
-  flex: 1 1 43%;
-}
-#themes .options-page-themes .theme-selection {
-  flex: 1 1 39.4%;
 }
 .themes-title {
   margin-left: 0;
@@ -848,29 +839,70 @@ section .theme-section-row {
   }
 }
 
-@media screen and (max-width: 723px) {
-  #themes .theme-section-title {
-    display: none;
-  }
-  #themes .theme-section-title-top {
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    line-height: normal;
-  }
-  #themes .theme-image {
-    margin-bottom: 48px;
-  }
-  #themes .theme-title {
-    margin-bottom: 16px;
-    margin-top: 0;
-  }
-  #themes section .theme-section-row {
-    max-width: 224px;
-  }
-  #themes .popup-menu-themes {
-    margin-bottom: 48px;
-  }
+/* PREMIUM SYNC CTA */
+
+.sync-cta {
+  max-width: 984px;
+  min-height: 60px;
+  margin-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: flex-end;
+}
+
+.get-sync-cta,
+.goodbye-sync-cta {
+  width: 100%;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sync-cta p {
+  display: inline;
+  margin: 0;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: normal;
+  color: var(--options-page-accent-text);
+  overflow-wrap: break-word;
+  max-width: 776px;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  margin-left: 60px;
+}
+
+.user-actions a {
+  font-size: 14px;
+  font-weight: bold;
+  max-width: 176px;
+  height: 40px;
+}
+
+.user-actions button {
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background: none;
+  border: none;
+  margin-left: 24px;
+}
+
+.user-actions button:hover {
+  cursor: pointer;
+  color: var(--main-text-color);
+  background-color: var(--popup-block-ads-bg-color);
+}
+
+.user-actions button > i {
+  pointer-events: none;
 }
 
 /* SIDEBAR */

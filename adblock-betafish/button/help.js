@@ -20,7 +20,7 @@ const logHelpFlowResults = function (source) {
 };
 
 $(window).unload(() => {
-  if (!logSent) {
+  if (!logSent && segueBreadCrumb.length > 0) {
     logHelpFlowResults('popupClosed');
   }
 });

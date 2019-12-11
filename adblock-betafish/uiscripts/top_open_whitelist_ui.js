@@ -243,13 +243,19 @@ function topOpenWhitelistUI() {
     $pathPart.text(domainFilter.pathPart);
 
     $dialog.find('button.primary').click(() => {
-      const filter = `@@||${domainFilter.generateUrl(false, $domainSlider.valueAsNumber, $pathSlider.valueAsNumber)}$document`;
+      const rule = domainFilter.generateUrl(
+        false,
+        $domainSlider.valueAsNumber,
+        $pathSlider.valueAsNumber,
+      );
+      const filter = `@@||${rule}$document`;
       chrome.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then(() => {
         if ($dialog.find('#adblock-reload-page').is(':checked')) {
-          document.location.reload();
+          chrome.runtime.sendMessage({ command: 'reloadTabForWhitelist', rule });
         } else {
           mayOpenDialogUi = true;
           (document.body || document.documentElement).removeChild(base);
+          chrome.runtime.sendMessage({ command: 'showWhitelistCompletion', rule });
         }
       });
     });

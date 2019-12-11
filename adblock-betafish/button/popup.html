@@ -145,15 +145,20 @@
 
         <div id="separator-1" class="separator"></div>
 
-        <div id="div_myadblock_enrollment_v2" class="menu-entry">
+        <div id="div_myadblock_enrollment_v2" class="premium-cta menu-entry">
           <div class="cta-description">
             <span id="newText_v2" i18n="new_badge"></span>
-            <span tabindex="0" id="mabNewCtaText" i18n="new_cta_default_text" role="link"
+            <span
+              tabindex="0"
+              id="mabNewCtaText"
+              class="cta-message"
+              i18n="new_cta_default_text"
+              role="link"
               ><span></span
             ></span>
           </div>
 
-          <button tabindex="0" id="mabNewCtaClose" class="cta-close">
+          <button tabindex="0" id="mabNewCtaClose" class="premium-cta-close">
             <i class="material-icons md-18" role="img" i18n-aria-label="close">close</i>
           </button>
         </div>
@@ -240,15 +245,27 @@
           i18n="dont_run_on_pages_on_site"
         ></div>
 
-        <div id="separator3" class="separator"></div>
-      </div>
-      <!-- menu-items-->
+        <!-- Premium themes CTA -->
+        <div id="div_premium_themes_cta" class="premium-cta menu-entry">
+          <div class="cta-description">
+            <i class="material-icons md-18" role="img" aria-hidden="true">featured_video</i>
+            <span
+              tabindex="0"
+              id="themes-cta-text"
+              class="cta-message"
+              i18n="adblock_looked_like_this"
+              role="link"
+              ><span></span
+            ></span>
+          </div>
 
-      <div id="div_slideout" style="cursor: pointer;">
-        <div style="margin: 5px 0px;">
-          <a href="#" tabindex="0" id="link_open" i18n="donate_to_adblock"></a>
+          <button tabindex="0" id="close-themes-cta" class="premium-cta-close">
+            <i class="material-icons md-18" role="img" i18n-aria-label="close">close</i>
+          </button>
         </div>
+        <!-- Premium themes CTA -->
       </div>
+      <!-- menu-items -->
     </div>
     <!-- wrapper -->
   </body>

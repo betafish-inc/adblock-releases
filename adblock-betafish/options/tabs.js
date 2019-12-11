@@ -38,36 +38,18 @@ function allTabIDs() {
   }).get();
 }
 
-// Active tab cannot be #mab at any point
-// if mab tab doesn't exist
 // Inputs:
 //    - tabID -- string (tab ID to activate)
-//    - mabExists -- bool (true if enrolled to MAB)
 // Output:
 //    - tabID -- string (valid tab ID to activate)
-function validateTabID(tabID, mabExists) {
-  const defaultTabID = mabExists ? '#mab' : '#general';
-  const currentTabID = $('.tablink.active').attr('href');
-
-  if (!tabID) {
-    return defaultTabID;
-  }
-  if (tabID === '#mab' && !mabExists) {
-    return defaultTabID;
-  }
-  if (!allTabIDs().includes(tabID)) {
-    return defaultTabID;
-  }
-  if (currentTabID && tabIsLocked(tabID)) {
-    return currentTabID;
-  }
-  if (tabIsLocked(tabID)) {
-    return defaultTabID;
+function validateTabID(tabID) {
+  if (!tabID || !allTabIDs().includes(tabID)) {
+    return '#general';
   }
   return tabID;
 }
 
-// Show or hide myAdBlock subtabs based on
+// Show or hide Premium subtabs based on
 // which tab is currently active. All subtabs
 // links must have a data-parent-tab attribute
 // Inputs: $activeTab -- jQuery object
@@ -116,9 +98,9 @@ function displayActiveTab($activeTab) {
   $activeTabPanel.show();
 }
 
-function activateTab(tabHref, mabExists) {
-  const tabID = validateTabID(tabHref, mabExists);
-  const $activeTab = $(`[href=${tabID}]`);
+function activateTab(tabHref) {
+  const tabID = validateTabID(tabHref);
+  const $activeTab = $(`.tablink[href=${tabID}]`);
   const $allTabs = $('.tablink');
   const $allTabPanels = $('.tab');
 
@@ -134,75 +116,13 @@ function activateTab(tabHref, mabExists) {
   displayActiveTab($activeTab);
 }
 
-// Add myAdBlock tab HTML and respective subtabs if user is enrolled
-function addMyAdBlockTab() {
-  if (!License) {
-    return false;
-  }
-  const showMyAdBlockTab = License.shouldShowMyAdBlockEnrollment() || License.isActiveLicense();
-  if (!showMyAdBlockTab) {
-    return false;
-  }
-
-  // Hint: To add an extra subtab, add another <li> element below.
-  // Add class="locked" to li only if the subtab is not clickable for a free user
-  const myAdBlockTab = `
-  <li id="myadblock-tab">
-    <a href="#mab" class="tablink">
-      <i class="material-icons md-18" role="img" aria-hidden="true">account_circle</i>
-      <span i18n="premium"></span>
-    </a>
-    <ul data-parent-tab="#mab">
-      <li>
-        <a href="#mab-themes" class="tablink">
-          <i class="material-icons md-18 unlocked" role="img" aria-hidden="true">featured_video</i>
-          <span i18n="themes"></span>
-        </a>
-      </li>
-      <li>
-        <a href="#mab-image-swap" class="tablink">
-          <i class="material-icons md-18 unlocked" role="img" aria-hidden="true">image</i>
-          <i class="material-icons md-18 locked" role="img" i18n-aria-label="locked">lock</i>
-          <span i18n="image_swap"></span>
-        </a>
-      </li>
-      <li>
-        <a href="#sync" class="tablink">
-          <i class="material-icons md-18 unlocked" role="img" aria-hidden="true">sync</i>
-          <span i18n="sync_tab_item"></span>
-        </a>
-      </li>
-    </ul>
-  </li>`;
-
-  const $tabsUL = $('#sidebar-tabs > ul:not(.has-myadblock)');
-
-  $tabsUL.prepend(myAdBlockTab);
-  $tabsUL.addClass('has-myadblock');
-
-  if (License.shouldShowMyAdBlockEnrollment()) {
-    $('#myadblock-tab').show();
-    $('#themes-tab').hide();
-    return true;
-  }
-  if (License.isActiveLicense()) {
-    $('#myadblock-tab li.locked').removeClass('locked');
-    $('#myadblock-tab').show();
-    $('#themes-tab').hide();
-    return true;
-  }
-  $('#myadblock-tab').hide();
-  $('#themes-tab').show();
-  return false;
-}
-
 // displayMABFeedbackCTA checks if the user has set their language to english and
-// displays the feedback call to action on MyAdBlock related options pages:
+// displays the feedback call to action on Premium related options pages:
 //
-// MyAdBlock
-// MAB - Themes
-// MAB - Image Swap
-// MAB - Sync
+// Premium
+// Premium - Themes
+// Premium - Image Swap
+// Premium - Sync
 const displayMABFeedbackCTA = function () {
   const lang = getUILanguage();
   if (lang === 'en' || lang.startsWith('en-')) {
@@ -253,7 +173,7 @@ function loadTabPanelsHTML() {
 
 // Get active tab ID from cookie or URL hash and activate tab
 // and display the tabs and tabel accordingly
-function activateTabOnPageLoad(mabExists) {
+function activateTabOnPageLoad() {
   // Set active tab from cookie
   let activeTabID = $.cookie('active_tab');
 
@@ -261,26 +181,23 @@ function activateTabOnPageLoad(mabExists) {
   if (window.location && window.location.hash) {
     [activeTabID] = window.location.hash.split('_');
   }
-  activateTab(activeTabID, mabExists);
+  activateTab(activeTabID);
 }
 
 $(document).ready(() => {
-  // 1. add the myadblock tab if user is enrolled
-  const myAdBlockTabAdded = addMyAdBlockTab();
-
-  // 2. load all the tab panels templates in respective panel DIVs
+  // 1. load all the tab panels templates in respective panel DIVs
   loadTabPanelsHTML();
 
-  // 3. Activate tab on page load with cookie, URL hash or default tabID
-  activateTabOnPageLoad(myAdBlockTabAdded);
+  // 2. Activate tab on page load with cookie, URL hash or default tabID
+  activateTabOnPageLoad();
 
-  // 4. Activate tab when clicked
+  // 3. Activate tab when clicked
   $('.tablink').click(function tabLinkClicked() {
     const tabID = $(this).attr('href');
-    activateTab(tabID, myAdBlockTabAdded);
+    activateTab(tabID);
   });
 
-  // 5. Display CTA - a future library update will support
+  // 4. Display CTA - a future library update will support
   // automatically injecting the CTA HTML as well.
   displayMABFeedbackCTA();
 });

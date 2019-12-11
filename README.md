@@ -60,6 +60,21 @@ is present in this repository, it should not be modified here directly. Instead
 modifications should be made to the script in the `buildtools` repository, the
 copy here can then be updated from there.
 
+## Overrides and customization
+
+In order to customize AdBlock, we've aliased some of ABP's core JS files.  All of
+these aliased files can be found in the
+[alias](https://github.com/betafish-inc/adblock-next-gen/tree/master/adblock-betafish/alias)
+folder.
+When updating the [dependencies](https://github.com/betafish-inc/adblock-next-gen/blob/master/dependencies)
+file to upgrade to a new version of ABP, be sure to review and update the
+corresponding files in the `alias` folder.
+
+Also, we've overridden some of the features and functions of the ABP build process in the
+[build.py](https://github.com/betafish-inc/adblock-next-gen/blob/master/build.py) file.
+The overriden functions should also be reviewed when updating to a new version of the build tool.
+
+
 ## Code Style
 
 We use a standard code style enforced by [eslint](https://eslint.org) for JavaScript and [Prettier](https://prettier.io) for HTML, CSS and JSON. To use these tools, install [Node.js](https://nodejs.org) and run the following command in the project directory:

@@ -217,7 +217,8 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
         if (!response.error) {
           that.blockListViaCSS([$summary.text()]);
           that.fire('block');
-          $pageTwoCancelBtn.click();
+          that.blockedText = $summary.text();
+          that.buildPage3();
         } else {
           // eslint-disable-next-line no-alert
           alert(translate('blacklistereditinvalid1', response.error));
@@ -241,6 +242,55 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
   $pageTwo.show();
   that.currentStep = 2;
   that.preview($summary.text());
+};
+
+BlacklistUi.prototype.buildPage3 = function buildPage3() {
+  const that = this;
+  const $pageThree = that.$dialog.children('#page_3');
+  const $pageThreeDoneBtn = $pageThree.find('button.cancel');
+  const $pageThreeLearnMoreBtn = $pageThree.find('button.learn-more');
+  const $pageThreeCloseBtn = $pageThree.find('button.close');
+  const $summary = $pageThree.find('#summary-pg-3');
+  const $settingsLink = $pageThree.find('#settings-link');
+  const $premiumLink = $pageThree.find('#premium-link');
+  const $dismissedMsg = $pageThree.find('#dismissed-msg');
+  const $premiumCTA = $pageThree.find('#premium-cta');
+
+  $summary.text(that.blockedText);
+
+  // Reset and hide all wizard pages
+  that.$dialog.children('.page').hide();
+
+  $pageThreeDoneBtn.click(() => {
+    that.preview(null);
+    that.onClose();
+  });
+  $pageThreeLearnMoreBtn.click(() => {
+    chrome.runtime.sendMessage({ command: 'openPremiumPayURL' });
+    chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_clicked' });
+  });
+  $pageThreeCloseBtn.click(() => {
+    chrome.runtime.sendMessage({ command: 'setBlacklistCTAStatus', isEnabled: false });
+    chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_closed' });
+    $premiumCTA.hide();
+    $dismissedMsg.show();
+  });
+  $settingsLink.click(() => {
+    chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#customize' });
+  });
+  $premiumLink.click(() => {
+    chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
+  });
+
+  // Show page 3
+  $pageThree.show();
+  that.currentStep = 3;
+  that.preview($summary.text());
+
+  // Check whether CTA is shown
+  if ($pageThree.find('#blacklist-cta').is(':visible')) {
+    chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_seen' });
+  }
 };
 
 BlacklistUi.prototype.redrawPage1 = function redrawPage1() {

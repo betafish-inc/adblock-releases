@@ -12,7 +12,7 @@
     <script src="adblock-functions.js"></script>
     <script src="adblock-options-tabs.js"></script>
     <script src="adblock-options-index.js"></script>
-    <script src="adblock-options-mab-payment.js"></script>
+    <script src="adblock-options-premium-payment.js"></script>
   </head>
   <body>
     <div id="sidebar">
@@ -24,6 +24,41 @@
 
           <nav id="sidebar-tabs">
             <ul>
+              <li>
+                <a href="#mab" class="tablink">
+                  <i class="material-icons md-18" role="img" aria-hidden="true">account_circle</i>
+                  <span i18n="premium"></span>
+                </a>
+                <ul data-parent-tab="#mab">
+                  <li>
+                    <a href="#mab-themes" class="tablink">
+                      <i class="material-icons md-18 unlocked" role="img" aria-hidden="true"
+                        >featured_video</i
+                      >
+                      <span i18n="themes"></span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#mab-image-swap" class="tablink">
+                      <i class="material-icons md-18 unlocked" role="img" aria-hidden="true"
+                        >image</i
+                      >
+                      <i class="material-icons md-18 locked" role="img" i18n-aria-label="locked"
+                        >lock</i
+                      >
+                      <span i18n="image_swap"></span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#sync" class="tablink">
+                      <i class="material-icons md-18 unlocked" role="img" aria-hidden="true"
+                        >sync</i
+                      >
+                      <span i18n="sync_tab_item"></span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
               <li>
                 <a href="#general" class="tablink">
                   <i class="material-icons md-18" role="img" aria-hidden="true">settings</i
@@ -41,12 +76,6 @@
                 <a href="#customize" class="tablink">
                   <i class="material-icons md-18" role="img" aria-hidden="true">create</i
                   ><span i18n="tabcustomize"></span>
-                </a>
-              </li>
-              <li id="themes-tab">
-                <a href="#themes" class="tablink">
-                  <i class="material-icons md-18" role="img" aria-hidden="true">featured_video</i
-                  ><span i18n="tabthemes"></span>
                 </a>
               </li>
               <li>
@@ -84,7 +113,6 @@
       <div id="general" class="tab" syncMessageDiv="true"></div>
       <div id="filters" class="tab" syncMessageDiv="true"></div>
       <div id="customize" class="tab" syncMessageDiv="true"></div>
-      <div id="themes" class="tab" syncMessageDiv="true"></div>
       <div id="support" class="tab"></div>
       <div id="mab-image-swap" class="tab" syncMessageDiv="true"></div>
       <div id="sync" class="tab" syncMessageDiv="true"></div>

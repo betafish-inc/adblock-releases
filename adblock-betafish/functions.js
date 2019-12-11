@@ -125,6 +125,33 @@ const processReplacementChildren = function ($el, replacementText, messageId) {
   $element.addClass('i18n-replaced');
 };
 
+// Processes any replacement children in the passed-in element. Unlike the
+// above processReplacementChildren, this function expects the text to already
+// be inside the element (as textContent).
+const processReplacementChildrenInContent = function ($el) {
+  // Replace a dummy <a/> inside of localized text with a real element.
+  // Give the real element the same text as the dummy link.
+  const $element = $el;
+  const message = $element.get(0).textContent;
+  if (!message || typeof message !== 'string' || !$element.get(0).firstChild || !$element.get(0).lastChild) {
+    return;
+  }
+  const replaceElId = `#${$element.attr('i18n_replacement_el')}`;
+  const replaceEl = $element.find(replaceElId);
+  if (replaceEl.length === 0) {
+    log('returning, no child element found', replaceElId);
+    return;
+  }
+  const messageSplit = splitMessageWithReplacementText(message);
+  $element.get(0).firstChild.nodeValue = messageSplit.anchorPrefixText;
+  $element.get(0).lastChild.nodeValue = messageSplit.anchorPostfixText;
+  if (replaceEl.get(0).tagName === 'INPUT') {
+    replaceEl.prop('value', messageSplit.anchorText);
+  } else {
+    replaceEl.text(messageSplit.anchorText);
+  }
+};
+
 // Determine what language the user's browser is set to use
 const determineUserLanguage = function () {
   if (typeof navigator.language !== 'undefined' && navigator.language) {

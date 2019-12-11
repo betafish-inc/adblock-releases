@@ -13,11 +13,41 @@
   --options-bg-color: #f1f1f1;
   --check-checked: #03bcfc;
   --unchecked-circle: #e6e6e6;
+  --premium-accent: #ffca00;
+  --link-color: #2284f7;
 }
 
 * {
   font-family: "Lato", Arial, sans-serif;
   font-size: 16px;
+}
+
+.material-icons {
+  font-family: "Material Icons";
+  cursor: pointer;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px; /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  vertical-align: middle;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: "liga";
 }
 
 /* RTL language */
@@ -87,7 +117,7 @@ fieldset {
 button {
   color: var(--button-color);
   background-color: var(--button-background);
-  border: 1px solid #dcdcdc;
+  border: none;
   display: inline-block;
   font-style: normal;
   text-decoration: none;
@@ -139,6 +169,32 @@ input[type="range"] {
   vertical-align: middle;
 }
 
+section.body-button {
+  display: flex;
+  justify-content: flex-end;
+  min-height: auto;
+  padding: 0;
+  margin: 16px;
+}
+
+.body-button button {
+  margin: 0;
+  background-color: var(--button-cancel-background);
+}
+
+.body-button button:hover {
+  background-color: var(--button-cancel-background-hover);
+}
+
+a.link {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a.link:hover {
+  font-weight: bold;
+}
+
 /* Whitelist specific */
 
 #adblock-wizard-form {
@@ -160,6 +216,11 @@ input[type="range"] {
 
 #adblock-checkboxes {
   padding: 10px 0;
+}
+
+#adblock-rule {
+  margin-top: 12px;
+  font-weight: bold;
 }
 
 /* Blacklist specific */
@@ -195,7 +256,51 @@ button.edit.advanced-user {
   word-break: break-all;
 }
 
+#summary-pg-3 {
+  margin-top: 12px;
+  font-weight: bold;
+}
+
 #adblock-details > div {
   display: block;
   margin: 3px 0;
+}
+
+/* Premium CTA specific */
+
+#cta-msg,
+#dismissed-msg {
+  margin: 12px;
+}
+
+#cta-buttons {
+  margin: 4px 0 12px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+button.learn-more {
+  min-width: 176px;
+  min-height: 40px;
+  background-color: var(--premium-accent);
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+button.learn-more:hover {
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
+}
+
+button.close {
+  height: 40px;
+  width: 40px;
+  color: var(--text-color);
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+button.close:hover {
+  color: var(--button-color);
+  background-color: var(--button-cancel-background);
 }

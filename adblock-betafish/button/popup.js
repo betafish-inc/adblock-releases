@@ -129,6 +129,7 @@ try {
   const { SyncService } = BG;
   const { Prefs } = BG;
   const userClosedCta = storageGet(License.popupMenuCtaClosedKey);
+  const showThemesCTA = storageGet(License.showPopupMenuThemesCtaKey);
   const shown = {};
 
   // the tab/page object, which contains |id| and |url| of
@@ -136,6 +137,7 @@ try {
   let pageInfo = null;
   let activeTab = null;
   let popupMenuTheme = 'default_theme';
+  let themeCTA = '';
   let itemClicked = false;
 
   const show = function (elementIds) {
@@ -245,9 +247,17 @@ try {
             show(['div_status_beta']);
           }
 
-          if (userClosedCta) {
-            hide(['div_myadblock_enrollment_v2']);
-          } else if (License.shouldShowMyAdBlockEnrollment()) {
+          // Premium CTAs
+          if (License.shouldShowMyAdBlockEnrollment() && userClosedCta && showThemesCTA) {
+            show(['div_premium_themes_cta']);
+            themeCTA = License.getCurrentPopupMenuThemeCTA();
+            $('#div_premium_themes_cta').attr('data-theme-cta', themeCTA);
+            BG.recordGeneralMessage(
+              'premium_themes_cta_seen',
+              undefined,
+              { theme: themeCTA.replace('_theme', '') },
+            );
+          } else if (License.shouldShowMyAdBlockEnrollment() && !userClosedCta) {
             show(['div_myadblock_enrollment_v2', 'separator-1', 'separator-2']);
           }
 
@@ -301,6 +311,9 @@ try {
           ) {
             $('#block_counts').hide();
           }
+
+          // Add padding at the end of the Pop-up menu
+          $('.menu-entry:not(.premium-cta):visible').last().addClass('last-item');
         } catch (err) {
           processError(err);
         }
@@ -391,6 +404,8 @@ try {
           fn: 'topOpenBlacklistUI',
           options: {
             nothingClicked: true,
+            isActiveLicense: License.isActiveLicense(),
+            showBlacklistCTA: License.shouldShowBlacklistCTA(),
           },
         }, {
           tab: page,
@@ -418,13 +433,6 @@ try {
         chrome.tabs.reload();
       });
 
-      selected('#div_troubleshoot_an_ad', () => {
-        BG.recordGeneralMessage('troubleshoot_ad_clicked');
-        const url = 'https://help.getadblock.com/support/solutions/articles/6000109812-report-an-unblocked-ad';
-        BG.openTab(url);
-        closeAndReloadPopup();
-      });
-
       selected('#svg_options', () => {
         BG.recordGeneralMessage('options_clicked');
         BG.openTab(chrome.runtime.getURL('options.html'));
@@ -443,6 +451,23 @@ try {
         $('#div_myadblock_enrollment_v2').slideUp();
         $('#separator-2').hide();
         storageSet(License.popupMenuCtaClosedKey, true);
+        storageSet(License.showPopupMenuThemesCtaKey, true);
+      });
+
+      selected('#div_premium_themes_cta', (event) => {
+        event.stopPropagation();
+        const theme = themeCTA ? themeCTA.replace('_theme', '') : '';
+        BG.recordGeneralMessage('premium_themes_cta_clicked', undefined, { theme });
+        BG.openTab(chrome.runtime.getURL('options.html#mab-themes'));
+        closeAndReloadPopup();
+      });
+
+      selected('#close-themes-cta', (event) => {
+        event.stopPropagation();
+        const theme = themeCTA ? themeCTA.replace('_theme', '') : '';
+        BG.recordGeneralMessage('premium_themes_cta_closed', undefined, { theme });
+        $('#div_premium_themes_cta').slideUp();
+        storageSet(License.showPopupMenuThemesCtaKey, false);
       });
 
       selected('#help_link', () => {
@@ -452,13 +477,6 @@ try {
         } else {
           BG.openTab('http://help.getadblock.com/');
         }
-      });
-
-      selected('#link_open', () => {
-        BG.recordGeneralMessage('link_clicked');
-        const linkHref = `https://getadblock.com/pay/?exp=7003&u=${BG.STATS.userId()}`;
-        BG.openTab(linkHref);
-        closeAndReloadPopup();
       });
 
       selected('#protect_enrollment_btn', () => {
@@ -479,6 +497,19 @@ try {
         $('#separator0').removeClass('hide-on-new-cta-hover');
         $('#mabNewCtaText').text(translate('new_cta_default_text'));
       });
+
+      $('#div_premium_themes_cta').hover(
+        function handleIn() {
+          $('#themes-cta-text').text(translate('check_out_themes'));
+          const currentThemeCTA = $(this).attr('data-theme-cta');
+          $('body').attr('id', currentThemeCTA).data('theme', currentThemeCTA);
+        },
+        // eslint-disable-next-line prefer-arrow-callback
+        function handleOut() {
+          $('#themes-cta-text').text(translate('adblock_looked_like_this'));
+          $('body').attr('id', popupMenuTheme).data('theme', popupMenuTheme);
+        },
+      );
     } catch (err) {
       processError(err);
     }

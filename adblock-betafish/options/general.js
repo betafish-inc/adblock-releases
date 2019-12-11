@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global backgroundPage, parseUri, optionalSettings:true, abpPrefPropertyNames, settingsNotifier,
    DownloadableSubscription, Subscription, Prefs, synchronizer, filterStorage, filterNotifier,
-   port, updateAcceptableAdsUI */
+   port, updateAcceptableAdsUI, activateTab, MABPayment, License, autoReloadingPage:true */
 
 // Handle incoming clicks from bandaids.js & '/installed'
 try {
@@ -78,6 +78,13 @@ const initialize = function init() {
 
   $('input.feature[type=\'checkbox\']').change(function onOptionSelectionChange() {
     const isEnabled = $(this).is(':checked');
+
+    // This change of settings causes the Options page to be automatically reloaded
+    // so the CTA display logic is handled on the Options page unload/load time
+    if (this.id !== 'enable_show_advanced_options') {
+      MABPayment.displaySyncCTAs(true);
+    }
+
     if (this.id === 'acceptable_ads') {
       acceptableAdsClicked(isEnabled);
       return;
@@ -123,10 +130,8 @@ const initialize = function init() {
     // add or remove history state listners
     if (name === 'youtube_channel_whitelist') {
       if (isEnabled) {
-        backgroundPage.addYouTubeHistoryStateUpdateHanlder();
         backgroundPage.addYTChannelListeners();
       } else {
-        backgroundPage.removeYouTubeHistoryStateUpdateHanlder();
         backgroundPage.removeYTChannelListeners();
       }
     }
@@ -154,6 +159,7 @@ $('#enable_show_advanced_options').change(() => {
   }
 
   window.setTimeout(() => {
+    autoReloadingPage = true;
     window.location.reload();
   }, 50);
 });
@@ -161,6 +167,23 @@ $('#enable_show_advanced_options').change(() => {
 $(document).ready(() => {
   initialize();
   showSeparators();
+
+  if (!License || $.isEmptyObject(License) || !MABPayment) {
+    return;
+  }
+  const payInfo = MABPayment.initialize('general');
+  if (License.shouldShowMyAdBlockEnrollment()) {
+    MABPayment.freeUserLogic(payInfo);
+  } else if (License.isActiveLicense()) {
+    MABPayment.paidUserLogic(payInfo);
+  }
+
+  MABPayment.displaySyncCTAs();
+  $('.sync-cta #get-it-now-general').click(MABPayment.userClickedSyncCTA);
+  $('.sync-cta #close-sync-cta-general').click(MABPayment.userClosedSyncCTA);
+  $('a.link-to-tab').click((event) => {
+    activateTab($(event.target).attr('href'));
+  });
 });
 
 const onSettingsChanged = function (name, currentValue, previousValue) {

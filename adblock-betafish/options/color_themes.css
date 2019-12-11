@@ -102,7 +102,8 @@
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
 }
-#solarized_theme {
+#solarized_theme,
+[data-theme-cta="solarized_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #90a2a2;
   --popup-entry-hovered-bg-color: #002c38;
@@ -153,8 +154,14 @@
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
+  --popup-themes-cta-icon: var(--checkbox-bg-color);
+  --popup-themes-cta-text: var(--popup-main-text-color);
+  --popup-themes-cta-background: var(--background-color);
+  --popup-themes-cta-background-on-hover: var(--checkbox-bg-color);
+  --popup-themes-cta-color-on-hover: var(--background-color);
 }
-#solarized_light_theme {
+#solarized_light_theme,
+[data-theme-cta="solarized_light_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #607c84;
   --popup-entry-hovered-bg-color: #eee8d5;
@@ -205,6 +212,11 @@
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
+  --popup-themes-cta-icon: var(--checkbox-bg-color);
+  --popup-themes-cta-text: var(--popup-main-text-color);
+  --popup-themes-cta-background: var(--background-color);
+  --popup-themes-cta-background-on-hover: var(--checkbox-bg-color);
+  --popup-themes-cta-color-on-hover: var(--background-color);
 }
 #rebecca_purple_theme {
   /* Needed for Pop-up Menu */
@@ -226,7 +238,8 @@
   --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
 }
-#watermelon_theme {
+#watermelon_theme,
+[data-theme-cta="watermelon_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
   --popup-entry-hovered-bg-color: #ce0707;
@@ -245,8 +258,14 @@
      in future themes */
   --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --popup-themes-cta-icon: var(--popup-main-text-color);
+  --popup-themes-cta-text: var(--popup-main-text-color);
+  --popup-themes-cta-background: var(--background-color);
+  --popup-themes-cta-background-on-hover: var(--link-color);
+  --popup-themes-cta-color-on-hover: var(--popup-main-text-color);
 }
-#ocean_theme {
+#ocean_theme,
+[data-theme-cta="ocean_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
   --popup-entry-hovered-bg-color: #2284f7;
@@ -265,8 +284,14 @@
      in future themes */
   --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --popup-themes-cta-icon: var(--popup-main-text-color);
+  --popup-themes-cta-text: var(--popup-main-text-color);
+  --popup-themes-cta-background: var(--background-color);
+  --popup-themes-cta-background-on-hover: var(--link-color);
+  --popup-themes-cta-color-on-hover: var(--popup-main-text-color);
 }
-#sunshine_theme {
+#sunshine_theme,
+[data-theme-cta="sunshine_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
   --popup-entry-hovered-bg-color: #ff9c00;
@@ -285,4 +310,9 @@
      in future themes */
   --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --popup-themes-cta-icon: var(--link-color);
+  --popup-themes-cta-text: var(--link-color);
+  --popup-themes-cta-background: var(--background-color);
+  --popup-themes-cta-background-on-hover: var(--link-color);
+  --popup-themes-cta-color-on-hover: var(--popup-main-text-color);
 }

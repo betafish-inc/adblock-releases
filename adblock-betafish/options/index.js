@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global chrome, getSettings, translate, FilterListUtil, activateTab,
-   CustomFilterListUploadUtil, localizePage */
+   CustomFilterListUploadUtil, localizePage, storageSet */
 
 const backgroundPage = chrome.extension.getBackgroundPage();
 const { Filter } = backgroundPage;
@@ -28,6 +28,7 @@ const { isValidTheme } = backgroundPage;
 const { abpPrefPropertyNames } = backgroundPage;
 const FIVE_SECONDS = 5000;
 const TWENTY_SECONDS = FIVE_SECONDS * 4;
+let autoReloadingPage;
 
 const language = navigator.language.match(/^[a-z]+/i)[0];
 let optionalSettings = {};
@@ -374,3 +375,11 @@ $(document).ready(() => {
   localizePage();
   displayTranslationCredit();
 });
+
+storageSet(License.pageReloadedOnSettingChangeKey, false);
+window.onbeforeunload = function leavingOptionsPage() {
+  if (autoReloadingPage) {
+    storageSet(License.pageReloadedOnSettingChangeKey, true);
+  }
+  storageSet(License.userSawSyncCTAKey, true);
+};

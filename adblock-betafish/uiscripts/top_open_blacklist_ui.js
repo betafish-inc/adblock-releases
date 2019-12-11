@@ -2,7 +2,8 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global chrome, translate, BlacklistUi, bindEnterClickToDefault, mayOpenDialogUi:true,
-   setLangAndDirAttributes, rightClickedItem:true, loadWizardResources */
+   setLangAndDirAttributes, rightClickedItem:true, loadWizardResources, i18nJoin,
+   processReplacementChildrenInContent */
 
 // Global lock so we can't open more than once on a tab.
 if (typeof window.mayOpenDialogUi === 'undefined') {
@@ -166,6 +167,40 @@ function topOpenBlacklistUI(options) {
           <button class='cancel'>${translate('buttoncancel')}</button>
         </footer>
       </div>
+      <div class='page' id='page_3' style='display:none;'>
+        <header>
+          <img aria-hidden='true' src='${chrome.runtime.getURL('/icons/icon24.png')}'>
+          <h1>${translate('blacklisteroptionstitle')}</h1>
+        </header>
+        <section>
+          <div class='messageWithLink' i18n_replacement_el='settings-link'>
+            ${i18nJoin('successfully_blocked_ad', 'future_ads_blocked', 'change_behavior_settings')}
+            <a id='settings-link' class='link' href='#'></a>
+          </div>
+        </section>
+        <section>
+          <div>${translate('rule_added_filters')}</div>
+          <div>
+            <div id='summary-pg-3'></div>
+          </div>
+        </section>
+        <section class='body-button'>
+          <button class='cancel'>${translate('done')}</button>
+        </section>
+        <footer id='blacklist-cta' style='display:none;'>
+          <div id='dismissed-msg' class='messageWithLink' i18n_replacement_el='premium-link' style='display:none;'>
+            ${i18nJoin('wont_show_again', 'check_out_premium')}
+            <a id='premium-link' class='link' href='#'></a>
+          </div>
+          <div id='premium-cta'>
+            <div id='cta-msg'>${i18nJoin('blocked_something', 'never_lose_settings')}</div>
+            <div id='cta-buttons'>
+              <button class='learn-more'>${translate('learn_more_without_period')}</button>
+              <button class='close material-icons'>close</button>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
     `;
     const $dialog = $(html);
@@ -178,6 +213,12 @@ function topOpenBlacklistUI(options) {
       (document.body || document.documentElement).removeChild(base);
     });
 
+    $dialog.find('.messageWithLink').each(function replaceLinks() {
+      processReplacementChildrenInContent($(this));
+    });
+    if (!options.isActiveLicense && options.showBlacklistCTA) {
+      $dialog.find('#blacklist-cta').show();
+    }
     setLangAndDirAttributes($dialog.get(0));
     bindEnterClickToDefault($dialog);
 

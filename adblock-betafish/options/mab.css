@@ -209,7 +209,7 @@ div.mab-page-box > .option-page-content > footer > div {
 
 /* Start: MAB payment section */
 
-[id^="locked-user-pay-section-"] {
+[id^="locked-user-pay-section-"]:not(.get-sync-cta) {
   width: 100%;
   padding-bottom: 10px;
   display: flex;
@@ -228,10 +228,11 @@ div.mab-page-box > .option-page-content > footer > div {
   max-width: 776px;
 }
 
-[id^="locked-user-pay-section-"] > a {
+[id^="locked-user-pay-section-"] a {
   font-size: 14px;
   font-weight: bold;
   max-width: 176px;
+  height: 40px;
 }
 
 /* End: MAB payment section */
