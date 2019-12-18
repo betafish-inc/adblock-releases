@@ -13,6 +13,12 @@ and contains only what is necessary for AdBlock's branding and additional functi
 
 This repository has [the same requirements as the Adblock Plus](https://github.com/adblockplus/adblockpluschrome#requirements).
 
+Be sure that your build environment is up to date with the latest ABP dependencies (noted above).
+
+Note: when installing the fonttools module, you will probably need to run the installer with sudo or admin permissions.
+
+Finally, if the dependencies file has been changed to a different version of the ABP code, its a good idea to delete the adblockpluschrome and buildtools folders under the project's root directory.
+
 
 ## Usage
 
