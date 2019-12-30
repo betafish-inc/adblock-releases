@@ -33,12 +33,22 @@ let dataCorrupted = false;
  */
 function detectFirstRun()
 {
-  firstRun = filterStorage.getSubscriptionCount() == 0;
+  return new Promise((resolve) => {
+    firstRun = filterStorage.getSubscriptionCount() == 0;
 
-  if (firstRun && (!filterStorage.firstRun || Prefs.currentVersion))
-    reinitialized = true;
+    if (firstRun && (!filterStorage.firstRun || Prefs.currentVersion)) {
+      reinitialized = true;
+    }
+    Prefs.currentVersion = info.addonVersion;
 
-  Prefs.currentVersion = info.addonVersion;
+    chrome.storage.local.get(null).then((currentData) => {
+      const edgeMigrationNeeded = currentData.filter_lists;
+      if (edgeMigrationNeeded && firstRun) {
+        firstRun = false;
+      }
+      resolve();
+    });
+  });
 }
 
 /**

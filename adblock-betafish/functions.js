@@ -459,6 +459,8 @@ const i18nJoin = function (...args) {
   return joined;
 };
 
+const isEmptyObject = obj => !!(Object.keys(obj).length === 0 && obj.constructor === Object);
+
 Object.assign(window, {
   sessionStorageSet,
   sessionStorageGet,
@@ -477,4 +479,5 @@ Object.assign(window, {
   selected,
   selectedOnce,
   i18nJoin,
+  isEmptyObject,
 });

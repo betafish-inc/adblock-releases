@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, getSettings, translate, determineUserLanguage */
+/* global browser, chrome, getSettings, translate, determineUserLanguage */
 
 const BG = chrome.extension.getBackgroundPage();
 let debugInfo;
@@ -38,29 +38,40 @@ const bugReportLogic = function () {
 
   // Retrieve extension info
   const askUserToGatherExtensionInfo = function () {
-    if (chrome && chrome.permissions && chrome.permissions.request) {
-      chrome.permissions.request({
+    if (browser && browser.permissions && browser.permissions.request) {
+      browser.permissions.request({
         permissions: ['management'],
-      }, (granted) => {
+      }).then((granted) => {
         // The callback argument will be true if
         // the user granted the permissions.
         if (granted) {
-          chrome.management.getAll((result) => {
-            const tempExtInfo = [];
-            for (let i = 0; i < result.length; i++) {
-              tempExtInfo.push(`Number ${i + 1}`);
-              tempExtInfo.push(`  name: ${result[i].name}`);
-              tempExtInfo.push(`  id: ${result[i].id}`);
-              tempExtInfo.push(`  version: ${result[i].version}`);
-              tempExtInfo.push(`  enabled: ${result[i].enabled}`);
-              tempExtInfo.push(`  type: ${result[i].type}`);
-              tempExtInfo.push('');
-            }
-
-            extInfo = `\nExtensions:\n${tempExtInfo.join('\n')}`;
-            chrome.permissions.remove({ permissions: ['management'] });
-            continueProcessing();
-          });
+          // since the management.getAll function is not available when the page is loaded
+          // the function is not wrapped by the polyfil Promise wrapper
+          // so we create, and load a temporary iFrame after the permission is granted
+          // so the polyfil will correctly wrap the now available API
+          const iframe = document.createElement('iframe');
+          iframe.onload = () => {
+            const proxy = iframe.contentWindow.browser;
+            proxy.management.getAll().then((result) => {
+              const tempExtInfo = [];
+              for (let i = 0; i < result.length; i++) {
+                tempExtInfo.push(`Number ${i + 1}`);
+                tempExtInfo.push(`  name: ${result[i].name}`);
+                tempExtInfo.push(`  id: ${result[i].id}`);
+                tempExtInfo.push(`  version: ${result[i].version}`);
+                tempExtInfo.push(`  enabled: ${result[i].enabled}`);
+                tempExtInfo.push(`  type: ${result[i].type}`);
+                tempExtInfo.push('');
+              }
+              extInfo = `\nExtensions:\n${tempExtInfo.join('\n')}`;
+              browser.permissions.remove({ permissions: ['management'] });
+              document.body.removeChild(iframe);
+              continueProcessing();
+            });
+          };
+          iframe.src = browser.runtime.getURL('proxy.html');
+          iframe.style.visibility = 'hidden';
+          document.body.appendChild(iframe);
         } else {
           // user didn't grant us permission
           extInfo = 'Permission not granted';

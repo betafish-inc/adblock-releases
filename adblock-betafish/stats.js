@@ -30,7 +30,7 @@ const STATS = (function exportStats() {
   match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d.]+)/);
   const edgeMatch = navigator.userAgent.match(/(?:Edg|Version)\/([\d.]+)/);
   if (edgeMatch) { // null in Chrome browsers
-    flavor = 'M'; // MS - Edge
+    flavor = 'CM'; // MS - Chromium Edge
     match = edgeMatch;
   }
   const browserVersion = (match || [])[1] || 'Unknown';
@@ -161,8 +161,8 @@ const STATS = (function exportStats() {
         twh: settingsObj.twitch_hiding ? '1' : '0',
       };
 
-      // only on Chrome
-      if (flavor === 'E' && Prefs.blocked_total) {
+      // only on Chrome or Edge
+      if ((flavor === 'E' || flavor === 'CM') && Prefs.blocked_total) {
         data.b = Prefs.blocked_total;
       }
       if (chrome.runtime.id) {
@@ -369,6 +369,7 @@ const STATS = (function exportStats() {
     flavor,
     browser: ({
       E: 'Chrome',
+      CM: 'Edge',
     })[flavor],
     browserVersion,
     os,

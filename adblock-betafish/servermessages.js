@@ -46,6 +46,10 @@ const ServerMessages = (function serverMessages() {
 
       error(e) {
         log('message server returned error: ', e.status);
+        // Remove following if statement when Edge migration is no longer needed
+        if (payload.event === 'cm_migration_finished' && typeof callback === 'function') {
+          callback();
+        }
       },
     });
   };

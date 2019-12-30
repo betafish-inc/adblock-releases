@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global chrome, require, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
-  blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings */
+  blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings, storageGet */
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
@@ -35,6 +35,7 @@ const {
   recordGeneralMessage,
   recordErrorMessage,
   recordAdreportMessage,
+  recordAnonymousMessage,
 } = require('./servermessages').ServerMessages;
 const {
   getUrlFromId,
@@ -69,6 +70,7 @@ Object.assign(window, {
   recordGeneralMessage,
   recordErrorMessage,
   recordAdreportMessage,
+  recordAnonymousMessage,
   getUrlFromId,
   unsubscribe,
   recommendations,
@@ -1067,6 +1069,11 @@ const getDebugInfo = function (callback) {
     for (const key in localStorage) {
       response.otherInfo.localStorageInfo[`key${inx}`] = key;
       inx += 1;
+    }
+    // Temporarly add Edge migration logs to debug data
+    const edgeMigrationLogs = storageGet('migrateLogMessageKey') || [];
+    if (edgeMigrationLogs || edgeMigrationLogs.length) {
+      response.otherInfo.edgeMigrationLogs = Object.assign({}, edgeMigrationLogs);
     }
   } else {
     response.otherInfo.localStorageInfo = 'no data';
