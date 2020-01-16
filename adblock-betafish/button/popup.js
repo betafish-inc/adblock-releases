@@ -131,6 +131,8 @@ try {
   const userClosedCta = storageGet(License.popupMenuCtaClosedKey);
   const showThemesCTA = storageGet(License.showPopupMenuThemesCtaKey);
   const shown = {};
+  License.cleanUpSevenDayAlarm();
+  License.showIconBadgeCTA(false);
 
   // the tab/page object, which contains |id| and |url| of
   // the current tab
@@ -181,8 +183,6 @@ try {
 
       BG.getCurrentTabInfo((info) => {
         try {
-          License.showIconBadgeCTA(false);
-
           if (info.settings) {
             popupMenuTheme = info.settings.color_themes.popup_menu;
           }

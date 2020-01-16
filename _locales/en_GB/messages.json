@@ -2458,8 +2458,18 @@
     "message":"Request"
   },
   "devtools_request_url":{
-    "description":"sub title text for the request-column of the dev tools panel when the request is rewritten e.g. http://example.com/foo rewritten to http://example.com/bar",
-    "message":"<a0></a0> rewritten to <a1></a1>"
+    "description": "A request URL in the AdBlock DevTools panel",
+    "message": "<a0>$original$</a0> rewritten to <a1>$rewritten$</a1>",
+    "placeholders": {
+      "original": {
+        "content": "$1",
+        "example": "http://example.com/foo"
+      },
+      "rewritten": {
+        "content": "$2",
+        "example": "http://example.com/bar"
+      }
+    }
   },
   "devtools_type_title":{
     "description":"Type column header text",
@@ -2908,5 +2918,43 @@
   "check_out_themes":{
     "message":"Check out themes!",
     "description":"Part 2 of a call-to-action on the Popup menu"
+  },
+  "notification_antiadblock_message": {
+    "message": "This site has been known to show targeted messages to AdBlock users. Do you want AdBlock to hide targeted messages?"
+  },
+  "notification_antiadblock_title": {
+    "message": "Hide targeted messages?"
+  },
+  "overlay_notification_button_no": {
+    "message": "No"
+  },
+  "overlay_notification_button_yes": {
+    "message": "Yes"
+  },
+  "filter_elemhideemulation_nodomain": {
+    "message": "No active domain specified for extended element hiding filter"
+  },
+  "filter_invalid_csp": {
+    "message": "Invalid Content Security Policy"
+  },
+  "filter_invalid_domain": {
+    "message": "Invalid (or empty) domain specified"
+  },
+  "filter_invalid_regexp": {
+    "message": "Invalid regular expression"
+  },
+  "filter_snippet_nodomain": {
+    "message": "No active domain specified for snippet filter"
+  },
+  "filter_unknown_option": {
+    "message": "Unknown filter option"
+  },
+  "unexpected_filter_list_header": {
+    "description": "Error message shown when the user attempts to add a custom filter that has the format of a header (e.g. \"[Adblock Plus 2.0]\") which are only allowed in filter lists",
+    "message": "Filter list headers aren't allowed here"
+  },
+  "filter_invalid": {
+    "message": "Invalid filter",
+    "description": "Generic error shown when the user tries to add an invalid filter rule to their custom filters"
   }
 }

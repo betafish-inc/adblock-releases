@@ -37,9 +37,15 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     ) {
       chrome.tabs.executeScript(tabId,
         {
-          file: 'adblock-datacollection-contentscript.js',
+          file: 'polyfill.js',
           allFrames: true,
-        });
+        }).then(() => {
+        chrome.tabs.executeScript(tabId,
+          {
+            file: 'adblock-datacollection-contentscript.js',
+            allFrames: true,
+          });
+      });
     }
   };
 

@@ -327,9 +327,14 @@ const storageGet = function (key) {
 };
 
 // Inputs: key:string, value:object.
+// If value === undefined, removes key from storage.
 // Returns undefined.
 const storageSet = function (key, value) {
   const store = localStorage;
+  if (value === undefined) {
+    store.removeItem(key);
+    return;
+  }
   try {
     store.setItem(key, JSON.stringify(value));
   } catch (ex) {

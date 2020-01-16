@@ -115,7 +115,7 @@ $(() => {
         if (result.error) {
           filterErrorMessage = translate(
             'customfilterserrormessage',
-            [result.filter.text, result.error],
+            [result.filter, translate(result.error.reason || result.error.type) || translate('filter_invalid')],
           );
         }
       }
@@ -277,7 +277,7 @@ $(() => {
 
     if (result.error) {
       $('#btnAddBlacklist').prop('disabled', true);
-      filterErrorMessage = translate('customfilterserrormessage', [$('#txtBlacklist').val(), result.error]);
+      filterErrorMessage = translate('customfilterserrormessage', [$('#txtBlacklist').val(), translate(result.error.reason || result.error.type)]);
       $('#messageBlacklist').text(filterErrorMessage);
       $('#messageBlacklist').show();
       return;

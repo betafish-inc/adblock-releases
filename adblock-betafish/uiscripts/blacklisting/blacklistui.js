@@ -203,7 +203,7 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
             });
           } else if (parseResult.error) {
             // eslint-disable-next-line no-alert
-            alert(translate('blacklistereditinvalid1', parseResult.error));
+            alert(translate('blacklistereditinvalid1', translate(parseResult.error.reason || parseResult.error.type)));
           }
         });
       }

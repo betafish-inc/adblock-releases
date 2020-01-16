@@ -3,7 +3,8 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global chrome, require, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
-  blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings, storageGet */
+  blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
+  storageGet, parseFilter */
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
@@ -455,29 +456,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse({ response: pageIsWhitelisted(sender) });
 });
 
-const parseFilter = function (filterText) {
-  let filter = null;
-  let error = null;
-  const text = Filter.normalize(filterText);
-  if (text) {
-    if (text[0] === '[') {
-      error = 'unexpected_filter_list_header';
-    } else {
-      filter = Filter.fromText(text);
-      if (filter instanceof InvalidFilter) {
-        error = filter.reason;
-      }
-    }
-  }
-  return { filter, error };
-};
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'parseFilter' || !message.filterTextToParse) {
-    return;
-  }
-  sendResponse(parseFilter(message.filterTextToParse));
-});
-
 const pausedKey = 'paused';
 // white-list all blocking requests regardless of frame / document, but still allows element hiding
 const pausedFilterText1 = '@@';
@@ -769,7 +747,7 @@ if (chrome.runtime.id) {
       checkQueryState();
     }
   };
-  const slashUpdateReleases = ['3.60.0', '3.61.0', '3.61.1', '3.62.0', '4.0.0', '4.0.1', '4.0.2', '4.1.0', '4.2.0'];
+  const slashUpdateReleases = ['3.60.0', '3.61.0', '3.61.1', '3.62.0', '4.0.0', '4.0.1', '4.0.2', '4.1.0', '4.2.0', '4.4.0'];
 
   // Display updated page after each updat
   chrome.runtime.onInstalled.addListener((details) => {
@@ -783,11 +761,6 @@ if (chrome.runtime.id) {
     ) {
       STATS.untilLoaded(() => {
         Prefs.untilLoaded.then(shouldShowUpdate);
-      });
-    }
-    if (details.reason === 'update') {
-      STATS.untilLoaded(() => {
-        recordGeneralMessage('extension_updated');
       });
     }
     localStorage.setItem(updateStorageKey, currentVersion);
@@ -1282,5 +1255,4 @@ Object.assign(window, {
   isLanguageSpecific,
   isAcceptableAds,
   isAcceptableAdsPrivacy,
-  parseFilter,
 });

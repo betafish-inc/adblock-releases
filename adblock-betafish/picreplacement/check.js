@@ -24,6 +24,7 @@ const License = (function getLicense() {
   const popupMenuCtaClosedKey = 'popup_menu_cta_closed';
   const showPopupMenuThemesCtaKey = 'popup_menu_themes_cta';
   const licenseAlarmName = 'licenseAlarm';
+  const sevenDayAlarmName = 'sevenDayLicenseAlarm';
   let theLicense;
   const fiveMinutes = 300000;
   const initialized = false;
@@ -58,6 +59,33 @@ const License = (function getLicense() {
   });
   const MAB_CONFIG = isProd ? mabConfig.prod : mabConfig.dev;
 
+
+  const sevenDayAlarmIdleListener = function (newState) {
+    if (newState === 'active') {
+      License.checkSevenDayAlarm();
+    }
+  };
+
+  const removeSevenDayAlarmStateListener = function () {
+    chrome.idle.onStateChanged.removeListener(sevenDayAlarmIdleListener);
+  };
+
+  const addSevenDayAlarmStateListener = function () {
+    removeSevenDayAlarmStateListener();
+    chrome.idle.onStateChanged.addListener(sevenDayAlarmIdleListener);
+  };
+
+  const cleanUpSevenDayAlarm = function () {
+    removeSevenDayAlarmStateListener();
+    chrome.storage.local.remove(License.sevenDayAlarmName);
+    chrome.alarms.clear(License.sevenDayAlarmName);
+  };
+
+  const processSevenDayAlarm = function () {
+    cleanUpSevenDayAlarm();
+    License.showIconBadgeCTA(true);
+  };
+
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm && alarm.name === licenseAlarmName) {
       // At this point, no alarms exists, so
@@ -66,6 +94,9 @@ const License = (function getLicense() {
       License.ready().then(() => {
         License.updatePeriodically();
       });
+    }
+    if (alarm && alarm.name === sevenDayAlarmName) {
+      processSevenDayAlarm();
     }
   });
 
@@ -96,6 +127,55 @@ const License = (function getLicense() {
     }
   });
 
+  // check the 7 alarm when the browser starts
+  // or is woken up
+  const checkSevenDayAlarm = function () {
+    chrome.alarms.get(License.sevenDayAlarmName, (alarm) => {
+      if (alarm && Date.now() > alarm.scheduledTime) {
+        chrome.alarms.clear(License.sevenDayAlarmName, () => {
+          License.showIconBadgeCTA(true);
+          removeSevenDayAlarmStateListener();
+          chrome.storage.local.remove(License.sevenDayAlarmName);
+        });
+      } else if (alarm) {
+        // if the alarm should fire in the future,
+        // re-add the license so it fires at the correct time
+        const originalTime = alarm.scheduledTime;
+        chrome.alarms.clear(License.sevenDayAlarmName, (wasCleared) => {
+          if (wasCleared) {
+            chrome.alarms.create(License.sevenDayAlarmName, { when: originalTime });
+            chrome.storage.local.set({ [License.sevenDayAlarmName]: true });
+            License.addSevenDayAlarmStateListener();
+          }
+        });
+      } else {
+        // since there's no alarm, we may need to show the 'new' text,
+        // check if the temporary seven day alarm indicator is set, and
+        // if the install date is 7 days or more than now
+        chrome.storage.local.get(License.sevenDayAlarmName).then((data) => {
+          if (data && data[License.sevenDayAlarmName]) {
+            chrome.storage.local.get('blockage_stats').then((response) => {
+              const { blockage_stats } = response;
+              if (blockage_stats && blockage_stats.start) {
+                const installDate = new Date(blockage_stats.start);
+                const now = new Date();
+                const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+                const diffDays = Math.round((now - installDate) / oneDay);
+                if (diffDays >= 7) {
+                  License.showIconBadgeCTA(true);
+                  removeSevenDayAlarmStateListener();
+                  chrome.storage.local.remove(License.sevenDayAlarmName);
+                }
+              }
+            });
+          }
+        });
+        removeSevenDayAlarmStateListener();
+      }
+    });
+  };
+  addSevenDayAlarmStateListener();
+
   // Load the license from persistent storage
   // Should only be called during startup / initialization
   const loadFromStorage = function (callback) {
@@ -118,6 +198,11 @@ const License = (function getLicense() {
     pageReloadedOnSettingChangeKey,
     initialized,
     licenseAlarmName,
+    sevenDayAlarmName,
+    checkSevenDayAlarm,
+    addSevenDayAlarmStateListener,
+    removeSevenDayAlarmStateListener,
+    cleanUpSevenDayAlarm,
     licenseTimer: undefined, // the license update timer token
     licenseNotifier,
     MAB_CONFIG,
@@ -128,7 +213,6 @@ const License = (function getLicense() {
         if (typeof theLicense.myadblock_enrollment === 'undefined') {
           theLicense.myadblock_enrollment = true;
           License.set(theLicense);
-          // only process updates for now
           if (enrollReason === 'update') {
             License.showIconBadgeCTA(true);
           }
@@ -352,7 +436,7 @@ const License = (function getLicense() {
     showIconBadgeCTA(showBadge) {
       if (showBadge) {
         let newBadgeText = translate('new_badge');
-        // 'New' Badge Text that exceeds 4 characters is truncated on the toolbar badge,
+        // Text that exceeds 4 characters is truncated on the toolbar badge,
         // so we default to English
         if (!newBadgeText || newBadgeText.length >= 5) {
           newBadgeText = 'New';
@@ -380,8 +464,9 @@ const License = (function getLicense() {
         const storedValue = storageGet(statsInIconKey);
         if (typeof storedValue === 'boolean') {
           Prefs.show_statsinicon = storedValue;
+          storageSet(statsInIconKey); // remove the data, since we no longer need it
+          chrome.browserAction.setBadgeText({ text: '' });
         }
-        chrome.browserAction.setBadgeText({ text: '' });
       }
     },
     // fetchLicenseAPI automates the common steps required to call the /license/api endpoint.
@@ -487,6 +572,12 @@ Promise.all([onInstalledPromise, License.ready(), onBehaviorPromise]).then((deta
   // Enroll existing users in Premium
   if (detailsArray.length > 0 && detailsArray[0].reason) {
     License.enrollUser(detailsArray[0].reason);
+    if (detailsArray[0].reason === 'install') {
+      // create an alarm that will fire in ~ 7 days to show the "New" badge text
+      chrome.alarms.create(License.sevenDayAlarmName, { delayInMinutes: (60 * 24 * 7) });
+      License.addSevenDayAlarmStateListener();
+      chrome.storage.local.set({ [License.sevenDayAlarmName]: true });
+    }
   }
 });
 
@@ -539,6 +630,8 @@ License.ready().then(() => {
       }
     }
   });
+
+  License.checkSevenDayAlarm();
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.command === 'setBlacklistCTAStatus') {

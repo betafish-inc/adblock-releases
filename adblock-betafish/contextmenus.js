@@ -11,6 +11,7 @@ const { Prefs } = require('prefs');
 const updateButtonUIAndContextMenus = function () {
   chrome.tabs.query({}).then((tabs) => {
     for (const tab of tabs) {
+      tab.url = tab.url ? tab.url : tab.pendingUrl;
       const page = new ext.Page(tab);
       if (adblockIsPaused() || adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
         page.browserAction.setBadge({ number: '' });

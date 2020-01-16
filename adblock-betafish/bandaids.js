@@ -249,249 +249,143 @@ const runBandaids = function () {
       }
     },
 
-    // The following Twitch-related code is used under the terms of the MIT license from (v1.12):
-    // https://greasyfork.org/en/scripts/371186-twitch-mute-ads-and-optionally-hide-them/code?version=752525
+    // The following Twitch-related code inspired by:
+    // https://greasyfork.org/en/scripts/371186-twitch-mute-ads-and-optionally-hide-them/code
     twitch() {
       const tmuteVars = {
-        // Checking rate of ad in progress (in ms ; EDITABLE)
-        timerCheck: 1000,
-        // Player muted or not
         playerMuted: false,
-        // Number of ads displayed
-        adsDisplayed: 0,
-        // Disable the player display during an ad (true = yes, false = no (default) ; EDITABLE)
-        disableDisplay: true,
-        // Used to check if the player is muted at the start of an ad
         alreadyMuted: false,
-        // Used to check if Twitch forgot to remove the ad notice
-        adElapsedTime: undefined,
-        // Unlock the player if this amount of seconds elapsed during an ad (EDITABLE)
-        adUnlockAt: 150,
-        // Minimum amount of seconds the player will be muted/hidden since an ad started
-        // (EDITABLE ; Recommended to really avoid any ad: 30 to 45)
-        adMinTime: 15,
-        // Either the current page is a squad page or not
-        squadPage: false,
-        // Player ID where ads may be displayed (default 0, varying on squads page)
-        playerIdAds: 0,
-        // Either ads options are currently displayed or not
-        displayingOptions: false,
-        // If you've the Highwind Player or not (automatically checked)
-        highwindPlayer: undefined,
+        // Max time (in milliseconds) to mute/hide player
+        adMaxTime: 150000,
+        // Min time (in milliseconds) to mute/hide player
+        adMinTime: 15000,
       };
 
-      // Selectors for the old player and the highwind one
       const tmuteSelectors = {
-        old: {
-          player: 'player-video', // Player class
-          playerVideo: '.player-video', // Player video selector
-          muteButton: '.player-button--volume', // (un)mute button selector
-          adNotice: 'player-ad-notice', // Ad notice class
-        },
-        hw: {
-          player: 'highwind-video-player__container', // Player class
-          playerVideo: '.highwind-video-player__container video', // Player video selector
-          muteButton: "button[data-a-target='player-mute-unmute-button']", // (un)mute button selector
-          adNotice: 'tw-absolute tw-c-background-overlay tw-c-text-overlay tw-inline-block tw-left-0 tw-pd-1 tw-top-0', // Ad notice class
-        },
+        player: 'video-player__container', // Player class
+        playerVideo: '.video-player__container video', // Player video selector
+        playerAd: '.video-player__container iframe', // Player ad selector
+        muteButton: "button[data-a-target='player-mute-unmute-button']", // (un)mute button selector
+        adNotice: 'tw-absolute tw-c-background-overlay tw-c-text-overlay tw-inline-block tw-left-0 tw-pd-1 tw-top-0', // Ad notice class
+        overlay: 'video-player__overlay', // Player overlay class
       };
 
-      // Current selector (either old or highwind player, automatically set below)
-      let currentSelector;
+      const unmuteLabels = ['Unmute (m)', 'Stummschalten aufheben (m)', 'Activar sonido (m)', "Réactiver l'audio (M)", 'Attiva audio (m)', '取消静音（m）', '取消靜音 (m)', 'ミュート解除（m）', 'Dempen opheffen (m)', 'Tirar do mudo (m)', 'Включить звук (m)', 'Slå på ljudet (m)'];
+      let currentPlayer;
+      let playerObserver;
+      let maxTimeTimer;
+      let titleObserver;
 
-      // (un)Mute Player
+      // Toggle mute/hide status of player
       function mutePlayer() {
-        const muteButton = document.querySelectorAll(currentSelector.muteButton);
-        const playerVideo = document.querySelectorAll(currentSelector.playerVideo);
+        const muteButton = document.querySelectorAll(tmuteSelectors.muteButton);
+        const playerVideo = document.querySelectorAll(tmuteSelectors.playerVideo);
+        const playerAd = document.querySelectorAll(tmuteSelectors.playerAd);
         if (muteButton.length >= 1) {
+          // if the player is muted before the ad started (by the user), don't mute/unmute
           if (tmuteVars.alreadyMuted === false) {
-            // If the player is already muted before an ad, we avoid to unmute it.
-            muteButton[tmuteVars.playerIdAds].click();
+            muteButton[0].click();
           }
-          tmuteVars.playerMuted = !(tmuteVars.playerMuted);
-          if (tmuteVars.playerMuted === true) {
-            tmuteVars.adsDisplayed += 1;
-            tmuteVars.adElapsedTime = 1;
-            if (tmuteVars.disableDisplay === true) {
-              playerVideo[tmuteVars.playerIdAds].style.visibility = 'hidden';
-            }
-          } else {
-            tmuteVars.adElapsedTime = undefined;
-            if (tmuteVars.disableDisplay === true) {
-              playerVideo[tmuteVars.playerIdAds].style.visibility = 'visible';
-            }
-          }
+          tmuteVars.playerMuted = !tmuteVars.playerMuted;
+          playerVideo[0].style.visibility = (tmuteVars.playerMuted === true) ? 'hidden' : 'visible';
+          playerAd[0].style.visibility = (tmuteVars.playerMuted === true) ? 'hidden' : 'visible';
+          return true;
         }
+        return false;
       }
 
-      // Manage ads options
-      function adsOptions(changeType = 'show') {
-        const optionsTemplate = document.createElement('div');
-        const playerVideo = document.querySelectorAll(currentSelector.playerVideo);
-        const playerVideoVisability = (tmuteVars.disableDisplay === true) ? 'hidden' : 'visible';
-        const tmadsDisplayInnerText = (tmuteVars.disableDisplay === true ? 'Show' : 'Hide');
-        const advert = document.getElementsByClassName(currentSelector.adNotice);
-        const viewerWrapper = document.getElementsByClassName('channel-info-bar__viewers-wrapper');
-        const channelContainer = document.getElementsByClassName('squad-stream-top-bar__contaichannel-info-bar__viewers-wrapperner');
-        const tmuteDisplayCSS = (tmuteVars.displayingOptions === false) ? 'none' : 'inline-flex';
-
-        switch (changeType) {
-        // Manage player display during an ad (either hiding the ads or still showing them)
-          case 'display':
-            tmuteVars.disableDisplay = !(tmuteVars.disableDisplay);
-            // Update the player display if an ad is supposedly in progress
-            if (tmuteVars.playerMuted === true) {
-              playerVideo[tmuteVars.playerIdAds].style.visibility = playerVideoVisability;
-            }
-            document.getElementById('_tmads_display').innerText = `
-              ${tmadsDisplayInnerText} player during ads
-            `;
-            break;
-          // Force a player unlock if Twitch didn't remove the ad notice properly instead of
-          // waiting the auto unlock
-          case 'unlock':
-            if (tmuteVars.adElapsedTime !== undefined || advert[0] !== undefined) {
-              // We set the elapsed time to the unlock timer to trigger it during the next check.
-              tmuteVars.adElapsedTime = tmuteVars.adUnlockAt;
-            }
-            break;
-          // Display the ads options button
-          case 'init':
-            if (viewerWrapper[0] === undefined && channelContainer[0] === undefined) {
-              break;
-            }
-            // Append ads options and events related
-            optionsTemplate.id = '_tmads_options-wrapper';
-            optionsTemplate.className = 'tw-inline-flex';
-            // eslint-disable-next-line no-unsanitized/property
-            optionsTemplate.innerHTML = `
-            <span id="_tmads_options" style="display: none;">
-              <button type="button" id="_tmads_unlock"
-                      style="padding: 0 2px 0 2px; margin-left: 2px; height: 16px; width: unset;"
-                      class="tw-interactive tw-button-icon tw-button-icon--hollow">
-                Unlock player
-              </button>
-              <button type="button" id="_tmads_display"
-                      style="padding: 0 2px 0 2px; margin-left: 2px; height: 16px; width: unset;"
-                      class="tw-interactive tw-button-icon tw-button-icon--hollow">
-                ${tmadsDisplayInnerText} player during ads
-              </button>
-            </span>
-            <button type="button" id="_tmads_showoptions"
-                    style="padding: 0 2px 0 2px; margin-left: 2px; height: 16px; width: unset;"
-                    class="tw-interactive tw-button-icon tw-button-icon--hollow">
-              Ads Options
-            </button>`;
-
-            // Normal player page
-            if (viewerWrapper[0] !== undefined) {
-              tmuteVars.squadPage = false;
-              tmuteVars.playerIdAds = 0;
-              viewerWrapper[0].parentNode.appendChild(optionsTemplate);
-            // Squad page
-            } else if (channelContainer[0] !== undefined) {
-              tmuteVars.squadPage = true;
-              tmuteVars.playerIdAds = 0;
-              // Since the primary player is never at the same place, we've to find it.
-              for (let i = 0; i < parseInt(playerVideo.length, 10); i++) {
-                const playerContainerClass = 'multi-stream-player-layout__player-container';
-                const playerPrimaryClass = 'multi-stream-player-layout__player-primary';
-                const playerContainer = document.getElementsByClassName(playerContainerClass);
-                if (playerContainer[0].childNodes[i].classList.contains(playerPrimaryClass)) {
-                  tmuteVars.playerIdAds = i;
-                  break;
-                }
-              }
-              channelContainer[0].appendChild(optionsTemplate);
-            }
-
-            document.getElementById('_tmads_showoptions').addEventListener('click', adsOptions, false);
-            document.getElementById('_tmads_display').addEventListener('click', () => {
-              adsOptions('display');
-            }, false);
-            document.getElementById('_tmads_unlock').addEventListener('click', () => {
-              adsOptions('unlock');
-            }, false);
-
-            break;
-          // Display/Hide the ads options
-          case 'show':
-          default:
-            tmuteVars.displayingOptions = !(tmuteVars.displayingOptions);
-            document.getElementById('_tmads_options').style.display = tmuteDisplayCSS;
-        }
+      function maxTimeElapsed() {
+        const advert = document.getElementsByClassName(tmuteSelectors.adNotice);
+        advert[0].parentNode.removeChild(advert[0]);
+        mutePlayer();
       }
 
-      // Check if there's an ad
+      function stopPlayerObserver() {
+        playerObserver.disconnect();
+      }
+
       function checkAd() {
-        // Check if you're watching a stream, useless to continue if not
-        if (tmuteVars.highwindPlayer === undefined) {
-          const isOldPlayer = document.getElementsByClassName(tmuteSelectors.old.player).length;
-          const isHwPlayer = document.getElementsByClassName(tmuteSelectors.hw.player).length;
-          const isViewing = Boolean(isOldPlayer + isHwPlayer);
-          if (isViewing === false) {
-            return;
-          }
-          // We set the type of player currently used (old or highwind one)
-          tmuteVars.highwindPlayer = Boolean(isHwPlayer);
-          if (tmuteVars.highwindPlayer === true) {
-            currentSelector = tmuteSelectors.hw;
-          } else {
-            currentSelector = tmuteSelectors.old;
-          }
-        } else {
-          const isViewing = Boolean(document.getElementsByClassName(currentSelector.player).length);
-          if (isViewing === false) {
-            return;
-          }
+        const advert = document.getElementsByClassName(tmuteSelectors.adNotice);
+        if (advert.length >= 1 && tmuteVars.playerMuted === false) {
+          stopPlayerObserver();
+          clearTimeout(maxTimeTimer);
+          // eslint-disable-next-line no-use-before-define
+          muteAndObservePlayer();
+          return false;
         }
-
-        // Initialize the ads options if necessary.
-        const optionsInitialized = document.getElementById('_tmads_options') !== null;
-        if (optionsInitialized === false) {
-          adsOptions('init');
-        }
-        const advert = document.getElementsByClassName(currentSelector.adNotice);
-
-        if (tmuteVars.adElapsedTime !== undefined) {
-          tmuteVars.adElapsedTime += 1;
-          if (tmuteVars.adElapsedTime >= tmuteVars.adUnlockAt && advert[0] !== undefined) {
-            advert[0].parentNode.removeChild(advert[0]);
-          }
-        }
-
-        if (
-          (advert.length >= 1 && tmuteVars.playerMuted === false)
-          || (tmuteVars.playerMuted === true && advert.length === 0)
-        ) {
-          // Update at the start of an ad if the player is already muted or not
-          if (advert.length >= 1) {
-            // eslint-disable-next-line max-len
-            const muteButton = document.querySelectorAll(currentSelector.muteButton)[tmuteVars.playerIdAds];
-            if (tmuteVars.highwindPlayer === true) {
-              tmuteVars.alreadyMuted = Boolean(muteButton.getAttribute('aria-label') === 'Unmute (m)');
-            } else {
-              tmuteVars.alreadyMuted = Boolean(muteButton.childNodes[0].className === 'unmute-button');
-            }
-          }
-
-          // Keep the player muted/hidden for the minimum ad time set (Twitch started to remove
-          // the ad notice before the end of some ads)
-          if (
-            advert.length === 0
-            && tmuteVars.adElapsedTime !== undefined
-            && tmuteVars.adElapsedTime < tmuteVars.adMinTime
-          ) {
-            return;
-          }
+        if (advert.length === 0 && tmuteVars.playerMuted === true) {
+          clearTimeout(maxTimeTimer);
           mutePlayer();
         }
+        return true;
+      }
+
+      function startPlayerObserver() {
+        const overlayNode = document.getElementsByClassName(tmuteSelectors.overlay)[0];
+        const options = { childList: true };
+
+        if (playerObserver === undefined) {
+          playerObserver = new MutationObserver(checkAd);
+        }
+        playerObserver.observe(overlayNode, options);
+      }
+
+      function muteAndObservePlayer() {
+        if (mutePlayer()) {
+          setTimeout(() => {
+            if (checkAd()) {
+              startPlayerObserver();
+            }
+          }, tmuteVars.adMinTime);
+          maxTimeTimer = setTimeout(maxTimeElapsed, tmuteVars.adMaxTime);
+        }
+      }
+
+      function checkPlayer(retry = 0) {
+        if (!currentPlayer) {
+          currentPlayer = document.getElementsByClassName(tmuteSelectors.player).length >= 1;
+
+          if (!currentPlayer) {
+            if (retry === 0) {
+              setTimeout(() => {
+                checkPlayer(1);
+              }, 1000);
+            }
+            return;
+          }
+        } else if (document.getElementsByClassName(tmuteSelectors.player).length === 0) {
+          return;
+        }
+
+        // Check if player is already muted
+        const muteButton = document.querySelectorAll(tmuteSelectors.muteButton)[0];
+        tmuteVars.alreadyMuted = muteButton && unmuteLabels.includes(muteButton.getAttribute('aria-label'));
+        if (tmuteVars.playerMuted === true) {
+          tmuteVars.alreadyMuted = false;
+        }
+
+        const advert = document.getElementsByClassName(tmuteSelectors.adNotice);
+        if (advert.length >= 1 && tmuteVars.playerMuted === false) {
+          muteAndObservePlayer();
+        } else {
+          startPlayerObserver();
+        }
+      }
+
+      function startTitleObserver() {
+        const titleNode = document.querySelectorAll('title')[0];
+        const options = { childList: true };
+
+        if (titleObserver === undefined) {
+          titleObserver = new MutationObserver(checkPlayer);
+        }
+        titleObserver.observe(titleNode, options);
       }
 
       chrome.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
         if (settings.twitch_hiding) {
-          // Start the background check
-          tmuteVars.autoCheck = setInterval(checkAd, tmuteVars.timerCheck);
+          checkPlayer();
+          startTitleObserver();
         }
       });
     },
