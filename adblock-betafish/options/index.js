@@ -1,10 +1,10 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, getSettings, translate, FilterListUtil, activateTab,
+/* global browser, getSettings, translate, FilterListUtil, activateTab,
    CustomFilterListUploadUtil, localizePage, storageSet */
 
-const backgroundPage = chrome.extension.getBackgroundPage();
+const backgroundPage = browser.extension.getBackgroundPage();
 const { Filter } = backgroundPage;
 const { WhitelistFilter } = backgroundPage;
 const { Subscription } = backgroundPage;
@@ -33,7 +33,7 @@ let autoReloadingPage;
 const language = navigator.language.match(/^[a-z]+/i)[0];
 let optionalSettings = {};
 let delayedSubscriptionSelection = null;
-const port = chrome.runtime.connect({ name: 'ui' });
+const port = browser.runtime.connect({ name: 'ui' });
 let syncErrorCode = 0;
 
 // Function to check the last known Sync Error Code,
@@ -49,7 +49,7 @@ function checkForSyncError(handler) {
 }
 
 function displayVersionNumber() {
-  const currentVersion = chrome.runtime.getManifest().version;
+  const currentVersion = browser.runtime.getManifest().version;
   $('#version_number').text(translate('optionsversion', [currentVersion]));
 }
 
@@ -59,7 +59,7 @@ function displayTranslationCredit() {
   }
   const translators = [];
 
-  $.getJSON(chrome.runtime.getURL('translators.json'), (response) => {
+  $.getJSON(browser.runtime.getURL('translators.json'), (response) => {
     const lang = navigator.language;
     let matchFound = false;
     for (const id in response) {
@@ -164,6 +164,7 @@ function setSelectedThemeColor() {
     optionsTheme = settings.color_themes.options_page;
   }
   $('body').attr('id', optionsTheme).data('theme', optionsTheme);
+  $('#sidebar-adblock-logo').attr('src', `icons/${optionsTheme}/logo.svg`);
 }
 
 const requestSyncMessageRemoval = function (delayTime) {
@@ -358,7 +359,7 @@ const updateAcceptableAdsUI = function (checkAA, checkAAprivacy) {
   }
 };
 
-$(document).ready(() => {
+$(() => {
   const onSettingsChanged = function (name, currentValue) {
     if (name === 'color_themes') {
       $('body').attr('id', currentValue.options_page).data('theme', currentValue.options_page);

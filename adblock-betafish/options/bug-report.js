@@ -1,9 +1,9 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, chrome, getSettings, translate, determineUserLanguage */
+/* global browser, browser, getSettings, translate, determineUserLanguage */
 
-const BG = chrome.extension.getBackgroundPage();
+const BG = browser.extension.getBackgroundPage();
 let debugInfo;
 let textDebugInfo = '';
 let extInfo = '';
@@ -27,10 +27,10 @@ const bugReportLogic = function () {
       scrollTop: 15000,
     }, 50);
     if ($('#rememberDetails').is(':checked')) {
-      chrome.storage.local.set({
+      browser.storage.local.set({
         userName: $name.val(),
       });
-      chrome.storage.local.set({
+      browser.storage.local.set({
         userEmail: $email.val(),
       });
     }
@@ -137,11 +137,11 @@ const bugReportLogic = function () {
   });
 
   // Cache access to input boxes
-  chrome.storage.local.get('userName').then((response) => {
+  browser.storage.local.get('userName').then((response) => {
     $name.val(response.userName);
   });
 
-  chrome.storage.local.get('userEmail').then((response) => {
+  browser.storage.local.get('userEmail').then((response) => {
     $email.val(response.userEmail);
   });
 
@@ -248,7 +248,7 @@ const bugReportLogic = function () {
   };
 
   // Step 1: Name & Email
-  $('#step1-next').click(() => {
+  $('#step1-next').on('click', () => {
     // Check for errors
     let problems = 0;
     if ($name.val() === '') {
@@ -306,7 +306,7 @@ const bugReportLogic = function () {
     }
   });
 
-  $('#step2-back').click(() => {
+  $('#step2-back').on('click', () => {
     $('#email, #name, #rememberDetails').prop('disabled', false);
     $('#summary, #repro-steps, #expected-result, #actual-result').prop('disabled', false);
     $('#step_repro_info').fadeOut();
@@ -318,19 +318,20 @@ const bugReportLogic = function () {
     $('#step1-next').prop('disabled', false);
   });
 
-  $('#submit').click(() => {
+  $('#submit').on('click', () => {
     sendReport();
     $('#submit').prop('disabled', true);
     $('#step2-back').prop('disabled', true);
   });
 };
 
-$(document).ready(() => {
+$(() => {
   let optionsTheme = 'default_theme';
   if (BG && BG.getSettings()) {
     const settings = BG.getSettings();
     optionsTheme = settings.color_themes.options_page;
   }
   $('body').attr('id', optionsTheme).data('theme', optionsTheme);
+  $('#sidebar-adblock-logo').attr('src', `icons/${optionsTheme}/logo.svg`);
   bugReportLogic();
 });

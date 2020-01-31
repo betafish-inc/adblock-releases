@@ -16,7 +16,8 @@
 */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, parseUri, ytInitialPlayerResponse */
+/* global browser, parseUri, ytInitialPlayerResponse, DOMPurify */
+
 const toContentScriptRandomEventName = `ab-yt-channel-name-${Math.random().toString(36).substr(2)}`;
 const fromContentScriptRandomEventName = `yt-ab-channel-name-${Math.random().toString(36).substr(2)}`;
 
@@ -53,7 +54,7 @@ function onMessage(request, sender, sendResponse) {
     sendResponse({});
   }
 }
-chrome.runtime.onMessage.addListener(onMessage);
+browser.runtime.onMessage.addListener(onMessage);
 
 // the following code will be injected into the tab JS page context.
 const captureAJAXRequests = function (toContentScriptEventName, fromContentScriptEventName) {
@@ -67,8 +68,7 @@ const captureAJAXRequests = function (toContentScriptEventName, fromContentScrip
     function fixedEncodeURIComponent(str) {
       return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
     }
-    // eslint-disable-next-line no-unsanitized/property
-    parseElem.innerHTML = channelNameToParse;
+    parseElem.innerHTML = DOMPurify.sanitize(channelNameToParse);
     const channelName = parseElem.innerText;
     // Remove whitespace, and encode
     return fixedEncodeURIComponent(channelName.replace(/\s/g, ''));
@@ -234,15 +234,18 @@ document.addEventListener(toContentScriptRandomEventName, (event) => {
     if (event && event.detail && event.detail.videoId) {
       gNextVideoId = event.detail.videoId;
     }
-    chrome.runtime.sendMessage({ command: 'updateYouTubeChannelName', channelName: event.detail.channelName });
+    browser.runtime.sendMessage({ command: 'updateYouTubeChannelName', channelName: event.detail.channelName });
   }
 });
 
 if (window.top === window.self) {
+  const elemDOMPurify = document.createElement('script');
+  elemDOMPurify.src = browser.runtime.getURL('purify.min.js');
   const scriptToInject = `(${captureAJAXRequests.toString()})('${toContentScriptRandomEventName}', '${fromContentScriptRandomEventName}');`;
   const elem = document.createElement('script');
   elem.appendChild(document.createTextNode(scriptToInject));
   try {
+    (document.head || document.documentElement).appendChild(elemDOMPurify);
     (document.head || document.documentElement).appendChild(elem);
   } catch (ex) {
     // eslint-disable-next-line no-console

@@ -1,11 +1,11 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, localizePage, parseUri, translate */
+/* global browser, localizePage, parseUri, translate */
 
-const BG = chrome.extension.getBackgroundPage();
+const BG = browser.extension.getBackgroundPage();
 
-$(document).ready(() => {
+$(() => {
   localizePage();
   if (window.location && window.location.search) {
     const searchQuery = parseUri.parseSearch(window.location.search);

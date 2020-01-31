@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, License, parseUri, backgroundPage, storageSet, storageGet */
+/* global License, parseUri, backgroundPage, storageSet, storageGet */
 
 // MABPayment can be used in all the Options page tabs and should be used to display
 // the CTAs to pay for Premium.

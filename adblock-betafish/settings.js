@@ -1,11 +1,11 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, log, chromeStorageSetHelper, logging */
+/* global browser, require, log, chromeStorageSetHelper, logging */
 
 const { EventEmitter } = require('events');
 const { LocalCDN } = require('./localcdn');
-const minjQuery = require('./jquery/jquery.min');
+const minjQuery = require('./jquery/jquery-3.4.1.min.js');
 
 const settingsNotifier = new EventEmitter();
 const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];
@@ -33,7 +33,7 @@ function Settings() {
   };
   const that = this;
   this.init = new Promise(((resolve) => {
-    chrome.storage.local.get(that.settingsKey).then((response) => {
+    browser.storage.local.get(that.settingsKey).then((response) => {
       const settings = response.settings || {};
       that.data = $.extend(that.defaults, settings);
       if (settings.debug_logging) {
@@ -57,7 +57,7 @@ Settings.prototype = {
     const that = this;
 
     // Don't store defaults that the user hasn't modified
-    chrome.storage.local.get(this.settingsKey).then((response) => {
+    browser.storage.local.get(this.settingsKey).then((response) => {
       const storedData = response.settings || {};
 
       storedData[name] = isEnabled;
@@ -88,7 +88,7 @@ const getSettings = function () {
   return settings.getAll();
 };
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'getSettings') {
     return;
   } // not for us
@@ -103,7 +103,7 @@ const setSetting = function (name, isEnabled, callback) {
   }
 };
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'setSetting' || !message.name || (typeof message.isEnabled === 'undefined')) {
     return;
   }

@@ -455,12 +455,6 @@ label {
   cursor: pointer;
   width: fit-content;
 }
-.icon {
-  background: url("../img/logo.png") no-repeat;
-  height: 55px;
-  background-size: 180px;
-  margin-left: 20px;
-}
 input[type="button"],
 select {
   -webkit-box-shadow: inset 0px 1px 0px 0px white;
@@ -939,8 +933,10 @@ section .theme-section-row {
   height: auto;
   margin-top: 30px;
   margin-bottom: 30px;
-  content: var(--adblock-logo-url, url(icons/default_theme/logo.svg));
   display: inline-block;
+}
+#sidebar-adblock-logo-narrow {
+  display: none;
 }
 #sidebar-content-top,
 #sidebar-content-bottom {
@@ -1058,11 +1054,16 @@ input:checked + .slider::before {
 
 /* Screen resolution support */
 @media screen and (max-width: 890px) {
-  #sidebar-adblock-logo {
-    content: url(icons/ab-38.png);
+  #sidebar-adblock-logo-narrow {
+    display: inline-block;
     margin-top: 35px;
     width: 28px;
     margin-left: 16px;
+    height: auto;
+    margin-bottom: 30px;
+  }
+  #sidebar-adblock-logo {
+    display: none;
   }
   #sidebar-content-bottom #sidebar-social-links {
     flex-direction: column;
@@ -1090,13 +1091,4 @@ input:checked + .slider::before {
       display: none;
     }
   }
-}
-
-/* BELOW: Chrome 49 compatability */
-
-#default_theme .adblock-logo img {
-  content: url(icons/default_theme/logo.svg);
-}
-#dark_theme .adblock-logo img {
-  content: url(icons/dark_theme/logo.svg);
 }

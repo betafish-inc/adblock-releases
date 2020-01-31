@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, translate, bindEnterClickToDefault, mayOpenDialogUi:true,
+/* global browser, translate, bindEnterClickToDefault, mayOpenDialogUi:true,
    setLangAndDirAttributes, loadWizardResources, parseUri */
 
 
@@ -151,7 +151,7 @@ function topOpenWhitelistUI() {
   mayOpenDialogUi = false;
 
   // Get Flash objects out of the way of our UI
-  chrome.runtime.sendMessage({ command: 'sendContentToBack' });
+  browser.runtime.sendMessage({ command: 'sendContentToBack' });
 
   // A empty base <div> is appended to the page's DOM and then a shadow is hosted in it.
   // The shadow protects our dialog from outside CSS "leaking" in.
@@ -173,7 +173,7 @@ function topOpenWhitelistUI() {
     const html = `
 <div id="wizard">
   <header >
-    <img aria-hidden="true" src="${chrome.runtime.getURL('/icons/icon24.png')}">
+    <img aria-hidden="true" src="${browser.runtime.getURL('/icons/icon24.png')}">
     <h1 >${translate('whitelistertitle2')}</h1>
   </header>
   <section >
@@ -242,25 +242,25 @@ function topOpenWhitelistUI() {
     $domainPart.text(domainFilter.domainPart);
     $pathPart.text(domainFilter.pathPart);
 
-    $dialog.find('button.primary').click(() => {
+    $dialog.find('button.primary').on('click', () => {
       const rule = domainFilter.generateUrl(
         false,
         $domainSlider.valueAsNumber,
         $pathSlider.valueAsNumber,
       );
       const filter = `@@||${rule}$document`;
-      chrome.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then(() => {
+      browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then(() => {
         if ($dialog.find('#adblock-reload-page').is(':checked')) {
-          chrome.runtime.sendMessage({ command: 'reloadTabForWhitelist', rule });
+          browser.runtime.sendMessage({ command: 'reloadTabForWhitelist', rule });
         } else {
           mayOpenDialogUi = true;
           (document.body || document.documentElement).removeChild(base);
-          chrome.runtime.sendMessage({ command: 'showWhitelistCompletion', rule });
+          browser.runtime.sendMessage({ command: 'showWhitelistCompletion', rule });
         }
       });
     });
 
-    $dialog.find('button.cancel').click(() => {
+    $dialog.find('button.cancel').on('click', () => {
       mayOpenDialogUi = true;
       (document.body || document.documentElement).removeChild(base);
     });

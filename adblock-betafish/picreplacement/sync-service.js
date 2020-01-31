@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, exports, settings, getSettings, setSetting, License, STATS, channels,
+/* global browser, require, exports, settings, getSettings, setSetting, License, STATS, channels,
    getSubscriptionsMinusText, chromeStorageSetHelper, getUserFilters, Prefs, abpPrefPropertyNames,
    Subscription, adblockIsDomainPaused, PubNub, adblockIsPaused, filterStorage, parseFilter,
    synchronizer, pausedFilterText1, pausedFilterText2, getUrlFromId, channelsNotifier,
@@ -623,7 +623,7 @@ const SyncService = (function getSyncService() {
       extInfo: getExtensionInfo(),
     };
 
-    chrome.storage.local.get(syncPreviousDataKey).then((response) => {
+    browser.storage.local.get(syncPreviousDataKey).then((response) => {
       const previousData = response[syncPreviousDataKey] || '{}';
       if (objectComparison(payload, JSON.parse(previousData))) {
         return;
@@ -1002,9 +1002,9 @@ const SyncService = (function getSyncService() {
   settings.onload().then(() => {
     if (getSettings().sync_settings) {
       License.ready().then(() => {
-        chrome.storage.local.get(syncCommitVersionKey).then((response) => {
+        browser.storage.local.get(syncCommitVersionKey).then((response) => {
           syncCommitVersion = response[syncCommitVersionKey] || 0;
-          chrome.storage.local.get(syncPendingPostDataKey).then((postDataResponse) => {
+          browser.storage.local.get(syncPendingPostDataKey).then((postDataResponse) => {
             pendingPostData = postDataResponse[syncPendingPostDataKey] || false;
             processEventChangeRequest();
             enableSync();
@@ -1013,7 +1013,7 @@ const SyncService = (function getSyncService() {
       });
     }
     License.ready().then(() => {
-      chrome.storage.local.get(syncExtensionNameKey).then((response) => {
+      browser.storage.local.get(syncExtensionNameKey).then((response) => {
         currentExtensionName = response[syncExtensionNameKey] || '';
       });
     });

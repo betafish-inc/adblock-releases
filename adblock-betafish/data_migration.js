@@ -4,7 +4,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, isEmptyObject, storageSet, getSubscriptionsMinusText, Subscription,
+/* global browser, require, isEmptyObject, storageSet, getSubscriptionsMinusText, Subscription,
    filterStorage, getUrlFromId, synchronizer, DownloadableSubscription, Prefs, parseFilter,
    recordAnonymousMessage */
 
@@ -21,7 +21,7 @@
     storageSet(migrateLogMessageKey, storedLog);
   };
   const reloadExtension = () => {
-    chrome.runtime.reload();
+    browser.runtime.reload();
   };
 
   // Works for all |input| that are not 'stringified' or stringified' once or twice
@@ -135,7 +135,7 @@
     return blockStats;
   };
 
-  // settings are stored only in chrome.storage.local in both Edge and Chrome
+  // settings are stored only in browser.storage.local in both Edge and Chrome
   // No localStorage logic necessary here
   const migrateLegacySettings = (edgeSettings) => {
     // Parse data to cover all basis from Chromium odd migration of data formatting
@@ -260,15 +260,15 @@
       'malware-notification',
     ];
 
-    chrome.storage.local.set(migratedData).then(() => {
-      chrome.storage.local.remove(removeAfterMigration).then(() => {
+    browser.storage.local.set(migratedData).then(() => {
+      browser.storage.local.remove(removeAfterMigration).then(() => {
         storeMigrationLogs('migration finished.');
         recordAnonymousMessage('cm_migration_finished', 'general', reloadExtension);
       });
     });
   };
 
-  chrome.storage.local.get(null).then((currentData) => {
+  browser.storage.local.get(null).then((currentData) => {
     const edgeMigrationNeeded = currentData.filter_lists;
     if (edgeMigrationNeeded) {
       try {

@@ -11,17 +11,17 @@ function Overlay(options) {
       position: 'absolute',
       'z-index': 1000000,
     })
-    .width(el.width())
-    .height(el.height());
+    .width(el.width() || 0)
+    .height(el.height() || 0);
   this.el = el;
   this.clickHandler = options.clickHandler;
 
   this.image
-    .bind('mouseenter', function onEnter() {
+    .on('mouseenter', function onEnter() {
       // crbug.com/110084
       this.style.setProperty('background-color', 'rgba(130, 180, 230, 0.5)', 'important');
     })
-    .bind('mouseleave', function onLeave() {
+    .on('mouseleave', function onLeave() {
       // crbug.com/110084
       this.style.setProperty('background-color', 'transparent', 'important');
     });
@@ -42,7 +42,7 @@ Overlay.prototype.display = function displayOverlay() {
   const that = this;
   this.image
     .appendTo(that.el.parent())
-    .click(() => {
+    .on('click', () => {
       that.clickHandler(that.el);
       return false;
     });

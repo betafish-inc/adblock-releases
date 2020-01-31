@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global require, exports, recommendations, Subscription
-   DownloadableSubscription, chrome */
+   DownloadableSubscription, browser */
 
 const { filterStorage } = require('filterStorage');
 const subClasses = require('subscriptionClasses');
@@ -143,7 +143,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
     }
     return userSubs;
   };
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.command !== 'unsubscribe' || !message.id) {
       return;
     }

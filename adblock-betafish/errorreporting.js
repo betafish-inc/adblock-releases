@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, chromeStorageSetHelper */
+/* global browser, chromeStorageSetHelper */
 
 // Send the file name and line number of any error message. This will help us
 // to trace down any frequent errors we can't confirm ourselves.
@@ -10,7 +10,7 @@ window.addEventListener('error', (e) => {
     return;
   }
   let str = `Error: ${
-    (e.filename || 'anywhere').replace(chrome.runtime.getURL(''), '')
+    (e.filename || 'anywhere').replace(browser.runtime.getURL(''), '')
   }:${e.lineno || 'anywhere'
   }:${e.colno || 'anycol'}`;
   if (e.message) {

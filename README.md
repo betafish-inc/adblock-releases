@@ -8,7 +8,6 @@ By leveraging the Adblock Plus build system `build.py` and dependency management
 tool `ensure_dependencies.py` this repository is built on top of Adblock Plus
 and contains only what is necessary for AdBlock's branding and additional functionality.
 
-
 ## Requirements
 
 This repository has [the same requirements as the Adblock Plus](https://github.com/adblockplus/adblockpluschrome#requirements).
@@ -19,7 +18,6 @@ Note: when installing the fonttools module, you will probably need to run the in
 
 Finally, if the dependencies file has been changed to a different version of the ABP code, its a good idea to delete the adblockpluschrome and buildtools folders under the project's root directory.
 
-
 ## Usage
 
 ### Building the extension
@@ -27,24 +25,42 @@ Finally, if the dependencies file has been changed to a different version of the
 To produce an unsigned build, suitable for uploading to the Chrome Web Store
 and Opera Add-Ons, run the following command:
 
-    ./build.py -t chrome build
+```bash
+./build.py build -t chrome -r
+```
 
-This will create a build with a name in the form
-`adblockforchrome-VERSION.zip`
+This will create a build with a name in the form `adblockforchrome-VERSION.zip`
 
+For Firefox, run the following command:
+
+```bash
+./build.py build -t gecko -r
+```
+
+This will create a build with a name in the form `adblockforfirefox-VERSION.xpi`
 
 ### Development builds
 
 To simplify the process of testing your changes you can create an unpacked
-development environment. For that run one of the following commands:
+development environment. For Chrome run:
 
-    ./build.py devenv -t chrome
+```bash
+./build.py devenv -t chrome
+```
 
-This will create a `devenv` directory in the repository. In Chrome you should
+This will create a `devenv.chrome` directory in the repository. In Chrome you should
 load it as an unpacked extension directory. After making changes to the
 source code re-run the command to update the development environment, the
 extension should reload automatically after a few seconds.
 
+For Firefox run:
+
+```bash
+./build.py devenv -t gecko && (cd devenv.gecko && npx web-ext run)
+```
+
+This creates a `devenv.gecko` directory in the repository and uses the Mozilla
+web-ext tool to launch the extension in Firefox.
 
 ### Dependencies
 
@@ -145,19 +161,21 @@ more advanced usage I recommend taking a look at
 
 There is now the ability to add any key/value pairs to the manifest.json file by
 adding them to the [manifest] section of the metadata.adblock file. The
-following rules apply:
-        * An option's key may be declared as a series of nested dictionary keys,
-          seperated by '.'.
-        * Declaring an option's value in a new line (even if only one is given)
-          will define the option's value as a list.
-        * When an option's value is defined as a list, no other nested
-          objects may follow.
-        * A list is expandable by the ConfigParser's '+=' token (Note: A
-          previously declared string will be converted into a list).
-        * Values may be marked as `number` or `bool` by prefixing them
-          accordingly (this also applies to values in a list):
-          * bool:<value>
-          * number:<value>
+following rules apply: 
+
+* An option's key may be declared as a series of nested dictionary keys,
+  seperated by '.'.
+* Declaring an option's value in a new line (even if only one is given)
+  will define the option's value as a list.
+* When an option's value is defined as a list, no other nested
+  objects may follow.
+* A list is expandable by the ConfigParser's '+=' token (Note: A
+  previously declared string will be converted into a list).
+* Values may be marked as `number` or `bool` by prefixing them
+  accordingly (this also applies to values in a list):
+  * bool:<value>
+  * number:<value>
+* An inherited key may be removed by giving it a value of 'REMOVE'
 
         Example:
                                     {

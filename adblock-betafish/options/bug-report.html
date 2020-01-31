@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="adblock-options-options.css" />
     <script src="polyfill.js"></script>
-    <script src="adblock-jquery.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
     <script src="adblock-functions.js"></script>
     <script src="adblock-options-bug-report.js"></script>
   </head>
@@ -14,7 +14,12 @@
       <div id="sidebar-content">
         <section id="sidebar-content-top">
           <a id="adblock-logo-link" href="https://www.getadblock.com" target="_blank">
-            <img id="sidebar-adblock-logo" i18n-alt="adblock_home" />
+            <img
+              id="sidebar-adblock-logo"
+              i18n-alt="adblock_home"
+              src="icons/default_theme/logo.svg"
+            />
+            <img id="sidebar-adblock-logo-narrow" i18n-alt="adblock_home" src="icons/ab-38.png" />
           </a>
         </section>
 

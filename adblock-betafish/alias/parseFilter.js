@@ -73,7 +73,7 @@ function parseFilter(text)
   return { filter, error };
 }
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'parseFilter' || !message.filterTextToParse) {
     return;
   }

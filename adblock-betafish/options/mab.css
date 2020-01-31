@@ -117,13 +117,6 @@
 }
 #image-swap-preview {
   width: 100%; /* Remove this rule if file is svg */
-  content: url(icons/image-swap-preview.png);
-}
-#themes-preview {
-  content: var(--mab-themes-preview-card);
-}
-#sync-preview {
-  content: url(icons/sync-preview.svg);
 }
 
 /* Start: MAB Feedback CTA */
@@ -266,6 +259,9 @@ div.mab-page-box > .option-page-content > footer > div {
   margin: 12px;
   padding: 0 16px;
 }
+.channel-box.image-box {
+  padding: 0;
+}
 .channel-box.coming-soon {
   background-color: #e6e6e6;
 }
@@ -324,15 +320,6 @@ input.invisible-overlay {
   left: 0;
   margin: 0;
 }
-#cats {
-  content: url(icons/adblock-picreplacement-images-cat-grayscale.png);
-}
-#dogs {
-  content: url(icons/adblock-picreplacement-images-dog-grayscale.png);
-}
-#landscapes {
-  content: url(icons/adblock-picreplacement-images-landscape-grayscale.png);
-}
 
 /* Themes */
 #video-icon {
@@ -359,15 +346,6 @@ input.invisible-overlay {
 .selected.channel-box {
   box-shadow: 0 5px 15px 0 rgba(10, 14, 71, 0.2);
 }
-.selected #cats {
-  content: url(icons/adblock-picreplacement-images-cat.png);
-}
-.selected #dogs {
-  content: url(icons/adblock-picreplacement-images-dog.png);
-}
-.selected #landscapes {
-  content: url(icons/adblock-picreplacement-images-landscape.png);
-}
 
 /* Sync */
 .main-text,
@@ -393,7 +371,6 @@ input.invisible-overlay {
   margin-bottom: 22px;
 }
 #sync-image {
-  content: url(icons/sync-image.svg);
   margin: 24px 32px 24px 59px;
 }
 #get-sync,
@@ -591,12 +568,5 @@ input.invisible-overlay {
       flex-wrap: wrap;
       justify-content: space-evenly;
     }
-  }
-}
-
-/* Retina & hi DPI displays only */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  #image-swap-preview {
-    content: url(icons/image-swap-preview@2x.png);
   }
 }

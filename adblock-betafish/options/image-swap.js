@@ -7,6 +7,19 @@
 (function onImageSwapLoaded() {
   const { channels, setSetting } = backgroundPage;
 
+  const updateChannelBoxes = function () {
+    const $catsBox = $('#cats');
+    const $dogsBox = $('#dogs');
+    const $landscapesBox = $('#landscapes');
+    const catsImageSrc = $catsBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-cat.png' : 'icons/adblock-picreplacement-images-cat-grayscale.png';
+    const dogsImageSrc = $dogsBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-dog.png' : 'icons/adblock-picreplacement-images-dog-grayscale.png';
+    const landscapesImageSrc = $landscapesBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-landscape.png' : 'icons/adblock-picreplacement-images-landscape-grayscale.png';
+
+    $catsBox.attr('src', catsImageSrc);
+    $dogsBox.attr('src', dogsImageSrc);
+    $landscapesBox.attr('src', landscapesImageSrc);
+  };
+
   const loadCurrentSettingsIntoPage = function () {
     const guide = channels.getGuide();
     const $stopFeatureInput = $('input#no-channel');
@@ -35,6 +48,7 @@
       $stopFeatureInput.prop('checked', true);
       $stopFeatureInput.parent('.channel-box').addClass('selected');
     }
+    updateChannelBoxes();
   };
 
   const updateChannelSelection = function (event) {
@@ -59,16 +73,16 @@
     $('input.invisible-overlay').prop('hidden', true);
     $('.channel-box > a[id^=get-it-now]').closest('li').addClass('locked');
     $('.channel-box').first().closest('li').addClass('selected');
+    updateChannelBoxes();
     $('.locked > a[id^=get-it-now]').each((i, linkWithoutUserId) => {
       const link = linkWithoutUserId;
       link.href = License.MAB_CONFIG.payURL;
     });
 
     // Events
-    $('.locked > a[id^=get-it-now]').hover(
-      () => $('#get-it-now-image-swap').addClass('shadow'),
-      () => $('#get-it-now-image-swap').removeClass('shadow'),
-    );
+    $('.locked > a[id^=get-it-now]')
+      .on('mouseenter', () => $('#get-it-now-image-swap').addClass('shadow'))
+      .on('mouseleave', () => $('#get-it-now-image-swap').removeClass('shadow'));
   };
 
   const paidUserSetup = function () {
@@ -77,10 +91,10 @@
     $('.channel-box').removeClass('locked');
 
     // Events
-    $('input.invisible-overlay').change(updateChannelSelection);
+    $('input.invisible-overlay').on('change', updateChannelSelection);
   };
 
-  $(document).ready(() => {
+  $(() => {
     localizePage();
 
     if (!License || $.isEmptyObject(License)) {
@@ -101,7 +115,7 @@
       const guide = backgroundPage.channels.getGuide();
       const $channelInput = $(`#${guide[id].name}`);
       if ($channelInput.is(':checked') === previousValue) {
-        $channelInput.click();
+        $channelInput.trigger('click');
       }
     };
 

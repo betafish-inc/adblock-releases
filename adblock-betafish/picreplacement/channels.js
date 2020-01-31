@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, getUrlFromId, getSettings, storageGet, storageSet */
+/* global require, getUrlFromId, getSettings, storageGet, storageSet */
 
 const { Subscription } = require('subscriptionClasses');
 const { filterStorage } = require('filterStorage');
@@ -10,7 +10,7 @@ const {
   imageSizesMap, WIDE, TALL, SKINNYWIDE, SKINNYTALL,
 } = require('./image-sizes-map');
 
-const minjQuery = require('../jquery/jquery.min');
+const minjQuery = require('../jquery/jquery-3.4.1.min.js');
 
 const channelsNotifier = new EventEmitter();
 
@@ -79,7 +79,7 @@ Channels.prototype = {
     };
     this.saveToStorage();
     const that = this;
-    minjQuery(channel).bind('updated', () => {
+    minjQuery(channel).on('updated', () => {
       if (that.channelGuide[id].enabled) {
         that.channelGuide[id].channel.prefetch();
       }

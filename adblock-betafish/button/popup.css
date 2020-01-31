@@ -45,7 +45,6 @@ body {
 /* HEADER */
 
 .header-logo {
-  content: var(--adblock-logo-url);
   cursor: pointer;
   height: 32px;
   width: auto;
@@ -73,30 +72,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-#default_theme .header-logo {
-  content: url(icons/default_theme/logo.svg);
-}
-#dark_theme .header-logo {
-  content: url(icons/dark_theme/logo.svg);
-}
-#ocean_theme .header-logo {
-  content: url(icons/ocean_theme/logo.svg);
-}
-#solarized_theme .header-logo {
-  content: url(icons/solarized_theme/logo.svg);
-}
-#solarized_light_theme .header-logo {
-  content: url(icons/solarized_light_theme/logo.svg);
-}
-#rebecca_purple_theme .header-logo {
-  content: url(icons/rebecca_purple_theme/logo.svg);
-}
-#sunshine_theme .header-logo {
-  content: url(icons/sunshine_theme/logo.svg);
-}
-#watermelon_theme .header-logo {
-  content: url(icons/watermelon_theme/logo.svg);
 }
 
 /* BLOCKED COUNT */

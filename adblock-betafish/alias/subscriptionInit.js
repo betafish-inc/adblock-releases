@@ -41,7 +41,7 @@ function detectFirstRun()
     }
     Prefs.currentVersion = info.addonVersion;
 
-    chrome.storage.local.get(null).then((currentData) => {
+    browser.storage.local.get(null).then((currentData) => {
       const edgeMigrationNeeded = currentData.filter_lists;
       if (edgeMigrationNeeded && firstRun) {
         firstRun = false;
@@ -280,7 +280,7 @@ function addSubscriptionsAndNotifyUser(subscriptions)
         if (firstRun || dataCorrupted) {
           STATS.untilLoaded(function(userID)
           {
-            browser.tabs.create({url: "https://getadblock.com/installed/?u=" + userID + "&lg=" + chrome.i18n.getUILanguage() + "&dc=" + dataCorrupted });
+            browser.tabs.create({url: "https://getadblock.com/installed/?u=" + userID + "&lg=" + browser.i18n.getUILanguage() + "&dc=" + dataCorrupted });
           });
         }
       }

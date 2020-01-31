@@ -1,9 +1,9 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, backgroundPage, optionalSettings, Subscription, filterStorage, filterNotifier,
+/* global browser, backgroundPage, optionalSettings, Subscription, filterStorage, filterNotifier,
 syncErrorCode, parseFilter, translate, checkForSyncError, isSelectorFilter, activateTab, License,
-MABPayment */
+MABPayment, DOMPurify */
 
 let originalCustomFilters;
 
@@ -60,7 +60,7 @@ $(() => {
 
   const getExcludeFilters = function () {
     const excludeFiltersKey = 'exclude_filters';
-    chrome.storage.local.get(excludeFiltersKey).then((response) => {
+    browser.storage.local.get(excludeFiltersKey).then((response) => {
       if (response[excludeFiltersKey]) {
         $('#txtExcludeFiltersAdvanced').val(response[excludeFiltersKey]);
         $('#divExcludeFilters').show();
@@ -70,12 +70,12 @@ $(() => {
   getExcludeFilters();
 
   // Display any migration error messages to the user
-  chrome.storage.local.get('custom_filters_errors').then((response) => {
+  browser.storage.local.get('custom_filters_errors').then((response) => {
     if (response.custom_filters_errors) {
       $('#txtMigrationErrorMessage').val(response.custom_filters_errors);
       $('#migrationErrorMessageDiv').show();
-      $('#btnDeleteMigrationErrorMessage').click(() => {
-        chrome.storage.local.remove('custom_filters_errors');
+      $('#btnDeleteMigrationErrorMessage').on('click', () => {
+        browser.storage.local.remove('custom_filters_errors');
         $('#migrationErrorMessageDiv').hide();
       });
     }
@@ -106,7 +106,7 @@ $(() => {
     const customFiltersText = $('#txtFiltersAdvanced').val();
     const customFiltersArray = customFiltersText.split('\n');
     let filterErrorMessage = '';
-    $('#messagecustom').html(filterErrorMessage);
+    $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
     for (let i = 0; (!filterErrorMessage && i < customFiltersArray.length); i++) {
       let filter = customFiltersArray[i];
       filter = filter.trim();
@@ -122,7 +122,7 @@ $(() => {
     }
 
     if (filterErrorMessage) {
-      $('#messagecustom').html(filterErrorMessage);
+      $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
       $('#messagecustom').removeClass('do-not-display');
     } else {
       if (backgroundPage.adblockIsPaused()) {
@@ -182,7 +182,7 @@ $(() => {
     return domainList;
   }
 
-  $('#txtBlacklist').focus(function BlacklistTextFocused() {
+  $('#txtBlacklist').on('focus', function BlacklistTextFocused() {
     // Find the blacklist entry in the user's filters, and put it
     // into the blacklist input.
     const customFilterText = $('#txtFiltersAdvanced').val();
@@ -193,7 +193,7 @@ $(() => {
   });
 
   // The add_filter functions
-  $('#btnAddUserFilter').click(checkForSyncError((event) => {
+  $('#btnAddUserFilter').on('click', checkForSyncError((event) => {
     const blockCss = $('#txtUserFilterCss').val().trim();
     const blockDomain = $('#txtUserFilterDomain').val().trim();
 
@@ -207,7 +207,7 @@ $(() => {
     $(event.target).prop('disabled', true);
   }));
 
-  $('#btnAddExcludeFilter').click(checkForSyncError((event) => {
+  $('#btnAddExcludeFilter').on('click', checkForSyncError((event) => {
     let excludeUrl = $('#txtUnblock').val().trim();
 
     // prevent regexes
@@ -221,7 +221,7 @@ $(() => {
     $(event.target).prop('disabled', true);
   }));
 
-  $('#btnAddBlacklist').click(checkForSyncError(() => {
+  $('#btnAddBlacklist').on('click', checkForSyncError(() => {
     const blacklist = toTildePipeFormat($('#txtBlacklist').val());
 
     let filters = `${$('#txtFiltersAdvanced').val().trim()}\n`;
@@ -240,7 +240,7 @@ $(() => {
     $('#btnAddBlacklist').prop('disabled', true);
   }));
 
-  $('#btnAddUrlBlock').click(checkForSyncError((event) => {
+  $('#btnAddUrlBlock').on('click', checkForSyncError((event) => {
     let blockUrl = $('#txtBlockUrl').val().trim();
     let blockDomain = $('#txtBlockUrlDomain').val().trim();
     if (blockDomain === '*') {
@@ -263,7 +263,7 @@ $(() => {
   }));
 
   // The validation functions
-  $('#txtBlacklist').bind('input', checkForSyncError(() => {
+  $('#txtBlacklist').on('input', checkForSyncError(() => {
     let blacklist = toTildePipeFormat($('#txtBlacklist').val());
 
     if (blacklist) {
@@ -286,7 +286,7 @@ $(() => {
     $('#btnAddBlacklist').prop('disabled', false);
   }));
 
-  $('#divUrlBlock input[type=\'text\']').bind('input', checkForSyncError(() => {
+  $('#divUrlBlock input[type=\'text\']').on('input', checkForSyncError(() => {
     const blockUrl = $('#txtBlockUrl').val().trim();
     let blockDomain = $('#txtBlockUrlDomain').val().trim();
     if (blockDomain === '*') {
@@ -301,7 +301,7 @@ $(() => {
     $('#btnAddUrlBlock').prop('disabled', (result.error) ? true : null);
   }));
 
-  $('#divCssBlock input[type=\'text\']').bind('input', checkForSyncError(() => {
+  $('#divCssBlock input[type=\'text\']').on('input', checkForSyncError(() => {
     const blockCss = $('#txtUserFilterCss').val().trim();
     let blockDomain = $('#txtUserFilterDomain').val().trim();
     if (blockDomain === '*') {
@@ -312,7 +312,7 @@ $(() => {
     $('#btnAddUserFilter').prop('disabled', (result.error) ? true : null);
   }));
 
-  $('#divExcludeBlock input[type=\'text\']').bind('input', checkForSyncError(() => {
+  $('#divExcludeBlock input[type=\'text\']').on('input', checkForSyncError(() => {
     const unblockUrl = $('#txtUnblock').val().trim();
     const result = parseFilter(`@@${unblockUrl}$document`);
     if (!unblockUrl || isSelectorFilter(unblockUrl)) {
@@ -323,15 +323,15 @@ $(() => {
   }));
 
   // When one presses 'Enter', pretend it was a click on the 'add' button
-  $('.customize-entry-table input[type=\'text\']').keypress(checkForSyncError((event) => {
+  $('.customize-entry-table input[type=\'text\']').on('keypress', checkForSyncError((event) => {
     const submitButton = $(event.target).closest('.customize-entry-table').find('input[type=\'button\']');
     if (event.keyCode === 13 && !submitButton.prop('disabled')) {
       event.preventDefault();
-      submitButton.click();
+      submitButton.trigger('click');
     }
   }));
 
-  $('a.controlsLink').click(checkForSyncError((event) => {
+  $('a.controlsLink').on('click', checkForSyncError((event) => {
     event.preventDefault();
     const $myControls = $(event.target).parent('div').find('.addControls');
     $('.addControls').not($myControls).slideUp({
@@ -353,32 +353,32 @@ $(() => {
     });
   }));
 
-  $('#btnEditAdvancedFilters').click(checkForSyncError((event) => {
-    const headerOffset = $('#header').height() + 10;
+  $('#btnEditAdvancedFilters').on('click', checkForSyncError((event) => {
+    const headerOffset = $('#header').height() ? $('#header').height() + 10 : 0;
     $('body, html').animate({
       scrollTop: $(event.target).offset().top - headerOffset,
     }, 1000);
     $('#txtFiltersAdvanced').prop('disabled', false);
     $('#spanSaveButton').show();
     $('#btnEditAdvancedFilters').hide();
-    $('#txtFiltersAdvanced').focus();
+    $('#txtFiltersAdvanced').trigger('focus');
   }));
 
 
-  $('#btnEditExcludeAdvancedFilters').click(checkForSyncError((event) => {
-    const headerOffset = $('#header').height() + 10;
+  $('#btnEditExcludeAdvancedFilters').on('click', checkForSyncError((event) => {
+    const headerOffset = $('#header').height() ? $('#header').height() + 10 : 0;
     $('body, html').animate({
       scrollTop: $(event.target).offset().top - headerOffset,
     }, 1000);
-    $('#txtExcludeFiltersAdvanced').removeAttr('disabled');
+    $('#txtExcludeFiltersAdvanced').prop('disabled', false);
     $('#spanSaveExcludeButton').show();
     $('#btnEditExcludeAdvancedFilters').hide();
-    $('#txtExcludeFiltersAdvanced').focus();
+    $('#txtExcludeFiltersAdvanced').trigger('focus');
   }));
 
-  $('#btnSaveAdvancedFilters').click(saveFilters);
+  $('#btnSaveAdvancedFilters').on('click', saveFilters);
 
-  $('#btnSaveExcludeAdvancedFilters').click(checkForSyncError(() => {
+  $('#btnSaveExcludeAdvancedFilters').on('click', checkForSyncError(() => {
     const excludeFiltersText = $('#txtExcludeFiltersAdvanced').val();
     backgroundPage.ExcludeFilter.setExcludeFilters(excludeFiltersText);
     $('#divAddNewFilter').slideDown();
@@ -415,9 +415,9 @@ $(() => {
   }
 
   MABPayment.displaySyncCTAs();
-  $('.sync-cta #get-it-now-customize').click(MABPayment.userClickedSyncCTA);
-  $('.sync-cta #close-sync-cta-customize').click(MABPayment.userClosedSyncCTA);
-  $('a.link-to-tab').click((event) => {
+  $('.sync-cta #get-it-now-customize').on('click', MABPayment.userClickedSyncCTA);
+  $('.sync-cta #close-sync-cta-customize').on('click', MABPayment.userClosedSyncCTA);
+  $('a.link-to-tab').on('click', (event) => {
     activateTab($(event.target).attr('href'));
   });
 });

@@ -2,6 +2,14 @@
 
 UNRELEASED:
 
+Version: 4.5.0, Date: 2020-01-31
+- Updated translations
+- Consitently use 'browser.*' instead of 'chrome.*' for extension APIs
+- Updated the bundled version of jQuery to 3.4.1
+- Corrected the 'report an ad' link in the help flow
+- Converted all CSS url links to use the absolute path, instead of a relative path
+- All dynamically created HTML is now santized using DOMPurify
+
 Version: 4.4.0, Date: 2020-01-16
 - Updated translations
 - Fixed an issue with blank AdBlock notifications

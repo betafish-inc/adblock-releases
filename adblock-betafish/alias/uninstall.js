@@ -5,7 +5,7 @@ const {STATS} = require('./../stats');
 
 let uninstallInit = exports.uninstallInit = function()
 {
-  if (chrome.runtime.setUninstallURL)
+  if (browser.runtime.setUninstallURL)
   {
     var Prefs = require('prefs').Prefs;
     STATS.untilLoaded(function(userID)
@@ -31,7 +31,7 @@ let uninstallInit = exports.uninstallInit = function()
         };
         var updateUninstallURL = function()
         {
-          chrome.storage.local.get("blockage_stats").then((data) =>
+          browser.storage.local.get("blockage_stats").then((data) =>
           {
             var url = uninstallURL;
             if (data &&
@@ -52,7 +52,7 @@ let uninstallInit = exports.uninstallInit = function()
             {
               url = url + "&abc-lt=-1"
             }
-            chrome.runtime.setUninstallURL(url);
+            browser.runtime.setUninstallURL(url);
           });
         };
         // start an interval timer that will update the Uninstall URL every 2
@@ -62,7 +62,7 @@ let uninstallInit = exports.uninstallInit = function()
       }
       else
       {
-        chrome.runtime.setUninstallURL(uninstallURL + "&t=-1");
+        browser.runtime.setUninstallURL(uninstallURL + "&t=-1");
       }
     }); // end of STATS.then
   }

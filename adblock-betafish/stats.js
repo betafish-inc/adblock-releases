@@ -4,7 +4,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, exports, require, log, getSettings, determineUserLanguage,
+/* global browser, exports, require, log, getSettings, determineUserLanguage,
    replacedCounts, chromeStorageSetHelper, getAllSubscriptionsMinusText,
    checkPingResponseForProtect, License, channels */
 
@@ -22,7 +22,7 @@ const STATS = (function exportStats() {
   let dataCorrupt = false;
 
   // Get some information about the version, os, and browser
-  const { version } = chrome.runtime.getManifest();
+  const { version } = browser.runtime.getManifest();
   let match = navigator.userAgent.match(/(CrOS \w+|Windows NT|Mac OS X|Linux) ([\d._]+)?/);
   const os = (match || [])[1] || 'Unknown';
   const osVersion = (match || [])[2] || 'Unknown';
@@ -87,7 +87,7 @@ const STATS = (function exportStats() {
   function readUserIDPromisified() {
     return new Promise(
       ((resolve) => {
-        chrome.storage.local.get(STATS.userIDStorageKey).then((response) => {
+        browser.storage.local.get(STATS.userIDStorageKey).then((response) => {
           const localuserid = storageGet(STATS.userIDStorageKey);
           if (!response[STATS.userIDStorageKey] && !localuserid) {
             STATS.firstRun = true;
@@ -118,7 +118,7 @@ const STATS = (function exportStats() {
     );
   }
 
-  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  browser.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message.command !== 'get_adblock_user_id') {
       return undefined;
     }
@@ -132,7 +132,7 @@ const STATS = (function exportStats() {
     if (!callbackFN && (typeof callbackFN !== 'function')) {
       return;
     }
-    chrome.storage.local.get(STATS.totalPingStorageKey).then((response) => {
+    browser.storage.local.get(STATS.totalPingStorageKey).then((response) => {
       const settingsObj = getSettings();
       const localTotalPings = storageGet(STATS.totalPingStorageKey);
       const totalPings = response[STATS.totalPingStorageKey] || localTotalPings || 0;
@@ -165,8 +165,8 @@ const STATS = (function exportStats() {
       if ((flavor === 'E' || flavor === 'CM') && Prefs.blocked_total) {
         data.b = Prefs.blocked_total;
       }
-      if (chrome.runtime.id) {
-        data.extid = chrome.runtime.id;
+      if (browser.runtime.id) {
+        data.extid = browser.runtime.id;
       }
       const subs = getAllSubscriptionsMinusText();
       if (subs) {
@@ -229,8 +229,8 @@ const STATS = (function exportStats() {
         },
       };
 
-      if (chrome.management && chrome.management.getSelf) {
-        chrome.management.getSelf((info) => {
+      if (browser.management && browser.management.getSelf) {
+        browser.management.getSelf((info) => {
           pingData.it = info.installType.charAt(0);
           $.ajax(ajaxOptions);
         });
@@ -247,7 +247,7 @@ const STATS = (function exportStats() {
 
   // Called just after we ping the server, to schedule our next ping.
   const scheduleNextPing = function () {
-    chrome.storage.local.get(STATS.totalPingStorageKey).then((response) => {
+    browser.storage.local.get(STATS.totalPingStorageKey).then((response) => {
       let localTotalPings = storageGet(totalPingStorageKey);
       if (typeof localTotalPings !== 'number' || Number.isNaN(localTotalPings)) {
         localTotalPings = 0;
@@ -299,7 +299,7 @@ const STATS = (function exportStats() {
     }
     // Wait 10 seconds to allow the previous 'set' to finish
     window.setTimeout(() => {
-      chrome.storage.local.get(STATS.nextPingTimeStorageKey).then((response) => {
+      browser.storage.local.get(STATS.nextPingTimeStorageKey).then((response) => {
         let localNextPingTime = storageGet(STATS.nextPingTimeStorageKey);
         if (typeof localNextPingTime !== 'number' || Number.isNaN(localNextPingTime)) {
           localNextPingTime = 0;
@@ -398,10 +398,10 @@ const STATS = (function exportStats() {
       readUserIDPromisified().then(() => {
         // Do 'stuff' when we're first installed...
         // - send a message
-        chrome.storage.local.get(STATS.totalPingStorageKey).then((response) => {
+        browser.storage.local.get(STATS.totalPingStorageKey).then((response) => {
           if (!response[STATS.totalPingStorageKey]) {
-            if (chrome.management && chrome.management.getSelf) {
-              chrome.management.getSelf((info) => {
+            if (browser.management && browser.management.getSelf) {
+              browser.management.getSelf((info) => {
                 if (info) {
                   recordGeneralMessage(`new_install_${info.installType}`);
                 } else {
@@ -436,8 +436,8 @@ const STATS = (function exportStats() {
         o: os,
         ov: osVersion,
       };
-      if (chrome.runtime.id) {
-        data.extid = chrome.runtime.id;
+      if (browser.runtime.id) {
+        data.extid = browser.runtime.id;
       }
       $.ajax(statsUrl, {
         type: 'POST',

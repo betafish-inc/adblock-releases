@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, ext, adblockIsPaused, adblockIsDomainPaused
+/* global browser, require, ext, adblockIsPaused, adblockIsDomainPaused
    recordGeneralMessage, log, License, reloadTab */
 
 const { checkWhitelisted } = require('whitelisting');
@@ -9,7 +9,7 @@ const { filterNotifier } = require('filterNotifier');
 const { Prefs } = require('prefs');
 
 const updateButtonUIAndContextMenus = function () {
-  chrome.tabs.query({}).then((tabs) => {
+  browser.tabs.query({}).then((tabs) => {
     for (const tab of tabs) {
       tab.url = tab.url ? tab.url : tab.pendingUrl;
       const page = new ext.Page(tab);
@@ -29,7 +29,7 @@ const emitPageBroadcast = (function emitBroadcast() {
       {
         allFrames: false,
         include: [
-          'adblock-jquery.js',
+          'jquery-3.4.1.min.js',
           'adblock-uiscripts-load_wizard_resources.js',
           'adblock-uiscripts-top_open_whitelist_ui.js',
         ],
@@ -38,7 +38,7 @@ const emitPageBroadcast = (function emitBroadcast() {
       {
         allFrames: false,
         include: [
-          'adblock-jquery.js',
+          'jquery-3.4.1.min.js',
           'adblock-uiscripts-load_wizard_resources.js',
           'adblock-uiscripts-top_open_whitelist_completion_ui.js',
         ],
@@ -47,7 +47,8 @@ const emitPageBroadcast = (function emitBroadcast() {
       {
         allFrames: false,
         include: [
-          'adblock-jquery.js',
+          'jquery-3.4.1.min.js',
+          'purify.min.js',
           'adblock-uiscripts-load_wizard_resources.js',
           'adblock-uiscripts-blacklisting-overlay.js',
           'adblock-uiscripts-blacklisting-clickwatcher.js',
@@ -79,7 +80,7 @@ const emitPageBroadcast = (function emitBroadcast() {
     // If there's anything to inject, inject the next item and recurse.
     if (data.include.length > injectedSoFar) {
       details.file = data.include[injectedSoFar];
-      chrome.tabs.executeScript(tabID, details).then(() => {
+      browser.tabs.executeScript(tabID, details).then(() => {
         executeOnTab(fnName, parameter, injectedSoFar + 1, tabID);
       }).catch((error) => {
         log(error);
@@ -88,7 +89,7 @@ const emitPageBroadcast = (function emitBroadcast() {
       // Nothing left to inject, so execute the function.
       const param = JSON.stringify(parameter);
       details.code = `${fnName}(${param});`;
-      chrome.tabs.executeScript(tabID, details);
+      browser.tabs.executeScript(tabID, details);
     }
   };
 
@@ -103,7 +104,7 @@ const emitPageBroadcast = (function emitBroadcast() {
 const contextMenuItem = (() => ({
   pauseAll:
     {
-      title: chrome.i18n.getMessage('pause_adblock_everywhere'),
+      title: browser.i18n.getMessage('pause_adblock_everywhere'),
       contexts: ['all'],
       onclick: () => {
         recordGeneralMessage('cm_pause_clicked');
@@ -113,7 +114,7 @@ const contextMenuItem = (() => ({
     },
   unpauseAll:
     {
-      title: chrome.i18n.getMessage('resume_blocking_ads'),
+      title: browser.i18n.getMessage('resume_blocking_ads'),
       contexts: ['all'],
       onclick: () => {
         recordGeneralMessage('cm_unpause_clicked');
@@ -123,7 +124,7 @@ const contextMenuItem = (() => ({
     },
   pauseDomain:
     {
-      title: chrome.i18n.getMessage('domain_pause_adblock'),
+      title: browser.i18n.getMessage('domain_pause_adblock'),
       contexts: ['all'],
       onclick: (info, tab) => {
         recordGeneralMessage('cm_domain_pause_clicked');
@@ -133,7 +134,7 @@ const contextMenuItem = (() => ({
     },
   unpauseDomain:
     {
-      title: chrome.i18n.getMessage('resume_blocking_ads'),
+      title: browser.i18n.getMessage('resume_blocking_ads'),
       contexts: ['all'],
       onclick: (info, tab) => {
         recordGeneralMessage('cm_domain_unpause_clicked');
@@ -143,7 +144,7 @@ const contextMenuItem = (() => ({
     },
   blockThisAd:
     {
-      title: chrome.i18n.getMessage('block_this_ad'),
+      title: browser.i18n.getMessage('block_this_ad'),
       contexts: ['all'],
       onclick(info, tab) {
         emitPageBroadcast({
@@ -160,7 +161,7 @@ const contextMenuItem = (() => ({
     },
   blockAnAd:
     {
-      title: chrome.i18n.getMessage('block_an_ad_on_this_page'),
+      title: browser.i18n.getMessage('block_an_ad_on_this_page'),
       contexts: ['all'],
       onclick(info, tab) {
         emitPageBroadcast({
@@ -179,7 +180,7 @@ const contextMenuItem = (() => ({
 
 const updateContextMenuItems = function (page) {
   // Remove the AdBlock context menu items
-  chrome.contextMenus.removeAll();
+  browser.contextMenus.removeAll();
 
   // Check if the context menu items should be added
   if (!Prefs.shouldShowBlockElementMenu) {
@@ -189,32 +190,32 @@ const updateContextMenuItems = function (page) {
   const adblockIsPaused = window.adblockIsPaused();
   const domainIsPaused = window.adblockIsDomainPaused({ url: page.url.href, id: page.id });
   if (adblockIsPaused) {
-    chrome.contextMenus.create(contextMenuItem.unpauseAll);
+    browser.contextMenus.create(contextMenuItem.unpauseAll);
   } else if (domainIsPaused) {
-    chrome.contextMenus.create(contextMenuItem.unpauseDomain);
+    browser.contextMenus.create(contextMenuItem.unpauseDomain);
   } else if (checkWhitelisted(page)) {
-    chrome.contextMenus.create(contextMenuItem.pauseAll);
+    browser.contextMenus.create(contextMenuItem.pauseAll);
   } else {
-    chrome.contextMenus.create(contextMenuItem.blockThisAd);
-    chrome.contextMenus.create(contextMenuItem.blockAnAd);
-    chrome.contextMenus.create(contextMenuItem.pauseDomain);
-    chrome.contextMenus.create(contextMenuItem.pauseAll);
+    browser.contextMenus.create(contextMenuItem.blockThisAd);
+    browser.contextMenus.create(contextMenuItem.blockAnAd);
+    browser.contextMenus.create(contextMenuItem.pauseDomain);
+    browser.contextMenus.create(contextMenuItem.pauseAll);
   }
 };
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status) {
     updateContextMenuItems(new ext.Page(tab));
   }
 });
 
-chrome.runtime.onMessage.addListener((msg, sender) => {
+browser.runtime.onMessage.addListener((msg, sender) => {
   if (msg.type === 'report-html-page') {
     updateContextMenuItems(sender.page);
   }
 });
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'sendContentToBack') {
     return;
   } // not for us
@@ -222,7 +223,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse({});
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'reloadTabForWhitelist') {
     reloadTab(sender.tab.id, () => {
       emitPageBroadcast({
@@ -239,7 +240,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'showWhitelistCompletion') {
     emitPageBroadcast({
       fn: 'topOpenWhitelistCompletionUI',

@@ -1,9 +1,9 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, backgroundPage, selected, browser */
+/* global browser, backgroundPage, selected, browser */
 
-$(document).ready(() => {
+$(() => {
   if (navigator.language.substring(0, 2) !== 'en') {
     $('.english-only').removeClass('do-not-display');
   }
@@ -100,7 +100,7 @@ $(document).ready(() => {
   // Show the changelog
   selected('#whatsnew_link', () => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', chrome.runtime.getURL('CHANGELOG.txt'), false);
+    xhr.open('GET', browser.runtime.getURL('CHANGELOG.txt'), false);
     xhr.send();
     const object = xhr.responseText;
     $('#changes').text(object).css({ width: '670px', height: '200px' }).fadeIn();

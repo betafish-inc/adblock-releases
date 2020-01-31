@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, ext, exports, chromeStorageSetHelper, getSettings, adblockIsPaused,
+/* global browser, require, ext, exports, chromeStorageSetHelper, getSettings, adblockIsPaused,
    adblockIsDomainPaused, filterStorage, Filter, parseUri, settings, getAllSubscriptionsMinusText,
    getUserFilters, Utils */
 
@@ -23,7 +23,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   dataCollectionCache.domains = {};
 
   const handleTabUpdated = function (tabId, changeInfo, tabInfo) {
-    if (chrome.runtime.lastError) {
+    if (browser.runtime.lastError) {
       return;
     }
     if (!tabInfo || !tabInfo.url || !tabInfo.url.startsWith('http')) {
@@ -35,12 +35,12 @@ const DataCollectionV2 = (function getDataCollectionV2() {
       && !adblockIsDomainPaused({ url: tabInfo.url, id: tabId })
       && changeInfo.status === 'complete'
     ) {
-      chrome.tabs.executeScript(tabId,
+      browser.tabs.executeScript(tabId,
         {
           file: 'polyfill.js',
           allFrames: true,
         }).then(() => {
-        chrome.tabs.executeScript(tabId,
+        browser.tabs.executeScript(tabId,
           {
             file: 'adblock-datacollection-contentscript.js',
             allFrames: true,
@@ -182,7 +182,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
               domains: dataCollectionCache.domains,
               filters: dataCollectionCache.filters,
             };
-            chrome.storage.local.get(TIME_LAST_PUSH_KEY).then((response) => {
+            browser.storage.local.get(TIME_LAST_PUSH_KEY).then((response) => {
               let timeLastPush = 'n/a';
               if (response[TIME_LAST_PUSH_KEY]) {
                 const serverTimestamp = new Date(response[TIME_LAST_PUSH_KEY]);
@@ -234,11 +234,11 @@ const DataCollectionV2 = (function getDataCollectionV2() {
         });
       }, HOUR_IN_MS);
       filterNotifier.on('filter.hitCount', filterListener);
-      chrome.webRequest.onBeforeRequest.addListener(webRequestListener, {
+      browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
         urls: ['http://*/*', 'https://*/*'],
         types: ['main_frame'],
       });
-      chrome.tabs.onUpdated.addListener(handleTabUpdated);
+      browser.tabs.onUpdated.addListener(handleTabUpdated);
       addMessageListener();
     }
   });// End of then
@@ -248,19 +248,19 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     dataCollectionCache.filters = {};
     dataCollectionCache.domains = {};
     filterNotifier.on('filter.hitCount', filterListener);
-    chrome.webRequest.onBeforeRequest.addListener(webRequestListener, {
+    browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
       urls: ['http://*/*', 'https://*/*'],
       types: ['main_frame'],
     });
-    chrome.tabs.onUpdated.addListener(handleTabUpdated);
+    browser.tabs.onUpdated.addListener(handleTabUpdated);
     addMessageListener();
   };
   returnObj.end = function returnObjEnd() {
     dataCollectionCache = {};
     filterNotifier.off('filter.hitCount', filterListener);
-    chrome.webRequest.onBeforeRequest.removeListener(webRequestListener);
-    chrome.storage.local.remove(TIME_LAST_PUSH_KEY);
-    chrome.tabs.onUpdated.removeListener(handleTabUpdated);
+    browser.webRequest.onBeforeRequest.removeListener(webRequestListener);
+    browser.storage.local.remove(TIME_LAST_PUSH_KEY);
+    browser.tabs.onUpdated.removeListener(handleTabUpdated);
   };
   returnObj.getCache = function returnObjGetCache() {
     return dataCollectionCache;

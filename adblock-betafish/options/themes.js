@@ -97,35 +97,33 @@
 
   const documentEventsHandling = () => {
     // Hover events
-    $('.popup-menu-themes .theme-box:not(.selected)').hover(
-      function handleIn() {
+    $('.popup-menu-themes .theme-box:not(.selected)')
+      .on('mouseenter', function handleIn() {
         showHoveredPopupThemePreview($(this));
         showShadowOnLockedHover($(this));
-      },
+      })
       // eslint-disable-next-line prefer-arrow-callback
-      function handleOut() {
+      .on('mouseleave', function handleOut() {
         showSelectedPopupThemePreview();
         hideShadowNoHover();
-      },
-    );
+      });
 
-    $('.options-page-themes .theme-box:not(.selected)').hover(
-      function handleIn() {
+    $('.options-page-themes .theme-box:not(.selected)')
+      .on('mouseenter', function handleIn() {
         showHoveredOptionsThemePreview($(this));
         showShadowOnLockedHover($(this));
-      },
+      })
       // eslint-disable-next-line prefer-arrow-callback
-      function handleOut() {
+      .on('mouseleave', function handleOut() {
         showSelectedOptionsThemePreview();
         hideShadowNoHover();
-      },
-    );
+      });
 
     // Change events
-    $('input.invisible-radio-button').change(event => updateSelection(event));
+    $('input.invisible-radio-button').on('change', event => updateSelection(event));
   };
 
-  $(document).ready(() => {
+  $(() => {
     let colorThemes = {};
     if (backgroundPage && backgroundPage.getSettings()) {
       colorThemes = backgroundPage.getSettings().color_themes;

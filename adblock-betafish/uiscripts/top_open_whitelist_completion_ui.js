@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, translate, bindEnterClickToDefault, mayOpenDialogUi:true, i18nJoin,
+/* global browser, translate, bindEnterClickToDefault, mayOpenDialogUi:true, i18nJoin,
    processReplacementChildrenInContent, setLangAndDirAttributes, loadWizardResources */
 
 
@@ -25,7 +25,7 @@ function topOpenWhitelistCompletionUI(options) {
   mayOpenDialogUi = false;
 
   // Get Flash objects out of the way of our UI
-  chrome.runtime.sendMessage({ command: 'sendContentToBack' });
+  browser.runtime.sendMessage({ command: 'sendContentToBack' });
 
   // A empty base <div> is appended to the page's DOM and then a shadow is hosted in it.
   // The shadow protects our dialog from outside CSS "leaking" in.
@@ -47,7 +47,7 @@ function topOpenWhitelistCompletionUI(options) {
     const html = `
     <div id="wizard">
       <header >
-        <img aria-hidden="true" src="${chrome.runtime.getURL('/icons/icon24.png')}">
+        <img aria-hidden="true" src="${browser.runtime.getURL('/icons/icon24.png')}">
         <h1 >${translate('whitelistertitle2')}</h1>
       </header>
       <section>
@@ -91,25 +91,25 @@ function topOpenWhitelistCompletionUI(options) {
 
     $adblockRule.text(options.rule || '');
 
-    $doneBtn.click(() => {
+    $doneBtn.on('click', () => {
       mayOpenDialogUi = true;
       (document.body || document.documentElement).removeChild(base);
     });
-    $learnMoreBtn.click(() => {
-      chrome.runtime.sendMessage({ command: 'openPremiumPayURL' });
-      chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_cta_clicked' });
+    $learnMoreBtn.on('click', () => {
+      browser.runtime.sendMessage({ command: 'openPremiumPayURL' });
+      browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_cta_clicked' });
     });
-    $closeBtn.click(() => {
-      chrome.runtime.sendMessage({ command: 'setWhitelistCTAStatus', isEnabled: false });
-      chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_cta_closed' });
+    $closeBtn.on('click', () => {
+      browser.runtime.sendMessage({ command: 'setWhitelistCTAStatus', isEnabled: false });
+      browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_cta_closed' });
       $premiumCTA.hide();
       $dismissedMsg.show();
     });
-    $settingsLink.click(() => {
-      chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#customize' });
+    $settingsLink.on('click', () => {
+      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#customize' });
     });
-    $premiumLink.click(() => {
-      chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
+    $premiumLink.on('click', () => {
+      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
     });
 
     $dialog.find('.messageWithLink').each(function replaceLinks() {
@@ -122,7 +122,7 @@ function topOpenWhitelistCompletionUI(options) {
     // Check whether to show CTA
     if (!options.isActiveLicense && options.showWhitelistCTA) {
       $dialog.find('#whitelist-cta').show();
-      chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_cta_seen' });
+      browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_cta_seen' });
     }
 
     // Show page

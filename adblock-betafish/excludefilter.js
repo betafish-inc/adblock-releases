@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, exports, parseFilter, chromeStorageSetHelper */
+/* global browser, require, exports, parseFilter, chromeStorageSetHelper */
 
 // Module for removing individual filters from filter lists
 // An 'advance' feature, used on the Customize tab, titled "disabled filters"
@@ -83,13 +83,13 @@ const ExcludeFilter = (function excludeFilter() {
     if (validExcludeFiltersArray.length > 0) {
       chromeStorageSetHelper('exclude_filters', validExcludeFiltersArray.join('\n'));
     } else {
-      chrome.storage.local.remove('exclude_filters');
+      browser.storage.local.remove('exclude_filters');
     }
   };
 
   function excludeFilterChangeListener() {
     const excludeFiltersKey = 'exclude_filters';
-    chrome.storage.local.get(excludeFiltersKey).then((response) => {
+    browser.storage.local.get(excludeFiltersKey).then((response) => {
       if (response[excludeFiltersKey]) {
         const excludeFiltersArray = response[excludeFiltersKey].split('\n');
         for (let i = 0; i < excludeFiltersArray.length; i++) {

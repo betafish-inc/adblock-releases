@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global ClickWatcher, ElementChain, translate, chrome */
+/* global ClickWatcher, ElementChain, translate, browser, DOMPurify */
 
 // Requires clickwatcher.js and elementchain.js and jQuery
 
@@ -107,10 +107,10 @@ BlacklistUi.prototype.show = function show() {
     clickWatcher.enable();
 
     that.$dialog.children('.page')
-      .bind('mouseenter', () => {
+      .on('mouseenter', () => {
         clickWatcher.highlighter.disable();
       })
-      .bind('mouseleave', () => {
+      .on('mouseleave', () => {
         clickWatcher.highlighter.enable();
       });
     that.$dialog.children('.page').hide();
@@ -141,11 +141,11 @@ BlacklistUi.prototype.buildPage1 = function buildPage1() {
   that.$dialog.children('.page').hide();
 
   // Add events to page 1 and its components
-  $pageOneCancelBtn.click(() => {
+  $pageOneCancelBtn.on('click', () => {
     that.preview(null);
     that.onClose();
   });
-  $pageOneOkBtn.click(() => {
+  $pageOneOkBtn.on('click', () => {
     that.cancelled = false;
     that.buildPage2();
     that.cancelled = true;
@@ -181,7 +181,7 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
 
   if (that.advancedUser) {
     $pageTwoEditBtn.show();
-    $pageTwoEditBtn.click(() => {
+    $pageTwoEditBtn.on('click', () => {
       let customFilter = `${document.location.hostname}##${$summary.text()}`;
       // eslint-disable-next-line no-alert
       customFilter = prompt(translate('blacklistereditfilter'), customFilter);
@@ -189,13 +189,13 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
         if (!/##/.test(customFilter)) {
           customFilter = `##${customFilter}`;
         }
-        chrome.runtime.sendMessage({ command: 'parseFilter', filterTextToParse: customFilter }).then((parseResult) => {
+        browser.runtime.sendMessage({ command: 'parseFilter', filterTextToParse: customFilter }).then((parseResult) => {
           if (parseResult && parseResult.filter && !parseResult.error) {
-            chrome.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: parseResult.filter.text }).then((response) => {
+            browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: parseResult.filter.text }).then((response) => {
               if (!response.error) {
                 that.blockListViaCSS([customFilter.substr(customFilter.indexOf('##') + 2)]);
                 that.fire('block');
-                $pageTwoCancelBtn.click();
+                $pageTwoCancelBtn.trigger('click');
               } else {
                 // eslint-disable-next-line no-alert
                 alert(translate('blacklistereditinvalid1', response.error));
@@ -210,10 +210,10 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
     });
   }
 
-  $pageTwoBlockItBtn.click(() => {
+  $pageTwoBlockItBtn.on('click', () => {
     if ($summary.text().length > 0) {
       const filter = `${document.location.hostname}##${$summary.text()}`;
-      chrome.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then((response) => {
+      browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then((response) => {
         if (!response.error) {
           that.blockListViaCSS([$summary.text()]);
           that.fire('block');
@@ -229,11 +229,11 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
       alert(translate('blacklisternofilter'));
     }
   });
-  $pageTwoBackBtn.click(() => {
+  $pageTwoBackBtn.on('click', () => {
     that.$dialog.children('.page').hide();
     that.$dialog.children('#page_1').show();
   });
-  $pageTwoCancelBtn.click(() => {
+  $pageTwoCancelBtn.on('click', () => {
     that.preview(null);
     that.onClose();
   });
@@ -261,25 +261,25 @@ BlacklistUi.prototype.buildPage3 = function buildPage3() {
   // Reset and hide all wizard pages
   that.$dialog.children('.page').hide();
 
-  $pageThreeDoneBtn.click(() => {
+  $pageThreeDoneBtn.on('click', () => {
     that.preview(null);
     that.onClose();
   });
-  $pageThreeLearnMoreBtn.click(() => {
-    chrome.runtime.sendMessage({ command: 'openPremiumPayURL' });
-    chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_clicked' });
+  $pageThreeLearnMoreBtn.on('click', () => {
+    browser.runtime.sendMessage({ command: 'openPremiumPayURL' });
+    browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_clicked' });
   });
-  $pageThreeCloseBtn.click(() => {
-    chrome.runtime.sendMessage({ command: 'setBlacklistCTAStatus', isEnabled: false });
-    chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_closed' });
+  $pageThreeCloseBtn.on('click', () => {
+    browser.runtime.sendMessage({ command: 'setBlacklistCTAStatus', isEnabled: false });
+    browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_closed' });
     $premiumCTA.hide();
     $dismissedMsg.show();
   });
-  $settingsLink.click(() => {
-    chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#customize' });
+  $settingsLink.on('click', () => {
+    browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#customize' });
   });
-  $premiumLink.click(() => {
-    chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
+  $premiumLink.on('click', () => {
+    browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
   });
 
   // Show page 3
@@ -289,7 +289,7 @@ BlacklistUi.prototype.buildPage3 = function buildPage3() {
 
   // Check whether CTA is shown
   if ($pageThree.find('#blacklist-cta').is(':visible')) {
-    chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_seen' });
+    browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_seen' });
   }
 };
 
@@ -386,7 +386,7 @@ BlacklistUi.prototype.redrawPage2 = function redrawPage2() {
     if (matchCount === 1) {
       $pageTwoCount.text(translate('blacklistersinglematch'));
     } else {
-      $pageTwoCount.html(translate('blacklistermatches', [`<b>${matchCount}</b>`]));
+      $pageTwoCount.html(DOMPurify.sanitize(translate('blacklistermatches', [`<b>${matchCount}</b>`]), { SAFE_FOR_JQUERY: true }));
     }
   }
 
@@ -412,7 +412,7 @@ BlacklistUi.prototype.redrawPage2 = function redrawPage2() {
       const $checkboxlabel = $('<label></label>')
         .addClass('adblock')
         .attr('for', `ck${attr}`)
-        .html(translate('blacklisterattrwillbe', [nameHTML, valueHTML]));
+        .html(DOMPurify.sanitize(translate('blacklisterattrwillbe', [nameHTML, valueHTML]), { SAFE_FOR_JQUERY: true }));
 
       // Create <input> tag
       const $checkboxInput = $('<input></input')
@@ -420,7 +420,7 @@ BlacklistUi.prototype.redrawPage2 = function redrawPage2() {
         .attr('type', 'checkbox')
         .attr('checked', checked)
         .attr('id', `ck${attr}`)
-        .change(() => {
+        .on('change', () => {
           updateFilter();
           that.preview($pageTwoSummary.text());
         });

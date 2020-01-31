@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, translate, onReady, typeMap, imageSizesMap, */
+/* global browser, translate, onReady, typeMap, imageSizesMap, */
 
 const { hostname } = window.location;
 let totalSwaps = 0;
@@ -10,7 +10,7 @@ const hiddenElements = [];
 let cssRules = [];
 const minDimension = 60;
 
-chrome.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
+browser.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
   if (response && response.selectors) {
     cssRules = response.selectors;
   }
@@ -277,7 +277,7 @@ const imageSwap = {
       return false;
     }
 
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
       message: 'get_random_listing',
       opts: {
         width: t.x, height: t.y, type: t.type, position: t.position,
@@ -350,7 +350,7 @@ const imageSwap = {
 
     const overlayLogo = document.createElement('img');
     overlayLogo.classList.add('ab-logo-header');
-    overlayLogo.src = chrome.runtime.getURL('icons/dark_theme/logo.svg');
+    overlayLogo.src = browser.runtime.getURL('icons/dark_theme/logo.svg');
     overlayLogo.alt = translate('adblock_logo');
 
     const overlayIcons = document.createElement('div');
@@ -394,7 +394,7 @@ const imageSwap = {
   injectCSS(data, placement, containerID) {
     const adblockLogoWidth = placement.type === imageSizesMap.get('skinnywide') ? '81px' : '114px';
     const adblockLogoHeight = placement.type === imageSizesMap.get('skinnywide') ? '20px' : '29px';
-    const materialIconsURL = chrome.runtime.getURL('/icons/MaterialIcons-Regular.woff2');
+    const materialIconsURL = browser.runtime.getURL('/icons/MaterialIcons-Regular.woff2');
     const styleTag = document.createElement('style');
     styleTag.type = 'text/css';
     styleTag.textContent = `
@@ -517,10 +517,10 @@ const imageSwap = {
       const height = placement.listingHeight;
       const channel = placement.channelName;
       const queryStrings = `url=${url}&width=${width}&height=${height}&channel=${channel}`;
-      chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: `adblock-picreplacement-imageview.html?${queryStrings}` });
+      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: `adblock-picreplacement-imageview.html?${queryStrings}` });
     });
     containerNodes.settingsIcon.addEventListener('click', () => {
-      chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab-image-swap' });
+      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab-image-swap' });
     });
     containerNodes.closeIcon.addEventListener('click', () => {
       containerNodes.container.parentNode.removeChild(containerNodes.container);
@@ -561,7 +561,7 @@ const imageSwap = {
   },
 
   translate(key) {
-    return chrome.i18n.getMessage(key);
+    return browser.i18n.getMessage(key);
   },
   isInvalidSize(size) {
     return !size.x || !size.y || size.x < minDimension || size.y < minDimension;
@@ -605,7 +605,7 @@ const imageSwap = {
       // a forced window resize event repaints the page to correctly lay it out
       totalSwaps += 1;
       window.dispatchEvent(new Event('resize'));
-      chrome.runtime.sendMessage({ message: 'recordOneAdReplaced' });
+      browser.runtime.sendMessage({ message: 'recordOneAdReplaced' });
     }
   },
 }; // end imageSwap

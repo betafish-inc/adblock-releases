@@ -46,8 +46,8 @@ function Highlighter() {
     const $el = $(el);
     const offset = $el.offset();
     box.css({
-      height: $el.outerHeight(),
-      width: $el.outerWidth(),
+      height: $el.outerHeight() || 0,
+      width: $el.outerWidth() || 0,
       left: offset.left,
       top: offset.top,
     });
@@ -59,14 +59,14 @@ function Highlighter() {
   };
   this.enable = function enable() {
     if (box && !enabled) {
-      $(document.body).bind('mousemove', handler);
+      $(document.body).on('mousemove', handler);
     }
     enabled = true;
   };
   this.disable = function disable() {
     if (box && enabled) {
       box.hide();
-      $(document.body).unbind('mousemove', handler);
+      $(document.body).off('mousemove', handler);
     }
     enabled = false;
   };

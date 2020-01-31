@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, translate, BlacklistUi, bindEnterClickToDefault, mayOpenDialogUi:true,
+/* global browser, translate, BlacklistUi, bindEnterClickToDefault, mayOpenDialogUi:true,
    setLangAndDirAttributes, rightClickedItem:true, loadWizardResources, i18nJoin,
    processReplacementChildrenInContent */
 
@@ -74,7 +74,7 @@ function topOpenBlacklistUI(options) {
   mayOpenDialogUi = false;
 
   // Get Flash objects out of the way of our UI
-  chrome.runtime.sendMessage({ command: 'sendContentToBack' });
+  browser.runtime.sendMessage({ command: 'sendContentToBack' });
 
   // A empty base <div> is appended to the page's DOM and then a shadow is hosted in it.
   // The shadow protects our dialog from outside CSS 'leaking' in.
@@ -112,7 +112,7 @@ function topOpenBlacklistUI(options) {
     <div id='wizard'>
       <div class='page' id='page_0'>
         <header>
-          <img aria-hidden='true' src='${chrome.runtime.getURL('/icons/icon24.png')}'>
+          <img aria-hidden='true' src='${browser.runtime.getURL('/icons/icon24.png')}'>
           <h1>${translate('blockanadtitle')}</h1>
         </header>
         <section>
@@ -124,7 +124,7 @@ function topOpenBlacklistUI(options) {
       </div>
       <div class='page' id='page_1' style='display:none;'>
         <header>
-          <img aria-hidden='true' src='${chrome.runtime.getURL('/icons/icon24.png')}'>
+          <img aria-hidden='true' src='${browser.runtime.getURL('/icons/icon24.png')}'>
           <h1>${translate('slidertitle')}</h1>
         </header>
         <section>
@@ -144,7 +144,7 @@ function topOpenBlacklistUI(options) {
       </div>
       <div class='page' id='page_2' style='display:none;'>
         <header>
-          <img aria-hidden='true' src='${chrome.runtime.getURL('/icons/icon24.png')}'>
+          <img aria-hidden='true' src='${browser.runtime.getURL('/icons/icon24.png')}'>
           <h1>${translate('blacklisteroptionstitle')}</h1>
         </header>
         <section>
@@ -169,7 +169,7 @@ function topOpenBlacklistUI(options) {
       </div>
       <div class='page' id='page_3' style='display:none;'>
         <header>
-          <img aria-hidden='true' src='${chrome.runtime.getURL('/icons/icon24.png')}'>
+          <img aria-hidden='true' src='${browser.runtime.getURL('/icons/icon24.png')}'>
           <h1>${translate('blacklisteroptionstitle')}</h1>
         </header>
         <section>
@@ -208,7 +208,7 @@ function topOpenBlacklistUI(options) {
       // eslint-disable-next-line no-new
       new DragElement(header, $dialog.get(0));
     });
-    $dialog.find('button.cancel').click(() => {
+    $dialog.find('button.cancel').on('click', () => {
       mayOpenDialogUi = true;
       (document.body || document.documentElement).removeChild(base);
     });
@@ -223,7 +223,7 @@ function topOpenBlacklistUI(options) {
     bindEnterClickToDefault($dialog);
 
     $base.append($dialog);
-    chrome.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
+    browser.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
       const advancedUser = settings.show_advanced_options;
       const blacklistUI = new BlacklistUi(rightClickedItem, advancedUser, $dialog);
       blacklistUI.cancel(() => {

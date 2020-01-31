@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global BG, page, transitionTo, logHelpFlowResults, filterUpdateError:true,
-  chrome */
+  browser */
 
 // Help flow button actions -- called when the associated buttons are clicked
 const popupMenuHelpActionMap = {
@@ -48,12 +48,12 @@ const popupMenuHelpActionMap = {
     window.close();
   },
   reloadFinishFlowAction() {
-    chrome.tabs.reload();
+    browser.tabs.reload();
     logHelpFlowResults('reloadFinishFlow');
     window.close();
   },
   reloadCheckAction() {
-    chrome.tabs.reload();
+    browser.tabs.reload();
     transitionTo('checkedBasics', false);
   },
   stillSeeAdAction() {
@@ -75,7 +75,7 @@ const popupMenuHelpActionMap = {
   // Unpauses and reloads the page
   unpauseAndReloadAction() {
     BG.adblockIsPaused(false);
-    chrome.tabs.reload();
+    browser.tabs.reload();
     transitionTo('unpauseAndReload', false);
   },
   dontChangeSeeAdsAction() {
@@ -87,7 +87,7 @@ const popupMenuHelpActionMap = {
   // Pauses and reloads the page
   reloadStillBrokenAction() {
     BG.adblockIsPaused(true);
-    chrome.tabs.reload();
+    browser.tabs.reload();
     transitionTo('reloadStillBroken', false);
   },
   stillBrokenNotAdBlockAction() {

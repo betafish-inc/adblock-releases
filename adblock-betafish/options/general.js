@@ -76,7 +76,7 @@ const initialize = function init() {
     }
   };
 
-  $('input.feature[type=\'checkbox\']').change(function onOptionSelectionChange() {
+  $('input.feature[type=\'checkbox\']').on('change', function onOptionSelectionChange() {
     const isEnabled = $(this).is(':checked');
 
     // This change of settings causes the Options page to be automatically reloaded
@@ -147,7 +147,7 @@ const showSeparators = function () {
   $lastVisibleOption.removeClass('bottom-line');
 };
 
-$('#enable_show_advanced_options').change(() => {
+$('#enable_show_advanced_options').on('change', () => {
   // Reload the page to show or hide the advanced options on the
   // options page -- after a moment so we have time to save the option.
   // Also, disable all advanced options, so that non-advanced users will
@@ -164,7 +164,7 @@ $('#enable_show_advanced_options').change(() => {
   }, 50);
 });
 
-$(document).ready(() => {
+$(() => {
   initialize();
   showSeparators();
 
@@ -179,9 +179,9 @@ $(document).ready(() => {
   }
 
   MABPayment.displaySyncCTAs();
-  $('.sync-cta #get-it-now-general').click(MABPayment.userClickedSyncCTA);
-  $('.sync-cta #close-sync-cta-general').click(MABPayment.userClosedSyncCTA);
-  $('a.link-to-tab').click((event) => {
+  $('.sync-cta #get-it-now-general').on('click', MABPayment.userClickedSyncCTA);
+  $('.sync-cta #close-sync-cta-general').on('click', MABPayment.userClosedSyncCTA);
+  $('a.link-to-tab').on('click', (event) => {
     activateTab($(event.target).attr('href'));
   });
 });

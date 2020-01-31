@@ -1,10 +1,10 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, backgroundPage, synchronizer, optionalSettings, Subscription, filterStorage,
+/* global backgroundPage, synchronizer, optionalSettings, Subscription, filterStorage,
    filterNotifier, translate, DownloadableSubscription, updateAcceptableAdsUI, port,
    delayedSubscriptionSelection, startSubscriptionSelection, selected, activateTab, License,
-   MABPayment */
+   MABPayment, getStorageCookie, setStorageCookie, THIRTY_MINUTES_IN_MILLISECONDS */
 
 // Contains all filter lists and their respective containers.
 const filterListSections = {
@@ -283,10 +283,10 @@ SubscriptionUtil.validateOverSubscription = (clicked) => {
   if (optionalSettings && optionalSettings.show_advanced_options) {
     // In case of an advanced user, only warn once every 30 minutes, even
     // if the options page wasn't open all the time. 30 minutes = 1/48 day
-    if ($.cookie('noOversubscriptionWarning')) {
+    if (getStorageCookie('noOversubscriptionWarning')) {
       return true;
     }
-    $.cookie('noOversubscriptionWarning', 'true', { expires: (1 / 48) });
+    setStorageCookie('noOversubscriptionWarning', 'true', THIRTY_MINUTES_IN_MILLISECONDS);
   }
 
   // eslint-disable-next-line no-alert
@@ -312,10 +312,10 @@ SubscriptionUtil.validateUnderSubscription = (clicked) => {
   if (optionalSettings && optionalSettings.show_advanced_options) {
     // In case of an advanced user, only warn once every 30 minutes, even
     // if the options page wasn't open all the time. 30 minutes = 1/48 day
-    if ($.cookie('noUnderSubscriptionWarning')) {
+    if (getStorageCookie('noUnderSubscriptionWarning')) {
       return true;
     }
-    $.cookie('noUnderSubscriptionWarning', 'true', { expires: (1 / 48) });
+    setStorageCookie('noUnderSubscriptionWarning', 'true', THIRTY_MINUTES_IN_MILLISECONDS);
   }
 
   // eslint-disable-next-line no-alert
@@ -488,7 +488,7 @@ function getDefaultFilterUI(filterList, checkboxID, filterListType) {
     .css('display', filterList.subscribed ? 'none' : 'inline')
     .attr('href', '#')
     .text(translate('removefromlist'))
-    .click(function removeThisFilterList(event) {
+    .on('click', function removeThisFilterList(event) {
       event.preventDefault();
       const $subscription = $(this).closest('.subscription');
       const $subscriptionWrapper = $subscription.closest('.filter-subscription-wrapper');
@@ -612,7 +612,7 @@ CheckboxForFilterList.prototype = {
 
   bindActions() {
     const that = this;
-    this.checkBox.change(function filterListSelectionChanged(event) {
+    this.checkBox.on('change', function filterListSelectionChanged(event) {
       const $subscription = $(this).closest('.subscription');
       const $subscriptionWrapper = $subscription.closest('.filter-subscription-wrapper');
       const checked = $(this).is(':checked');
@@ -744,7 +744,7 @@ LanguageSelectUtil.init = () => {
     }
   }
 
-  $('#language_select').change(function aLanguageSelectionChanged(event) {
+  $('#language_select').on('change', function aLanguageSelectionChanged(event) {
     const $this = $(this);
     const selectedOption = $this.find(':selected');
     const index = $(selectedOption).data('index');
@@ -840,7 +840,7 @@ CustomFilterListUploadUtil.updateExistingFilterList = (existingFilterList) => {
 
 // Binds events for key press 'enter' and click for upload box.
 CustomFilterListUploadUtil.bindControls = () => {
-  $('#btnNewSubscriptionUrl').click(() => {
+  $('#btnNewSubscriptionUrl').on('click', () => {
     let url = $('#txtNewSubscriptionUrl').val();
     const abpRegex = /^abp.*\Wlocation=([^&]+)/i;
     if (abpRegex.test(url)) {
@@ -865,10 +865,10 @@ CustomFilterListUploadUtil.bindControls = () => {
   });
 
   // Pressing enter will add the list too.
-  $('#txtNewSubscriptionUrl').keypress((event) => {
+  $('#txtNewSubscriptionUrl').on('keypress', (event) => {
     if (event.keyCode === 13) {
       event.preventDefault();
-      $('#btnNewSubscriptionUrl').click();
+      $('#btnNewSubscriptionUrl').trigger('click');
     }
   });
 };
@@ -1044,7 +1044,7 @@ $(() => {
     FilterListUtil.updateSubscriptionInfoAll();
   }, 10000);
 
-  $('#btnUpdateNow').click(function updateFilterListsNow() {
+  $('#btnUpdateNow').on('click', function updateFilterListsNow() {
     $(this).prop('disabled', true);
     backgroundPage.updateFilterLists();
     setTimeout(() => {
@@ -1064,7 +1064,7 @@ $(() => {
   }
 });
 
-$(document).ready(() => {
+$(() => {
   const $txtInputCustomURL = $('#txtNewSubscriptionUrl');
   $txtInputCustomURL.attr('placeholder', translate('enter_url'));
   removeBottomLine('all');
@@ -1080,9 +1080,9 @@ $(document).ready(() => {
   }
 
   MABPayment.displaySyncCTAs();
-  $('.sync-cta #get-it-now-filters').click(MABPayment.userClickedSyncCTA);
-  $('.sync-cta #close-sync-cta-filters').click(MABPayment.userClosedSyncCTA);
-  $('a.link-to-tab').click((event) => {
+  $('.sync-cta #get-it-now-filters').on('click', MABPayment.userClickedSyncCTA);
+  $('.sync-cta #close-sync-cta-filters').on('click', MABPayment.userClosedSyncCTA);
+  $('a.link-to-tab').on('click', (event) => {
     activateTab($(event.target).attr('href'));
   });
 });

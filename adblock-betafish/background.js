@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, chromeStorageSetHelper, log, License, translate,
+/* global browser, require, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
   blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
   storageGet, parseFilter */
@@ -133,7 +133,7 @@ const countCache = (function countCache() {
     },
 
     init() {
-      chrome.storage.local.get('custom_filter_count').then((response) => {
+      browser.storage.local.get('custom_filter_count').then((response) => {
         cache = response.custom_filter_count || {};
       });
     },
@@ -163,7 +163,7 @@ const addCustomFilter = function (filterText) {
     return ex.toString();
   }
 };
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'addCustomFilter' || !message.filterTextToAdd) {
     return;
   }
@@ -287,7 +287,7 @@ const confirmRemovalOfCustomFiltersOnHost = function (host, activeTab) {
   }
 
   removeCustomFilterForHost(host);
-  chrome.tabs.reload(activeTab.id);
+  browser.tabs.reload(activeTab.id);
 };
 
 // Reload already opened tab
@@ -299,11 +299,11 @@ const reloadTab = function (id, callback) {
   const listener = function (updatedTabId, changeInfo, tab) {
     if (changeInfo.status === 'complete' && tab.status === 'complete') {
       setTimeout(() => {
-        chrome.tabs.sendMessage(updatedTabId, { command: 'reloadcomplete' });
+        browser.tabs.sendMessage(updatedTabId, { command: 'reloadcomplete' });
         if (typeof localCallback === 'function') {
           localCallback(tab);
         }
-        chrome.tabs.onUpdated.removeListener(listener);
+        browser.tabs.onUpdated.removeListener(listener);
       }, 2000);
     }
   };
@@ -311,8 +311,8 @@ const reloadTab = function (id, callback) {
   if (typeof tabId === 'string') {
     tabId = parseInt(tabId, 10);
   }
-  chrome.tabs.onUpdated.addListener(listener);
-  chrome.tabs.reload(tabId, { bypassCache: true });
+  browser.tabs.onUpdated.addListener(listener);
+  browser.tabs.reload(tabId, { bypassCache: true });
 };
 
 const isSelectorExcludeFilter = function (text) {
@@ -327,7 +327,7 @@ const getAdblockUserId = function () {
 const addGABTabListeners = function (sender) {
   gabQuestion.addGABTabListeners(sender);
 };
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'addGABTabListeners') {
     return;
   }
@@ -338,7 +338,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 const removeGABTabListeners = function (saveState) {
   gabQuestion.removeGABTabListeners(saveState);
 };
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'removeGABTabListeners' || !message.saveState) {
     return;
   }
@@ -382,7 +382,7 @@ const pageIsUnblockable = function (url) {
 // Returns: null (asynchronous)
 const getCurrentTabInfo = function (callback, secondTime) {
   try {
-    chrome.tabs.query({
+    browser.tabs.query({
       active: true,
       lastFocusedWindow: true,
     }).then((tabs) => {
@@ -449,7 +449,7 @@ const pageIsWhitelisted = function (sender) {
   const whitelisted = checkWhitelisted(sender.page);
   return (whitelisted !== undefined && whitelisted !== null);
 };
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'pageIsWhitelisted') {
     return;
   }
@@ -482,7 +482,7 @@ const adblockIsPaused = function (newValue) {
   } else {
     filterStorage.removeFilter(result1.filter);
     filterStorage.removeFilter(result2.filter);
-    chrome.storage.local.remove(pausedKey);
+    browser.storage.local.remove(pausedKey);
   }
   sessionStorageSet(pausedKey, newValue);
   return undefined;
@@ -586,10 +586,10 @@ const adblockIsDomainPaused = function (activeTab, newValue) {
     // add a domain pause
     filterStorage.addFilter(result.filter);
     storedDomainPauses[activeDomain] = activeTab.id;
-    chrome.tabs.onUpdated.removeListener(domainPauseNavigationHandler);
-    chrome.tabs.onRemoved.removeListener(domainPauseClosedTabHandler);
-    chrome.tabs.onUpdated.addListener(domainPauseNavigationHandler);
-    chrome.tabs.onRemoved.addListener(domainPauseClosedTabHandler);
+    browser.tabs.onUpdated.removeListener(domainPauseNavigationHandler);
+    browser.tabs.onRemoved.removeListener(domainPauseClosedTabHandler);
+    browser.tabs.onUpdated.addListener(domainPauseNavigationHandler);
+    browser.tabs.onRemoved.addListener(domainPauseClosedTabHandler);
   } else {
     // remove the domain pause
     filterStorage.removeFilter(result.filter);
@@ -603,7 +603,7 @@ const adblockIsDomainPaused = function (activeTab, newValue) {
 
 // If AdBlock was paused on shutdown (adblock_is_paused is true), then
 // unpause / remove the white-list all entry at startup.
-chrome.storage.local.get(pausedKey).then((response) => {
+browser.storage.local.get(pausedKey).then((response) => {
   if (response[pausedKey]) {
     const pauseHandler = function () {
       filterNotifier.off('load', pauseHandler);
@@ -611,7 +611,7 @@ chrome.storage.local.get(pausedKey).then((response) => {
       const result2 = parseFilter(pausedFilterText2);
       filterStorage.removeFilter(result1.filter);
       filterStorage.removeFilter(result2.filter);
-      chrome.storage.local.remove(pausedKey);
+      browser.storage.local.remove(pausedKey);
     };
 
     filterNotifier.on('load', pauseHandler);
@@ -620,7 +620,7 @@ chrome.storage.local.get(pausedKey).then((response) => {
 
 // If AdBlock was domain paused on shutdown, then unpause / remove
 // all domain pause white-list entries at startup.
-chrome.storage.local.get(domainPausedKey).then((response) => {
+browser.storage.local.get(domainPausedKey).then((response) => {
   try {
     const storedDomainPauses = response[domainPausedKey];
     if (!jQuery.isEmptyObject(storedDomainPauses)) {
@@ -630,7 +630,7 @@ chrome.storage.local.get(domainPausedKey).then((response) => {
           const result = parseFilter(`@@${aDomain}$document`);
           filterStorage.removeFilter(result.filter);
         }
-        chrome.storage.local.remove(domainPausedKey);
+        browser.storage.local.remove(domainPausedKey);
       };
       filterNotifier.on('load', domainPauseHandler);
     }
@@ -639,7 +639,7 @@ chrome.storage.local.get(domainPausedKey).then((response) => {
   }
 });
 
-chrome.commands.onCommand.addListener((command) => {
+browser.commands.onCommand.addListener((command) => {
   if (command === 'toggle_pause') {
     adblockIsPaused(!adblockIsPaused());
     recordGeneralMessage('pause_shortcut_used');
@@ -652,120 +652,40 @@ chrome.commands.onCommand.addListener((command) => {
 const readfile = function (file) {
   // A bug in jquery prevents local files from being read, so use XHR.
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', chrome.runtime.getURL(file), false);
+  xhr.open('GET', browser.runtime.getURL(file), false);
   xhr.send();
   return xhr.responseText;
 };
 
 // BETA CODE
-if (chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
+if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
   // Display beta page after each update for beta-users only
-  chrome.runtime.onInstalled.addListener((details) => {
+  browser.runtime.onInstalled.addListener((details) => {
     if (details.reason === 'update' || details.reason === 'install') {
-      chrome.tabs.create({ url: 'https://getadblock.com/beta' });
+      browser.tabs.create({ url: 'https://getadblock.com/beta' });
     }
   });
 }
 
 const updateStorageKey = 'last_known_version';
-// Commented out only during /update releases
-// chrome.runtime.onInstalled.addListener((details) => {
-//   if (details.reason === 'update' || details.reason === 'install') {
-//     localStorage.setItem(updateStorageKey, chrome.runtime.getManifest().version);
-//   }
-// });
+
+browser.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'update' || details.reason === 'install') {
+    localStorage.setItem(updateStorageKey, browser.runtime.getManifest().version);
+  }
+});
 
 const openTab = function (url) {
-  chrome.tabs.create({ url });
+  browser.tabs.create({ url });
 };
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'openTab' || !message.urlToOpen) {
     return;
   }
   openTab(message.urlToOpen);
   sendResponse({});
 });
-
-if (chrome.runtime.id) {
-  let updateTabRetryCount = 0;
-  const getUpdatedURL = function () {
-    const encodedVersion = encodeURIComponent('3.60.0');
-    let updatedURL = `https://getadblock.com/update/${encodedVersion}/?u=${STATS.userId()}`;
-    updatedURL = `${updatedURL}&bc=${Prefs.blocked_total}`;
-    updatedURL = `${updatedURL}&rt=${updateTabRetryCount}`;
-    return updatedURL;
-  };
-  const waitForUserAction = function () {
-    chrome.tabs.onCreated.removeListener(waitForUserAction);
-    setTimeout(() => {
-      updateTabRetryCount += 1;
-      // eslint-disable-next-line no-use-before-define
-      openUpdatedPage();
-    }, 10000); // 10 seconds
-  };
-  const openUpdatedPage = function () {
-    const updatedURL = getUpdatedURL();
-    chrome.tabs.create({ url: updatedURL }).then((tab) => {
-      // if we couldn't open a tab to '/updated_tab', send a message
-      if (!tab) {
-        recordErrorMessage('updated_tab_failed_to_open');
-        chrome.tabs.onCreated.removeListener(waitForUserAction);
-        chrome.tabs.onCreated.addListener(waitForUserAction);
-        return;
-      }
-      if (updateTabRetryCount > 0) {
-        recordGeneralMessage(`updated_tab_retry_success_count_${updateTabRetryCount}`);
-      }
-    }).catch(() => {
-      // if we couldn't open a tab to '/updated_tab', send a message
-      recordErrorMessage('updated_tab_failed_to_open');
-      chrome.tabs.onCreated.removeListener(waitForUserAction);
-      chrome.tabs.onCreated.addListener(waitForUserAction);
-    });
-  };
-  const shouldShowUpdate = function () {
-    const checkQueryState = function () {
-      chrome.idle.queryState(60, (state) => {
-        if (state === 'active') {
-          openUpdatedPage();
-        } else {
-          chrome.tabs.onCreated.removeListener(waitForUserAction);
-          chrome.tabs.onCreated.addListener(waitForUserAction);
-        }
-      });
-    };
-    if (chrome.management && chrome.management.getSelf) {
-      chrome.management.getSelf((extensionInfo) => {
-        if (extensionInfo && extensionInfo.installType !== 'admin') {
-          checkQueryState();
-        } else if (extensionInfo && extensionInfo.installType === 'admin') {
-          recordGeneralMessage('update_tab_not_shown_admin_user');
-        }
-      });
-    } else {
-      checkQueryState();
-    }
-  };
-  const slashUpdateReleases = ['3.60.0', '3.61.0', '3.61.1', '3.62.0', '4.0.0', '4.0.1', '4.0.2', '4.1.0', '4.2.0', '4.4.0'];
-
-  // Display updated page after each updat
-  chrome.runtime.onInstalled.addListener((details) => {
-    const lastKnownVersion = localStorage.getItem(updateStorageKey);
-    const currentVersion = chrome.runtime.getManifest().version;
-    if (
-      details.reason === 'update'
-      && slashUpdateReleases.includes(currentVersion)
-      && !slashUpdateReleases.includes(lastKnownVersion)
-      && chrome.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
-    ) {
-      STATS.untilLoaded(() => {
-        Prefs.untilLoaded.then(shouldShowUpdate);
-      });
-    }
-    localStorage.setItem(updateStorageKey, currentVersion);
-  });
-}
 
 // Creates a custom filter entry that whitelists a YouTube channel
 // Inputs: url:string url of the page
@@ -793,16 +713,16 @@ const runChannelWhitelist = function (tabUrl, tabId) {
   ) {
     // if a channel name isn't stored for that tab id,
     // then we probably haven't inject the content script, so we shall
-    chrome.tabs.sendMessage(tabId, { message: 'ping_yt_content_script' }).then((response) => {
+    browser.tabs.sendMessage(tabId, { message: 'ping_yt_content_script' }).then((response) => {
       const resp = response || {};
       if (resp.status !== 'yes') {
-        chrome.tabs.executeScript(tabId, {
+        browser.tabs.executeScript(tabId, {
           file: 'adblock-ytchannel.js',
           runAt: 'document_start',
         });
       }
     }).catch(() => {
-      chrome.tabs.executeScript(tabId, {
+      browser.tabs.executeScript(tabId, {
         file: 'adblock-ytchannel.js',
         runAt: 'document_start',
       });
@@ -811,11 +731,11 @@ const runChannelWhitelist = function (tabUrl, tabId) {
 };
 
 const ytChannelOnCreatedListener = function (tab) {
-  if (chrome.runtime.lastError) {
+  if (browser.runtime.lastError) {
     return;
   }
-  chrome.tabs.get(tab.id).then((tabs) => {
-    if (chrome.runtime.lastError) {
+  browser.tabs.get(tab.id).then((tabs) => {
+    if (browser.runtime.lastError) {
       return;
     }
     if (tabs && tabs.url && tabs.id) {
@@ -825,17 +745,17 @@ const ytChannelOnCreatedListener = function (tab) {
 };
 
 const ytChannelOnUpdatedListener = function (tabId, changeInfo, tab) {
-  if (chrome.runtime.lastError) {
+  if (browser.runtime.lastError) {
     return;
   }
   if (!getSettings().youtube_channel_whitelist) {
     return;
   }
   if (changeInfo.status === 'loading' && changeInfo.url) {
-    if (chrome.runtime.lastError) {
+    if (browser.runtime.lastError) {
       return;
     }
-    chrome.tabs.get(tabId).then((tabs) => {
+    browser.tabs.get(tabId).then((tabs) => {
       if (tabs && tabs.url && tabs.id) {
         runChannelWhitelist(tabs.url, tabs.id);
       }
@@ -870,26 +790,26 @@ const youTubeHistoryStateUpdateHandler = function (details) {
       myFrame.url = myURL;
       myFrame._url = myURL;
       if (!/ab_channel/.test(details.url) && myURL.pathname === '/watch') {
-        chrome.tabs.sendMessage(details.tabId, { command: 'updateURLWithYouTubeChannelName' });
+        browser.tabs.sendMessage(details.tabId, { command: 'updateURLWithYouTubeChannelName' });
       } else if (/ab_channel/.test(details.url) && myURL.pathname !== '/watch') {
-        chrome.tabs.sendMessage(details.tabId, { command: 'removeYouTubeChannelName' });
+        browser.tabs.sendMessage(details.tabId, { command: 'removeYouTubeChannelName' });
       }
     }
   }
 };
 
 const addYTChannelListeners = function () {
-  chrome.tabs.onCreated.addListener(ytChannelOnCreatedListener);
-  chrome.tabs.onUpdated.addListener(ytChannelOnUpdatedListener);
-  chrome.tabs.onRemoved.addListener(ytChannelOnRemovedListener);
-  chrome.webNavigation.onHistoryStateUpdated.addListener(youTubeHistoryStateUpdateHandler);
+  browser.tabs.onCreated.addListener(ytChannelOnCreatedListener);
+  browser.tabs.onUpdated.addListener(ytChannelOnUpdatedListener);
+  browser.tabs.onRemoved.addListener(ytChannelOnRemovedListener);
+  browser.webNavigation.onHistoryStateUpdated.addListener(youTubeHistoryStateUpdateHandler);
 };
 
 const removeYTChannelListeners = function () {
-  chrome.tabs.onCreated.removeListener(ytChannelOnCreatedListener);
-  chrome.tabs.onUpdated.removeListener(ytChannelOnUpdatedListener);
-  chrome.tabs.onRemoved.removeListener(ytChannelOnRemovedListener);
-  chrome.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHandler);
+  browser.tabs.onCreated.removeListener(ytChannelOnCreatedListener);
+  browser.tabs.onUpdated.removeListener(ytChannelOnUpdatedListener);
+  browser.tabs.onRemoved.removeListener(ytChannelOnRemovedListener);
+  browser.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHandler);
 };
 
 settings.onload().then(() => {
@@ -903,7 +823,7 @@ const previousYTvideoId = '';
 let previousYTuserId = '';
 
 // Listen for the message from the ytchannel.js content script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === 'updateYouTubeChannelName' && message.channelName) {
     ytChannelNamePages.set(sender.tab.id, message.channelName);
     sendResponse({});
@@ -924,7 +844,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           if (json && json.items && json.items[0]) {
             const channelName = json.items[0].snippet.title;
             ytChannelNamePages.set(sender.tab.id, channelName);
-            chrome.tabs.sendMessage(sender.tab.id, {
+            browser.tabs.sendMessage(sender.tab.id, {
               command: 'updateURLWithYouTubeChannelName',
               channelName,
             });
@@ -935,7 +855,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({});
       return;
     }
-    chrome.tabs.sendMessage(sender.tab.id, {
+    browser.tabs.sendMessage(sender.tab.id, {
       command: 'updateURLWithYouTubeChannelName',
       channelName: ytChannelNamePages.get(sender.tab.id),
     });
@@ -957,7 +877,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           if (json && json.items && json.items[0]) {
             const channelName = json.items[0].snippet.title;
             ytChannelNamePages.set(sender.tab.id, channelName);
-            chrome.tabs.sendMessage(sender.tab.id, {
+            browser.tabs.sendMessage(sender.tab.id, {
               command: 'updateURLWithYouTubeChannelName',
               channelName,
             });
@@ -967,7 +887,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       xhr.send();
       sendResponse({});
     } else {
-      chrome.tabs.sendMessage(sender.tab.id, {
+      browser.tabs.sendMessage(sender.tab.id, {
         command: 'updateURLWithYouTubeChannelName',
         channelName: ytChannelNamePages.get(sender.tab.id),
       });
@@ -987,17 +907,17 @@ const getDebugInfo = function (callback) {
   response.otherInfo = {};
 
   // Is this installed build of AdBlock the official one?
-  if (chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
+  if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
     response.otherInfo.buildtype = ' Beta';
-  } else if (chrome.runtime.id === 'gighmmpiobklfepjocnamgkkbiglidom'
-            || chrome.runtime.id === 'aobdicepooefnbaeokijohmhjlleamfj') {
+  } else if (browser.runtime.id === 'gighmmpiobklfepjocnamgkkbiglidom'
+            || browser.runtime.id === 'aobdicepooefnbaeokijohmhjlleamfj') {
     response.otherInfo.buildtype = ' Stable';
   } else {
     response.otherInfo.buildtype = ' Unofficial';
   }
 
   // Get AdBlock version
-  response.otherInfo.version = chrome.runtime.getManifest().version;
+  response.otherInfo.version = browser.runtime.getManifest().version;
 
   // Get subscribed filter lists
   const subscriptionInfo = {};
@@ -1056,24 +976,24 @@ const getDebugInfo = function (callback) {
   response.otherInfo.licenseVersion = License.get().lv;
 
   // Get total pings
-  chrome.storage.local.get('total_pings').then((storageResponse) => {
+  browser.storage.local.get('total_pings').then((storageResponse) => {
     response.otherInfo.totalPings = storageResponse.totalPings || 0;
 
     // Now, add exclude filters (if there are any)
     const excludeFiltersKey = 'exclude_filters';
-    chrome.storage.local.get(excludeFiltersKey).then((secondResponse) => {
+    browser.storage.local.get(excludeFiltersKey).then((secondResponse) => {
       if (secondResponse && secondResponse[excludeFiltersKey]) {
         response.excludedFilters = secondResponse[excludeFiltersKey];
       }
       // Now, add JavaScript exception error (if there is one)
       const errorKey = 'errorkey';
-      chrome.storage.local.get(errorKey).then((errorResponse) => {
+      browser.storage.local.get(errorKey).then((errorResponse) => {
         if (errorResponse && errorResponse[errorKey]) {
           response.otherInfo[errorKey] = errorResponse[errorKey];
         }
         // Now, add the migration messages (if there are any)
         const migrateLogMessageKey = 'migrateLogMessageKey';
-        chrome.storage.local.get(migrateLogMessageKey).then((migrateLogMessageResponse) => {
+        browser.storage.local.get(migrateLogMessageKey).then((migrateLogMessageResponse) => {
           if (migrateLogMessageResponse && migrateLogMessageResponse[migrateLogMessageKey]) {
             const messages = migrateLogMessageResponse[migrateLogMessageKey].split('\n');
             for (let i = 0; i < messages.length; i++) {
@@ -1091,7 +1011,7 @@ const getDebugInfo = function (callback) {
               response.otherInfo.syncInfo.SyncCommitName = SyncService.getCurrentExtensionName();
               response.otherInfo.syncInfo.SyncCommitLog = SyncService.getSyncLog();
             }
-            chrome.alarms.getAll((alarms) => {
+            browser.alarms.getAll((alarms) => {
               if (alarms && alarms.length > 0) {
                 response.otherInfo['Alarm info'] = `length: ${alarms.length}`;
                 for (let i = 0; i < alarms.length; i++) {
@@ -1149,9 +1069,9 @@ STATS.untilLoaded(() => {
 });
 
 // Create the "blockage stats" for the uninstall logic ...
-chrome.runtime.onInstalled.addListener((details) => {
+browser.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    chrome.storage.local.get('blockage_stats').then((response) => {
+    browser.storage.local.get('blockage_stats').then((response) => {
       const { blockage_stats } = response;
       if (!blockage_stats) {
         const data = {};

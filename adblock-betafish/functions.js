@@ -1,11 +1,12 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, log, License, runBandaids, openTab */
+/* global browser, log, License, runBandaids, openTab */
 
 // Set to true to get noisier console.log statements
 const VERBOSE_DEBUG = false;
 let loggingEnable = false;
+const THIRTY_MINUTES_IN_MILLISECONDS = 1800000;
 
 // Enabled in adblock_start_common.js and background.js if the user wants
 const logging = function (enabled) {
@@ -67,10 +68,10 @@ const translate = function (messageName, substitutions) {
   // if VERBOSE_DEBUG is set to true, duplicate (double the length) of the translated strings
   // used for testing purposes only
   if (VERBOSE_DEBUG) {
-    return `${chrome.i18n.getMessage(messageName, parts)}
-            ${chrome.i18n.getMessage(messageName, parts)}`;
+    return `${browser.i18n.getMessage(messageName, parts)}
+            ${browser.i18n.getMessage(messageName, parts)}`;
   }
-  return chrome.i18n.getMessage(messageName, parts);
+  return browser.i18n.getMessage(messageName, parts);
 };
 
 const splitMessageWithReplacementText = function (rawMessageText, messageID) {
@@ -110,7 +111,7 @@ const processReplacementChildren = function ($el, replacementText, messageId) {
     log('returning, no child element found', $element.attr('i18n'), replaceElId);
     return;
   }
-  const rawMessageText = chrome.i18n.getMessage(messageID) || '';
+  const rawMessageText = browser.i18n.getMessage(messageID) || '';
   const messageSplit = splitMessageWithReplacementText(rawMessageText, messageID);
   $element.get(0).firstChild.nodeValue = messageSplit.anchorPrefixText;
   $element.get(0).lastChild.nodeValue = messageSplit.anchorPostfixText;
@@ -161,13 +162,13 @@ const determineUserLanguage = function () {
 };
 
 const getUILanguage = function () {
-  return chrome.i18n.getUILanguage();
+  return browser.i18n.getUILanguage();
 };
 
 // Set dir and lang attributes to the given el or to document.documentElement by default
 const setLangAndDirAttributes = function (el) {
   const element = el instanceof HTMLElement ? el : document.documentElement;
-  chrome.runtime.sendMessage({
+  browser.runtime.sendMessage({
     type: 'app.get',
     what: 'localeInfo',
   }).then((localeInfo) => {
@@ -311,7 +312,7 @@ const sessionStorageSet = function (key, value) {
 // Returns object from localStorage.
 // The following two functions should only be used when
 // multiple 'sets' & 'gets' may occur in immediately preceding each other
-// chrome.storage.local.get & set instead
+// browser.storage.local.get & set instead
 const storageGet = function (key) {
   const store = localStorage;
   const json = store.getItem(key);
@@ -346,7 +347,7 @@ const storageSet = function (key, value) {
 const chromeStorageSetHelper = function (key, value, callback) {
   const items = {};
   items[key] = value;
-  chrome.storage.local.set(items).then(() => {
+  browser.storage.local.set(items).then(() => {
     if (typeof callback === 'function') {
       callback();
     }
@@ -359,7 +360,7 @@ const chromeStorageSetHelper = function (key, value, callback) {
 
 const chromeStorageGetHelper = function (storageKey) {
   return new Promise(((resolve, reject) => {
-    chrome.storage.local.get(storageKey).then((items) => {
+    browser.storage.local.get(storageKey).then((items) => {
       resolve(items[storageKey]);
     }).catch((error) => {
       // eslint-disable-next-line no-console
@@ -370,7 +371,7 @@ const chromeStorageGetHelper = function (storageKey) {
 };
 
 const chromeLocalStorageOnChangedHelper = function (storageKey, callback) {
-  chrome.storage.onChanged.addListener((changes, namespace) => {
+  browser.storage.onChanged.addListener((changes, namespace) => {
     if (namespace !== 'local') {
       return;
     }
@@ -385,22 +386,22 @@ const chromeLocalStorageOnChangedHelper = function (storageKey, callback) {
 
 const reloadOptionsPageTabs = function () {
   const optionTabQuery = {
-    url: `chrome-extension://${chrome.runtime.id}/options.html*`,
+    url: `chrome-extension://${browser.runtime.id}/options.html*`,
   };
-  chrome.tabs.query(optionTabQuery).then((tabs) => {
+  browser.tabs.query(optionTabQuery).then((tabs) => {
     for (const i in tabs) {
-      chrome.tabs.reload(tabs[i].id);
+      browser.tabs.reload(tabs[i].id);
     }
   });
 };
 
 const reloadAllOpenedTabs = function () {
   const optionTabQuery = {
-    url: `chrome-extension://${chrome.runtime.id}/*`,
+    url: `chrome-extension://${browser.runtime.id}/*`,
   };
-  chrome.tabs.query(optionTabQuery).then((tabs) => {
+  browser.tabs.query(optionTabQuery).then((tabs) => {
     for (const i in tabs) {
-      chrome.tabs.reload(tabs[i].id);
+      browser.tabs.reload(tabs[i].id);
     }
   });
 };
@@ -411,13 +412,13 @@ const reloadAllOpenedTabs = function () {
 // Returns a reference to the keydown handler for future removal.
 const selected = function (selector, handler) {
   const $matched = $(selector);
-  $matched.click(handler);
+  $matched.on('click', handler);
   function keydownHandler(event) {
     if (event.which === 13 || event.which === 32) {
       handler(event);
     }
   }
-  $matched.keydown(keydownHandler);
+  $matched.on('keydown', keydownHandler);
   return keydownHandler;
 };
 
@@ -466,6 +467,29 @@ const i18nJoin = function (...args) {
 
 const isEmptyObject = obj => !!(Object.keys(obj).length === 0 && obj.constructor === Object);
 
+// Sets expirable object in storage to be used in place of a cookie
+// Inputs:
+//   name: string,
+//   value: object,
+//   millisecondsUntilExpire: number of milliseconds until the "cookie" expires
+const setStorageCookie = function (name, value, millisecondsUntilExpire) {
+  const expirationTime = Date.now() + (millisecondsUntilExpire || 0);
+  storageSet(name, { value, expires: expirationTime });
+};
+
+// Returns value of storage "cookie" or undefined if the it doesn't exist or
+// has expired
+// Inputs:
+//  name: string
+const getStorageCookie = function (name) {
+  const storedCookie = storageGet(name);
+  if (storedCookie && (storedCookie.expires > Date.now())) {
+    return storedCookie.value;
+  }
+
+  return undefined;
+};
+
 Object.assign(window, {
   sessionStorageSet,
   sessionStorageGet,
@@ -485,4 +509,7 @@ Object.assign(window, {
   selectedOnce,
   i18nJoin,
   isEmptyObject,
+  setStorageCookie,
+  getStorageCookie,
+  THIRTY_MINUTES_IN_MILLISECONDS,
 });

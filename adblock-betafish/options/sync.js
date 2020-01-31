@@ -126,7 +126,7 @@ const onSyncDataInitialGetError = function () {
     SyncService.syncNotifier.on('sync.data.getting.error.initial.fail', onSyncDataInitialGetError);
 
     // Click handlers
-    $('#btnCheckStatus').click(() => {
+    $('#btnCheckStatus').on('click', () => {
       $('#btnCheckStatus').addClass('grey');
       $('#btnCheckStatus').attr('disabled', true);
       License.licenseNotifier.on('license.updating', onLicenseUpdating);
@@ -135,13 +135,13 @@ const onSyncDataInitialGetError = function () {
       License.updatePeriodically();
     });
 
-    $('#toggle-sync-details').click(() => {
+    $('#toggle-sync-details').on('click', () => {
       showSyncDetails = !showSyncDetails;
       storageSet('showSyncDetails', showSyncDetails);
       showOrHideSyncDetails();
     });
 
-    $('#btnAddThisExtension').click(() => {
+    $('#btnAddThisExtension').on('click', () => {
       $('#btnAddThisExtension').fadeOut('slow', () => {
         if (deviceNameArray.length === 0) {
           $('#enter-name-div').show();
@@ -154,7 +154,7 @@ const onSyncDataInitialGetError = function () {
       });
     });
 
-    $('#btnVerifyCancel').click(() => {
+    $('#btnVerifyCancel').on('click', () => {
       $('#verify-overwrite-div').fadeOut('slow', () => {
         $('#show-verify-message').hide();
         $('#btnAddThisExtension').show();
@@ -162,7 +162,7 @@ const onSyncDataInitialGetError = function () {
       });
     });
 
-    $('#btnVerifyOK').click(() => {
+    $('#btnVerifyOK').on('click', () => {
       $('#verify-overwrite-div').fadeOut('slow', () => {
         $('#show-verify-message').hide();
         $('#sync_extension_section_list_title').show();
@@ -171,19 +171,19 @@ const onSyncDataInitialGetError = function () {
       });
     });
 
-    $('#extension-delete-icon').click(() => {
+    $('#extension-delete-icon').on('click', () => {
       $('#extension-delete-icon').fadeOut('slow', () => {
         $('#extension-delete-block').show();
       });
     });
 
-    $('#extension-delete-cancel').click(() => {
+    $('#extension-delete-cancel').on('click', () => {
       $('#extension-delete-block').fadeOut('slow', () => {
         $('#extension-delete-icon').show();
       });
     });
 
-    $('#extension-delete-button').click(() => {
+    $('#extension-delete-button').on('click', () => {
       $('#last-sync-now').hide();
       backgroundPage.setSetting('sync_settings', false);
       SyncService.removeCurrentExtensionName();
@@ -199,7 +199,7 @@ const onSyncDataInitialGetError = function () {
       }, FIVE_SECONDS); // wait 5 seconds to allow the above remove to complete
     });
 
-    $('#btnSaveSyncName').click(() => {
+    $('#btnSaveSyncName').on('click', () => {
       $('#error-message').text('');
       let extensionName = $('#extension-name').val().trim();
       if (!extensionName) {
@@ -230,21 +230,21 @@ const onSyncDataInitialGetError = function () {
       }, FIVE_SECONDS); // wait 5 seconds to allow the above 'set' to complete
     });
 
-    $('#btnCancelSyncName').click(() => {
+    $('#btnCancelSyncName').on('click', () => {
       $('#enter-name-div').fadeOut('slow', () => {
         $('#btnCancelSyncName').hide();
         $('#btnAddThisExtension').fadeIn('slow');
       });
     });
 
-    $('#btnSyncNow').click(() => {
+    $('#btnSyncNow').on('click', () => {
       setTimeout(() => {
         SyncService.processUserSyncRequest();
       }, 0);
     });
   };
 
-  $(document).ready(() => {
+  $(() => {
     if (!License || $.isEmptyObject(License) || !MABPayment) {
       return;
     }

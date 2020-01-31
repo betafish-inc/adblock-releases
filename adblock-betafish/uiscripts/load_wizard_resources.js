@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome */
+/* global browser */
 
 // Binds keypress enter to trigger click action on
 // default button or trigger click action on focused
@@ -11,10 +11,10 @@ function bindEnterClickToDefault($dialog) {
     return;
   }
   window.GLOBAL_BIND_ENTER_CLICK_TO_DEFAULT = true;
-  $('html').bind('keypress', (e) => {
-    if (e.keyCode === 13 && $('button:focus').size() <= 0) {
+  $('html').on('keypress', (e) => {
+    if (e.keyCode === 13 && !$('button:focus').length) {
       e.preventDefault();
-      $dialog.find('.adblock-default-button').filter(':visible').click();
+      $dialog.find('.adblock-default-button').filter(':visible').trigger('click');
     }
   });
 }
@@ -24,8 +24,8 @@ function bindEnterClickToDefault($dialog) {
 //   - callback : function to call when loading is complete
 function loadWizardResources($base, callback) {
   function loadCss(cssSrc) {
-    const cssUrl = chrome.runtime.getURL(cssSrc);
-    const fontCssUrl = chrome.runtime.getURL('fonts/font-face.css');
+    const cssUrl = browser.runtime.getURL(cssSrc);
+    const fontCssUrl = browser.runtime.getURL('fonts/font-face.css');
     const $styleTag = $('<style />').addClass('adblock-ui-stylesheet');
 
     // HTML element <link> is ignored in shadow tree in Chrome 53
@@ -41,7 +41,7 @@ function loadWizardResources($base, callback) {
   }
 
   function loadFont(name, style, weight, unicodeRange) {
-    return new FontFace('Lato', `url(${chrome.runtime.getURL(`/fonts/${name}.woff`)}`, { style, weight, unicodeRange });
+    return new FontFace('Lato', `url(${browser.runtime.getURL(`/fonts/${name}.woff`)}`, { style, weight, unicodeRange });
   }
 
   loadCss('adblock-uiscripts-adblock-wizard.css');
@@ -58,8 +58,8 @@ function loadWizardResources($base, callback) {
   fonts.push(loadFont('lato-bolditalic', 'italic', 'bold', 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'));
   fonts.push(loadFont('lato-ext-bold', 'normal', 'bold', 'U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF'));
   fonts.push(loadFont('lato-bold', 'normal', 'bold', 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'));
-  fonts.push(new FontFace('Material Icons', `url(${chrome.runtime.getURL('/icons/MaterialIcons-Regular.woff2')}`, { style: 'normal', weight: 'normal' }));
-  fonts.push(new FontFace('AdBlock Icons', `url(${chrome.runtime.getURL('/icons/adblock-icons.woff2')}`, { style: 'normal', weight: 'normal' }));
+  fonts.push(new FontFace('Material Icons', `url(${browser.runtime.getURL('/icons/MaterialIcons-Regular.woff2')}`, { style: 'normal', weight: 'normal' }));
+  fonts.push(new FontFace('AdBlock Icons', `url(${browser.runtime.getURL('/icons/adblock-icons.woff2')}`, { style: 'normal', weight: 'normal' }));
 
   Promise.all(fonts).then((loaded) => {
     for (let i = 0; i < loaded.length; i++) {

@@ -25,7 +25,7 @@ def get_metadata_path(base_dir, type):
     return os.path.join(BASE_DIR, "metadata." + type)
 
 def get_dev_env_path(base_dir, type):
-    return os.path.join(BASE_DIR, "devenv")
+    return os.path.join(BASE_DIR, "devenv." + type)
 
 def import_ab_locales(params, files):
     for item in params['metadata'].items('import_ab_locales'):
@@ -83,6 +83,35 @@ def process_file(path, data, params):
 
     return data
 
+def ab_serialize_section_if_present(self, section, base):
+    def parse_value(v):
+        if v.startswith('number:'):
+            v = v.split(':', 1)[1]
+            try:
+                return int(v)
+            except ValueError:
+                return float(v)
+        if v == 'bool:true':
+            return True
+        if v == 'bool:false':
+            return False
+        return v
+
+    if self.has_section(section):
+        for k, v in self.items(section):
+            parents = k.split('.')
+            tail = parents.pop()
+            current = base
+            for name in parents:
+                current = current.setdefault(name, {})
+
+            if '\n' in v:
+                current[tail] = [parse_value(x) for x in v.splitlines() if x]
+            elif v == 'REMOVE':
+                current.pop(tail, "false")
+            else:
+                current[tail] = parse_value(v)
+
 try:
   subprocess.check_call([sys.executable, DEPENDENCY_SCRIPT, BASE_DIR])
 except subprocess.CalledProcessError as e:
@@ -96,6 +125,8 @@ import buildtools.packagerChrome
 buildtools.packagerChrome.processFile = process_file
 buildtools.packagerChrome.import_locales = import_ab_locales
 toJson = buildtools.packagerChrome.toJson
+from buildtools.chainedconfigparser import ChainedConfigParser
+ChainedConfigParser.serialize_section_if_present = ab_serialize_section_if_present
 
 originalGetIgnoredFiles = buildtools.packagerChrome.getIgnoredFiles
 

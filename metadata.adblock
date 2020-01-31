@@ -1,6 +1,5 @@
 [general]
-author = Michael Gundlach
-version = 4.4.0
+version = 4.5.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -31,9 +30,6 @@ permissions =
   notifications
   idle
   alarms
-optional_permissions =
-  management
-minimum_chrome_version = 53.0
 web_accessible_resources =
   adblock-uiscripts-adblock-wizard.css
   icons/icon24.png
@@ -69,6 +65,7 @@ web_accessible_resources =
   fonts/font-face.css
   icons/MaterialIcons-Regular.woff2
   icons/adblock-icons.woff2
+  purify.min.js
 commands.toggle_pause.description = Toggle Pause/Resume on all sites
 commands.toggle_pause.suggested_key.default = Ctrl+Period
 commands.toggle_pause.suggested_key.mac = Command+Period
@@ -82,11 +79,10 @@ document_end += adblock-uiscripts-rightclick_hook.js adblock-notificationoverlay
 CHANGELOG.txt = adblock-betafish/CHANGELOG.txt
 LICENSE = adblock-betafish/LICENSE
 translators.json = adblock-betafish/translators.json
-adblock-jquery.js = adblock-betafish/jquery/jquery.min.js
-adblock-purify.min.js = adblock-betafish/lib/purify.min.js
+jquery-3.4.1.min.js = adblock-betafish/jquery/jquery-3.4.1.min.js
+purify.min.js = adblock-betafish/lib/purify.min.js
 pubnub-min-v4.23.3.js = adblock-betafish/pubnub/pubnub-min-v4.23.3.js
 adblock-errorreporting.js = adblock-betafish/errorreporting.js
-adblock-jquery.cookie.js = adblock-betafish/jquery/jquery.cookie.js
 adblock.css = adblock-betafish/adblock.css
 adblock-functions.js = adblock-betafish/functions.js
 adblock-bandaids.js = adblock-betafish/bandaids.js
@@ -268,6 +264,20 @@ devtools.js = adblock-betafish/alias/devtools.js
 devtools-panel.css = adblockpluschrome/adblockplusui/skin/devtools-panel.css
 snippets.js = adblock-betafish/alias/snippets.js
 fonts/font-face.css = adblock-betafish/fonts/font-face.css
+icons/abp-32.png = icons/adblock-32.png
+icons/detailed/abp-32.png = icons/adblock-32.png
+icons/detailed/abp-64.png = icons/adblock-64.png
+icons/detailed/abp-128.png = icons/adblock-128.png
+icons/abp-16.png = icons/adblock-16.png
+icons/abp-19.png = icons/adblock-19.png
+icons/abp-19-whitelisted.png = icons/adblock-19-whitelisted.png
+icons/abp-38.png = icons/adblock-38.png
+icons/abp-38-whitelisted.png = icons/adblock-38-whitelisted.png
+icons/detailed/abp-32.png = icons/adblock-32.png
+icons/detailed/abp-38.png = icons/adblock-38.png
+icons/detailed/abp-38-whitelisted.png = icons/adblock-38-whitelisted.png
+icons/detailed/abp-48.png = icons/adblock-48.png
+icons/detailed/abp-64.png = icons/adblock-64.png
 
 [module_alias]
 subscriptionInit = ../../adblock-betafish/alias/subscriptionInit.js
@@ -276,7 +286,7 @@ recommendations = ../../adblock-betafish/alias/recommendations.js
 
 [bundles]
 lib/adblockplus.js +=
-  ../adblock-betafish/jquery/jquery.min.js
+  ../adblock-betafish/jquery/jquery-3.4.1.min.js
   ../adblock-betafish/errorreporting.js
   ../adblock-betafish/functions.js
   ../adblock-betafish/survey.js

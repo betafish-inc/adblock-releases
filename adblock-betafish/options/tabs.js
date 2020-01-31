@@ -1,10 +1,11 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, License, localizePage, getUILanguage */
+/* global browser, License, localizePage, getUILanguage, getStorageCookie, setStorageCookie,
+   THIRTY_MINUTES_IN_MILLISECONDS */
 
 function tabIsLocked(tabID) {
-  const $tabToActivate = $(`.tablink[href=${tabID}]`);
+  const $tabToActivate = $(`.tablink[href='${tabID}']`);
   const $locked = $tabToActivate.parent('li.locked');
   return !!$locked.length;
 }
@@ -55,7 +56,7 @@ function validateTabID(tabID) {
 // Inputs: $activeTab -- jQuery object
 function handleSubTabs($activeTab) {
   const activeTabHref = $activeTab.attr('href');
-  const $activeTabNestedUL = $(`[data-parent-tab=${activeTabHref}]`);
+  const $activeTabNestedUL = $(`[data-parent-tab='${activeTabHref}']`);
   const $activeTabUL = $activeTab.closest('ul');
   const subtabIsActive = $activeTabUL[0].hasAttribute('data-parent-tab');
   const parentTabIsActive = !!$activeTabNestedUL.length;
@@ -78,7 +79,7 @@ function loadTabPanelScript($activeTabPanel) {
   const activePanelID = $activeTabPanel.attr('id');
   const scriptToLoad = `adblock-options-${activePanelID}.js`;
   const scriptTag = document.createElement('script');
-  const alreadyLoaded = $(`script[src="${scriptToLoad}"]`).length > 0;
+  const alreadyLoaded = $(`script[src='${scriptToLoad}']`).length > 0;
 
   if (alreadyLoaded) {
     return;
@@ -100,7 +101,7 @@ function displayActiveTab($activeTab) {
 
 function activateTab(tabHref) {
   const tabID = validateTabID(tabHref);
-  const $activeTab = $(`.tablink[href=${tabID}]`);
+  const $activeTab = $(`.tablink[href='${tabID}']`);
   const $allTabs = $('.tablink');
   const $allTabPanels = $('.tab');
 
@@ -109,9 +110,7 @@ function activateTab(tabHref) {
 
   $activeTab.addClass('active');
 
-  $.cookie('active_tab', $activeTab.attr('href'), {
-    expires: 10,
-  });
+  setStorageCookie('active_tab', $activeTab.attr('href'), THIRTY_MINUTES_IN_MILLISECONDS);
 
   displayActiveTab($activeTab);
 }
@@ -128,15 +127,15 @@ const displayMABFeedbackCTA = function () {
   if (lang === 'en' || lang.startsWith('en-')) {
     $('div.mab-page-box > .option-page-content > footer').removeAttr('style');
     const $feedbackButton = $('.mab-feedback-button');
-    $feedbackButton.click((e) => {
+    $feedbackButton.on('click', (e) => {
       e.preventDefault();
       e.stopImmediatePropagation();
       let url = 'https://getadblock.typeform.com/to/zKDlkc';
       if (License.isActiveLicense()) {
         url = 'https://getadblock.typeform.com/to/VUFngU';
       }
-      chrome.tabs.create({ url });
-      $feedbackButton.blur();
+      browser.tabs.create({ url });
+      $feedbackButton.trigger('blur');
     });
   }
 };
@@ -175,7 +174,7 @@ function loadTabPanelsHTML() {
 // and display the tabs and tabel accordingly
 function activateTabOnPageLoad() {
   // Set active tab from cookie
-  let activeTabID = $.cookie('active_tab');
+  let activeTabID = getStorageCookie('active_tab');
 
   // Set active tab from hash (has priority over cookie)
   if (window.location && window.location.hash) {
@@ -184,7 +183,7 @@ function activateTabOnPageLoad() {
   activateTab(activeTabID);
 }
 
-$(document).ready(() => {
+$(() => {
   // 1. load all the tab panels templates in respective panel DIVs
   loadTabPanelsHTML();
 
@@ -192,7 +191,7 @@ $(document).ready(() => {
   activateTabOnPageLoad();
 
   // 3. Activate tab when clicked
-  $('.tablink').click(function tabLinkClicked() {
+  $('.tablink').on('click', function tabLinkClicked() {
     const tabID = $(this).attr('href');
     activateTab(tabID);
   });

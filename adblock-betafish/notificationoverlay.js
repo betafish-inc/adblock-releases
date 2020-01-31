@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome */
+/* global browser */
 
 (function onScriptLoad() {
   const divID = '_ABoverlay';
@@ -118,7 +118,7 @@
     window.removeEventListener('message', receiveMessage);
   };
 
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.command === 'showoverlay' && request.overlayURL && request.tabURL === document.location.href) {
       showOverlay(request.overlayURL);
       sendResponse({ ack: request.command });

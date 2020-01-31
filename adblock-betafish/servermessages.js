@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, exports, STATS, log, logging, determineUserLanguage */
+/* global browser, exports, STATS, log, logging, determineUserLanguage */
 
 // Log an 'error' message on GAB log server.
 const ServerMessages = (function serverMessages() {
@@ -67,7 +67,7 @@ const ServerMessages = (function serverMessages() {
       o: STATS.os,
       l: determineUserLanguage(),
       t: queryType,
-      v: chrome.runtime.getManifest().version,
+      v: browser.runtime.getManifest().version,
     };
     if (typeof additionalParams === 'object') {
       for (const prop in additionalParams) {
@@ -119,7 +119,7 @@ const ServerMessages = (function serverMessages() {
     recordMessageWithUserID(msg, 'adreport', callback, additionalParams);
   };
 
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.command !== 'recordGeneralMessage' || !message.msg) {
       return;
     }

@@ -1,6 +1,6 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome */
+/* global browser */
 
-chrome.runtime.sendMessage({ message: 'load_my_adblock' });
+browser.runtime.sendMessage({ message: 'load_my_adblock' });

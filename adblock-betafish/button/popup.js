@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, translate, Prefs, storageGet, localizePage, storageSet,
+/* global browser, translate, Prefs, storageGet, localizePage, storageSet,
   selected, selectedOnce, showHelpSetupPage, i18nJoin */
 
 let errorOccurred = false;
@@ -72,10 +72,10 @@ const processError = function (err, stack, message) {
     });
 
     const reloadAnchor = document.getElementById('reload');
-    if (chrome && chrome.runtime && chrome.runtime.reload) {
+    if (browser && browser.runtime && browser.runtime.reload) {
       selectedOnce(reloadAnchor, () => {
         try {
-          chrome.runtime.reload();
+          browser.runtime.reload();
         } catch (e) {
           const reloadMsg = document.getElementById('reload_msg');
           if (reloadMsg) {
@@ -124,7 +124,7 @@ let BG = null;
 let page = null;
 
 try {
-  BG = chrome.extension.getBackgroundPage();
+  BG = browser.extension.getBackgroundPage();
   const { License } = BG;
   const { SyncService } = BG;
   const { Prefs } = BG;
@@ -187,12 +187,13 @@ try {
             popupMenuTheme = info.settings.color_themes.popup_menu;
           }
           $('body').attr('id', popupMenuTheme).data('theme', popupMenuTheme);
+          $('.header-logo').attr('src', `icons/${popupMenuTheme}/logo.svg`);
 
           if (info && info.errorStr) {
             processError(info.errorStr, info.stack, info.message);
             return;
           }
-          $(window).unload(() => {
+          $(window).on('unload', () => {
             if (!itemClicked) {
               BG.recordGeneralMessage('popup_closed');
             }
@@ -216,7 +217,7 @@ try {
           } else {
             show(['div_pause_adblock', 'div_domain_pause_adblock', 'div_blacklist', 'div_whitelist', 'div_whitelist_page', 'separator3', 'separator4', 'svg_options', 'block_counts', 'help_link']);
 
-            chrome.runtime.sendMessage({
+            browser.runtime.sendMessage({
               type: 'stats.getBlockedPerPage',
               tab: info.tab,
             }).then((blockedPage) => {
@@ -243,7 +244,7 @@ try {
             show(['div_whitelist_channel']);
           }
 
-          if (chrome.runtime && chrome.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
+          if (browser.runtime && browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
             show(['div_status_beta']);
           }
 
@@ -338,7 +339,7 @@ try {
       selected('#div_enable_adblock_on_this_page', () => {
         BG.recordGeneralMessage('enable_adblock_clicked');
         if (BG.tryToUnwhitelist(page.url.href)) {
-          chrome.tabs.reload();
+          browser.tabs.reload();
           closeAndReloadPopup();
         } else {
           $('#div_status_whitelisted').replaceWith(translate('disabled_by_filter_lists'));
@@ -371,7 +372,7 @@ try {
         BG.recordGeneralMessage('whitelist_youtube_clicked');
         BG.createWhitelistFilterForYoutubeChannel(page.url.href);
         closeAndReloadPopup();
-        chrome.tabs.reload();
+        browser.tabs.reload();
       });
 
       selected('#div_pause_adblock', () => {
@@ -430,12 +431,12 @@ try {
         BG.recordGeneralMessage('whitelist_page_clicked');
         BG.createPageWhitelistFilter(page.url.href);
         closeAndReloadPopup();
-        chrome.tabs.reload();
+        browser.tabs.reload();
       });
 
       selected('#svg_options', () => {
         BG.recordGeneralMessage('options_clicked');
-        BG.openTab(chrome.runtime.getURL('options.html'));
+        BG.openTab(browser.runtime.getURL('options.html'));
         closeAndReloadPopup();
       });
 
@@ -458,7 +459,7 @@ try {
         event.stopPropagation();
         const theme = themeCTA ? themeCTA.replace('_theme', '') : '';
         BG.recordGeneralMessage('premium_themes_cta_clicked', undefined, { theme });
-        BG.openTab(chrome.runtime.getURL('options.html#mab-themes'));
+        BG.openTab(browser.runtime.getURL('options.html#mab-themes'));
         closeAndReloadPopup();
       });
 
@@ -486,30 +487,27 @@ try {
         closeAndReloadPopup();
       });
 
-      $('#div_myadblock_enrollment_v2').hover(() => {
+      $('#div_myadblock_enrollment_v2').on('mouseenter', () => {
         $('#separator-1').addClass('hide-on-new-cta-hover');
         $('#separator-2').addClass('hide-on-new-cta-hover');
         $('#separator0').addClass(shown.separator0 ? 'hide-on-new-cta-hover' : '');
         $('#mabNewCtaText').text(translate('new_cta_hovered_text'));
-      }, () => {
+      }).on('mouseleave', () => {
         $('#separator-1').removeClass('hide-on-new-cta-hover');
         $('#separator-2').removeClass('hide-on-new-cta-hover');
         $('#separator0').removeClass('hide-on-new-cta-hover');
         $('#mabNewCtaText').text(translate('new_cta_default_text'));
       });
 
-      $('#div_premium_themes_cta').hover(
-        function handleIn() {
-          $('#themes-cta-text').text(translate('check_out_themes'));
-          const currentThemeCTA = $(this).attr('data-theme-cta');
-          $('body').attr('id', currentThemeCTA).data('theme', currentThemeCTA);
-        },
+      $('#div_premium_themes_cta').on('mouseenter', function handleIn() {
+        $('#themes-cta-text').text(translate('check_out_themes'));
+        const currentThemeCTA = $(this).attr('data-theme-cta');
+        $('body').attr('id', currentThemeCTA).data('theme', currentThemeCTA);
         // eslint-disable-next-line prefer-arrow-callback
-        function handleOut() {
-          $('#themes-cta-text').text(translate('adblock_looked_like_this'));
-          $('body').attr('id', popupMenuTheme).data('theme', popupMenuTheme);
-        },
-      );
+      }).on('mouseleave', function handleOut() {
+        $('#themes-cta-text').text(translate('adblock_looked_like_this'));
+        $('body').attr('id', popupMenuTheme).data('theme', popupMenuTheme);
+      });
     } catch (err) {
       processError(err);
     }

@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, adblock_installed, adblock_userid, adblock_version */
+/* global browser, adblock_installed, adblock_userid, adblock_version */
 
 const invalidGUIDChars = /[^a-z0-9]/g;
 
@@ -75,7 +75,7 @@ function receiveMessage(event) {
     && event.data.command === 'payment_success'
   ) {
     window.removeEventListener('message', receiveMessage);
-    chrome.runtime.sendMessage({ command: 'payment_success', version: 1 })
+    browser.runtime.sendMessage({ command: 'payment_success', version: 1 })
       .then((response) => {
         window.postMessage(response, '*');
       });
@@ -125,12 +125,12 @@ function receiveMessage(event) {
       && window.top === window.self
   ) {
     window.addEventListener('message', receiveMessage, false);
-    chrome.storage.local.get('userid').then((response) => {
+    browser.storage.local.get('userid').then((response) => {
       let adblockUserId = response.userid;
       if (adblockUserId.match(invalidGUIDChars)) {
         adblockUserId = 'invalid';
       }
-      const adblockVersion = chrome.runtime.getManifest().version;
+      const adblockVersion = browser.runtime.getManifest().version;
       const elem = document.createElement('script');
       const scriptToInject = `(${getAdblockDomain.toString()})();`
             + `(${cleanup.toString()})();`
@@ -181,11 +181,11 @@ const runBandaids = function () {
       }`, 0);
     },
     getadblockquestion() {
-      chrome.runtime.sendMessage({ command: 'addGABTabListeners' });
+      browser.runtime.sendMessage({ command: 'addGABTabListeners' });
       const personalBtn = document.getElementById('personal-use');
       const enterpriseBtn = document.getElementById('enterprise-use');
       const buttonListener = function () {
-        chrome.runtime.sendMessage({ command: 'removeGABTabListeners', saveState: true });
+        browser.runtime.sendMessage({ command: 'removeGABTabListeners', saveState: true });
         if (enterpriseBtn) {
           enterpriseBtn.removeEventListener('click', buttonListener);
         }
@@ -201,7 +201,7 @@ const runBandaids = function () {
       }
     },
     getadblock() {
-      chrome.storage.local.get('userid').then((response) => {
+      browser.storage.local.get('userid').then((response) => {
         if (response.userid) {
           const elemDiv = document.createElement('div');
           elemDiv.id = 'adblockUserId';
@@ -213,7 +213,7 @@ const runBandaids = function () {
       const enableShowSurvey = document.getElementById('enable_show_survey');
       if (enableShowSurvey) {
         enableShowSurvey.onclick = function showSurvey() {
-          chrome.runtime.sendMessage({ command: 'setSetting', name: 'show_survey', isEnabled: !enableShowSurvey.checked });
+          browser.runtime.sendMessage({ command: 'setSetting', name: 'show_survey', isEnabled: !enableShowSurvey.checked });
         };
       }
       const aaElements = document.querySelectorAll('#disableacceptableads');
@@ -224,9 +224,9 @@ const runBandaids = function () {
               return;
             }
             event.preventDefault();
-            chrome.runtime.sendMessage({ command: 'unsubscribe', id: 'acceptable_ads' }).then(() => {
-              chrome.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'disableacceptableads_clicked' }).then(() => {
-                chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html?aadisabled=true#general' });
+            browser.runtime.sendMessage({ command: 'unsubscribe', id: 'acceptable_ads' }).then(() => {
+              browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'disableacceptableads_clicked' }).then(() => {
+                browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html?aadisabled=true#general' });
               });
             });
           };
@@ -243,7 +243,7 @@ const runBandaids = function () {
             }
             event.stopImmediatePropagation();
             event.preventDefault();
-            chrome.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
+            browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
           };
         }
       }
@@ -382,7 +382,7 @@ const runBandaids = function () {
         titleObserver.observe(titleNode, options);
       }
 
-      chrome.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
+      browser.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
         if (settings.twitch_hiding) {
           checkPlayer();
           startTitleObserver();

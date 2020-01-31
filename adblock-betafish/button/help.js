@@ -19,7 +19,7 @@ const logHelpFlowResults = function (source) {
   BG.recordGeneralMessage('help_flow_results', undefined, { hfd: `${segueBreadCrumb},${source}` });
 };
 
-$(window).unload(() => {
+$(window).on('unload', () => {
   if (!logSent && segueBreadCrumb.length > 0) {
     logHelpFlowResults('popupClosed');
   }
@@ -57,11 +57,11 @@ const transitionTo = function (segueToId, backIconClicked) {
     $('#help_title').attr('i18n', nextHelpPage.title);
   }
   const $textContainer = $('<div id="text_container">');
-  $content.append($textContainer, { SAFE_FOR_JQUERY: true });
+  $content.append($textContainer);
   // process any segues - will be displayed first
   if (Array.isArray(nextHelpPage.segues)) {
     for (const segue of nextHelpPage.segues) {
-      const $cleanCloneSegueHTML = $(cleanSegueHTML, { SAFE_FOR_JQUERY: true });
+      const $cleanCloneSegueHTML = $(cleanSegueHTML);
       $cleanCloneSegueHTML.find('.segue-text').attr('i18n', segue.content);
       selected($cleanCloneSegueHTML.find('.segue-box'), () => {
         const paused = BG.adblockIsPaused();
@@ -76,14 +76,14 @@ const transitionTo = function (segueToId, backIconClicked) {
         }
         transitionTo(segue.segueTo);
       });
-      $textContainer.append($cleanCloneSegueHTML, { SAFE_FOR_JQUERY: true });
+      $textContainer.append($cleanCloneSegueHTML);
     }
   }
   // sections
   if (Array.isArray(nextHelpPage.sections)) {
     for (const section of nextHelpPage.sections) {
-      const $cleanCloneSectionHTML = $(cleanSectionHTML, { SAFE_FOR_JQUERY: true });
-      $textContainer.append($cleanCloneSectionHTML, { SAFE_FOR_JQUERY: true });
+      const $cleanCloneSectionHTML = $(cleanSectionHTML);
+      $textContainer.append($cleanCloneSectionHTML);
       for (const content of section.content) {
         const textSpan = $('<span tabindex="0" class="section-text"></span>');
         $cleanCloneSectionHTML.find('.section-box').append(textSpan);
@@ -117,7 +117,7 @@ const transitionTo = function (segueToId, backIconClicked) {
       multipleButton = true;
     }
     for (const button of nextHelpPage.buttons) {
-      const $cleanCloneButtonHTML = $(cleanButtonHTML, { SAFE_FOR_JQUERY: true });
+      const $cleanCloneButtonHTML = $(cleanButtonHTML);
       $cleanCloneButtonHTML.find('.button-text').attr('i18n', button.text);
       if (button.icon) {
         $cleanCloneButtonHTML.find('.button-icon').text(button.icon);
@@ -132,9 +132,9 @@ const transitionTo = function (segueToId, backIconClicked) {
       if (multipleButton) {
         $cleanCloneButtonHTML.addClass('multiple-button');
       }
-      $buttonContainer.append($cleanCloneButtonHTML, { SAFE_FOR_JQUERY: true });
+      $buttonContainer.append($cleanCloneButtonHTML);
     }
-    $content.append($buttonContainer, { SAFE_FOR_JQUERY: true });
+    $content.append($buttonContainer);
   }
   if (nextHelpPage.footer) {
     $('#help_footer').show();
@@ -184,9 +184,9 @@ const loadHTMLSegments = function () {
     helpSectionRequest,
     helpMapRequest,
   ]).then((values) => {
-    cleanSegueHTML = DOMPurify.sanitize(values[0]);
-    cleanButtonHTML = DOMPurify.sanitize(values[1]);
-    cleanSectionHTML = DOMPurify.sanitize(values[2]);
+    cleanSegueHTML = DOMPurify.sanitize(values[0], { SAFE_FOR_JQUERY: true });
+    cleanButtonHTML = DOMPurify.sanitize(values[1], { SAFE_FOR_JQUERY: true });
+    cleanSectionHTML = DOMPurify.sanitize(values[2], { SAFE_FOR_JQUERY: true });
     [, , , popupMenuHelpMap] = values;
   });
 };

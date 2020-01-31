@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome */
+/* global browser */
 
 let pairs = [];
 const matchSelectors = [];
@@ -15,7 +15,7 @@ function* genFunc() {
   }
 }
 
-chrome.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
+browser.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
   if (document.readyState !== 'loading') {
     pairs = response.selectors;
     const { exceptions } = response;
@@ -26,7 +26,7 @@ chrome.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
         clearInterval(interval);
         if (matchSelectors.length > 0) {
           const noDuplicates = Array.from(new Set(matchSelectors)); // remove any duplicates
-          chrome.runtime.sendMessage({
+          browser.runtime.sendMessage({
             type: 'datacollection.elementHide',
             selectors: noDuplicates,
           });
@@ -38,7 +38,7 @@ chrome.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
         }
         if (matchExceptions.length > 0) {
           const noDuplicates = Array.from(new Set(matchExceptions)); // remove any duplicates
-          chrome.runtime.sendMessage({ type: 'datacollection.exceptionElementHide', exceptions: noDuplicates });
+          browser.runtime.sendMessage({ type: 'datacollection.exceptionElementHide', exceptions: noDuplicates });
         }
       } else {
         const selectors = val.value;

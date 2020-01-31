@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, require, exports, STATS, log, getSettings, Prefs, openTab, License */
+/* global browser, require, exports, STATS, log, getSettings, Prefs, openTab, License */
 
 // if the ping response indicates a survey (tab or overlay)
 // gracefully processes the request
@@ -17,7 +17,7 @@ const SURVEY = (function getSurvey() {
   // Call |callback(tab)|, where |tab| is the active tab, or undefined if
   // there is no active tab.
   const getActiveTab = function (callback) {
-    chrome.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+    browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
       callback(tabs[0]);
     });
   };
@@ -31,7 +31,7 @@ const SURVEY = (function getSurvey() {
   };
 
   const getBlockCountOnActiveTab = function (callback) {
-    chrome.tabs.query(
+    browser.tabs.query(
       {
         active: true,
         lastFocusedWindow: true,
@@ -156,13 +156,13 @@ const SURVEY = (function getSurvey() {
         }
         // click handler for notification
         const notificationClicked = function (notificationId) {
-          chrome.notifications.onClicked.removeListener(notificationClicked);
+          browser.notifications.onClicked.removeListener(notificationClicked);
           // Exceptions required since the errors cannot be resolved by changing
           // the order of function definitions. TODO: refactor to remove exceptions
           // eslint-disable-next-line no-use-before-define
-          chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
+          browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
           // eslint-disable-next-line no-use-before-define
-          chrome.notifications.onClosed.removeListener(closedClicked);
+          browser.notifications.onClosed.removeListener(closedClicked);
 
           const clickedUrl = surveyData.notification_options.clicked_url;
           if (notificationId === lastNotificationID && clickedUrl) {
@@ -173,12 +173,12 @@ const SURVEY = (function getSurvey() {
           }
         };
         const buttonNotificationClicked = function (notificationId, buttonIndex) {
-          chrome.notifications.onClicked.removeListener(notificationClicked);
-          chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
+          browser.notifications.onClicked.removeListener(notificationClicked);
+          browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
           // Exception required since the error cannot be resolved by changing
           // the order of function definitions. TODO: refactor to remove exception
           // eslint-disable-next-line no-use-before-define
-          chrome.notifications.onClosed.removeListener(closedClicked);
+          browser.notifications.onClosed.removeListener(closedClicked);
           if (surveyData.notification_options.buttons) {
             if (notificationId === lastNotificationID && buttonIndex === 0) {
               recordGeneralMessage('button_0_clicked', undefined, { sid: surveyData.survey_id });
@@ -191,13 +191,13 @@ const SURVEY = (function getSurvey() {
           }
         };
         const closedClicked = function (notificationId, byUser) {
-          chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-          chrome.notifications.onClicked.removeListener(notificationClicked);
-          chrome.notifications.onClosed.removeListener(closedClicked);
+          browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
+          browser.notifications.onClicked.removeListener(notificationClicked);
+          browser.notifications.onClosed.removeListener(closedClicked);
           recordGeneralMessage('notification_closed', undefined, { sid: surveyData.survey_id, bu: byUser });
         };
-        chrome.notifications.onClicked.removeListener(notificationClicked);
-        chrome.notifications.onClicked.addListener(notificationClicked);
+        browser.notifications.onClicked.removeListener(notificationClicked);
+        browser.notifications.onClicked.addListener(notificationClicked);
         if (surveyData.notification_options.buttons) {
           const buttonArray = [];
           if (surveyData.notification_options.buttons[0]) {
@@ -214,17 +214,17 @@ const SURVEY = (function getSurvey() {
           }
           notificationOptions.buttons = buttonArray;
         }
-        chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-        chrome.notifications.onButtonClicked.addListener(buttonNotificationClicked);
-        chrome.notifications.onClosed.addListener(closedClicked);
+        browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
+        browser.notifications.onButtonClicked.addListener(buttonNotificationClicked);
+        browser.notifications.onClosed.addListener(closedClicked);
         // show the notification to the user.
-        chrome.notifications.create(lastNotificationID, notificationOptions).then(() => {
+        browser.notifications.create(lastNotificationID, notificationOptions).then(() => {
           recordGeneralMessage('survey_shown', undefined, { sid: surveyData.survey_id });
         }).catch(() => {
           recordGeneralMessage('error_survey_not_shown', undefined, { sid: surveyData.survey_id });
-          chrome.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-          chrome.notifications.onClicked.removeListener(notificationClicked);
-          chrome.notifications.onClosed.removeListener(closedClicked);
+          browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
+          browser.notifications.onClicked.removeListener(notificationClicked);
+          browser.notifications.onClosed.removeListener(closedClicked);
         });
       });
     };
@@ -236,15 +236,15 @@ const SURVEY = (function getSurvey() {
       }, fiveMinutes);
     };
     // check (again) if we still have permission to show a notification
-    if (chrome && chrome.notifications && chrome.notifications.getPermissionLevel) {
-      chrome.notifications.getPermissionLevel((permissionLevel) => {
+    if (browser && browser.notifications && browser.notifications.getPermissionLevel) {
+      browser.notifications.getPermissionLevel((permissionLevel) => {
         if (permissionLevel === 'granted') {
           if (typeof surveyData.block_count_limit !== 'number' || Number.isNaN(surveyData.block_count_limit)) {
             log('invalid block_count_limit', surveyData.block_count_limit);
             return;
           }
           surveyData.block_count_limit = Number(surveyData.block_count_limit);
-          chrome.idle.queryState(60, (state) => {
+          browser.idle.queryState(60, (state) => {
             if (state === 'active') {
               getBlockCountOnActiveTab((blockedPerPage) => {
                 if (blockedPerPage >= surveyData.block_count_limit) {
@@ -264,7 +264,7 @@ const SURVEY = (function getSurvey() {
               // browser is idle or locked
               retryInFiveMinutes();
             }
-          }); // end chrome.idle.queryState
+          }); // end browser.idle.queryState
         }
       });
     }
@@ -275,22 +275,22 @@ const SURVEY = (function getSurvey() {
     const openTabIfAllowed = function () {
       setTimeout(() => {
         shouldShowSurvey(surveyData, (responseData) => {
-          chrome.tabs.create({ url: `https://getadblock.com/${responseData.open_this_url}` });
+          browser.tabs.create({ url: `https://getadblock.com/${responseData.open_this_url}` });
         });
       }, 10000); // 10 seconds
     };
 
     const waitForUserAction = function () {
-      chrome.tabs.onCreated.removeListener(waitForUserAction);
+      browser.tabs.onCreated.removeListener(waitForUserAction);
       openTabIfAllowed();
     };
 
-    chrome.idle.queryState(60, (state) => {
+    browser.idle.queryState(60, (state) => {
       if (state === 'active') {
         openTabIfAllowed();
       } else {
-        chrome.tabs.onCreated.removeListener(waitForUserAction);
-        chrome.tabs.onCreated.addListener(waitForUserAction);
+        browser.tabs.onCreated.removeListener(waitForUserAction);
+        browser.tabs.onCreated.addListener(waitForUserAction);
       }
     });
   }; // end of processTab()
@@ -308,7 +308,7 @@ const SURVEY = (function getSurvey() {
             recordErrorMessage('invalid_response_from_notification_overlay_script', undefined, { errorMessage: response });
           }
         };
-        chrome.tabs.sendMessage(tab.id, data).then(validateResponseFromTab).catch((error) => {
+        browser.tabs.sendMessage(tab.id, data).then(validateResponseFromTab).catch((error) => {
           recordErrorMessage('overlay_message_error', undefined, { errorMessage: JSON.stringify(error) });
         });
       });
@@ -354,10 +354,10 @@ const SURVEY = (function getSurvey() {
       // 'O' = Overlay Surveys
       // 'T' = Tab Surveys
       // 'N' = Notifications
-      if (chrome
-          && chrome.notifications
-          && chrome.notifications.getPermissionLevel) {
-        chrome.notifications.getPermissionLevel((permissionLevel) => {
+      if (browser
+          && browser.notifications
+          && browser.notifications.getPermissionLevel) {
+        browser.notifications.getPermissionLevel((permissionLevel) => {
           if (permissionLevel === 'granted') {
             callback('OTN');
           } else {

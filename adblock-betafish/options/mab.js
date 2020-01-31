@@ -1,9 +1,9 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global License, MABPayment, localizePage, activateTab, translate */
+/* global License, MABPayment, localizePage, activateTab, translate, backgroundPage */
 
-$(document).ready(() => {
+$(() => {
   localizePage();
 
   if (!License || $.isEmptyObject(License) || !MABPayment) {
@@ -27,7 +27,16 @@ $(document).ready(() => {
     $('a#manage-subscription').attr('href', manageSubscriptionURL).show();
   }
 
-  $('.mab-feature:not(.locked) a').click(function goToTab() {
+  $('.mab-feature:not(.locked) a').on('click', function goToTab() {
     activateTab($(this).attr('href'));
   });
+
+  if (backgroundPage && backgroundPage.getSettings()) {
+    const optionsTheme = backgroundPage.getSettings().color_themes.options_page;
+    if (optionsTheme === 'dark_theme') {
+      $('#themes-preview').attr('src', 'icons/themes_lighttext.svg');
+    } else {
+      $('#themes-preview').attr('src', 'icons/themes_darktext.svg');
+    }
+  }
 });

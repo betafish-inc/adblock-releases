@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global chrome, parseUri, exports, getAvailableFiles, adblockIsPaused */
+/* global browser, parseUri, exports, getAvailableFiles, adblockIsPaused */
 
 const LocalCDN = (function getLocalCDN() {
   const urlsMatchPattern = ['http://*/*', 'https://*/*'];
@@ -155,7 +155,7 @@ const LocalCDN = (function getLocalCDN() {
             const localPath = `localLib/${targetLibrary}/${fileName}`;
             incrementRedirectCount();
             addToDataCount(targetLibrary, fileName);
-            return { redirectUrl: chrome.runtime.getURL(localPath) };
+            return { redirectUrl: browser.runtime.getURL(localPath) };
           }
           addMissedVersion(targetLibrary, version);
         }
@@ -212,13 +212,13 @@ const LocalCDN = (function getLocalCDN() {
     setUp,
     // Starts the LocalCDN listeners
     start() {
-      chrome.webRequest.onBeforeRequest.addListener(libRequestHandler, { urls: urlsMatchPattern }, ['blocking']);
-      chrome.webRequest.onBeforeSendHeaders.addListener(stripMetadataHandler, { urls: urlsMatchPattern }, ['blocking', 'requestHeaders']);
+      browser.webRequest.onBeforeRequest.addListener(libRequestHandler, { urls: urlsMatchPattern }, ['blocking']);
+      browser.webRequest.onBeforeSendHeaders.addListener(stripMetadataHandler, { urls: urlsMatchPattern }, ['blocking', 'requestHeaders']);
     },
     // Stops the LocalCDN listeners and reset data
     end() {
-      chrome.webRequest.onBeforeRequest.removeListener(libRequestHandler);
-      chrome.webRequest.onBeforeSendHeaders.removeListener(stripMetadataHandler);
+      browser.webRequest.onBeforeRequest.removeListener(libRequestHandler);
+      browser.webRequest.onBeforeSendHeaders.removeListener(stripMetadataHandler);
       resetCollectedData();
     },
     // Gets the redirect count as a number of redirects
