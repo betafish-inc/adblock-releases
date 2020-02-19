@@ -21,8 +21,6 @@ const License = (function getLicense() {
   const userClosedSyncCTAKey = 'user_closed_sync_cta';
   const userSawSyncCTAKey = 'user_saw_sync_cta';
   const pageReloadedOnSettingChangeKey = 'page_reloaded_on_user_settings_change';
-  const popupMenuCtaClosedKey = 'popup_menu_cta_closed';
-  const showPopupMenuThemesCtaKey = 'popup_menu_themes_cta';
   const licenseAlarmName = 'licenseAlarm';
   const sevenDayAlarmName = 'sevenDayLicenseAlarm';
   let theLicense;
@@ -189,10 +187,8 @@ const License = (function getLicense() {
 
   return {
     licenseStorageKey,
-    popupMenuCtaClosedKey,
     userClosedSyncCTAKey,
     userSawSyncCTAKey,
-    showPopupMenuThemesCtaKey,
     themesForCTA,
     pageReloadedOnSettingChangeKey,
     initialized,
@@ -654,6 +650,26 @@ License.ready().then(() => {
     if (request.command === 'openPremiumPayURL') {
       openTab(License.MAB_CONFIG.payURL);
       sendResponse({});
+    }
+  });
+
+  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.command === 'cleanUpSevenDayAlarm') {
+      License.cleanUpSevenDayAlarm();
+      sendResponse({});
+    }
+  });
+
+  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.command === 'showIconBadgeCTA' && typeof request.value === 'boolean') {
+      License.showIconBadgeCTA(request.value);
+      sendResponse({});
+    }
+  });
+
+  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.command === 'License.MAB_CONFIG' && typeof request.url === 'string') {
+      sendResponse({ url: License.MAB_CONFIG[request.url] });
     }
   });
 });

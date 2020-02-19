@@ -130,9 +130,9 @@ const displayMABFeedbackCTA = function () {
     $feedbackButton.on('click', (e) => {
       e.preventDefault();
       e.stopImmediatePropagation();
-      let url = 'https://getadblock.typeform.com/to/zKDlkc';
+      let url = 'https://portal.productboard.com/getadblock/4-adblock-extension';
       if (License.isActiveLicense()) {
-        url = 'https://getadblock.typeform.com/to/VUFngU';
+        url = 'https://portal.productboard.com/getadblock/5-adblock-extension-premium';
       }
       browser.tabs.create({ url });
       $feedbackButton.trigger('blur');

@@ -2,7 +2,8 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, getSettings, translate, FilterListUtil, activateTab,
-   CustomFilterListUploadUtil, localizePage, storageSet */
+   CustomFilterListUploadUtil, localizePage, storageSet, chromeStorageSetHelper,
+   chromeStorageGetHelper */
 
 const backgroundPage = browser.extension.getBackgroundPage();
 const { Filter } = backgroundPage;
@@ -26,6 +27,8 @@ const { License } = backgroundPage;
 const { SyncService } = backgroundPage;
 const { isValidTheme } = backgroundPage;
 const { abpPrefPropertyNames } = backgroundPage;
+const { info } = backgroundPage;
+const { rateUsCtaKey } = backgroundPage;
 const FIVE_SECONDS = 5000;
 const TWENTY_SECONDS = FIVE_SECONDS * 4;
 let autoReloadingPage;
@@ -346,7 +349,7 @@ const updateAcceptableAdsUI = function (checkAA, checkAAprivacy) {
     $aaInput.removeClass('feature').prop('checked', true).addClass('feature');
     $aaPrivacyInput.prop('checked', true);
     $aaYellowBanner.slideUp();
-    if (navigator.doNotTrack) {
+    if (navigator.doNotTrack === '1') {
       $aaPrivacyHelper.slideUp();
     } else {
       $aaPrivacyHelper.slideDown();
@@ -363,6 +366,7 @@ $(() => {
   const onSettingsChanged = function (name, currentValue) {
     if (name === 'color_themes') {
       $('body').attr('id', currentValue.options_page).data('theme', currentValue.options_page);
+      $('#sidebar-adblock-logo').attr('src', `icons/${currentValue.options_page}/logo.svg`);
     }
   };
   settingsNotifier.on('settings.changed', onSettingsChanged);
@@ -375,6 +379,18 @@ $(() => {
   displayVersionNumber();
   localizePage();
   displayTranslationCredit();
+
+  if (info.application === 'chrome') {
+    chromeStorageGetHelper(rateUsCtaKey).then((alreadyRatedUs) => {
+      if (!alreadyRatedUs) {
+        $('#rate-us-cta').show();
+        $('#rate-us-cta a#rate-us').on('click', () => {
+          chromeStorageSetHelper(rateUsCtaKey, true);
+          $('#rate-us-cta').hide();
+        });
+      }
+    });
+  }
 });
 
 storageSet(License.pageReloadedOnSettingChangeKey, false);

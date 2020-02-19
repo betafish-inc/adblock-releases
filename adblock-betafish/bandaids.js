@@ -87,15 +87,6 @@ function receiveMessage(event) {
     return;
   }
 
-  // https://bugs.chromium.org/p/chromium/issues/detail?id=129353
-  // Trap calls to WebSocket constructor, and expose websocket-based network
-  // requests to AdBlock
-
-  // Fix won't be applied on older versions of Chromium.
-  if (window.WebSocket instanceof Function === false) {
-    return;
-  }
-
   // Only for dynamically created frames and http/https documents.
   if (/^(https?:|about:)/.test(window.location.protocol) !== true) {
     return;

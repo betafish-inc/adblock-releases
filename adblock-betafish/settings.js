@@ -53,17 +53,20 @@ function Settings() {
 Settings.prototype = {
   set(name, isEnabled, callback) {
     const originalValue = this.data[name];
-    this.data[name] = isEnabled;
+    // Firefox passes weak references to objects, so in case isEnabled is an object,
+    // we need to store a local copy of the object
+    const localIsEnabled = JSON.parse(JSON.stringify(isEnabled));
+    this.data[name] = localIsEnabled;
     const that = this;
 
     // Don't store defaults that the user hasn't modified
     browser.storage.local.get(this.settingsKey).then((response) => {
       const storedData = response.settings || {};
 
-      storedData[name] = isEnabled;
+      storedData[name] = localIsEnabled;
       chromeStorageSetHelper(that.settingsKey, storedData);
-      if (originalValue !== isEnabled) {
-        settingsNotifier.emit('settings.changed', name, isEnabled, originalValue);
+      if (originalValue !== localIsEnabled) {
+        settingsNotifier.emit('settings.changed', name, localIsEnabled, originalValue);
       }
       if (callback !== undefined && typeof callback === 'function') {
         callback();

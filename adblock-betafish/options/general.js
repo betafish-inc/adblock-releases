@@ -147,13 +147,13 @@ const showSeparators = function () {
   $lastVisibleOption.removeClass('bottom-line');
 };
 
-$('#enable_show_advanced_options').on('change', () => {
+$('#enable_show_advanced_options').on('change', function onAdvancedOptionsChange() {
   // Reload the page to show or hide the advanced options on the
   // options page -- after a moment so we have time to save the option.
   // Also, disable all advanced options, so that non-advanced users will
   // not end up with debug/beta/test options enabled.
   if (!this.checked) {
-    $('.advanced input[type=\'checkbox\']:checked').each(() => {
+    $('.advanced input[type=\'checkbox\']:checked').each(function forEachAdvancedOption() {
       backgroundPage.setSetting(this.id.substr(7), false);
     });
   }

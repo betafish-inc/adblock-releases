@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global BG, page, transitionTo, logHelpFlowResults, filterUpdateError:true,
+/* global pageInfo, transitionTo, logHelpFlowResults, filterUpdateError:true,
   browser */
 
 // Help flow button actions -- called when the associated buttons are clicked
@@ -11,28 +11,30 @@ const popupMenuHelpActionMap = {
   // Disables button while updating the filter lists and reenables it
   // when updating is complete or after 6 seconds
   okCheckWhitelistAction() {
-    if (BG.pageIsWhitelisted({ page })) {
+    if (pageInfo.whitelisted) {
       transitionTo('seeAdOnWhitelist', false);
     } else {
       transitionTo('seeAdNotOnWhitelist', false);
       $('button').prop('disabled', true);
-      BG.updateFilterLists();
+      browser.runtime.sendMessage({ command: 'updateFilterLists' });
       setTimeout(() => {
-        const progress = BG.checkUpdateProgress();
-        if (progress.inProgress) {
-          setTimeout(() => {
-            const progress2 = BG.checkUpdateProgress();
-            if (progress2.inProgress || progress2.filterError) {
-              filterUpdateError = true;
-            }
+        browser.runtime.sendMessage({ command: 'checkUpdateProgress' }).then((progress) => {
+          if (progress.inProgress) {
+            setTimeout(() => {
+              browser.runtime.sendMessage({ command: 'checkUpdateProgress' }).then((progress2) => {
+                if (progress2.inProgress || progress2.filterError) {
+                  filterUpdateError = true;
+                }
+                $('button').prop('disabled', false);
+              });
+            }, 5000); // wait five seconds and check again
+          } else {
             $('button').prop('disabled', false);
-          }, 5000); // wait five seconds and check again
-        } else {
-          $('button').prop('disabled', false);
-        }
-        if (progress.filterError && !progress.inProgress) {
-          filterUpdateError = true;
-        }
+          }
+          if (progress.filterError && !progress.inProgress) {
+            filterUpdateError = true;
+          }
+        });
       }, 1000); // wait one second and check
     }
   },
@@ -40,7 +42,7 @@ const popupMenuHelpActionMap = {
     transitionTo('dontRemoveWhitelist', false);
   },
   removeWhitelistAction() {
-    BG.tryToUnwhitelist(page.url.href);
+    browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href });
     transitionTo('removeWhitelist', false);
   },
   finishFlowAction() {
@@ -74,9 +76,17 @@ const popupMenuHelpActionMap = {
   },
   // Unpauses and reloads the page
   unpauseAndReloadAction() {
-    BG.adblockIsPaused(false);
-    browser.tabs.reload();
-    transitionTo('unpauseAndReload', false);
+    if (pageInfo.paused) {
+      browser.runtime.sendMessage({ command: 'adblockIsPaused', newValue: false }).then(() => {
+        browser.tabs.reload();
+        transitionTo('unpauseAndReload', false);
+      });
+    } else {
+      browser.runtime.sendMessage({ command: 'adblockIsDomainPaused', activeTab: { url: pageInfo.url.href, id: pageInfo.id }, newValue: false }).then(() => {
+        browser.tabs.reload();
+        transitionTo('unpauseAndReload', false);
+      });
+    }
   },
   dontChangeSeeAdsAction() {
     transitionTo('dontChangeSeeAds', false);
@@ -86,9 +96,10 @@ const popupMenuHelpActionMap = {
   },
   // Pauses and reloads the page
   reloadStillBrokenAction() {
-    BG.adblockIsPaused(true);
-    browser.tabs.reload();
-    transitionTo('reloadStillBroken', false);
+    browser.runtime.sendMessage({ command: 'adblockIsPaused', newValue: true }).then(() => {
+      browser.tabs.reload();
+      transitionTo('reloadStillBroken', false);
+    });
   },
   stillBrokenNotAdBlockAction() {
     transitionTo('stillBrokenNotAdBlock', false);

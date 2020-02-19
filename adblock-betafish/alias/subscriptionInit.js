@@ -191,11 +191,13 @@ function getSubscriptions()
   // Add "acceptable ads", "anti-adblock messages", "AdBlock Custom", and "BitCoing Mining Protection List" subscriptions
   if (firstRun)
   {
-    let acceptableAdsSubscription = Subscription.fromURL(
-      Prefs.subscriptions_exceptionsurl
-    );
-    acceptableAdsSubscription.title = "Allow non-intrusive advertising";
-    subscriptions.push(acceptableAdsSubscription);
+    if (info.platform !== "gecko") {
+      let acceptableAdsSubscription = Subscription.fromURL(
+        Prefs.subscriptions_exceptionsurl
+      );
+      acceptableAdsSubscription.title = "Allow non-intrusive advertising";
+      subscriptions.push(acceptableAdsSubscription);
+    }
 
     let abcSubscription = Subscription.fromURL('https://cdn.adblockcdn.com/filters/adblock_custom.txt');
     abcSubscription.title = "AdBlock custom filters";

@@ -99,7 +99,7 @@ The overriden functions should also be reviewed when updating to a new version o
 
 ## Code Style
 
-We use a standard code style enforced by [eslint](https://eslint.org) for JavaScript and [Prettier](https://prettier.io) for HTML, CSS and JSON. To use these tools, install [Node.js](https://nodejs.org) and run the following command in the project directory:
+We use a standard code style enforced by [eslint](https://eslint.org) for JavaScript and [Prettier](https://prettier.io) for HTML, CSS and JSON. We use [HTMLhint](https://github.com/htmlhint/HTMLHint) for HTML accessibility and standards checking. To use these tools, install [Node.js](https://nodejs.org) and run the following command in the project directory:
 
 ```bash
 npm install
@@ -113,6 +113,7 @@ The following npm commands are then available:
 * `npm run lint-fix` runs eslint and automatically fixes JavaScript style violations in place (be sure to commit before running this command in case you need to revert the changes eslint makes).
 * `npm run prettier` runs prettier on HTML, CSS, and JSON files in the adblock-betafish directory and list all files that need to be Prettier.
 * `npm run prettier-fix` runs prettier and automatically replaces with Prettier versions for HTML, CSS, and JSON files in the adblock-betafish directory.
+* `npm run html-hint` runs HTMLhint and flags any issues with the HTML templates such as missing `DOCTYPE`, tags and/or attributes. This does not run on pre-commits so it must be run manually. New AdBlock custom attributes should be added in `/rules/static/custom_attributes.json`. If mistakenly flagged, standard HTML attributes should be added in `/rules/static/aria_attributes.json` or `/rules/static/mapped_attributes.json`.
 
 ## Development
 

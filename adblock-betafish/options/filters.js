@@ -618,8 +618,10 @@ CheckboxForFilterList.prototype = {
       const checked = $(this).is(':checked');
       const id = $subscription.attr('name');
       if (checked) {
-        const stopSelection = !SubscriptionUtil.validateOverSubscription(that.filterList);
-        if (!event.addedViaBackground && stopSelection) {
+        if (
+          !event.addedViaBackground
+          && !SubscriptionUtil.validateOverSubscription(that.filterList)
+        ) {
           $(this).prop('checked', false);
           return;
         }

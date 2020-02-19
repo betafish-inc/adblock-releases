@@ -1000,8 +1000,8 @@ const SyncService = (function getSyncService() {
   };
 
   settings.onload().then(() => {
-    if (getSettings().sync_settings) {
-      License.ready().then(() => {
+    License.ready().then(() => {
+      if (getSettings().sync_settings) {
         browser.storage.local.get(syncCommitVersionKey).then((response) => {
           syncCommitVersion = response[syncCommitVersionKey] || 0;
           browser.storage.local.get(syncPendingPostDataKey).then((postDataResponse) => {
@@ -1010,11 +1010,31 @@ const SyncService = (function getSyncService() {
             enableSync();
           });
         });
-      });
-    }
-    License.ready().then(() => {
+      }
+
       browser.storage.local.get(syncExtensionNameKey).then((response) => {
         currentExtensionName = response[syncExtensionNameKey] || '';
+      });
+
+      browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.command === 'resetLastGetStatusCode') {
+          resetLastGetStatusCode();
+          sendResponse({});
+        }
+      });
+
+      browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.command === 'resetLastGetErrorResponse') {
+          resetLastGetErrorResponse();
+          sendResponse({});
+        }
+      });
+
+      browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.command === 'resetLastPostStatusCode') {
+          resetLastPostStatusCode();
+          sendResponse({});
+        }
       });
     });
   });

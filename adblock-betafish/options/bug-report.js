@@ -38,7 +38,13 @@ const bugReportLogic = function () {
 
   // Retrieve extension info
   const askUserToGatherExtensionInfo = function () {
-    if (browser && browser.permissions && browser.permissions.request) {
+    if (
+      browser
+      && browser.runtime.getManifest().optional_permissions
+      && browser.runtime.getManifest().optional_permissions.includes('management')
+      && browser.permissions
+      && browser.permissions.request
+    ) {
       browser.permissions.request({
         permissions: ['management'],
       }).then((granted) => {

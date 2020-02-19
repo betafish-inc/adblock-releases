@@ -120,8 +120,6 @@ button {
   border-width: 0;
   background-color: var(--popup-button);
   color: var(--popup-button-text);
-  display: flex;
-  justify-content: center;
   width: 185px;
   height: 45px;
   font-size: 15px;
@@ -130,6 +128,13 @@ button {
 button.multiple-button {
   width: 110px;
   margin: 0px 4px 0px 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button.multiple-button .button-text {
+  height: min-content;
 }
 
 button:disabled {

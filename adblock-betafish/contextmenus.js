@@ -21,6 +21,12 @@ const updateButtonUIAndContextMenus = function () {
     }
   });
 };
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'updateButtonUIAndContextMenus') {
+    updateButtonUIAndContextMenus();
+    sendResponse({});
+  }
+});
 
 // Bounce messages back to content scripts.
 const emitPageBroadcast = (function emitBroadcast() {
@@ -250,6 +256,32 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         showWhitelistCTA: License.shouldShowWhitelistCTA(),
       },
       tabID: sender.tab.id,
+    });
+    sendResponse({});
+  }
+});
+
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'showBlacklist' && typeof request.nothingClicked === 'boolean') {
+    emitPageBroadcast({
+      fn: 'topOpenBlacklistUI',
+      options: {
+        nothingClicked: request.nothingClicked,
+        isActiveLicense: License.isActiveLicense(),
+        showBlacklistCTA: License.shouldShowBlacklistCTA(),
+      },
+      tabID: request.tabId,
+    });
+    sendResponse({});
+  }
+});
+
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'showWhitelist') {
+    emitPageBroadcast({
+      fn: 'topOpenWhitelistUI',
+      options: {},
+      tabID: request.tabId,
     });
     sendResponse({});
   }

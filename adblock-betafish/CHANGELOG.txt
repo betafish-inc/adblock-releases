@@ -2,13 +2,27 @@
 
 UNRELEASED:
 
+Version: 4.6.0, Date: 2020-02-19
+- Updated translations
+- Fixed an issue with the whitelist filter that's created on the 'Don't run on this page' AdBlock menu option
+- Removed references to the background page on the popup menu
+- Fixed an issue in the help flow
+- Fixed an issue when subscribing to a new filter lists with multiple AdBlock Option pages opened
+- Added support for Mozilla / Firefox to the wizards, and telemetry data
+- Added a new parameter to the telemetry data to indicate if Chrome users have modified the default hosts that AdBlock runs on
+- Fixed an issue with users unable to de-select the 'Advanced' option on the General tab of the AdBlock Options page
+- Updated the URLs used for Premium feedback
+- Added tooling to help us maintain our current level of accessibility
+- Modified the AdBlock logo / icon in the AdBlock menu to now open the AdBlock homepage
+- Added a 'Rate Us' link to the AdBlock options page
+
 Version: 4.5.0, Date: 2020-01-31
 - Updated translations
-- Consitently use 'browser.*' instead of 'chrome.*' for extension APIs
+- Consistently use 'browser.*' instead of 'chrome.*' for extension APIs
 - Updated the bundled version of jQuery to 3.4.1
 - Corrected the 'report an ad' link in the help flow
 - Converted all CSS url links to use the absolute path, instead of a relative path
-- All dynamically created HTML is now santized using DOMPurify
+- All dynamically created HTML is now sanitized using DOMPurify
 
 Version: 4.4.0, Date: 2020-01-16
 - Updated translations

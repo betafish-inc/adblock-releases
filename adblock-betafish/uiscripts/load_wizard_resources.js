@@ -30,10 +30,10 @@ function loadWizardResources($base, callback) {
 
     // HTML element <link> is ignored in shadow tree in Chrome 53
     // so we must load the CSS file in some other ways e.g. using <style>
-    $.get(cssUrl, (wizardCssRules) => {
+    fetch(cssUrl).then(response => response.text()).then((wizardCssRules) => {
       $styleTag.text(`${$styleTag.text()}${wizardCssRules}`);
     });
-    $.get(fontCssUrl, (fontFaceRules) => {
+    fetch(fontCssUrl).then(response => response.text()).then((fontFaceRules) => {
       $styleTag.text(`${$styleTag.text()}${fontFaceRules}`);
     });
 

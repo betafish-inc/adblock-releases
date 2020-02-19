@@ -15,6 +15,10 @@
     "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
     "message": "AdBlock — лучший блокировщик рекламы"
   },
+  "name": {
+    "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message": "AdBlock — лучший блокировщик рекламы"
+  },
   "description_edge": {
     "message": "AdBlock. Лучший блокировщик рекламы, 200 миллионов загрузок. Больше никакой рекламы в Интернете.",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -28,7 +32,7 @@
     "description": "Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
   },
   "adblock_click_for_details": {
-    "message": "AdBlock - нажмите, чтобы узнать больше",
+    "message": "AdBlock — нажмите, чтобы узнать больше",
     "description": "Tooltip on the AdBlock button, to help users understand that they can click the button to access more options."
   },
   "buttoncancel": {
@@ -68,7 +72,7 @@
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
   },
   "safaributton_how_to_hide2": {
-    "message": "Чтобы скрыть кнопку, щелкните правой кнопкой мыши по панель инструментов Safari и выберите Настройку панели инструментов, а затем уберите оттуда AdBlock. Вы можете показать его снова, перетащив его обратно.",
+    "message": "Чтобы скрыть кнопку, щелкните правой кнопкой мыши по панель инструментов Safari и выберите \"Настройка панели инструментов\", а затем уберите оттуда AdBlock. Вы можете показать его снова, перетащив его обратно.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "ff_button_how_to_hide": {
@@ -104,7 +108,7 @@
     "description": "Warning if the user hasn't specified a filter"
   },
   "blacklistereditfilter": {
-    "message": "Пожалуйста, введите подходящий фильтр в поле и нажмите ОК",
+    "message": "Пожалуйста, введите подходящий фильтр в поле и нажмите \"ОК\"",
     "description": "Text if the user wants to manually edit a filter. 'OK' is the standard JavaScript popup button text."
   },
   "blacklistereditinvalid1": {
@@ -1983,52 +1987,6 @@
     "message": "Выберите категорию из списка ниже, и периодически AdBlock будет заменять рекламу на HD-изображения и поднимать вам настроение.",
     "description": "The label text for the switch on the MyAdBlock Options page"
   },
-  "myadblock_enrollment_title": {
-    "message": "MyAdBlock установлен в этот браузер!",
-    "description": "The title of the MyAdBlock enrollment box."
-  },
-  "myadblock_enrollment_hide_forever": {
-    "message": "Не показывать снова",
-    "description": "The label for a checkbox that will hide the enrollment box forever."
-  },
-  "myadblock_enrollment_success": {
-    "message": "Воспользуйтесь волшебной ссылкой из подтверждающего письма, чтобы разблокировать MyAdBlock в других браузерах Chrome.",
-    "description": "MyAdBlock successfully licensed message."
-  },
-  "check_email": {
-    "message": "Проверьте почту.",
-    "description": "Prompt the user to check their email for a message from AdBlock"
-  },
-  "please_try_again": {
-    "message": "Попробуйте еще раз.",
-    "description": "Prompt the user to retry the last action."
-  },
-  "contact_support_if_errors_continue": {
-    "message": "Если вы видите эту ошибку уже не в первый раз, то обратитесь к нам: [[support]].",
-    "description": "Warn the user if they continue to see the same error they should contact AdBlock support."
-  },
-  "myadblock_enrollment_resend_success": {
-    "message": "Мы отправили волшебную ссылку на $email$.",
-    "description": "MyAdBlock license email successfully sent message.",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "alice@example.com"
-      }
-    }
-  },
-  "myadblock_enrollment_link_info": {
-    "message": "Если вы перейдете по ссылке, то вам будет проще настроить MyAdBlock в других браузерах Chrome.",
-    "description": "Explains what happens when clicking the magic link."
-  },
-  "myadblock_enrollment_resend_error": {
-    "message": "Ошибка отправки подтверждающего письма.",
-    "description": "MyAdBlock license email failed to send error message."
-  },
-  "myadblock_enrollment_resend_button": {
-    "message": "Отправить еще раз",
-    "description": "Text on the MyAdBlock enrollment resend email button"
-  },
   "myadblock_feedback_title": {
     "message": "Поделитесь впечатлениями!",
     "description": "Title for MyAdBlock feedback call to action."
@@ -2152,10 +2110,6 @@
   "require_restart_browser": {
     "message": "требуется перезапуск браузера",
     "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
-  },
-  "tabthemes": {
-    "message": "Темы",
-    "description": "A tab on the Options page"
   },
   "themes": {
     "message": "Темы",
@@ -2504,8 +2458,18 @@
     "message": "Запрос"
   },
   "devtools_request_url": {
-    "description": "sub title text for the request-column of the dev tools panel when the request is rewritten e.g. http://example.com/foo rewritten to http://example.com/bar",
-    "message": "<a0></a0> переписано на <a0></a0>"
+    "description": "A request URL in the AdBlock DevTools panel",
+    "message": "<a0>$original$</a0> заменен на <a1>$rewritten$</a1>",
+    "placeholders": {
+      "original": {
+        "content": "$1",
+        "example": "http://example.com/foo"
+      },
+      "rewritten": {
+        "content": "$2",
+        "example": "http://example.com/bar"
+      }
+    }
   },
   "devtools_type_title": {
     "description": "Type column header text",
@@ -2883,18 +2847,6 @@
     "message": "AdBlock Premium",
     "description": "Full name of the AdBlock upgrade."
   },
-  "premium_enrollment_title": {
-    "message": "AdBlock Premium теперь в вашем браузере!",
-    "description": "DO NOT TRANSLATE. The title of the AdBlock Premium enrollment box."
-  },
-  "premium_enrollment_success": {
-    "message": "Перейдите по волшебной ссылке в письме, которое мы вам отправили, и AdBlock Premium будет на всех ваших браузерах Chrome.",
-    "description": "DO NOT TRANSLATE. AdBlock Premium successfully licensed message."
-  },
-  "premium_enrollment_link_info": {
-    "message": "По ссылке вы сможете быстро добавить AdBlock Premium на все устройства, где есть Chrome.",
-    "description": "DO NOT TRANSLATE. Explains what happens when clicking the magic link."
-  },
   "premium_page_title": {
     "message": "AdBlock Premium: Интернет с комфортом.",
     "description": "The text of the header the AdBlock Premium Options page"
@@ -2966,5 +2918,85 @@
   "check_out_themes": {
     "message": "Что скажете об этих темах?",
     "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "notification_antiadblock_message": {
+    "message": "Этот сайт показывает пользователям AdBlock таргетированную рекламу. Скрывать такие объявления?"
+  },
+  "notification_antiadblock_title": {
+    "message": "Скрывать таргетированную рекламу?"
+  },
+  "overlay_notification_button_no": {
+    "message": "Нет"
+  },
+  "overlay_notification_button_yes": {
+    "message": "Да"
+  },
+  "filter_elemhideemulation_nodomain": {
+    "message": "Не указан активный домен для фильтра элементов"
+  },
+  "filter_invalid_csp": {
+    "message": "Неверная политика защиты контента"
+  },
+  "filter_invalid_domain": {
+    "message": "Домен указан неверно или не указан вообще"
+  },
+  "filter_invalid_regexp": {
+    "message": "Неверное регулярное выражение"
+  },
+  "filter_snippet_nodomain": {
+    "message": "Не указан активный домен для фильтра сниппетов"
+  },
+  "filter_unknown_option": {
+    "message": "Неизвестная настройка фильтра"
+  },
+  "unexpected_filter_list_header": {
+    "description": "Error message shown when the user attempts to add a custom filter that has the format of a header (e.g. \"[Adblock Plus 2.0]\") which are only allowed in filter lists",
+    "message": "Невозможно отфильтровать заголовки"
+  },
+  "filter_invalid": {
+    "message": "Недопустимый фильтр",
+    "description": "Generic error shown when the user tries to add an invalid filter rule to their custom filters"
+  },
+  "love_adblock": {
+    "message": "Вам нравится AdBlock?",
+    "description": "Text in a button that asks users to rate us."
+  },
+  "show_some_love": {
+    "message": "Сделайте нам приятное!",
+    "description": "Title of the tooltip of the rate us button CTA in the Options page."
+  },
+  "support_with_a_review": {
+    "message": "Поддержите нашу команду, оставьте отзыв!",
+    "description": "Text of the tooltip of the rate us button CTA in the Options page."
+  },
+  "leave_a_review": {
+    "message": "Оставьте отзыв!",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "rate_us": {
+    "message": "Оцените нас",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "youve_blocked_num_ads": {
+    "message": "$numBlocked$ объявл. заблокировано!",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review. The $numBlocked$ will be replaced with the number of ads the users has blocked, starting at 10,000.",
+    "placeholders": {
+      "numBlocked": {
+        "content": "$1",
+        "example": "10,000"
+      }
+    }
+  },
+  "enjoying_adblock": {
+    "message": "Вам нравится AdBlock?",
+    "description": "Text of a footer in the popup menu help flow asking users to leave us a review."
+  },
+  "back_help_flow": {
+    "message": "Вернуться на один шаг.",
+    "description": "Aria label for back button in help flow (in popup menu)"
+  },
+  "close_help_flow": {
+    "message": "Закрыть помощь и вернуться в меню.",
+    "description": "Aria label for close button in help flow (in popup menu)"
   }
 }

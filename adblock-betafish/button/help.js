@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global selectedOff, selected, BG, page, popupMenuHelpActionMap,
+/* global selectedOff, selected, pageInfo, popupMenuHelpActionMap, browser,
   localizePage, DOMPurify */
 
 let cleanButtonHTML;
@@ -16,7 +16,7 @@ let backKeydownHandler;
 
 const logHelpFlowResults = function (source) {
   logSent = true;
-  BG.recordGeneralMessage('help_flow_results', undefined, { hfd: `${segueBreadCrumb},${source}` });
+  browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'help_flow_results', additionalParams: { hfd: `${segueBreadCrumb},${source}` } });
 };
 
 $(window).on('unload', () => {
@@ -64,13 +64,11 @@ const transitionTo = function (segueToId, backIconClicked) {
       const $cleanCloneSegueHTML = $(cleanSegueHTML);
       $cleanCloneSegueHTML.find('.segue-text').attr('i18n', segue.content);
       selected($cleanCloneSegueHTML.find('.segue-box'), () => {
-        const paused = BG.adblockIsPaused();
-        const domainPaused = BG.adblockIsDomainPaused({ url: page.url.href, id: page.id });
-        if (segue.segueToIfPaused && (paused || domainPaused)) {
+        if (segue.segueToIfPaused && (pageInfo.paused || pageInfo.domainPaused)) {
           transitionTo(segue.segueToIfPaused);
           return;
         }
-        if (segue.segueToIfWhitelisted && BG.checkWhitelisted(page)) {
+        if (segue.segueToIfWhitelisted && pageInfo.whitelisted) {
           transitionTo(segue.segueToIfWhitelisted);
           return;
         }
@@ -88,14 +86,14 @@ const transitionTo = function (segueToId, backIconClicked) {
         const textSpan = $('<span tabindex="0" class="section-text"></span>');
         $cleanCloneSectionHTML.find('.section-box').append(textSpan);
         if (content.linkURL) {
-          const linkAnchor = $('<a href="#" target="_blank" tabindex="0">');
+          const linkAnchor = $('<a href="#" tabindex="0">');
           // create a random String to use an id for the i18n processing
           const randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
           const randNumber = Date.now() + Math.floor(Math.random() * 1000000);
           const i18nReplacementElId = randLetter + randNumber;
           linkAnchor.attr('id', i18nReplacementElId);
           selected(linkAnchor, () => {
-            BG.openTab(content.linkURL);
+            browser.runtime.sendMessage({ command: 'openTab', urlToOpen: content.linkURL });
             logHelpFlowResults('link');
             reset();
           });

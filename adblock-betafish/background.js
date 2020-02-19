@@ -142,6 +142,13 @@ const countCache = (function countCache() {
 
 countCache.init();
 
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'getCustomFilterCount' || !message.host) {
+    return;
+  }
+  sendResponse({ response: countCache.getCustomFilterCount(message.host) });
+});
+
 // Add a new custom filter entry.
 // Inputs: filter:string line of text to add to custom filters.
 // Returns: null if succesfull, otherwise an exception
@@ -174,12 +181,17 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // Inputs: pageUrl:string url of the page
 // Returns: null if successful, otherwise an exception
 const createPageWhitelistFilter = function (pageUrl) {
-  const url = pageUrl.replace(/#.*$/, ''); // Remove anchors
-  const parts = url.match(/^([^?]+)(\??)/); // Detect querystring
-  const hasQuerystring = parts[2];
-  const filter = `@@|${parts[1]}${hasQuerystring ? '?' : '|'}$document`;
+  const theURL = new URL(pageUrl);
+  const host = theURL.hostname.replace(/^www\./, '');
+  const filter = `@@||${host}${theURL.pathname}${theURL.search}^$document`;
   return addCustomFilter(filter);
 };
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'createPageWhitelistFilter' || !message.url) {
+    return;
+  }
+  sendResponse({ response: createPageWhitelistFilter(message.url) });
+});
 
 // UNWHITELISTING
 
@@ -243,6 +255,12 @@ const tryToUnwhitelist = function (pageUrl) {
   }
   return false;
 };
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'tryToUnwhitelist' || !message.url) {
+    return;
+  }
+  sendResponse({ unwhitelisted: tryToUnwhitelist(message.url) });
+});
 
 // Removes a custom filter entry.
 // Inputs: host:domain of the custom filters to be reset.
@@ -268,7 +286,9 @@ const removeCustomFilter = function (host) {
 
 // Entry point for customize.js, used to update custom filter count cache.
 const updateCustomFilterCountMap = function (newCountMap) {
-  countCache.updateCustomFilterCountMap(newCountMap);
+  // Firefox passes weak references to objects, so we need a local copy
+  const localCountMap = JSON.parse(JSON.stringify(newCountMap));
+  countCache.updateCustomFilterCountMap(localCountMap);
 };
 
 const removeCustomFilterForHost = function (host) {
@@ -278,17 +298,33 @@ const removeCustomFilterForHost = function (host) {
   }
 };
 
-const confirmRemovalOfCustomFiltersOnHost = function (host, activeTab) {
+// Currently, Firefox doesn't allow the background page to use alert() or confirm(),
+// so some JavaScript is injected into the active tab, which does the confirmation for us.
+// If the user confirms the removal of the entries, then they are removed, and the page reloaded.
+const confirmRemovalOfCustomFiltersOnHost = function (host, activeTabId) {
   const customFilterCount = countCache.getCustomFilterCount(host);
   const confirmationText = translate('confirm_undo_custom_filters', [customFilterCount, host]);
-  // eslint-disable-next-line no-alert
-  if (!window.confirm(confirmationText)) {
+  const messageListenerFN = function (request) {
+    browser.runtime.onMessage.removeListener(messageListenerFN);
+    if (request === `remove_custom_filters_on_host${host}:true`) {
+      removeCustomFilterForHost(host);
+      browser.tabs.reload(activeTabId);
+    }
+  };
+
+  browser.runtime.onMessage.addListener(messageListenerFN);
+  /* eslint-disable prefer-template */
+  const codeToExecute = 'var host = "' + host + '"; var confirmResponse = confirm("' + confirmationText + '"); browser.runtime.sendMessage("remove_custom_filters_on_host" + host + ":" + confirmResponse); ';
+  const details = { allFrames: false, code: codeToExecute };
+  browser.tabs.executeScript(activeTabId, details);
+};
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'confirmRemovalOfCustomFiltersOnHost' || !message.host || !message.activeTabId) {
     return;
   }
-
-  removeCustomFilterForHost(host);
-  browser.tabs.reload(activeTab.id);
-};
+  confirmRemovalOfCustomFiltersOnHost(message.host, message.activeTabId);
+  sendResponse({});
+});
 
 // Reload already opened tab
 // Input:
@@ -365,95 +401,17 @@ const pageIsUnblockable = function (url) {
   return (scheme !== 'http:' && scheme !== 'https:' && scheme !== 'feed:');
 };
 
-// Get interesting information about the current tab.
-// Inputs:
-// callback: function(info).
-// info object passed to callback: {
-// tab: Tab object
-// whitelisted: bool - whether the current tab's URL is whitelisted.
-// disabled_site: bool - true if the url is e.g. about:blank or the
-// Extension Gallery, where extensions don't run.
-// total_blocked: int - # of ads blocked since install
-// tab_blocked: int - # of ads blocked on this tab
-// display_stats: bool - whether block counts are displayed on button
-// display_menu_stats: bool - whether block counts are displayed on the popup
-// menu
-// }
-// Returns: null (asynchronous)
-const getCurrentTabInfo = function (callback, secondTime) {
-  try {
-    browser.tabs.query({
-      active: true,
-      lastFocusedWindow: true,
-    }).then((tabs) => {
-      try {
-        if (tabs.length === 0) {
-          return; // For example: only the background devtools or a popup are opened
-        }
-        const tab = tabs[0];
-
-        if (tab && !tab.url) {
-          // Issue 6877: tab URL is not set directly after you opened a window
-          // using window.open()
-          if (!secondTime) {
-            window.setTimeout(() => {
-              getCurrentTabInfo(callback, true);
-            }, 250);
-          }
-
-          return;
-        }
-        try {
-          const page = new ext.Page(tab);
-          const disabledSite = pageIsUnblockable(page.url.href);
-
-          const result = {
-            page,
-            tab,
-            disabledSite,
-            settings: getSettings(),
-          };
-
-          if (!disabledSite) {
-            result.whitelisted = checkWhitelisted(page);
-          }
-          if (
-            getSettings().youtube_channel_whitelist
-            && parseUri(tab.url).hostname === 'www.youtube.com'
-          ) {
-            result.youTubeChannelName = ytChannelNamePages.get(page.id);
-            // handle the odd occurence of when the  YT Channel Name
-            // isn't available in the ytChannelNamePages map
-            // obtain the channel name from the URL
-            // for instance, when the forward / back button is clicked
-            if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
-              result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
-            }
-          }
-          callback(result);
-        } catch (err) {
-          callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
-        }
-      } catch (err) {
-        callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
-      }
-    });
-  } catch (err) {
-    callback({ errorStr: err.toString(), stack: err.stack, message: err.message });
-  }
-};
-
 // Returns true if the page is whitelisted.
 // Called from a content script
-const pageIsWhitelisted = function (sender) {
-  const whitelisted = checkWhitelisted(sender.page);
+const pageIsWhitelisted = function (page) {
+  const whitelisted = checkWhitelisted(page);
   return (whitelisted !== undefined && whitelisted !== null);
 };
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'pageIsWhitelisted') {
+  if (message.command !== 'pageIsWhitelisted' || !message.page) {
     return;
   }
-  sendResponse({ response: pageIsWhitelisted(sender) });
+  sendResponse(pageIsWhitelisted(JSON.parse(message.page)));
 });
 
 const pausedKey = 'paused';
@@ -487,6 +445,12 @@ const adblockIsPaused = function (newValue) {
   sessionStorageSet(pausedKey, newValue);
   return undefined;
 };
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'adblockIsPaused') {
+    return;
+  }
+  sendResponse(adblockIsPaused(message.newValue));
+});
 
 const domainPausedKey = 'domainPaused';
 
@@ -600,6 +564,12 @@ const adblockIsDomainPaused = function (activeTab, newValue) {
   saveDomainPauses(storedDomainPauses);
   return undefined;
 };
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'adblockIsDomainPaused') {
+    return;
+  }
+  sendResponse(adblockIsDomainPaused(message.activeTab, message.newValue));
+});
 
 // If AdBlock was paused on shutdown (adblock_is_paused is true), then
 // unpause / remove the white-list all entry at startup.
@@ -644,6 +614,113 @@ browser.commands.onCommand.addListener((command) => {
     adblockIsPaused(!adblockIsPaused());
     recordGeneralMessage('pause_shortcut_used');
   }
+});
+
+// Get interesting information about the current tab.
+// Inputs:
+// secondTime: bool - whether this is a recursive call
+// info object passed to resolve: {
+// page: Page object
+// tab: Tab object
+// whitelisted: bool - whether the current tab's URL is whitelisted.
+// disabled_site: bool - true if the url is e.g. about:blank or the
+// Extension Gallery, where extensions don't run.
+// settings: Settings object
+// paused: bool - whether AdBlock is paused
+// domainPaused: bool - whether the current tab's URL is paused
+// blockCountPage: int - number of ads blocked on the current page
+// blockCountTotal: int - total number of ads blocked since install
+// showStatsInPopup: bool - whether to show stats in popup menu
+// customFilterCount: int - number of custom rules for the current tab's URL
+// showMABEnrollment: bool - whether to show MAB enrollment
+// popupMenuThemeCTA: string - name of current popup menu CTA theme
+// lastGetStatusCode: int - status code for last GET request
+// lastGetErrorResponse: error object - error response for last GET request
+// lastPostStatusCode: int - status code for last POST request
+// }
+// Returns: Promise
+const getCurrentTabInfo = function (secondTime) {
+  return new Promise((resolve) => {
+    try {
+      browser.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+      }).then((tabs) => {
+        try {
+          if (tabs.length === 0) {
+            return resolve(); // For example: only the background devtools or a popup are opened
+          }
+          const tab = tabs[0];
+
+          if (tab && !tab.url) {
+            // Issue 6877: tab URL is not set directly after you opened a window
+            // using window.open()
+            if (!secondTime) {
+              window.setTimeout(() => {
+                getCurrentTabInfo(true);
+              }, 250);
+            }
+
+            return resolve();
+          }
+          try {
+            const page = new ext.Page(tab);
+            const disabledSite = pageIsUnblockable(page.url.href);
+            const customFilterCheckUrl = info.disabledSite ? undefined : page.url.hostname;
+
+            const result = {
+              disabledSite,
+              url: page.url,
+              id: page.id,
+              settings: getSettings(),
+              paused: adblockIsPaused(),
+              domainPaused: adblockIsDomainPaused({ url: page.url.href, id: page.id }),
+              blockCountPage: getBlockedPerPage(tab),
+              blockCountTotal: Prefs.blocked_total,
+              showStatsInPopup: Prefs.show_statsinpopup,
+              customFilterCount: countCache.getCustomFilterCount(customFilterCheckUrl),
+              showMABEnrollment: License.shouldShowMyAdBlockEnrollment(),
+              popupMenuThemeCTA: License.getCurrentPopupMenuThemeCTA(),
+              lastGetStatusCode: SyncService.getLastGetStatusCode(),
+              lastGetErrorResponse: SyncService.getLastGetErrorResponse(),
+              lastPostStatusCode: SyncService.getLastPostStatusCode(),
+            };
+
+            if (!disabledSite) {
+              result.whitelisted = checkWhitelisted(page);
+            }
+            if (
+              getSettings().youtube_channel_whitelist
+              && parseUri(tab.url).hostname === 'www.youtube.com'
+            ) {
+              result.youTubeChannelName = ytChannelNamePages.get(page.id);
+              // handle the odd occurence of when the  YT Channel Name
+              // isn't available in the ytChannelNamePages map
+              // obtain the channel name from the URL
+              // for instance, when the forward / back button is clicked
+              if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
+                result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
+              }
+            }
+            return resolve(result);
+          } catch (err) {
+            return resolve({ errorStr: err.toString(), stack: err.stack, message: err.message });
+          }
+        } catch (err) {
+          return resolve({ errorStr: err.toString(), stack: err.stack, message: err.message });
+        }
+      });
+    } catch (err) {
+      return resolve({ errorStr: err.toString(), stack: err.stack, message: err.message });
+    }
+    return undefined;
+  });
+};
+browser.runtime.onMessage.addListener((message) => {
+  if (message.command !== 'getCurrentTabInfo') {
+    return undefined;
+  }
+  return getCurrentTabInfo().then(results => results);
 });
 
 // Return the contents of a local file.
@@ -703,6 +780,12 @@ const createWhitelistFilterForYoutubeChannel = function (url) {
   }
   return undefined;
 };
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'createWhitelistFilterForYoutubeChannel' || !message.url) {
+    return;
+  }
+  sendResponse(createWhitelistFilterForYoutubeChannel(message.url));
+});
 
 // YouTube Channel Whitelist
 const runChannelWhitelist = function (tabUrl, tabId) {
@@ -1046,6 +1129,13 @@ function updateFilterLists() {
     }
   }
 }
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'updateFilterLists') {
+    return;
+  }
+  updateFilterLists();
+  sendResponse({});
+});
 
 // Checks if the filter lists are currently in the process of
 // updating and if there were errors the last time they were
@@ -1062,6 +1152,12 @@ function checkUpdateProgress() {
   }
   return { inProgress, filterError };
 }
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'checkUpdateProgress') {
+    return;
+  }
+  sendResponse(checkUpdateProgress());
+});
 
 STATS.untilLoaded(() => {
   STATS.startPinging();
@@ -1138,6 +1234,8 @@ function isAcceptableAdsPrivacy(filterList) {
   return filterList.id === 'acceptable_ads_privacy';
 }
 
+const rateUsCtaKey = 'rate-us-cta-clicked';
+
 // Attach methods to window
 Object.assign(window, {
   adblockIsPaused,
@@ -1175,4 +1273,5 @@ Object.assign(window, {
   isLanguageSpecific,
   isAcceptableAds,
   isAcceptableAdsPrivacy,
+  rateUsCtaKey,
 });

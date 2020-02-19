@@ -206,6 +206,12 @@ a .link-text-color:hover {
 .btn.grey:hover {
   background-color: var(--options-button-disabled-bg-hover);
 }
+.btn.secondary {
+  color: var(--small-text-color);
+  border-radius: 3px;
+  border: 0.5px solid var(--main-text-color);
+  background-color: transparent;
+}
 .social .adblock-icons {
   padding: 0 5px;
   color: var(--header-social-icons);
@@ -329,6 +335,7 @@ a .link-text-color:hover {
 }
 .remove_filterList {
   padding-left: 10px;
+  z-index: 1;
 }
 #language-select-box {
   position: relative;
@@ -968,11 +975,58 @@ section .theme-section-row {
   width: 100%;
   padding: 15px 0;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 #sidebar-content-bottom .top-line {
   padding: 15px 0;
   min-width: 50%;
+}
+#rate-us-cta {
+  margin: 15px 0;
+}
+#rate-us-tooltip,
+section#rate-us-cta > section#rate-us-tooltip:hover {
+  display: none;
+  position: absolute;
+  bottom: 187px;
+  color: var(--main-text-color);
+  background: var(--background-color);
+  width: 140px;
+  min-height: 126px;
+  height: fit-content;
+  padding: 8px;
+  line-height: normal;
+  border-radius: 3px 3px 0 0;
+  flex-direction: column;
+  justify-content: space-around;
+}
+#rate-us-tooltip > div:nth-child(1) {
+  font-weight: bold;
+}
+#rate-us-tooltip > div {
+  padding: 8px;
+}
+#rate-us-cta:hover > #rate-us-tooltip {
+  display: flex;
+}
+.btn#rate-us {
+  margin: 0;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 14px;
+  width: 140px;
+  min-height: 32px;
+  line-height: normal;
+}
+.btn#rate-us:hover {
+  color: white;
+  font-weight: normal;
+  border-radius: 0 0 3px 3px;
+  border: 0.5px solid var(--options-button-bg-hover);
+  background-color: var(--options-button-bg-hover);
+}
+.btn#rate-us:hover > i {
+  color: white;
 }
 
 /* BUG REPORT */
@@ -1071,7 +1125,8 @@ input:checked + .slider::before {
   #sidebar-content-bottom #sidebar-social-links i {
     margin-bottom: 15px;
   }
-  #sidebar-content-bottom .top-line {
+  #sidebar-content-bottom .top-line,
+  #sidebar-content-bottom section#rate-us-cta {
     display: none;
   }
   #sidebar {
@@ -1083,7 +1138,8 @@ input:checked + .slider::before {
 }
 
 @media screen and (max-height: 530px) {
-  #sidebar-content-bottom .top-line {
+  #sidebar-content-bottom .top-line,
+  #sidebar-content-bottom section#rate-us-cta {
     display: none;
   }
   @media screen and (max-height: 435px) {

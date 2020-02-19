@@ -29,9 +29,13 @@ const STATS = (function exportStats() {
   let flavor = 'E'; // Chrome
   match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d.]+)/);
   const edgeMatch = navigator.userAgent.match(/(?:Edg|Version)\/([\d.]+)/);
-  if (edgeMatch) { // null in Chrome browsers
+  const firefoxMatch = navigator.userAgent.match(/(?:Firefox)\/([\d.]+)/);
+  if (edgeMatch) {
     flavor = 'CM'; // MS - Chromium Edge
     match = edgeMatch;
+  } else if (firefoxMatch) {
+    flavor = 'F'; // Firefox
+    match = firefoxMatch;
   }
   const browserVersion = (match || [])[1] || 'Unknown';
 
@@ -161,8 +165,8 @@ const STATS = (function exportStats() {
         twh: settingsObj.twitch_hiding ? '1' : '0',
       };
 
-      // only on Chrome or Edge
-      if ((flavor === 'E' || flavor === 'CM') && Prefs.blocked_total) {
+      // only on Chrome, Edge, or Firefox
+      if ((flavor === 'E' || flavor === 'CM' || flavor === 'F') && Prefs.blocked_total) {
         data.b = Prefs.blocked_total;
       }
       if (browser.runtime.id) {
@@ -187,7 +191,15 @@ const STATS = (function exportStats() {
       data.dc = dataCorrupt ? '1' : '0';
       SURVEY.types((res) => {
         data.st = res;
-        callbackFN(data);
+        if (browser.permissions && browser.permissions.getAll) {
+          browser.permissions.getAll((allPermissions) => {
+            data.dhp = allPermissions.origins && allPermissions.origins.includes('<all_urls>') ? '1' : '0';
+            callbackFN(data);
+          });
+        } else {
+          data.dhp = '1';
+          callbackFN(data);
+        }
       });
     });
   };
@@ -370,6 +382,7 @@ const STATS = (function exportStats() {
     browser: ({
       E: 'Chrome',
       CM: 'Edge',
+      F: 'Firefox',
     })[flavor],
     browserVersion,
     os,
