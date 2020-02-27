@@ -186,6 +186,7 @@ const License = (function getLicense() {
   };
 
   return {
+    statsInIconKey,
     licenseStorageKey,
     userClosedSyncCTAKey,
     userSawSyncCTAKey,

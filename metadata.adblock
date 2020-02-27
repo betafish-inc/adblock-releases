@@ -1,5 +1,5 @@
 [general]
-version = 4.6.0
+version = 4.7.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -15,7 +15,7 @@ browserAction =
   icons/ab-38.png
   icons/ab-40.png
   adblock-button-popup.html
-backgroundScripts += pubnub-min-v4.23.3.js
+backgroundScripts += pubnub.min.js
 
 [manifest]
 permissions =
@@ -35,25 +35,25 @@ web_accessible_resources =
   icons/icon24.png
   icons/ab-19.png
   icons/dark_theme/logo.svg
-  localLib/jquery/jquery-1.10.2.min.js.local
-  localLib/jquery/jquery-1.11.0.min.js.local
-  localLib/jquery/jquery-1.11.1.min.js.local
-  localLib/jquery/jquery-1.11.2.min.js.local
-  localLib/jquery/jquery-1.11.3.min.js.local
-  localLib/jquery/jquery-1.12.4.min.js.local
-  localLib/jquery/jquery-1.3.2.min.js.local
-  localLib/jquery/jquery-1.4.2.min.js.local
-  localLib/jquery/jquery-1.7.1.min.js.local
-  localLib/jquery/jquery-1.7.2.min.js.local
-  localLib/jquery/jquery-1.8.2.min.js.local
-  localLib/jquery/jquery-1.8.3.min.js.local
-  localLib/jquery/jquery-1.9.1.min.js.local
-  localLib/jquery/jquery-2.1.1.min.js.local
-  localLib/jquery/jquery-2.1.3.min.js.local
-  localLib/jquery/jquery-2.1.4.min.js.local
-  localLib/jquery/jquery-2.2.4.min.js.local
-  localLib/jquery/jquery-3.1.1.min.js.local
-  localLib/jquery/jquery-3.2.1.min.js.local
+  localLib/jquery/jquery-1.10.2.min.js
+  localLib/jquery/jquery-1.11.0.min.js
+  localLib/jquery/jquery-1.11.1.min.js
+  localLib/jquery/jquery-1.11.2.min.js
+  localLib/jquery/jquery-1.11.3.min.js
+  localLib/jquery/jquery-1.12.4.min.js
+  localLib/jquery/jquery-1.3.2.min.js
+  localLib/jquery/jquery-1.4.2.min.js
+  localLib/jquery/jquery-1.7.1.min.js
+  localLib/jquery/jquery-1.7.2.min.js
+  localLib/jquery/jquery-1.8.2.min.js
+  localLib/jquery/jquery-1.8.3.min.js
+  localLib/jquery/jquery-1.9.1.min.js
+  localLib/jquery/jquery-2.1.1.min.js
+  localLib/jquery/jquery-2.1.3.min.js
+  localLib/jquery/jquery-2.1.4.min.js
+  localLib/jquery/jquery-2.2.4.min.js
+  localLib/jquery/jquery-3.1.1.min.js
+  localLib/jquery/jquery-3.2.1.min.js
   fonts/lato-ext-italic.woff
   fonts/lato-italic.woff
   fonts/lato-ext-bolditalic.woff
@@ -81,7 +81,7 @@ LICENSE = adblock-betafish/LICENSE
 translators.json = adblock-betafish/translators.json
 jquery-3.4.1.min.js = adblock-betafish/jquery/jquery-3.4.1.min.js
 purify.min.js = adblock-betafish/lib/purify.min.js
-pubnub-min-v4.23.3.js = adblock-betafish/pubnub/pubnub-min-v4.23.3.js
+pubnub.min.js = adblock-betafish/pubnub/pubnub.min.js
 adblock-errorreporting.js = adblock-betafish/errorreporting.js
 adblock.css = adblock-betafish/adblock.css
 adblock-functions.js = adblock-betafish/functions.js
@@ -230,25 +230,25 @@ icons/adblock-picreplacement-images-dog.png = adblock-betafish/picreplacement/im
 icons/adblock-picreplacement-images-dog-grayscale.png = adblock-betafish/picreplacement/images/dog_grayscale.png
 icons/adblock-picreplacement-images-landscape.png = adblock-betafish/picreplacement/images/landscape.png
 icons/adblock-picreplacement-images-landscape-grayscale.png = adblock-betafish/picreplacement/images/landscape_grayscale.png
-localLib/jquery/jquery-1.10.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.10.2.min.js.local
-localLib/jquery/jquery-1.11.0.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.0.min.js.local
-localLib/jquery/jquery-1.11.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.1.min.js.local
-localLib/jquery/jquery-1.11.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.2.min.js.local
-localLib/jquery/jquery-1.11.3.min.js.local = adblock-betafish/localLib/jquery/jquery-1.11.3.min.js.local
-localLib/jquery/jquery-1.12.4.min.js.local = adblock-betafish/localLib/jquery/jquery-1.12.4.min.js.local
-localLib/jquery/jquery-1.3.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.3.2.min.js.local
-localLib/jquery/jquery-1.4.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.4.2.min.js.local
-localLib/jquery/jquery-1.7.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.7.1.min.js.local
-localLib/jquery/jquery-1.7.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.7.2.min.js.local
-localLib/jquery/jquery-1.8.2.min.js.local = adblock-betafish/localLib/jquery/jquery-1.8.2.min.js.local
-localLib/jquery/jquery-1.8.3.min.js.local = adblock-betafish/localLib/jquery/jquery-1.8.3.min.js.local
-localLib/jquery/jquery-1.9.1.min.js.local = adblock-betafish/localLib/jquery/jquery-1.9.1.min.js.local
-localLib/jquery/jquery-2.1.1.min.js.local = adblock-betafish/localLib/jquery/jquery-2.1.1.min.js.local
-localLib/jquery/jquery-2.1.3.min.js.local = adblock-betafish/localLib/jquery/jquery-2.1.3.min.js.local
-localLib/jquery/jquery-2.1.4.min.js.local = adblock-betafish/localLib/jquery/jquery-2.1.4.min.js.local
-localLib/jquery/jquery-2.2.4.min.js.local = adblock-betafish/localLib/jquery/jquery-2.2.4.min.js.local
-localLib/jquery/jquery-3.1.1.min.js.local = adblock-betafish/localLib/jquery/jquery-3.1.1.min.js.local
-localLib/jquery/jquery-3.2.1.min.js.local = adblock-betafish/localLib/jquery/jquery-3.2.1.min.js.local
+localLib/jquery/jquery-1.10.2.min.js = adblock-betafish/localLib/jquery/jquery-1.10.2.min.js
+localLib/jquery/jquery-1.11.0.min.js = adblock-betafish/localLib/jquery/jquery-1.11.0.min.js
+localLib/jquery/jquery-1.11.1.min.js = adblock-betafish/localLib/jquery/jquery-1.11.1.min.js
+localLib/jquery/jquery-1.11.2.min.js = adblock-betafish/localLib/jquery/jquery-1.11.2.min.js
+localLib/jquery/jquery-1.11.3.min.js = adblock-betafish/localLib/jquery/jquery-1.11.3.min.js
+localLib/jquery/jquery-1.12.4.min.js = adblock-betafish/localLib/jquery/jquery-1.12.4.min.js
+localLib/jquery/jquery-1.3.2.min.js = adblock-betafish/localLib/jquery/jquery-1.3.2.min.js
+localLib/jquery/jquery-1.4.2.min.js = adblock-betafish/localLib/jquery/jquery-1.4.2.min.js
+localLib/jquery/jquery-1.7.1.min.js = adblock-betafish/localLib/jquery/jquery-1.7.1.min.js
+localLib/jquery/jquery-1.7.2.min.js = adblock-betafish/localLib/jquery/jquery-1.7.2.min.js
+localLib/jquery/jquery-1.8.2.min.js = adblock-betafish/localLib/jquery/jquery-1.8.2.min.js
+localLib/jquery/jquery-1.8.3.min.js = adblock-betafish/localLib/jquery/jquery-1.8.3.min.js
+localLib/jquery/jquery-1.9.1.min.js = adblock-betafish/localLib/jquery/jquery-1.9.1.min.js
+localLib/jquery/jquery-2.1.1.min.js = adblock-betafish/localLib/jquery/jquery-2.1.1.min.js
+localLib/jquery/jquery-2.1.3.min.js = adblock-betafish/localLib/jquery/jquery-2.1.3.min.js
+localLib/jquery/jquery-2.1.4.min.js = adblock-betafish/localLib/jquery/jquery-2.1.4.min.js
+localLib/jquery/jquery-2.2.4.min.js = adblock-betafish/localLib/jquery/jquery-2.2.4.min.js
+localLib/jquery/jquery-3.1.1.min.js = adblock-betafish/localLib/jquery/jquery-3.1.1.min.js
+localLib/jquery/jquery-3.2.1.min.js = adblock-betafish/localLib/jquery/jquery-3.2.1.min.js
 fonts/lato-ext-italic.woff = adblock-betafish/fonts/lato-ext-italic.woff
 fonts/lato-italic.woff = adblock-betafish/fonts/lato-italic.woff
 fonts/lato-ext-bolditalic.woff = adblock-betafish/fonts/lato-ext-bolditalic.woff
@@ -307,6 +307,7 @@ lib/adblockplus.js +=
   ../adblock-betafish/picreplacement/sync-service.js
   ../adblock-betafish/getselectors.js
   ../adblock-betafish/data_migration.js
+  ../adblock-betafish/twitchSettings.js
 lib/adblockplus.js -= lib/filterComposer.js
   lib/subscriptionInit.js
   lib/uninstall.js

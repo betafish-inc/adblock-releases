@@ -275,6 +275,7 @@
         storeMigrationLogs('Migration started.');
         Prefs.untilLoaded.then(() => {
           Prefs.suppress_first_run_page = true;
+          Prefs.subscriptions_addedanticv = true;
           initMigration(currentData);
         });
       } catch (error) {

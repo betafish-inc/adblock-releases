@@ -4,7 +4,7 @@
 /* global browser, require, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
   blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
-  storageGet, parseFilter */
+  storageGet, parseFilter, twitchSettings */
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
@@ -1057,6 +1057,9 @@ const getDebugInfo = function (callback) {
   response.otherInfo.isAdblockPaused = adblockIsPaused();
   response.otherInfo.licenseState = License.get().status;
   response.otherInfo.licenseVersion = License.get().lv;
+  if (settings.twitch_hiding) {
+    response.otherInfo.twitchSettings = twitchSettings;
+  }
 
   // Get total pings
   browser.storage.local.get('total_pings').then((storageResponse) => {

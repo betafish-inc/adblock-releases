@@ -136,6 +136,14 @@ const initialize = function init() {
       }
     }
 
+    // if the user enables Twitch hiding, update the Twitch
+    // settings file
+    if (name === 'twitch_hiding') {
+      if (isEnabled) {
+        backgroundPage.getTwitchSettingsFile();
+      }
+    }
+
     optionalSettings = backgroundPage.getSettings();
   });
 };

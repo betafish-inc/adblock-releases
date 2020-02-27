@@ -252,42 +252,36 @@ const runBandaids = function () {
         adMinTime: 15000,
       };
 
-      const tmuteSelectors = {
-        player: 'video-player__container', // Player class
-        playerVideo: '.video-player__container video', // Player video selector
-        playerAd: '.video-player__container iframe', // Player ad selector
-        muteButton: "button[data-a-target='player-mute-unmute-button']", // (un)mute button selector
-        adNotice: 'tw-absolute tw-c-background-overlay tw-c-text-overlay tw-inline-block tw-left-0 tw-pd-1 tw-top-0', // Ad notice class
-        overlay: 'video-player__overlay', // Player overlay class
-      };
-
       const unmuteLabels = ['Unmute (m)', 'Stummschalten aufheben (m)', 'Activar sonido (m)', "Réactiver l'audio (M)", 'Attiva audio (m)', '取消静音（m）', '取消靜音 (m)', 'ミュート解除（m）', 'Dempen opheffen (m)', 'Tirar do mudo (m)', 'Включить звук (m)', 'Slå på ljudet (m)'];
       let currentPlayer;
       let playerObserver;
       let maxTimeTimer;
       let titleObserver;
+      let tmuteSelectors;
 
       // Toggle mute/hide status of player
       function mutePlayer() {
-        const muteButton = document.querySelectorAll(tmuteSelectors.muteButton);
-        const playerVideo = document.querySelectorAll(tmuteSelectors.playerVideo);
-        const playerAd = document.querySelectorAll(tmuteSelectors.playerAd);
-        if (muteButton.length >= 1) {
+        const muteButton = document.querySelector(tmuteSelectors.muteButton);
+        const playerVideo = document.querySelector(tmuteSelectors.playerVideo);
+        const playerAd = document.querySelector(tmuteSelectors.playerAd);
+        if (muteButton) {
           // if the player is muted before the ad started (by the user), don't mute/unmute
           if (tmuteVars.alreadyMuted === false) {
-            muteButton[0].click();
+            muteButton.click();
           }
           tmuteVars.playerMuted = !tmuteVars.playerMuted;
-          playerVideo[0].style.visibility = (tmuteVars.playerMuted === true) ? 'hidden' : 'visible';
-          playerAd[0].style.visibility = (tmuteVars.playerMuted === true) ? 'hidden' : 'visible';
+          playerVideo.style.visibility = (tmuteVars.playerMuted === true) ? 'hidden' : 'visible';
+          playerAd.style.visibility = (tmuteVars.playerMuted === true) ? 'hidden' : 'visible';
           return true;
         }
         return false;
       }
 
       function maxTimeElapsed() {
-        const advert = document.getElementsByClassName(tmuteSelectors.adNotice);
-        advert[0].parentNode.removeChild(advert[0]);
+        const advert = document.querySelector(tmuteSelectors.adNotice);
+        if (advert && advert.parentNode) {
+          advert.parentNode.removeChild(advert);
+        }
         mutePlayer();
       }
 
@@ -296,15 +290,15 @@ const runBandaids = function () {
       }
 
       function checkAd() {
-        const advert = document.getElementsByClassName(tmuteSelectors.adNotice);
-        if (advert.length >= 1 && tmuteVars.playerMuted === false) {
+        const advert = document.querySelector(tmuteSelectors.adNotice);
+        if (advert && tmuteVars.playerMuted === false) {
           stopPlayerObserver();
           clearTimeout(maxTimeTimer);
           // eslint-disable-next-line no-use-before-define
           muteAndObservePlayer();
           return false;
         }
-        if (advert.length === 0 && tmuteVars.playerMuted === true) {
+        if (!advert && tmuteVars.playerMuted === true) {
           clearTimeout(maxTimeTimer);
           mutePlayer();
         }
@@ -312,7 +306,7 @@ const runBandaids = function () {
       }
 
       function startPlayerObserver() {
-        const overlayNode = document.getElementsByClassName(tmuteSelectors.overlay)[0];
+        const overlayNode = document.querySelector(tmuteSelectors.overlay);
         const options = { childList: true };
 
         if (playerObserver === undefined) {
@@ -334,7 +328,7 @@ const runBandaids = function () {
 
       function checkPlayer(retry = 0) {
         if (!currentPlayer) {
-          currentPlayer = document.getElementsByClassName(tmuteSelectors.player).length >= 1;
+          currentPlayer = Boolean(document.querySelector(tmuteSelectors.player));
 
           if (!currentPlayer) {
             if (retry === 0) {
@@ -344,19 +338,19 @@ const runBandaids = function () {
             }
             return;
           }
-        } else if (document.getElementsByClassName(tmuteSelectors.player).length === 0) {
+        } else if (!document.querySelector(tmuteSelectors.player)) {
           return;
         }
 
         // Check if player is already muted
-        const muteButton = document.querySelectorAll(tmuteSelectors.muteButton)[0];
+        const muteButton = document.querySelector(tmuteSelectors.muteButton);
         tmuteVars.alreadyMuted = muteButton && unmuteLabels.includes(muteButton.getAttribute('aria-label'));
         if (tmuteVars.playerMuted === true) {
           tmuteVars.alreadyMuted = false;
         }
 
-        const advert = document.getElementsByClassName(tmuteSelectors.adNotice);
-        if (advert.length >= 1 && tmuteVars.playerMuted === false) {
+        const advert = document.querySelector(tmuteSelectors.adNotice);
+        if (advert && tmuteVars.playerMuted === false) {
           muteAndObservePlayer();
         } else {
           startPlayerObserver();
@@ -364,7 +358,7 @@ const runBandaids = function () {
       }
 
       function startTitleObserver() {
-        const titleNode = document.querySelectorAll('title')[0];
+        const titleNode = document.querySelector('title');
         const options = { childList: true };
 
         if (titleObserver === undefined) {
@@ -373,8 +367,9 @@ const runBandaids = function () {
         titleObserver.observe(titleNode, options);
       }
 
-      browser.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
-        if (settings.twitch_hiding) {
+      browser.runtime.sendMessage({ command: 'getTwitchSettings' }).then((settings) => {
+        if (settings.twitchEnabled) {
+          tmuteSelectors = settings.twitchSettings;
           checkPlayer();
           startTitleObserver();
         }
