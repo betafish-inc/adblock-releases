@@ -22,7 +22,9 @@
   };
 
   const reloadExtension = () => {
-    browser.runtime.reload();
+    setTimeout(() => {
+      browser.runtime.reload();
+    }, 60000); // a one minute delay to allow downloading & saving
   };
 
   const migrateLegacyFilterList = (id, firefoxFilterList) => {
@@ -48,10 +50,14 @@
       url = filterListId.slice(4);
       subscription = Subscription.fromURL(url);
     }
-    filterStorage.addSubscription(subscription);
-    if (subscription instanceof DownloadableSubscription && !subscription.lastDownload) {
-      synchronizer.execute(subscription);
-    }
+    let timeout = 1000;
+    timeout *= (filterStorage.getSubscriptionCount() || 1);
+    setTimeout(() => {
+      filterStorage.addSubscription(subscription);
+      if (subscription instanceof DownloadableSubscription && !subscription.lastDownload) {
+        synchronizer.execute(subscription);
+      }
+    }, timeout);
   };
 
   const migrateLegacyCustomFilters = (firefoxCustomFilters) => {
