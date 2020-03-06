@@ -3,7 +3,7 @@
 The following document will provide some information regarding the technical implementation of the ‘sync’ feature within AdBlock for Chrome (next gen repo).
 
 Introduction
-The Sync feature should allow a user to synchronize their AdBlock settings, subscriptions, custom filters, image replacement channels and ABP preferences between multiple devices.  In other words, any setting a user can change on the AdBlock Options page should be sync'd.
+The Sync feature allows a user to synchronize their AdBlock settings, subscriptions, custom filters, image replacement channels and ABP preferences between multiple devices.  In other words, any setting a user can change on the AdBlock Options page should be sync'd.
 
 The following use case is similar to the Data Sync user case.  If a user has opened the AdBlock options page twice within the same browser session, then all changes made in one tab should be be reflected in the other tab.  In other words, if a setting, subscription, custom filters, image replacement channel, theme or preference is changed on one tab / options page, then the second (or all other open options pages) should show the same update(s) or changes immediately.
 
@@ -59,9 +59,6 @@ The sync server will attempt to do a merge of custom filter rules strings if an 
 
 # Testing hints:
 
-- Use the following snippet to enroll in MAB:
-  `License.checkPingResponse(JSON.stringify({ "myadblock_enrollment": true }));`
-
 - Use the following snippet to change in extension memory sync commit version:
   `SyncService.setCommitVersion(1);`
 
@@ -82,4 +79,4 @@ The sync server will attempt to do a merge of custom filter rules strings if an 
 
 Changing the license id is one way to cause sync post and get errors (license_not_found error code 404)
 
-Note: In the Sync MVP, many 'GET' errors are not shown to the user.
+Note: Currently, some Sync 'GET' errors are not shown to the user.

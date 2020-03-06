@@ -269,7 +269,7 @@
   };
 
   browser.storage.local.get(null).then((currentData) => {
-    const edgeMigrationNeeded = currentData.filter_lists;
+    const edgeMigrationNeeded = currentData.filter_lists || currentData.subscribed_filter_lists;
     if (edgeMigrationNeeded) {
       try {
         storeMigrationLogs('Migration started.');

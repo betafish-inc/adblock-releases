@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, exports, STATS, log, getSettings, Prefs, openTab, License */
+/* global browser, require, exports, STATS, log, getSettings, Prefs, openTab */
 
 // if the ping response indicates a survey (tab or overlay)
 // gracefully processes the request
@@ -67,7 +67,6 @@ const SURVEY = (function getSurvey() {
         }
         if (data && data.should_survey === 'true' && surveyAllowed) {
           surveyAllowed = false;
-          License.checkPingResponse(responseData);
           callback(data);
         }
       });
