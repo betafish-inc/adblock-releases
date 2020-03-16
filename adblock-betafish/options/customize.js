@@ -56,7 +56,7 @@ function onFilterChange() {
 }
 
 $(() => {
-  $('#tutorlink').attr('href', backgroundPage.Utils.getDocLink('filterdoc'));
+  $('#tutorlink').attr('href', backgroundPage.Prefs.getDocLink('filterdoc'));
 
   const getExcludeFilters = function () {
     const excludeFiltersKey = 'exclude_filters';

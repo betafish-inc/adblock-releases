@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, require, ext, exports, chromeStorageSetHelper, getSettings, adblockIsPaused,
    adblockIsDomainPaused, filterStorage, Filter, parseUri, settings, getAllSubscriptionsMinusText,
-   getUserFilters, Utils */
+   getUserFilters */
 
 const { extractHostFromFrame } = require('url');
 const { ElemHideFilter } = require('filterClasses');
@@ -177,7 +177,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
               applicationVersion: info.applicationVersion,
               platform: info.platform,
               platformVersion: info.platformVersion,
-              appLocale: Utils.appLocale,
+              appLocale: browser.i18n.getUILanguage(),
               filterListSubscriptions: subscribedSubs,
               domains: dataCollectionCache.domains,
               filters: dataCollectionCache.filters,

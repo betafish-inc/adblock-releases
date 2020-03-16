@@ -10,9 +10,9 @@ const {filterStorage} = require("filterStorage");
 const {filterNotifier} = require("filterNotifier");
 const {recommendations} = require("./recommendations.js");
 const info = require("info");
+const {port} = require("../../adblockpluschrome/lib/messaging");
 const {Prefs} = require("prefs");
 const {synchronizer} = require("synchronizer");
-const {Utils} = require("utils");
 const {initNotifications} = require("notificationHelper");
 const {updatesVersion} = require("../../adblockpluschrome/adblockplusui/lib/prefs");
 
@@ -99,7 +99,7 @@ function chooseFilterSubscriptions(subscriptions)
   {
     let {languages, type} = subscription;
     let language = languages && languages.find(
-      lang => new RegExp("^" + lang + "\\b").test(Utils.appLocale)
+      lang => new RegExp("^" + lang + "\\b").test(browser.i18n.getUILanguage())
     );
 
     if ((type == "ads" || type == "circumvention") &&
@@ -144,37 +144,6 @@ function chooseFilterSubscriptions(subscriptions)
   return chosenSubscriptions;
 }
 
-function supportsNotificationsWithButtons()
-{
-  // Older versions of Microsoft Edge (EdgeHTML 16) don't have the
-  // notifications API. Newever versions (EdgeHTML 17) seem to crash
-  // when it is used.
-  // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/20146233/
-  if (info.platform == "edgehtml")
-    return false;
-
-  // Opera gives an asynchronous error when buttons are provided (we cannot
-  // detect that behavior without attempting to show a notification).
-  if (info.application == "opera")
-    return false;
-
-  // Firefox throws synchronously if the "buttons" option is provided.
-  // If buttons are supported (i.e. on Chrome), this fails with
-  // an asynchronous error due to missing required options.
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1190681
-  try
-  {
-    browser.notifications.create({buttons: []}).catch(() => {});
-  }
-  catch (e)
-  {
-    if (e.toString().includes('"buttons" is unsupported'))
-      return false;
-  }
-
-  return true;
-}
-
 /**
  * Gets the filter subscriptions to be added when the extnesion is loaded.
  *
@@ -188,7 +157,7 @@ function getSubscriptions()
   for (let url of Prefs.additional_subscriptions)
     subscriptions.push(Subscription.fromURL(url));
 
-  // Add "acceptable ads", "anti-adblock messages", "AdBlock Custom", and "BitCoing Mining Protection List" subscriptions
+  // Add "acceptable ads", "AdBlock Custom", and "BitCoing Mining Protection List" subscriptions
   if (firstRun)
   {
     if (info.platform !== "gecko") {
@@ -207,16 +176,6 @@ function getSubscriptions()
     cplSubscription.title = "Cryptocurrency (Bitcoin) Mining Protection List";
     subscriptions.push(cplSubscription);
 
-    // Only add the anti-adblock messages subscription if
-    // the related notification can be shown on this browser.
-    if (supportsNotificationsWithButtons())
-    {
-      let antiAdblockSubscription = Subscription.fromURL(
-        Prefs.subscriptions_antiadblockurl
-      );
-      antiAdblockSubscription.disabled = true;
-      subscriptions.push(antiAdblockSubscription);
-    }
   }
 
   // Add default ad blocking subscriptions (e.g. EasyList, Anti-Circumvention)
@@ -302,15 +261,6 @@ Promise.all([
   .then(() => initNotifications(firstRun));
 
 /**
- * Gets a value indicating whether the default filter subscriptions have been
- * added again because there weren't any subscriptions even though this wasn't
- * the first run.
- *
- * @return {boolean}
- */
-exports.isReinitialized = () => reinitialized;
-
-/**
  * Gets a value indicating whether a data corruption was detected.
  *
  * @return {boolean}
@@ -331,3 +281,21 @@ exports.setSubscriptionsCallback = callback =>
 
 // Exports for tests only
 exports.chooseFilterSubscriptions = chooseFilterSubscriptions;
+
+/**
+ * @typedef {object} subscriptionsGetInitIssuesResult
+ * @property {boolean} dataCorrupted
+ *   true if it appears that the user's extension data was corrupted.
+ * @property {boolean} reinitialized
+ *   true if we have reset the user's settings due to data corruption.
+ */
+
+/**
+ * Returns an Object with boolean flags for any subscription initialization
+ * issues.
+ *
+ * @event "subscriptions.getInitIssues"
+ * @returns {subscriptionsGetInitIssuesResult}
+ */
+port.on("subscriptions.getInitIssues",
+        (message, sender) => ({dataCorrupted, reinitialized}));

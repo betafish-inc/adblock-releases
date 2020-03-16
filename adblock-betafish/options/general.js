@@ -239,8 +239,8 @@ filterNotifier.on('subscription.added', onSubAdded);
 const onSubRemoved = function (item) {
   const aa = backgroundPage.Prefs.subscriptions_exceptionsurl;
   const aaPrivacy = backgroundPage.Prefs.subscriptions_exceptionsurl_privacy;
-  const aaSubscribed = filterStorage.knownSubscriptions.has(aa);
-  const aaPrivacySubscribed = filterStorage.knownSubscriptions.has(aaPrivacy);
+  const aaSubscribed = filterStorage.hasSubscription(aa);
+  const aaPrivacySubscribed = filterStorage.hasSubscription(aaPrivacy);
 
   if (item && item.url === aa && !aaPrivacySubscribed) {
     updateAcceptableAdsUI(false, false);

@@ -161,10 +161,6 @@ const determineUserLanguage = function () {
   return null;
 };
 
-const getUILanguage = function () {
-  return browser.i18n.getUILanguage();
-};
-
 // Set dir and lang attributes to the given el or to document.documentElement by default
 const setLangAndDirAttributes = function (el) {
   const element = el instanceof HTMLElement ? el : document.documentElement;
@@ -497,7 +493,6 @@ Object.assign(window, {
   storageSet,
   parseUri,
   determineUserLanguage,
-  getUILanguage,
   chromeStorageSetHelper,
   logging,
   translate,

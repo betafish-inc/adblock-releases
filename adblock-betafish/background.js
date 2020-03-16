@@ -16,9 +16,7 @@ const { filterStorage } = require('filterStorage');
 const { filterNotifier } = require('filterNotifier');
 const { Prefs } = require('prefs');
 const { synchronizer } = require('synchronizer');
-const { Utils } = require('utils');
 const { getBlockedPerPage } = require('stats');
-const NotificationStorage = require('notification').Notification;
 const { RegExpFilter, InvalidFilter } = require('filterClasses');
 const { URLRequest } = require('../adblockpluschrome/adblockpluscore/lib/url.js');
 const info = require('../buildtools/info');
@@ -53,7 +51,6 @@ Object.assign(window, {
   filterNotifier,
   Prefs,
   synchronizer,
-  NotificationStorage,
   Subscription,
   SpecialSubscription,
   DownloadableSubscription,
@@ -62,7 +59,6 @@ Object.assign(window, {
   checkWhitelisted,
   info,
   getBlockedPerPage,
-  Utils,
   STATS,
   SyncService,
   DataCollectionV2,

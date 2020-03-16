@@ -6,6 +6,9 @@
  * - added AdBlock specific filter lists
  * - added language, id & hidden attribute
  */
+
+/** @module */
+
 "use strict";
 
 /**
