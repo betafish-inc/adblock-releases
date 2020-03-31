@@ -514,6 +514,7 @@ const replacedPerPage = new ext.PageMap();
 // Records how many ads have been replaced by AdBlock.  This is used
 // by the AdBlock to display statistics to the user.
 const replacedCounts = (function getReplacedCount() {
+  const adReplacedNotifier = new EventEmitter();
   const key = 'replaced_stats';
   let data = storageGet(key);
   if (!data) {
@@ -537,6 +538,7 @@ const replacedCounts = (function getReplacedCount() {
       const myPage = ext.getPage(tabId);
       let replaced = replacedPerPage.get(myPage) || 0;
       replacedPerPage.set(myPage, replaced += 1);
+      adReplacedNotifier.emit('adReplaced', tabId, myPage.url);
     },
     get() {
       return storageGet(key);
@@ -547,6 +549,7 @@ const replacedCounts = (function getReplacedCount() {
       }
       return this.get().total;
     },
+    adReplacedNotifier,
   };
 }());
 

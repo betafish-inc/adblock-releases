@@ -154,6 +154,7 @@ const STATS = (function exportStats() {
         l: determineUserLanguage(),
         pc: totalPings,
         dcv2: settingsObj.data_collection_v2 ? '1' : '0',
+        ldc: settingsObj.local_data_collection ? '1' : '0',
         cdn: settingsObj.local_cdn ? '1' : '0',
         cdnr: LocalCDN.getRedirectCount(),
         cdnd: LocalCDN.getDataCount(),

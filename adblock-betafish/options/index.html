@@ -6,9 +6,11 @@
     <link rel="stylesheet" href="adblock-options-options.css" />
     <link rel="stylesheet" href="adblock-options-tabs.css" />
     <link rel="stylesheet" href="adblock-options-mab.css" />
+    <link rel="stylesheet" href="adblock-options-stats-tabs.css" />
     <script src="polyfill.js"></script>
     <script src="jquery-3.4.1.min.js"></script>
     <script src="purify.min.js"></script>
+    <script src="Chart.min.js"></script>
     <script src="adblock-functions.js"></script>
     <script src="adblock-options-tabs.js"></script>
     <script src="adblock-options-index.js"></script>
@@ -29,6 +31,12 @@
 
           <nav id="sidebar-tabs">
             <ul>
+              <li>
+                <a href="#stats-tabs" class="tablink">
+                  <i class="material-icons md-18" role="img" aria-hidden="true">timeline</i
+                  >&#32;&#32;<span i18n="stats"></span>
+                </a>
+              </li>
               <li>
                 <a href="#mab" class="tablink">
                   <i class="material-icons md-18" role="img" aria-hidden="true">account_circle</i>
@@ -132,6 +140,7 @@
     </div>
 
     <div id="tab-content">
+      <div id="stats-tabs" class="tab"></div>
       <div id="mab" class="tab" syncMessageDiv="true"></div>
       <div id="general" class="tab" syncMessageDiv="true"></div>
       <div id="filters" class="tab" syncMessageDiv="true"></div>

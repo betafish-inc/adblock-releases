@@ -25,6 +25,7 @@ const info = require('../buildtools/info');
 const { STATS } = require('./stats');
 const { SyncService } = require('./picreplacement/sync-service');
 const { DataCollectionV2 } = require('./datacollection.v2');
+const { LocalDataCollection } = require('./localdatacollection');
 const { LocalCDN } = require('./localcdn');
 const { ServerMessages } = require('./servermessages');
 const { recommendations } = require('./alias/recommendations');
@@ -62,6 +63,7 @@ Object.assign(window, {
   STATS,
   SyncService,
   DataCollectionV2,
+  LocalDataCollection,
   LocalCDN,
   ServerMessages,
   recordGeneralMessage,
@@ -1056,64 +1058,66 @@ const getDebugInfo = function (callback) {
   if (settings.twitch_hiding) {
     response.otherInfo.twitchSettings = twitchSettings;
   }
+  LocalDataCollection.getRawStatsSize((rawStatsSize) => {
+    response.otherInfo.rawStatsSize = rawStatsSize;
+    // Get total pings
+    browser.storage.local.get('total_pings').then((storageResponse) => {
+      response.otherInfo.totalPings = storageResponse.totalPings || 0;
 
-  // Get total pings
-  browser.storage.local.get('total_pings').then((storageResponse) => {
-    response.otherInfo.totalPings = storageResponse.totalPings || 0;
-
-    // Now, add exclude filters (if there are any)
-    const excludeFiltersKey = 'exclude_filters';
-    browser.storage.local.get(excludeFiltersKey).then((secondResponse) => {
-      if (secondResponse && secondResponse[excludeFiltersKey]) {
-        response.excludedFilters = secondResponse[excludeFiltersKey];
-      }
-      // Now, add JavaScript exception error (if there is one)
-      const errorKey = 'errorkey';
-      browser.storage.local.get(errorKey).then((errorResponse) => {
-        if (errorResponse && errorResponse[errorKey]) {
-          response.otherInfo[errorKey] = errorResponse[errorKey];
+      // Now, add exclude filters (if there are any)
+      const excludeFiltersKey = 'exclude_filters';
+      browser.storage.local.get(excludeFiltersKey).then((secondResponse) => {
+        if (secondResponse && secondResponse[excludeFiltersKey]) {
+          response.excludedFilters = secondResponse[excludeFiltersKey];
         }
-        // Now, add the migration messages (if there are any)
-        const migrateLogMessageKey = 'migrateLogMessageKey';
-        browser.storage.local.get(migrateLogMessageKey).then((migrateLogMessageResponse) => {
-          if (migrateLogMessageResponse && migrateLogMessageResponse[migrateLogMessageKey]) {
-            const messages = migrateLogMessageResponse[migrateLogMessageKey].split('\n');
-            for (let i = 0; i < messages.length; i++) {
-              const key = `migration_message_${i}`;
-              response.otherInfo[key] = messages[i];
-            }
+        // Now, add JavaScript exception error (if there is one)
+        const errorKey = 'errorkey';
+        browser.storage.local.get(errorKey).then((errorResponse) => {
+          if (errorResponse && errorResponse[errorKey]) {
+            response.otherInfo[errorKey] = errorResponse[errorKey];
           }
-          if (License.isActiveLicense()) {
-            response.otherInfo.licenseInfo = {};
-            response.otherInfo.licenseInfo.extensionGUID = STATS.userId();
-            response.otherInfo.licenseInfo.licenseId = License.get().licenseId;
-            if (getSettings().sync_settings) {
-              response.otherInfo.syncInfo = {};
-              response.otherInfo.syncInfo.SyncCommitVersion = SyncService.getCommitVersion();
-              response.otherInfo.syncInfo.SyncCommitName = SyncService.getCurrentExtensionName();
-              response.otherInfo.syncInfo.SyncCommitLog = SyncService.getSyncLog();
-            }
-            browser.alarms.getAll((alarms) => {
-              if (alarms && alarms.length > 0) {
-                response.otherInfo['Alarm info'] = `length: ${alarms.length}`;
-                for (let i = 0; i < alarms.length; i++) {
-                  const alarm = alarms[i];
-                  response.otherInfo[`${i} Alarm Name`] = alarm.name;
-                  response.otherInfo[`${i} Alarm Scheduled Time`] = new Date(alarm.scheduledTime);
-                }
-              } else {
-                response.otherInfo['No alarm info'] = 'No alarm info';
+          // Now, add the migration messages (if there are any)
+          const migrateLogMessageKey = 'migrateLogMessageKey';
+          browser.storage.local.get(migrateLogMessageKey).then((migrateLogMessageResponse) => {
+            if (migrateLogMessageResponse && migrateLogMessageResponse[migrateLogMessageKey]) {
+              const messages = migrateLogMessageResponse[migrateLogMessageKey].split('\n');
+              for (let i = 0; i < messages.length; i++) {
+                const key = `migration_message_${i}`;
+                response.otherInfo[key] = messages[i];
               }
-              License.getLicenseInstallationDate((installdate) => {
-                response.otherInfo['License Installation Date'] = installdate;
-                if (typeof callback === 'function') {
-                  callback(response);
+            }
+            if (License.isActiveLicense()) {
+              response.otherInfo.licenseInfo = {};
+              response.otherInfo.licenseInfo.extensionGUID = STATS.userId();
+              response.otherInfo.licenseInfo.licenseId = License.get().licenseId;
+              if (getSettings().sync_settings) {
+                response.otherInfo.syncInfo = {};
+                response.otherInfo.syncInfo.SyncCommitVersion = SyncService.getCommitVersion();
+                response.otherInfo.syncInfo.SyncCommitName = SyncService.getCurrentExtensionName();
+                response.otherInfo.syncInfo.SyncCommitLog = SyncService.getSyncLog();
+              }
+              browser.alarms.getAll((alarms) => {
+                if (alarms && alarms.length > 0) {
+                  response.otherInfo['Alarm info'] = `length: ${alarms.length}`;
+                  for (let i = 0; i < alarms.length; i++) {
+                    const alarm = alarms[i];
+                    response.otherInfo[`${i} Alarm Name`] = alarm.name;
+                    response.otherInfo[`${i} Alarm Scheduled Time`] = new Date(alarm.scheduledTime);
+                  }
+                } else {
+                  response.otherInfo['No alarm info'] = 'No alarm info';
                 }
+                License.getLicenseInstallationDate((installdate) => {
+                  response.otherInfo['License Installation Date'] = installdate;
+                  if (typeof callback === 'function') {
+                    callback(response);
+                  }
+                });
               });
-            });
-          } else if (typeof callback === 'function') { // License is not active
-            callback(response);
-          }
+            } else if (typeof callback === 'function') { // License is not active
+              callback(response);
+            }
+          });
         });
       });
     });

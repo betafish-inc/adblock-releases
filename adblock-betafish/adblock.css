@@ -77,6 +77,20 @@ Global Styles
   --popup-themes-cta-background: #003643;
   --popup-themes-cta-background-on-hover: #00a498;
   --popup-themes-cta-color-on-hover: #003643;
+  /* stats-tab entries */
+  --primary-button-text-color: #ffffff;
+  --primary-button-bg-color: #e40d0d;
+  --ancillary-button-bg-color: #ffffff;
+  --ancillary-button-text-color: #666666;
+  --primary-panel-bg-color: #ffffff;
+  --primary-cta-bg-color: #ffca00;
+  --stats-menu-text-color: #000000;
+  --ads-blocked-color: #e40d0d;
+  --trackers-blocked-color: #03bcfc;
+  --ads-replaced-color: #ffae00;
+  --stats-main-text-color: #333333;
+  --stats-overlay-text-color: #666666;
+  --stats-border-color: #c6c6c6;
 }
 
 * {
@@ -253,4 +267,35 @@ Icons global styling (needs to @import 'fonts/font-face.css')
   width: 1px;
   height: 1px;
   overflow: hidden;
+}
+
+/* Rules for rotating an element */
+
+.spin-counter-clockwise {
+  -webkit-animation: spin-counter-clockwise 2s infinite linear;
+  animation: spin-counter-clockwise 2s infinite linear;
+}
+
+@-webkit-keyframes spin-counter-clockwise {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+
+  100% {
+    -webkit-transform: rotate(-359deg);
+    transform: rotate(-359deg);
+  }
+}
+
+@keyframes spin-counter-clockwise {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+
+  100% {
+    -webkit-transform: rotate(-359deg);
+    transform: rotate(-359deg);
+  }
 }

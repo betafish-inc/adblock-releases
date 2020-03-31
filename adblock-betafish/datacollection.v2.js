@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, require, ext, exports, chromeStorageSetHelper, getSettings, adblockIsPaused,
    adblockIsDomainPaused, filterStorage, Filter, parseUri, settings, getAllSubscriptionsMinusText,
-   getUserFilters */
+   getUserFilters, setSetting */
 
 const { extractHostFromFrame } = require('url');
 const { ElemHideFilter } = require('filterClasses');
@@ -244,7 +244,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   });// End of then
 
   const returnObj = {};
-  returnObj.start = function returnObjStart() {
+  returnObj.start = function returnObjStart(callback) {
     dataCollectionCache.filters = {};
     dataCollectionCache.domains = {};
     filterNotifier.on('filter.hitCount', filterListener);
@@ -254,13 +254,15 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     });
     browser.tabs.onUpdated.addListener(handleTabUpdated);
     addMessageListener();
+    setSetting('data_collection_v2', true, callback);
   };
-  returnObj.end = function returnObjEnd() {
+  returnObj.end = function returnObjEnd(callback) {
     dataCollectionCache = {};
     filterNotifier.off('filter.hitCount', filterListener);
     browser.webRequest.onBeforeRequest.removeListener(webRequestListener);
     browser.storage.local.remove(TIME_LAST_PUSH_KEY);
     browser.tabs.onUpdated.removeListener(handleTabUpdated);
+    setSetting('data_collection_v2', false, callback);
   };
   returnObj.getCache = function returnObjGetCache() {
     return dataCollectionCache;
