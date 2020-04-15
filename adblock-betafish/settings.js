@@ -42,8 +42,18 @@ function Settings() {
       if (settings.local_cdn) {
         LocalCDN.start();
       }
-
-      resolve();
+      if ('managed' in browser.storage) {
+        browser.storage.managed.get(null).then((items) => {
+          for (const key in items) {
+            if (key === 'suppress_update_page' || key === 'suppress_surveys' || key === 'suppress_first_run_page') {
+              that.data[key] = items[key];
+            }
+          }
+          resolve();
+        });
+      } else {
+        resolve();
+      }
     });
   })).then(() => {
     log('\n===SETTINGS FINISHED LOADING===\n\n');

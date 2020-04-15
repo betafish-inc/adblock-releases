@@ -187,16 +187,25 @@ $(() => {
   // 1. load all the tab panels templates in respective panel DIVs
   loadTabPanelsHTML();
 
-  // 2. Activate tab on page load with cookie, URL hash or default tabID
+  // 2. hide the 'Premium' tab, if the Registry or Group Policy has requested it
+  // Note: this check is done here to minimize the chance of the user
+  //       seeing the Options menu change when the 'Premium' item is removed
+  if (browser.extension.getBackgroundPage()
+      && browser.extension.getBackgroundPage().License
+      && browser.extension.getBackgroundPage().License.shouldShowPremiumCTA() === false) {
+    $('#sidebar-tabs a[href="#mab"]').parent().hide();
+  }
+
+  // 3. Activate tab on page load with cookie, URL hash or default tabID
   activateTabOnPageLoad();
 
-  // 3. Activate tab when clicked
+  // 4. Activate tab when clicked
   $('.tablink').on('click', function tabLinkClicked() {
     const tabID = $(this).attr('href');
     activateTab(tabID);
   });
 
-  // 4. Display CTA - a future library update will support
+  // 5. Display CTA - a future library update will support
   // automatically injecting the CTA HTML as well.
   displayMABFeedbackCTA();
 });

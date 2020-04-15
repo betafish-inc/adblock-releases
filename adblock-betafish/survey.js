@@ -335,6 +335,9 @@ const SURVEY = (function getSurvey() {
       if (getSettings().show_survey === false) {
         return;
       }
+      if (getSettings().suppress_surveys) {
+        return;
+      }
 
       const surveyData = surveyDataFrom(responseData);
       if (!surveyData) {

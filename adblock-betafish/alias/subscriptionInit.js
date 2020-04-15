@@ -207,6 +207,39 @@ function getSubscriptions()
   return subscriptions;
 }
 
+function removeSubscriptions() {
+  return new Promise(function(resolve, reject) {
+    if ("managed" in browser.storage)
+    {
+      browser.storage.managed.get(null).then(
+        items =>
+        {
+          for (let key in items)
+          {
+            if (key === "remove_subscriptions" && Array.isArray(items[key]) && items[key].length)
+            {
+              for (let inx = 0; inx < items[key].length; inx++)
+              {
+                let subscription = Subscription.fromURL(items[key][inx]);
+                filterStorage.removeSubscription(subscription);
+              }
+            }
+          }
+          resolve();
+        },
+
+        // Opera doesn't support browser.storage.managed, but instead of simply
+        // removing the API, it gives an asynchronous error which we ignore here.
+        () => {}
+      );
+    }
+    else
+    {
+      resolve();
+    }
+  });
+}
+
 function addSubscriptionsAndNotifyUser(subscriptions)
 {
   if (subscriptionsCallback)
@@ -255,6 +288,7 @@ Promise.all([
 ]).then(detectFirstRun)
   .then(getSubscriptions)
   .then(addSubscriptionsAndNotifyUser)
+  .then(removeSubscriptions)
   // We have to require the "uninstall" module on demand,
   // as the "uninstall" module in turn requires this module.
   .then(() => { require("./uninstall").setUninstallURL(); })

@@ -184,6 +184,24 @@ const License = (function getLicense() {
       }
     });
   };
+  const checkForManagedSettings = function () {
+    return new Promise(((resolve) => {
+      if ('managed' in browser.storage) {
+        browser.storage.managed.get(null).then((items) => {
+          for (const key in items) {
+            if (key === 'suppress_premium_cta') {
+              theLicense = License.get();
+              theLicense[key] = items[key];
+              License.set(theLicense);
+            }
+          }
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    }));
+  };
 
   return {
     statsInIconKey,
@@ -228,10 +246,12 @@ const License = (function getLicense() {
     },
     initialize(callback) {
       loadFromStorage(() => {
-        if (typeof callback === 'function') {
-          callback();
-        }
-        readyComplete();
+        checkForManagedSettings().then(() => {
+          if (typeof callback === 'function') {
+            callback();
+          }
+          readyComplete();
+        });
       });
     },
     getCurrentPopupMenuThemeCTA() {
@@ -390,9 +410,17 @@ const License = (function getLicense() {
       return License && License.get() && License.get().myadblock_enrollment === true;
     },
     shouldShowMyAdBlockEnrollment() {
-      return License.isMyAdBlockEnrolled() && !License.isActiveLicense();
+      return License.isMyAdBlockEnrolled()
+             && !License.isActiveLicense()
+             && License.shouldShowPremiumCTA();
+    },
+    shouldShowPremiumCTA() {
+      return !(License && License.get().suppress_premium_cta === true);
     },
     shouldShowBlacklistCTA(newValue) {
+      if (!License.shouldShowPremiumCTA()) {
+        return false;
+      }
       const currentLicense = License.get() || {};
       if (typeof newValue === 'boolean') {
         currentLicense.showBlacklistCTA = newValue;
@@ -407,6 +435,9 @@ const License = (function getLicense() {
       return License && License.get() && License.get().showBlacklistCTA === true;
     },
     shouldShowWhitelistCTA(newValue) {
+      if (!License.shouldShowPremiumCTA()) {
+        return false;
+      }
       const currentLicense = License.get() || {};
       if (typeof newValue === 'boolean') {
         currentLicense.showWhitelistCTA = newValue;
@@ -423,13 +454,16 @@ const License = (function getLicense() {
     displayPopupMenuNewCTA() {
       const isNotActive = !License.isActiveLicense();
       const variant = License.get() ? License.get().var : undefined;
-      return License && isNotActive && [3, 4].includes(variant);
+      return License && isNotActive && [3, 4].includes(variant) && License.shouldShowPremiumCTA();
     },
     /**
      * Handles the display of the New badge on the toolbar icon.
      * @param {Boolean} [showBadge] true shows the badge, false removes the badge
      */
     showIconBadgeCTA(showBadge) {
+      if (!License.shouldShowPremiumCTA()) {
+        return;
+      }
       if (showBadge) {
         let newBadgeText = translate('new_badge');
         // Text that exceeds 4 characters is truncated on the toolbar badge,

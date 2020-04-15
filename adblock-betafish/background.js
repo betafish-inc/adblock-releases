@@ -742,6 +742,8 @@ if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
   });
 }
 
+// Note:  be sure to check the 'suppress_update_page' on the Settings object before showing
+//        the /update page
 const updateStorageKey = 'last_known_version';
 
 // browser.runtime.onInstalled.addListener((details) => {
