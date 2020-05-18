@@ -5,7 +5,7 @@
    getSubscriptionsMinusText, chromeStorageSetHelper, getUserFilters, Prefs, abpPrefPropertyNames,
    Subscription, adblockIsDomainPaused, PubNub, adblockIsPaused, filterStorage, parseFilter,
    synchronizer, pausedFilterText1, pausedFilterText2, getUrlFromId, channelsNotifier,
-   settingsNotifier, filterNotifier, isWhitelistFilter, */
+   settingsNotifier, filterNotifier, isWhitelistFilter, recordGeneralMessage */
 
 const { EventEmitter } = require('events');
 
@@ -829,6 +829,9 @@ const SyncService = (function getSyncService() {
           pubnub.subscribe({
             channels: [License.get().licenseId],
           });
+        }
+        if (msg.error === true && msg.category && msg.operation) {
+          recordGeneralMessage('pubnub_error', undefined, { licenseId: License.get().licenseId, category: msg.category, operation: msg.operation });
         }
       },
     });

@@ -100,6 +100,28 @@ const ServerMessages = (function serverMessages() {
     sendMessageToLogServer(eventWithPayload, callback);
   };
 
+  // Log a error message on GAB log server.
+  // If callback() is specified, call callback() after logging has completed
+  const recordAnonymousErrorMessage = function (msg, callback, additionalParams) {
+    if (!msg) {
+      return;
+    }
+
+    const payload = {
+      f: STATS.flavor,
+      o: STATS.os,
+      l: determineUserLanguage(),
+      t: 'error',
+    };
+    if (typeof additionalParams === 'object') {
+      for (const prop in additionalParams) {
+        payload[prop] = additionalParams[prop];
+      }
+    }
+    const eventWithPayload = { event: msg, payload };
+    sendMessageToLogServer(eventWithPayload, callback);
+  };
+
   const recordErrorMessage = function (msg, callback, additionalParams) {
     recordMessageWithUserID(msg, 'error', callback, additionalParams);
   };
@@ -130,6 +152,7 @@ const ServerMessages = (function serverMessages() {
   return {
     recordErrorMessage,
     recordAnonymousMessage,
+    recordAnonymousErrorMessage,
     postFilterStatsToLogServer,
     recordStatusMessage,
     recordGeneralMessage,

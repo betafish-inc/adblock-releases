@@ -1935,6 +1935,10 @@
     "message": "Пейзажи",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
   },
+  "customchannelswitchlabel": {
+    "message": "Персонализация",
+    "description": "The label text for the Custom Image switch on the MyAdBlock Options page"
+  },
   "urgent_safari_changes": {
     "message": "ВАЖНО: Apple вносит изменения в расширения Safari.",
     "description": "Title for Options page message letting users know of settings change."
@@ -3040,11 +3044,11 @@
     "description": "Text on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_hide_data": {
-    "message": "Скрыть данные",
+    "message": "Скрыть статистику",
     "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_show_data": {
-    "message": "Показать данные",
+    "message": "Показать статистику",
     "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_trackers_blocked": {
@@ -3112,7 +3116,7 @@
     "description": "sub menu item text on the statistics page of the Options page"
   },
   "delete_panel_title": {
-    "message": "Удаление данных о блокировке",
+    "message": "Удаление статистики блокировки",
     "description": "title text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_I": {
@@ -3148,7 +3152,7 @@
     "description": "button text on page 2 of delete modal box on the statistics page of the Options page"
   },
   "no_data_title": {
-    "message": "Нет данных",
+    "message": "Нет статистики",
     "description": "title text on warning message when there's no user data to show on the statistics page of the Options page"
   },
   "no_data_msg_part_I": {
@@ -3158,5 +3162,97 @@
   "no_data_msg_part_II": {
     "message": "Чтобы увидеть статистику, поработайте в Интернете, а затем обновите эту страницу.",
     "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "loading_in_progress": {
+    "message": "загрузка…",
+    "description": "Text in the aria-label attribute of an icon indicating that page is currently loading"
+  },
+  "stats_ads_blocked_aria_label": {
+    "message": "Количество заблокированных объявлений",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_trackers_blocked_aria_label": {
+    "message": "Количество заблокированных трекеров",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_replaced_blocked_aria_label": {
+    "message": "Количество замененных изображений",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "edit_image_msg_partI": {
+    "message": "Это три самых распространенных размера рекламных объявлений.",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image_msg_partII": {
+    "message": "Выберите самый подходящий, обрежьте картинку с помощью ползунка и нажмите \"Сохранить\".",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image": {
+    "message": "Изменение изображения",
+    "description": "header text in the on custom image swap modal dialog"
+  },
+  "custom_images": {
+    "message": "Пользовательские изображения",
+    "description": "text on the image swap tab"
+  },
+  "custom_image_description": {
+    "message": "Выберите до 9 картинок, которыми будет заменяться реклама.",
+    "description": "text on the image swap tab"
+  },
+  "remove_image": {
+    "message": "Удаление изображения",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "remove_image_msg": {
+    "message": "Удалить изображение?",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonremove": {
+    "message": "Удалить",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonkeep": {
+    "message": "Сохранить",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "custom_image_error": {
+    "message": "Ой! Что-то пошло не так.",
+    "description": "header / title text on the error message on the image swap tab"
+  },
+  "custom_image_error_msg_partI": {
+    "message": "Не удалось добавить изображение.",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partII": {
+    "message": "Подождите немного и повторите попытку.",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partIII": {
+    "message": "Помогите нам выяснить причину проблемы, отправив [[обезличенные данные о поломке]]. ",
+    "description": "error message text error message on the image swap tab"
+  },
+  "dontsend": {
+    "message": "Не отправлять",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "senddebugdata": {
+    "message": "Отправить",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "custom_image_unsupported_title": {
+    "message": "Неподдерживаемый формат изображения",
+    "description": "header / title on error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partI": {
+    "message": "Ой! Кажется, вы пытаетесь добавить файл, формат которого мы не поддерживаем.",
+    "description": "First sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partII": {
+    "message": "Выберите один из этих типов файлов:",
+    "description": "second sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_supported_file_types": {
+    "message": "*.bmp, *.gif, *.jpeg, *.png, *.svg, *.tiff, *.webp",
+    "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
   }
 }

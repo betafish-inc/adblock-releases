@@ -91,6 +91,10 @@ Global Styles
   --stats-main-text-color: #333333;
   --stats-overlay-text-color: #666666;
   --stats-border-color: #c6c6c6;
+  /* Image Swap entries, that are never 'themed' */
+  --icon-notes-main-text-color: white;
+  --icon-notes-background-color: #e40d0d;
+  --image-background-color: white;
 }
 
 * {
@@ -119,6 +123,10 @@ textarea::-webkit-scrollbar-thumb {
   background-color: #e6e6e6;
   background-clip: content-box;
   border: 3px solid transparent;
+}
+
+.inactive {
+  display: none;
 }
 
 /*

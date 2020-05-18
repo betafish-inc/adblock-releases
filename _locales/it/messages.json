@@ -1935,6 +1935,10 @@
     "message": "Panorami",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
   },
+  "customchannelswitchlabel": {
+    "message": "Personalizzato",
+    "description": "The label text for the Custom Image switch on the MyAdBlock Options page"
+  },
   "urgent_safari_changes": {
     "message": "URGENTE: Apple sta cambiando le estensioni di Safari.",
     "description": "Title for Options page message letting users know of settings change."
@@ -2796,7 +2800,7 @@
     "description": "Text in the aria-label attribute of an icon showing an option is selected."
   },
   "learn_more_without_period": {
-    "message": "Ulteriori informazioni",
+    "message": "Scopri di più",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
   "update_filter_lists_now": {
@@ -3012,11 +3016,11 @@
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_opt_in_msg": {
-    "message": "Partecipa alla raccolta di dati locali per vedere le tue statistiche di AdBlock, ad esempio i siti su cui blocchi più annunci e tracker, il numero totale di blocchi nel tempo e le immagini sostituite per gli utenti Premium.",
+    "message": "Partecipa alla raccolta di statistiche locali per vedere le tue statistiche di AdBlock, ad esempio i siti su cui blocchi più annunci e tracker, il numero totale di blocchi nel tempo e le immagini sostituite per gli utenti Premium.",
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_opt_in_local_msg": {
-    "message": "Partecipa anche alla raccolta di dati locali per accedere a tutte le tue statistiche di AdBlock, ad esempio i siti su cui blocchi più annunci e tracker, il numero totale di blocchi nel tempo e le immagini sostituite per gli utenti Premium.",
+    "message": "Partecipa anche alla raccolta di statistiche locali per accedere a tutte le tue statistiche di AdBlock, ad esempio i siti su cui blocchi più annunci e tracker, il numero totale di blocchi nel tempo e le immagini sostituite per gli utenti Premium.",
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_already_opted": {
@@ -3028,7 +3032,7 @@
     "description": "Text in the Opt In button on the statistics page of the Options page"
   },
   "stats_opt_in_local_text_button": {
-    "message": "Partecipa alla raccolta di dati locali",
+    "message": "Partecipa alla raccolta di statistiche locali",
     "description": "Text in the Opt In button on the statistics page of the Options page"
   },
   "stats_opt_in_data_collect": {
@@ -3040,11 +3044,11 @@
     "description": "Text on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_hide_data": {
-    "message": "Nascondi dati",
+    "message": "Nascondi statistiche",
     "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_show_data": {
-    "message": "Mostra dati",
+    "message": "Mostra statistiche",
     "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_trackers_blocked": {
@@ -3112,11 +3116,11 @@
     "description": "sub menu item text on the statistics page of the Options page"
   },
   "delete_panel_title": {
-    "message": "Cancella dati blocco",
+    "message": "Cancella statistiche blocco",
     "description": "title text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_I": {
-    "message": "Qui puoi cancellare i dati di blocco conservati in locale.",
+    "message": "Qui puoi cancellare le statistiche di blocco conservate in locale.",
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_II": {
@@ -3124,15 +3128,15 @@
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_III": {
-    "message": "I tuoi dati sono conservati solo sul tuo dispositivo. Qualsiasi dato cancellato NON PUÒ essere recuperato.",
+    "message": "Le tue statistiche sono conservate solo sul tuo dispositivo. Qualsiasi statistica cancellata NON PUÒ essere recuperata.",
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_all_stats_data": {
-    "message": "Cancella i dati di blocco conservati attualmente",
+    "message": "Cancella le statistiche di blocco conservate attualmente",
     "description": "text related to the delete all data checkbox on the statistics page of the Options page"
   },
   "opt_out_stats_data": {
-    "message": "Non raccogliere i miei dati di blocco in futuro",
+    "message": "Non raccogliere le mie statistiche di blocco in futuro",
     "description": "text related to the opt out data collection checkbox on the statistics page of the Options page"
   },
   "delete_detail_page_2_msg_part_I": {
@@ -3148,15 +3152,107 @@
     "description": "button text on page 2 of delete modal box on the statistics page of the Options page"
   },
   "no_data_title": {
-    "message": "Nessun dato",
+    "message": "Nessuna statistica",
     "description": "title text on warning message when there's no user data to show on the statistics page of the Options page"
   },
   "no_data_msg_part_I": {
-    "message": "Non hai dati di blocco da visualizzare.",
+    "message": "Non hai statistiche di blocco da visualizzare.",
     "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
   },
   "no_data_msg_part_II": {
     "message": "Aggiorna questa pagina dopo aver navigato in rete per iniziare a vedere le statistiche di blocco.",
     "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "loading_in_progress": {
+    "message": "caricamento in corso",
+    "description": "Text in the aria-label attribute of an icon indicating that page is currently loading"
+  },
+  "stats_ads_blocked_aria_label": {
+    "message": "Numero di annunci bloccati",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_trackers_blocked_aria_label": {
+    "message": "Numero di tracker bloccati",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_replaced_blocked_aria_label": {
+    "message": "Numero di immagini sostituite",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "edit_image_msg_partI": {
+    "message": "In basso abbiamo elencato le 3 dimensioni più comuni per gli annunci.",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image_msg_partII": {
+    "message": "Seleziona quella più vicina alla tua immagine, regolala col cursore e clicca Salva quando hai fatto.",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image": {
+    "message": "Modifica immagine",
+    "description": "header text in the on custom image swap modal dialog"
+  },
+  "custom_images": {
+    "message": "Immagini personalizzate",
+    "description": "text on the image swap tab"
+  },
+  "custom_image_description": {
+    "message": "Scegli fino a 9 immagini che desideri siano usate da AdBlock per sostituire gli annunci",
+    "description": "text on the image swap tab"
+  },
+  "remove_image": {
+    "message": "Rimuovi immagine",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "remove_image_msg": {
+    "message": "Vuoi davvero rimuovere questa immagine?",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonremove": {
+    "message": "Rimuovi",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonkeep": {
+    "message": "Tieni",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "custom_image_error": {
+    "message": "Ops! Qualcosa è andato storto",
+    "description": "header / title text on the error message on the image swap tab"
+  },
+  "custom_image_error_msg_partI": {
+    "message": "Non abbiamo potuto aggiungere la tua immagine.",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partII": {
+    "message": "Attendi un attimo e riprova.",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partIII": {
+    "message": "Puoi anche condividere [[dati di debug anonimi]] per aiutarci a capire cosa non ha funzionato.",
+    "description": "error message text error message on the image swap tab"
+  },
+  "dontsend": {
+    "message": "Non inviare",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "senddebugdata": {
+    "message": "Invia dati di debug",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "custom_image_unsupported_title": {
+    "message": "Tipo di immagine non supportato",
+    "description": "header / title on error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partI": {
+    "message": "Ops! Sembra che tu stia cercando di aggiungere un'immagine non supportata dalla Sostituzione di immagini personalizzate.",
+    "description": "First sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partII": {
+    "message": "Scegli uno dei seguenti tipi di immagini:",
+    "description": "second sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_supported_file_types": {
+    "message": "*.bmp, *.gif, *.jpeg, *.png, *.svg, *.tiff, *.webp",
+    "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
   }
 }

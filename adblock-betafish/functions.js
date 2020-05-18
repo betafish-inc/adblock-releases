@@ -486,6 +486,47 @@ const getStorageCookie = function (name) {
   return undefined;
 };
 
+// the Navigator object is used here because this code is
+// executed in functions.js, which is loaded prior to any other
+// background page JS modules (like 'info').
+// Althought 'webp' is a preferred for Custom Image Swap
+// because it is generally a smaller, more efficient image format,
+// Firefox doesn't like working with 'webp' as much as 'png' in Blobs and Data URLs.
+let customImageSwapMimeType = 'image/webp';
+const firefoxMatch = navigator.userAgent.match(/(?:Firefox)\/([\d.]+)/);
+if (firefoxMatch) {
+  customImageSwapMimeType = 'image/png';
+}
+
+// converts a Base64 encoded string to
+// a Blob.
+// Used in the custom image swap processing
+// Input:
+//   base64Data: a string, base64 string encoded representing an image
+// Returns:
+//   a Blob
+const base64toBlob = function (base64Data) {
+  let updatedBase64Data = base64Data;
+  if (updatedBase64Data.startsWith('data:image/')) {
+    [, updatedBase64Data] = updatedBase64Data.split(',');
+  }
+  const sliceSize = 512;
+  const byteChars = atob(updatedBase64Data);
+  const byteArrays = [];
+  const len = byteChars.length;
+  for (let offset = 0; offset < len; offset += sliceSize) {
+    const chunk = byteChars.slice(offset, offset + sliceSize);
+    const chunkLength = chunk.length;
+    const byteNumbers = new Array(chunkLength);
+    for (let i = 0; i < chunkLength; i++) {
+      byteNumbers[i] = chunk.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+  return new Blob(byteArrays, { type: customImageSwapMimeType });
+};
+
 Object.assign(window, {
   sessionStorageSet,
   sessionStorageGet,

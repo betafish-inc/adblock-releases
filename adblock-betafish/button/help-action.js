@@ -42,7 +42,9 @@ const popupMenuHelpActionMap = {
     transitionTo('dontRemoveWhitelist', false);
   },
   removeWhitelistAction() {
-    browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href });
+    if (pageInfo.url) {
+      browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href });
+    }
     transitionTo('removeWhitelist', false);
   },
   finishFlowAction() {
@@ -81,11 +83,14 @@ const popupMenuHelpActionMap = {
         browser.tabs.reload();
         transitionTo('unpauseAndReload', false);
       });
-    } else {
+    } else if (pageInfo.url) {
       browser.runtime.sendMessage({ command: 'adblockIsDomainPaused', activeTab: { url: pageInfo.url.href, id: pageInfo.id }, newValue: false }).then(() => {
         browser.tabs.reload();
         transitionTo('unpauseAndReload', false);
       });
+    } else {
+      browser.tabs.reload();
+      transitionTo('unpauseAndReload', false);
     }
   },
   dontChangeSeeAdsAction() {

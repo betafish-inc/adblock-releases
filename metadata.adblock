@@ -1,5 +1,5 @@
 [general]
-version = 4.11.0
+version = 4.12.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -83,6 +83,8 @@ jquery-3.4.1.min.js = adblock-betafish/jquery/jquery-3.4.1.min.js
 purify.min.js = adblock-betafish/lib/purify.min.js
 Chart.min.js = adblock-betafish/lib/Chart.min.js
 pubnub.min.js = adblock-betafish/pubnub/pubnub.min.js
+croppie.js = adblock-betafish/lib/croppie.js
+croppie.css = adblock-betafish/lib/croppie.css
 adblock-errorreporting.js = adblock-betafish/errorreporting.js
 adblock.css = adblock-betafish/adblock.css
 adblock-functions.js = adblock-betafish/functions.js
@@ -308,6 +310,7 @@ lib/adblockplus.js +=
   ../adblock-betafish/picreplacement/cat-channel.js
   ../adblock-betafish/picreplacement/dog-channel.js
   ../adblock-betafish/picreplacement/landscape-channel.js
+  ../adblock-betafish/picreplacement/custom-channel.js
   ../adblock-betafish/picreplacement/unknown-channel.js
   ../adblock-betafish/picreplacement/check.js
   ../adblock-betafish/picreplacement/sync-service.js

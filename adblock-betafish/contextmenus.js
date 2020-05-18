@@ -184,7 +184,7 @@ const contextMenuItem = (() => ({
     },
 }))();
 
-const updateContextMenuItems = function (page) {
+let updateContextMenuItems = function (page) {
   // Remove the AdBlock context menu items
   browser.contextMenus.removeAll();
 
@@ -208,6 +208,21 @@ const updateContextMenuItems = function (page) {
     browser.contextMenus.create(contextMenuItem.pauseAll);
   }
 };
+
+const updateContextMenuItemsNoOp = function () {
+  // Remove the AdBlock context menu items
+  browser.contextMenus.removeAll();
+};
+// startup test to check if the context menu API functions correctly
+// the `create` function is invoked twice, because it's the second
+// and all subsequent calls that fail.
+try {
+  browser.contextMenus.create(contextMenuItem.blockThisAd);
+  browser.contextMenus.create(contextMenuItem.blockThisAd);
+} catch (e) {
+  updateContextMenuItems = updateContextMenuItemsNoOp;
+}
+browser.contextMenus.removeAll();
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status) {

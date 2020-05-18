@@ -4,7 +4,7 @@
 /* global browser, require, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
   blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
-  storageGet, parseFilter, twitchSettings */
+  storageGet, parseFilter, twitchSettings, channels */
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
@@ -35,6 +35,7 @@ const {
   recordGeneralMessage,
   recordErrorMessage,
   recordAdreportMessage,
+  recordAnonymousErrorMessage,
   recordAnonymousMessage,
 } = require('./servermessages').ServerMessages;
 const {
@@ -70,6 +71,7 @@ Object.assign(window, {
   recordErrorMessage,
   recordAdreportMessage,
   recordAnonymousMessage,
+  recordAnonymousErrorMessage,
   getUrlFromId,
   unsubscribe,
   recommendations,
@@ -119,7 +121,11 @@ const countCache = (function countCache() {
     // Get current custom filter count for a particular domain
     // Inputs: host:string - url of the host
     getCustomFilterCount(host) {
-      return cache[host] || 0;
+      let customCount = 0;
+      if (cache) {
+        customCount = cache[host];
+      }
+      return customCount || 0;
     },
 
     // Add 1 to custom filter count for the filters domain.
@@ -668,7 +674,7 @@ const getCurrentTabInfo = function (secondTime) {
 
             const result = {
               disabledSite,
-              url: page.url,
+              url: String(page.url || tab.url),
               id: page.id,
               settings: getSettings(),
               paused: adblockIsPaused(),
@@ -688,7 +694,8 @@ const getCurrentTabInfo = function (secondTime) {
               result.whitelisted = checkWhitelisted(page);
             }
             if (
-              getSettings().youtube_channel_whitelist
+              getSettings()
+              && getSettings().youtube_channel_whitelist
               && parseUri(tab.url).hostname === 'www.youtube.com'
             ) {
               result.youTubeChannelName = ytChannelNamePages.get(page.id);
@@ -816,19 +823,23 @@ if (browser.runtime.id) {
       License.ready().then(checkQueryState);
     }
   };
-  const slashUpdateReleases = ['4.10.0'];
+  const slashUpdateReleases = ['4.10.0', '4.11.0', '4.12.0'];
   // Display updated page after each update
   browser.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);
     const currentVersion = browser.runtime.getManifest().version;
     if (
       details.reason === 'update'
-      && slashUpdateReleases.includes(currentVersion)
-      && !slashUpdateReleases.includes(lastKnownVersion)
-      && browser.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
+          && slashUpdateReleases.includes(currentVersion)
+          && !slashUpdateReleases.includes(lastKnownVersion)
+          && browser.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
     ) {
-      STATS.untilLoaded(() => {
-        Prefs.untilLoaded.then(shouldShowUpdate);
+      settings.onload().then(() => {
+        if (!getSettings().suppress_update_page) {
+          STATS.untilLoaded(() => {
+            Prefs.untilLoaded.then(shouldShowUpdate);
+          });
+        }
       });
     }
     localStorage.setItem(updateStorageKey, currentVersion);
@@ -1194,7 +1205,16 @@ const getDebugInfo = function (callback) {
                 }
                 License.getLicenseInstallationDate((installdate) => {
                   response.otherInfo['License Installation Date'] = installdate;
-                  if (typeof callback === 'function') {
+                  const customChannelId = channels.getIdByName('CustomChannel');
+                  if (channels.getGuide()[customChannelId].enabled) {
+                    const customChannel = channels.channelGuide[customChannelId].channel;
+                    customChannel.getTotalBytesInUse().then((result) => {
+                      response.otherInfo['Custom Channel total bytes in use'] = result;
+                      if (typeof callback === 'function') {
+                        callback(response);
+                      }
+                    });
+                  } else if (typeof callback === 'function') {
                     callback(response);
                   }
                 });

@@ -197,7 +197,11 @@ try {
 
             // Cache response object for later use
             pageInfo = info;
-            pageInfo.url = new URL(info.url);
+            try {
+              pageInfo.url = new URL(info.url);
+            } catch (err) {
+              pageInfo.url = null;
+            }
 
             show(['svg_options']);
             if (info.paused) {
@@ -222,7 +226,8 @@ try {
             }
 
             if (
-              pageInfo.url.hostname === 'www.youtube.com'
+              pageInfo.url
+              && pageInfo.url.hostname === 'www.youtube.com'
               && info.youTubeChannelName
               && /ab_channel/.test(pageInfo.url.href)
               && eligibleForUndo
@@ -321,14 +326,16 @@ try {
 
       selected('#div_enable_adblock_on_this_page', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'enable_adblock_clicked' });
-        browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href }).then((response) => {
-          if (response.unwhitelisted) {
-            browser.tabs.reload();
-            closeAndReloadPopup();
-          } else {
-            $('#div_status_whitelisted').replaceWith(translate('disabled_by_filter_lists'));
-          }
-        });
+        if (pageInfo.url) {
+          browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href }).then((response) => {
+            if (response.unwhitelisted) {
+              browser.tabs.reload();
+              closeAndReloadPopup();
+            } else {
+              $('#div_status_whitelisted').replaceWith(translate('disabled_by_filter_lists'));
+            }
+          });
+        }
       });
 
       selected('#div_paused_adblock', () => {
@@ -342,27 +349,33 @@ try {
 
       selected('#div_domain_paused_adblock', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'domain_unpause_clicked' });
-        browser.runtime.sendMessage({ command: 'adblockIsDomainPaused', activeTab: { url: pageInfo.url.href, id: pageInfo.id }, newValue: false }).then(() => {
-          browser.runtime.sendMessage({ command: 'updateButtonUIAndContextMenus' }).then(() => {
-            closeAndReloadPopup();
+        if (pageInfo.url) {
+          browser.runtime.sendMessage({ command: 'adblockIsDomainPaused', activeTab: { url: pageInfo.url.href, id: pageInfo.id }, newValue: false }).then(() => {
+            browser.runtime.sendMessage({ command: 'updateButtonUIAndContextMenus' }).then(() => {
+              closeAndReloadPopup();
+            });
           });
-        });
+        }
       });
 
       selected('#div_undo', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'undo_clicked' });
-        const host = pageInfo.url.hostname;
-        browser.runtime.sendMessage({ command: 'confirmRemovalOfCustomFiltersOnHost', host, activeTabId: pageInfo.id }).then(() => {
-          closeAndReloadPopup();
-        });
+        if (pageInfo.url) {
+          const host = pageInfo.url.hostname;
+          browser.runtime.sendMessage({ command: 'confirmRemovalOfCustomFiltersOnHost', host, activeTabId: pageInfo.id }).then(() => {
+            closeAndReloadPopup();
+          });
+        }
       });
 
       selected('#div_whitelist_channel', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_youtube_clicked' });
-        browser.runtime.sendMessage({ command: 'createWhitelistFilterForYoutubeChannel', url: pageInfo.url.href }).then(() => {
-          closeAndReloadPopup();
-          browser.tabs.reload();
-        });
+        if (pageInfo.url) {
+          browser.runtime.sendMessage({ command: 'createWhitelistFilterForYoutubeChannel', url: pageInfo.url.href }).then(() => {
+            closeAndReloadPopup();
+            browser.tabs.reload();
+          });
+        }
       });
 
       selected('#div_pause_adblock', () => {
@@ -376,11 +389,13 @@ try {
 
       selected('#div_domain_pause_adblock', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'domain_pause_clicked' });
-        browser.runtime.sendMessage({ command: 'adblockIsDomainPaused', activeTab: { url: pageInfo.url.href, id: pageInfo.id }, newValue: true }).then(() => {
-          browser.runtime.sendMessage({ command: 'updateButtonUIAndContextMenus' }).then(() => {
-            closeAndReloadPopup();
+        if (pageInfo.url) {
+          browser.runtime.sendMessage({ command: 'adblockIsDomainPaused', activeTab: { url: pageInfo.url.href, id: pageInfo.id }, newValue: true }).then(() => {
+            browser.runtime.sendMessage({ command: 'updateButtonUIAndContextMenus' }).then(() => {
+              closeAndReloadPopup();
+            });
           });
-        });
+        }
       });
 
       selected('#div_blacklist', () => {
@@ -399,10 +414,12 @@ try {
 
       selected('#div_whitelist_page', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_page_clicked' });
-        browser.runtime.sendMessage({ command: 'createPageWhitelistFilter', url: pageInfo.url.href }).then(() => {
-          closeAndReloadPopup();
-          browser.tabs.reload();
-        });
+        if (pageInfo.url) {
+          browser.runtime.sendMessage({ command: 'createPageWhitelistFilter', url: pageInfo.url.href }).then(() => {
+            closeAndReloadPopup();
+            browser.tabs.reload();
+          });
+        }
       });
 
       selected('#svg_options', () => {

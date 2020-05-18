@@ -1,7 +1,8 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, translate, onReady, typeMap, imageSizesMap, */
+/* global browser, translate, onReady, typeMap, imageSizesMap,
+   base64toBlob  */
 
 const { hostname } = window.location;
 let totalSwaps = 0;
@@ -9,6 +10,7 @@ const hideElements = [];
 const hiddenElements = [];
 let cssRules = [];
 const minDimension = 60;
+const CUSTOM_IMAGES_KEY = 'customImages';
 
 browser.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
   if (response && response.selectors) {
@@ -321,6 +323,7 @@ const imageSwap = {
       result.listingHeight = pic.listingHeight;
       result.listingWidth = pic.listingWidth;
       result.channelName = pic.channelName;
+      result.customImage = pic.customImage;
       callback(result);
       return true;
     });
@@ -338,11 +341,27 @@ const imageSwap = {
     imageSwapWrapper.classList.add('ab-image-swap-wrapper');
 
     // New image
-    const newPic = document.createElement('img');
+    let newPic;
+    if (placement.customImage === true) {
+      newPic = document.createElement('div');
+      browser.storage.local.get(placement.url).then((savedCustomImageData) => {
+        const base = newPic.attachShadow({ mode: 'closed' });
+        // a closed shadow root is utilized to protect users images
+        // from being accessed by websites where the images are injected
+        const innerHTMLText = `:host {
+                               content: url("${savedCustomImageData[placement.url].src}");
+                             }`;
+        const styleTag = document.createElement('style');
+        styleTag.type = 'text/css';
+        styleTag.textContent = innerHTMLText;
+        base.appendChild(styleTag);
+      });
+    } else {
+      newPic = document.createElement('img');
+      newPic.src = placement.url;
+      newPic.alt = translate('image_of_channel', translate(placement.channelName));
+    }
     newPic.classList.add('picreplacement-image');
-    newPic.src = placement.url;
-    newPic.alt = translate('image_of_channel', translate(placement.channelName));
-
 
     // Overlay info card
     const infoCardOverlay = document.createElement('div');

@@ -50,6 +50,11 @@ function Settings() {
             }
           }
           resolve();
+        },
+        // Opera and FF doesn't support browser.storage.managed, but instead of simply
+        // removing the API, it gives an asynchronous error which we ignore here.
+        () => {
+          resolve();
         });
       } else {
         resolve();

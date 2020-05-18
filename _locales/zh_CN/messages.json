@@ -1935,6 +1935,10 @@
     "message": "风景",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
   },
+  "customchannelswitchlabel": {
+    "message": "自定义",
+    "description": "The label text for the Custom Image switch on the MyAdBlock Options page"
+  },
   "urgent_safari_changes": {
     "message": "紧急通知：Apple 更改了 Safari 扩展的运作机制。",
     "description": "Title for Options page message letting users know of settings change."
@@ -3012,11 +3016,11 @@
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_opt_in_msg": {
-    "message": "请选择加入本地数据收集以查看您的 AdBlock 统计信息，例如您在哪些网站上拦截了最多的广告和跟踪代码，一段时间内的拦截总数，Premium 用户还可查看交换的图像。",
+    "message": "请选择加入本地统计收集以查看您的 AdBlock 统计信息，例如您在哪些网站上拦截了最多的广告和跟踪代码，一段时间内的拦截总数，Premium 用户还可查看交换的图像。",
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_opt_in_local_msg": {
-    "message": "请也选择加入本地数据收集以查看您全部的 AdBlock 统计信息，例如您在哪些网站上拦截了最多的广告和跟踪代码，一段时间内的拦截总数，Premium 用户还可查看交换的图像。",
+    "message": "请也选择加入本地统计收集以查看您全部的 AdBlock 统计信息，例如您在哪些网站上拦截了最多的广告和跟踪代码，一段时间内的拦截总数，Premium 用户还可查看交换的图像。",
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_already_opted": {
@@ -3028,7 +3032,7 @@
     "description": "Text in the Opt In button on the statistics page of the Options page"
   },
   "stats_opt_in_local_text_button": {
-    "message": "选择加入本地数据收集",
+    "message": "选择加入本地统计收集",
     "description": "Text in the Opt In button on the statistics page of the Options page"
   },
   "stats_opt_in_data_collect": {
@@ -3040,11 +3044,11 @@
     "description": "Text on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_hide_data": {
-    "message": "隐藏数据",
+    "message": "隐藏统计",
     "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_show_data": {
-    "message": "显示数据",
+    "message": "显示统计",
     "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_trackers_blocked": {
@@ -3112,11 +3116,11 @@
     "description": "sub menu item text on the statistics page of the Options page"
   },
   "delete_panel_title": {
-    "message": "删除拦截数据",
+    "message": "删除拦截统计",
     "description": "title text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_I": {
-    "message": "您可以在此处删除本地存储的拦截数据。",
+    "message": "您可以在此处删除本地存储的拦截统计。",
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_II": {
@@ -3124,15 +3128,15 @@
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_III": {
-    "message": "您的数据仅存储在设备上，删除的任何数据均无法恢复。",
+    "message": "您的统计仅存储在设备上，删除的任何统计均无法恢复。",
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_all_stats_data": {
-    "message": "删除我当前存储的拦截数据",
+    "message": "删除我当前存储的拦截统计",
     "description": "text related to the delete all data checkbox on the statistics page of the Options page"
   },
   "opt_out_stats_data": {
-    "message": "以后不要收集我的拦截数据",
+    "message": "以后不要收集我的拦截统计",
     "description": "text related to the opt out data collection checkbox on the statistics page of the Options page"
   },
   "delete_detail_page_2_msg_part_I": {
@@ -3148,15 +3152,107 @@
     "description": "button text on page 2 of delete modal box on the statistics page of the Options page"
   },
   "no_data_title": {
-    "message": "无数据",
+    "message": "无统计",
     "description": "title text on warning message when there's no user data to show on the statistics page of the Options page"
   },
   "no_data_msg_part_I": {
-    "message": "您目前没有任何拦截数据可供显示。",
+    "message": "您目前没有任何拦截统计可供显示。",
     "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
   },
   "no_data_msg_part_II": {
     "message": "请在上网浏览后刷新此页面，即可开始看到拦截状态。",
     "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "loading_in_progress": {
+    "message": "加载中",
+    "description": "Text in the aria-label attribute of an icon indicating that page is currently loading"
+  },
+  "stats_ads_blocked_aria_label": {
+    "message": "已拦截的广告数量",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_trackers_blocked_aria_label": {
+    "message": "已拦截的跟踪代码数量",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_replaced_blocked_aria_label": {
+    "message": "已交换的图像数量",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "edit_image_msg_partI": {
+    "message": "我们在下面列出了 3 种最常见的广告尺寸。",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image_msg_partII": {
+    "message": "请选择最接近你图像的尺寸，使用滑块进行调整，完成后点击“保存”。",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image": {
+    "message": "编辑图像",
+    "description": "header text in the on custom image swap modal dialog"
+  },
+  "custom_images": {
+    "message": "自定义图像",
+    "description": "text on the image swap tab"
+  },
+  "custom_image_description": {
+    "message": "选择最多 9 张您希望 AdBlock 用来替换广告的图像",
+    "description": "text on the image swap tab"
+  },
+  "remove_image": {
+    "message": "移除图像",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "remove_image_msg": {
+    "message": "确定要移除此图像吗？",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonremove": {
+    "message": "移除",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonkeep": {
+    "message": "保留",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "custom_image_error": {
+    "message": "糟糕！出错了",
+    "description": "header / title text on the error message on the image swap tab"
+  },
+  "custom_image_error_msg_partI": {
+    "message": "我们无法添加你的图像。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partII": {
+    "message": "请稍等，然后重试。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partIII": {
+    "message": "您还可以共享[[匿名调试数据]]，帮助我们找出问题所在。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "dontsend": {
+    "message": "不要发送",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "senddebugdata": {
+    "message": "发送调试数据",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "custom_image_unsupported_title": {
+    "message": "不支持的图像类型",
+    "description": "header / title on error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partI": {
+    "message": "糟糕！似乎您尝试添加的图像不支持“自定义图像交换”。",
+    "description": "First sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partII": {
+    "message": "请选择以下图像类型之一：",
+    "description": "second sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_supported_file_types": {
+    "message": "*.bmp、*.gif、*.jpeg、*.png、*.svg、*.tiff、*.webp",
+    "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
   }
 }

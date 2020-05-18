@@ -43,6 +43,9 @@ function Listing(data) {
   if (data.ratio) {
     this.ratio = data.ratio;
   }
+  if (data.customImage) {
+    this.customImage = data.customImage;
+  }
 }
 
 // Contains and provides access to all the photo channels.
@@ -119,9 +122,18 @@ Channels.prototype = {
     return undefined;
   },
 
+  isCustomChannel(id) {
+    return (this.getIdByName('CustomChannel') === id);
+  },
+
+  isCustomChannelEnabled() {
+    return (this.channelGuide[this.getIdByName('CustomChannel')].enabled);
+  },
+
   getListings(id) {
     return this.channelGuide[id].channel.getListings();
   },
+
   setEnabled(id, enabled) {
     const originalValue = this.channelGuide[id].enabled;
     this.channelGuide[id].enabled = enabled;
@@ -280,10 +292,22 @@ Channels.prototype = {
         param: undefined,
         enabled: false,
       });
+      this.add({
+        name: 'CustomChannel',
+        param: undefined,
+        enabled: false,
+      });
     } else {
       for (let i = 0; i < entries.length; i++) {
         this.add(entries[i]);
       }
+    }
+    if (!this.getIdByName('CustomChannel')) {
+      this.add({
+        name: 'CustomChannel',
+        param: undefined,
+        enabled: false,
+      });
     }
   },
 

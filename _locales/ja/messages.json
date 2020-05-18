@@ -1935,6 +1935,10 @@
     "message": "風景",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
   },
+  "customchannelswitchlabel": {
+    "message": "カスタム",
+    "description": "The label text for the Custom Image switch on the MyAdBlock Options page"
+  },
   "urgent_safari_changes": {
     "message": "緊急: アップルはSafariの拡張機能を変更しています。",
     "description": "Title for Options page message letting users know of settings change."
@@ -3012,11 +3016,11 @@
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_opt_in_msg": {
-    "message": "ローカルデータの収集に登録すると、どのサイトで最も多くの広告やトラッカーをブロックしているか、時間の経過とともにブロックされた合計ブロック数、プレミアムユーザーのために交換された画像など、AdBlockの統計データを確認することができます。",
+    "message": "ローカル統計データの収集に登録すると、どのサイトで最も多くの広告やトラッカーをブロックしているか、時間の経過とともにブロックされた合計ブロック数、プレミアムユーザーのために交換された画像など、AdBlockの統計データを確認することができます。",
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_opt_in_local_msg": {
-    "message": "ローカルデータの収集にも登録すると、どのサイトで最も多くの広告やトラッカーをブロックしているか、時間の経過とともにブロックされた合計ブロック数、プレミアムユーザーのために交換された画像など、AdBlockのすべての統計データにアクセスできます。",
+    "message": "ローカル統計データの収集にも登録すると、どのサイトで最も多くの広告やトラッカーをブロックしているか、時間の経過とともにブロックされた合計ブロック数、プレミアムユーザーのために交換された画像など、AdBlockのすべての統計データにアクセスできます。",
     "description": "On page text of the statistics page of the Options page"
   },
   "stats_already_opted": {
@@ -3028,7 +3032,7 @@
     "description": "Text in the Opt In button on the statistics page of the Options page"
   },
   "stats_opt_in_local_text_button": {
-    "message": "ローカルデータ収集に登録する",
+    "message": "ローカル統計データ収集に登録する",
     "description": "Text in the Opt In button on the statistics page of the Options page"
   },
   "stats_opt_in_data_collect": {
@@ -3040,11 +3044,11 @@
     "description": "Text on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_hide_data": {
-    "message": "データ非表示",
+    "message": "統計データ非表示",
     "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_show_data": {
-    "message": "データ表示",
+    "message": "統計データ表示",
     "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
   },
   "stats_trackers_blocked": {
@@ -3112,11 +3116,11 @@
     "description": "sub menu item text on the statistics page of the Options page"
   },
   "delete_panel_title": {
-    "message": "ブロックデータの削除",
+    "message": "ブロック統計データの削除",
     "description": "title text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_I": {
-    "message": "ローカルに保存されたブロックデータを削除できます。",
+    "message": "ローカルに保存されたブロック統計データを削除できます。",
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_II": {
@@ -3124,15 +3128,15 @@
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_detail_msg_part_III": {
-    "message": "データはデバイスにのみ保存され、削除したデータは復元できません。",
+    "message": "統計データはデバイスにのみ保存され、削除した統計データは復元できません。",
     "description": "text on the delete overlay on the statistics page of the Options page"
   },
   "delete_all_stats_data": {
-    "message": "現在保存されているブロックデータを削除する",
+    "message": "現在保存されているブロック統計データを削除する",
     "description": "text related to the delete all data checkbox on the statistics page of the Options page"
   },
   "opt_out_stats_data": {
-    "message": "今後、ブロックデータを収集しない。",
+    "message": "今後、ブロック統計データを収集しない。",
     "description": "text related to the opt out data collection checkbox on the statistics page of the Options page"
   },
   "delete_detail_page_2_msg_part_I": {
@@ -3148,15 +3152,107 @@
     "description": "button text on page 2 of delete modal box on the statistics page of the Options page"
   },
   "no_data_title": {
-    "message": "データがありません",
+    "message": "統計データなし",
     "description": "title text on warning message when there's no user data to show on the statistics page of the Options page"
   },
   "no_data_msg_part_I": {
-    "message": "現在、表示できるブロックデータはありません。",
+    "message": "現在、表示できるブロック統計データはありません。",
     "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
   },
   "no_data_msg_part_II": {
     "message": "ウェブ・ブラウジング後にこのページを更新すると、ブロック統計データが表示されるようになります。",
     "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "loading_in_progress": {
+    "message": "読み込み中",
+    "description": "Text in the aria-label attribute of an icon indicating that page is currently loading"
+  },
+  "stats_ads_blocked_aria_label": {
+    "message": "ブロックした広告数",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_trackers_blocked_aria_label": {
+    "message": "ブロックしたトラッカー数",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_replaced_blocked_aria_label": {
+    "message": "交換した画像数",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "edit_image_msg_partI": {
+    "message": "一般的な広告のサイズを以下に3つ挙げました。",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image_msg_partII": {
+    "message": "画像のサイズを選択し、スライダーで調整し、完了したら保存をクリックします。",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image": {
+    "message": "画像の編集",
+    "description": "header text in the on custom image swap modal dialog"
+  },
+  "custom_images": {
+    "message": "画像カスタマイズ",
+    "description": "text on the image swap tab"
+  },
+  "custom_image_description": {
+    "message": "AdBlockで広告を置き換えるために使用する画像を最大9枚まで選択します",
+    "description": "text on the image swap tab"
+  },
+  "remove_image": {
+    "message": "画像の削除",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "remove_image_msg": {
+    "message": "本当にこの画像を削除しますか？",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonremove": {
+    "message": "削除",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonkeep": {
+    "message": "保持",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "custom_image_error": {
+    "message": "エラーが発生しました",
+    "description": "header / title text on the error message on the image swap tab"
+  },
+  "custom_image_error_msg_partI": {
+    "message": "画像が追加できませんでした。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partII": {
+    "message": "時間をおいてからお試し下さい。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partIII": {
+    "message": "また、[[匿名デバッグデータ]]を共有してもらえるとエラーの原因を解明するために役立ちます。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "dontsend": {
+    "message": "送信しない",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "senddebugdata": {
+    "message": "デバッグデータを送信する",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "custom_image_unsupported_title": {
+    "message": "非対応の画像ファイル形式です",
+    "description": "header / title on error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partI": {
+    "message": "カスタマイズ画像交換能に非対応の画像を追加しようとしています。",
+    "description": "First sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partII": {
+    "message": "画像のファイル形式は以下の中からお選びください。",
+    "description": "second sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_supported_file_types": {
+    "message": "*.bmp, *.gif, *.jpeg, *.png, *.svg, *.tiff, *.webp",
+    "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
   }
 }

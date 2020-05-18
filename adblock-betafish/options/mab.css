@@ -236,12 +236,14 @@ div.mab-page-box > .option-page-content > footer > div {
   margin-right: 8px;
   color: var(--options-page-accent-text);
 }
-#channel-options {
+#channel-options,
+#custom-channel-options {
   padding: 15px 60px;
   display: flex;
   flex-wrap: wrap;
 }
-.channel-box {
+.channel-box,
+.custom-channel-box {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -252,9 +254,9 @@ div.mab-page-box > .option-page-content > footer > div {
   max-height: 135px;
   border-radius: 6px;
   overflow: visible;
-  background-color: #f4f4f4;
+  background-color: transparent;
   margin: 5px;
-  color: #666666;
+  color: var(--main-text-color);
   text-align: center;
   margin: 12px;
   padding: 0 16px;
@@ -269,6 +271,255 @@ div.mab-page-box > .option-page-content > footer > div {
   max-width: 140px;
   max-height: 135px;
 }
+#custom-images {
+  display: none;
+}
+#custom-channel-options-add-icon {
+  padding: 0;
+}
+#upload_content_icon_label {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+.custom-channel-box.thumbnail {
+  padding: 0;
+}
+.thumbnail i {
+  display: none;
+  background: var(--icon-notes-background-color);
+  color: var(--icon-notes-main-text-color);
+  pointer-events: auto;
+  z-index: 20;
+}
+
+.custom-channel-box:hover i {
+  display: inline;
+}
+.thumbnail .thumbnailOverlay {
+  display: none;
+  background: rgba(51, 51, 51, 0.5);
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  overflow: hidden;
+  color: var(--icon-notes-main-text-color);
+  font-size: 24px;
+}
+.thumbnail:hover .thumbnailOverlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+.thumbnailOverlay i {
+  background: transparent;
+  color: var(--icon-notes-main-text-color);
+  display: block;
+}
+
+#swap-edit-overlay,
+#swap-edit-no-click-overlay {
+  position: fixed;
+  top: 0px;
+  left: 200px;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: auto;
+  user-select: none;
+}
+
+#swap-edit-overlay {
+  background-color: rgba(51, 51, 51, 0.6);
+}
+
+#swap-edit-no-click-overlay {
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+#swap-edit-overlay-page,
+#swap-delete-overlay-page,
+#swap-error-overlay-page,
+#swap-unsupported-overlay-page {
+  position: fixed;
+  background-color: var(--background-color);
+  color: var(--main-text-color);
+  z-index: 500;
+  border-radius: 6px;
+}
+
+#swap-edit-overlay-header {
+  font-size: 18px;
+  margin: 24px 0;
+}
+
+#swap-edit-overlay-page {
+  width: 640px;
+  left: calc((100% - 440px) / 2);
+  top: calc((100% - 731px) / 2);
+  height: max-content;
+}
+
+#swap-delete-overlay-page {
+  width: 640px;
+  left: calc((100% - 440px) / 2);
+  top: calc((100% - 24px) / 2);
+  height: max-content;
+}
+
+#swap-error-overlay-page {
+  width: 640px;
+  left: calc((100% - 440px) / 2);
+  top: calc((100% - 250px) / 2);
+  height: max-content;
+}
+
+#swap-unsupported-overlay-page {
+  width: 640px;
+  left: calc((100% - 440px) / 2);
+  top: calc((100% - 250px) / 2);
+  height: max-content;
+}
+
+#swap-edit-overlay-content,
+#swap-delete-overlay-content,
+#swap-error-overlay-content,
+#swap-unsupported-overlay-content {
+  padding: 16px;
+}
+
+#image-swap-custom-container {
+  width: 575px;
+}
+
+#swap-edit-overlay-title-div,
+#swap-delete-overlay-title-div,
+#swap-error-overlay-title-div,
+#swap-unsupported-overlay-title-div {
+  display: flex;
+  justify-content: space-between;
+  line-height: 22px;
+  border-bottom: 1px solid var(--bottom-line-color);
+  padding-bottom: 12px;
+  background: var(--background-color);
+  color: var(--main-text-color);
+  font-size: 22px;
+}
+#swap-edit-overlay-title-div i,
+#swap-delete-overlay-title-div i,
+#swap-error-overlay-title-div i,
+#swap-unsupported-overlay-title-div i {
+  color: var(--main-text-color);
+}
+
+#swap-edit-overlay-msg-content,
+#swap-delete-overlay-msg,
+#swap-error-overlay-header {
+  padding: 16px 0;
+  color: var(--main-text-color);
+}
+
+#swap-edit-overlay-footer {
+  padding-right: 16px;
+  padding-bottom: 16px;
+  padding-top: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  width: 100%;
+  border-top: 1px solid var(--stats-border-color);
+}
+
+#swap-delete-overlay-footer,
+#swap-error-overlay-footer,
+#swap-unsupported-overlay-footer {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+#swap-delete-overlay-header,
+#swap-error-overlay-header,
+#swap-unsupported-overlay-header {
+  margin: 24px 0;
+}
+
+#image-swap-custom-sizes {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  margin-top: 25px;
+}
+.image-swap-sample {
+  color: var(--checkbox-bg-color);
+  border: 1px solid var(--checkbox-bg-color);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.image-swap-sample-selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--checkbox-bg-color);
+  color: #ffffff;
+  border-radius: 6px;
+  margin: auto;
+}
+
+#sample-size-small {
+  width: 160px;
+  height: 133px;
+}
+#sample-size-large {
+  width: 160px;
+  height: 84px;
+}
+#sample-size-medium {
+  width: 161px;
+  height: 134px;
+}
+
+img,
+canvas,
+#temp-image-swap-canvas,
+#temp-image-swap-custom-image-upload,
+#image-swap-custom-image-upload,
+#temp-croppie-image-swap-canvas,
+#thumbnail-image-swap-canvas,
+#thumbnail-image-swap-image,
+#temp-image-swap-custom-image-result .cr-image {
+  image-orientation: none;
+}
+
+#temp-croppie-image-swap-canvas {
+  visibility: hidden;
+  display: block;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+#thumbnail-image-swap-canvas,
+#thumbnail-image-swap-image,
+#temp-image-swap-custom-image-result,
+#temp-image-swap-canvas,
+#temp-image-swap-custom-image-upload {
+  display: none;
+}
+
 .locked > a[id^="get-it-now"] {
   position: absolute;
   height: 100%;
@@ -319,6 +570,62 @@ input.invisible-overlay {
   top: 0;
   left: 0;
   margin: 0;
+}
+
+.custom-channel-enable,
+.favorite_icon_enable {
+  background: var(--checkbox-bg-color);
+  color: var(--icon-notes-main-text-color);
+}
+
+.custom-channel-disable,
+.favorite_icon_disable {
+  background: rgba(0, 0, 0, 0);
+  color: var(--main-text-color);
+}
+
+.custom-channel-disable {
+  border: 1px solid var(--bottom-line-color);
+}
+
+.channel-box-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#do_not_swap_ads_panel,
+#do_not_swap_ads_panel i {
+  color: var(--main-text-color);
+}
+
+#custom-channel-options li:first-child {
+  background: var(--image-background-color);
+}
+
+.custom-channel-upload-enabled {
+  border: 1px solid var(--checkbox-bg-color);
+  cursor: pointer;
+}
+
+.custom-channel-upload-disabled {
+  border: 1px solid var(--help-icon-color);
+  cursor: not-allowed;
+}
+
+.upload-icon-enabled {
+  color: var(--checkbox-bg-color);
+  cursor: pointer;
+}
+
+.upload-icon-disabled {
+  color: var(--help-icon-color);
+  cursor: not-allowed;
+}
+
+#upload_content_icon {
+  background: var(--image-background-color);
+  margin: auto;
 }
 
 /* Themes */
@@ -563,10 +870,41 @@ input.invisible-overlay {
 /* Screen size support */
 
 @media screen and (max-width: 1265px) {
+  @media screen and (max-width: 890px) {
+    #swap-edit-overlay,
+    #swap-edit-no-click-overlay {
+      left: var(--small-sidebar-width, 60px);
+    }
+  }
+
   @media screen and (max-width: 700px) {
     #channels#channels {
       flex-wrap: wrap;
       justify-content: space-evenly;
+    }
+  }
+  @media screen and (max-width: 720px) {
+    #swap-edit-overlay-page,
+    #swap-delete-overlay-page,
+    #swap-error-overlay-page,
+    #swap-unsupported-overlay-page {
+      width: 568px;
+      left: calc((100% - 508px) / 2);
+    }
+    #image-swap-custom-container {
+      width: 508px;
+    }
+    #sample-size-small {
+      width: 142px;
+      height: 119px;
+    }
+    #sample-size-large {
+      width: 142px;
+      height: 75px;
+    }
+    #sample-size-medium {
+      width: 144px;
+      height: 119px;
     }
   }
 }
