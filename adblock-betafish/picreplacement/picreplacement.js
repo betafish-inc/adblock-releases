@@ -360,6 +360,7 @@ const imageSwap = {
       newPic = document.createElement('img');
       newPic.src = placement.url;
       newPic.alt = translate('image_of_channel', translate(placement.channelName));
+      newPic.setAttribute('referrerpolicy', 'no-referrer');
     }
     newPic.classList.add('picreplacement-image');
 

@@ -23,6 +23,7 @@ const info = require('../buildtools/info');
 
 // Object's used on the option, pop up, etc. pages...
 const { STATS } = require('./stats');
+const { SURVEY } = require('./survey');
 const { SyncService } = require('./picreplacement/sync-service');
 const { DataCollectionV2 } = require('./datacollection.v2');
 const { LocalDataCollection } = require('./localdatacollection');
@@ -62,6 +63,7 @@ Object.assign(window, {
   info,
   getBlockedPerPage,
   STATS,
+  SURVEY,
   SyncService,
   DataCollectionV2,
   LocalDataCollection,
@@ -823,7 +825,7 @@ if (browser.runtime.id) {
       License.ready().then(checkQueryState);
     }
   };
-  const slashUpdateReleases = ['4.10.0', '4.11.0', '4.12.0'];
+  const slashUpdateReleases = ['4.10.0', '4.11.0', '4.12.0', '4.13.0'];
   // Display updated page after each update
   browser.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);

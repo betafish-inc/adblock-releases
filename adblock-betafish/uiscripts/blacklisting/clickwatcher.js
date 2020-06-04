@@ -18,6 +18,7 @@ function Highlighter() {
     'box-sizing': 'border-box',
     outline: 'solid 1px #0F4D9A',
     position: 'absolute',
+    zIndex: 214748364,
   });
   box.appendTo($(document.body));
 

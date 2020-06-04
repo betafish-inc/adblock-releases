@@ -168,6 +168,7 @@ const STATS = (function exportStats() {
         sup: settingsObj.suppress_update_page ? '1' : '0',
         ss: settingsObj.suppress_surveys ? '1' : '0',
         sfrp: settingsObj.suppress_first_run_page ? '1' : '0',
+        opm: settingsObj.onpageMessages ? '1' : '0',
       };
 
       // only on Chrome, Edge, or Firefox

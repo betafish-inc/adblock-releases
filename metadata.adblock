@@ -1,5 +1,5 @@
 [general]
-version = 4.12.0
+version = 4.13.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -32,6 +32,8 @@ permissions =
   alarms
 web_accessible_resources =
   adblock-uiscripts-adblock-wizard.css
+  adblock-onpage-icon.css
+  adblock-onpage-icon.svg
   icons/icon24.png
   icons/ab-19.png
   icons/dark_theme/logo.svg
@@ -73,7 +75,7 @@ commands.toggle_pause.suggested_key.mac = Command+Period
 [contentScripts]
 document_start += adblock-functions.js
   adblock-bandaids.js
-document_end += adblock-uiscripts-rightclick_hook.js adblock-notificationoverlay.js
+document_end += adblock-uiscripts-rightclick_hook.js adblock-onpage-icon-cs.js
 
 [mapping]
 CHANGELOG.txt = adblock-betafish/CHANGELOG.txt
@@ -91,7 +93,10 @@ adblock-functions.js = adblock-betafish/functions.js
 adblock-bandaids.js = adblock-betafish/bandaids.js
 adblock-datacollection-contentscript.js = adblock-betafish/datacollection-contentscript.js
 adblock-ytchannel.js = adblock-betafish/ytchannel.js
-adblock-notificationoverlay.js = adblock-betafish/notificationoverlay.js
+adblock-onpage-icon-cs.js = adblock-betafish/onpageIcon/onpage-icon-cs.js
+adblock-onpage-icon.css = adblock-betafish/onpageIcon/onpage-icon.css
+adblock-onpage-icon-user.css = adblock-betafish/onpageIcon/onpage-icon-user.css
+adblock-onpage-icon.svg = adblock-betafish/onpageIcon/icon.svg
 adblock-options-tabs.css = adblock-betafish/options/tabs.css
 adblock-options-tabs.js = adblock-betafish/options/tabs.js
 options.html = adblock-betafish/options/index.html

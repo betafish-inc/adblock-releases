@@ -361,6 +361,16 @@ const updateAcceptableAdsUI = function (checkAA, checkAAprivacy) {
 };
 
 $(() => {
+  // delay opening of a second port due to a race condition in the ABP code
+  // the delay allows the confirmation message to the user to function correctly
+  window.setTimeout(() => {
+    const port2 = browser.runtime.connect({ name: 'ui' });
+    port2.postMessage({
+      type: 'app.listen',
+      filter: ['addSubscription'],
+    });
+  }, 500);
+
   const onSettingsChanged = function (name, currentValue) {
     if (name === 'color_themes') {
       $('body').attr('id', currentValue.options_page).data('theme', currentValue.options_page);

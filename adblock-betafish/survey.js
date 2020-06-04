@@ -1,51 +1,64 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, exports, STATS, log, getSettings, Prefs, openTab */
+/* global browser, require, exports, STATS, log, getSettings, Prefs, openTab,
+   License
+ */
 
 // if the ping response indicates a survey (tab or overlay)
 // gracefully processes the request
 const stats = require('stats');
+const { OnPageIconManager } = require('./onpageIcon/onpage-icon-bg.js');
+const { domainSuffixes, parseDomains } = require('../adblockpluschrome/adblockpluscore/lib/url.js');
 const { recordGeneralMessage, recordErrorMessage } = require('./servermessages').ServerMessages;
 
 const SURVEY = (function getSurvey() {
   // Only allow one survey per browser startup, to make sure users don't get
   // spammed due to bugs in AdBlock / the ping server / the browser.
   let surveyAllowed = true;
-  let lastNotificationID = '';
-
-  // Call |callback(tab)|, where |tab| is the active tab, or undefined if
-  // there is no active tab.
-  const getActiveTab = function (callback) {
-    browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-      callback(tabs[0]);
-    });
-  };
 
   // True if we are willing to show an overlay on this tab.
   const validTab = function (tab) {
     if (tab.incognito || tab.status !== 'complete') {
       return false;
     }
-    return /^http:/.test(tab.url);
+    return /^http/.test(tab.url);
   };
 
-  const getBlockCountOnActiveTab = function (callback) {
-    browser.tabs.query(
-      {
-        active: true,
-        lastFocusedWindow: true,
-      },
-    ).then((tabs) => {
-      if (tabs.length === 0) {
-        return;
+  /**
+   * Checks whether the tab URL is a match to the domain(s)
+   * @param {?string} [tabDomain]
+   * @return {boolean}
+   */
+  const isActiveOnDomain = function (tabDomain, domains) {
+    // If no domains are set the rule matches everywhere
+    if (!domains) {
+      return true;
+    }
+    let docDomain = tabDomain;
+    if (docDomain === null) {
+      docDomain = '';
+    } else if (docDomain[docDomain.length - 1] === '.') {
+      docDomain = docDomain.substring(0, docDomain.length - 1);
+    }
+
+    // If the document has no host name, match only if the filter
+    // isn't restricted to specific domains
+    if (!docDomain) {
+      return domains.get('');
+    }
+
+    for (docDomain of domainSuffixes(docDomain)) {
+      const isDomainIncluded = domains.get(docDomain);
+      if (typeof isDomainIncluded !== 'undefined') {
+        return isDomainIncluded;
       }
-      const blockedPerPage = stats.getBlockedPerPage(tabs[0]);
-      callback(blockedPerPage);
-    });
+    }
+
+    return domains.get('');
   };
 
-  // functions below are used by both Tab and Overlay Surveys
+  // functions below are used by both Tab Surveys
 
   // Double check that the survey should be shown
   // Inputs:
@@ -54,6 +67,7 @@ const SURVEY = (function getSurvey() {
   const shouldShowSurvey = function (surveyData, callback) {
     // Check if we should show survey only if it can actually be shown
     // based on surveyAllowed.
+    log('shouldShowSurvey::surveyAllowed: ', surveyAllowed);
     if (surveyAllowed) {
       let data = { cmd: 'survey', u: STATS.userId(), sid: surveyData.survey_id };
       if (STATS.flavor === 'E' && Prefs.blocked_total) {
@@ -66,12 +80,129 @@ const SURVEY = (function getSurvey() {
           log('Error parsing JSON: ', responseData, ' Error: ', e);
         }
         if (data && data.should_survey === 'true' && surveyAllowed) {
-          surveyAllowed = false;
+          // for icon surveys, the surveyAllowed is set to false when
+          // the user engages / mouse's over the icon
+          if (surveyData.type !== 'icon') {
+            surveyAllowed = false;
+          }
           callback(data);
         }
       });
-    } else {
-      log('survey not allowed');
+    }
+  };
+
+  // Process a request to show the 'on page / tab AdBlock icon'
+  // Inputs:
+  //         surveyData : object - with the following:
+  //             survey_id : string - A unique string
+  //             domains : string - A separate list of domains, and subdomain to show the icon on
+  //             block_count : integer - The minimum block count to show the icon (can be zero)
+  //             user_state : string - one of the three values: 'all', 'free', 'active'
+  // step 1 verify the user allows on page messages
+  // step 2 verify the initial survey data (ping response)
+  // step 3 verify license type is a match
+  // step 4 add a onTab update listener to watch for user navigation
+  // step 5 when a tab/site is done loading, check the tab's domain to the survey's list of domains
+  // step 6 compare the current block count on the tab to survey's minimum block count
+  // step 7 if the tab meets all of the survey critieria, then check with the ping server again
+  // step 8 validate shouldShow response data
+  // step 9 show the adblock icon on the tab
+  // step 10 when the user interacts with the icon, remove tab listener
+  const processIcon = function (surveyData) {
+    const validateIconSurveyData = function () {
+      if (!surveyData) {
+        return false;
+      }
+      if (!surveyData.survey_id) {
+        return false;
+      }
+      if (!surveyData.domains || typeof surveyData.domains !== 'string') {
+        return false;
+      }
+      if (surveyData.block_count && typeof surveyData.block_count !== 'number') {
+        return false;
+      }
+      if (!Object.prototype.hasOwnProperty.call(surveyData, 'block_count')) {
+        return false;
+      }
+      if (!surveyData.user_state || typeof surveyData.user_state !== 'string') {
+        return false;
+      }
+      return true;
+    };
+
+    const doesLicenseMatch = function () {
+      if (surveyData.user_state === 'all') {
+        return true;
+      }
+      if (License && License.get() && License.get().status === 'active' && surveyData.user_state === 'active') {
+        return true;
+      }
+      if (License && License.get() && !License.get().status && surveyData.user_state === 'free') {
+        return true;
+      }
+      return false;
+    };
+
+    const parsedDomains = parseDomains(surveyData.domains, ',');
+
+    const tabListener = function (updatedTabId, changeInfo, tab) {
+      const shouldShowOnPageIcon = function () {
+        shouldShowSurvey(surveyData, (responseData) => {
+          log('shouldShowSurvey::responseData:', responseData);
+          if (
+            responseData.survey_id === surveyData.survey_id
+            && responseData.should_survey === 'true'
+          ) {
+            OnPageIconManager.showOnPageIcon(tab.id, tab.url, {
+              titleText: responseData.titleText,
+              msgText: responseData.msgText,
+              buttonText: responseData.buttonText,
+              buttonURL: responseData.buttonURL,
+              surveyId: responseData.survey_id,
+            });
+          }
+        });
+      };
+
+      if (changeInfo.status === 'complete' && tab.status === 'complete' && validTab(tab)) {
+        const myURL = new URL(tab.url);
+        const cleanDomain = myURL.hostname.replace(/^www\./, ''); // remove lead 'www.'
+        log('processIcon:: checking if isActiveOnDomain', cleanDomain, isActiveOnDomain(cleanDomain, parsedDomains));
+        if (isActiveOnDomain(cleanDomain, parsedDomains)) {
+          log('processIcon:: block count check', stats.getBlockedPerPage(tab), surveyData.block_count);
+          if (surveyData.block_count <= stats.getBlockedPerPage(tab)) {
+            shouldShowOnPageIcon();
+          }
+        }
+      }
+    };
+
+    const surveyMsgListener = function (message, sender, sendResponse) {
+      if (message.onpageiconevent === 'mouseenter') {
+        surveyAllowed = false;
+        browser.runtime.onMessage.removeListener(surveyMsgListener);
+        browser.tabs.onUpdated.removeListener(tabListener);
+        browser.tabs.query({ url: '*://*/*' }).then((tabs) => {
+          for (const theTab of tabs) {
+            if (theTab.id !== sender.tab.id && theTab.url && theTab.url.startsWith('http')) {
+              browser.tabs.sendMessage(theTab.id, { command: 'removeIcon' }).catch(() => {
+                // ignore error
+              });
+            }
+          }
+        });
+        sendResponse({});
+      }
+    };
+
+    log('processIcon:: is survey data valid? ', validateIconSurveyData());
+    log('processIcon:: is license status match? ', doesLicenseMatch());
+    log('processIcon:: is settting enabled? ', getSettings().onpageMessages);
+    if (getSettings().onpageMessages && validateIconSurveyData() && doesLicenseMatch()) {
+      browser.runtime.onMessage.removeListener(surveyMsgListener);
+      browser.runtime.onMessage.addListener(surveyMsgListener);
+      browser.tabs.onUpdated.addListener(tabListener);
     }
   };
 
@@ -103,172 +234,6 @@ const SURVEY = (function getSurvey() {
     return surveyData;
   };
 
-  // create a Notification
-  const processNotification = function (surveyDataParam) {
-    let surveyData = surveyDataParam;
-
-    // Check to see if we should show the survey before showing the overlay.
-    const showNotificationIfAllowed = function () {
-      shouldShowSurvey(surveyData, (updatedSurveyData) => {
-        lastNotificationID = (Math.floor(Math.random() * 3000)).toString();
-        if (updatedSurveyData) {
-          const newSurveyData = surveyDataFrom(JSON.stringify(updatedSurveyData));
-          if (newSurveyData.survey_id === surveyData.survey_id) {
-            surveyData = newSurveyData;
-          } else {
-            recordGeneralMessage('survey_ids_do_not_match', undefined, {
-              original_sid: surveyData.survey_id,
-              updated_sid: newSurveyData.survey_id,
-            });
-            return;
-          }
-        }
-        if (
-          !surveyData.notification_options
-          || !surveyData.notification_options.type
-          || !surveyData.notification_options.message
-          || !surveyData.notification_options.icon_url
-          || typeof surveyData.notification_options.priority !== 'number'
-          || Number.isNaN(surveyData.notification_options.priority)
-        ) {
-          recordGeneralMessage('invalid_survey_data', undefined, { sid: surveyData.survey_id });
-          return;
-        }
-        const notificationOptions = {
-          title: surveyData.notification_options.title,
-          iconUrl: surveyData.notification_options.icon_url,
-          type: surveyData.notification_options.type,
-          priority: surveyData.notification_options.priority,
-          message: surveyData.notification_options.message,
-        };
-        if (surveyData.notification_options.context_message) {
-          const contextMessage = surveyData.notification_options.context_message;
-          notificationOptions.contextMessage = contextMessage;
-        }
-        if (surveyData.notification_options.require_interaction) {
-          const requireInteraction = surveyData.notification_options.require_interaction;
-          notificationOptions.requireInteraction = requireInteraction;
-        }
-        if (surveyData.notification_options.is_clickable) {
-          const isClickable = surveyData.notification_options.is_clickable;
-          notificationOptions.isClickable = isClickable;
-        }
-        // click handler for notification
-        const notificationClicked = function (notificationId) {
-          browser.notifications.onClicked.removeListener(notificationClicked);
-          // Exceptions required since the errors cannot be resolved by changing
-          // the order of function definitions. TODO: refactor to remove exceptions
-          // eslint-disable-next-line no-use-before-define
-          browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-          // eslint-disable-next-line no-use-before-define
-          browser.notifications.onClosed.removeListener(closedClicked);
-
-          const clickedUrl = surveyData.notification_options.clicked_url;
-          if (notificationId === lastNotificationID && clickedUrl) {
-            recordGeneralMessage('notification_clicked', undefined, { sid: surveyData.survey_id });
-            openTab(`https://getadblock.com/${surveyData.notification_options.clicked_url}`);
-          } else {
-            recordGeneralMessage('notification_clicked_no_URL_to_open', undefined, { sid: surveyData.survey_id });
-          }
-        };
-        const buttonNotificationClicked = function (notificationId, buttonIndex) {
-          browser.notifications.onClicked.removeListener(notificationClicked);
-          browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-          // Exception required since the error cannot be resolved by changing
-          // the order of function definitions. TODO: refactor to remove exception
-          // eslint-disable-next-line no-use-before-define
-          browser.notifications.onClosed.removeListener(closedClicked);
-          if (surveyData.notification_options.buttons) {
-            if (notificationId === lastNotificationID && buttonIndex === 0) {
-              recordGeneralMessage('button_0_clicked', undefined, { sid: surveyData.survey_id });
-              openTab(`https://getadblock.com/${surveyData.notification_options.buttons[0].clicked_url}`);
-            }
-            if (notificationId === lastNotificationID && buttonIndex === 1) {
-              recordGeneralMessage('button_1_clicked', undefined, { sid: surveyData.survey_id });
-              openTab(`https://getadblock.com/${surveyData.notification_options.buttons[1].clicked_url}`);
-            }
-          }
-        };
-        const closedClicked = function (notificationId, byUser) {
-          browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-          browser.notifications.onClicked.removeListener(notificationClicked);
-          browser.notifications.onClosed.removeListener(closedClicked);
-          recordGeneralMessage('notification_closed', undefined, { sid: surveyData.survey_id, bu: byUser });
-        };
-        browser.notifications.onClicked.removeListener(notificationClicked);
-        browser.notifications.onClicked.addListener(notificationClicked);
-        if (surveyData.notification_options.buttons) {
-          const buttonArray = [];
-          if (surveyData.notification_options.buttons[0]) {
-            buttonArray.push({
-              title: surveyData.notification_options.buttons[0].title,
-              iconUrl: surveyData.notification_options.buttons[0].icon_url,
-            });
-          }
-          if (surveyData.notification_options.buttons[1]) {
-            buttonArray.push({
-              title: surveyData.notification_options.buttons[1].title,
-              iconUrl: surveyData.notification_options.buttons[1].icon_url,
-            });
-          }
-          notificationOptions.buttons = buttonArray;
-        }
-        browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-        browser.notifications.onButtonClicked.addListener(buttonNotificationClicked);
-        browser.notifications.onClosed.addListener(closedClicked);
-        // show the notification to the user.
-        browser.notifications.create(lastNotificationID, notificationOptions).then(() => {
-          recordGeneralMessage('survey_shown', undefined, { sid: surveyData.survey_id });
-        }).catch(() => {
-          recordGeneralMessage('error_survey_not_shown', undefined, { sid: surveyData.survey_id });
-          browser.notifications.onButtonClicked.removeListener(buttonNotificationClicked);
-          browser.notifications.onClicked.removeListener(notificationClicked);
-          browser.notifications.onClosed.removeListener(closedClicked);
-        });
-      });
-    };
-
-    const retryInFiveMinutes = function () {
-      const fiveMinutes = 5 * 60 * 1000;
-      setTimeout(() => {
-        processNotification(surveyData);
-      }, fiveMinutes);
-    };
-    // check (again) if we still have permission to show a notification
-    if (browser && browser.notifications && browser.notifications.getPermissionLevel) {
-      browser.notifications.getPermissionLevel((permissionLevel) => {
-        if (permissionLevel === 'granted') {
-          if (typeof surveyData.block_count_limit !== 'number' || Number.isNaN(surveyData.block_count_limit)) {
-            log('invalid block_count_limit', surveyData.block_count_limit);
-            return;
-          }
-          surveyData.block_count_limit = Number(surveyData.block_count_limit);
-          browser.idle.queryState(60, (state) => {
-            if (state === 'active') {
-              getBlockCountOnActiveTab((blockedPerPage) => {
-                if (blockedPerPage >= surveyData.block_count_limit) {
-                  getActiveTab((tab) => {
-                    if (tab && validTab(tab)) {
-                      showNotificationIfAllowed(tab);
-                    } else {
-                      // We didn't find an appropriate tab
-                      retryInFiveMinutes();
-                    }
-                  });
-                } else {
-                  retryInFiveMinutes();
-                }
-              }); // end getBlockCountOnActiveTab
-            } else {
-              // browser is idle or locked
-              retryInFiveMinutes();
-            }
-          }); // end browser.idle.queryState
-        }
-      });
-    }
-  }; // end of processNotification()
-
   // open a Tab for a full page survey
   const processTab = function (surveyData) {
     const openTabIfAllowed = function () {
@@ -294,42 +259,6 @@ const SURVEY = (function getSurvey() {
     });
   }; // end of processTab()
 
-  // Display a notification overlay on the active tab
-  // To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
-  // and must not be using SSL / HTTPS
-  const processOverlay = function (surveyData) {
-    // Check to see if we should show the survey before showing the overlay.
-    const showOverlayIfAllowed = function (tab) {
-      shouldShowSurvey(surveyData, () => {
-        const data = { command: 'showoverlay', overlayURL: surveyData.open_this_url, tabURL: tab.url };
-        const validateResponseFromTab = function (response) {
-          if (!response || response.ack !== data.command) {
-            recordErrorMessage('invalid_response_from_notification_overlay_script', undefined, { errorMessage: response });
-          }
-        };
-        browser.tabs.sendMessage(tab.id, data).then(validateResponseFromTab).catch((error) => {
-          recordErrorMessage('overlay_message_error', undefined, { errorMessage: JSON.stringify(error) });
-        });
-      });
-    };
-
-    const retryInFiveMinutes = function () {
-      const fiveMinutes = 5 * 60 * 1000;
-      setTimeout(() => {
-        processOverlay(surveyData);
-      }, fiveMinutes);
-    };
-
-    getActiveTab((tab) => {
-      if (tab && validTab(tab)) {
-        showOverlayIfAllowed(tab);
-      } else {
-        // We didn't find an appropriate tab
-        retryInFiveMinutes();
-      }
-    });
-  }; // end of processOverlay()
-
   return {
     maybeSurvey(responseData) {
       if (getSettings().show_survey === false) {
@@ -343,32 +272,15 @@ const SURVEY = (function getSurvey() {
       if (!surveyData) {
         return;
       }
-
-      if (surveyData.type === 'overlay') {
-        processOverlay(surveyData);
-      } else if (surveyData.type === 'tab') {
+      if (surveyData.type === 'tab') {
         processTab(surveyData);
-      } else if (surveyData.type === 'notification') {
-        processNotification(surveyData);
+      } else if (surveyData.type === 'icon') {
+        processIcon(surveyData);
       }
     }, // end of maybeSurvey
     types(callback) {
-      // 'O' = Overlay Surveys
       // 'T' = Tab Surveys
-      // 'N' = Notifications
-      if (browser
-          && browser.notifications
-          && browser.notifications.getPermissionLevel) {
-        browser.notifications.getPermissionLevel((permissionLevel) => {
-          if (permissionLevel === 'granted') {
-            callback('OTN');
-          } else {
-            callback('OT');
-          }
-        });
-        return;
-      }
-      callback('OT');
+      callback('TI');
     },
   };
 }());
