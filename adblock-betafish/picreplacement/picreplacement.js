@@ -429,9 +429,15 @@ const imageSwap = {
         left: ${this.getStyle(data, 'left')};
         right: ${this.getStyle(data, 'right')};
         bottom: ${this.getStyle(data, 'bottom')};
+        /* nytimes.com float:right ad at top is on the left without this */
+        float: ${this.getStyle(data, 'float')};
       }
       div#${containerID} > .ab-image-swap-wrapper {
         position: relative;
+        display: inline-grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: 'overlap';
       }
       div#${containerID} > .ab-image-swap-wrapper > .picreplacement-image {
         width: ${placement.width}px;
@@ -439,9 +445,8 @@ const imageSwap = {
         background-position: -${placement.left}px -${placement.top}px;
         background-size: ${placement.x}px ${placement.y}px;
         margin: ${placement.offsettop}px ${placement.offsetleft}px;
-        /* nytimes.com float:right ad at top is on the left without this */
-        float: ${this.getStyle(data, 'float')};
         border: none; /* some sites borders all imgs */
+        grid-area: overlap;
       }
       div#${containerID} > .ab-image-swap-wrapper > .picinjection-infocard {
         display: none;
@@ -454,6 +459,7 @@ const imageSwap = {
         color: black;
         background-color: rgba(0, 0, 0, 0.7);
         margin: ${placement.offsettop}px ${placement.offsetleft}px;
+        grid-area: overlap;
         top: 0;
         left: 0;
         right: 0;

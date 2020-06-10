@@ -825,7 +825,7 @@ if (browser.runtime.id) {
       License.ready().then(checkQueryState);
     }
   };
-  const slashUpdateReleases = ['4.10.0', '4.11.0', '4.12.0', '4.13.0'];
+  const slashUpdateReleases = ['4.10.0', '4.11.0', '4.12.0', '4.13.0', '4.14.0'];
   // Display updated page after each update
   browser.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);
@@ -1345,6 +1345,7 @@ function isAcceptableAdsPrivacy(filterList) {
 }
 
 const rateUsCtaKey = 'rate-us-cta-clicked';
+const vpnWaitlistCtaKey = 'vpn-waitlist-cta-clicked';
 
 // Attach methods to window
 Object.assign(window, {
@@ -1384,4 +1385,5 @@ Object.assign(window, {
   isAcceptableAds,
   isAcceptableAdsPrivacy,
   rateUsCtaKey,
+  vpnWaitlistCtaKey,
 });

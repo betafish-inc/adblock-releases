@@ -26,7 +26,7 @@ const { SyncService } = backgroundPage;
 const { isValidTheme } = backgroundPage;
 const { abpPrefPropertyNames } = backgroundPage;
 const { info } = backgroundPage;
-const { rateUsCtaKey } = backgroundPage;
+const { rateUsCtaKey, vpnWaitlistCtaKey } = backgroundPage;
 const FIVE_SECONDS = 5000;
 const TWENTY_SECONDS = FIVE_SECONDS * 4;
 let autoReloadingPage;
@@ -360,6 +360,40 @@ const updateAcceptableAdsUI = function (checkAA, checkAAprivacy) {
   }
 };
 
+const shouldShowRateUsCTA = function () {
+  const mql = window.matchMedia('(max-width: 890px)');
+  if (!mql.matches && info.application === 'chrome') {
+    chromeStorageGetHelper(rateUsCtaKey).then((alreadyRatedUs) => {
+      if (!alreadyRatedUs) {
+        $('#rate-us-cta').show();
+        $('#rate-us-cta a#rate-us').on('click', () => {
+          chromeStorageSetHelper(rateUsCtaKey, true);
+          $('#rate-us-cta').hide();
+        });
+      }
+    });
+  }
+};
+
+const shouldShowVPNWaitlistCTA = function () {
+  const mql = window.matchMedia('(max-width: 890px)');
+  if (!mql.matches) {
+    chromeStorageGetHelper(vpnWaitlistCtaKey).then((alreadyClickedVPNWaitlist) => {
+      if (!alreadyClickedVPNWaitlist) {
+        $('#waitlist-cta').show();
+        $('#waitlist-cta a#vpn-waitlist-link').on('click', () => {
+          chromeStorageSetHelper(vpnWaitlistCtaKey, true);
+          $('#waitlist-cta').hide();
+          shouldShowRateUsCTA();
+        });
+      } else {
+        shouldShowRateUsCTA();
+      }
+    });
+  }
+};
+
+
 $(() => {
   // delay opening of a second port due to a race condition in the ABP code
   // the delay allows the confirmation message to the user to function correctly
@@ -387,18 +421,7 @@ $(() => {
   displayVersionNumber();
   localizePage();
   displayTranslationCredit();
-
-  if (info.application === 'chrome') {
-    chromeStorageGetHelper(rateUsCtaKey).then((alreadyRatedUs) => {
-      if (!alreadyRatedUs) {
-        $('#rate-us-cta').show();
-        $('#rate-us-cta a#rate-us').on('click', () => {
-          chromeStorageSetHelper(rateUsCtaKey, true);
-          $('#rate-us-cta').hide();
-        });
-      }
-    });
-  }
+  shouldShowVPNWaitlistCTA();
 });
 
 storageSet(License.pageReloadedOnSettingChangeKey, false);

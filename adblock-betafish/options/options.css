@@ -986,11 +986,14 @@ section .theme-section-row {
   padding: 15px 0;
   min-width: 50%;
 }
-#rate-us-cta {
+#rate-us-cta,
+#waitlist-cta {
   margin: 15px 0;
 }
 #rate-us-tooltip,
-section#rate-us-cta > section#rate-us-tooltip:hover {
+#waitlist-tooltip,
+section#rate-us-cta > section#rate-us-tooltip:hover,
+section#waitlist-cta > section#waitlist-tooltip:hover {
   display: none;
   position: absolute;
   bottom: 187px;
@@ -1005,16 +1008,23 @@ section#rate-us-cta > section#rate-us-tooltip:hover {
   flex-direction: column;
   justify-content: space-around;
 }
-#rate-us-tooltip > div:nth-child(1) {
+#waitlist-tooltip {
+  width: 168px;
+}
+#rate-us-tooltip > div:nth-child(1),
+#waitlist-tooltip > div:nth-child(1) {
   font-weight: bold;
 }
-#rate-us-tooltip > div {
+#rate-us-tooltip > div,
+#waitlist-tooltip > div {
   padding: 8px;
 }
-#rate-us-cta:hover > #rate-us-tooltip {
+#rate-us-cta:hover > #rate-us-tooltip,
+#waitlist-cta:hover > #waitlist-tooltip {
   display: flex;
 }
-.btn#rate-us {
+.btn#rate-us,
+.btn#vpn-waitlist-link {
   margin: 0;
   padding: 5px 10px;
   border-radius: 3px;
@@ -1023,7 +1033,12 @@ section#rate-us-cta > section#rate-us-tooltip:hover {
   min-height: 32px;
   line-height: normal;
 }
-.btn#rate-us:hover {
+.btn#vpn-waitlist-link {
+  width: 168px;
+}
+.btn#rate-us:hover,
+.btn#vpn-waitlist-link:hover,
+.btn#vpn-waitlist-link:hover span {
   color: white;
   font-weight: normal;
   border-radius: 0 0 3px 3px;
@@ -1131,7 +1146,8 @@ input:checked + .slider::before {
     margin-bottom: 15px;
   }
   #sidebar-content-bottom .top-line,
-  #sidebar-content-bottom section#rate-us-cta {
+  #sidebar-content-bottom section#rate-us-cta,
+  #sidebar-content-bottom section#waitlist-cta {
     display: none;
   }
   #sidebar {
