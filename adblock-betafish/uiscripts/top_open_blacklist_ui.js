@@ -185,6 +185,7 @@ function topOpenBlacklistUI(options) {
           </div>
         </section>
         <section class='body-button'>
+          <button id="block_something_else_btn" class='primary remove-another adblock-default-button'>${translate('block_something_else')}</button>
           <button class='cancel'>${translate('done')}</button>
         </section>
         <footer id='blacklist-cta' style='display:none;'>
@@ -231,10 +232,6 @@ function topOpenBlacklistUI(options) {
       });
       blacklistUI.block(() => {
         mayOpenDialogUi = true;
-        // In case of frames, reload, as the frame might contain matches too.
-        if ($('iframe, frameset, frame').filter(':visible').length > 0) {
-          document.location.reload();
-        }
       });
       blacklistUI.show();
     });

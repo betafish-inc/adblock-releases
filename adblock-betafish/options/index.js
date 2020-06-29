@@ -362,9 +362,12 @@ const updateAcceptableAdsUI = function (checkAA, checkAAprivacy) {
 
 const shouldShowRateUsCTA = function () {
   const mql = window.matchMedia('(max-width: 890px)');
-  if (!mql.matches && info.application === 'chrome') {
+  if (!mql.matches && (info.application === 'chrome' || info.application === 'edge')) {
     chromeStorageGetHelper(rateUsCtaKey).then((alreadyRatedUs) => {
       if (!alreadyRatedUs) {
+        if (info.application === 'edge') {
+          $('#rate-us').attr('href', 'https://microsoftedge.microsoft.com/addons/detail/adblock-%E2%80%94-best-ad-blocker/ndcileolkflehcjpmjnfbnaibdcgglog');
+        }
         $('#rate-us-cta').show();
         $('#rate-us-cta a#rate-us').on('click', () => {
           chromeStorageSetHelper(rateUsCtaKey, true);

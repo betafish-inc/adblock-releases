@@ -5,6 +5,9 @@
 
 const invalidGUIDChars = /[^a-z0-9]/g;
 
+const gabHostnames = ['getadblock.com', 'dev.getadblock.com', 'dev1.getadblock.com', 'dev2.getadblock.com'];
+const gabHostnamesWithProtocal = ['https://getadblock.com', 'http://dev.getadblock.com', 'http://dev1.getadblock.com', 'http://dev2.getadblock.com'];
+
 let abort = (function shouldAbort() {
   if (document instanceof HTMLDocument === false) {
     if (document instanceof XMLDocument === false
@@ -71,7 +74,7 @@ const getAdblockVersion = function (version) {
 function receiveMessage(event) {
   if (
     event.data
-    && event.origin === 'https://getadblock.com'
+    && gabHostnamesWithProtocal.includes(event.origin)
     && event.data.command === 'payment_success'
   ) {
     window.removeEventListener('message', receiveMessage);
@@ -108,13 +111,7 @@ function receiveMessage(event) {
     }
   };
 
-  if (
-    (document.location.hostname === 'getadblock.com'
-       || document.location.hostname === 'dev.getadblock.com'
-       || document.location.hostname === 'dev1.getadblock.com'
-       || document.location.hostname === 'dev2.getadblock.com')
-      && window.top === window.self
-  ) {
+  if (gabHostnames.includes(document.location.hostname) && window.top === window.self) {
     window.addEventListener('message', receiveMessage, false);
     browser.storage.local.get('userid').then((response) => {
       let adblockUserId = response.userid;
@@ -143,16 +140,8 @@ const runBandaids = function () {
   let applyBandaidFor = '';
   if (/mail\.live\.com/.test(document.location.hostname)) {
     applyBandaidFor = 'hotmail';
-  } else if ((document.location.hostname === 'getadblock.com'
-            || document.location.hostname === 'dev.getadblock.com'
-            || document.location.hostname === 'dev1.getadblock.com'
-            || document.location.hostname === 'dev2.getadblock.com')
-            && (window.top === window.self)) {
-    if (/\/question\/$/.test(document.location.pathname)) {
-      applyBandaidFor = 'getadblockquestion';
-    } else {
-      applyBandaidFor = 'getadblock';
-    }
+  } else if (gabHostnames.includes(document.location.hostname) && window.top === window.self) {
+    applyBandaidFor = 'getadblock';
   } else if (/(^|\.)twitch\.tv$/.test(hostname) === true) {
     applyBandaidFor = 'twitch';
   }
@@ -170,26 +159,6 @@ const runBandaids = function () {
         visibility: none !important;
         orphans: 4321 !important;
       }`, 0);
-    },
-    getadblockquestion() {
-      browser.runtime.sendMessage({ command: 'addGABTabListeners' });
-      const personalBtn = document.getElementById('personal-use');
-      const enterpriseBtn = document.getElementById('enterprise-use');
-      const buttonListener = function () {
-        browser.runtime.sendMessage({ command: 'removeGABTabListeners', saveState: true });
-        if (enterpriseBtn) {
-          enterpriseBtn.removeEventListener('click', buttonListener);
-        }
-        if (personalBtn) {
-          personalBtn.removeEventListener('click', buttonListener);
-        }
-      };
-      if (personalBtn) {
-        personalBtn.addEventListener('click', buttonListener);
-      }
-      if (enterpriseBtn) {
-        enterpriseBtn.addEventListener('click', buttonListener);
-      }
     },
     getadblock() {
       browser.storage.local.get('userid').then((response) => {

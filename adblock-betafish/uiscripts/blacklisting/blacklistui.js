@@ -36,7 +36,14 @@ function BlacklistUi(clickedItem, advancedUser, $base) {
   this.clickedItem = clickedItem;
   this.advancedUser = advancedUser;
   this.$dialog = $base;
+  this.clickWatcher = null;
 }
+
+BlacklistUi.prototype.reset = function reset() {
+  this.cancelled = true;
+  this.currentStep = 0;
+  this.clickedItem = null;
+};
 
 // TODO: same event framework as ClickWatcher
 BlacklistUi.prototype.cancel = function cancel(callback) {
@@ -94,24 +101,26 @@ BlacklistUi.prototype.show = function show() {
 
   // If we don't know the clicked element, we must find it first.
   if (!that.clickedItem) {
-    const clickWatcher = new ClickWatcher();
-    clickWatcher.cancel(() => {
-      that.preview(null);
-      that.fire('cancel');
-    });
-    clickWatcher.click((element) => {
-      that.clickedItem = element;
-      that.show();
-    });
+    if (!that.clickWatcher) {
+      that.clickWatcher = new ClickWatcher();
+      that.clickWatcher.cancel(() => {
+        that.preview(null);
+        that.fire('cancel');
+      });
+      that.clickWatcher.click((element) => {
+        that.clickedItem = element;
+        that.show();
+      });
+    }
     that.preview('*');
-    clickWatcher.enable();
+    that.clickWatcher.enable();
 
     that.$dialog.children('.page')
       .on('mouseenter', () => {
-        clickWatcher.highlighter.disable();
+        that.clickWatcher.highlighter.disable();
       })
       .on('mouseleave', () => {
-        clickWatcher.highlighter.enable();
+        that.clickWatcher.highlighter.enable();
       });
     that.$dialog.children('.page').hide();
     that.$dialog.children('#page_0').show();
@@ -250,6 +259,7 @@ BlacklistUi.prototype.buildPage3 = function buildPage3() {
   const $pageThreeDoneBtn = $pageThree.find('button.cancel');
   const $pageThreeLearnMoreBtn = $pageThree.find('button.learn-more');
   const $pageThreeCloseBtn = $pageThree.find('button.close');
+  const $pageThreeContinueBtn = $pageThree.find('button.remove-another');
   const $summary = $pageThree.find('#summary-pg-3');
   const $settingsLink = $pageThree.find('#settings-link');
   const $premiumLink = $pageThree.find('#premium-link');
@@ -260,6 +270,14 @@ BlacklistUi.prototype.buildPage3 = function buildPage3() {
 
   // Reset and hide all wizard pages
   that.$dialog.children('.page').hide();
+
+  $pageThreeContinueBtn.off('click');
+  $pageThreeContinueBtn.on('click', () => {
+    // Reset and hide all wizard pages
+    that.$dialog.children('.page').hide();
+    that.reset();
+    that.show();
+  });
 
   $pageThreeDoneBtn.on('click', () => {
     that.preview(null);

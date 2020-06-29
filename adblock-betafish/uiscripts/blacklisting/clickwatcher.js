@@ -85,7 +85,7 @@ function Highlighter() {
 function ClickWatcher() {
   this.callbacks = { cancel: [], click: [] };
   this.clickedElement = null;
-  this.highlighter = new Highlighter();
+  this.highlighter = null;
 }
 
 ClickWatcher.prototype.cancel = function cancel(callback) {
@@ -103,6 +103,7 @@ ClickWatcher.prototype.fire = function fire(eventName, arg) {
 
 ClickWatcher.prototype.enable = function enable() {
   const that = this;
+  that.highlighter = new Highlighter();
   that.highlighter.enable();
   that.eventsListener();
 };
