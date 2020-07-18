@@ -143,12 +143,6 @@ function getURLsFromElement(element)
 
 function getSelectorForBlockedElement(element)
 {
-  // Microsoft Edge does not support CSS.escape(). However, it doesn't
-  // support user style sheets either. So the selector would be added
-  // with an author style sheet anyway, which doesn't provide any benefits.
-  if (!("escape" in CSS))
-    return null;
-
   // Setting the "display" CSS property to "none" doesn't have any effect on
   // <frame> elements (in framesets). So we have to hide it inline through
   // the "visibility" CSS property.
@@ -179,21 +173,21 @@ function getSelectorForBlockedElement(element)
   return selector ? element.localName + selector : null;
 }
 
-function hideElement(element)
+function hideElement(element, properties)
 {
+  if (element.localName == "frame")
+    properties = [["visibility", "hidden"]];
+  else if (!properties)
+    properties = [["display", "none"]];
+
   function doHide()
   {
-    let propertyName = "display";
-    let propertyValue = "none";
-    if (element.localName == "frame")
+    for (let [property, value] of properties)
     {
-      propertyName = "visibility";
-      propertyValue = "hidden";
+      if (element.style.getPropertyValue(property) != value ||
+          element.style.getPropertyPriority(property) != "important")
+        element.style.setProperty(property, value, "important");
     }
-
-    if (element.style.getPropertyValue(propertyName) != propertyValue ||
-        element.style.getPropertyPriority(propertyName) != "important")
-      element.style.setProperty(propertyName, propertyValue, "important");
   }
   if (typeof checkElement === "function") {
     checkElement(element);
@@ -276,18 +270,12 @@ ElementHidingTracer.prototype = {
 
     for (let selector of this.selectors)
     {
-      nodes: for (let node of nodes)
+      for (let node of nodes)
       {
-        for (let element of node.querySelectorAll(selector))
+        if (node.querySelector(selector))
         {
-          // Only consider selectors that actually have an effect on the
-          // computed styles, and aren't overridden by rules with higher
-          // priority, or haven't been circumvented in a different way.
-          if (getComputedStyle(element).display == "none")
-          {
-            effectiveSelectors.push(selector);
-            break nodes;
-          }
+          effectiveSelectors.push(selector);
+          break;
         }
       }
     }
@@ -402,7 +390,7 @@ function ContentFiltering()
 {
   this.styles = new Map();
   this.tracer = null;
-
+  this.cssProperties = null;
   this.elemHideEmulation = new ElemHideEmulation(this.hideElements.bind(this));
 }
 ContentFiltering.prototype = {
@@ -455,8 +443,8 @@ ContentFiltering.prototype = {
       {
         // Insert the rules inline if we have been instructed by the background
         // page to do so. This is rarely the case, except on platforms that do
-        // not support user stylesheets via the browser.tabs.insertCSS API
-        // (Firefox <53, Chrome <66, and Edge).
+        // not support user stylesheets via the browser.tabs.insertCSS API, i.e.
+        // Firefox <53 and Chrome <66.
         // Once all supported platforms have implemented this API, we can remove
         // the code below. See issue #5090.
         // Related Chrome and Firefox issues:
@@ -470,7 +458,7 @@ ContentFiltering.prototype = {
   hideElements(elements, filters)
   {
     for (let element of elements)
-      hideElement(element);
+      hideElement(element, this.cssProperties);
 
     if (this.tracer)
     {
@@ -506,6 +494,7 @@ ContentFiltering.prototype = {
         );
       }
 
+      this.cssProperties = response.cssProperties;
       this.elemHideEmulation.apply(response.emulatedPatterns);
     });
   }

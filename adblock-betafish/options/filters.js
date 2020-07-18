@@ -441,7 +441,7 @@ function getDefaultFilterUI(filterList, checkboxID, filterListType) {
     .append($checkBoxIcons);
 
   const $filterTitle = $('<h1>')
-    .text(filterList.label || filterList.title || `${filterList.url.substr(0, 40)}...`);
+    .text(filterList.label || filterList.title || filterList._title || `${filterList.url.substr(0, 40)}...`);
 
   const $link = $('<a>')
     .addClass('filter-list-link')
@@ -457,11 +457,11 @@ function getDefaultFilterUI(filterList, checkboxID, filterListType) {
   const $infoSpan = $('<span>')
     .addClass('subscription_info')
     .attr('aria-hidden', true)
-    .text(filterList.subscribed && !filterList.lastDownload ? translate('fetchinglabel') : '');
+    .text(filterList.subscribed && !filterList._lastDownload ? translate('fetchinglabel') : '');
 
   const $timestampSpan = $('<span>')
     .addClass('timestamp_info')
-    .text(filterList.subscribed && !filterList.lastDownload ? translate('fetchinglabel') : '');
+    .text(filterList.subscribed && !filterList._lastDownload ? translate('fetchinglabel') : '');
 
   const $infoSection = $('<div>')
     .append($infoSpan)

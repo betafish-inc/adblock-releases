@@ -37,15 +37,9 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     ) {
       browser.tabs.executeScript(tabId,
         {
-          file: 'polyfill.js',
+          file: 'adblock-datacollection-contentscript.js',
           allFrames: true,
-        }).then(() => {
-        browser.tabs.executeScript(tabId,
-          {
-            file: 'adblock-datacollection-contentscript.js',
-            allFrames: true,
-          });
-      });
+        });
     }
   };
 
@@ -141,10 +135,11 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   const filterListener = function (item, newValue, oldValue, tabIds) {
     if (getSettings().data_collection_v2 && !adblockIsPaused()) {
       for (const tabId of tabIds) {
-        const page = new ext.Page({ id: tabId });
-        if (page && !adblockIsDomainPaused({ url: page.url.href, id: page.id })) {
-          addFilterToCache(item, page);
-        }
+        browser.tabs.get(tabId).then((tab) => {
+          if (tab && !adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
+            addFilterToCache(item, tab);
+          }
+        });
       }
     } else if (!getSettings().data_collection_v2) {
       filterNotifier.off('filter.hitCount', filterListener);

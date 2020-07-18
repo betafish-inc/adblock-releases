@@ -7,15 +7,16 @@
 const { checkWhitelisted } = require('whitelisting');
 const { filterNotifier } = require('filterNotifier');
 const { Prefs } = require('prefs');
+const browserAction = require('browserAction');
 
 const updateButtonUIAndContextMenus = function () {
   browser.tabs.query({}).then((tabs) => {
     for (const tab of tabs) {
       tab.url = tab.url ? tab.url : tab.pendingUrl;
-      const page = new ext.Page(tab);
       if (adblockIsPaused() || adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
-        page.browserAction.setBadge({ number: '' });
+        browserAction.setBadge(tab.id, { number: '' });
       }
+      const page = new ext.Page(tab);
       // eslint-disable-next-line no-use-before-define
       updateContextMenuItems(page);
     }

@@ -3,7 +3,6 @@
  * except:
  * - added an invocation of the 'MyAdBlock' function checkElement()
  */
-
 /*
  * This file is part of Adblock Plus <https://adblockplus.org/>,
  * Copyright (C) 2006-present eyeo GmbH
@@ -23,10 +22,18 @@
 
 /** @module */
 
+/* global environment */
 /* eslint-env webextensions */
 /* eslint no-console: "off" */
 
 "use strict";
+
+let [uniqueIdentifier] = URL.createObjectURL(new Blob()).match(/[^/]+$/);
+
+// secured env and secured global variables
+let ABP = getABPNamespace();
+let {Object, utils} = ABP;
+let {getComputedStyle, setInterval, setTimeout, performance} = ABP.window;
 
 /**
  * @typedef {object} FetchContentInfo
@@ -43,10 +50,96 @@
 let fetchContentMap = new Map();
 
 /**
- * Returns a potentially already resolved fetch auto cleaning,
- * if not requested again, after a certain amount of milliseconds.
- * The resolved fetch is by default <code>arrayBuffer</code> but it can be
- * any other kind through the configuration object.
+ * @type {Map.<function, Array.<function>>}
+ * @private
+ */
+let dependencyGraph = new Map();
+
+/**
+ * Extract utilities from globals and return a deep-frozen object with those.
+ * @return {object} An object namespace with all the global utilities used by
+ * our snippets.
+ * @private
+ */
+function getABPNamespace()
+{
+  /* eslint-disable no-shadow */
+  let {Object} = window;
+  let {assign, defineProperty, freeze, getOwnPropertyDescriptor,
+       values} = Object;
+  let {getComputedStyle, setInterval, setTimeout, performance} = window;
+  /* eslint-enable no-shadow */
+  // the bind is needed in Firefox or it breaks
+  return freeze({
+    Object: freeze({
+      assign: assign.bind(Object),
+      defineProperty: defineProperty.bind(Object),
+      getOwnPropertyDescriptor: getOwnPropertyDescriptor.bind(Object),
+      values: (values || function(object)
+      {
+        return this.keys(object).map(key => object[key]);
+      }).bind(Object)
+    }),
+    utils: freeze({
+      isOwnProperty: Function.call.bind(Object.prototype.hasOwnProperty)
+    }),
+    window: freeze({
+      getComputedStyle: getComputedStyle.bind(window),
+      setInterval: setInterval.bind(window),
+      setTimeout: setTimeout.bind(window),
+      performance
+    })
+  });
+}
+
+/**
+ * Register one or more dependencies for a specific function.
+ * @param {function} func The function that requires dependencies.
+ * @param {...function} dependencies The function function dependencies.
+ * @private
+ */
+function registerDependencies(func, ...dependencies)
+{
+  if (dependencyGraph.has(func))
+    throw new Error(`duplicated ${func.name} dependencies`);
+
+  dependencyGraph.set(func, dependencies);
+}
+
+/**
+ * Returns a list of requirements for a function being injected as a script.
+ * @param {function} func A function with dependencies.
+ * @param {Set} [dependencies] An object that collects the unique set of
+ * dependencies.
+ * @returns {Array.<function>} All dependencies needed for the function.
+ * @private
+ */
+function resolveDependencies(func, dependencies = new Set())
+{
+  let root = dependencies.size === 0;
+
+  if (root)
+    dependencies.add(func);
+
+  for (let dependency of dependencyGraph.get(func) || [])
+  {
+    if (!dependencies.has(dependency))
+    {
+      dependencies.add(dependency);
+      resolveDependencies(dependency, dependencies);
+    }
+  }
+
+  if (root)
+    return [...dependencies].slice(1);
+}
+
+/**
+ * Returns a potentially already resolved fetch auto cleaning, if not requested
+ * again, after a certain amount of milliseconds.
+ *
+ * The resolved fetch is by default `arrayBuffer` but it can be any other kind
+ * through the configuration object.
  *
  * @param {string} url The url to fetch
  * @param {object} [options] Optional configuration options.
@@ -87,8 +180,9 @@ function fetchContent(url, {as = "arrayBuffer", cleanup = 60000} = {})
 }
 
 /**
- * Escapes regular expression special characters in a string. The returned
- * string may be passed to the <code>RegExp</code> constructor to match the
+ * Escapes regular expression special characters in a string.
+ *
+ * The returned string may be passed to the `RegExp` constructor to match the
  * original string.
  *
  * @param {string} string The string in which to escape special characters.
@@ -105,31 +199,30 @@ function regexEscape(string)
  * Converts a given pattern to a regular expression.
  *
  * @param {string} pattern The pattern to convert. If the pattern begins and
- * ends with a slash (<code>/</code>), the text in between is treated as a
- * regular expression; otherwise the pattern is treated as raw text.
+ *   ends with a slash (`/`), the text in between is treated as a regular
+ *   expression; otherwise the pattern is treated as raw text.
  *
- * @returns {RegExp} A <code>RegExp</code> object based on the given pattern.
+ * @returns {RegExp} A `RegExp` object based on the given pattern.
  * @private
  */
 function toRegExp(pattern)
 {
   if (pattern.length >= 2 && pattern[0] == "/" &&
       pattern[pattern.length - 1] == "/")
-  {
     return new RegExp(pattern.substring(1, pattern.length - 1));
-  }
 
   return new RegExp(regexEscape(pattern));
 }
+
+registerDependencies(toRegExp, regexEscape);
 
 /**
  * Converts a number to its hexadecimal representation.
  *
  * @param {number} number The number to convert.
  * @param {number} [length] The <em>minimum</em> length of the hexadecimal
- *   representation. For example, given the number <code>1024</code> and the
- *   length <code>8</code>, the function returns the value
- *   <code>"00000400"</code>.
+ *   representation. For example, given the number `1024` and the length `8`,
+ *   the function returns the value `"00000400"`.
  *
  * @returns {string} The hexadecimal representation of the given number.
  * @private
@@ -145,14 +238,12 @@ function toHex(number, length = 2)
 }
 
 /**
- * Converts a <code>Uint8Array</code> object into its hexadecimal
- * representation.
+ * Converts a `Uint8Array` object into its hexadecimal representation.
  *
- * @param {Uint8Array} uint8Array The <code>Uint8Array</code> object to
- * convert.
+ * @param {Uint8Array} uint8Array The `Uint8Array` object to convert.
  *
- * @returns {string} The hexadecimal representation of the given
- *   <code>Uint8Array</code> object.
+ * @returns {string} The hexadecimal representation of the given `Uint8Array`
+ *   object.
  * @private
  */
 function uint8ArrayToHex(uint8Array)
@@ -161,10 +252,11 @@ function uint8ArrayToHex(uint8Array)
 }
 
 /**
- * Returns the value of the <code>cssText</code> property of the object
- * returned by <code>getComputedStyle</code> for the given element. If the
- * value of the <code>cssText</code> property is blank, this function computes
- * the value out of the properties available in the object.
+ * Returns the value of the `cssText` property of the object returned by
+ * `getComputedStyle` for the given element.
+ *
+ * If the value of the `cssText` property is blank, this function computes the
+ * value out of the properties available in the object.
  *
  * @param {Element} element The element for which to get the computed CSS text.
  *
@@ -187,7 +279,7 @@ function getComputedCSSText(element)
 
 /**
  * Injects JavaScript code into the document using a temporary
- * <code>script</code> element.
+ * `script` element.
  *
  * @param {string} code The code to inject.
  * @param {Array.<function|string>} [dependencies] A list of dependencies
@@ -201,7 +293,19 @@ function injectCode(code, dependencies = [])
     (function()
     {
       "use strict";
+      let environment = ${JSON.stringify(environment)};
+      let ABP = window["${uniqueIdentifier}"];
+      if (!ABP)
+      {
+        ABP = (${getABPNamespace})();
+        ABP.Object.defineProperty(window, "${uniqueIdentifier}", {value: ABP});
+      }
+      let {Object, utils} = ABP;
+      let {getComputedStyle, setInterval, setTimeout,
+           performance} = ABP.window;
       let debug = ${debug};
+      let inactiveProfile = ${inactiveProfile};
+      let noopProfile = ${noopProfile};
       ${dependencies.join("\n")}
       ${code}
     })();
@@ -233,9 +337,11 @@ function injectCode(code, dependencies = [])
 
 /**
  * Converts a function and an optional list of arguments into a string of code
- * containing a function call. The function is converted to its string
- * representation using the <code>Function.prototype.toString</code> method.
- * Each argument is stringified using <code>JSON.stringify</code>.
+ * containing a function call.
+ *
+ * The function is converted to its string representation using the
+ * `Function.prototype.toString` method. Each argument is stringified using
+ * `JSON.stringify`.
  *
  * @param {function} func The function to convert.
  * @param {...*} [params] The arguments to convert.
@@ -251,10 +357,11 @@ function stringifyFunctionCall(func, ...params)
 }
 
 /**
- * Wraps a function and its dependencies into an injector. The injector, when
- * called with zero or more arguments, generates code that calls the function,
- * with the given arguments, if any, and injects the code, along with any
- * dependencies, into the document using a temporary <code>script</code>
+ * Wraps a function and its dependencies into an injector.
+ *
+ * The injector, when called with zero or more arguments, generates code that
+ * calls the function, with the given arguments, if any, and injects the code,
+ * along with any dependencies, into the document using a temporary `script`
  * element.
  *
  * @param {function} injectable The function to wrap into an injector.
@@ -265,15 +372,15 @@ function stringifyFunctionCall(func, ...params)
  * @returns {function} The generated injector.
  * @private
  */
-function makeInjector(injectable, ...dependencies)
+function makeInjector(injectable)
 {
   return (...args) => injectCode(stringifyFunctionCall(injectable, ...args),
-                                 dependencies);
+                                 resolveDependencies(injectable));
 }
 
 /**
- * Hides an HTML element by setting its <code>style</code> attribute to
- * <code>display: none !important</code>.
+ * Hides an HTML element by setting its `style` attribute to
+ * `display: none !important`.
  *
  * @param {HTMLElement} element The HTML element to hide.
  * @private
@@ -283,44 +390,36 @@ function hideElement(element)
   if (typeof checkElement === "function") {
     checkElement(element);
   }
+  let {style} = element;
+  let hide = () =>
+  {
+    for (let [key, value] of environment.debugCSSProperties ||
+                             [["display", "none"]])
+    {
+      if (style.getPropertyValue(key) != value ||
+          style.getPropertyPriority(key) != "important")
+        style.setProperty(key, value, "important");
+    }
+  };
 
-  element.style.setProperty("display", "none", "important");
+  hide();
 
   // Listen for changes to the style property and if our values are unset
   // then reset them.
-  new MutationObserver(() =>
-  {
-    if (element.style.getPropertyValue("display") != "none" ||
-        element.style.getPropertyPriority("display") != "important")
-    {
-      element.style.setProperty("display", "none", "important");
-    }
-  })
-  .observe(element, {attributes: true, attributeFilter: ["style"]});
+  new MutationObserver(hide).observe(element, {
+    attributes: true,
+    attributeFilter: ["style"]
+  });
 }
 
 /**
- * Highlights an HTML element by setting its `style` attribute to
- * `border: red; border-width: thick; border-style: dashed;`.
- *
- * @param {HTMLElement} element The HTML element to highlight.
- * @private
- */
-function highlightElement(element)
-{
-  element.style.setProperty("border", "red");
-  element.style.setProperty("border-width", "thick");
-  element.style.setProperty("border-style", "dashed");
-}
-
-/**
- * Observes changes to a DOM node using a <code>MutationObserver</code>.
+ * Observes changes to a DOM node using a `MutationObserver`.
  *
  * @param {Node} target The DOM node to observe for changes.
  * @param {MutationObserverInit?} [options] Options that describe what DOM
  *   mutations should be reported to the callback.
  * @param {function} callback A function that will be called on each DOM
- *   mutation, taking a <code>MutationRecord</code> as its parameter.
+ *   mutation, taking a `MutationRecord` as its parameter.
  * @private
  */
 function observe(target, options, callback)
@@ -334,8 +433,11 @@ function observe(target, options, callback)
 }
 
 /**
- * Logs its arguments to the console. This may be used for testing and
- * debugging.
+ * Logs its arguments to the console.
+ *
+ * This may be used for testing and debugging.
+ *
+ * @alias module:content/snippets.log
  *
  * @param {...*} [args] The arguments to log.
  *
@@ -343,20 +445,26 @@ function observe(target, options, callback)
  */
 function log(...args)
 {
+  let {mark, end} = profile("log");
+
   if (debug)
-  {
     args.unshift("%c DEBUG", "font-weight: bold");
-  }
+
+  mark();
   console.log(...args);
+  end();
 }
+
+registerDependencies(log, profile);
 
 exports.log = log;
 
 /**
- * Similar to {@link log}, but does the logging in the context of the document
- * rather than the content script. This may be used for testing and debugging,
- * especially to verify that the injection of snippets into the document is
- * working without any errors.
+ * Similar to `log`, but does the logging in the context of the document rather
+ * than the content script.
+ *
+ * This may be used for testing and debugging, especially to verify that the
+ * injection of snippets into the document is working without any errors.
  *
  * @param {...*} [args] The arguments to log.
  *
@@ -369,12 +477,13 @@ function trace(...args)
   log(...args);
 }
 
-exports.trace = makeInjector(trace, log);
+registerDependencies(trace, log);
+
+exports.trace = makeInjector(trace);
 
 /**
- * This is an implementation of the <code>uabinject-defuser</code> technique
- * used by
- * {@link https://github.com/uBlockOrigin/uAssets/blob/c091f861b63cd2254b8e9e4628f6bdcd89d43caa/filters/resources.txt#L640 uBlock Origin}.
+ * This is an implementation of the `uabinject-defuser` technique used by
+ * [uBlock Origin](https://github.com/uBlockOrigin/uAssets/blob/c091f861b63cd2254b8e9e4628f6bdcd89d43caa/filters/resources.txt#L640).
  * @alias module:content/snippets.uabinject-defuser
  *
  * @since Adblock Plus 3.3
@@ -395,8 +504,8 @@ exports["uabinject-defuser"] = makeInjector(uabinjectDefuser);
  * @alias module:content/snippets.hide-if-shadow-contains
  *
  * @param {string} search The string to look for in every HTML element's
- *   shadow. If the string begins and ends with a slash (<code>/</code>), the
- *   text in between is treated as a regular expression.
+ *   shadow. If the string begins and ends with a slash (`/`), the text in
+ *   between is treated as a regular expression.
  * @param {string} selector The CSS selector that an HTML element must match
  *   for it to be hidden.
  *
@@ -463,9 +572,11 @@ function hideIfShadowContains(search, selector = "*")
   });
 }
 
-exports["hide-if-shadow-contains"] = makeInjector(hideIfShadowContains,
-                                                  toRegExp, regexEscape,
-                                                  hideElement);
+registerDependencies(hideIfShadowContains,
+                     toRegExp,
+                     hideElement);
+
+exports["hide-if-shadow-contains"] = makeInjector(hideIfShadowContains);
 
 /**
  * Hides any HTML element or one of its ancestors matching a CSS selector if
@@ -476,7 +587,7 @@ exports["hide-if-shadow-contains"] = makeInjector(hideIfShadowContains,
  *   for it to be hidden.
  * @param {?string} [searchSelector] The CSS selector that an HTML element
  *   containing the given string must match. Defaults to the value of the
- *   <code>selector</code> argument.
+ *   `selector` argument.
  * @private
  */
 function hideIfMatches(match, selector, searchSelector)
@@ -504,13 +615,13 @@ function hideIfMatches(match, selector, searchSelector)
  * @alias module:content/snippets.hide-if-contains
  *
  * @param {string} search The string to look for in HTML elements. If the
- *   string begins and ends with a slash (<code>/</code>), the text in between
- *   is treated as a regular expression.
+ *   string begins and ends with a slash (`/`), the text in between is treated
+ *   as a regular expression.
  * @param {string} selector The CSS selector that an HTML element must match
  *   for it to be hidden.
  * @param {?string} [searchSelector] The CSS selector that an HTML element
  *   containing the given string must match. Defaults to the value of the
- *   <code>selector</code> argument.
+ *   `selector` argument.
  *
  * @since Adblock Plus 3.3
  */
@@ -531,13 +642,13 @@ exports["hide-if-contains"] = hideIfContains;
  *
  * @param {string} search The string to match to the visible text. Is considered
  *   visible text that isn't hidden by CSS properties or other means.
- *   If the string begins and ends with a slash (<code>/</code>), the
- *   text in between is treated as a regular expression.
+ *   If the string begins and ends with a slash (`/`), the text in between is
+ *   treated as a regular expression.
  * @param {string} selector The CSS selector that an HTML element must match
  *   for it to be hidden.
  * @param {?string} [searchSelector] The CSS selector that an HTML element
  *   containing the given string must match. Defaults to the value of the
- *   <code>selector</code> argument.
+ *   `selector` argument.
  *
  * @since Adblock Plus 3.6
  */
@@ -555,7 +666,7 @@ function hideIfContainsVisibleText(search, selector, searchSelector = null)
   function isTextVisible(element, style)
   {
     if (!style)
-      style = window.getComputedStyle(element);
+      style = getComputedStyle(element);
 
     if (style.getPropertyValue("opacity") == "0")
       return false;
@@ -576,19 +687,16 @@ function hideIfContainsVisibleText(search, selector, searchSelector = null)
    * Check if an element is visible
    *
    * @param {Element} element The element to check visibility of.
-   * @param {?CSSStyleDeclaration} style The computed style of element. If
-   *   falsey it will be queried.
+   * @param {CSSStyleDeclaration} style The computed style of element.
    * @param {?Element} closest The closest parent to reach.
    * @return {bool} Whether the element is visible.
    * @private
    */
   function isVisible(element, style, closest)
   {
-    if (!style)
-      style = window.getComputedStyle(element);
-
     if (style.getPropertyValue("display") == "none")
       return false;
+
     let visibility = style.getPropertyValue("visibility");
     if (visibility == "hidden" || visibility == "collapse")
       return false;
@@ -600,7 +708,49 @@ function hideIfContainsVisibleText(search, selector, searchSelector = null)
     if (!parent)
       return true;
 
-    return isVisible(parent, null, closest);
+    return isVisible(parent, getComputedStyle(parent), closest);
+  }
+
+  /**
+   * Check if a pseudo element has visible text via `content`.
+   *
+   * @param {Element} element The element to check visibility of.
+   * @param {string} pseudo The `::before` or `::after` pseudo selector.
+   * @return {string} The pseudo content or an empty string.
+   * @private
+   */
+  function getPseudoContent(element, pseudo)
+  {
+    let style = getComputedStyle(element, pseudo);
+    if (!isVisible(element, style) || !isTextVisible(element, style))
+      return "";
+
+    let {content} = style;
+    if (content && content !== "none")
+    {
+      let strings = [];
+
+      // remove all strings, in quotes, including escaping chars, putting
+      // instead `\x01${string-index}` in place, which is not valid CSS,
+      // so that it's safe to parse it back at the end of the operation.
+      content = content.trim().replace(
+        /(["'])(?:(?=(\\?))\2.)*?\1/g,
+        value => `\x01${strings.push(value.slice(1, -1)) - 1}`
+      );
+
+      // replace attr(...) with the attribute value or an empty string,
+      // ignoring units and fallback values, as these do not work, or have,
+      // any meaning in the CSS `content` property value.
+      content = content.replace(
+        /\s*attr\(\s*([^\s,)]+)[^)]*?\)\s*/g,
+        (_, name) => element.getAttribute(name) || ""
+      );
+
+      // replace back all `\x01${string-index}` values with their corresponding
+      // strings, so that the outcome is a real, cleaned up, `content` value.
+      return content.replace(/\x01(\d+)/g, (_, index) => strings[index]);
+    }
+    return "";
   }
 
   /**
@@ -609,22 +759,29 @@ function hideIfContainsVisibleText(search, selector, searchSelector = null)
    * @param {Element} element The element whose visible text we want.
    * @param {Element} closest The closest parent to reach while checking
    *   for visibility.
+   * @param {?CSSStyleDeclaration} style The computed style of element. If
+   *   falsey it will be queried.
    * @returns {string} The text that is visible.
    * @private
    */
-  function getVisibleContent(element, closest)
+  function getVisibleContent(element, closest, style)
   {
-    let style = window.getComputedStyle(element);
-    if (!isVisible(element, style, closest))
+    let checkClosest = !style;
+    if (checkClosest)
+      style = getComputedStyle(element);
+
+    if (!isVisible(element, style, checkClosest && closest))
       return "";
 
-    let text = "";
+    let text = getPseudoContent(element, ":before");
     for (let node of element.childNodes)
     {
       switch (node.nodeType)
       {
         case Node.ELEMENT_NODE:
-          text += getVisibleContent(node, element);
+          text += getVisibleContent(node,
+                                    element,
+                                    getComputedStyle(node));
           break;
         case Node.TEXT_NODE:
           if (isTextVisible(element, style))
@@ -632,21 +789,28 @@ function hideIfContainsVisibleText(search, selector, searchSelector = null)
           break;
       }
     }
-    return text;
+    return text + getPseudoContent(element, ":after");
   }
 
   let re = toRegExp(search);
   let seen = new WeakSet();
 
-  hideIfMatches((element, closest) =>
-  {
-    if (seen.has(element))
-      return false;
+  hideIfMatches(
+    (element, closest) =>
+    {
+      if (seen.has(element))
+        return false;
 
-    seen.add(element);
-    return re.test(getVisibleContent(element, closest));
-  },
-  selector, searchSelector);
+      seen.add(element);
+      let text = getVisibleContent(element, closest);
+      let result = re.test(text);
+      if (debug && text.length)
+        log(result, re, text);
+      return result;
+    },
+    selector,
+    searchSelector
+  );
 }
 
 exports["hide-if-contains-visible-text"] = hideIfContainsVisibleText;
@@ -658,21 +822,21 @@ exports["hide-if-contains-visible-text"] = hideIfContainsVisibleText;
  * @alias module:content/snippets.hide-if-contains-and-matches-style
  *
  * @param {string} search The string to look for in HTML elements. If the
- *   string begins and ends with a slash (<code>/</code>), the text in between
- *   is treated as a regular expression.
+ *   string begins and ends with a slash (`/`), the text in between is treated
+ *   as a regular expression.
  * @param {string} selector The CSS selector that an HTML element must match
  *   for it to be hidden.
  * @param {string?} [searchSelector] The CSS selector that an HTML element
  *   containing the given string must match. Defaults to the value of the
- *   <code>selector</code> argument.
+ *   `selector` argument.
  * @param {string?} [style] The string that the computed style of an HTML
- *   element matching <code>selector</code> must contain. If the string begins
- *   and ends with a slash (<code>/</code>), the text in between is treated as
- *   a regular expression.
+ *   element matching `selector` must contain. If the string begins and ends
+ *   with a slash (`/`), the text in between is treated as a regular
+ *   expression.
  * @param {string?} [searchStyle] The string that the computed style of an HTML
- *   element matching <code>searchSelector</code> must contain. If the string
- *   begins and ends with a slash (<code>/</code>), the text in between is
- *   treated as a regular expression.
+ *   element matching `searchSelector` must contain. If the string begins and
+ *   ends with a slash (`/`), the text in between is treated as a regular
+ *   expression.
  *
  * @since Adblock Plus 3.3.2
  */
@@ -699,9 +863,7 @@ function hideIfContainsAndMatchesStyle(search, selector = "*",
         let closest = element.closest(selector);
         if (closest && (!styleRegExp ||
                         styleRegExp.test(getComputedCSSText(closest))))
-        {
           hideElement(closest);
-        }
       }
     }
   })
@@ -722,15 +884,15 @@ exports["hide-if-contains-and-matches-style"] = hideIfContainsAndMatchesStyle;
  *   for it to be hidden.
  * @param {?string} [searchSelector] The CSS selector that an HTML element
  *   containing the specified descendants must match. Defaults to the value of
- *   the <code>selector</code> argument.
+ *   the `selector` argument.
  * @param {?string} [style] The string that the computed style of an HTML
- *   element matching <code>selector</code> must contain. If the string begins
- *   and ends with a slash (<code>/</code>), the text in between is treated as
- *   a regular expression.
+ *   element matching `selector` must contain. If the string begins and ends
+ *   with a slash (`/`), the text in between is treated as a regular
+ *   expression.
  * @param {?string} [searchStyle] The string that the computed style of an HTML
- *   element matching <code>searchSelector</code> must contain. If the string
- *   begins and ends with a slash (<code>/</code>), the text in between is
- *   treated as a regular expression.
+ *   element matching `searchSelector` must contain. If the string begins and
+ *   ends with a slash (`/`), the text in between is treated as a regular
+ *   expression.
  *
  * @since Adblock Plus 3.4.2
  */
@@ -755,9 +917,7 @@ function hideIfHasAndMatchesStyle(search, selector = "*",
         let closest = element.closest(selector);
         if (closest && (!styleRegExp ||
                         styleRegExp.test(getComputedCSSText(closest))))
-        {
           hideElement(closest);
-        }
       }
     }
   })
@@ -773,13 +933,13 @@ exports["hide-if-has-and-matches-style"] = hideIfHasAndMatchesStyle;
  *
  * @param {string} search The pattern to look for in the background images of
  *   HTML elements. This must be the hexadecimal representation of the image
- *   data for which to look. If the string begins and ends with a slash
- *   (<code>/</code>), the text in between is treated as a regular expression.
+ *   data for which to look. If the string begins and ends with a slash (`/`),
+ *   the text in between is treated as a regular expression.
  * @param {string} selector The CSS selector that an HTML element must match
  *   for it to be hidden.
  * @param {?string} [searchSelector] The CSS selector that an HTML element
  *   containing the given pattern must match. Defaults to the value of the
- *   <code>selector</code> argument.
+ *   `selector` argument.
  *
  * @since Adblock Plus 3.4.2
  */
@@ -849,12 +1009,11 @@ function readd(selector, parentSelector = null)
 exports.readd = readd;
 
 /**
- * Wraps the <code>console.dir</code> API to call the <code>toString</code>
- * method of the argument.
+ * Wraps the `console.dir` API to call the `toString` method of the argument.
  * @alias module:content/snippets.dir-string
  *
- * @param {string} [times=1] The number of times to call the
- *   <code>toString</code> method of the argument to <code>console.dir</code>.
+ * @param {string} [times=1] The number of times to call the `toString` method
+ *   of the argument to `console.dir`.
  *
  * @since Adblock Plus 3.4
  */
@@ -940,8 +1099,8 @@ function wrapPropertyAccess(object, property, descriptor)
 }
 
 /**
- * Overrides the <code>onerror</code> handler to discard tagged error messages
- * from our property wrapping.
+ * Overrides the `onerror` handler to discard tagged error messages from our
+ * property wrapping.
  *
  * @param {string} magic The magic string that tags the error message.
  * @private
@@ -965,7 +1124,7 @@ function overrideOnError(magic)
  * No error is printed to the console.
  *
  * The idea originates from
- * {@link https://github.com/uBlockOrigin/uAssets/blob/80b195436f8f8d78ba713237bfc268ecfc9d9d2b/filters/resources.txt#L1703 uBlock Origin}.
+ * [uBlock Origin](https://github.com/uBlockOrigin/uAssets/blob/80b195436f8f8d78ba713237bfc268ecfc9d9d2b/filters/resources.txt#L1703).
  * @alias module:content/snippets.abort-on-property-read
  *
  * @param {string} property The name of the property.
@@ -997,11 +1156,13 @@ function abortOnPropertyRead(property)
   overrideOnError(rid);
 }
 
-exports["abort-on-property-read"] = makeInjector(abortOnPropertyRead,
-                                                 wrapPropertyAccess,
-                                                 overrideOnError,
-                                                 randomId,
-                                                 log);
+registerDependencies(abortOnPropertyRead,
+                     log,
+                     overrideOnError,
+                     randomId,
+                     wrapPropertyAccess);
+
+exports["abort-on-property-read"] = makeInjector(abortOnPropertyRead);
 
 /**
  * Patches a property on the window object to abort execution when the
@@ -1010,7 +1171,7 @@ exports["abort-on-property-read"] = makeInjector(abortOnPropertyRead,
  * No error is printed to the console.
  *
  * The idea originates from
- * {@link https://github.com/uBlockOrigin/uAssets/blob/80b195436f8f8d78ba713237bfc268ecfc9d9d2b/filters/resources.txt#L1671 uBlock Origin}.
+ * [uBlock Origin](https://github.com/uBlockOrigin/uAssets/blob/80b195436f8f8d78ba713237bfc268ecfc9d9d2b/filters/resources.txt#L1671).
  * @alias module:content/snippets.abort-on-property-write
  *
  * @param {string} property The name of the property.
@@ -1042,11 +1203,13 @@ function abortOnPropertyWrite(property)
   overrideOnError(rid);
 }
 
-exports["abort-on-property-write"] = makeInjector(abortOnPropertyWrite,
-                                                  wrapPropertyAccess,
-                                                  overrideOnError,
-                                                  randomId,
-                                                  log);
+registerDependencies(abortOnPropertyWrite,
+                     log,
+                     overrideOnError,
+                     randomId,
+                     wrapPropertyAccess);
+
+exports["abort-on-property-write"] = makeInjector(abortOnPropertyWrite);
 
 /**
  * Aborts the execution of an inline script.
@@ -1055,8 +1218,7 @@ exports["abort-on-property-write"] = makeInjector(abortOnPropertyWrite,
  * @param {string} api API function or property name to anchor on.
  * @param {?string} [search] If specified, only scripts containing the given
  *   string are prevented from executing. If the string begins and ends with a
- *   slash (<code>/</code>), the text in between is treated as a regular
- *   expression.
+ *   slash (`/`), the text in between is treated as a regular expression.
  *
  * @since Adblock Plus 3.4.3
  */
@@ -1089,9 +1251,7 @@ function abortCurrentInlineScript(api, search = null)
     let element = document.currentScript;
     if (element instanceof HTMLScriptElement && element.src == "" &&
         element != us && (!re || re.test(element.textContent)))
-    {
       throw new ReferenceError(rid);
-    }
   };
 
   let descriptor = {
@@ -1120,12 +1280,94 @@ function abortCurrentInlineScript(api, search = null)
   overrideOnError(rid);
 }
 
+registerDependencies(abortCurrentInlineScript,
+                     overrideOnError,
+                     randomId,
+                     toRegExp,
+                     wrapPropertyAccess);
+
 exports["abort-current-inline-script"] =
-  makeInjector(abortCurrentInlineScript, wrapPropertyAccess, toRegExp,
-               overrideOnError, regexEscape, randomId);
+  makeInjector(abortCurrentInlineScript);
+
 
 /**
- * Strips a query string parameter from <code>fetch()</code> calls.
+ * Traps calls to JSON.parse, and if the result of the parsing is an Object, it
+ * will remove specified properties from the result before returning to the
+ * caller.
+ *
+ * The idea originates from
+ * [uBlock Origin](https://github.com/gorhill/uBlock/commit/2fd86a66).
+ * @alias module:content/snippets.json-prune
+ *
+ * @param {string} rawPrunePaths A list of space-separated properties to remove.
+ * @param {?string} [rawNeedlePaths] A list of space-separated properties which
+ *   must be all present for the pruning to occur.
+ *
+ * @since Adblock Plus 3.9.0
+ */
+function jsonPrune(rawPrunePaths, rawNeedlePaths = "")
+{
+  if (!rawPrunePaths)
+    throw new Error("Missing paths to prune");
+  let prunePaths = rawPrunePaths.split(/ +/);
+  let needlePaths = rawNeedlePaths !== "" ? rawNeedlePaths.split(/ +/) : [];
+  let currentValue = JSON.parse;
+
+  let descriptor = {
+    value(...args)
+    {
+      let result;
+      result = currentValue.apply(this, args);
+
+      if (needlePaths.length > 0 &&
+          needlePaths.some(path => !findOwner(result, path)))
+        return result;
+
+      for (let path of prunePaths)
+      {
+        let details = findOwner(result, path);
+        if (typeof details != "undefined")
+          delete details[0][details[1]];
+      }
+      return result;
+    }
+  };
+
+  Object.defineProperty(JSON, "parse", descriptor);
+
+  function findOwner(root, path)
+  {
+    if (!(root instanceof window.Object))
+      return;
+
+    let object = root;
+    let chain = path.split(".");
+
+    if (chain.length === 0)
+      return;
+
+    for (let i = 0; i < chain.length - 1; i++)
+    {
+      let prop = chain[i];
+      if (!utils.isOwnProperty(object, prop))
+        return;
+
+      object = object[prop];
+
+      if (!(object instanceof window.Object))
+        return;
+    }
+
+    let prop = chain[chain.length - 1];
+    if (utils.isOwnProperty(object, prop))
+      return [object, prop];
+  }
+}
+
+exports["json-prune"] = makeInjector(jsonPrune);
+
+/**
+ * Strips a query string parameter from `fetch()` calls.
  * @alias module:content/snippets.strip-fetch-query-parameter
  *
  * @param {string} name The name of the parameter.
@@ -1155,8 +1397,10 @@ function stripFetchQueryParameter(name, urlPattern = null)
   };
 }
 
-exports["strip-fetch-query-parameter"] = makeInjector(stripFetchQueryParameter,
-                                                      toRegExp, regexEscape);
+registerDependencies(stripFetchQueryParameter, toRegExp);
+
+exports["strip-fetch-query-parameter"] =
+  makeInjector(stripFetchQueryParameter);
 
 /**
  * Represents an undirected graph. Used for producing adjacency and feature
@@ -1174,9 +1418,7 @@ class UndirectedGraph
     // Create adjacency matrix and initialize it with '0's
     let emptyMatrix = new Array(numOfVertices);
     for (let i = 0; i < numOfVertices; i++)
-    {
       emptyMatrix[i] = new Array(numOfVertices).fill(0);
-    }
     this.adjacencyMatrix = emptyMatrix;
   }
 
@@ -1203,7 +1445,7 @@ class UndirectedGraph
 }
 
 // Source: https://github.com/sindresorhus/html-tags/blob/master/html-tags.json
-const htmlTags = [
+let htmlTags = [
   "a", "abbr", "address", "area", "article", "aside", "audio",
   "b", "base", "bdi", "bdo", "blockquote", "body", "br", "button", "canvas",
   "caption", "cite", "code", "col", "colgroup", "data", "datalist", "dd", "del",
@@ -1245,6 +1487,8 @@ let htmlTagsMap = new Map(
  */
 function processElement(target)
 {
+  let {mark, end} = profile("ml:addEdges");
+
   let elementGraph = new UndirectedGraph(GRAPH_CUT_OFF);
   let numOfElements = 1;
 
@@ -1256,9 +1500,7 @@ function processElement(target)
     for (let child of children)
     {
       if (numOfElements > GRAPH_CUT_OFF)
-      {
         break;
-      }
 
       elementTags[numOfElements] = htmlTagsMap.get(child.tagName) || 0;
       elementGraph.addEdge(parentPos, numOfElements);
@@ -1269,16 +1511,20 @@ function processElement(target)
   elementTags[0] = (htmlTagsMap.get(target.tagName) || 0);
 
   // Kick off recursive graph building
+  mark();
   addEdges(target, 0);
+  end();
   let adjMatrix = elementGraph.adjacencyMatrix;
   return {adjMatrix, elementTags};
 }
 
 /**
-* Runs a ML prediction on each element that matches a selector
-* @param {String} selector - a selector to use for finding candidates
-* @param {WeakSet} seenMlTargets - matched elements to ignore
-*/
+ * Runs a ML prediction on each element that matches a selector.
+ * @param {string} selector A selector to use for finding candidates.
+ * @param {WeakSet} seenMlTargets Matched elements to ignore.
+ *
+ * @private
+ */
 function predictAds(selector, seenMlTargets)
 {
   let debugLog = (debug ? log : () => {})
@@ -1291,35 +1537,38 @@ function predictAds(selector, seenMlTargets)
       continue;
 
     if (target.innerText == "")
-    {
       continue;
-    }
+
     seenMlTargets.add(target);
     let processedElement = processElement(target);
 
+    // as this call is asynchronous, ensure the id is unique
+    let {mark, end} = profile(`ml:inference:${randomId()}`);
+    mark();
     browser.runtime.sendMessage({
       type: "ml.inference",
       inputs: [
         {
           data: [processedElement.elementTags], preprocess: [
-                        {funcName: "cast", args: "int32"},
-                        {funcName: "pad", args: GRAPH_CUT_OFF},
-                        {funcName: "oneHot", args: htmlTags.length},
-                        {funcName: "cast", args: "float32"}
+            {funcName: "cast", args: "int32"},
+            {funcName: "pad", args: GRAPH_CUT_OFF},
+            {funcName: "oneHot", args: htmlTags.length},
+            {funcName: "cast", args: "float32"}
           ]
         },
         {
           data: [processedElement.adjMatrix], preprocess: [
-                        {funcName: "pad", args: GRAPH_CUT_OFF},
-                        {funcName: "unstack"},
-                        {funcName: "localPooling"},
-                        {funcName: "stack"}
+            {funcName: "pad", args: GRAPH_CUT_OFF},
+            {funcName: "unstack"},
+            {funcName: "localPooling"},
+            {funcName: "stack"}
           ]
         }
       ],
       model: "mlHideIfGraphMatches"
     }).then(rawPrediction =>
     {
+      end(true);
       debugLog(rawPrediction);
 
       let predictionValues = Object.values(rawPrediction);
@@ -1334,8 +1583,12 @@ function predictAds(selector, seenMlTargets)
       if (!result[0])
       {
         debugLog("Detected ad: " + target.innerText);
-        debug ? highlightElement(target) : hideElement(target);
+        hideElement(target);
       }
+    }).catch(() =>
+    {
+      // ensure the metric is sent even on possible ML failures
+      end(true);
     });
   }
 }
@@ -1343,13 +1596,13 @@ function predictAds(selector, seenMlTargets)
 /**
  * Hides any HTML element if its structure (graph) is classified as an ad
  * by a built-in machine learning model.
- * @alias ml-hide-if-graph-matches
+ * @alias module:content/snippets.ml-hide-if-graph-matches
  *
  * @param {string} selector A selector that produces a list of targets to
  * classify.
  * @param {string} tagName An HTML tag name to filter mutations.
  *
- * @since Adblock Plus 3.8.0
+ * @since Adblock Plus 3.8
  */
 function mlHideIfGraphMatches(selector, tagName)
 {
@@ -1387,6 +1640,7 @@ function mlHideIfGraphMatches(selector, tagName)
 }
 
 exports["ml-hide-if-graph-matches"] = mlHideIfGraphMatches;
+
 /**
  * Calculates and returns the perceptual hash of the supplied image.
  *
@@ -1409,9 +1663,7 @@ function hashImage(imageData, blockBits)
     mdarr.sort((a, b) => a - b);
     let {length} = mdarr;
     if (length % 2 === 0)
-    {
       return (mdarr[length / 2 - 1] + mdarr[length / 2]) / 2.0;
-    }
     return mdarr[(length / 2) | 0];
   }
 
@@ -1476,13 +1728,9 @@ function hashImage(imageData, blockBits)
           {
             let alpha = imgData[ii + 3];
             if (alpha === 0)
-            {
               total += 765;
-            }
             else
-            {
               total += imgData[ii] + imgData[ii + 1] + imgData[ii + 2];
-            }
 
             ii += 4;
           }
@@ -1510,9 +1758,7 @@ function hashImage(imageData, blockBits)
     let evenY = height % bits === 0;
 
     if (evenX && evenY)
-    {
       return bmvbhashEven(data, bits);
-    }
 
     // initialize blocks array with 0s
     let result = new Array(bits * bits).fill(0);
@@ -1576,9 +1822,7 @@ function hashImage(imageData, blockBits)
         let avgvalue = 765;
         let alpha = imgData[ii + 3];
         if (alpha !== 0)
-        {
           avgvalue = imgData[ii] + imgData[ii + 1] + imgData[ii + 2];
-        }
 
         if (evenX)
         {
@@ -1657,9 +1901,7 @@ function hammingDistance(hash1, hash2)
   let i;
 
   if (hash1.length !== hash2.length)
-  {
     throw new Error("Can't compare hashes with different length");
-  }
 
   for (i = 0; i < hash1.length; i++)
   {
@@ -1677,13 +1919,13 @@ function hammingDistance(hash1, hash2)
  * @alias module:content/snippets.hide-if-contains-image-hash
  *
  * @param {string} hashes List of comma seperated  perceptual hashes of the
- *  images that should be blocked, see also <code>maxDistance</code>.
+ *  images that should be blocked, see also `maxDistance`.
  * @param {?string} [selector] The CSS selector that an HTML element
- *   containing the given pattern must match. Defaults to the image element
- *   itself.
- * @param {?string} [maxDistance] The maximum hamming distance between
- *   <code>hash</code> and the perceptual hash of the image to be considered a
- *   match.
+ *   containing the given pattern must match. If empty or omitted, defaults
+ *   to the image element itself.
+ * @param {?string} [maxDistance] The maximum hamming distance between `hash`
+ *   and the perceptual hash of the image to be considered a match. Defaults
+ *   to 0.
  * @param {?number} [blockBits] The block width used to generate the perceptual
  *   image hash, a number of 4 will split the image into 16 blocks
  *   (width/4 * height/4). Defaults to 8. The maximum value allowed is 64.
@@ -1700,7 +1942,7 @@ function hideIfContainsImageHash(hashes,
                                  blockBits,
                                  selection)
 {
-  if (selector == null)
+  if (selector == null || selector === "")
     selector = "img";
 
   if (maxDistance == null)
@@ -1797,19 +2039,107 @@ function hideIfContainsImageHash(hashes,
     for (let img of document.images)
     {
       if (!seenImages.has(img.src))
-      {
         images.add(img);
-      }
     }
 
     if (images.size)
-    {
       callback(images);
-    }
   }).observe(document, {childList: true, subtree: true, attributes: true});
 }
 
 exports["hide-if-contains-image-hash"] = hideIfContainsImageHash;
+
+/**
+ * Hides any HTML element that uses an `aria-labelledby`, or one of its
+ * ancestors, if the related aria element contains the searched text.
+ * @alias module:content/snippets.hide-if-labelled-by
+ *
+ * @param {string} search The string to look for in HTML elements. If the
+ *   string begins and ends with a slash (`/`), the text in between is treated
+ *   as a regular expression.
+ * @param {string} selector The CSS selector of an HTML element that uses as
+ *   `aria-labelledby` attribute.
+ * @param {?string} [searchSelector] The CSS selector of an ancestor of the
+ *   HTML element that uses as `aria-labelledby` attribute. Defaults to the
+ *   value of the `selector` argument.
+ *
+ * @since Adblock Plus 3.9
+ */
+function hideIfLabelledBy(search, selector, searchSelector = null)
+{
+  if (searchSelector == null)
+    searchSelector = selector;
+
+  let searchRegExp = toRegExp(search);
+
+  let hidden = new WeakSet();
+
+  let callback = () =>
+  {
+    for (let node of document.querySelectorAll(selector))
+    {
+      let attr = node.getAttribute("aria-labelledby");
+      if (attr)
+      {
+        for (let label of attr.split(/\s+/))
+        {
+          let target = document.getElementById(label);
+          if (target && searchRegExp.test(target.textContent))
+          {
+            let closest = node.closest(searchSelector);
+            if (closest && !hidden.has(target))
+            {
+              hidden.add(target);
+              hideElement(closest);
+            }
+          }
+        }
+      }
+    }
+  };
+
+  let options = {characterData: true, childList: true, subtree: true};
+  new MutationObserver(callback).observe(document, options);
+  callback();
+}
+
+exports["hide-if-labelled-by"] = hideIfLabelledBy;
+
+/**
+ * Hide a specific element through a XPath 1.0 query string.
+ * @alias module:content/snippets.hide-if-matches-xpath
+ *
+ * @param {string} query The XPath query that targets the element to hide.
+ *
+ * @since Adblock Plus 3.9.0
+ */
+function hideIfMatchesXPath(query)
+{
+  let hidden = new WeakSet();
+  let callback = () =>
+  {
+    // do not use ORDERED_NODE_ITERATOR_TYPE or the test env will fail
+    let result = document.evaluate(query, document, null,
+                                   XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+                                   null);
+
+    for (let i = 0, {snapshotLength} = result; i < snapshotLength; i++)
+    {
+      let element = result.snapshotItem(i);
+      if (hidden.has(element))
+        continue;
+
+      hidden.add(element);
+      hideElement(element);
+    }
+  };
+
+  let options = {characterData: true, childList: true, subtree: true};
+  new MutationObserver(callback).observe(document, options);
+  callback();
+}
+
+exports["hide-if-matches-xpath"] = hideIfMatchesXPath;
 
 /**
  * Whether debug mode is enabled.
@@ -1824,6 +2154,8 @@ let debug = false;
  *
  * @example
  * example.com#$#debug; log 'Hello, world!'
+ *
+ * @since Adblock Plus 3.8
  */
 function setDebug()
 {
@@ -1831,3 +2163,121 @@ function setDebug()
 }
 
 exports["debug"] = setDebug;
+
+/**
+ * Default profile("...") returned object when profile mode is disabled.
+ * @type {Profiler}
+ * @private
+ */
+let noopProfile = {
+  mark() {},
+  end() {},
+  toString()
+  {
+    return "{mark(){},end(){}}";
+  }
+};
+
+/**
+ * Whether profile mode is inactive.
+ * @type {boolean}
+ * @private
+ */
+let inactiveProfile = true;
+
+/**
+ * Enables profile mode.
+ * @alias module:content/snippets.profile
+ * @since Adblock Plus 3.9
+ *
+ * @example
+ * example.com#$#profile; log 'Hello, world!'
+ */
+function setProfile()
+{
+  inactiveProfile = false;
+}
+
+exports["profile"] = setProfile;
+
+/**
+ * @typedef {object} Profiler
+ * @property {function} mark Add a `performance.mark(uniqueId)` entry.
+ * @property {function} end Measure and clear `uniqueId` related marks. If a
+ * `true` value is passed as argument, clear related interval and process all
+ * collected samples since the creation of the profiler.
+ * @private
+ */
+
+/**
+ * Create an object with `mark()` and `end()` methods to either keep marking a
+ * specific profiled name, or ending it.
+ *
+ * @example
+ * let {mark, end} = profile('console.log');
+ * mark();
+ * console.log(1, 2, 3);
+ * end();
+ *
+ * @param {string} id the callback name or unique ID to profile.
+ * @param {number} [rate] The number of times per minute to process samples.
+ * @returns {Profiler} The profiler with `mark()` and `end(clear = false)`
+ * methods.
+ * @private
+ */
+function profile(id, rate = 10)
+{
+  if (inactiveProfile)
+    return noopProfile;
+
+  function sendMessage(message)
+  {
+    let {runtime} = (typeof browser == "undefined" ? chrome : browser);
+    runtime.sendMessage(message);
+  }
+
+  function processSamples()
+  {
+    let samples = [];
+
+    for (let {name, duration} of performance.getEntriesByType("measure"))
+      samples.push({name, duration});
+
+    if (samples.length)
+    {
+      performance.clearMeasures();
+
+      sendMessage({
+        type: "profiler.sample",
+        category: "snippets",
+        samples
+      });
+    }
+  }
+
+  // avoid creation of N intervals when the same id is used
+  // over and over (i.e. within loops or multiple profile calls)
+  if (!profile[id])
+  {
+    profile[id] = setInterval(processSamples,
+                              Math.round(60000 / Math.min(60, rate)));
+  }
+
+  return {
+    mark()
+    {
+      performance.mark(id);
+    },
+    end(clear = false)
+    {
+      performance.measure(id, id);
+      performance.clearMarks(id);
+      if (clear)
+      {
+        clearInterval(profile[id]);
+        delete profile[id];
+        processSamples();
+      }
+    }
+  };
+}

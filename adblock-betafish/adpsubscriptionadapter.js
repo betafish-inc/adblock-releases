@@ -89,7 +89,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
         for (const attr in subscription) {
           // if the subscription has a 'URL' property use it to
           // add the other attributes (id, language, hidden)
-          if (attr === 'url') {
+          if ((attr === 'url' || attr === '_url') && !tempSub.id) {
             const subscriptionInfo = getSubscriptionInfoFromURL(subscription[attr]);
             if (subscriptionInfo && subscriptionInfo.url) {
               tempSub.id = subscriptionInfo.id;
@@ -101,7 +101,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
               tempSub.hidden = subscriptionInfo.hidden;
             }
           }
-          if (attr !== '_filterText') {
+          if (attr !== '_filterText' && attr !== '_filterTextIndex') {
             tempSub[attr] = subscription[attr];
           }
         }
@@ -109,6 +109,13 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
         // 'id' property
         if (!tempSub.id || tempSub.id === undefined) {
           tempSub.id = `url:${subscription.url}`;
+        }
+        // if the subscription doesn't have a 'url' property, copy the '_url' property
+        if (!tempSub.url && tempSub._url) {
+          tempSub.url = tempSub._url;
+        }
+        if (!tempSub.downloadStatus && subscription._downloadStatus) {
+          tempSub.downloadStatus = subscription._downloadStatus;
         }
         // Since FilterStorage.subscriptions only contains subscribed FilterLists,
         // add the 'subscribed' property

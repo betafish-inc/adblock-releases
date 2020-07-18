@@ -1216,7 +1216,7 @@ $('#aTrackersEnable, #btnTrackersEnable').on('click', () => {
     if (
       item
         && item.url === easyPrivacyURL
-        && item.downloadStatus === 'synchronize_ok'
+        && item._downloadStatus === 'synchronize_ok'
     ) {
       filterNotifier.off('subscription.added', onStatsSubUpdated);
       // eslint-disable-next-line no-use-before-define

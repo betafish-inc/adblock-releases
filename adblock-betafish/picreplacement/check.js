@@ -9,6 +9,7 @@
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
 const { checkWhitelisted } = require('whitelisting');
 const { EventEmitter } = require('events');
+const browserAction = require('browserAction');
 const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
 
 const licenseNotifier = new EventEmitter();
@@ -483,11 +484,7 @@ const License = (function getLicense() {
           // process currrently opened tabs
           browser.tabs.query({}).then((tabs) => {
             for (const tab of tabs) {
-              const page = new ext.Page(tab);
-              page.browserAction.setBadge({
-                color: '#03bcfc',
-                number: newBadgeText,
-              });
+              browserAction.setBadge(tab.id, { color: '#03bcfc', number: newBadgeText });
             }
             // set for new tabs
             browser.browserAction.setBadgeBackgroundColor({ color: '#03bcfc' });
@@ -500,6 +497,7 @@ const License = (function getLicense() {
         if (typeof storedValue === 'boolean') {
           Prefs.show_statsinicon = storedValue;
           storageSet(statsInIconKey); // remove the data, since we no longer need it
+
           browser.browserAction.setBadgeText({ text: '' });
         }
       }

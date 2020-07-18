@@ -248,7 +248,7 @@ const STATS = (function exportStats() {
       };
 
       if (browser.management && browser.management.getSelf) {
-        browser.management.getSelf((info) => {
+        browser.management.getSelf().then((info) => {
           pingData.it = info.installType.charAt(0);
           $.ajax(ajaxOptions);
         });
@@ -420,7 +420,7 @@ const STATS = (function exportStats() {
         browser.storage.local.get(STATS.totalPingStorageKey).then((response) => {
           if (!response[STATS.totalPingStorageKey]) {
             if (browser.management && browser.management.getSelf) {
-              browser.management.getSelf((info) => {
+              browser.management.getSelf().then((info) => {
                 if (info) {
                   recordGeneralMessage(`new_install_${info.installType}`);
                 } else {

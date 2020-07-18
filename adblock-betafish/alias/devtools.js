@@ -19,7 +19,7 @@ if ("panels" in browser.devtools)
       {
         browser.devtools.panels.create(
           "AdBlock",
-          "icons/ab-48.png",
+          "icons/ab-32.png",
           "devtools-panel.html").then(panel =>
           {
             panel.onShown.addListener(window =>

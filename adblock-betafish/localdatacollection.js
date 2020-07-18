@@ -44,16 +44,9 @@ const LocalDataCollection = (function getLocalDataCollection() {
       && !adblockIsDomainPaused({ url: tabInfo.url, id: tabId })
       && changeInfo.status === 'complete'
     ) {
-      browser.tabs.executeScript(tabId,
-        {
-          file: 'polyfill.js',
-          allFrames: true,
-        }).then(() => {
-        browser.tabs.executeScript(tabId,
-          {
-            file: 'adblock-datacollection-contentscript.js',
-            allFrames: true,
-          });
+      browser.tabs.executeScript(tabId, {
+        file: 'adblock-datacollection-contentscript.js',
+        allFrames: true,
       });
     }
   };
@@ -64,12 +57,13 @@ const LocalDataCollection = (function getLocalDataCollection() {
                              || filter.type === 'elemhide'
                              || filter.type === 'elemhideemulation'
                              || filter.type === 'snippet');
-    if (validFilterType && validFilterText && page && page.url && page.url.hostname) {
+    if (validFilterType && validFilterText && page && page.url) {
       browser.tabs.get(page.id).then((tab) => {
         if (tab.incognito) {
           return;
         }
-        const domain = page.url.hostname;
+        const theURL = new URL(page.url);
+        const domain = theURL.hostname;
         initializeDomainIfNeeded(domain);
         const { text } = filter;
         let isAd = true;
@@ -131,10 +125,11 @@ const LocalDataCollection = (function getLocalDataCollection() {
   const filterListener = function (item, newValue, oldValue, tabIds) {
     if (getSettings().local_data_collection && !adblockIsPaused()) {
       for (const tabId of tabIds) {
-        const page = new ext.Page({ id: tabId });
-        if (page && page.url && !adblockIsDomainPaused({ url: page.url.href, id: page.id })) {
-          addFilterToCache(item, page);
-        }
+        browser.tabs.get(tabId).then((tab) => {
+          if (tab && tab.url && !adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
+            addFilterToCache(item, tab);
+          }
+        });
       }
     } else if (!getSettings().local_data_collection) {
       LocalDataCollection.end();

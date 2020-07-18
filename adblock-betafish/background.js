@@ -998,7 +998,7 @@ const getDebugInfo = function (callback) {
     if (subscriptions[id].subscribed) {
       subscriptionInfo[id] = {};
       subscriptionInfo[id].lastSuccess = new Date(subscriptions[id].lastSuccess * 1000);
-      subscriptionInfo[id].lastDownload = new Date(subscriptions[id].lastDownload * 1000);
+      subscriptionInfo[id].lastDownload = new Date(subscriptions[id]._lastDownload * 1000);
       subscriptionInfo[id].downloadCount = subscriptions[id].downloadCount;
       subscriptionInfo[id].downloadStatus = subscriptions[id].downloadStatus;
     }

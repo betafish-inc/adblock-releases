@@ -7,7 +7,7 @@ const {Subscription,
        SpecialSubscription} =
   require("subscriptionClasses");
 const {filterStorage} = require("filterStorage");
-const {filterNotifier} = require("filterNotifier");
+const {filterEngine} = require("filterEngine");
 const {recommendations} = require("./recommendations.js");
 const info = require("info");
 const {port} = require("../../adblockpluschrome/lib/messaging");
@@ -15,6 +15,10 @@ const {Prefs} = require("prefs");
 const {synchronizer} = require("synchronizer");
 const {initNotifications} = require("notificationHelper");
 const {updatesVersion} = require("../../adblockpluschrome/adblockplusui/lib/prefs");
+const {
+  showProblemNotification,
+  showUpdatesNotification
+} = require("notifications");
 
 let firstRun;
 let subscriptionsCallback = null;
@@ -258,8 +262,7 @@ function addSubscriptionsAndNotifyUser(subscriptions)
   // on Chromium (since the current updates page announces features that
   // aren't new to Firefox users), and only if this version of the
   // updates page hasn't been shown yet.
-  if (firstRun || info.platform == "chromium" &&
-                  updatesVersion > Prefs.last_updates_page_displayed)
+  if (firstRun)
   {
     return Prefs.set("last_updates_page_displayed", updatesVersion).catch(() =>
     {
@@ -284,7 +287,7 @@ function addSubscriptionsAndNotifyUser(subscriptions)
 }
 
 Promise.all([
-  filterNotifier.once("ready"),
+  filterEngine.initialize().then(() => synchronizer.start()),
   Prefs.untilLoaded.catch(() => { dataCorrupted = true; })
 ]).then(detectFirstRun)
   .then(getSubscriptions)
