@@ -1,12 +1,12 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, adblock_installed, adblock_userid, adblock_version */
+/* global browser, adblock_installed, adblock_userid, adblock_version, adblock_ext_id */
 
 const invalidGUIDChars = /[^a-z0-9]/g;
 
-const gabHostnames = ['getadblock.com', 'dev.getadblock.com', 'dev1.getadblock.com', 'dev2.getadblock.com'];
-const gabHostnamesWithProtocal = ['https://getadblock.com', 'http://dev.getadblock.com', 'http://dev1.getadblock.com', 'http://dev2.getadblock.com'];
+const gabHostnames = ['getadblock.com', 'dev.getadblock.com', 'dev1.getadblock.com', 'dev2.getadblock.com', 'getadblockpremium.com'];
+const gabHostnamesWithProtocal = ['https://getadblock.com', 'http://dev.getadblock.com', 'http://dev1.getadblock.com', 'http://dev2.getadblock.com', 'https://getadblockpremium.com'];
 
 let abort = (function shouldAbort() {
   if (document instanceof HTMLDocument === false) {
@@ -71,6 +71,20 @@ const getAdblockVersion = function (version) {
   adblock_version = version;
 };
 
+const getAdblockExtId = function (extId) {
+  // eslint-disable-next-line no-global-assign
+  adblock_ext_id = extId;
+};
+
+// listen to messages from the background page
+function onMessage(request, sender, sendResponse) {
+  if (Object.prototype.hasOwnProperty.call(request, 'dataMigrationStatus')) {
+    browser.runtime.onMessage.removeListener(onMessage);
+    window.postMessage({ dataMigrationStatus: request.dataMigrationStatus }, '*');
+    sendResponse({});
+  }
+}
+
 function receiveMessage(event) {
   if (
     event.data
@@ -78,7 +92,8 @@ function receiveMessage(event) {
     && event.data.command === 'payment_success'
   ) {
     window.removeEventListener('message', receiveMessage);
-    browser.runtime.sendMessage({ command: 'payment_success', version: 1 })
+    browser.runtime.onMessage.addListener(onMessage);
+    browser.runtime.sendMessage({ command: 'payment_success', version: 1, origin: event.origin })
       .then((response) => {
         window.postMessage(response, '*');
       });
@@ -123,6 +138,7 @@ function receiveMessage(event) {
       const scriptToInject = `(${getAdblockDomain.toString()})();`
             + `(${cleanup.toString()})();`
             + `(${getAdblockDomainWithUserID.toString()})('${adblockUserId}');`
+            + `(${getAdblockExtId.toString()})('${browser.runtime.id}');`
             + `(${getAdblockVersion.toString()})('${adblockVersion}');`;
       elem.appendChild(document.createTextNode(scriptToInject));
       try {

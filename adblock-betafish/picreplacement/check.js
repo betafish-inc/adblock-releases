@@ -11,6 +11,7 @@ const { checkWhitelisted } = require('whitelisting');
 const { EventEmitter } = require('events');
 const browserAction = require('browserAction');
 const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
+const { premiumMigration } = require('./../data_migration_premium');
 
 const licenseNotifier = new EventEmitter();
 
@@ -542,6 +543,7 @@ const License = (function getLicense() {
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'payment_success' && request.version === 1) {
     License.activate();
+    premiumMigration.checkforLegacyAdBlockPremium(request.origin, sender);
     sendResponse({ ack: true });
   }
 });

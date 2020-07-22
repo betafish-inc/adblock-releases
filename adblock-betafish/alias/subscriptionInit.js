@@ -245,6 +245,14 @@ function removeSubscriptions() {
   });
 }
 
+function openInstalled()
+{
+  STATS.untilLoaded(function(userID)
+  {
+    browser.tabs.create({url: "https://getadblock.com/installed/?u=" + userID + "&lg=" + browser.i18n.getUILanguage() + "&dc=" + dataCorrupted });
+  });
+}
+
 function addSubscriptionsAndNotifyUser(subscriptions)
 {
   if (subscriptionsCallback)
@@ -275,10 +283,30 @@ function addSubscriptionsAndNotifyUser(subscriptions)
         // (either through failure of reading from or writing to storage.local).
         // The first run page notifies the user about the data corruption.
         let url;
-        if (firstRun || dataCorrupted) {
-          STATS.untilLoaded(function(userID)
+        if (firstRun || dataCorrupted)
+        {
+          // see if the there's a tab to the Premium Sunset page, if so, don't open /installed
+          browser.tabs.query({ currentWindow: true }).then((tabs) =>
           {
-            browser.tabs.create({url: "https://getadblock.com/installed/?u=" + userID + "&lg=" + browser.i18n.getUILanguage() + "&dc=" + dataCorrupted });
+            if (!tabs || tabs.length === 0)
+            {
+              openInstalled();
+              return;
+            }
+            const updateFreeURL = 'https://getadblockpremium.com/sunset/free/?';
+            const updatePaidURL = 'https://getadblockpremium.com/sunset/paid/?';
+            const sunsetFreePageFound = tabs.some((tab) =>
+            {
+              return (tab && tab.url && tab.url.startsWith(updateFreeURL));
+            });
+            const sunsetPaidPageFound = tabs.some((tab) =>
+            {
+              return (tab && tab.url && tab.url.startsWith(updatePaidURL));
+            });
+            if (!sunsetFreePageFound && !sunsetPaidPageFound)
+            {
+              openInstalled();
+            }
           });
         }
       }
