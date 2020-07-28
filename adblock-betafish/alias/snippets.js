@@ -636,6 +636,34 @@ function hideIfContains(search, selector = "*", searchSelector = null)
 exports["hide-if-contains"] = hideIfContains;
 
 /**
+ * Check if an element is visible
+ *
+ * @param {Element} element The element to check visibility of.
+ * @param {CSSStyleDeclaration} style The computed style of element.
+ * @param {?Element} closest The closest parent to reach.
+ * @return {bool} Whether the element is visible.
+ * @private
+ */
+function isVisible(element, style, closest)
+{
+  if (style.getPropertyValue("display") == "none")
+    return false;
+
+  let visibility = style.getPropertyValue("visibility");
+  if (visibility == "hidden" || visibility == "collapse")
+    return false;
+
+  if (!closest || element == closest)
+    return true;
+
+  let parent = element.parentElement;
+  if (!parent)
+    return true;
+
+  return isVisible(parent, getComputedStyle(parent), closest);
+}
+
+/**
  * Hides any HTML element matching a CSS selector if the visible text content
  * of the element contains a given string.
  * @alias module:content/snippets.hide-if-contains-visible-text
@@ -681,34 +709,6 @@ function hideIfContainsVisibleText(search, selector, searchSelector = null)
       return false;
 
     return true;
-  }
-
-  /**
-   * Check if an element is visible
-   *
-   * @param {Element} element The element to check visibility of.
-   * @param {CSSStyleDeclaration} style The computed style of element.
-   * @param {?Element} closest The closest parent to reach.
-   * @return {bool} Whether the element is visible.
-   * @private
-   */
-  function isVisible(element, style, closest)
-  {
-    if (style.getPropertyValue("display") == "none")
-      return false;
-
-    let visibility = style.getPropertyValue("visibility");
-    if (visibility == "hidden" || visibility == "collapse")
-      return false;
-
-    if (!closest || element == closest)
-      return true;
-
-    let parent = element.parentElement;
-    if (!parent)
-      return true;
-
-    return isVisible(parent, getComputedStyle(parent), closest);
   }
 
   /**
@@ -2067,8 +2067,7 @@ exports["hide-if-contains-image-hash"] = hideIfContainsImageHash;
  */
 function hideIfLabelledBy(search, selector, searchSelector = null)
 {
-  if (searchSelector == null)
-    searchSelector = selector;
+  let sameSelector = searchSelector == null;
 
   let searchRegExp = toRegExp(search);
 
@@ -2078,22 +2077,45 @@ function hideIfLabelledBy(search, selector, searchSelector = null)
   {
     for (let node of document.querySelectorAll(selector))
     {
+      let closest = sameSelector ? node : node.closest(searchSelector);
+      if (!closest || !isVisible(node, getComputedStyle(node), closest))
+        continue;
+
       let attr = node.getAttribute("aria-labelledby");
+      let fallback = () =>
+      {
+        if (hidden.has(closest))
+          return;
+
+        if (searchRegExp.test(node.getAttribute("aria-label") || ""))
+        {
+          hidden.add(closest);
+          hideElement(closest);
+        }
+      };
+
       if (attr)
       {
         for (let label of attr.split(/\s+/))
         {
           let target = document.getElementById(label);
-          if (target && searchRegExp.test(target.textContent))
+          if (target)
           {
-            let closest = node.closest(searchSelector);
-            if (closest && !hidden.has(target))
+            if (!hidden.has(target) && searchRegExp.test(target.innerText))
             {
               hidden.add(target);
               hideElement(closest);
             }
           }
+          else
+          {
+            fallback();
+          }
         }
+      }
+      else
+      {
+        fallback();
       }
     }
   };
