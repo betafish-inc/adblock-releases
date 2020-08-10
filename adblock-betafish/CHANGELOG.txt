@@ -2,6 +2,11 @@
 
 UNRELEASED:
 
+Version: 4.19.0, Date: 2020-08-10
+- Fixed an issue with 'hide an ad' wizard when trying to hide certain ads with very long text
+- The AdBlock popup menu has been enhanced to allow a tab id to be provided in a query string.  This will allow us to improve our automated testing.
+- Added Twitch 'channel' allow listing and improved ad hiding on Twitch on channels which are not allow listed.
+
 Version: 4.18.0, Date: 2020-07-28
 - Updated to ABP Core 3.9.3
 
@@ -19,7 +24,7 @@ Version: 4.15.0, Date: 2020-06-29
 - For Edge users, a "Rate Us" link has been on the AdBlock Options page
 - The extension now correctly identifies the stable Edge version in the AdBlock debug data
 - Added aria labels and roles to the social media icons on the AdBlock Options page
-- Added the AdBlock developement servers to the bandaid code
+- Added the AdBlock development servers to the bandaid code
 - Removed unused code and references to a 'getadblock question'
 
 Version: 4.14.0, Date: 2020-06-10
@@ -31,7 +36,7 @@ Version: 4.14.0, Date: 2020-06-10
 Version: 4.13.0, Date: 2020-06-04
 - Added the AdBlock "on page" icon
 - Removed the unused 'notification' and 'overlay' survey types
-- Added a 'referrerpolicy' of 'no-referrer' to the image tag used for the Premium image replacement / swap
+- Added a 'referrer-policy' of 'no-referrer' to the image tag used for the Premium image replacement / swap
 - Continue to show the /update page to users that have not seen it.  The /update page lets users know what features have been updated in the last 6 months.
 - Fixed an issue with the 'Add Filter List Subscription' via link click functionality
 - Fixed an issue with the element highlighter in the 'Block an ad on this page' wizard

@@ -1575,15 +1575,9 @@
     "message": "Allow ads on all subscribed YouTube™ channels",
     "description": "Toolbar button menu entry, displayed only on youtube.com/feed/subscriptions and if the YouTube channel whitelisting option is enabled"
   },
-  "whitelist_youtube_channel": {
-    "message": "Whitelist $name$ channel",
-    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Name of channel"
-      }
-    }
+  "whitelist_channel": {
+    "message": "Allow ads on this channel",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
   },
   "whitelist_youtube_channel_v2": {
     "message": "Allow ads on YouTube™ channel:",
@@ -2116,7 +2110,11 @@
     "description": "First option in the language dropdown menu on the Filter lists tab."
   },
   "allow_whitelisting_youtube_channels2": {
-    "message": "Allow whitelisting of specific YouTube™ channels",
+    "message": "Allow ads on specific YouTube™ channels",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "allowlisting_twitch_channels": {
+    "message": "Allow ads on specific Twitch™ channels",
     "description": "Checkbox on the 'General' tab of the Options page"
   },
   "require_restart_browser": {
@@ -2210,10 +2208,6 @@
   "adblock_website": {
     "message": "AdBlock Home Page",
     "description": "Title for link to AdBlock's website"
-  },
-  "twitch_hiding_option": {
-    "message": "Enable hiding of streaming ads on Twitch™",
-    "description": "Description of option on General tab of the Options page to hide Twitch ads"
   },
   "callout_new_feature": {
     "message": "NEW!",

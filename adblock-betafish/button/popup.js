@@ -176,7 +176,12 @@ try {
       // Set menu entries appropriately for the selected tab.
       $('.menu-entry, .menu-status, .separator').hide();
       browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'popup_opened' });
-      browser.runtime.sendMessage({ command: 'getCurrentTabInfo' }).then((info) => {
+      let tabId;
+      if (document.location.search && document.location.search.indexOf('tabId') > 0) {
+        const params = new URLSearchParams(document.location.search);
+        tabId = params.get('tabId');
+      }
+      browser.runtime.sendMessage({ command: 'getCurrentTabInfo', tabId }).then((info) => {
         if (info) {
           try {
             if (info.settings) {
@@ -227,13 +232,17 @@ try {
 
             if (
               pageInfo.url
-              && pageInfo.url.hostname === 'www.youtube.com'
-              && info.youTubeChannelName
               && /ab_channel/.test(pageInfo.url.href)
-              && eligibleForUndo
+              && (
+                (pageInfo.url.hostname === 'www.twitch.tv' && info.twitchChannelName)
+             || (pageInfo.url.hostname === 'www.youtube.com' && info.youTubeChannelName)
+              )
             ) {
-              $('#div_whitelist_channel').text(translate('whitelist_youtube_channel', info.youTubeChannelName));
-              show(['div_whitelist_channel']);
+              if (eligibleForUndo) {
+                show(['div_whitelist_channel']);
+              } else if (info.whitelisted) {
+                $('#div_enable_adblock_on_this_page').text(translate('enable_adblock_on_this_channel'));
+              }
             }
 
             if (browser.runtime && browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
@@ -369,9 +378,15 @@ try {
       });
 
       selected('#div_whitelist_channel', () => {
-        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_youtube_clicked' });
-        if (pageInfo.url) {
+        if (pageInfo.url && pageInfo.url.hostname === 'www.youtube.com') {
+          browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_youtube_clicked' });
           browser.runtime.sendMessage({ command: 'createWhitelistFilterForYoutubeChannel', url: pageInfo.url.href }).then(() => {
+            closeAndReloadPopup();
+            browser.tabs.reload();
+          });
+        } else if (pageInfo.url && pageInfo.url.hostname === 'www.twitch.tv') {
+          browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_twitch_clicked' });
+          browser.runtime.sendMessage({ command: 'createWhitelistFilterForTwitchChannel', url: pageInfo.url.href }).then(() => {
             closeAndReloadPopup();
             browser.tabs.reload();
           });

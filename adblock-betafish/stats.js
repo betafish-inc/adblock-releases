@@ -164,7 +164,7 @@ const STATS = (function exportStats() {
         sy: settingsObj.sync_settings ? '1' : '0',
         ir: channels.isAnyEnabled() ? '1' : '0',
         cir: channels.channelGuide[channels.getIdByName('CustomChannel')].enabled ? '1' : '0',
-        twh: settingsObj.twitch_hiding ? '1' : '0',
+        tca: settingsObj.twitch_channel_allowlist ? '1' : '0',
         sup: settingsObj.suppress_update_page ? '1' : '0',
         ss: settingsObj.suppress_surveys ? '1' : '0',
         sfrp: settingsObj.suppress_first_run_page ? '1' : '0',

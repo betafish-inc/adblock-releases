@@ -4,7 +4,7 @@
 /* global browser, require, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
   blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
-  storageGet, parseFilter, twitchSettings, channels */
+  storageGet, parseFilter, channels, twitchChannelNamePages */
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
@@ -599,6 +599,31 @@ browser.commands.onCommand.addListener((command) => {
   }
 });
 
+const getTab = function (tabId) {
+  return new Promise((resolve) => {
+    if (tabId) {
+      let id = tabId;
+      if (typeof id === 'string') {
+        id = parseInt(id, 10);
+      }
+      browser.tabs.get(id).then((tab) => {
+        resolve(tab);
+      });
+    } else {
+      browser.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+      }).then((tabs) => {
+        if (tabs.length === 0) {
+          resolve(); // For example: only the background devtools or a popup are opened
+        }
+        resolve(tabs[0]);
+      });
+    }
+  });
+};
+
+
 // Get interesting information about the current tab.
 // Inputs:
 // secondTime: bool - whether this is a recursive call
@@ -622,89 +647,79 @@ browser.commands.onCommand.addListener((command) => {
 // lastPostStatusCode: int - status code for last POST request
 // }
 // Returns: Promise
-const getCurrentTabInfo = function (secondTime) {
+const getCurrentTabInfo = function (secondTime, tabId) {
   return new Promise((resolve) => {
-    try {
-      browser.tabs.query({
-        active: true,
-        lastFocusedWindow: true,
-      }).then((tabs) => {
-        try {
-          if (tabs.length === 0) {
-            return resolve(); // For example: only the background devtools or a popup are opened
-          }
-          const tab = tabs[0];
+    getTab(tabId).then((tab) => {
+      if (tab && !tab.url) {
+        // Issue 6877: tab URL is not set directly after you opened a window
+        // using window.open()
+        if (!secondTime) {
+          window.setTimeout(() => {
+            getCurrentTabInfo(true);
+          }, 250);
+        }
+        return resolve();
+      }
+      try {
+        const page = new ext.Page(tab);
+        const disabledSite = pageIsUnblockable(page.url.href);
+        const customFilterCheckUrl = info.disabledSite ? undefined : page.url.hostname;
 
-          if (tab && !tab.url) {
-            // Issue 6877: tab URL is not set directly after you opened a window
-            // using window.open()
-            if (!secondTime) {
-              window.setTimeout(() => {
-                getCurrentTabInfo(true);
-              }, 250);
-            }
+        const result = {
+          disabledSite,
+          url: String(page.url || tab.url),
+          id: page.id,
+          settings: getSettings(),
+          paused: adblockIsPaused(),
+          domainPaused: adblockIsDomainPaused({ url: page.url.href, id: page.id }),
+          blockCountPage: getBlockedPerPage(tab),
+          blockCountTotal: Prefs.blocked_total,
+          showStatsInPopup: Prefs.show_statsinpopup,
+          customFilterCount: countCache.getCustomFilterCount(customFilterCheckUrl),
+          showMABEnrollment: License.shouldShowMyAdBlockEnrollment(),
+          popupMenuThemeCTA: License.getCurrentPopupMenuThemeCTA(),
+          lastGetStatusCode: SyncService.getLastGetStatusCode(),
+          lastGetErrorResponse: SyncService.getLastGetErrorResponse(),
+          lastPostStatusCode: SyncService.getLastPostStatusCode(),
+        };
 
-            return resolve();
-          }
-          try {
-            const page = new ext.Page(tab);
-            const disabledSite = pageIsUnblockable(page.url.href);
-            const customFilterCheckUrl = info.disabledSite ? undefined : page.url.hostname;
-
-            const result = {
-              disabledSite,
-              url: String(page.url || tab.url),
-              id: page.id,
-              settings: getSettings(),
-              paused: adblockIsPaused(),
-              domainPaused: adblockIsDomainPaused({ url: page.url.href, id: page.id }),
-              blockCountPage: getBlockedPerPage(tab),
-              blockCountTotal: Prefs.blocked_total,
-              showStatsInPopup: Prefs.show_statsinpopup,
-              customFilterCount: countCache.getCustomFilterCount(customFilterCheckUrl),
-              showMABEnrollment: License.shouldShowMyAdBlockEnrollment(),
-              popupMenuThemeCTA: License.getCurrentPopupMenuThemeCTA(),
-              lastGetStatusCode: SyncService.getLastGetStatusCode(),
-              lastGetErrorResponse: SyncService.getLastGetErrorResponse(),
-              lastPostStatusCode: SyncService.getLastPostStatusCode(),
-            };
-
-            if (!disabledSite) {
-              result.whitelisted = checkWhitelisted(page);
-            }
-            if (
-              getSettings()
+        if (!disabledSite) {
+          result.whitelisted = checkWhitelisted(page);
+        }
+        if (
+          getSettings()
               && getSettings().youtube_channel_whitelist
               && parseUri(tab.url).hostname === 'www.youtube.com'
-            ) {
-              result.youTubeChannelName = ytChannelNamePages.get(page.id);
-              // handle the odd occurence of when the  YT Channel Name
-              // isn't available in the ytChannelNamePages map
-              // obtain the channel name from the URL
-              // for instance, when the forward / back button is clicked
-              if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
-                result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
-              }
-            }
-            return resolve(result);
-          } catch (err) {
-            return resolve({ errorStr: err.toString(), stack: err.stack, message: err.message });
+        ) {
+          result.youTubeChannelName = ytChannelNamePages.get(page.id);
+          // handle the odd occurence of when the  YT Channel Name
+          // isn't available in the ytChannelNamePages map
+          // obtain the channel name from the URL
+          // for instance, when the forward / back button is clicked
+          if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
+            result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
           }
-        } catch (err) {
-          return resolve({ errorStr: err.toString(), stack: err.stack, message: err.message });
         }
-      });
-    } catch (err) {
-      return resolve({ errorStr: err.toString(), stack: err.stack, message: err.message });
-    }
-    return undefined;
+        if (
+          twitchChannelNamePages
+          && getSettings()
+          && getSettings().twitch_channel_allowlist
+          && parseUri(tab.url).hostname === 'www.twitch.tv'
+        ) {
+          result.twitchChannelName = twitchChannelNamePages.get(page.id);
+        }
+        return resolve(result);
+      } catch (err) {
+        return resolve({ errorStr: err.toString(), stack: err.stack, message: err.message });
+      }
+    });
   });
 };
 browser.runtime.onMessage.addListener((message) => {
   if (message.command !== 'getCurrentTabInfo') {
     return undefined;
   }
-  return getCurrentTabInfo().then(results => results);
+  return getCurrentTabInfo(false, message.tabId).then(results => results);
 });
 
 // Return the contents of a local file.
@@ -1046,9 +1061,6 @@ const getDebugInfo = function (callback) {
   response.otherInfo.isAdblockPaused = adblockIsPaused();
   response.otherInfo.licenseState = License.get().status;
   response.otherInfo.licenseVersion = License.get().lv;
-  if (settings.twitch_hiding) {
-    response.otherInfo.twitchSettings = twitchSettings;
-  }
   LocalDataCollection.getRawStatsSize((rawStatsSize) => {
     response.otherInfo.rawStatsSize = rawStatsSize;
     // Get total pings

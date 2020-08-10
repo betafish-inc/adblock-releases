@@ -191,7 +191,7 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
   if (that.advancedUser) {
     $pageTwoEditBtn.show();
     $pageTwoEditBtn.on('click', () => {
-      let customFilter = `${document.location.hostname}##${$summary.text()}`;
+      let customFilter = `${document.location.hostname}##${$summary.data('filter-text')}`;
       // eslint-disable-next-line no-alert
       customFilter = prompt(translate('blacklistereditfilter'), customFilter);
       if (customFilter) { // null => user clicked cancel
@@ -398,7 +398,8 @@ BlacklistUi.prototype.redrawPage2 = function redrawPage2() {
 
   function updateFilter() {
     const theFilter = that.makeFilter();
-    $pageTwoSummary.text(theFilter);
+    $pageTwoSummary.text(BlacklistUi.ellipsis(theFilter, 250));
+    $pageTwoSummary.data('filter-text', theFilter);
     const matchCount = $(theFilter).not('.dialog').length;
 
     if (matchCount === 1) {
@@ -440,7 +441,7 @@ BlacklistUi.prototype.redrawPage2 = function redrawPage2() {
         .attr('id', `ck${attr}`)
         .on('change', () => {
           updateFilter();
-          that.preview($pageTwoSummary.text());
+          that.preview($pageTwoSummary.data('filter-text'));
         });
 
       // Aggregate <input> and <label> within a <div>

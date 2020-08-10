@@ -136,11 +136,13 @@ const initialize = function init() {
       }
     }
 
-    // if the user enables Twitch hiding, update the Twitch
-    // settings file
-    if (name === 'twitch_hiding') {
+    // if the user enables/disable Twitch Channel allow listing
+    // add or remove listners
+    if (name === 'twitch_channel_allowlist') {
       if (isEnabled) {
-        backgroundPage.getTwitchSettingsFile();
+        backgroundPage.addTwitchAllowlistListeners();
+      } else {
+        backgroundPage.removeTwitchAllowlistListeners();
       }
     }
 

@@ -1,58 +1,89 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, getSettings, idleHandler, settings, require */
+/* global browser, getSettings, settings, require, ext, setSetting,
+   addCustomFilter, filterNotifier, checkWhitelisted */
 
-const { idleHandler } = require('./idlehandler.js');
+const browserAction = require('browserAction');
 
-const DAY_IN_MS = 1000 * 60 * 60 * 24;
-const twitchSettings = {
-  player: '.video-player__container',
-  playerVideo: '.video-player__container video',
-  playerAd: '.video-player__container iframe',
-  muteButton: "button[data-a-target='player-mute-unmute-button']",
-  adNotice: '.tw-absolute.tw-c-background-overlay.tw-c-text-overlay.tw-inline-block.tw-left-0.tw-pd-1.tw-top-0',
-  overlay: '.video-player__overlay',
+const twitchChannelNamePages = new Map();
+
+// On single page sites, such as Twitch, that update the URL using the History API pushState(),
+// they don't actually load a new page, we need to get notified when this happens
+// and update the URLs in the Page and Frame objects
+const twitchHistoryStateUpdateHandler = function (details) {
+  if (details
+      && Object.prototype.hasOwnProperty.call(details, 'frameId')
+      && Object.prototype.hasOwnProperty.call(details, 'tabId')
+      && Object.prototype.hasOwnProperty.call(details, 'url')
+      && details.transitionType === 'link') {
+    const myURL = new URL(details.url);
+    if (myURL.hostname === 'www.twitch.tv') {
+      const myFrame = ext.getFrame(details.tabId, details.frameId);
+      const myPage = ext.getPage(details.tabId);
+      myPage._url = myURL;
+      myFrame.url = myURL;
+      myFrame._url = myURL;
+      if (checkWhitelisted(myPage)) {
+        browserAction.setBadge(details.tabId, { number: '' });
+      }
+    }
+  }
 };
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'getTwitchSettings') {
+// Creates a custom filter entry that whitelists a YouTube channel
+// Inputs: url:string url of the page
+// Returns: null if successful, otherwise an exception
+const createWhitelistFilterForTwitchChannel = function (url) {
+  let twitchChannel;
+  if (/ab_channel=/.test(url)) {
+    [, twitchChannel] = url.match(/ab_channel=([^]*)/);
+  } else {
+    twitchChannel = url.split('/').pop();
+  }
+  if (twitchChannel) {
+    const filter = `@@||twitch.tv/*${twitchChannel}^$document`;
+    return addCustomFilter(filter);
+  }
+  return undefined;
+};
+
+const twitchMessageHandler = function (message, sender, sendResponse) {
+  if (message.command === 'createWhitelistFilterForTwitchChannel' && message.url) {
+    sendResponse(createWhitelistFilterForTwitchChannel(message.url));
     return;
   }
+  if (message.command === 'updateTwitchChannelName' && message.channelName) {
+    twitchChannelNamePages.set(sender.tab.id, message.channelName);
+    sendResponse({});
+  }
+  if (message.command === 'allowlistingStateRevalidate') {
+    const page = new ext.Page(sender.tab);
+    filterNotifier.emit('page.WhitelistingStateRevalidate', page, checkWhitelisted(page));
+    sendResponse({});
+  }
+};
 
-  const response = {
-    twitchSettings,
-    twitchEnabled: getSettings().twitch_hiding,
-  };
-  sendResponse(response);
-});
+const addTwitchAllowlistListeners = function () {
+  twitchChannelNamePages.clear();
+  browser.runtime.onMessage.addListener(twitchMessageHandler);
+  browser.webNavigation.onHistoryStateUpdated.addListener(twitchHistoryStateUpdateHandler);
+};
 
-const getTwitchSettingsFile = function () {
-  fetch('https://cdn.adblockcdn.com/filters/twitchSettings.json').then(resp => resp.json()).then((data) => {
-    if (data) {
-      twitchSettings.player = data.player;
-      twitchSettings.playerVideo = data.playerVideo;
-      twitchSettings.playerAd = data.playerAd;
-      twitchSettings.muteButton = data.muteButton;
-      twitchSettings.adNotice = data.adNotice;
-      twitchSettings.overlay = data.overlay;
-    }
-  });
+const removeTwitchAllowlistListeners = function () {
+  twitchChannelNamePages.clear();
+  browser.runtime.onMessage.removeListener(twitchMessageHandler);
+  browser.webNavigation.onHistoryStateUpdated.removeListener(twitchHistoryStateUpdateHandler);
 };
 
 settings.onload().then(() => {
-  const twitchEnabled = getSettings().twitch_hiding;
-  if (twitchEnabled) {
-    getTwitchSettingsFile();
-    window.setInterval(() => {
-      idleHandler.scheduleItemOnce(() => {
-        getTwitchSettingsFile();
-      });
-    }, DAY_IN_MS);
+  if (getSettings().twitch_channel_allowlist) {
+    addTwitchAllowlistListeners();
   }
 });
 
 Object.assign(window, {
-  twitchSettings,
-  getTwitchSettingsFile,
+  addTwitchAllowlistListeners,
+  removeTwitchAllowlistListeners,
+  twitchChannelNamePages,
 });
