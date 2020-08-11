@@ -1,0 +1,18 @@
+[default]
+inherit = metadata.adblock adblockpluschrome/metadata.gecko
+
+[general]
+basename = adblockforfirefox
+author = BetaFish
+
+[manifest]
+applications.gecko.id = jid1-NIfFY2CA8fy1tg@jetpack
+applications.gecko.strict_min_version = 52.0
+content_security_policy = default-src 'self'; img-src 'self' blob: https://cdn.adblockcdn.com; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://getadblock.com
+storage = REMOVE
+
+[bundles]
+lib/adblockplus.js +=
+  ../adblock-betafish/data_migration_firefox.js
+lib/adblockplus.js -=
+  ../adblock-betafish/data_migration.js
