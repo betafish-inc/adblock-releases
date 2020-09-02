@@ -79,6 +79,9 @@ a .link-text-color:hover {
 .link-text-color {
   color: var(--link-color);
 }
+.disabled-link-text-color {
+  color: var(--disabled-link-color);
+}
 .bold {
   font-weight: bold;
 }
@@ -266,12 +269,26 @@ a .link-text-color:hover {
   padding: 0px;
   list-style-type: none;
 }
+.text-help-link-icon {
+  margin-right: 5px;
+  margin-left: 5px;
+  text-indent: 0;
+  min-width: fit-content;
+}
 .help-link-icon {
   margin: 5px;
   text-indent: 0;
 }
+.text-help-link-icon .material-icons {
+  display: inline-block;
+  color: var(--help-icon-color);
+}
 .help-link-icon .material-icons {
   display: block;
+  color: var(--help-icon-color);
+}
+.inline-help-link-icon .material-icons {
+  display: inline;
   color: var(--help-icon-color);
 }
 .help-link-icon .material-icons:hover {
@@ -462,7 +479,9 @@ select#language_select optgroup {
 }
 
 /* MISC */
-
+.pointer {
+  cursor: pointer;
+}
 label {
   cursor: pointer;
   width: fit-content;

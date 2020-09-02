@@ -1,5 +1,5 @@
 [general]
-version = 4.19.0
+version = 4.20.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -34,6 +34,9 @@ web_accessible_resources =
   adblock-uiscripts-adblock-wizard.css
   adblock-onpage-icon.css
   adblock-onpage-icon.svg
+  adblock-ads-allowed-icon.svg
+  adblock-ads-blocked-icon.svg
+  adblock-yt-manage.css
   icons/icon24.png
   icons/ab-19.png
   icons/dark_theme/logo.svg
@@ -76,6 +79,7 @@ commands.toggle_pause.suggested_key.mac = Command+Period
 document_start += adblock-functions.js
   adblock-bandaids.js
   adblock-twitch-contentscript.js
+  adblock-yt-cs.js
 document_end += adblock-uiscripts-rightclick_hook.js adblock-onpage-icon-cs.js
 
 [mapping]
@@ -93,7 +97,11 @@ adblock.css = adblock-betafish/adblock.css
 adblock-functions.js = adblock-betafish/functions.js
 adblock-bandaids.js = adblock-betafish/bandaids.js
 adblock-datacollection-contentscript.js = adblock-betafish/datacollection-contentscript.js
-adblock-ytchannel.js = adblock-betafish/ytchannel.js
+adblock-yt-cs.js = adblock-betafish/youtube/yt-cs.js
+adblock-yt-manage-cs.js = adblock-betafish/youtube/yt-manage-cs.js
+adblock-yt-manage.css = adblock-betafish/youtube/yt-manage.css
+adblock-ads-allowed-icon.svg = adblock-betafish/youtube/ads-allowed-icon.svg
+adblock-ads-blocked-icon.svg = adblock-betafish/youtube/ads-blocked-icon.svg
 adblock-twitch-contentscript.js = adblock-betafish/twitch-contentscript.js
 adblock-onpage-icon-cs.js = adblock-betafish/onpageIcon/onpage-icon-cs.js
 adblock-onpage-icon.css = adblock-betafish/onpageIcon/onpage-icon.css
@@ -324,6 +332,7 @@ lib/adblockplus.js +=
   ../adblock-betafish/getselectors.js
   ../adblock-betafish/data_migration.js
   ../adblock-betafish/twitchSettings.js
+  ../adblock-betafish/youtube/yt-bg.js
 lib/adblockplus.js -= lib/filterComposer.js
   lib/subscriptionInit.js
   lib/uninstall.js

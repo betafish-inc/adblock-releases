@@ -19,7 +19,8 @@ function Settings() {
   this.settingsKey = 'settings';
   this.defaults = {
     debug_logging: false,
-    youtube_channel_whitelist: false,
+    youtube_channel_whitelist: true,
+    youtube_manage_subscribed: true,
     show_advanced_options: false,
     show_block_counts_help_link: true,
     show_survey: true,

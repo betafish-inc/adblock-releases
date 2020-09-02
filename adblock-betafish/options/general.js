@@ -35,6 +35,12 @@ const initialize = function init() {
   if (optionalSettings && !optionalSettings.show_advanced_options) {
     $('.advanced').hide();
   }
+  if (optionalSettings && !optionalSettings.youtube_manage_subscribed) {
+    $('#youtube_manage_subscribed_link').removeClass('link-text-color');
+    $('#youtube_manage_subscribed_link').removeClass('pointer');
+    $('#youtube_manage_subscribed_link').addClass('disabled-link-text-color');
+  }
+
 
   for (const inx in abpPrefPropertyNames) {
     const name = abpPrefPropertyNames[inx];
@@ -126,13 +132,40 @@ const initialize = function init() {
         backgroundPage.LocalCDN.end();
       }
     }
-    // if the user enables/disable YouTube Channel hiding
+    // if the user enables/disable YouTube Channel allowlisting
     // add or remove history state listners
     if (name === 'youtube_channel_whitelist') {
       if (isEnabled) {
         backgroundPage.addYTChannelListeners();
       } else {
+        window.setTimeout(() => {
+          backgroundPage.setSetting('youtube_manage_subscribed', isEnabled, true);
+          $('#youtube_manage_subscribed_link').removeClass('link-text-color');
+          $('#youtube_manage_subscribed_link').removeClass('pointer');
+          $('#youtube_manage_subscribed_link').addClass('disabled-link-text-color');
+        }, 250);
         backgroundPage.removeYTChannelListeners();
+      }
+    }
+
+    // if the user enables/disable the Manage AdBlock settings from YouTube™ subscriptions page
+    // also, wait a moment to allow the current 'set' to save,
+    // then enable YouTube Channel allowlisting
+    if (name === 'youtube_manage_subscribed') {
+      if (isEnabled && !optionalSettings.youtube_channel_whitelist) {
+        window.setTimeout(() => {
+          backgroundPage.setSetting('youtube_channel_whitelist', isEnabled, true);
+          backgroundPage.addYTChannelListeners();
+        }, 250);
+      }
+      if (!isEnabled) {
+        $('#youtube_manage_subscribed_link').removeClass('link-text-color');
+        $('#youtube_manage_subscribed_link').removeClass('pointer');
+        $('#youtube_manage_subscribed_link').addClass('disabled-link-text-color');
+      } else {
+        $('#youtube_manage_subscribed_link').addClass('link-text-color');
+        $('#youtube_manage_subscribed_link').addClass('pointer');
+        $('#youtube_manage_subscribed_link').removeClass('disabled-link-text-color');
       }
     }
 
@@ -147,6 +180,12 @@ const initialize = function init() {
     }
 
     optionalSettings = backgroundPage.getSettings();
+  });
+
+  $('#youtube_manage_subscribed_link').on('click', () => {
+    if (optionalSettings && optionalSettings.youtube_manage_subscribed) {
+      backgroundPage.openYTManagedSubPage();
+    }
   });
 };
 

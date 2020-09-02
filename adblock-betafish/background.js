@@ -4,7 +4,7 @@
 /* global browser, require, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
   blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
-  storageGet, parseFilter, channels, twitchChannelNamePages */
+  storageGet, parseFilter, channels, twitchChannelNamePages, ytChannelNamePages */
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
@@ -215,6 +215,11 @@ function getUserFilters() {
   return filters;
 }
 
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command === 'getUserFilters') {
+    sendResponse({ response: getUserFilters() });
+  }
+});
 
 const isWhitelistFilter = function (text) {
   return /^@@/.test(text);
@@ -366,8 +371,6 @@ const getAdblockUserId = function () {
 };
 
 // INFO ABOUT CURRENT PAGE
-
-const ytChannelNamePages = new Map();
 
 // Returns true if the url cannot be blocked
 const pageIsUnblockable = function (url) {
@@ -765,223 +768,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse({});
 });
 
-// Creates a custom filter entry that whitelists a YouTube channel
-// Inputs: url:string url of the page
-// Returns: null if successful, otherwise an exception
-const createWhitelistFilterForYoutubeChannel = function (url) {
-  let ytChannel;
-  if (/ab_channel=/.test(url)) {
-    [, ytChannel] = url.match(/ab_channel=([^]*)/);
-  } else {
-    ytChannel = url.split('/').pop();
-  }
-  if (ytChannel) {
-    const filter = `@@|https://www.youtube.com/*${ytChannel}|$document`;
-    return addCustomFilter(filter);
-  }
-  return undefined;
-};
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'createWhitelistFilterForYoutubeChannel' || !message.url) {
-    return;
-  }
-  sendResponse(createWhitelistFilterForYoutubeChannel(message.url));
-});
-
-// YouTube Channel Whitelist
-const runChannelWhitelist = function (tabUrl, tabId) {
-  if (
-    getSettings().youtube_channel_whitelist
-    && parseUri(tabUrl).hostname === 'www.youtube.com'
-    && !parseUri.parseSearch(tabUrl).ab_channel
-  ) {
-    // if a channel name isn't stored for that tab id,
-    // then we probably haven't inject the content script, so we shall
-    browser.tabs.sendMessage(tabId, { message: 'ping_yt_content_script' }).then((response) => {
-      const resp = response || {};
-      if (resp.status !== 'yes') {
-        browser.tabs.executeScript(tabId, {
-          file: 'adblock-ytchannel.js',
-          runAt: 'document_start',
-        });
-      }
-    }).catch(() => {
-      browser.tabs.executeScript(tabId, {
-        file: 'adblock-ytchannel.js',
-        runAt: 'document_start',
-      });
-    });
-  }
-};
-
-const ytChannelOnCreatedListener = function (tab) {
-  if (browser.runtime.lastError) {
-    return;
-  }
-  browser.tabs.get(tab.id).then((tabs) => {
-    if (browser.runtime.lastError) {
-      return;
-    }
-    if (tabs && tabs.url && tabs.id) {
-      runChannelWhitelist(tabs.url, tabs.id);
-    }
-  });
-};
-
-const ytChannelOnUpdatedListener = function (tabId, changeInfo, tab) {
-  if (browser.runtime.lastError) {
-    return;
-  }
-  if (!getSettings().youtube_channel_whitelist) {
-    return;
-  }
-  if (changeInfo.status === 'loading' && changeInfo.url) {
-    if (browser.runtime.lastError) {
-      return;
-    }
-    browser.tabs.get(tabId).then((tabs) => {
-      if (tabs && tabs.url && tabs.id) {
-        runChannelWhitelist(tabs.url, tabs.id);
-      }
-    });
-  }
-  if (ytChannelNamePages.get(tabId) && parseUri(tab.url).hostname !== 'www.youtube.com') {
-    ytChannelNamePages.delete(tabId);
-  }
-};
-
-const ytChannelOnRemovedListener = function (tabId) {
-  if (!getSettings().youtube_channel_whitelist) {
-    return;
-  }
-  ytChannelNamePages.delete(tabId);
-};
-
-// On single page sites, such as YouTube, that update the URL using the History API pushState(),
-// they don't actually load a new page, we need to get notified when this happens
-// and update the URLs in the Page and Frame objects
-const youTubeHistoryStateUpdateHandler = function (details) {
-  if (details
-      && Object.prototype.hasOwnProperty.call(details, 'frameId')
-      && Object.prototype.hasOwnProperty.call(details, 'tabId')
-      && Object.prototype.hasOwnProperty.call(details, 'url')
-      && details.transitionType === 'link') {
-    const myURL = new URL(details.url);
-    if (myURL.hostname === 'www.youtube.com') {
-      const myFrame = ext.getFrame(details.tabId, details.frameId);
-      const myPage = ext.getPage(details.tabId);
-      myPage._url = myURL;
-      myFrame.url = myURL;
-      myFrame._url = myURL;
-      if (!/ab_channel/.test(details.url) && myURL.pathname === '/watch') {
-        browser.tabs.sendMessage(details.tabId, { command: 'updateURLWithYouTubeChannelName' });
-      } else if (/ab_channel/.test(details.url) && myURL.pathname !== '/watch') {
-        browser.tabs.sendMessage(details.tabId, { command: 'removeYouTubeChannelName' });
-      }
-      filterNotifier.emit('page.WhitelistingStateRevalidate', myPage, checkWhitelisted(myPage));
-    }
-  }
-};
-
-const addYTChannelListeners = function () {
-  browser.tabs.onCreated.addListener(ytChannelOnCreatedListener);
-  browser.tabs.onUpdated.addListener(ytChannelOnUpdatedListener);
-  browser.tabs.onRemoved.addListener(ytChannelOnRemovedListener);
-  browser.webNavigation.onHistoryStateUpdated.addListener(youTubeHistoryStateUpdateHandler);
-};
-
-const removeYTChannelListeners = function () {
-  browser.tabs.onCreated.removeListener(ytChannelOnCreatedListener);
-  browser.tabs.onUpdated.removeListener(ytChannelOnUpdatedListener);
-  browser.tabs.onRemoved.removeListener(ytChannelOnRemovedListener);
-  browser.webNavigation.onHistoryStateUpdated.removeListener(youTubeHistoryStateUpdateHandler);
-};
-
-settings.onload().then(() => {
-  if (getSettings().youtube_channel_whitelist) {
-    addYTChannelListeners();
-  }
-});
-
-let previousYTchannelId = '';
-const previousYTvideoId = '';
-let previousYTuserId = '';
-
-// Listen for the message from the ytchannel.js content script
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command === 'updateYouTubeChannelName' && message.channelName) {
-    ytChannelNamePages.set(sender.tab.id, message.channelName);
-    sendResponse({});
-    return;
-  }
-  if (message.command === 'get_channel_name_by_channel_id' && message.channelId) {
-    if (previousYTchannelId !== message.channelId) {
-      previousYTchannelId = message.channelId;
-      const xhr = new XMLHttpRequest();
-      const { channelId } = message;
-      const key = atob('QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz');
-      const url = 'https://www.googleapis.com/youtube/v3/channels';
-      xhr.open('GET', `${url}?part=snippet&id=${channelId}&key=${key}`);
-      xhr.onload = function xhrOnload() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          const json = JSON.parse(xhr.response);
-          // Got name of the channel
-          if (json && json.items && json.items[0]) {
-            const channelName = json.items[0].snippet.title;
-            ytChannelNamePages.set(sender.tab.id, channelName);
-            browser.tabs.sendMessage(sender.tab.id, {
-              command: 'updateURLWithYouTubeChannelName',
-              channelName,
-            });
-          }
-        }
-      };
-      xhr.send();
-      sendResponse({});
-      return;
-    }
-    browser.tabs.sendMessage(sender.tab.id, {
-      command: 'updateURLWithYouTubeChannelName',
-      channelName: ytChannelNamePages.get(sender.tab.id),
-    });
-    sendResponse({});
-    return;
-  }
-  if (message.command === 'get_channel_name_by_user_id' && message.userId) {
-    if (previousYTuserId !== message.userId) {
-      previousYTuserId = message.userId;
-      const xhr = new XMLHttpRequest();
-      const { userId } = message;
-      const key = atob('QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz');
-      const url = 'https://www.googleapis.com/youtube/v3/channels';
-      xhr.open('GET', `${url}?part=snippet&forUsername=${userId}&key=${key}`);
-      xhr.onload = function xhrOnload() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          const json = JSON.parse(xhr.response);
-          // Got name of the channel
-          if (json && json.items && json.items[0]) {
-            const channelName = json.items[0].snippet.title;
-            ytChannelNamePages.set(sender.tab.id, channelName);
-            browser.tabs.sendMessage(sender.tab.id, {
-              command: 'updateURLWithYouTubeChannelName',
-              channelName,
-            });
-          }
-        }
-      };
-      xhr.send();
-      sendResponse({});
-    } else {
-      browser.tabs.sendMessage(sender.tab.id, {
-        command: 'updateURLWithYouTubeChannelName',
-        channelName: ytChannelNamePages.get(sender.tab.id),
-      });
-      sendResponse({});
-    }
-  }
-});
-
-
 // These functions are usually only called by content scripts.
 
 // DEBUG INFO
@@ -1260,7 +1046,6 @@ Object.assign(window, {
   updateFilterLists,
   checkUpdateProgress,
   getDebugInfo,
-  createWhitelistFilterForYoutubeChannel,
   openTab,
   readfile,
   saveDomainPauses,
@@ -1280,9 +1065,6 @@ Object.assign(window, {
   isSelectorFilter,
   isWhitelistFilter,
   isSelectorExcludeFilter,
-  addYTChannelListeners,
-  removeYTChannelListeners,
-  ytChannelNamePages,
   checkPingResponseForProtect,
   pausedFilterText1,
   pausedFilterText2,

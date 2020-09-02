@@ -244,6 +244,14 @@ try {
                 $('#div_enable_adblock_on_this_page').text(translate('enable_adblock_on_this_channel'));
               }
             }
+            if (
+              pageInfo.url
+              && pageInfo.url.hostname === 'www.youtube.com'
+              && pageInfo.url.pathname !== '/feed/channels'
+              && info.settings.youtube_manage_subscribed
+            ) {
+              show(['div_manage_subscribed_channel']);
+            }
 
             if (browser.runtime && browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
               show(['div_status_beta']);
@@ -391,6 +399,13 @@ try {
             browser.tabs.reload();
           });
         }
+      });
+
+      selected('#div_manage_subscribed_channel', () => {
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'manage_subscribed_clicked' });
+        browser.runtime.sendMessage({ command: 'openYTManagedSubPage' }).then(() => {
+          closeAndReloadPopup();
+        });
       });
 
       selected('#div_pause_adblock', () => {
