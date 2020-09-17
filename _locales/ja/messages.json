@@ -24,11 +24,11 @@
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
   },
   "description_yt": {
-    "message": "世界で合計6千万人のユーザーが使う一番人気のChrome拡張機能のAdBlockにより開発されたYouTube™用の広告ブロッカー",
+    "message": "世界で合計6千万人のユーザーが使う一番人気のChrome拡張機能のAdBlockにより開発されたYouTube用の広告ブロッカー",
     "description": "Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
   },
   "name_adblock_on_youtube": {
-    "message": "YouTube™ の AdBlock",
+    "message": "YouTubeのAdBlock",
     "description": "Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
   },
   "adblock_click_for_details": {
@@ -60,7 +60,7 @@
     "description": "Title for the Options page"
   },
   "optionstitle_yt": {
-    "message": "YouTube™ オプションの AdBlock",
+    "message": "YouTubeオプションの AdBlock",
     "description": "Title for the Options page for the 'AdBlock on YouTube' extension."
   },
   "chromebutton_how_to_hide2": {
@@ -197,27 +197,27 @@
   },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlockは一致するいずれのページで実行されません:",
-    "description": "Message displayed when the whitelist wizard will whitelist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
+    "description": "Message displayed when the allowlist wizard will allowlist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change": {
     "message": "下でスライドさせて、AdBlockが実行されないページを正確に変更することができます。",
-    "description": "Whitelist slider usage instructions. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
+    "description": "allowlist slider usage instructions. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2": {
     "message": "AdBlockを実行させないページ...",
-    "description": "The title of the whitelist wizard (Don't run on this page/pages on this domain)"
+    "description": "The title of the allowlist wizard (Don't run on this page/pages on this domain)"
   },
   "buttonexclude": {
     "message": "除外",
-    "description": "Button for excluding a domain in the whitelist wizard"
+    "description": "Button for excluding a domain in the allowlist wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "ページを再読込みして下さい。",
-    "description": "Checkbox in the whitelist wizard"
+    "description": "Checkbox in the allowlist wizard"
   },
   "wizardcantrunonframesets": {
-    "message": "このAdBlock機能は古い技術を使用しているため、このサイトでは機能しません。手動でオプションページの[カスタマイズ]タブからリソースをブラックリストまたはホワイトリストに登録することができます。",
-    "description": "Alert shown when the user tries to use a blacklist/whitelist wizard on an old website"
+    "message": "このAdBlock機能は古い技術を使用しているため、このサイトでは機能しません。手動でオプションページの[カスタマイズ]タブから広告表示の許可・ブロックを選択できます。",
+    "description": "Alert shown when the user tries to use a blocklist/allowlist wizard on an old website"
   },
   "subscribeconfirm": {
     "message": "$title$フィルタリストを登録してよろしいですか？",
@@ -473,6 +473,10 @@
     "message": "チェコ ・ スロバキア語 + EasyList",
     "description": "A filter list combined with EasyList"
   },
+  "filteridcac": {
+    "message": "クッキーは気にしない",
+    "description": "A filter list"
+  },
   "filtereasyprivacy": {
     "message": "EasyPrivacy (プライバシーの保護)",
     "description": "A filter list"
@@ -573,18 +577,6 @@
     "message": "無効のフィルタの編集:",
     "description": "Subtitle on the 'Customize' tab"
   },
-  "filtersavewarning": {
-    "message": "注意してください。ここで間違えると、公式フィルタを含む他の多くのフィルタが破損する可能性があります！\n高度なブラックリストおよびホワイトリストフィルタを追加する方法は、[[フィルタ構文チュートリアル]]を参照ください。",
-    "description": "Warning when manually editing filters."
-  },
-  "filtersavewarning_ytadblock_1": {
-    "message": "注意してください。ここで間違えた場合、YouTube™のAdBlockが正常に動作しない可能性があります。",
-    "description": "First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
-  },
-  "filtersavewarning_ytadblock_2": {
-    "message": "ホワイトリストフィルタを追加する方法は、[[フィルタ構文チュートリアル]]を参照ください。",
-    "description": "Second part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
-  },
   "migration_error_message": {
     "message": "カスタムフィルタにいくつかのエラーが見つかりました。メッセージは以下から参照ください。",
     "description": "Error when adding custom filters manually"
@@ -592,10 +584,6 @@
   "delete_migration_error_messages": {
     "message": "メッセージを削除",
     "description": "Button to delete error messages when adding custom filters manually"
-  },
-  "contentblockingwarning": {
-    "message": "注: ページやサイトのホワイトリスト(広告の許可)への追加は、Safari Content Blockingが有効な時は行えません。",
-    "description": "Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
   },
   "savebutton": {
     "message": "保存",
@@ -1239,35 +1227,35 @@
   },
   "disabled_by_filter_lists": {
     "message": "AdBlockがあなたのフィルタリストのいずれかのフィルタにより無効になっています。",
-    "description": "Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list."
   },
   "disabled_by_filter_lists_yt": {
-    "message": "YouTube™のAdBlockがあなたのフィルタリストのいずれかのフィルタにより無効になっています。",
-    "description": "Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+    "message": "YouTubeのAdBlockがあなたのフィルタリストのいずれかのフィルタにより無効になっています。",
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
   },
   "dont_run_on_pages_on_domain": {
     "message": "このドメイン内のページ上で実行しないでください",
-    "description": "Menu entry to open the whitelist wizard"
+    "description": "Menu entry to open the allowlist wizard"
   },
   "dont_run_on_pages_on_site": {
     "message": "このサイト内のページ上で実行しないでください",
-    "description": "Menu entry to open the whitelist wizard"
+    "description": "Menu entry to open the allowlist wizard"
   },
   "disabled_on_this_page": {
     "message": "AdBlockはこのページで無効になっています。",
-    "description": "Message shown in toolbar button on web pages that have been whitelisted"
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
   },
   "disabled_on_this_channel": {
     "message": "このチャンネルでの広告を許可しました。",
-    "description": "Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
+    "description": "Message shown in the toolbar button menu on YouTube channel pages and videos that have been allowlisted."
   },
   "enable_adblock": {
     "message": "このページでAdBlockを有効にします。",
-    "description": "Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
+    "description": "Link text to un-allowlist a page, displayed immediately after 'AdBlock is disabled on this page'"
   },
   "enable_adblock_on_this_channel": {
     "message": "このチャンネルの広告をブロックする",
-    "description": "Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
+    "description": "Menu entry to un-allowlist a YouTube channel, displayed under 'You allowed ads on this channel.'"
   },
   "status_paused": {
     "message": "AdBlockが一時停止しています。",
@@ -1335,15 +1323,15 @@
   },
   "undo_last_block": {
     "message": "このドメインでのブロックを元に戻す",
-    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "undo_last_block_site": {
     "message": "このサイトでのブロックを元に戻す",
-    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
     "message": "このページ上で実行しない",
-    "description": "Menu entry to whitelist the current page"
+    "description": "Menu entry to allowlist the current page"
   },
   "options": {
     "message": "オプション",
@@ -1415,15 +1403,15 @@
   },
   "modifydomain": {
     "message": "サイト:",
-    "description": "Caption for the whitelist wizard slider that modifies the domain part of a URL"
+    "description": "Caption for the allowlist wizard slider that modifies the domain part of a URL"
   },
   "modifypath": {
     "message": "ページ:",
-    "description": "Caption for the whitelist wizard slider that modifies the path part of a URL"
+    "description": "Caption for the allowlist wizard slider that modifies the path part of a URL"
   },
   "show_ads_except_for": {
     "message": "このドメインを除いてどこでも広告を表示...",
-    "description": "Section title for the whitelisting section of Customize tab"
+    "description": "Section title for the allowlisting section of Customize tab"
   },
   "only_block_ads_on_these_sites": {
     "message": "このサイトのみで広告をブロック:",
@@ -1435,15 +1423,11 @@
   },
   "warning_overrules_filters": {
     "message": "警告: すべての他のサイトで広告が表示されます！\nこれらのサイトの他の全フィルタより優先されます。",
-    "description": "Message on the 'Customize' tab of the options page, explaining the danger of adding a whitelist filter for all websites with only some exceptions."
+    "description": "Message on the 'Customize' tab of the options page, explaining the danger of adding a allowlist filter for all websites with only some exceptions."
   },
   "storage_quota_exceeded": {
     "message": "AdBlockが利用できる容量の限界を超えています。フィルタリストから登録を解除して下さい！",
     "description": "Message shown when the user uses more storage than allowed by the browser."
-  },
-  "safari50_updatenotice": {
-    "message": "古いバージョンのSafariを使用しています。AdBlockツールバーボタンを使用してAdBlockを停止させ、ホワイトリストのウェブサイト、広告の報告を行うために最新のバージョンにアップデートして下さい。[[今すぐアップデートしましょう]]。",
-    "description": "A message shown to Safari 5.0 users urging them to upgrade"
   },
   "firefox_explanation": {
     "message": "この質問の目的はあなたの報告を誰が受信するべきか特定する為です。間違って回答すると、あなたの報告は正しくない相手に送信されます。",
@@ -1498,15 +1482,15 @@
     "description": "Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
   "block_ads_on_youtube": {
-    "message": "YouTube™の広告を排除する",
+    "message": "YouTubeの広告を排除する",
     "description": "Label for checkbox letting user choose whether to block ads on youtube.com"
   },
   "block_privacy_on_youtube": {
-    "message": "YouTube™でのプライバシーを保護する",
+    "message": "YouTubeでのプライバシーを保護する",
     "description": "Checkbox letting user choose whether to block privacy-related requests on youtube.com"
   },
   "block_annonyances_on_youtube": {
-    "message": "YouTube™の迷惑な広告を排除する",
+    "message": "YouTubeの迷惑な広告を排除する",
     "description": "Checkbox letting user choose whether to block annoyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
   },
   "show_devtools_panel": {
@@ -1555,38 +1539,16 @@
     "message": " -- 言語を選択 -- ",
     "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
-  "allow_whitelisting_youtube_channels": {
-    "message": "特定のYouTube™チャンネルのホワイトリスト登録を許可する (ブラウザーの再起動が必要です)",
-    "description": "Checkbox on the 'General' tab of the Options page"
+  "whitelist_channel": {
+    "message": "このチャンネルの広告を許可する",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
   },
-  "whitelist_all_youtube_channels": {
-    "message": "すべてのYouTube™登録チャンネルをホワイトリストに追加",
-    "description": "Toolbar button menu entry, displayed only on youtube.com/feed/subscriptions and if the YouTube channel whitelisting option is enabled."
-  },
-  "one_moment_all_youtube_channels": {
-    "message": "全チャンネルを収集するまで少しお待ち下さい",
-    "description": "Alert displayed when whitelisting all subscribed YouTube channels"
-  },
-  "all_youtube_channels_complete": {
-    "message": "YouTube™登録チャンネルをすべてホワイトリストに追加しました",
-    "description": "Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
-  },
-  "allow_ads_all_youtube_channels": {
-    "message": "すべてのYouTube™登録チャンネルで広告を許可する",
-    "description": "Toolbar button menu entry, displayed only on youtube.com/feed/subscriptions and if the YouTube channel whitelisting option is enabled"
-  },
-  "whitelist_youtube_channel": {
-    "message": "ホワイトリスト$name$チャンネル",
-    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Name of channel"
-      }
-    }
+  "manage_subscribed_channel": {
+    "message": "登録チャンネルの広告の管理",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel allow listing option"
   },
   "whitelist_youtube_channel_v2": {
-    "message": "広告を許可するYouTube™チャンネル:",
+    "message": "広告表示を許可するYouTubeチャンネル:",
     "description": "Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters": {
@@ -1624,7 +1586,7 @@
     "description": "Subtitle on the Support tab"
   },
   "ytadblockupdates": {
-    "message": "YouTube™アップデートでのAdBlock",
+    "message": "YouTubeアップデートでのAdBlock",
     "description": "Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
   },
   "whatmakesadblocktick": {
@@ -1745,14 +1707,10 @@
   },
   "legend": {
     "message": "凡例: ",
-    "description": "Resource list page: followed by color codes for various resource statuses (blocked, whitelisted, hidden)"
+    "description": "Resource list page: followed by color codes for various resource statuses (blocked, allowlisted, hidden)"
   },
   "blockedresource": {
     "message": "ブロックリソース",
-    "description": "Resource list page: resource status"
-  },
-  "whitelistedresource": {
-    "message": "ホワイトリスト済みリソース",
     "description": "Resource list page: resource status"
   },
   "hiddenelement": {
@@ -2075,6 +2033,10 @@
     "message": "広告ブロッカーの使用に関する警告を排除します",
     "description": "A filter list explanation"
   },
+  "filter_idcac_explained": {
+    "message": "クッキーの通知をブロックします。これは、あなたが訪問するウェブサイトでのクッキーの使用について通知を受ける権利を放棄することを意味します。",
+    "description": "A filter list explanation"
+  },
   "filterlistsrock2": {
     "message": "フィルタリストは、Web上のほとんどの広告をブロックします。",
     "description": "Header text on the Customize tab"
@@ -2100,7 +2062,7 @@
     "description": "Warning when manually editing filters -- first part not clickable."
   },
   "filtersavewarning_part2": {
-    "message": "高度なブラックリストとホワイトリストフィルタを追加する方法を学ぶためには、[[フィルタ文のチュートリアル]]をお読み下さい。",
+    "message": "高度なブロックリストと許可リストフィルタを追加する方法を学ぶためには、[[フィルタ文のチュートリアル]]をお読み下さい。",
     "description": "Warning when manually editing filters -- second part clickable."
   },
   "pwyw2": {
@@ -2116,7 +2078,15 @@
     "description": "First option in the language dropdown menu on the Filter lists tab."
   },
   "allow_whitelisting_youtube_channels2": {
-    "message": "特定のYouTube™チャンネルのホワイトリスト登録を許可する",
+    "message": "特定のYouTubeチャンネルの広告表示を許可する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "youtube_manage_subscribed": {
+    "message": "YouTubeの登録ページからAdBlockの設定を管理する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "allowlisting_twitch_channels": {
+    "message": "特定のTwitchチャンネルの広告表示を許可する",
     "description": "Checkbox on the 'General' tab of the Options page"
   },
   "require_restart_browser": {
@@ -2210,10 +2180,6 @@
   "adblock_website": {
     "message": "AdBlock ホームページ",
     "description": "Title for link to AdBlock's website"
-  },
-  "twitch_hiding_option": {
-    "message": "Twitch™上のストリーミング広告の非表示を有効にします",
-    "description": "Description of option on General tab of the Options page to hide Twitch ads"
   },
   "callout_new_feature": {
     "message": "NEW!",
@@ -2455,7 +2421,7 @@
   },
   "devtools_header_state_whitelisted": {
     "description": "one of the items in the drop down list in the header of the dev tools panel",
-    "message": "ホワイトリスト済"
+    "message": "許可済み"
   },
   "devtools_header_type_any": {
     "description": "one of the items in the drop down list in the header of the dev tools panel",
@@ -2532,7 +2498,7 @@
     "description": "The title of a feature box in the MyAdBlock Options page"
   },
   "sync_your_settings_description": {
-    "message": "ご使用のPCでどこでも、広告ブロックルールの設定やホワイトリストなどを編集することができます。",
+    "message": "どのPCからでも、広告ブロックルールの設定や許可リストなどを編集することができます。",
     "description": "The main text of a feature box in the MyAdBlock Options page"
   },
   "how_can_we_help": {
@@ -2572,7 +2538,7 @@
     "description": "Message for help flow in popup menu."
   },
   "check_whitelist": {
-    "message": "問題がないかホワイトリストを確認します。",
+    "message": "問題がないか許可リストを確認します。",
     "description": "Message for help flow in popup menu."
   },
   "ok": {
@@ -2580,7 +2546,7 @@
     "description": "Message for help flow in popup menu."
   },
   "page_is_whitelisted": {
-    "message": "このページはあなたのホワイトリストに含まれているため、広告が表示されています。",
+    "message": "このページはあなたの許可リストに含まれているため、広告が表示されています。",
     "description": "Message for help flow in popup menu."
   },
   "want_to_remove": {
@@ -2592,7 +2558,7 @@
     "description": "Message for help flow in popup menu."
   },
   "removed_url": {
-    "message": "あなたのホワイトリストからURLを削除しました。",
+    "message": "あなたの許可リストからURLを削除しました。",
     "description": "Message for help flow in popup menu."
   },
   "reload_not_see_ad": {
@@ -2604,7 +2570,7 @@
     "description": "Message for help flow in popup menu."
   },
   "page_not_whitelisted": {
-    "message": "このページはあなたのホワイトリストに含まれていません。",
+    "message": "このページはあなたの許可リストに含まれていません。",
     "description": "Message for help flow in popup menu."
   },
   "updating_filter_lists": {
@@ -2888,40 +2854,40 @@
     "description": "Part 2 of message shown when user opts out of call-to-action"
   },
   "successfully_whitelisted": {
-    "message": "このURLを無事にホワイトリストに追加しました。",
-    "description": "Part of a message on the whitelist wizard"
+    "message": "このURLが許可リストに追加されました。",
+    "description": "Part of a message on the allowlist wizard"
   },
   "future_show_ads": {
     "message": "今後、これらのページには引き続き広告が表示されます。",
-    "description": "Part of a message on the whitelist wizard"
+    "description": "Part of a message on the allowlist wizard"
   },
   "change_behavior_settings": {
     "message": "この動作は[[設定]]で変更できます。",
-    "description": "Part of a message on the whitelist and blacklist wizards"
+    "description": "Part of a message on the allowlist and blocklist wizards"
   },
   "whitelisted_a_site": {
-    "message": "サイトをホワイトリストに追加しました！",
-    "description": "Part 1 of a call-to-action on the whitelist wizard"
+    "message": "サイトを許可リストに追加しました！",
+    "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
   "never_lose_settings": {
     "message": "この設定をすべての端末に適用して、「バックアップと同期」を利用してAdBlock設定が失われないようにしましょう。",
-    "description": "Part 2 of a call-to-action on the whitelist and blacklist wizards"
+    "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
   },
   "successfully_blocked_ad": {
     "message": "無事にこの広告をブロックしました。",
-    "description": "Part of a message on the blacklist wizard"
+    "description": "Part of a message on the blocklist wizard"
   },
   "future_ads_blocked": {
     "message": "今後、これらのルールに一致する広告は引き続きブロックされます。",
-    "description": "Part of a message on the blacklist wizard"
+    "description": "Part of a message on the blocklist wizard"
   },
   "rule_added_filters": {
     "message": "次のルールがフィルターに追加されました:",
-    "description": "Part of a message on the blacklist wizard"
+    "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
     "message": "このサイトで何かをブロックしました！",
-    "description": "Part 1 of a call-to-action on the blacklist wizard"
+    "description": "Part 1 of a call-to-action on the blocklist wizard"
   },
   "adblock_looked_like_this": {
     "message": "AdBlockがもしこうだったら？",
@@ -3274,5 +3240,45 @@
   "custom_image_supported_file_types": {
     "message": "*.bmp, *.gif, *.jpeg, *.png, *.svg, *.tiff, *.webp",
     "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
+  },
+  "youtube_onpage_icon_msg": {
+    "message": "登録チャンネルの広告表示を管理しよう:",
+    "description": "The message text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allow_all_btn_text": {
+    "message": "広告表示を全て許可",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_block_all_btn_text": {
+    "message": "広告表示を全てブロック",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_one_moment_text": {
+    "message": "少々お待ち下さい...",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowed_complete_text": {
+    "message": "全ての登録チャンネルの広告表示を許可しました",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocked_complete_text": {
+    "message": "全ての登録チャンネルの広告表示をブロックしました",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowing_ads_on_channel": {
+    "message": "このチャンネルの広告表示を許可する",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocking_ads_on_channel": {
+    "message": "このチャンネルの広告をブロックする",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_sign_in_text": {
+    "message": "YouTubeアカウントにログインし、登録チャンネルの広告表示を管理しましょう。",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_no_channels_text": {
+    "message": "少なくとも1つのYouTubeチャンネルに登録して、登録チャンネルの広告表示を管理しましょう。",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
   }
 }

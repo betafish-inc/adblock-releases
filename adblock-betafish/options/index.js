@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, getSettings, translate, FilterListUtil, activateTab,
    CustomFilterListUploadUtil, localizePage, storageSet, chromeStorageSetHelper,
-   chromeStorageGetHelper */
+   chromeStorageGetHelper, debounced */
 
 const backgroundPage = browser.extension.getBackgroundPage();
 const { Filter } = backgroundPage;
@@ -332,7 +332,7 @@ function loadOptionalSettings() {
 // when there is a change in the AA and AA Privacy subscriptions
 // Inputs: - checkAA: Bool, true if we must check AA
 //         - checkAAprivacy: Bool, true if we must check AA privacy
-const updateAcceptableAdsUI = function (checkAA, checkAAprivacy) {
+const updateAcceptableAdsUIFN = function (checkAA, checkAAprivacy) {
   const $aaInput = $('input#acceptable_ads');
   const $aaPrivacyInput = $('input#acceptable_ads_privacy');
   const $aaPrivacyHelper = $('#aa-privacy-helper');
@@ -359,6 +359,9 @@ const updateAcceptableAdsUI = function (checkAA, checkAAprivacy) {
     $aaPrivacyHelper.slideUp();
   }
 };
+
+const debounceWaitTime = 1000; // time in ms before
+const updateAcceptableAdsUI = debounced(debounceWaitTime, updateAcceptableAdsUIFN);
 
 const shouldShowRateUsCTA = function () {
   const mql = window.matchMedia('(max-width: 890px)');

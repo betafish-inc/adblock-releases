@@ -1,7 +1,8 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, parseUri, exports, getAvailableFiles, adblockIsPaused */
+/* global browser, parseUri, exports, getAvailableFiles, adblockIsPaused
+   getSettings, settings */
 
 const LocalCDN = (function getLocalCDN() {
   const urlsMatchPattern = ['http://*/*', 'https://*/*'];
@@ -238,3 +239,13 @@ const LocalCDN = (function getLocalCDN() {
 }());
 
 exports.LocalCDN = LocalCDN;
+
+settings.onload().then(() => {
+  if (getSettings().local_cdn) {
+    LocalCDN.start();
+  }
+});
+
+Object.assign(window, {
+  LocalCDN,
+});

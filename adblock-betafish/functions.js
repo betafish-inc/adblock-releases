@@ -527,6 +527,19 @@ const base64toBlob = function (base64Data) {
   return new Blob(byteArrays, { type: customImageSwapMimeType });
 };
 
+function debounced(delay, fn) {
+  let timerId;
+  return function debouncedAgain(...args) {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    timerId = setTimeout(() => {
+      fn(...args);
+      timerId = null;
+    }, delay);
+  };
+}
+
 Object.assign(window, {
   sessionStorageSet,
   sessionStorageGet,
@@ -548,4 +561,5 @@ Object.assign(window, {
   setStorageCookie,
   getStorageCookie,
   THIRTY_MINUTES_IN_MILLISECONDS,
+  debounced,
 });

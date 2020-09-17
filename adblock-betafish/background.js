@@ -27,7 +27,6 @@ const { SURVEY } = require('./survey');
 const { SyncService } = require('./picreplacement/sync-service');
 const { DataCollectionV2 } = require('./datacollection.v2');
 const { LocalDataCollection } = require('./localdatacollection');
-const { LocalCDN } = require('./localcdn');
 const { ServerMessages } = require('./servermessages');
 const { recommendations } = require('./alias/recommendations');
 const { uninstallInit } = require('./alias/uninstall');
@@ -67,7 +66,6 @@ Object.assign(window, {
   SyncService,
   DataCollectionV2,
   LocalDataCollection,
-  LocalCDN,
   ServerMessages,
   recordGeneralMessage,
   recordErrorMessage,

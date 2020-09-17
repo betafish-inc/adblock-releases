@@ -3,7 +3,8 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global backgroundPage, parseUri, optionalSettings:true, abpPrefPropertyNames, settingsNotifier,
    DownloadableSubscription, Subscription, Prefs, synchronizer, filterStorage, filterNotifier,
-   port, updateAcceptableAdsUI, activateTab, MABPayment, License, autoReloadingPage:true */
+   port, updateAcceptableAdsUI, activateTab, MABPayment, License, autoReloadingPage:true,
+   updateAcceptableAdsUIFN */
 
 // Handle incoming clicks from bandaids.js & '/installed'
 try {
@@ -17,16 +18,19 @@ try {
 // Check or uncheck each loaded DOM option checkbox according to the
 // user's saved settings.
 const initialize = function init() {
+  if (typeof backgroundPage.LocalCDN === 'object') {
+    $('#local_cdn_option').css('display', 'flex');
+  }
   const subs = backgroundPage.getSubscriptionsMinusText();
 
   // if the user is currently subscribed to AA
   // then 'check' the acceptable ads button.
   if ('acceptable_ads' in subs && subs.acceptable_ads.subscribed) {
-    updateAcceptableAdsUI(true, false);
+    updateAcceptableAdsUIFN(true, false);
   }
 
   if ('acceptable_ads_privacy' in subs && subs.acceptable_ads_privacy.subscribed) {
-    updateAcceptableAdsUI(true, true);
+    updateAcceptableAdsUIFN(true, true);
   }
 
   for (const name in optionalSettings) {
@@ -125,7 +129,7 @@ const initialize = function init() {
     }
     // if the user enables/disable Local CDN
     // start or end the Local CDN
-    if (name === 'local_cdn') {
+    if (typeof backgroundPage.LocalCDN === 'object' && name === 'local_cdn') {
       if (isEnabled) {
         backgroundPage.LocalCDN.start();
       } else {

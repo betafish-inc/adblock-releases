@@ -4,7 +4,6 @@
 /* global browser, require, log, chromeStorageSetHelper, logging */
 
 const { EventEmitter } = require('events');
-const { LocalCDN } = require('./localcdn');
 const minjQuery = require('./jquery/jquery-3.4.1.min.js');
 
 const settingsNotifier = new EventEmitter();
@@ -40,9 +39,6 @@ function Settings() {
       that.data = $.extend(that.defaults, settings);
       if (settings.debug_logging) {
         logging(true);
-      }
-      if (settings.local_cdn) {
-        LocalCDN.start();
       }
       if ('managed' in browser.storage) {
         browser.storage.managed.get(null).then((items) => {

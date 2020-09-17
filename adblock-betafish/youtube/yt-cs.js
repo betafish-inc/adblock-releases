@@ -150,12 +150,13 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
     }
 
     let ytInitialPlayerResponseWrapped;
-    Object.defineProperty(window, 'ytInitialPlayerResponse', {
+    const ytDescriptor = {
       configurable: true,
       get() {
         return ytInitialPlayerResponseWrapped;
       },
       set(newValue) {
+        // eslint-disable-next-line no-console
         ytInitialPlayerResponseWrapped = newValue;
         if (
           ytInitialPlayerResponseWrapped
@@ -168,7 +169,17 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
             { detail: { channelName: author, videoId } }));
         }
       },
-    });
+    };
+    Object.defineProperty(window, 'ytInitialPlayerResponse', ytDescriptor);
+
+    const theObjectDefineProperty = Object.defineProperty;
+    Object.defineProperty = function defineProperties(obj, prop, descriptor) {
+      // Prevent YT specific snippets from clobbering our overriding
+      if (prop === 'ytInitialPlayerResponse') {
+        return;
+      }
+      theObjectDefineProperty(obj, prop, descriptor);
+    };
 
     const XHR = XMLHttpRequest.prototype;
     XMLHttpRequest.wrapped = true;

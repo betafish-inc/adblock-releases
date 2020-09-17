@@ -6,10 +6,9 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, exports, require, log, getSettings, determineUserLanguage,
    replacedCounts, chromeStorageSetHelper, getAllSubscriptionsMinusText,
-   checkPingResponseForProtect, License, channels */
+   checkPingResponseForProtect, License, channels, LocalCDN */
 
 const { Prefs } = require('prefs');
-const { LocalCDN } = require('./localcdn');
 const { SURVEY } = require('./survey');
 const { recordGeneralMessage, recordErrorMessage } = require('./servermessages').ServerMessages;
 
@@ -156,8 +155,6 @@ const STATS = (function exportStats() {
         dcv2: settingsObj.data_collection_v2 ? '1' : '0',
         ldc: settingsObj.local_data_collection ? '1' : '0',
         cdn: settingsObj.local_cdn ? '1' : '0',
-        cdnr: LocalCDN.getRedirectCount(),
-        cdnd: LocalCDN.getDataCount(),
         rc: replacedCounts.getTotalAdsReplaced(),
         to: themeOptionsPage,
         tm: themePopupMenu,
@@ -170,6 +167,14 @@ const STATS = (function exportStats() {
         sfrp: settingsObj.suppress_first_run_page ? '1' : '0',
         opm: settingsObj.onpageMessages ? '1' : '0',
       };
+
+      if (typeof LocalCDN !== 'undefined') {
+        data.cdnr = LocalCDN.getRedirectCount();
+        data.cdnd = LocalCDN.getDataCount();
+      } else {
+        data.cdnr = 0;
+        data.cdnd = 0;
+      }
 
       // only on Chrome, Edge, or Firefox
       if ((flavor === 'E' || flavor === 'CM' || flavor === 'F') && Prefs.blocked_total) {
@@ -256,9 +261,11 @@ const STATS = (function exportStats() {
         $.ajax(ajaxOptions);
       }
 
-      const missedVersions = LocalCDN.getMissedVersions();
-      if (missedVersions) {
-        recordGeneralMessage('cdn_miss_stats', undefined, { cdnm: missedVersions });
+      if (typeof LocalCDN !== 'undefined') {
+        const missedVersions = LocalCDN.getMissedVersions();
+        if (missedVersions) {
+          recordGeneralMessage('cdn_miss_stats', undefined, { cdnm: missedVersions });
+        }
       }
     });
   };

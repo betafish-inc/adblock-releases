@@ -24,11 +24,11 @@
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
   },
   "description_yt": {
-    "message": "El único bloqueador de anuncios de YouTube™ por AdBlock, la extensión más popular de Chrome con más de 60 millones de usuarios",
+    "message": "El único bloqueador de anuncios de YouTube por AdBlock, la extensión más popular de Chrome con más de 60 millones de usuarios",
     "description": "Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
   },
   "name_adblock_on_youtube": {
-    "message": "AdBlock en YouTube™",
+    "message": "AdBlock en Youtube",
     "description": "Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
   },
   "adblock_click_for_details": {
@@ -60,7 +60,7 @@
     "description": "Title for the Options page"
   },
   "optionstitle_yt": {
-    "message": "Opciones de AdBlock en YouTube™",
+    "message": "Opciones de AdBlock en Youtube",
     "description": "Title for the Options page for the 'AdBlock on YouTube' extension."
   },
   "chromebutton_how_to_hide2": {
@@ -197,27 +197,27 @@
   },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock no se activará en ninguna página que coincida con:",
-    "description": "Message displayed when the whitelist wizard will whitelist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
+    "description": "Message displayed when the allowlist wizard will allowlist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change": {
     "message": "Puedes usar el control deslizante para cambiar en qué páginas exactamente no se activará AdBlock.",
-    "description": "Whitelist slider usage instructions. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
+    "description": "allowlist slider usage instructions. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2": {
     "message": "No activar AdBlock en...",
-    "description": "The title of the whitelist wizard (Don't run on this page/pages on this domain)"
+    "description": "The title of the allowlist wizard (Don't run on this page/pages on this domain)"
   },
   "buttonexclude": {
     "message": "Excluir",
-    "description": "Button for excluding a domain in the whitelist wizard"
+    "description": "Button for excluding a domain in the allowlist wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "Recarga la página.",
-    "description": "Checkbox in the whitelist wizard"
+    "description": "Checkbox in the allowlist wizard"
   },
   "wizardcantrunonframesets": {
-    "message": "Esta función de AdBlock no funciona en este sitio web puesto que usa una tecnología obsoleta. Puedes añadir recursos de manera manual a la lista negra y la lista blanca en la pestaña \"Personalizar\" de la página Opciones.",
-    "description": "Alert shown when the user tries to use a blacklist/whitelist wizard on an old website"
+    "message": "Esta función de AdBlock no funciona en este sitio web puesto que usa una tecnología obsoleta. Puedes añadir recursos de manera manual a la lista de bloqueados y la lista de permitidos en la pestaña \"Personalizar\" en la página Opciones.",
+    "description": "Alert shown when the user tries to use a blocklist/allowlist wizard on an old website"
   },
   "subscribeconfirm": {
     "message": "¿Seguro que quieres suscribirte a la lista de filtros $title$?",
@@ -473,6 +473,10 @@
     "message": "Checo y eslovaco + EasyList",
     "description": "A filter list combined with EasyList"
   },
+  "filteridcac": {
+    "message": "No me importan las cookies",
+    "description": "A filter list"
+  },
   "filtereasyprivacy": {
     "message": "EasyPrivacy (protección de privacidad)",
     "description": "A filter list"
@@ -573,18 +577,6 @@
     "message": "Editar filtros deshabilitados:",
     "description": "Subtitle on the 'Customize' tab"
   },
-  "filtersavewarning": {
-    "message": "Ten cuidado: si cometes un error aquí, muchos de los otros filtros, incluidos los filtros oficiales, podrían dejar de funcionar también. Lee el [[tutorial de sintaxis de filtros]] para aprender a añadir filtros de lista negra y lista blanca avanzados.",
-    "description": "Warning when manually editing filters."
-  },
-  "filtersavewarning_ytadblock_1": {
-    "message": "Ten cuidado: si cometes un error aquí, es posible que AdBlock en YouTube™ deje de funcionar correctamente.",
-    "description": "First part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
-  },
-  "filtersavewarning_ytadblock_2": {
-    "message": "Lee el [[tutorial de sintaxis de filtros]] para aprender a añadir filtros de lista negra y lista blanca.",
-    "description": "Second part of the warning when manually editing filters in the 'AdBlock on YouTube' extension."
-  },
   "migration_error_message": {
     "message": "Hemos encontrado algunos errores en tus filtros personalizados. Ve más abajo los mensajes.",
     "description": "Error when adding custom filters manually"
@@ -592,10 +584,6 @@
   "delete_migration_error_messages": {
     "message": "Eliminar mensajes",
     "description": "Button to delete error messages when adding custom filters manually"
-  },
-  "contentblockingwarning": {
-    "message": "Nota: Cuando el bloqueador de contenido de Safari está activado, no podrás añadir una página o sitio web a la lista blanca (permitir que tenga anuncios).",
-    "description": "Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
   },
   "savebutton": {
     "message": "Guardar",
@@ -1239,35 +1227,35 @@
   },
   "disabled_by_filter_lists": {
     "message": "Lo sentimos, AdBlock está deshabilitado en esta página de acuerdo con una de tus listas de filtros.",
-    "description": "Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list."
   },
   "disabled_by_filter_lists_yt": {
-    "message": "Lo sentimos, AdBlock en YouTube™ está deshabilitado en esta página de acuerdo con una de tus opciones.",
-    "description": "Message shown when a user tries to un-whitelist a web page that has been whitelisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+    "message": "Lo sentimos, AdBlock en YouTube está deshabilitado en esta página de acuerdo con una de tus opciones.",
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
   },
   "dont_run_on_pages_on_domain": {
     "message": "No activar en páginas de este dominio",
-    "description": "Menu entry to open the whitelist wizard"
+    "description": "Menu entry to open the allowlist wizard"
   },
   "dont_run_on_pages_on_site": {
     "message": "No activar en páginas de este sitio web",
-    "description": "Menu entry to open the whitelist wizard"
+    "description": "Menu entry to open the allowlist wizard"
   },
   "disabled_on_this_page": {
     "message": "AdBlock está deshabilitado en esta página.",
-    "description": "Message shown in toolbar button on web pages that have been whitelisted"
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
   },
   "disabled_on_this_channel": {
     "message": "Has permitido anuncios en este canal.",
-    "description": "Message shown in the toolbar button menu on YouTube channel pages and videos that have been whitelisted."
+    "description": "Message shown in the toolbar button menu on YouTube channel pages and videos that have been allowlisted."
   },
   "enable_adblock": {
     "message": "Habilitar AdBlock en esta página",
-    "description": "Link text to un-whitelist a page, displayed immediately after 'AdBlock is disabled on this page'"
+    "description": "Link text to un-allowlist a page, displayed immediately after 'AdBlock is disabled on this page'"
   },
   "enable_adblock_on_this_channel": {
     "message": "Bloquear anuncios en este canal",
-    "description": "Menu entry to un-whitelist a YouTube channel, displayed under 'You allowed ads on this channel.'"
+    "description": "Menu entry to un-allowlist a YouTube channel, displayed under 'You allowed ads on this channel.'"
   },
   "status_paused": {
     "message": "AdBlock está pausado.",
@@ -1335,15 +1323,15 @@
   },
   "undo_last_block": {
     "message": "Deshacer mis bloqueos en este dominio",
-    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "undo_last_block_site": {
     "message": "Deshacer mis bloqueos en este sitio web",
-    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
     "message": "No activar en esta página",
-    "description": "Menu entry to whitelist the current page"
+    "description": "Menu entry to allowlist the current page"
   },
   "options": {
     "message": "Opciones",
@@ -1415,15 +1403,15 @@
   },
   "modifydomain": {
     "message": "Sitio web:",
-    "description": "Caption for the whitelist wizard slider that modifies the domain part of a URL"
+    "description": "Caption for the allowlist wizard slider that modifies the domain part of a URL"
   },
   "modifypath": {
     "message": "Página:",
-    "description": "Caption for the whitelist wizard slider that modifies the path part of a URL"
+    "description": "Caption for the allowlist wizard slider that modifies the path part of a URL"
   },
   "show_ads_except_for": {
     "message": "Mostrar anuncios en todas partes excepto en estos dominios...",
-    "description": "Section title for the whitelisting section of Customize tab"
+    "description": "Section title for the allowlisting section of Customize tab"
   },
   "only_block_ads_on_these_sites": {
     "message": "Bloquear solo los anuncios en estos sitios web:",
@@ -1435,15 +1423,11 @@
   },
   "warning_overrules_filters": {
     "message": "Aviso: ¡verás anuncios en todos los demás sitios web!\nEsto anula todos los otros filtros para estos sitios web.",
-    "description": "Message on the 'Customize' tab of the options page, explaining the danger of adding a whitelist filter for all websites with only some exceptions."
+    "description": "Message on the 'Customize' tab of the options page, explaining the danger of adding a allowlist filter for all websites with only some exceptions."
   },
   "storage_quota_exceeded": {
     "message": "Has superado la cantidad de almacenamiento que AdBlock puede usar. ¡Date de baja de algunas listas de filtros!",
     "description": "Message shown when the user uses more storage than allowed by the browser."
-  },
-  "safari50_updatenotice": {
-    "message": "Estás usando una versión obsoleta de Safari. Consigue la versión más reciente para poder usar el botón AdBlock en la barra de herramientas para pausar AdBlock, añadir sitios web a la lista blanca e informar de anuncios. [[Actualizar ahora]].",
-    "description": "A message shown to Safari 5.0 users urging them to upgrade"
   },
   "firefox_explanation": {
     "message": "El objetivo de esta pregunta es determinar quién debería recibir tu informe. Si respondes a esta pregunta de manera incorrecta, el informe se enviará a la persona errónea, lo que podría derivar en que se ignore.",
@@ -1498,15 +1482,15 @@
     "description": "Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
   "block_ads_on_youtube": {
-    "message": "Eliminar anuncios en YouTube™",
+    "message": "Eliminar anuncios en YouTube",
     "description": "Label for checkbox letting user choose whether to block ads on youtube.com"
   },
   "block_privacy_on_youtube": {
-    "message": "Proteger mi privacidad en YouTube™",
+    "message": "Proteger mi privacidad en YouTube",
     "description": "Checkbox letting user choose whether to block privacy-related requests on youtube.com"
   },
   "block_annonyances_on_youtube": {
-    "message": "Eliminar molestias en YouTube™",
+    "message": "Eliminar molestias en YouTube",
     "description": "Checkbox letting user choose whether to block annoyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
   },
   "show_devtools_panel": {
@@ -1555,38 +1539,16 @@
     "message": " -- Seleccionar idioma -- ",
     "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
-  "allow_whitelisting_youtube_channels": {
-    "message": "Permitir añadir a la lista blanca algunos canales de YouTube™ específicos (requiere reiniciar el navegador)",
-    "description": "Checkbox on the 'General' tab of the Options page"
+  "whitelist_channel": {
+    "message": "Permitir anuncios en este canal",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
   },
-  "whitelist_all_youtube_channels": {
-    "message": "Añadir a la lista blanca todos los canales de YouTube™ a los que estoy suscrito",
-    "description": "Toolbar button menu entry, displayed only on youtube.com/feed/subscriptions and if the YouTube channel whitelisting option is enabled."
-  },
-  "one_moment_all_youtube_channels": {
-    "message": "Espera un momento mientras recopilamos todas tus suscripciones",
-    "description": "Alert displayed when whitelisting all subscribed YouTube channels"
-  },
-  "all_youtube_channels_complete": {
-    "message": "Se han añadido a la lista blanca todos los canales de YouTube™ a los que estás suscrito",
-    "description": "Alert displayed after the whitelisting of all subscribed YouTube channels has been completed"
-  },
-  "allow_ads_all_youtube_channels": {
-    "message": "Permitir anuncios en todos los canales de YouTube™ a los que estoy suscrito",
-    "description": "Toolbar button menu entry, displayed only on youtube.com/feed/subscriptions and if the YouTube channel whitelisting option is enabled"
-  },
-  "whitelist_youtube_channel": {
-    "message": "Añadir el canal $name$ a la lista blanca",
-    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "Name of channel"
-      }
-    }
+  "manage_subscribed_channel": {
+    "message": "Gestionar anuncios en los canales suscritos",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel allow listing option"
   },
   "whitelist_youtube_channel_v2": {
-    "message": "Permitir anuncios en el canal de YouTube™:",
+    "message": "Permitir anuncios en el canal de YouTube:",
     "description": "Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
   },
   "confirm_undo_custom_filters": {
@@ -1624,7 +1586,7 @@
     "description": "Subtitle on the Support tab"
   },
   "ytadblockupdates": {
-    "message": "Actualizaciones de AdBlock en YouTube™",
+    "message": "Actualizaciones de AdBlock en YouTube",
     "description": "Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
   },
   "whatmakesadblocktick": {
@@ -1745,14 +1707,10 @@
   },
   "legend": {
     "message": "Leyenda: ",
-    "description": "Resource list page: followed by color codes for various resource statuses (blocked, whitelisted, hidden)"
+    "description": "Resource list page: followed by color codes for various resource statuses (blocked, allowlisted, hidden)"
   },
   "blockedresource": {
     "message": "Recurso bloqueado",
-    "description": "Resource list page: resource status"
-  },
-  "whitelistedresource": {
-    "message": "Recurso añadido a la lista blanca",
     "description": "Resource list page: resource status"
   },
   "hiddenelement": {
@@ -2075,6 +2033,10 @@
     "message": "elimina advertencias usando bloqueadores de anuncios",
     "description": "A filter list explanation"
   },
+  "filter_idcac_explained": {
+    "message": "bloquea las notificaciones de cookies, lo que significa que renuncias a tu derecho a que se te notifique del uso de cookies en las páginas web que visitas",
+    "description": "A filter list explanation"
+  },
   "filterlistsrock2": {
     "message": "Las listas de filtros bloquean la mayor parte de anuncios de la red. También podrás...",
     "description": "Header text on the Customize tab"
@@ -2100,7 +2062,7 @@
     "description": "Warning when manually editing filters -- first part not clickable."
   },
   "filtersavewarning_part2": {
-    "message": "Lee [[filter syntax tutorial]] para aprender cómo añadir filtros avanzados de lista negra y lista blanca.",
+    "message": "Lee [[filter syntax tutorial]] para aprender cómo añadir filtros avanzados de lista de bloqueados y lista de permitidos.",
     "description": "Warning when manually editing filters -- second part clickable."
   },
   "pwyw2": {
@@ -2116,7 +2078,15 @@
     "description": "First option in the language dropdown menu on the Filter lists tab."
   },
   "allow_whitelisting_youtube_channels2": {
-    "message": "Permite listas blancas de canales de YouTube™ específicos",
+    "message": "Permitir anuncios en canales de YouTube específicos",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "youtube_manage_subscribed": {
+    "message": "Gestionar mis ajustes de AdBlock desde mi página de suscripciones de YouTube",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "allowlisting_twitch_channels": {
+    "message": "Permitir anuncios en canales de Twitch específicos",
     "description": "Checkbox on the 'General' tab of the Options page"
   },
   "require_restart_browser": {
@@ -2210,10 +2180,6 @@
   "adblock_website": {
     "message": "Página de inicio de AdBlock",
     "description": "Title for link to AdBlock's website"
-  },
-  "twitch_hiding_option": {
-    "message": "Permite ocultar anuncios en las retransmisiones de Twitch™",
-    "description": "Description of option on General tab of the Options page to hide Twitch ads"
   },
   "callout_new_feature": {
     "message": "NUEVO!",
@@ -2455,7 +2421,7 @@
   },
   "devtools_header_state_whitelisted": {
     "description": "one of the items in the drop down list in the header of the dev tools panel",
-    "message": "permitido"
+    "message": "en lista de permitidos"
   },
   "devtools_header_type_any": {
     "description": "one of the items in the drop down list in the header of the dev tools panel",
@@ -2532,7 +2498,7 @@
     "description": "The title of a feature box in the MyAdBlock Options page"
   },
   "sync_your_settings_description": {
-    "message": "Tus ajustes personalizados de bloqueo, configuración y listas blancas estarán disponibles en cualquier ordenador que utilices.",
+    "message": "Sincroniza tus ajustes y listas de bloqueo personalizados en cualquier ordenador que uses.",
     "description": "The main text of a feature box in the MyAdBlock Options page"
   },
   "how_can_we_help": {
@@ -2572,7 +2538,7 @@
     "description": "Message for help flow in popup menu."
   },
   "check_whitelist": {
-    "message": "Echémosle un vistazo a tu lista blanca para ver si está ahí el problema.",
+    "message": "Vamos a revisar tus ajustes de listas de permitidos para ver si hubiera algún problema.",
     "description": "Message for help flow in popup menu."
   },
   "ok": {
@@ -2580,7 +2546,7 @@
     "description": "Message for help flow in popup menu."
   },
   "page_is_whitelisted": {
-    "message": "Esta página está en tu lista blanca, por eso ves el anuncio.",
+    "message": "Esta página no está en tu lista de permitidos, por eso estás viendo anuncios.",
     "description": "Message for help flow in popup menu."
   },
   "want_to_remove": {
@@ -2592,7 +2558,7 @@
     "description": "Message for help flow in popup menu."
   },
   "removed_url": {
-    "message": "¡Vale! Hemos eliminado la URL de tu lista blanca.",
+    "message": "¡Entendido! Hemos eliminado la URL de tu lista de permitidos.",
     "description": "Message for help flow in popup menu."
   },
   "reload_not_see_ad": {
@@ -2604,7 +2570,7 @@
     "description": "Message for help flow in popup menu."
   },
   "page_not_whitelisted": {
-    "message": "Esta página no está en tu lista blanca.",
+    "message": "Esta página no está en tu lista de permitidos.",
     "description": "Message for help flow in popup menu."
   },
   "updating_filter_lists": {
@@ -2888,40 +2854,40 @@
     "description": "Part 2 of message shown when user opts out of call-to-action"
   },
   "successfully_whitelisted": {
-    "message": "Has puesto esta URL en la lista blanca.",
-    "description": "Part of a message on the whitelist wizard"
+    "message": "Has añadido esta URL a tu lista de permitidos.",
+    "description": "Part of a message on the allowlist wizard"
   },
   "future_show_ads": {
     "message": "Estas páginas seguirán mostrando anuncios en el futuro.",
-    "description": "Part of a message on the whitelist wizard"
+    "description": "Part of a message on the allowlist wizard"
   },
   "change_behavior_settings": {
     "message": "Puedes modificar este comportamiento en tus [[ajustes]].",
-    "description": "Part of a message on the whitelist and blacklist wizards"
+    "description": "Part of a message on the allowlist and blocklist wizards"
   },
   "whitelisted_a_site": {
-    "message": "¡Has puesto una página web en la lista blanca!",
-    "description": "Part 1 of a call-to-action on the whitelist wizard"
+    "message": "¡Acabas de añadir una página a tu lista de permitidos!",
+    "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
   "never_lose_settings": {
     "message": "Aplica estos ajustes a todos tus dispositivos para asegurarte que no perderás tus ajustes si usas Copia de seguridad o Sincronización.",
-    "description": "Part 2 of a call-to-action on the whitelist and blacklist wizards"
+    "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
   },
   "successfully_blocked_ad": {
     "message": "Has bloqueado este anuncio.",
-    "description": "Part of a message on the blacklist wizard"
+    "description": "Part of a message on the blocklist wizard"
   },
   "future_ads_blocked": {
     "message": "Los anuncios que coincidan con las reglas establecidas serán bloqueados en el futuro.",
-    "description": "Part of a message on the blacklist wizard"
+    "description": "Part of a message on the blocklist wizard"
   },
   "rule_added_filters": {
     "message": "Se ha añadido la siguiente regla a los filtros:",
-    "description": "Part of a message on the blacklist wizard"
+    "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
     "message": "¡Acabas de bloquear un elemento en esta página!",
-    "description": "Part 1 of a call-to-action on the blacklist wizard"
+    "description": "Part 1 of a call-to-action on the blocklist wizard"
   },
   "adblock_looked_like_this": {
     "message": "¿Y si AdBlock tuviera este aspecto?",
@@ -3274,5 +3240,45 @@
   "custom_image_supported_file_types": {
     "message": "*.bmp, *.gif, *.jpeg, *.png, *.svg, *.tiff, *.webp",
     "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
+  },
+  "youtube_onpage_icon_msg": {
+    "message": "Gestionar anuncios en canales suscritos:",
+    "description": "The message text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allow_all_btn_text": {
+    "message": "Permitir anuncios en todos",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_block_all_btn_text": {
+    "message": "Bloquear anuncios en todos",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_one_moment_text": {
+    "message": "Un momento...",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowed_complete_text": {
+    "message": "Anuncios permitidos en todos los canales suscritos",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocked_complete_text": {
+    "message": "Anuncios bloqueados en todos los canales suscritos",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowing_ads_on_channel": {
+    "message": "Anuncios permitidos en este canal",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocking_ads_on_channel": {
+    "message": "Anuncios bloqueados en este canal",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_sign_in_text": {
+    "message": "Inicia sesión en tu cuenta de YouTube para gestionar anuncios en los canales a los que te has suscrito.",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_no_channels_text": {
+    "message": "Súscribete a al menos un canal de YouTube para gestionar los anuncios en tus suscripciones.",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
   }
 }
