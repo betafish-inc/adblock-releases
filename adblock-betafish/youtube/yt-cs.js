@@ -242,27 +242,34 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
     });
   };
 
-  // process the event messages from the injected script
-  document.addEventListener(toContentScriptRandomEventName, (event) => {
-    if (event && event.detail && event.detail.channelName) {
-      gChannelName = event.detail.channelName;
-      if (event && event.detail && event.detail.videoId) {
-        gNextVideoId = event.detail.videoId;
+  const runOnYT = function () {
+    const elemDOMPurify = document.createElement('script');
+    elemDOMPurify.src = browser.runtime.getURL('purify.min.js');
+    const scriptToInject = `(${captureAJAXRequests.toString()})('${toContentScriptRandomEventName}', '${fromContentScriptRandomEventName}');`;
+    const elem = document.createElement('script');
+    elem.appendChild(document.createTextNode(scriptToInject));
+    try {
+      (document.head || document.documentElement).appendChild(elemDOMPurify);
+      (document.head || document.documentElement).appendChild(elem);
+    } catch (ex) {
+      // eslint-disable-next-line no-console
+      console.log(ex);
+    }
+
+    // process the event messages from the injected script
+    document.addEventListener(toContentScriptRandomEventName, (event) => {
+      if (event && event.detail && event.detail.channelName) {
+        gChannelName = event.detail.channelName;
+        if (event && event.detail && event.detail.videoId) {
+          gNextVideoId = event.detail.videoId;
+        }
+        browser.runtime.sendMessage({ command: 'updateYouTubeChannelName', channelName: event.detail.channelName });
       }
-      browser.runtime.sendMessage({ command: 'updateYouTubeChannelName', channelName: event.detail.channelName });
+    });
+  };
+  browser.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
+    if (settings && settings.youtube_channel_whitelist) {
+      runOnYT();
     }
   });
-
-  const elemDOMPurify = document.createElement('script');
-  elemDOMPurify.src = browser.runtime.getURL('purify.min.js');
-  const scriptToInject = `(${captureAJAXRequests.toString()})('${toContentScriptRandomEventName}', '${fromContentScriptRandomEventName}');`;
-  const elem = document.createElement('script');
-  elem.appendChild(document.createTextNode(scriptToInject));
-  try {
-    (document.head || document.documentElement).appendChild(elemDOMPurify);
-    (document.head || document.documentElement).appendChild(elem);
-  } catch (ex) {
-    // eslint-disable-next-line no-console
-    console.log(ex);
-  }
 }

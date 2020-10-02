@@ -1,8 +1,10 @@
 #dark_theme {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #f4f4f4;
-  --popup-entry-hovered-bg-color: #333333;
-  --popup-block-ads-bg-color: #4c4c4c;
+  --popup-accent-color: #999999;
+  --popup-accent-hovered-color: #ffffff;
+  --popup-entry-hovered-bg-color: #000000;
+  --popup-block-ads-bg-color: #333333;
   --block-count-color: #ff363b;
   --background-color: #666666;
   --link-color: #4ecdf9;
@@ -33,12 +35,13 @@
   --mab-feature-card-body-bg: #c6c6c6;
   --options-button-text: white;
   --options-button-bg: #ff363b;
+  --options-premium-badge: #999999;
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --premium-badge: var(--popup-accent-color);
   --options-page-accent-text: var(--popup-main-text-color);
   --speech-bubble-border-color: var(--bottom-line-color);
   --hide-mab-enrollment: var(--help-icon-color);
@@ -53,6 +56,8 @@
 #default_theme {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #333333;
+  --popup-accent-color: #c6c6c6;
+  --popup-accent-hovered-color: #666666;
   --popup-entry-hovered-bg-color: #e6e6e6;
   --popup-block-ads-bg-color: #f4f4f4;
   --block-count-color: #ce0707;
@@ -85,12 +90,13 @@
   --mab-feature-card-body-bg: #f4f4f4;
   --options-button-text: white;
   --options-button-bg: #ff363b;
+  --options-premium-badge: #666666;
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --premium-badge: var(--popup-accent-color);
   --options-page-accent-text: var(--popup-main-text-color);
   --speech-bubble-border-color: var(--bottom-line-color);
   --hide-mab-enrollment: var(--help-icon-color);
@@ -106,9 +112,11 @@
 [data-theme-cta="solarized_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #90a2a2;
+  --popup-accent-color: #90a2a2;
+  --popup-accent-hovered-color: #f4f4f4;
   --popup-entry-hovered-bg-color: #002c38;
   --popup-block-ads-bg-color: #002c38;
-  --block-count-color: #ee0d20;
+  --block-count-color: #ff363b;
   --background-color: #003643;
   --link-color: #009f94;
   --popup-button: #fc1c1c;
@@ -138,12 +146,13 @@
   --mab-feature-card-body-bg: #586e75;
   --options-button-text: #003643;
   --options-button-bg: #dc322f;
+  --options-premium-badge: #90a2a2;
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --premium-badge: var(--popup-accent-color);
   --options-page-accent-text: var(--popup-main-text-color);
   --speech-bubble-border-color: var(--bottom-line-color);
   --hide-mab-enrollment: var(--help-icon-color);
@@ -164,9 +173,11 @@
 [data-theme-cta="solarized_light_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #607c84;
+  --popup-accent-color: #607c84;
+  --popup-accent-hovered-color: #003643;
   --popup-entry-hovered-bg-color: #eee8d5;
   --popup-block-ads-bg-color: #eee8d5;
-  --block-count-color: #ee0d20;
+  --block-count-color: #ff363b;
   --background-color: #fdf6e3;
   --link-color: #00a498;
   --popup-button: #657b83;
@@ -196,12 +207,13 @@
   --mab-feature-card-body-bg: #eee8d5;
   --options-button-text: white;
   --options-button-bg: #ff363b;
+  --options-premium-badge: #607c84;
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --premium-badge: var(--popup-accent-color);
   --options-page-accent-text: var(--popup-main-text-color);
   --speech-bubble-border-color: var(--bottom-line-color);
   --hide-mab-enrollment: var(--help-icon-color);
@@ -221,8 +233,10 @@
 #rebecca_purple_theme {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
+  --popup-accent-color: #b399cc;
+  --popup-accent-hovered-color: #ffffff;
   --popup-entry-hovered-bg-color: #3f2e56;
-  --popup-block-ads-bg-color: #3f2e56;
+  --popup-block-ads-bg-color: #48226e;
   --block-count-color: #4ecdf9;
   --background-color: #663399;
   --link-color: #ffca00;
@@ -234,13 +248,15 @@
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --premium-badge: var(--popup-accent-color);
 }
 #watermelon_theme,
 [data-theme-cta="watermelon_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
+  --popup-accent-color: #f18686;
+  --popup-accent-hovered-color: #ffffff;
   --popup-entry-hovered-bg-color: #ce0707;
   --popup-block-ads-bg-color: #ce0707;
   --block-count-color: white;
@@ -254,7 +270,7 @@
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
+  --premium-badge: var(--popup-accent-color);
   --popup-link-hovered: var(--block-count-color);
   --popup-themes-cta-icon: var(--popup-main-text-color);
   --popup-themes-cta-text: var(--popup-main-text-color);
@@ -266,6 +282,8 @@
 [data-theme-cta="ocean_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
+  --popup-accent-color: #81defe;
+  --popup-accent-hovered-color: #ffffff;
   --popup-entry-hovered-bg-color: #2284f7;
   --popup-block-ads-bg-color: #2284f7;
   --block-count-color: white;
@@ -279,7 +297,7 @@
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
+  --premium-badge: var(--popup-accent-color);
   --popup-link-hovered: var(--block-count-color);
   --popup-themes-cta-icon: var(--popup-main-text-color);
   --popup-themes-cta-text: var(--popup-main-text-color);
@@ -291,6 +309,8 @@
 [data-theme-cta="sunshine_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
+  --popup-accent-color: #ffd780;
+  --popup-accent-hovered-color: #ffffff;
   --popup-entry-hovered-bg-color: #ff9c00;
   --popup-block-ads-bg-color: #ff9c00;
   --block-count-color: white;
@@ -304,7 +324,7 @@
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
+  --premium-badge: var(--popup-accent-color);
   --popup-link-hovered: var(--block-count-color);
   --popup-themes-cta-icon: var(--link-color);
   --popup-themes-cta-text: var(--link-color);

@@ -11,7 +11,7 @@ $(() => {
   }
 
   const payInfo = MABPayment.initialize('mab');
-  const $pageTitle = $('#premium-tab-header > h1.page-title');
+  const $pageTitle = $('#premium-tab-header > span > span.page-title');
   let manageSubscriptionURL = License.MAB_CONFIG.subscriptionURL;
 
   if (License.shouldShowMyAdBlockEnrollment()) {
@@ -20,6 +20,12 @@ $(() => {
   } else if (License.isActiveLicense()) {
     MABPayment.paidUserLogic(payInfo);
     $pageTitle.text(translate('premium'));
+    if (License.getFormattedActiveSinceDate()) {
+      $('#premium_status_msg').text(translate('premium_status_msg', License.getFormattedActiveSinceDate()));
+    } else {
+      $('#premium_status_msg').text(translate('premium_status_short_msg'));
+    }
+    $('.status_msg').css('display', 'inline-flex');
 
     if (License.isLicenseCodeValid()) {
       manageSubscriptionURL = `${manageSubscriptionURL}?lic=${License.get().code}`;

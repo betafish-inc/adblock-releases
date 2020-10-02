@@ -11,6 +11,8 @@ Global Styles
 :root {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #333333;
+  --popup-accent-color: #c6c6c6;
+  --popup-accent-hovered-color: #666666;
   --popup-entry-hovered-bg-color: #e6e6e6;
   --popup-block-ads-bg-color: #f4f4f4;
   --block-count-color: #ce0707;
@@ -44,6 +46,7 @@ Global Styles
   --mab-feature-card-body-bg: #f4f4f4;
   --options-button-text: white;
   --options-button-bg: #ff363b;
+  --options-premium-badge: #666666;
   /* Defaults for all themes:
      These are all the same for the current themes,
      but might be differentiated in future themes */
@@ -58,8 +61,8 @@ Global Styles
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
-  --popup-accent-color: var(--popup-main-text-color);
   --popup-link-hovered: var(--block-count-color);
+  --premium-badge: var(--popup-accent-color);
   --options-page-accent-text: var(--popup-main-text-color);
   --speech-bubble-border-color: var(--bottom-line-color);
   --hide-mab-enrollment: var(--help-icon-color);

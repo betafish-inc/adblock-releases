@@ -934,6 +934,22 @@ section .theme-section-row {
   pointer-events: none;
 }
 
+.status_msg {
+  color: var(--options-premium-badge);
+  border: 0.5px solid var(--options-premium-badge);
+  border-radius: 2px;
+  line-height: 14px;
+  font-weight: bold;
+  font-size: 8px;
+  display: none;
+  padding-left: 6px;
+  padding-right: 6px;
+  margin-left: 10px;
+  text-transform: uppercase;
+  white-space: pre;
+  margin-top: 6px;
+}
+
 /* SIDEBAR */
 
 #sidebar {

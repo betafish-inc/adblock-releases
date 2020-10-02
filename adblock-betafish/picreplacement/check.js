@@ -407,6 +407,26 @@ const License = (function getLicense() {
       }
       setSetting('picreplacement', false);
     },
+    getFormattedActiveSinceDate() {
+      if (
+        !License
+        || !License.isActiveLicense()
+        || !License.get()
+        || !License.get().createdAtUTC
+        || !Number.isInteger(License.get().createdAtUTC)
+      ) {
+        return null;
+      }
+      const dateFormat = { year: 'numeric', month: 'long' };
+      let formattedDate = null;
+      try {
+        const createdAtUTC = parseInt(License.get().createdAtUTC, 10);
+        formattedDate = new Date(createdAtUTC).toLocaleDateString(undefined, dateFormat);
+      } catch (e) {
+        return null;
+      }
+      return formattedDate;
+    },
     isActiveLicense() {
       return License && License.get() && License.get().status === 'active';
     },

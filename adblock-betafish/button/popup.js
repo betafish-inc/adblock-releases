@@ -266,6 +266,10 @@ try {
               show(['div_myadblock_enrollment_v2', 'separator-1', 'separator-2']);
             }
 
+            if (info.activeLicense === true) {
+              $('#premium_status_msg').css('display', 'inline-flex');
+            }
+
             if (shown.block_counts && info.showStatsInPopup) {
               hide(['separator-1']);
             } else if (info.disabledSite || info.whitelisted) {

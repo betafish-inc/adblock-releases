@@ -687,6 +687,9 @@ const getCurrentTabInfo = function (secondTime, tabId) {
         if (!disabledSite) {
           result.whitelisted = checkWhitelisted(page);
         }
+        if (License && License.isActiveLicense()) {
+          result.activeLicense = true;
+        }
         if (
           getSettings()
               && getSettings().youtube_channel_whitelist

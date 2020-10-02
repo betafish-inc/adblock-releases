@@ -49,18 +49,35 @@ body {
   height: 32px;
   width: auto;
 }
-#header-icons {
+#premium_status_msg {
+  display: none;
+  font-weight: bold;
+  font-size: 8px;
+  border: 0.5px solid var(--premium-badge);
+  border-radius: 2px;
+  margin-right: 8px;
+  padding-left: 3px;
+  padding-right: 3px;
+  line-height: 16px;
+  color: var(--premium-badge);
+  text-transform: uppercase;
+}
+#header-info {
   display: flex;
-  width: 45px;
   align-items: center;
   justify-content: space-between;
 }
+#header-icons {
+  width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
 #header-icons .material-icons {
   color: var(--popup-accent-color);
-  opacity: 0.5;
 }
 #header-icons .material-icons:hover {
-  opacity: 1;
+  color: var(--popup-accent-hovered-color);
 }
 
 #header-icons .material-icons:focus {
@@ -72,6 +89,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+#help_link {
+  margin-right: 2px;
 }
 
 /* BLOCKED COUNT */

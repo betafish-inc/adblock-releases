@@ -274,19 +274,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// For existing users that have already enabled YT channel whitelisting,
-// enable the new feature when the extension is published.
-browser.runtime.onInstalled.addListener((details) => {
-  const currentVersion = browser.runtime.getManifest().version;
-  if (details.reason === 'update' && currentVersion === '4.20.0') {
-    settings.onload().then(() => {
-      if (getSettings().youtube_channel_whitelist) {
-        setSetting('youtube_manage_subscribed', true);
-      }
-    });
-  }
-});
-
 Object.assign(window, {
   addYTChannelListeners,
   removeYTChannelListeners,
