@@ -244,11 +244,12 @@ if (window.top === window.self && /(^|\.)twitch\.tv$/.test(window.location.hostn
         [input] = params;
       }
       // This is the code that will prevent streaming ads
+
       if (params.length >= 2 && typeof input === 'string' && input.includes('/access_token')) {
         if ((thePath === window.location.pathname && !isWhitelisted)
             || (thePath !== window.location.pathname)) {
           const url = new URL(input);
-          url.searchParams.set('platform', '_');
+          url.searchParams.delete('platform');
           params[0] = url.href;
         }
       }
