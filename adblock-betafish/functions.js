@@ -155,10 +155,7 @@ const processReplacementChildrenInContent = function ($el) {
 
 // Determine what language the user's browser is set to use
 const determineUserLanguage = function () {
-  if (typeof navigator.language !== 'undefined' && navigator.language) {
-    return navigator.language.match(/^[a-z]+/i)[0];
-  }
-  return null;
+  return browser.i18n.getUILanguage();
 };
 
 // Set dir and lang attributes to the given el or to document.documentElement by default
@@ -207,7 +204,7 @@ const localizePage = function () {
 
   // Make a right-to-left translation for Arabic and Hebrew languages
   const language = determineUserLanguage();
-  if (language === 'ar' || language === 'he') {
+  if (language.startsWith('ar') || language.startsWith('he')) {
     $('#main_nav').removeClass('right').addClass('left');
     $('.adblock-logo').removeClass('left').addClass('right');
     $('.closelegend').css('float', 'left');

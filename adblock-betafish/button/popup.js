@@ -295,12 +295,6 @@ try {
               hide(['div_sync_error_msg']);
             }
 
-            if (info.settings.show_protect_enrollment) {
-              show(['div_adblock_protect_enrollment']);
-              hide(['separator0']);
-              $('#block_counts').addClass('remove-bottom-margin');
-            }
-
             if (errorOccurred) {
               return;
             }
@@ -505,14 +499,6 @@ try {
         } else {
           browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'http://help.getadblock.com/' });
         }
-      });
-
-      selected('#protect_enrollment_btn', () => {
-        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'protect_enrollment_btn_clicked' });
-        browser.runtime.sendMessage({ command: 'setSetting', name: 'show_protect_enrollment', isEnabled: false });
-        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'https://chrome.google.com/webstore/detail/adblock-protect/fpkpgcabihmjieiegmejiloplfdmpcee' }).then(() => {
-          closeAndReloadPopup();
-        });
       });
 
       $('#div_myadblock_enrollment_v2').on('mouseenter', () => {

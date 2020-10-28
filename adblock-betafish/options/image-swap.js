@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global backgroundPage, channelsNotifier, License, localizePage, MABPayment,
+/* global BG, channelsNotifier, License, localizePage, MABPayment,
    browser, DOMPurify, base64toBlob, info, customImageSwapMimeType
  */
 
@@ -14,7 +14,7 @@ if (info.application === 'gecko') {
 }
 
 (function onImageSwapLoaded() {
-  const { channels, setSetting } = backgroundPage;
+  const { channels, setSetting } = BG;
   const customChannel = channels.channelGuide[channels.getIdByName('CustomChannel')].channel;
   let deleteFileURL = '';
   let errorData = {};
@@ -145,13 +145,25 @@ if (info.application === 'gecko') {
     const $catsBox = $('#cats');
     const $dogsBox = $('#dogs');
     const $landscapesBox = $('#landscapes');
+    const $goatsBox = $('#goats');
+    const $oceanBox = $('#ocean');
+    const $foodBox = $('#food');
+    const $birdBox = $('#bird');
     const catsImageSrc = $catsBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-cat.png' : 'icons/adblock-picreplacement-images-cat-grayscale.png';
     const dogsImageSrc = $dogsBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-dog.png' : 'icons/adblock-picreplacement-images-dog-grayscale.png';
     const landscapesImageSrc = $landscapesBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-landscape.png' : 'icons/adblock-picreplacement-images-landscape-grayscale.png';
+    const goatsImageSrc = $goatsBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-goat.png' : 'icons/adblock-picreplacement-images-goat-grayscale.png';
+    const oceanImageSrc = $oceanBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-ocean.png' : 'icons/adblock-picreplacement-images-ocean-grayscale.png';
+    const foodImageSrc = $foodBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-food.png' : 'icons/adblock-picreplacement-images-food-grayscale.png';
+    const birdImageSrc = $birdBox.parent('.channel-box').hasClass('selected') ? 'icons/adblock-picreplacement-images-bird.png' : 'icons/adblock-picreplacement-images-bird-grayscale.png';
 
     $catsBox.attr('src', catsImageSrc);
     $dogsBox.attr('src', dogsImageSrc);
     $landscapesBox.attr('src', landscapesImageSrc);
+    $goatsBox.attr('src', goatsImageSrc);
+    $oceanBox.attr('src', oceanImageSrc);
+    $foodBox.attr('src', foodImageSrc);
+    $birdBox.attr('src', birdImageSrc);
     updateCustomChannelBox();
   };
 
@@ -330,7 +342,7 @@ if (info.application === 'gecko') {
     }
 
     const onChannelsChanged = function (id, currentValue, previousValue) {
-      const guide = backgroundPage.channels.getGuide();
+      const guide = BG.channels.getGuide();
       const $channelInput = $(`#${guide[id].name}`);
       if ($channelInput.is(':checked') === previousValue) {
         $channelInput.trigger('click');
@@ -448,11 +460,11 @@ if (info.application === 'gecko') {
 
   $('#btnSendDebug').on('click', () => {
     if (errorData
-      && backgroundPage
-      && typeof backgroundPage.getDebugInfo === 'function'
-      && typeof backgroundPage.recordAnonymousErrorMessage === 'function') {
-      backgroundPage.getDebugInfo((debugData) => {
-        backgroundPage.recordAnonymousErrorMessage('custom_image_swap_error', null, JSON.stringify({ debugData, errorData }));
+      && BG
+      && typeof BG.getDebugInfo === 'function'
+      && typeof BG.recordAnonymousErrorMessage === 'function') {
+      BG.getDebugInfo((debugData) => {
+        BG.recordAnonymousErrorMessage('custom_image_swap_error', null, JSON.stringify({ debugData, errorData }));
       });
     }
     $('#swap-edit-overlay').css({

@@ -726,17 +726,6 @@ browser.runtime.onMessage.addListener((message) => {
   return getCurrentTabInfo(false, message.tabId).then(results => results);
 });
 
-// Return the contents of a local file.
-// Inputs: file:string - the file relative address, eg "js/foo.js".
-// Returns: the content of the file.
-const readfile = function (file) {
-  // A bug in jquery prevents local files from being read, so use XHR.
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', browser.runtime.getURL(file), false);
-  xhr.send();
-  return xhr.responseText;
-};
-
 // BETA CODE
 if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
   // Display beta page after each update for beta-users only
@@ -821,7 +810,7 @@ if (browser.runtime.id) {
       License.ready().then(checkQueryState);
     }
   };
-  const slashUpdateReleases = ['4.23.0'];
+  const slashUpdateReleases = ['4.23.0', '4.24.0'];
   // Display updated page after each update
   browser.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);
@@ -1069,47 +1058,6 @@ browser.runtime.onInstalled.addListener((details) => {
   }
 });
 
-// AdBlock Protect integration
-//
-// Check the response from a ping to see if it contains valid show AdBlock Protect
-// enrollment instructions. If so, set the "show_protect_enrollment" setting
-// if an empty / zero length string is returned, and a user was previously enrolled then
-// set "show_protect_enrollment" to false
-// Inputs:
-//   responseData: string response from a ping
-function checkPingResponseForProtect(responseData) {
-  let pingData;
-
-  if (responseData.length === 0 || responseData.trim().length === 0) {
-    if (getSettings().show_protect_enrollment) {
-      setSetting('show_protect_enrollment', false);
-    }
-    return;
-  }
-  // if the user has clicked the Protect CTA, which sets the |show_protect_enrollment| to false
-  // then don't re-enroll them, even if the ping server has a show_protect_enrollment = true.
-  if (getSettings().show_protect_enrollment === false) {
-    return;
-  }
-  try {
-    pingData = JSON.parse(responseData);
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log('Something went wrong with parsing survey data.');
-    // eslint-disable-next-line no-console
-    console.log('error', e);
-    // eslint-disable-next-line no-console
-    console.log('response data', responseData);
-    return;
-  }
-  if (!pingData) {
-    return;
-  }
-  if (typeof pingData.protect_enrollment === 'boolean') {
-    setSetting('show_protect_enrollment', pingData.protect_enrollment);
-  }
-}
-
 function isAcceptableAds(filterList) {
   if (!filterList) {
     return undefined;
@@ -1136,7 +1084,6 @@ Object.assign(window, {
   checkUpdateProgress,
   getDebugInfo,
   openTab,
-  readfile,
   saveDomainPauses,
   adblockIsDomainPaused,
   pageIsWhitelisted,
@@ -1154,7 +1101,6 @@ Object.assign(window, {
   isSelectorFilter,
   isWhitelistFilter,
   isSelectorExcludeFilter,
-  checkPingResponseForProtect,
   pausedFilterText1,
   pausedFilterText2,
   isLanguageSpecific,

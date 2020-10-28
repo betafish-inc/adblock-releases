@@ -272,43 +272,29 @@ Channels.prototype = {
     return undefined;
   },
 
+  // adds any new or missing channels (in a disabled state) to the users channel guide
+  addNewChannels() {
+    const channelNames = ['DogsChannel', 'CatsChannel', 'LandscapesChannel', 'OceanChannel', 'GoatsChannel', 'BirdChannel', 'FoodChannel', 'CustomChannel'];
+    for (const name of channelNames) {
+      if (!this.getIdByName(name)) {
+        this.add({
+          name,
+          param: undefined,
+          enabled: false,
+        });
+      }
+    }
+  },
+
   loadFromStorage() {
     this.channelGuide = {};
-
     const entries = storageGet('channels');
-    if (!entries || (entries.length > 0 && !entries[0].name)) {
-      this.add({
-        name: 'DogsChannel',
-        param: undefined,
-        enabled: false,
-      });
-      this.add({
-        name: 'CatsChannel',
-        param: undefined,
-        enabled: false,
-      });
-      this.add({
-        name: 'LandscapesChannel',
-        param: undefined,
-        enabled: false,
-      });
-      this.add({
-        name: 'CustomChannel',
-        param: undefined,
-        enabled: false,
-      });
-    } else {
+    if (entries) {
       for (let i = 0; i < entries.length; i++) {
         this.add(entries[i]);
       }
     }
-    if (!this.getIdByName('CustomChannel')) {
-      this.add({
-        name: 'CustomChannel',
-        param: undefined,
-        enabled: false,
-      });
-    }
+    this.addNewChannels();
   },
 
   saveToStorage() {
@@ -331,6 +317,29 @@ function Channel() {
 Channel.prototype = {
   getListings() {
     return this.listings.slice(0); // shallow copy
+  },
+
+  listingFactory(widthParam, heightParam, url, title, channelName) {
+    let width = widthParam;
+    let height = heightParam;
+    const type = this.calculateType(width, height);
+
+    if (typeof width === 'number') {
+      width = `${width}`;
+    }
+    if (typeof height === 'number') {
+      height = `${height}`;
+    }
+    return new Listing({
+      width,
+      height,
+      url,
+      attributionUrl: url,
+      type,
+      ratio: Math.max(width, height) / Math.min(width, height),
+      title,
+      channelName, // message.json key for channel name
+    });
   },
 
   // Update the channel's listings and trigger an 'updated' event.

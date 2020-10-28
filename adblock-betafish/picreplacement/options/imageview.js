@@ -3,8 +3,6 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, localizePage, parseUri, translate */
 
-const BG = browser.extension.getBackgroundPage();
-
 $(() => {
   localizePage();
   if (window.location && window.location.search) {
@@ -15,7 +13,7 @@ $(() => {
     if (searchQuery && searchQuery.url && searchQuery.url.startsWith('file:///')) {
       browser.storage.local.get(searchQuery.url).then((savedCustomImageData) => {
         newPic.src = savedCustomImageData[searchQuery.url].src;
-        styleString = `${styleString} width: ${savedCustomImageData[searchQuery.url].testImage.width}px; height: ${savedCustomImageData[searchQuery.url].testImage.height}px;`;
+        styleString = `${styleString} width: ${savedCustomImageData[searchQuery.url].width}px; height: ${savedCustomImageData[searchQuery.url].height}px;`;
       });
     } else if (searchQuery && searchQuery.url) {
       newPic.src = searchQuery.url;

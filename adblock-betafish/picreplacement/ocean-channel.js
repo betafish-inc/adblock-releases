@@ -3,26 +3,26 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global Channel, Listing, require */
 
-const catData = require('./data/cats.json');
+const oceanData = require('./data/ocean.json');
 
 // Channel containing hard coded cats loaded from disk.
 // Subclass of Channel.
-function CatsChannel() {
+function OceanChannel() {
   Channel.call(this);
 }
 
-CatsChannel.prototype = {
+OceanChannel.prototype = {
   __proto__: Channel.prototype,
 
   getLatestListings(callback) {
     const listingArray = [];
-    for (const cat of catData) {
-      listingArray.push(this.listingFactory(cat.width, cat.height, cat.url, 'This is a cat!', 'catchannelswitchlabel'));
+    for (const ocean of oceanData) {
+      listingArray.push(this.listingFactory(ocean.width, ocean.height, ocean.url, 'This is a ocean!', 'oceanchannelswitchlabel'));
     }
     callback(listingArray);
   },
 };
 
 Object.assign(window, {
-  CatsChannel,
+  OceanChannel,
 });

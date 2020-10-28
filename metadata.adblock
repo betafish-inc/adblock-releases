@@ -1,5 +1,5 @@
 [general]
-version = 4.23.0
+version = 4.24.0
 icons =
   icons/ab-16.png
   icons/ab-32.png
@@ -210,6 +210,14 @@ icons/adblock-picreplacement-images-dog.png = adblock-betafish/picreplacement/im
 icons/adblock-picreplacement-images-dog-grayscale.png = adblock-betafish/picreplacement/images/dog_grayscale.png
 icons/adblock-picreplacement-images-landscape.png = adblock-betafish/picreplacement/images/landscape.png
 icons/adblock-picreplacement-images-landscape-grayscale.png = adblock-betafish/picreplacement/images/landscape_grayscale.png
+icons/adblock-picreplacement-images-food.png = adblock-betafish/picreplacement/images/food.png
+icons/adblock-picreplacement-images-food-grayscale.png = adblock-betafish/picreplacement/images/food_grayscale.png
+icons/adblock-picreplacement-images-ocean.png = adblock-betafish/picreplacement/images/ocean.png
+icons/adblock-picreplacement-images-ocean-grayscale.png = adblock-betafish/picreplacement/images/ocean_grayscale.png
+icons/adblock-picreplacement-images-goat.png = adblock-betafish/picreplacement/images/goat.png
+icons/adblock-picreplacement-images-goat-grayscale.png = adblock-betafish/picreplacement/images/goat_grayscale.png
+icons/adblock-picreplacement-images-bird.png = adblock-betafish/picreplacement/images/bird.png
+icons/adblock-picreplacement-images-bird-grayscale.png = adblock-betafish/picreplacement/images/bird_grayscale.png
 fonts/lato-ext-italic.woff = adblock-betafish/fonts/lato-ext-italic.woff
 fonts/lato-italic.woff = adblock-betafish/fonts/lato-italic.woff
 fonts/lato-ext-bolditalic.woff = adblock-betafish/fonts/lato-ext-bolditalic.woff
@@ -266,6 +274,10 @@ lib/adblockplus.js +=
   ../adblock-betafish/picreplacement/dog-channel.js
   ../adblock-betafish/picreplacement/landscape-channel.js
   ../adblock-betafish/picreplacement/custom-channel.js
+  ../adblock-betafish/picreplacement/goat-channel.js
+  ../adblock-betafish/picreplacement/ocean-channel.js
+  ../adblock-betafish/picreplacement/birds-channel.js
+  ../adblock-betafish/picreplacement/food-channel.js
   ../adblock-betafish/picreplacement/unknown-channel.js
   ../adblock-betafish/picreplacement/check.js
   ../adblock-betafish/picreplacement/sync-service.js

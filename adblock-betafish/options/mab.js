@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global License, MABPayment, localizePage, activateTab, translate, backgroundPage */
+/* global License, MABPayment, localizePage, activateTab, translate, BG */
 
 $(() => {
   localizePage();
@@ -37,8 +37,8 @@ $(() => {
     activateTab($(this).attr('href'));
   });
 
-  if (backgroundPage && backgroundPage.getSettings()) {
-    const optionsTheme = backgroundPage.getSettings().color_themes.options_page;
+  if (BG && BG.getSettings()) {
+    const optionsTheme = BG.getSettings().color_themes.options_page;
     if (optionsTheme === 'dark_theme') {
       $('#themes-preview').attr('src', 'icons/themes_lighttext.svg');
     } else {

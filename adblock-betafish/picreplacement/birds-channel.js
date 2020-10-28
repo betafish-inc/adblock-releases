@@ -3,25 +3,26 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global Channel, Listing, require */
 
-const dogData = require('./data/dogs.json');
+const birdData = require('./data/birds.json');
 
-// Channel containing hard coded dogs loaded from CDN
+// Channel containing hard coded birds loaded from disk.
 // Subclass of Channel.
-function DogsChannel() {
+function BirdChannel() {
   Channel.call(this);
 }
-DogsChannel.prototype = {
+
+BirdChannel.prototype = {
   __proto__: Channel.prototype,
 
   getLatestListings(callback) {
     const listingArray = [];
-    for (const dog of dogData) {
-      listingArray.push(this.listingFactory(dog.width, dog.height, dog.url, 'This is a dog!', 'dogchannelswitchlabel'));
+    for (const bird of birdData) {
+      listingArray.push(this.listingFactory(bird.width, bird.height, bird.url, 'This is a bird!', 'birdchannelswitchlabel'));
     }
     callback(listingArray);
   },
 };
 
 Object.assign(window, {
-  DogsChannel,
+  BirdChannel,
 });

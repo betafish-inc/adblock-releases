@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global backgroundPage, parseUri, optionalSettings:true, abpPrefPropertyNames, settingsNotifier,
+/* global BG, parseUri, optionalSettings:true, abpPrefPropertyNames, settingsNotifier,
    DownloadableSubscription, Subscription, Prefs, synchronizer, filterStorage, filterNotifier,
    port, updateAcceptableAdsUI, activateTab, MABPayment, License, autoReloadingPage:true,
    updateAcceptableAdsUIFN */
@@ -18,10 +18,10 @@ try {
 // Check or uncheck each loaded DOM option checkbox according to the
 // user's saved settings.
 const initialize = function init() {
-  if (typeof backgroundPage.LocalCDN === 'object') {
+  if (typeof BG.LocalCDN === 'object') {
     $('#local_cdn_option').css('display', 'flex');
   }
-  const subs = backgroundPage.getSubscriptionsMinusText();
+  const subs = BG.getSubscriptionsMinusText();
 
   // if the user is currently subscribed to AA
   // then 'check' the acceptable ads button.
@@ -48,7 +48,7 @@ const initialize = function init() {
 
   for (const inx in abpPrefPropertyNames) {
     const name = abpPrefPropertyNames[inx];
-    $(`#prefs__${name}`).prop('checked', backgroundPage.Prefs[name]);
+    $(`#prefs__${name}`).prop('checked', BG.Prefs[name]);
   }
 
   const acceptableAdsPrivacyClicked = function (isEnabled) {
@@ -109,46 +109,46 @@ const initialize = function init() {
     // if the user enables/disables the context menu
     // update the pages
     if (name === 'shouldShowBlockElementMenu') {
-      backgroundPage.updateButtonUIAndContextMenus();
+      BG.updateButtonUIAndContextMenus();
     }
     if (abpPrefPropertyNames.indexOf(name) >= 0) {
-      backgroundPage.Prefs[name] = isEnabled;
+      BG.Prefs[name] = isEnabled;
       return;
     }
 
-    backgroundPage.setSetting(name, isEnabled, true);
+    BG.setSetting(name, isEnabled, true);
 
     // if the user enables/disable data collection
     // start or end the data collection process
     if (name === 'data_collection_v2') {
       if (isEnabled) {
-        backgroundPage.DataCollectionV2.start();
+        BG.DataCollectionV2.start();
       } else {
-        backgroundPage.DataCollectionV2.end();
+        BG.DataCollectionV2.end();
       }
     }
     // if the user enables/disable Local CDN
     // start or end the Local CDN
-    if (typeof backgroundPage.LocalCDN === 'object' && name === 'local_cdn') {
+    if (typeof BG.LocalCDN === 'object' && name === 'local_cdn') {
       if (isEnabled) {
-        backgroundPage.LocalCDN.start();
+        BG.LocalCDN.start();
       } else {
-        backgroundPage.LocalCDN.end();
+        BG.LocalCDN.end();
       }
     }
     // if the user enables/disable YouTube Channel allowlisting
     // add or remove history state listners
     if (name === 'youtube_channel_whitelist') {
       if (isEnabled) {
-        backgroundPage.addYTChannelListeners();
+        BG.addYTChannelListeners();
       } else {
         window.setTimeout(() => {
-          backgroundPage.setSetting('youtube_manage_subscribed', isEnabled, true);
+          BG.setSetting('youtube_manage_subscribed', isEnabled, true);
           $('#youtube_manage_subscribed_link').removeClass('link-text-color');
           $('#youtube_manage_subscribed_link').removeClass('pointer');
           $('#youtube_manage_subscribed_link').addClass('disabled-link-text-color');
         }, 250);
-        backgroundPage.removeYTChannelListeners();
+        BG.removeYTChannelListeners();
       }
     }
 
@@ -158,8 +158,8 @@ const initialize = function init() {
     if (name === 'youtube_manage_subscribed') {
       if (isEnabled && !optionalSettings.youtube_channel_whitelist) {
         window.setTimeout(() => {
-          backgroundPage.setSetting('youtube_channel_whitelist', isEnabled, true);
-          backgroundPage.addYTChannelListeners();
+          BG.setSetting('youtube_channel_whitelist', isEnabled, true);
+          BG.addYTChannelListeners();
         }, 250);
       }
       if (!isEnabled) {
@@ -177,18 +177,18 @@ const initialize = function init() {
     // add or remove listners
     if (name === 'twitch_channel_allowlist') {
       if (isEnabled) {
-        backgroundPage.addTwitchAllowlistListeners();
+        BG.addTwitchAllowlistListeners();
       } else {
-        backgroundPage.removeTwitchAllowlistListeners();
+        BG.removeTwitchAllowlistListeners();
       }
     }
 
-    optionalSettings = backgroundPage.getSettings();
+    optionalSettings = BG.getSettings();
   });
 
   $('#youtube_manage_subscribed_link').on('click', () => {
     if (optionalSettings && optionalSettings.youtube_manage_subscribed) {
-      backgroundPage.openYTManagedSubPage();
+      BG.openYTManagedSubPage();
     }
   });
 };
@@ -207,7 +207,7 @@ $('#enable_show_advanced_options').on('change', function onAdvancedOptionsChange
   // not end up with debug/beta/test options enabled.
   if (!this.checked) {
     $('.advanced input[type=\'checkbox\']:checked').each(function forEachAdvancedOption() {
-      backgroundPage.setSetting(this.id.substr(7), false);
+      BG.setSetting(this.id.substr(7), false);
     });
   }
 
@@ -264,14 +264,14 @@ port.onMessage.addListener((message) => {
   if (message.type === 'prefs.respond') {
     for (const inx in abpPrefPropertyNames) {
       const name = abpPrefPropertyNames[inx];
-      $(`#prefs__${name}`).prop('checked', backgroundPage.Prefs[name]);
+      $(`#prefs__${name}`).prop('checked', BG.Prefs[name]);
     }
   }
 });
 
 const onSubAdded = function (item) {
-  const acceptableAds = backgroundPage.Prefs.subscriptions_exceptionsurl;
-  const acceptableAdsPrivacy = backgroundPage.Prefs.subscriptions_exceptionsurl_privacy;
+  const acceptableAds = BG.Prefs.subscriptions_exceptionsurl;
+  const acceptableAdsPrivacy = BG.Prefs.subscriptions_exceptionsurl_privacy;
 
   if (item && item.url === acceptableAds) {
     updateAcceptableAdsUI(true, false);
@@ -282,8 +282,8 @@ const onSubAdded = function (item) {
 filterNotifier.on('subscription.added', onSubAdded);
 
 const onSubRemoved = function (item) {
-  const aa = backgroundPage.Prefs.subscriptions_exceptionsurl;
-  const aaPrivacy = backgroundPage.Prefs.subscriptions_exceptionsurl_privacy;
+  const aa = BG.Prefs.subscriptions_exceptionsurl;
+  const aaPrivacy = BG.Prefs.subscriptions_exceptionsurl_privacy;
   const aaSubscribed = filterStorage.hasSubscription(aa);
   const aaPrivacySubscribed = filterStorage.hasSubscription(aaPrivacy);
 

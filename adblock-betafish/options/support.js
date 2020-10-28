@@ -1,10 +1,10 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, backgroundPage, selected, browser */
+/* global browser, BG, selected, browser, determineUserLanguage */
 
 $(() => {
-  if (navigator.language.substring(0, 2) !== 'en') {
+  if (!determineUserLanguage().startsWith('en')) {
     $('.english-only').removeClass('do-not-display');
   }
   // Show debug info
@@ -16,7 +16,7 @@ $(() => {
         .fadeIn();
     };
     // Get debug info
-    backgroundPage.getDebugInfo((theDebugInfo) => {
+    BG.getDebugInfo((theDebugInfo) => {
       const content = [];
       if (theDebugInfo.subscriptions) {
         content.push('=== Filter Lists ===');
@@ -107,13 +107,13 @@ $(() => {
 
   // Show the changelog
   selected('#whatsnew_link', () => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', browser.runtime.getURL('CHANGELOG.txt'), false);
-    xhr.send();
-    const object = xhr.responseText;
-    $('#changes').text(object).css({ width: '670px', height: '200px' }).fadeIn();
-    $('body, html').animate({
-      scrollTop: $('#changes').offset().top,
-    }, 1000);
+    fetch(browser.runtime.getURL('CHANGELOG.txt'))
+      .then(response => response.text())
+      .then((text) => {
+        $('#changes').text(text).css({ width: '670px', height: '200px' }).fadeIn();
+        $('body, html').animate({
+          scrollTop: $('#changes').offset().top,
+        }, 1000);
+      });
   });
 });

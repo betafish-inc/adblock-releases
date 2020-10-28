@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, backgroundPage, optionalSettings, Subscription, filterStorage, filterNotifier,
+/* global browser, BG, optionalSettings, Subscription, filterStorage, filterNotifier,
 syncErrorCode, parseFilter, translate, checkForSyncError, isSelectorFilter, activateTab, License,
 MABPayment, DOMPurify */
 
@@ -9,19 +9,19 @@ let originalCustomFilters;
 
 function cleanCustomFilter(filters) {
   // Remove the global pause white-list item if adblock is paused
-  if (backgroundPage.adblockIsPaused()) {
-    let index = filters.indexOf(backgroundPage.pausedFilterText1);
+  if (BG.adblockIsPaused()) {
+    let index = filters.indexOf(BG.pausedFilterText1);
     if (index >= 0) {
       filters.splice(index, 1);
     }
-    index = filters.indexOf(backgroundPage.pausedFilterText2);
+    index = filters.indexOf(BG.pausedFilterText2);
     if (index >= 0) {
       filters.splice(index, 1);
     }
   }
 
   // Remove the domain pause white-list items
-  const domainPauses = backgroundPage.adblockIsDomainPaused();
+  const domainPauses = BG.adblockIsDomainPaused();
   for (const aDomain in domainPauses) {
     const index = filters.indexOf(`@@${aDomain}$document`);
     if (index >= 0) {
@@ -45,7 +45,7 @@ function onFilterChange() {
     newStyle.sheet.insertRule('.btn:hover { font-weight: normal !important; cursor: unset !important; box-shadow: none !important; }', 0);
     return;
   }
-  const userFilters = backgroundPage.getUserFilters();
+  const userFilters = BG.getUserFilters();
   if (userFilters && userFilters.length) {
     originalCustomFilters = cleanCustomFilter(userFilters);
     $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));
@@ -56,7 +56,7 @@ function onFilterChange() {
 }
 
 $(() => {
-  $('#tutorlink').attr('href', backgroundPage.Prefs.getDocLink('filterdoc'));
+  $('#tutorlink').attr('href', BG.Prefs.getDocLink('filterdoc'));
 
   const getExcludeFilters = function () {
     const excludeFiltersKey = 'exclude_filters';
@@ -99,7 +99,7 @@ $(() => {
       }
     }
 
-    backgroundPage.updateCustomFilterCountMap(newCount);
+    BG.updateCustomFilterCountMap(newCount);
   }
 
   function saveFilters() {
@@ -125,7 +125,7 @@ $(() => {
       $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
       $('#messagecustom').removeClass('do-not-display');
     } else {
-      if (backgroundPage.adblockIsPaused()) {
+      if (BG.adblockIsPaused()) {
         customFiltersArray.push('@@');
         customFiltersArray.push('@@^$document');
       }
@@ -380,7 +380,7 @@ $(() => {
 
   $('#btnSaveExcludeAdvancedFilters').on('click', checkForSyncError(() => {
     const excludeFiltersText = $('#txtExcludeFiltersAdvanced').val();
-    backgroundPage.ExcludeFilter.setExcludeFilters(excludeFiltersText);
+    BG.ExcludeFilter.setExcludeFilters(excludeFiltersText);
     $('#divAddNewFilter').slideDown();
     $('#txtExcludeFiltersAdvanced').attr('disabled', 'disabled');
     $('#spanSaveExcludeButton').hide();
@@ -389,7 +389,7 @@ $(() => {
     MABPayment.displaySyncCTAs(true);
   }));
 
-  const userFilters = backgroundPage.getUserFilters();
+  const userFilters = BG.getUserFilters();
   if (userFilters && userFilters.length) {
     originalCustomFilters = cleanCustomFilter(userFilters);
     $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));

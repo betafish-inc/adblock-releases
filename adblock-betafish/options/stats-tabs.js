@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global Chart, browser, License, localizePage, backgroundPage
+/* global Chart, browser, License, localizePage, BG
    DOMPurify,translate, filterNotifier, subscription, synchronizer,
    filterStorage, Subscription, activateTab, channels */
 
@@ -13,8 +13,8 @@ const adsBlockedColor = getComputedStyle(document.body).getPropertyValue('--ads-
 const trackersBlockedColor = getComputedStyle(document.body).getPropertyValue('--trackers-blocked-color').trim();
 const adsReplacedColor = getComputedStyle(document.body).getPropertyValue('--ads-replaced-color').trim();
 
-const { channels } = backgroundPage;
-let subs = backgroundPage.getSubscriptionsMinusText();
+const { channels } = BG;
+let subs = BG.getSubscriptionsMinusText();
 window.theChart = undefined; // needs to be in the global name space.
 let labelData = [];
 let adChartData = [];
@@ -28,7 +28,7 @@ let showAdsData = true;
 let showTrackerData = true;
 let showReplacedData = true;
 
-const { EXT_STATS_KEY } = backgroundPage.LocalDataCollection;
+const { EXT_STATS_KEY } = BG.LocalDataCollection;
 
 const addResizeHandler = function () {
   if (window.resizeHandler) {
@@ -48,7 +48,7 @@ const addResizeHandler = function () {
 };
 
 const showOrHideNoDataMsgIfNeeded = function () {
-  if (backgroundPage.getSettings().local_data_collection) {
+  if (BG.getSettings().local_data_collection) {
     if ($.isEmptyObject(rawData)) {
       $('#no-data-overlay').show();
     } else {
@@ -59,14 +59,14 @@ const showOrHideNoDataMsgIfNeeded = function () {
 };
 
 const showOrHideAdPanelCountNeeded = function () {
-  if (backgroundPage.getSettings().local_data_collection && showAdsData) {
+  if (BG.getSettings().local_data_collection && showAdsData) {
     showAdsData = false;
     $('#adsblocked_value').hide();
     $('#adsblocked_panel').css({ background: '#dadada' });
     $('#adblocked_off_icon').show();
     $('#adsblocked_header span[i18n="stats_hide_data"]').text(translate('stats_show_data'));
     $('#adsblocked_header i').text('remove_red_eye');
-  } else if (backgroundPage.getSettings().local_data_collection && !showAdsData) {
+  } else if (BG.getSettings().local_data_collection && !showAdsData) {
     showAdsData = true;
     $('#adsblocked_panel').css({ background: '#ffffff' });
     $('#adblocked_off_icon').hide();
@@ -78,7 +78,7 @@ const showOrHideAdPanelCountNeeded = function () {
 
 const showOrHideTrackerPanelCountNeeded = function () {
   if (
-    backgroundPage.getSettings().local_data_collection
+    BG.getSettings().local_data_collection
     && subs.easyprivacy
     && subs.easyprivacy.subscribed
   ) {
@@ -102,7 +102,7 @@ const showOrHideTrackerPanelCountNeeded = function () {
 
 const showOrHideReplacedPanelCountNeeded = function () {
   if (
-    backgroundPage.getSettings().local_data_collection
+    BG.getSettings().local_data_collection
         && License.isActiveLicense()
         && channels
         && channels.isAnyEnabled()
@@ -1048,18 +1048,18 @@ const updateChart = function (chartType = 'line', filterName, labelName) {
 };
 
 const initializeStatsTabContent = function () {
-  if (!backgroundPage.getSettings().local_data_collection) {
+  if (!BG.getSettings().local_data_collection) {
     $('#opt-in-panel').css('display', 'flex').hide().fadeIn();
     $('li a').css({ cursor: 'default' });
     $('#stats_enable_data_collection').prop('checked', false);
     const myChartCTX = document.getElementById('myChart').getContext('2d');
     window.theChart = new Chart(myChartCTX, sampleChartConfig);
-    if (backgroundPage.getSettings().data_collection_v2) {
+    if (BG.getSettings().data_collection_v2) {
       $('#opt_in_data_collection').hide();
       $('#stats_opt_in_msg').hide();
       $('#already_opt_in_msg').show();
       $('#btnStatsOptIn').html(DOMPurify.sanitize(translate('stats_opt_in_local_text_button')));
-    } else if (!backgroundPage.getSettings().data_collection_v2) {
+    } else if (!BG.getSettings().data_collection_v2) {
       $('#opt_in_data_collection').css('display', 'inline');
       $('#stats_opt_in_msg').show();
       $('#already_opt_in_msg').hide();
@@ -1109,7 +1109,7 @@ const resetPageToInitialState = function () {
   $('.active-stats-sub-menu-item').removeClass('active-stats-sub-menu-item');
   $('#timeBlocks [data-filter-function-name="today"]').parent().addClass('active-stats-sub-menu-item');
   // reset global vars
-  subs = backgroundPage.getSubscriptionsMinusText();
+  subs = BG.getSubscriptionsMinusText();
   showAdsData = false;
   showTrackerData = false;
   showReplacedData = false;
@@ -1122,7 +1122,7 @@ const resetPageToInitialState = function () {
 };
 
 $(() => {
-  backgroundPage.LocalDataCollection.saveCacheData(() => {
+  BG.LocalDataCollection.saveCacheData(() => {
     initializeStatsTabContent();
   });
   localizePage();
@@ -1145,11 +1145,11 @@ $(() => {
 // button click handlers
 
 $('#btnStatsOptIn').on('click', () => {
-  backgroundPage.LocalDataCollection.start(() => {
+  BG.LocalDataCollection.start(() => {
     // this check is nested in a callback to prevent data loss when
     // the setSetting function is called quickly in succession
     if ($('#stats_enable_data_collection').is(':checked')) {
-      backgroundPage.setSetting('data_collection_v2', true);
+      BG.setSetting('data_collection_v2', true);
     }
     window.location.reload();
   });
@@ -1158,7 +1158,7 @@ $('#btnStatsOptIn').on('click', () => {
 // menu item click handlers
 
 $('#stats-menu-level2 a').on('click', function statsOptionLinkClicked() {
-  if (!backgroundPage.getSettings().local_data_collection) {
+  if (!BG.getSettings().local_data_collection) {
     return;
   }
   $('#no-click-overlay').show();
@@ -1180,7 +1180,7 @@ $('#stats-menu-level2 a').on('click', function statsOptionLinkClicked() {
 });
 
 $('.chart-parent-tab-link').on('click', function statsOptionLinkClicked() {
-  if (!backgroundPage.getSettings().local_data_collection) {
+  if (!BG.getSettings().local_data_collection) {
     return;
   }
   $('#no-click-overlay').show();
@@ -1202,7 +1202,7 @@ $('.chart-parent-tab-link').on('click', function statsOptionLinkClicked() {
 // buttons on CTA panels click handlers
 
 $('#aTrackersEnable, #btnTrackersEnable').on('click', () => {
-  if (!backgroundPage.getSettings().local_data_collection) {
+  if (!BG.getSettings().local_data_collection) {
     return;
   }
   $('#no-click-overlay').show();
@@ -1211,7 +1211,7 @@ $('#aTrackersEnable, #btnTrackersEnable').on('click', () => {
   $('#trackers_cta_msg_link').parent().parent().fadeOut(100, () => {
     $('#trackers_cta_progress_div').css('display', 'flex').hide().fadeIn();
   });
-  const { easyPrivacyURL } = backgroundPage.LocalDataCollection;
+  const { easyPrivacyURL } = BG.LocalDataCollection;
   const onStatsSubUpdated = function (item) {
     if (
       item
@@ -1237,7 +1237,7 @@ $('#aTrackersEnable, #btnTrackersEnable').on('click', () => {
 });
 
 $('#btnGetPremium').on('click', () => {
-  backgroundPage.openTab(License.MAB_CONFIG.payURL);
+  BG.openTab(License.MAB_CONFIG.payURL);
 });
 
 $('#btnImageSwapEnable').on('click', () => {
@@ -1326,8 +1326,8 @@ $('#delete_all_stats_data, #local_data_collection_opt_out').on('change', () => {
 $('#btnSureDelete').on('click', () => {
   const checkOtherCheckBox = function () {
     if ($('#local_data_collection_opt_out').is(':checked')) {
-      backgroundPage.LocalDataCollection.end(() => {
-        backgroundPage.DataCollectionV2.end(() => {
+      BG.LocalDataCollection.end(() => {
+        BG.DataCollectionV2.end(() => {
           window.location.reload();
         });
       });
@@ -1337,7 +1337,7 @@ $('#btnSureDelete').on('click', () => {
   };
   if ($('#delete_all_stats_data').is(':checked')) {
     browser.storage.local.remove(EXT_STATS_KEY).then(() => {
-      backgroundPage.LocalDataCollection.clearCache();
+      BG.LocalDataCollection.clearCache();
       checkOtherCheckBox();
     });
   } else {

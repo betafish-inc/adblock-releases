@@ -1,8 +1,9 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global backgroundPage, License, localizePage, SyncService, translate, FIVE_SECONDS,
-   settingsNotifier, processReplacementChildren, MABPayment, storageSet, storageGet */
+/* global BG, License, localizePage, SyncService, translate, FIVE_SECONDS,
+   settingsNotifier, processReplacementChildren, MABPayment, storageSet, storageGet,
+   determineUserLanguage */
 
 const onSyncDataInitialGetError = function () {
   $('#show-name-div').hide();
@@ -51,7 +52,7 @@ const onSyncDataInitialGetError = function () {
         const now = new Date();
         const timestampMsg = translate(
           'sync_device_name_list_updated_at_msg',
-          now.toLocaleString(navigator.languages[0], dateFormatOptions),
+          now.toLocaleString(determineUserLanguage(), dateFormatOptions),
         );
         $('#last-updated-on').text(timestampMsg);
         if (!deviceNameArray.length && !currentExtensionName) {
@@ -185,7 +186,7 @@ const onSyncDataInitialGetError = function () {
 
     $('#extension-delete-button').on('click', () => {
       $('#last-sync-now').hide();
-      backgroundPage.setSetting('sync_settings', false);
+      BG.setSetting('sync_settings', false);
       SyncService.removeCurrentExtensionName();
       SyncService.disableSync();
       removeSyncListeners();
@@ -268,7 +269,7 @@ const onSyncDataInitialGetError = function () {
         getAllExtensionNames();
         const currentExtensionName = SyncService.getCurrentExtensionName();
         $('#sync-info-block').show();
-        if (currentExtensionName && backgroundPage.getSettings().sync_settings) {
+        if (currentExtensionName && BG.getSettings().sync_settings) {
           $('#last-sync-now').show();
           $('#btnAddThisExtension').hide();
         } else {

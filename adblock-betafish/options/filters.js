@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global backgroundPage, synchronizer, optionalSettings, Subscription, filterStorage,
+/* global BG, synchronizer, optionalSettings, Subscription, filterStorage,
    filterNotifier, translate, DownloadableSubscription, updateAcceptableAdsUI, port,
    delayedSubscriptionSelection, startSubscriptionSelection, selected, activateTab, License,
    MABPayment, getStorageCookie, setStorageCookie, THIRTY_MINUTES_IN_MILLISECONDS */
@@ -84,10 +84,10 @@ FilterListUtil.sortFilterListArrays = () => {
   }
   // Move AA privacy after AA
   const aaSection = filterListSections.adblockFilterList.array;
-  const aaPrivacyIndex = aaSection.findIndex(list => backgroundPage.isAcceptableAdsPrivacy(list));
+  const aaPrivacyIndex = aaSection.findIndex(list => BG.isAcceptableAdsPrivacy(list));
   if (aaPrivacyIndex > -1) {
     const aaPrivacyFilter = aaSection.splice(aaPrivacyIndex, 1)[0];
-    let aaIndex = aaSection.findIndex(filterList => backgroundPage.isAcceptableAds(filterList));
+    let aaIndex = aaSection.findIndex(filterList => BG.isAcceptableAds(filterList));
     if (aaIndex > -1) {
       aaSection.splice(aaIndex += 1, 0, aaPrivacyFilter);
     }
@@ -169,7 +169,7 @@ FilterListUtil.updateSubscriptionInfoForId = (id) => {
   if (subscription.subscribed === false) {
     return;
   }
-  if (backgroundPage.isAcceptableAdsPrivacy(subscription)) {
+  if (BG.isAcceptableAdsPrivacy(subscription)) {
     $div = $('[name=acceptable_ads]');
   }
   const $infoLabel = $('.subscription_info', $div);
@@ -234,7 +234,7 @@ FilterListUtil.updateCheckbox = (filterList, id) => {
   const $checkbox = $($containingDiv).find('input');
   const $filterLink = $($containingDiv).find('a.filter-list-link');
   const aaPrivacy = FilterListUtil.cachedSubscriptions.acceptable_ads_privacy;
-  const isAcceptableAds = backgroundPage.isAcceptableAds(filterList);
+  const isAcceptableAds = BG.isAcceptableAds(filterList);
 
   // Keep AA checkbox selected when AA Privacy is subscribed
   // and assign the AA Privacy filter URL to the AA link icon
@@ -269,7 +269,7 @@ function SubscriptionUtil() {
 SubscriptionUtil.validateOverSubscription = (clicked) => {
   const totalSelected = $('.subscription :checked').length;
   const aaSelected = $('[name=acceptable_ads] :checked').length;
-  const aaPrivacyClicked = backgroundPage.isAcceptableAdsPrivacy(clicked);
+  const aaPrivacyClicked = BG.isAcceptableAdsPrivacy(clicked);
 
   if (totalSelected <= 6) {
     return true;
@@ -298,7 +298,7 @@ SubscriptionUtil.validateOverSubscription = (clicked) => {
 // all filter lists.
 SubscriptionUtil.validateUnderSubscription = (clicked) => {
   const totalSelected = $('.subscription :checked').length;
-  const aaClicked = backgroundPage.isAcceptableAds(clicked);
+  const aaClicked = BG.isAcceptableAds(clicked);
   const aaPrivacySelected = $('[name=acceptable_ads_privacy] :checked').length;
 
   // If the user unsubscribe to AA while the only other selection is AA Privacy
@@ -348,11 +348,11 @@ SubscriptionUtil.subscribe = (id, title) => {
     synchronizer.execute(subscription);
   }
 
-  if (backgroundPage.isAcceptableAds(cachedSubscription)) {
+  if (BG.isAcceptableAds(cachedSubscription)) {
     updateAcceptableAdsUI(true, false);
   }
 
-  if (backgroundPage.isAcceptableAdsPrivacy(cachedSubscription)) {
+  if (BG.isAcceptableAdsPrivacy(cachedSubscription)) {
     const aa = FilterListUtil.cachedSubscriptions.acceptable_ads;
     filterStorage.removeSubscription(Subscription.fromURL(aa.url));
     updateAcceptableAdsUI(true, true);
@@ -375,13 +375,13 @@ SubscriptionUtil.unsubscribe = (id) => {
     filterStorage.removeSubscription(subscription);
   }, 1);
 
-  if (backgroundPage.isAcceptableAds(cachedSubscription)) {
+  if (BG.isAcceptableAds(cachedSubscription)) {
     const aaPrivacy = FilterListUtil.cachedSubscriptions.acceptable_ads_privacy;
     filterStorage.removeSubscription(Subscription.fromURL(aaPrivacy.url));
     updateAcceptableAdsUI(false, false);
   }
 
-  if (backgroundPage.isAcceptableAdsPrivacy(cachedSubscription)) {
+  if (BG.isAcceptableAdsPrivacy(cachedSubscription)) {
     SubscriptionUtil.subscribe('acceptable_ads');
     FilterListUtil.cachedSubscriptions.acceptable_ads.subscribed = true;
     updateAcceptableAdsUI(true, false);
@@ -408,7 +408,7 @@ SubscriptionUtil.updateCacheValue = (id) => {
 };
 
 function getDefaultFilterUI(filterList, checkboxID, filterListType) {
-  const isAcceptableAds = backgroundPage.isAcceptableAds(filterList);
+  const isAcceptableAds = BG.isAcceptableAds(filterList);
   const isLanguageFilter = filterListType === 'languageFilterList';
   const aaPrivacy = FilterListUtil.cachedSubscriptions.acceptable_ads_privacy;
   let isSelected = filterList.subscribed;
@@ -574,7 +574,7 @@ function CheckboxForFilterList(filterList, filterListType, index, container) {
   const id = `${filterListType}_${index}`;
   let uiItems = {};
 
-  if (backgroundPage.isAcceptableAdsPrivacy(this.filterList)) {
+  if (BG.isAcceptableAdsPrivacy(this.filterList)) {
     uiItems = getToggleFilterUI(this.filterList, id);
   } else {
     uiItems = getDefaultFilterUI(this.filterList, id, filterListType);
@@ -626,7 +626,7 @@ CheckboxForFilterList.prototype = {
           $(this).prop('checked', false);
           return;
         }
-        if (backgroundPage.isAcceptableAdsPrivacy(that.filterList)) {
+        if (BG.isAcceptableAdsPrivacy(that.filterList)) {
           $('.subscription_info', '[name=acceptable_ads]').text(translate('fetchinglabel'));
         } else {
           $('.subscription_info', $subscription).text(translate('fetchinglabel'));
@@ -894,7 +894,7 @@ function onFilterChangeHandler(action, item) {
           FilterListUtil.cachedSubscriptions[entry.id][properties[i]] = entry[properties[i]];
         }
       }
-      entry.language = backgroundPage.isLanguageSpecific(entry.id);
+      entry.language = BG.isLanguageSpecific(entry.id);
 
       if (eventAction && eventAction === 'subscription.added') {
         FilterListUtil.cachedSubscriptions[entry.id].subscribed = true;
@@ -929,7 +929,7 @@ function onFilterChangeHandler(action, item) {
       updateEntry(itemToUpdateWithId, action);
     };
 
-    let id = backgroundPage.getIdFromURL(item.url);
+    let id = BG.getIdFromURL(item.url);
     const { param1, param2 } = window; // TODO: remove if legacy code
 
     if (id) {
@@ -951,12 +951,12 @@ function onFilterChangeHandler(action, item) {
     } if (action === 'subscription.title' && param1) {
       // or if the URL changed due to a redirect, we may not be able to determine
       // the correct id, but should be able to using one of the params
-      id = backgroundPage.getIdFromURL(param1);
+      id = BG.getIdFromURL(param1);
       if (id) {
         updateItem(item, id);
         return;
       }
-      id = backgroundPage.getIdFromURL(param2);
+      id = BG.getIdFromURL(param2);
       if (id) {
         updateItem(item, id);
         return;
@@ -964,7 +964,7 @@ function onFilterChangeHandler(action, item) {
     }
   }
   // If we didn't get an entry or id, loop through all of the subscriptions.
-  const subs = backgroundPage.getAllSubscriptionsMinusText();
+  const subs = BG.getAllSubscriptionsMinusText();
   const { cachedSubscriptions } = FilterListUtil;
   for (const id in cachedSubscriptions) {
     const entry = subs[id];
@@ -974,7 +974,7 @@ function onFilterChangeHandler(action, item) {
 
 $(() => {
   // Retrieves list of filter lists from the background.
-  const subs = backgroundPage.getAllSubscriptionsMinusText();
+  const subs = BG.getAllSubscriptionsMinusText();
   // Initialize page using subscriptions from the background.
   // Copy from update subscription list + setsubscriptionlist
   FilterListUtil.prepareSubscriptions(subs);
@@ -1049,7 +1049,7 @@ $(() => {
 
   $('#btnUpdateNow').on('click', function updateFilterListsNow() {
     $(this).prop('disabled', true);
-    backgroundPage.updateFilterLists();
+    BG.updateFilterLists();
     setTimeout(() => {
       $('#btnUpdateNow').prop('disabled', false);
     }, 300000); // Re-enable update button after 5 minutes.

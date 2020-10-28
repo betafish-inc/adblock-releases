@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, License, localizePage, getUILanguage, getStorageCookie, setStorageCookie,
+/* global browser, License, localizePage, determineUserLanguage, getStorageCookie, setStorageCookie,
    THIRTY_MINUTES_IN_MILLISECONDS */
 
 function tabIsLocked(tabID) {
@@ -123,8 +123,8 @@ function activateTab(tabHref) {
 // Premium - Image Swap
 // Premium - Sync
 const displayMABFeedbackCTA = function () {
-  const lang = getUILanguage();
-  if (lang === 'en' || lang.startsWith('en-')) {
+  const lang = determineUserLanguage();
+  if (lang === 'en' || lang.startsWith('en')) {
     $('div.mab-page-box > .option-page-content > footer').removeAttr('style');
     const $feedbackButton = $('.mab-feedback-button');
     $feedbackButton.on('click', (e) => {

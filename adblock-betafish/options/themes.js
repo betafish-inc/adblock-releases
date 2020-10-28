@@ -1,17 +1,17 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global backgroundPage, translate, License, MABPayment, settingsNotifier, localizePage */
+/* global BG, translate, License, MABPayment, settingsNotifier, localizePage */
 
 (function onThemesLoaded() {
   const updateThemeSettings = ($newTheme) => {
     const key = $newTheme.data('key');
     const newTheme = $newTheme.data('theme');
     // get local copy of the Color Themes object
-    const colorThemes = JSON.parse(JSON.stringify(backgroundPage.getSettings().color_themes));
+    const colorThemes = JSON.parse(JSON.stringify(BG.getSettings().color_themes));
 
     colorThemes[key] = newTheme;
-    backgroundPage.setSetting('color_themes', colorThemes);
+    BG.setSetting('color_themes', colorThemes);
     window.location.reload();
   };
 
@@ -21,7 +21,7 @@
     }
     const $selectedTheme = $(changeEvent.target).closest('.theme-box');
     if ($selectedTheme.closest('.theme-wrapper').hasClass('locked')) {
-      backgroundPage.openTab(License.MAB_CONFIG.payURL);
+      BG.openTab(License.MAB_CONFIG.payURL);
       return;
     }
     const $otherThemes = $selectedTheme.closest('section').find('.theme-box').not($selectedTheme);
@@ -33,8 +33,8 @@
   };
 
   const selectCurrentThemes = (currentThemes) => {
-    const popupMenuTheme = backgroundPage.isValidTheme(currentThemes.popup_menu) ? currentThemes.popup_menu : 'default_theme';
-    const optionsPageTheme = backgroundPage.isValidTheme(currentThemes.options_page) ? currentThemes.options_page : 'default_theme';
+    const popupMenuTheme = BG.isValidTheme(currentThemes.popup_menu) ? currentThemes.popup_menu : 'default_theme';
+    const optionsPageTheme = BG.isValidTheme(currentThemes.options_page) ? currentThemes.options_page : 'default_theme';
 
     // reset selected theme
     $('.popup-menu-themes .selected').removeClass('selected');
@@ -125,8 +125,8 @@
 
   $(() => {
     let colorThemes = {};
-    if (backgroundPage && backgroundPage.getSettings()) {
-      colorThemes = backgroundPage.getSettings().color_themes;
+    if (BG && BG.getSettings()) {
+      colorThemes = BG.getSettings().color_themes;
     }
     $('.theme-wrapper:not(.locked) .overlay-icon').each(function i18nSupport() {
       const $preview = $(this);

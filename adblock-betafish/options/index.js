@@ -3,35 +3,35 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, getSettings, translate, FilterListUtil, activateTab,
    CustomFilterListUploadUtil, localizePage, storageSet, chromeStorageSetHelper,
-   chromeStorageGetHelper, debounced */
+   chromeStorageGetHelper, debounced, determineUserLanguage */
 
-const backgroundPage = browser.extension.getBackgroundPage();
-const { Filter } = backgroundPage;
-const { WhitelistFilter } = backgroundPage;
-const { Subscription } = backgroundPage;
-const { SpecialSubscription } = backgroundPage;
-const { DownloadableSubscription } = backgroundPage;
-const { parseFilter } = backgroundPage;
-const { filterStorage } = backgroundPage;
-const { filterNotifier } = backgroundPage;
-const { settingsNotifier } = backgroundPage;
-const { channelsNotifier } = backgroundPage;
-const { Prefs } = backgroundPage;
-const { synchronizer } = backgroundPage;
-const { isSelectorFilter } = backgroundPage;
-const { isWhitelistFilter } = backgroundPage;
-const { isSelectorExcludeFilter } = backgroundPage;
-const { License } = backgroundPage;
-const { SyncService } = backgroundPage;
-const { isValidTheme } = backgroundPage;
-const { abpPrefPropertyNames } = backgroundPage;
-const { info } = backgroundPage;
-const { rateUsCtaKey, vpnWaitlistCtaKey } = backgroundPage;
+const BG = browser.extension.getBackgroundPage();
+const { Filter } = BG;
+const { WhitelistFilter } = BG;
+const { Subscription } = BG;
+const { SpecialSubscription } = BG;
+const { DownloadableSubscription } = BG;
+const { parseFilter } = BG;
+const { filterStorage } = BG;
+const { filterNotifier } = BG;
+const { settingsNotifier } = BG;
+const { channelsNotifier } = BG;
+const { Prefs } = BG;
+const { synchronizer } = BG;
+const { isSelectorFilter } = BG;
+const { isWhitelistFilter } = BG;
+const { isSelectorExcludeFilter } = BG;
+const { License } = BG;
+const { SyncService } = BG;
+const { isValidTheme } = BG;
+const { abpPrefPropertyNames } = BG;
+const { info } = BG;
+const { rateUsCtaKey, vpnWaitlistCtaKey } = BG;
 const FIVE_SECONDS = 5000;
 const TWENTY_SECONDS = FIVE_SECONDS * 4;
 let autoReloadingPage;
 
-const language = navigator.language.match(/^[a-z]+/i)[0];
+const language = determineUserLanguage();
 let optionalSettings = {};
 let delayedSubscriptionSelection = null;
 const port = browser.runtime.connect({ name: 'ui' });
@@ -55,22 +55,31 @@ function displayVersionNumber() {
 }
 
 function displayTranslationCredit() {
-  if (navigator.language.substring(0, 2) === 'en') {
+  if (language === 'en' || language.startsWith('en')) {
     return;
   }
   const translators = [];
 
   $.getJSON(browser.runtime.getURL('translators.json'), (response) => {
-    const lang = navigator.language;
     let matchFound = false;
+    const langSubstring = language.substring(0, 2);
+    let langEnd = '';
+    if (language.length >= 5) {
+      langEnd = language.substring(3, 5).toLowerCase();
+    }
     for (const id in response) {
-      const langSubstring = lang.substring(0, 2);
-      const idEqualToLang = id === lang || id === lang.toLowerCase();
-      const idEqualToLangSubstring = id === langSubstring || id === langSubstring.toLowerCase();
+      const idEqualToLang = id === language || id === language.toLowerCase();
+      const idEqualToLangSubstring = id.substring(0, 2) === langSubstring
+        || id.substring(0, 2) === langSubstring.toLowerCase();
 
       // if matching id hasn't been found and id matches lang
-      if (!matchFound && (idEqualToLang || idEqualToLangSubstring)) {
+      if (
+        !matchFound
+        && (idEqualToLang || idEqualToLangSubstring)
+        && (((id.length <= 3) || (id.length >= 5 && langEnd === id.substring(3, 5).toLowerCase())))
+      ) {
         matchFound = true;
+
         // Check if this language is professionally translated
         const professionalLang = response[id].professional;
         for (const translator in response[id].translators) {
@@ -160,8 +169,8 @@ window.addEventListener('unload', () => port.disconnect());
 
 function setSelectedThemeColor() {
   let optionsTheme = 'default_theme';
-  if (backgroundPage && backgroundPage.getSettings()) {
-    const settings = backgroundPage.getSettings();
+  if (BG && BG.getSettings()) {
+    const settings = BG.getSettings();
     optionsTheme = settings.color_themes.options_page;
   }
   $('body').attr('id', optionsTheme).data('theme', optionsTheme);
@@ -310,15 +319,15 @@ const addSyncListeners = function () {
 };
 
 function loadOptionalSettings() {
-  if (backgroundPage && typeof backgroundPage.getSettings !== 'function') {
+  if (BG && typeof BG.getSettings !== 'function') {
     // if the backgroudPage isn't available, wait 50 ms, and reload page
     window.setTimeout(() => {
       window.location.reload();
     }, 50);
   }
-  if (backgroundPage && typeof backgroundPage.getSettings === 'function') {
+  if (BG && typeof BG.getSettings === 'function') {
     // Check or uncheck each option.
-    optionalSettings = backgroundPage.getSettings();
+    optionalSettings = BG.getSettings();
   }
   if (optionalSettings && optionalSettings.sync_settings) {
     addSyncListeners();
