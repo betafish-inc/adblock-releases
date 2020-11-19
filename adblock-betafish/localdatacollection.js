@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, require, ext, exports, chromeStorageSetHelper, getSettings, adblockIsPaused,
    adblockIsDomainPaused, filterStorage, Filter, parseUri, settings, getAllSubscriptionsMinusText,
-   getUserFilters, Utils, replacedCounts, setSetting */
+   getUserFilters, Utils, replacedCounts, setSetting, storageGet, storageSet */
 
 const { extractHostFromFrame } = require('url');
 const { ElemHideFilter } = require('filterClasses');
@@ -16,6 +16,7 @@ const LocalDataCollection = (function getLocalDataCollection() {
   const FIFTEEN_MINS = 1000 * 60 * 15;
   let intervalFN;
   const EXT_STATS_KEY = 'ext_stats_key';
+  const STORED_DATA_CLEAN = 'STORED_DATA_CLEAN';
 
   // Setup memory cache
   let dataCollectionCache = {};
@@ -146,6 +147,40 @@ const LocalDataCollection = (function getLocalDataCollection() {
     }
   };
 
+  // 'clean' the stored data
+  // there was a bug that allowed blank domains ("") to be saved in the data
+  // the following code removes the blank domain
+  // this function only needs to run once
+  const cleanStoredData = function () {
+    if (storageGet(STORED_DATA_CLEAN)) {
+      return;
+    }
+    browser.storage.local.get(LocalDataCollection.EXT_STATS_KEY).then((hourlyResponse) => {
+      const savedData = hourlyResponse[LocalDataCollection.EXT_STATS_KEY] || {};
+      const parsedData = {};
+      for (const timestamp in savedData) {
+        if (!Number.isNaN(timestamp)) {
+          for (const domain in savedData[timestamp].doms) {
+            if (domain && domain.length > 1) { // check if domain is not blank
+              const domData = savedData[timestamp].doms[domain];
+              if (!parsedData[timestamp]) {
+                parsedData[timestamp] = {};
+                parsedData[timestamp].v = '1';
+                parsedData[timestamp].doms = {};
+              }
+              parsedData[timestamp].doms[domain] = {};
+              parsedData[timestamp].doms[domain].ads = domData.ads;
+              parsedData[timestamp].doms[domain].trackers = domData.trackers;
+              parsedData[timestamp].doms[domain].adsReplaced = domData.adsReplaced;
+            }
+          }
+        }
+      }
+      chromeStorageSetHelper(LocalDataCollection.EXT_STATS_KEY, parsedData);
+      storageSet(STORED_DATA_CLEAN, true);
+    });
+  };
+
   const clearCache = function () {
     dataCollectionCache = {};
     dataCollectionCache.domains = {};
@@ -188,6 +223,7 @@ const LocalDataCollection = (function getLocalDataCollection() {
       replacedCounts.adReplacedNotifier.on('adReplaced', adReplacedListener);
       browser.tabs.onUpdated.addListener(handleTabUpdated);
       addMessageListener();
+      cleanStoredData();
     }
   });// End of then
 
@@ -205,6 +241,7 @@ const LocalDataCollection = (function getLocalDataCollection() {
   returnObj.end = function returnObjEnd(callback) {
     clearInterval(intervalFN);
     clearCache();
+    storageSet(STORED_DATA_CLEAN);
     filterNotifier.off('filter.hitCount', filterListener);
     replacedCounts.adReplacedNotifier.off('adReplaced', adReplacedListener);
     browser.tabs.onUpdated.removeListener(handleTabUpdated);

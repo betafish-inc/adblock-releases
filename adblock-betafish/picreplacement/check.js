@@ -593,11 +593,12 @@ const replacedCounts = (function getReplacedCount() {
       data = storageGet(key);
       data.total += 1;
       storageSet(key, data);
-
-      const myPage = ext.getPage(tabId);
-      let replaced = replacedPerPage.get(myPage) || 0;
-      replacedPerPage.set(myPage, replaced += 1);
-      adReplacedNotifier.emit('adReplaced', tabId, myPage.url);
+      browser.tabs.get(tabId).then((tab) => {
+        const myPage = new ext.Page(tab);
+        let replaced = replacedPerPage.get(myPage) || 0;
+        replacedPerPage.set(myPage, replaced += 1);
+        adReplacedNotifier.emit('adReplaced', tabId, tab.url);
+      });
     },
     get() {
       return storageGet(key);

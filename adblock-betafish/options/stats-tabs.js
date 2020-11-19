@@ -828,24 +828,26 @@ const filterBarChartDataForDateRange = function (startTime, endTime) {
       if (theDate > startTime && theDate < endTime) {
         for (const domain in rawData[timestamp].doms) {
           const cleanDomain = domain.replace(/^www\./, ''); // remove lead 'www.'
-          if (!domainData[cleanDomain]) {
-            domainData[cleanDomain] = {};
-            domainData[cleanDomain].ads = 0;
-            domainData[cleanDomain].trackers = 0;
-            domainData[cleanDomain].adsReplaced = 0;
-            domainData[cleanDomain].total = 0;
+          if (cleanDomain && cleanDomain.length > 1) { // check if domain is not blank
+            if (!domainData[cleanDomain]) {
+              domainData[cleanDomain] = {};
+              domainData[cleanDomain].ads = 0;
+              domainData[cleanDomain].trackers = 0;
+              domainData[cleanDomain].adsReplaced = 0;
+              domainData[cleanDomain].total = 0;
+            }
+            domainData[cleanDomain].ads += rawData[timestamp].doms[domain].ads;
+            if (subs && subs.easyprivacy && subs.easyprivacy.subscribed) {
+              domainData[cleanDomain].trackers += rawData[timestamp].doms[domain].trackers;
+            }
+            if (License.isActiveLicense() && channels && channels.isAnyEnabled()) {
+              domainData[cleanDomain].adsReplaced
+                += rawData[timestamp].doms[domain].adsReplaced;
+            }
+            domainData[cleanDomain].total = domainData[cleanDomain].ads
+                                          + domainData[cleanDomain].trackers
+                                          + domainData[cleanDomain].adsReplaced;
           }
-          domainData[cleanDomain].ads += rawData[timestamp].doms[domain].ads;
-          if (subs && subs.easyprivacy && subs.easyprivacy.subscribed) {
-            domainData[cleanDomain].trackers += rawData[timestamp].doms[domain].trackers;
-          }
-          if (License.isActiveLicense() && channels && channels.isAnyEnabled()) {
-            domainData[cleanDomain].adsReplaced
-              += rawData[timestamp].doms[domain].adsReplaced;
-          }
-          domainData[cleanDomain].total = domainData[cleanDomain].ads
-                                         + domainData[cleanDomain].trackers
-                                         + domainData[cleanDomain].adsReplaced;
         }
       }
     }
@@ -870,7 +872,6 @@ const getBarChartConfig = function (chartType, filterName) {
   }
   startTime.setHours(0, 0, 0, 0);
   const filteredDomainData = filterBarChartDataForDateRange(startTime, endTime);
-
   const topNineDomainArray = [];
   const barChartAdsDS = [];
   const barChartTrackersDS = [];
@@ -1003,6 +1004,7 @@ const updateChart = function (chartType = 'line', filterName, labelName) {
     });
     return;
   }
+
   hidePageProgressCircleIfNeeded().then(() => {
     if (typeof window.theChart === 'undefined') {
       const myChartCTX = document.getElementById('myChart').getContext('2d');
