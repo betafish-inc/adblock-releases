@@ -1138,7 +1138,7 @@
     "description": "Title for the popup menu."
   },
   "block_an_ad_on_this_page": {
-    "message": "このページの広告をブロックする",
+    "message": "このページのコンテンツを非表示化",
     "description": "Toolbar button menu entry and context menu entry"
   },
   "block_this_ad": {
@@ -1237,9 +1237,25 @@
     "message": "このドメイン内のページ上で実行しないでください",
     "description": "Menu entry to open the allowlist wizard"
   },
-  "dont_run_on_pages_on_site": {
-    "message": "このサイト内のページ上で実行しないでください",
+  "open_allowlist_wizard": {
+    "message": "さらなる停止オプション",
     "description": "Menu entry to open the allowlist wizard"
+  },
+  "disabled_site_title": {
+    "message": "ブロックできる広告はありません！",
+    "description": "header title on the menu when a user is on tab that extensions are disabled on (Chrome settings, etc)"
+  },
+  "allowlisted_channel": {
+    "message": "AdBlockがこのチャンネルにアクセスするたびに一時停止するように設定されています。",
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
+  },
+  "disabled": {
+    "message": "AdBlockは一時停止中です",
+    "description": "Title shown in menu when AdBlock is paused on all sites"
+  },
+  "disabled_on_all_sites": {
+    "message": "すべてのサイトでAdBlockが一時停止したままになるように設定しました。",
+    "description": "Message shown in menu when AdBlock is paused on all sites"
   },
   "disabled_on_this_page": {
     "message": "AdBlockはこのページで無効になっています。",
@@ -1266,8 +1282,12 @@
     "description": "Message shown in toolbar button when AdBlock is not running on all domains"
   },
   "status_domain_paused": {
-    "message": "AdBlockはこのサイトで一時停止されています。",
+    "message": "AdBlockは一時停止されています。変更が適用されるには、ページを更新する必要があります。",
     "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "status_allowlisted": {
+    "message": "AdBlockがこのサイトにアクセスするたびに一時停止するように設定されています。",
+    "description": "Message shown in toolbar button when AdBlock is not running on a page or website"
   },
   "resume_blocking_ads": {
     "message": "広告ブロックを再開する",
@@ -1340,7 +1360,7 @@
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "undo_last_block_site": {
-    "message": "このサイトでのブロックを元に戻す",
+    "message": "隠しアイテムを元に戻す",
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
@@ -1553,7 +1573,7 @@
     "message": " -- 言語を選択 -- ",
     "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
-  "whitelist_channel": {
+  "allowlist_channel": {
     "message": "このチャンネルの広告を許可する",
     "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
   },
@@ -1883,14 +1903,6 @@
     "message": "MyAdBlockを有効にする",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
-  "adblockprotectenrollmentbutton": {
-    "message": "ぜひお試し下さい — 完全無料です",
-    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
-  },
-  "adblockprotectenrollmenttext": {
-    "message": "AdBlock Protectであなたの個人情報を安全に保護しましょう",
-    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
-  },
   "myadblockoptionspageheader": {
     "message": "MyAdBlockオプション",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1914,6 +1926,22 @@
   "landscapechannelswitchlabel": {
     "message": "風景",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "goatchannelswitchlabel": {
+    "message": "ヤギ",
+    "description": "The label text for the Goats switch on the MyAdBlock Options page"
+  },
+  "oceanchannelswitchlabel": {
+    "message": "オーシャン",
+    "description": "The label text for the Ocean switch on the MyAdBlock Options page"
+  },
+  "foodchannelswitchlabel": {
+    "message": "食べ物",
+    "description": "The label text for the Food switch on the MyAdBlock Options page"
+  },
+  "birdchannelswitchlabel": {
+    "message": "鳥",
+    "description": "The label text for the Birds switch on the MyAdBlock Options page"
   },
   "customchannelswitchlabel": {
     "message": "カスタム",
@@ -1984,27 +2012,39 @@
     "description": "Text on the MyAdBlock feedback button"
   },
   "error_msg_header": {
-    "message": "申し訳ありません、AdBlockメニューの読み込みの際に問題が発生しました。",
-    "description": "The text on the popup menu when an error has occurred"
+    "message": "おっと！",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
-  "error_msg_help_us": {
-    "message": "この問題を解決するのに役立つデバッグデータを送信ください。Click",
+  "error_msg_partI": {
+    "message": "We're sorry, the AdBlock menu had trouble loading.",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us_partI": {
+    "message": "Help us resolve this problem  ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_us_partII": {
+    "message": " by sending us some debug data.",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_thank_you": {
     "message": "ありがとうございます",
     "description": "The text on the popup menu when an error has occurred"
   },
-  "error_msg_reload": {
-    "message": "次に、拡張機能をリロードしてください。Click",
+  "error_msg_reload_partI": {
+    "message": "Next, try reloading the extension by ",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_help": {
-    "message": "それでもうまくいかない場合は、こちらをチェックしてください。Click",
+  "error_msg_reload_partII": {
+    "message": "clicking here.",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_here": {
-    "message": "こちら",
+  "error_msg_help_partI": {
+    "message": "If that doesn't work, ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_partII": {
+    "message": "check here for more help.",
     "description": "DO NOT TRANSLATE"
   },
   "generaloptions2": {
@@ -2804,8 +2844,8 @@
     "description": "General text used to define the extension options page."
   },
   "pause_on_this_site": {
-    "message": "このサイトで一時停止する",
-    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+    "message": "このサイトで一時停止する:",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site. This will be followed by the options 'Once' and 'Always'"
   },
   "adblock_will_pause_on_this_site": {
     "message": "クリックすると、AdBlockはこのサイトでの広告ブロックを停止します。",
@@ -3294,5 +3334,13 @@
   "youtube_onpage_icon_no_channels_text": {
     "message": "少なくとも1つのYouTubeチャンネルに登録して、登録チャンネルの広告表示を管理しましょう。",
     "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "once": {
+    "message": "一度だけ",
+    "description": "The button text on the popup menu"
+  },
+  "always": {
+    "message": "今後も",
+    "description": "The button text on the popup menu"
   }
 }

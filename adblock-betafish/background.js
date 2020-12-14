@@ -739,100 +739,11 @@ if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
 // Note:  be sure to check the 'suppress_update_page' on the Settings object before showing
 //        the /update page
 const updateStorageKey = 'last_known_version';
-
-// browser.runtime.onInstalled.addListener((details) => {
-//  if (details.reason === 'update' || details.reason === 'install') {
-//    localStorage.setItem(updateStorageKey, browser.runtime.getManifest().version);
-//  }
-// });
-
-
-if (browser.runtime.id) {
-  let updateTabRetryCount = 0;
-  const getUpdatedURL = function () {
-    const encodedVersion = encodeURIComponent('4.23.0');
-    let updatedURL = `https://getadblock.com/update/${STATS.flavor.toLowerCase()}/${encodedVersion}/?u=${STATS.userId()}`;
-    if (License && License.isActiveLicense()) {
-      updatedURL = `https://getadblock.com/update/p/${encodedVersion}/?u=${STATS.userId()}`;
-    }
-    updatedURL = `${updatedURL}&bc=${Prefs.blocked_total}`;
-    updatedURL = `${updatedURL}&rt=${updateTabRetryCount}`;
-    return updatedURL;
-  };
-  const waitForUserAction = function () {
-    browser.tabs.onCreated.removeListener(waitForUserAction);
-    setTimeout(() => {
-      updateTabRetryCount += 1;
-      // eslint-disable-next-line no-use-before-define
-      openUpdatedPage();
-    }, 10000); // 10 seconds
-  };
-  const openUpdatedPage = function () {
-    const updatedURL = getUpdatedURL();
-    browser.tabs.create({ url: updatedURL }).then((tab) => {
-      // if we couldn't open a tab to '/updated_tab', send a message
-      if (!tab) {
-        recordErrorMessage('updated_tab_failed_to_open');
-        browser.tabs.onCreated.removeListener(waitForUserAction);
-        browser.tabs.onCreated.addListener(waitForUserAction);
-        return;
-      }
-      if (updateTabRetryCount > 0) {
-        recordGeneralMessage(`updated_tab_retry_success_count_${updateTabRetryCount}`);
-      }
-    }).catch(() => {
-      // if we couldn't open a tab to '/updated_tab', send a message
-      recordErrorMessage('updated_tab_failed_to_open');
-      browser.tabs.onCreated.removeListener(waitForUserAction);
-      browser.tabs.onCreated.addListener(waitForUserAction);
-    });
-  };
-  const shouldShowUpdate = function () {
-    const checkQueryState = function () {
-      browser.idle.queryState(60, (state) => {
-        if (state === 'active') {
-          openUpdatedPage();
-        } else {
-          browser.tabs.onCreated.removeListener(waitForUserAction);
-          browser.tabs.onCreated.addListener(waitForUserAction);
-        }
-      });
-    };
-    if (browser.management && browser.management.getSelf) {
-      browser.management.getSelf().then((extensionInfo) => {
-        if (extensionInfo && extensionInfo.installType !== 'admin') {
-          License.ready().then(checkQueryState);
-        } else if (extensionInfo && extensionInfo.installType === 'admin') {
-          recordGeneralMessage('update_tab_not_shown_admin_user');
-        }
-      });
-    } else {
-      License.ready().then(checkQueryState);
-    }
-  };
-  const slashUpdateReleases = ['4.23.0', '4.24.0', '4.24.1'];
-  // Display updated page after each update
-  browser.runtime.onInstalled.addListener((details) => {
-    const lastKnownVersion = localStorage.getItem(updateStorageKey);
-    const currentVersion = browser.runtime.getManifest().version;
-    if (
-      details.reason === 'update'
-          && slashUpdateReleases.includes(currentVersion)
-          && !slashUpdateReleases.includes(lastKnownVersion)
-          && browser.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
-    ) {
-      settings.onload().then(() => {
-        if (!getSettings().suppress_update_page) {
-          STATS.untilLoaded(() => {
-            Prefs.untilLoaded.then(shouldShowUpdate);
-          });
-        }
-      });
-    }
-    localStorage.setItem(updateStorageKey, currentVersion);
-  });
-}
-
+browser.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'update' || details.reason === 'install') {
+    localStorage.setItem(updateStorageKey, browser.runtime.getManifest().version);
+  }
+});
 
 const openTab = function (url) {
   browser.tabs.create({ url });

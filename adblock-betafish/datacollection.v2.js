@@ -35,20 +35,27 @@ const DataCollectionV2 = (function getDataCollectionV2() {
       && !adblockIsDomainPaused({ url: tabInfo.url, id: tabId })
       && changeInfo.status === 'complete'
     ) {
-      browser.tabs.executeScript(tabId,
-        {
+      browser.tabs.sendMessage(tabId, { command: 'ping_dc_content_script' }).then((pingResponse) => {
+        if (pingResponse && pingResponse.status === 'yes') {
+          return;
+        }
+        browser.tabs.executeScript(tabId, {
           file: 'adblock-datacollection-contentscript.js',
           allFrames: true,
         });
+      });
     }
   };
 
   const addFilterToCache = function (filter, page) {
     const validFilterText = filter && filter.text && (typeof filter.text === 'string');
-    if (validFilterText && page && page.url && page.url.hostname) {
-      const domain = page.url.hostname;
+    if (validFilterText && page && page.url) {
+      let domain = page.url.hostname;
       if (!domain) {
-        return;
+        domain = new URL(page.url).hostname;
+        if (!domain) {
+          return;
+        }
       }
       const { text } = filter;
 

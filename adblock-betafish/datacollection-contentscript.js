@@ -2,6 +2,13 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser */
+// listen to messages from the background page
+const onDataCollectionMessage = function (request, sender, sendResponse) {
+  if (request.command === 'ping_dc_content_script') {
+    sendResponse({ status: 'yes' });
+  }
+};
+browser.runtime.onMessage.addListener(onDataCollectionMessage);
 
 let pairs = [];
 const matchSelectors = [];

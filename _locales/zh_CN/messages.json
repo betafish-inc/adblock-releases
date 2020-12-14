@@ -1138,7 +1138,7 @@
     "description": "Title for the popup menu."
   },
   "block_an_ad_on_this_page": {
-    "message": "在此页面上拦截广告",
+    "message": "隐藏此页面上的内容",
     "description": "Toolbar button menu entry and context menu entry"
   },
   "block_this_ad": {
@@ -1237,9 +1237,25 @@
     "message": "不要在该域名的页面上运行",
     "description": "Menu entry to open the allowlist wizard"
   },
-  "dont_run_on_pages_on_site": {
-    "message": "不要在该网站的页面上运行",
+  "open_allowlist_wizard": {
+    "message": "更多暂停选项",
     "description": "Menu entry to open the allowlist wizard"
+  },
+  "disabled_site_title": {
+    "message": "无可拦截的内容！",
+    "description": "header title on the menu when a user is on tab that extensions are disabled on (Chrome settings, etc)"
+  },
+  "allowlisted_channel": {
+    "message": "您已将AdBlock配置为每次访问时在此频道保持暂停状态。",
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
+  },
+  "disabled": {
+    "message": "AdBlock已暂停",
+    "description": "Title shown in menu when AdBlock is paused on all sites"
+  },
+  "disabled_on_all_sites": {
+    "message": "您已将AdBlock配置为在所有网站都保持暂停状态。",
+    "description": "Message shown in menu when AdBlock is paused on all sites"
   },
   "disabled_on_this_page": {
     "message": "AdBlock 在此页面上被禁用。",
@@ -1266,8 +1282,12 @@
     "description": "Message shown in toolbar button when AdBlock is not running on all domains"
   },
   "status_domain_paused": {
-    "message": "AdBlock 已在此网站上暂停。",
+    "message": "本次访问已暂停AdBlock。您可能需要刷新页面才能看到所做的更改。",
     "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "status_allowlisted": {
+    "message": "您已将AdBlock配置为每次访问此网站时都保持暂停状态。",
+    "description": "Message shown in toolbar button when AdBlock is not running on a page or website"
   },
   "resume_blocking_ads": {
     "message": "恢复拦截广告",
@@ -1340,7 +1360,7 @@
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "undo_last_block_site": {
-    "message": "撤销我在此网站上的拦截操作",
+    "message": "撤销我的隐藏项目",
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
@@ -1553,7 +1573,7 @@
     "message": " -- 选择语言 -- ",
     "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
-  "whitelist_channel": {
+  "allowlist_channel": {
     "message": "在此频道上允许广告",
     "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
   },
@@ -1883,14 +1903,6 @@
     "message": "启用 MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
-  "adblockprotectenrollmentbutton": {
-    "message": "立即试用 — 完全免费",
-    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
-  },
-  "adblockprotectenrollmenttext": {
-    "message": "使用 AdBlock 保护你个人信息的安全",
-    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
-  },
   "myadblockoptionspageheader": {
     "message": "MyAdBlock 选项",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1914,6 +1926,22 @@
   "landscapechannelswitchlabel": {
     "message": "风景",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "goatchannelswitchlabel": {
+    "message": "山羊",
+    "description": "The label text for the Goats switch on the MyAdBlock Options page"
+  },
+  "oceanchannelswitchlabel": {
+    "message": "海洋",
+    "description": "The label text for the Ocean switch on the MyAdBlock Options page"
+  },
+  "foodchannelswitchlabel": {
+    "message": "食物",
+    "description": "The label text for the Food switch on the MyAdBlock Options page"
+  },
+  "birdchannelswitchlabel": {
+    "message": "鸟",
+    "description": "The label text for the Birds switch on the MyAdBlock Options page"
   },
   "customchannelswitchlabel": {
     "message": "自定义",
@@ -1984,27 +2012,39 @@
     "description": "Text on the MyAdBlock feedback button"
   },
   "error_msg_header": {
-    "message": "哎呀！非常抱歉，AdBlock 菜单在加载时遇到了问题。",
-    "description": "The text on the popup menu when an error has occurred"
+    "message": "哎呀！",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
-  "error_msg_help_us": {
-    "message": "请向我们发送部分调试数据，以帮助我们解决此问题：点击 ",
+  "error_msg_partI": {
+    "message": "We're sorry, the AdBlock menu had trouble loading.",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us_partI": {
+    "message": "Help us resolve this problem  ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_us_partII": {
+    "message": " by sending us some debug data.",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_thank_you": {
     "message": "谢谢",
     "description": "The text on the popup menu when an error has occurred"
   },
-  "error_msg_reload": {
-    "message": "接下来，尝试重新加载扩展：点击 ",
+  "error_msg_reload_partI": {
+    "message": "Next, try reloading the extension by ",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_help": {
-    "message": "如果这不起作用，请在查看此处信息以获取更多帮助：点击 ",
+  "error_msg_reload_partII": {
+    "message": "clicking here.",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_here": {
-    "message": "这里",
+  "error_msg_help_partI": {
+    "message": "If that doesn't work, ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_partII": {
+    "message": "check here for more help.",
     "description": "DO NOT TRANSLATE"
   },
   "generaloptions2": {
@@ -2804,8 +2844,8 @@
     "description": "General text used to define the extension options page."
   },
   "pause_on_this_site": {
-    "message": "在此网站上暂停。",
-    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+    "message": "在此网站暂停：",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site. This will be followed by the options 'Once' and 'Always'"
   },
   "adblock_will_pause_on_this_site": {
     "message": "如果点击，AdBlock 将不再拦截此网站上的广告。",
@@ -3294,5 +3334,13 @@
   "youtube_onpage_icon_no_channels_text": {
     "message": "订阅至少一个 YouTube 频道以管理您订阅频道上的广告。",
     "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "once": {
+    "message": "仅此一次",
+    "description": "The button text on the popup menu"
+  },
+  "always": {
+    "message": "总是如此",
+    "description": "The button text on the popup menu"
   }
 }
