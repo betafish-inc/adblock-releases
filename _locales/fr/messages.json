@@ -1138,7 +1138,7 @@
     "description": "Title for the popup menu."
   },
   "block_an_ad_on_this_page": {
-    "message": "Masquer quelque chose sur cette page",
+    "message": "Bloquer une publicité sur cette page",
     "description": "Toolbar button menu entry and context menu entry"
   },
   "block_this_ad": {
@@ -1237,25 +1237,9 @@
     "message": "Ne pas activer sur les pages de ce domaine",
     "description": "Menu entry to open the allowlist wizard"
   },
-  "open_allowlist_wizard": {
-    "message": "Plus d'options de pause",
+  "dont_run_on_pages_on_site": {
+    "message": "Ne pas activer sur les pages de ce site",
     "description": "Menu entry to open the allowlist wizard"
-  },
-  "disabled_site_title": {
-    "message": "Rien à bloquer par ici !",
-    "description": "header title on the menu when a user is on tab that extensions are disabled on (Chrome settings, etc)"
-  },
-  "allowlisted_channel": {
-    "message": "Vous avez configuré AdBlock pour qu'il reste en pause sur cette chaîne à chaque visite.",
-    "description": "Message shown in toolbar button on web pages that have been allowlisted"
-  },
-  "disabled": {
-    "message": "AdBlock est mis en pause",
-    "description": "Title shown in menu when AdBlock is paused on all sites"
-  },
-  "disabled_on_all_sites": {
-    "message": "Vous avez configuré AdBlock pour qu'il reste en pause sur tous les sites.",
-    "description": "Message shown in menu when AdBlock is paused on all sites"
   },
   "disabled_on_this_page": {
     "message": "AdBlock est désactivé sur cette page.",
@@ -1282,12 +1266,8 @@
     "description": "Message shown in toolbar button when AdBlock is not running on all domains"
   },
   "status_domain_paused": {
-    "message": "AdBlock est mis en pause pendant cette visite. Vous devez peut-être réactualiser la page pour faire apparaître vos modifications.",
+    "message": "AdBlock est mis en pause sur ce site.",
     "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
-  },
-  "status_allowlisted": {
-    "message": "Vous avez configuré AdBlock pour qu'il reste en pause sur ce site à chaque visite.",
-    "description": "Message shown in toolbar button when AdBlock is not running on a page or website"
   },
   "resume_blocking_ads": {
     "message": "Reprendre le blocage des publicités",
@@ -1360,7 +1340,7 @@
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "undo_last_block_site": {
-    "message": "Annuler mes objets masqués",
+    "message": "Annuler mes blocages sur ce site",
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
@@ -1573,7 +1553,7 @@
     "message": " -- Choisir la langue -- ",
     "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
-  "allowlist_channel": {
+  "whitelist_channel": {
     "message": "Autoriser les publicités sur cette chaîne",
     "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
   },
@@ -1903,6 +1883,14 @@
     "message": "Activer MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
+  "adblockprotectenrollmentbutton": {
+    "message": "Essayez maintenant, c’est gratuit",
+    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
+  },
+  "adblockprotectenrollmenttext": {
+    "message": "Assurez la sécurité de vos données personnelles avec AdBlock Protect",
+    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
+  },
   "myadblockoptionspageheader": {
     "message": "Options MyAdBlock",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1926,22 +1914,6 @@
   "landscapechannelswitchlabel": {
     "message": "Paysages",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
-  },
-  "goatchannelswitchlabel": {
-    "message": "Chèvres",
-    "description": "The label text for the Goats switch on the MyAdBlock Options page"
-  },
-  "oceanchannelswitchlabel": {
-    "message": "Océan",
-    "description": "The label text for the Ocean switch on the MyAdBlock Options page"
-  },
-  "foodchannelswitchlabel": {
-    "message": "Nourriture",
-    "description": "The label text for the Food switch on the MyAdBlock Options page"
-  },
-  "birdchannelswitchlabel": {
-    "message": "Oiseaux",
-    "description": "The label text for the Birds switch on the MyAdBlock Options page"
   },
   "customchannelswitchlabel": {
     "message": "Personnalisé",
@@ -2012,39 +1984,27 @@
     "description": "Text on the MyAdBlock feedback button"
   },
   "error_msg_header": {
-    "message": "Oops !",
-    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+    "message": "Oups ! Désolé, le menu AdBlock avait du mal à charger.",
+    "description": "The text on the popup menu when an error has occurred"
   },
-  "error_msg_partI": {
-    "message": "We're sorry, the AdBlock menu had trouble loading.",
-    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
-  },
-  "error_msg_help_us_partI": {
-    "message": "Help us resolve this problem  ",
-    "description": "DO NOT TRANSLATE"
-  },
-  "error_msg_help_us_partII": {
-    "message": " by sending us some debug data.",
+  "error_msg_help_us": {
+    "message": "Aidez-nous à résoudre ce problème en nous envoyant des données de débogage : Cliquez ",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_thank_you": {
     "message": "Merci",
     "description": "The text on the popup menu when an error has occurred"
   },
-  "error_msg_reload_partI": {
-    "message": "Next, try reloading the extension by ",
+  "error_msg_reload": {
+    "message": "Ensuite, essayer de recharger l’extension : Cliquez ",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_reload_partII": {
-    "message": "clicking here.",
+  "error_msg_help": {
+    "message": "Si cela ne fonctionne pas, une aide plus complète est disponible : Cliquez ",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_help_partI": {
-    "message": "If that doesn't work, ",
-    "description": "DO NOT TRANSLATE"
-  },
-  "error_msg_help_partII": {
-    "message": "check here for more help.",
+  "error_msg_here": {
+    "message": "ici",
     "description": "DO NOT TRANSLATE"
   },
   "generaloptions2": {
@@ -2844,8 +2804,8 @@
     "description": "General text used to define the extension options page."
   },
   "pause_on_this_site": {
-    "message": "Mettre en pause sur ce site :",
-    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site. This will be followed by the options 'Once' and 'Always'"
+    "message": "Mettre en pause sur ce site.",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
   },
   "adblock_will_pause_on_this_site": {
     "message": "Si vous cliquez ici, AdBlock ne bloquera plus les publicités sur ce site.",
@@ -3334,13 +3294,5 @@
   "youtube_onpage_icon_no_channels_text": {
     "message": "Abonnez-vous à une chaîne YouTube au minimum pour gérer les publicités sur les chaînes que vous suivez.",
     "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
-  },
-  "once": {
-    "message": "Une fois",
-    "description": "The button text on the popup menu"
-  },
-  "always": {
-    "message": "Toujours",
-    "description": "The button text on the popup menu"
   }
 }
