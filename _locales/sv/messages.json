@@ -1138,7 +1138,7 @@
     "description": "Title for the popup menu."
   },
   "block_an_ad_on_this_page": {
-    "message": "Blockera en annons på den här sidan",
+    "message": "Dölj något på denna sida",
     "description": "Toolbar button menu entry and context menu entry"
   },
   "block_this_ad": {
@@ -1237,9 +1237,25 @@
     "message": "Kör inte på sidor på den här domänen",
     "description": "Menu entry to open the allowlist wizard"
   },
-  "dont_run_on_pages_on_site": {
-    "message": "Kör inte på sidor på den här webbplatsen",
+  "open_allowlist_wizard": {
+    "message": "Fler pausealternativ",
     "description": "Menu entry to open the allowlist wizard"
+  },
+  "disabled_site_title": {
+    "message": "Inget att blockera här!",
+    "description": "header title on the menu when a user is on tab that extensions are disabled on (Chrome settings, etc)"
+  },
+  "allowlisted_channel": {
+    "message": "Du har konfigurerat AdBlock att förbli pausat på denna kanal för varje besök.",
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
+  },
+  "disabled": {
+    "message": "AdBlock har pausats",
+    "description": "Title shown in menu when AdBlock is paused on all sites"
+  },
+  "disabled_on_all_sites": {
+    "message": "Du har konfigurerat AdBlock att förbli pausat på alla sidor.",
+    "description": "Message shown in menu when AdBlock is paused on all sites"
   },
   "disabled_on_this_page": {
     "message": "AdBlock är inaktiverat på den här sidan.",
@@ -1266,8 +1282,12 @@
     "description": "Message shown in toolbar button when AdBlock is not running on all domains"
   },
   "status_domain_paused": {
-    "message": "AdBlock är pausat på den här webbplatsen.",
+    "message": "AdBlock är pausat för detta besök. Du kan behöva uppdatera sidan för att se dina ändringar.",
     "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "status_allowlisted": {
+    "message": "Du har konfigurerat AdBlock att förbli pausat på denna sida för varje besök.",
+    "description": "Message shown in toolbar button when AdBlock is not running on a page or website"
   },
   "resume_blocking_ads": {
     "message": "Återuppta blockering av annonser",
@@ -1340,7 +1360,7 @@
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "undo_last_block_site": {
-    "message": "Ångra mina blockeringar på den här webbplatsen",
+    "message": "Ångra mina dolda objekt",
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
@@ -1553,8 +1573,8 @@
     "message": " -- Välj språk -- ",
     "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
-  "whitelist_channel": {
-    "message": "Tillåt annonser på den här kanalen",
+  "allowlist_channel": {
+    "message": "Tillåt annonser på denna kanal",
     "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
   },
   "manage_subscribed_channel": {
@@ -1883,14 +1903,6 @@
     "message": "Aktivera MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
-  "adblockprotectenrollmentbutton": {
-    "message": "Prova nu – Det är gratis",
-    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
-  },
-  "adblockprotectenrollmenttext": {
-    "message": "Skydda dina personuppgifter med AdBlock Protect",
-    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
-  },
   "myadblockoptionspageheader": {
     "message": "MyAdBlock-alternativ",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1914,6 +1926,22 @@
   "landscapechannelswitchlabel": {
     "message": "Landskap",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "goatchannelswitchlabel": {
+    "message": "Getter",
+    "description": "The label text for the Goats switch on the MyAdBlock Options page"
+  },
+  "oceanchannelswitchlabel": {
+    "message": "Hav",
+    "description": "The label text for the Ocean switch on the MyAdBlock Options page"
+  },
+  "foodchannelswitchlabel": {
+    "message": "Mat",
+    "description": "The label text for the Food switch on the MyAdBlock Options page"
+  },
+  "birdchannelswitchlabel": {
+    "message": "Fåglar",
+    "description": "The label text for the Birds switch on the MyAdBlock Options page"
   },
   "customchannelswitchlabel": {
     "message": "Anpassad",
@@ -1984,27 +2012,39 @@
     "description": "Text on the MyAdBlock feedback button"
   },
   "error_msg_header": {
-    "message": "Hoppsan! AdBlock-menyn kunde tyvärr inte laddas.",
-    "description": "The text on the popup menu when an error has occurred"
+    "message": "Oops!",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
-  "error_msg_help_us": {
-    "message": "Hjälp oss lösa problemet genom att skicka debug-information till oss: Klicka på ",
+  "error_msg_partI": {
+    "message": "We're sorry, the AdBlock menu had trouble loading.",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us_partI": {
+    "message": "Help us resolve this problem  ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_us_partII": {
+    "message": "by sending us some debug data.",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_thank_you": {
     "message": "Tack",
     "description": "The text on the popup menu when an error has occurred"
   },
-  "error_msg_reload": {
-    "message": "Prova därefter att ladda om tillägget: Klicka på ",
+  "error_msg_reload_partI": {
+    "message": "Next, try reloading the extension by ",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_help": {
-    "message": "Om det inte fungerar, kolla här för mer hjälp: Klicka ",
+  "error_msg_reload_partII": {
+    "message": "clicking here.",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_here": {
-    "message": "här",
+  "error_msg_help_partI": {
+    "message": "If that doesn't work, ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_partII": {
+    "message": "check here for more help.",
     "description": "DO NOT TRANSLATE"
   },
   "generaloptions2": {
@@ -2804,8 +2844,8 @@
     "description": "General text used to define the extension options page."
   },
   "pause_on_this_site": {
-    "message": "Pausa på den här webbplatsen.",
-    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+    "message": "Pausa på denna sida:",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site. This will be followed by the options 'Once' and 'Always'"
   },
   "adblock_will_pause_on_this_site": {
     "message": "AdBlock kommer att sluta blockera annonser på den här webbplatsen om denna klickas.",
@@ -3294,5 +3334,13 @@
   "youtube_onpage_icon_no_channels_text": {
     "message": "Prenumerera på minst en YouTube-kanal för att hantera annonserna på kanalerna du prenumererar på.",
     "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "once": {
+    "message": "En gång",
+    "description": "The button text on the popup menu"
+  },
+  "always": {
+    "message": "Alltid",
+    "description": "The button text on the popup menu"
   }
 }

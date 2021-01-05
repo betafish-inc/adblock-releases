@@ -11,26 +11,6 @@
     <script src="adblock-functions.js"></script>
   </head>
   <body style="overflow:hidden;">
-    <div id="help_overlay">
-      <div id="help_container">
-        <div id="header">
-          <span tabindex="0" id="back_icon" class="back-button" role="button">
-            <i class="material-icons md-18" role="img" i18n-aria-label="back_help_flow"
-              >chevron_left</i
-            >
-          </span>
-          <span id="help_title"></span>
-          <span tabindex="0" id="close_icon" class="close-button" role="button">
-            <i class="material-icons md-18" role="img" i18n-aria-label="close_help_flow">close</i>
-          </span>
-        </div>
-        <div id="separator_help" class="separator"></div>
-        <div id="help_content"></div>
-        <div class="popup-footer">
-          <a href="https://help.getadblock.com/" target="_blank" tabindex="0" id="help_footer"></a>
-        </div>
-      </div>
-    </div>
     <div id="wrapper">
       <div id="menu-items">
         <div id="titletext">
@@ -60,51 +40,38 @@
 
         <div
           id="div_status_error"
-          style="display:none; font-size: 14px; padding: 5px 10px 0px 10px;"
+          style="display:none; font-size: 14px; margin: 8px; padding: 5px 10px 0px 10px; background-color: white;"
         >
-          <p i18n_error="error_msg_header"></p>
+          <h2 i18n_error="error_msg_header" style="display:flex; justify-content: center;"></h2>
+          <div class="separator"></div>
+          <p i18n_error="error_msg_partI"></p>
           <div id="first_msg">
-            <span i18n_error="error_msg_help_us"></span>
-            <a id="errorreport" style="cursor: pointer;" i18n_error="error_msg_here"></a>
+            <span i18n_error="error_msg_help_us_partI"></span>
+            <a
+              id="errorreport"
+              style="cursor: pointer; color: blue;"
+              i18n_error="error_msg_help_us_partII"
+            ></a>
             <br />
             <br />
           </div>
           <p id="second_msg" i18n_error="error_msg_thank_you" style="display:none;"></p>
-          <span id="reload_msg" i18n_error="error_msg_reload"> </span>
-          <a tabindex="0" id="reload" style="cursor: pointer;" i18n_error="error_msg_here"></a>
-          <br /><br />
-          <span i18n_error="error_msg_help"> </span>
+          <span id="reload_msg" i18n_error="error_msg_reload_partI"> </span>
           <a
             tabindex="0"
-            i18n_error="error_msg_here"
-            style="cursor: pointer;"
+            id="reload"
+            style="cursor: pointer; color: blue;"
+            i18n_error="error_msg_reload_partII"
+          ></a>
+          <br /><br />
+          <span i18n_error="error_msg_help_partI"> </span>
+          <a
+            tabindex="0"
+            i18n_error="error_msg_help_partII"
+            style="cursor: pointer; color: blue;"
             href="https://help.getadblock.com/support/solutions/articles/6000137757-the-adblock-menu-doesn-t-open-or-contains-only-a-donation-request-or-icons-in-chrome"
             target="_blank"
           ></a>
-        </div>
-
-        <!-- ************ Status messages and block counter *********** -->
-
-        <!-- ************ Status messages *********** -->
-
-        <div id="div_status_beta" class="menu-status" style="display:none;">
-          <span style="font-size: 12px;">
-            You are using AdBlock Beta!<br />
-            If you find a bug, please
-            <a tabindex="0" id="bugreport" href="#">report it</a>!
-          </span>
-        </div>
-
-        <div id="block_counts" class="box">
-          <div i18n="blocked_ads" class="header"></div>
-          <div style="padding:2px 0px 0px 2px;">
-            <span i18n="blocked_n_on_this_page" i18n_replacement_el="page_blocked_count">
-              <span class="block_count_number" id="page_blocked_count"> </span>
-            </span>
-            <span i18n="blocked_n_in_total" i18n_replacement_el="total_blocked_count" class="right">
-              <span class="block_count_number" id="total_blocked_count"> </span>
-            </span>
-          </div>
         </div>
 
         <div id="div_sync_error_msg">
@@ -125,26 +92,13 @@
           </a>
         </div>
 
-        <div id="div_status_whitelisted" class="menu-status-italic">
-          <span i18n="disabled_on_this_page"></span>
-        </div>
-
-        <div id="div_status_paused" class="menu-status-italic">
-          <span i18n="status_universal_paused"></span>
-        </div>
-
-        <div id="div_status_domain_paused" class="menu-status-italic">
-          <span i18n="status_domain_paused"></span>
-        </div>
-
-        <div id="separator-1" class="separator"></div>
-
-        <div id="div_myadblock_enrollment_v2" class="premium-cta menu-entry">
+        <!-- Premium CTA -->
+        <div id="div_myadblock_enrollment_v2" class="premium-cta">
           <div class="cta-description">
             <span id="newText_v2" i18n="new_badge"></span>
             <span
               tabindex="0"
-              id="mabNewCtaText"
+              id="mab_new_cta_text"
               class="cta-message"
               i18n="new_cta_default_text"
               role="link"
@@ -152,109 +106,13 @@
             ></span>
           </div>
 
-          <button tabindex="0" id="mabNewCtaClose" class="premium-cta-close">
+          <button tabindex="0" id="mab_new_cta_close" class="premium-cta-close">
             <i class="material-icons md-18" role="img" i18n-aria-label="close">close</i>
           </button>
         </div>
 
-        <div id="separator-2" class="separator"></div>
-
-        <!-- ************ Standard menu entries *********** -->
-
-        <div
-          tabindex="0"
-          i18n="undo_last_block_site"
-          id="div_undo"
-          class="menu-entry"
-          role="button"
-        ></div>
-
-        <div
-          tabindex="0"
-          id="div_whitelist_channel"
-          class="menu-entry"
-          role="button"
-          i18n="whitelist_channel"
-        ></div>
-
-        <div id="separator0" class="separator"></div>
-
-        <div
-          tabindex="0"
-          id="div_manage_subscribed_channel"
-          class="menu-entry"
-          role="button"
-          i18n="manage_subscribed_channel"
-        ></div>
-
-        <div
-          tabindex="0"
-          i18n="enable_adblock"
-          id="div_enable_adblock_on_this_page"
-          class="menu-entry"
-          role="button"
-        ></div>
-
-        <div
-          tabindex="0"
-          i18n="domain_pause_adblock"
-          id="div_domain_pause_adblock"
-          class="menu-entry"
-          role="button"
-        ></div>
-
-        <div
-          tabindex="0"
-          i18n="resume_blocking_ads"
-          id="div_domain_paused_adblock"
-          class="menu-entry"
-          role="button"
-        ></div>
-
-        <div
-          tabindex="0"
-          i18n="pause_adblock_everywhere"
-          id="div_pause_adblock"
-          class="menu-entry"
-          role="button"
-        ></div>
-
-        <div
-          tabindex="0"
-          i18n="resume_blocking_ads"
-          id="div_paused_adblock"
-          class="menu-entry"
-          role="button"
-        ></div>
-
-        <div id="separator4" class="separator"></div>
-
-        <div
-          tabindex="0"
-          i18n="block_an_ad_on_this_page"
-          id="div_blacklist"
-          class="menu-entry"
-          role="button"
-        ></div>
-
-        <div
-          tabindex="0"
-          i18n="dont_run_on_this_page"
-          id="div_whitelist_page"
-          class="menu-entry"
-          role="button"
-        ></div>
-
-        <div
-          tabindex="0"
-          id="div_whitelist"
-          class="menu-entry"
-          role="button"
-          i18n="dont_run_on_pages_on_site"
-        ></div>
-
         <!-- Premium themes CTA -->
-        <div id="div_premium_themes_cta" class="premium-cta menu-entry">
+        <div id="div_premium_themes_cta" class="premium-cta">
           <div class="cta-description">
             <i class="material-icons md-18" role="img" aria-hidden="true">featured_video</i>
             <span
@@ -271,9 +129,209 @@
             <i class="material-icons md-18" role="img" i18n-aria-label="close">close</i>
           </button>
         </div>
-        <!-- Premium themes CTA -->
+
+        <!-- YT Channel Allowlist -->
+        <section id="yt_channel_section" class="primary_section">
+          <span class="channel_name_row">
+            <span tabindex="0" class="channel_icon" role="button">
+              <i id="yt_channel_icon" class="material-icons md-18" role="img">
+                play_circle_filled
+              </i>
+            </span>
+            <span id="yt_channelname" class="channelname"></span>
+          </span>
+          <section id="allowlist_yt_channel_section">
+            <div>
+              <button
+                tabindex="0"
+                class="popup-btn grey withBorder"
+                id="btn_allowlist_yt_channel"
+                i18n="allowlist_channel"
+                role="button"
+              ></button>
+            </div>
+            <div
+              tabindex="0"
+              id="div_manage_subscribed_channel"
+              class="menu-entry"
+              role="button"
+              i18n="manage_subscribed_channel"
+            ></div>
+          </section>
+          <section id="allowlisted_yt_channel_section">
+            <div tabindex="0" i18n="allowlisted_channel"></div>
+          </section>
+        </section>
+
+        <section id="twitch_channel_section" class="primary_section">
+          <span class="channel_name_row">
+            <span tabindex="0" class="channel_icon" role="button">
+              <i id="twitch_channel_icon" class="material-icons md-18" role="img">games</i>
+            </span>
+            <span id="twitch_channelname" class="channelname"></span>
+          </span>
+          <section id="allowlist_twitch_channel_section">
+            <div>
+              <button
+                tabindex="0"
+                class="popup-btn grey withBorder"
+                id="btn_allowlist_twitch_channel"
+                i18n="allowlist_channel"
+                role="button"
+              ></button>
+            </div>
+          </section>
+          <section id="allowlisted_twitch_channel_section">
+            <div tabindex="0" i18n="allowlisted_channel"></div>
+          </section>
+        </section>
+
+        <section id="help_overlay">
+          <div id="help_container">
+            <div id="header">
+              <span tabindex="0" id="back_icon" class="back-button" role="button">
+                <i class="material-icons md-18" role="img" i18n-aria-label="back_help_flow"
+                  >chevron_left</i
+                >
+              </span>
+              <span id="help_title"></span>
+              <span tabindex="0" id="close_icon" class="close-button" role="button">
+                <i class="material-icons md-18" role="img" i18n-aria-label="close_help_flow"
+                  >close</i
+                >
+              </span>
+            </div>
+            <div id="separator_help" class="separator"></div>
+            <div id="help_content"></div>
+            <div class="popup-footer">
+              <a
+                href="https://help.getadblock.com/"
+                target="_blank"
+                tabindex="0"
+                id="help_footer"
+              ></a>
+            </div>
+          </div>
+        </section>
+
+        <section id="disabled_site_section" class="primary_section">
+          <h2 id="disabled_site_title" i18n="disabled_site_title"></h2>
+          <div id="disabled_site_separator" class="separator"></div>
+          <img id="disabled_site_img" src="icons/disable_site.svg" />
+        </section>
+
+        <section id="primary_section" class="primary_section">
+          <h2 id="hostname"></h2>
+          <div id="separatorA" class="separator"></div>
+          <div id="block_counts">
+            <div i18n="blocked_ads"></div>
+            <div style="padding:2px 0px 0px 2px;">
+              <span i18n="blocked_n_on_this_page" i18n_replacement_el="page_blocked_count">
+                <span class="block_count_number" id="page_blocked_count"> </span>
+              </span>
+              <span
+                i18n="blocked_n_in_total"
+                i18n_replacement_el="total_blocked_count"
+                class="right"
+              >
+                <span class="block_count_number" id="total_blocked_count"> </span>
+              </span>
+            </div>
+          </div>
+
+          <section id="pause_subsection">
+            <div i18n="pause_on_this_site" class="header"></div>
+            <div id="btn_row">
+              <button
+                tabindex="0"
+                class="popup-btn grey withBorder"
+                id="btn_pause_once"
+                i18n="once"
+                role="button"
+              ></button>
+              <button
+                tabindex="0"
+                class="popup-btn grey withBorder"
+                type="button"
+                id="btn_pause_always"
+                i18n="always"
+                role="button"
+              ></button>
+            </div>
+            <div id="separatorB" class="separator"></div>
+            <section id="more_options">
+              <div
+                tabindex="0"
+                id="div_allowlist"
+                class="menu-entry"
+                role="button"
+                i18n="open_allowlist_wizard"
+              ></div>
+
+              <div
+                tabindex="0"
+                i18n="block_an_ad_on_this_page"
+                id="div_blacklist"
+                class="menu-entry"
+                role="button"
+              ></div>
+
+              <div
+                tabindex="0"
+                i18n="undo_last_block_site"
+                id="div_undo"
+                class="menu-entry"
+                role="button"
+              ></div>
+            </section>
+          </section>
+
+          <div id="div_domain_paused_msg">
+            <span i18n="status_domain_paused"></span>
+          </div>
+
+          <div id="div_all_paused_msg">
+            <span i18n="disabled_on_all_sites"></span>
+          </div>
+
+          <div id="div_domain_allowlisted_msg">
+            <span i18n="status_allowlisted"></span>
+          </div>
+        </section>
+
+        <section id="domain_paused_subsection">
+          <button
+            tabindex="0"
+            class="popup-btn white"
+            type="button"
+            id="btn_unpause_once"
+            i18n="unpause_adblock"
+            role="button"
+          ></button>
+        </section>
+
+        <section id="all_paused_subsection">
+          <button
+            tabindex="0"
+            class="popup-btn white"
+            type="button"
+            id="btn_unpause_all"
+            i18n="unpause_adblock"
+            role="button"
+          ></button>
+        </section>
+
+        <section id="allowlisted_subsection">
+          <button
+            tabindex="0"
+            class="popup-btn white"
+            type="button"
+            id="btn_enable_adblock_on_this_page"
+            i18n="unpause_adblock"
+            role="button"
+          ></button>
+        </section>
       </div>
-      <!-- menu-items -->
     </div>
     <!-- wrapper -->
   </body>

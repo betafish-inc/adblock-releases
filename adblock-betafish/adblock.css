@@ -9,21 +9,52 @@ Global Styles
 */
 
 :root {
+  --gray1: #333333;
+  --gray2: #666666;
+  --gray3: #999999;
+  --gray4: #c6c6c6;
+  --gray5: #e6e6e6;
+  --gray6: #f4f4f4;
+  --red1: #ce0707;
+  --red2: #e40d0d;
+  --red3: #ff363b;
+  --blue1: #2284f7;
+  --blue2: #03bcfc;
+  --blue3: #4ecdf9;
+  --yellow1: #ff9c00;
+  --yellow2: #ffae00;
+  --yellow3: #ffca00;
+  --green: #10b501;
+  --purple: #663399;
+
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #333333;
-  --popup-accent-color: #c6c6c6;
+  --popup-accent-color: #999999;
+  --popup-separator-color: var(--gray5);
   --popup-accent-hovered-color: #666666;
-  --popup-entry-hovered-bg-color: #e6e6e6;
-  --popup-block-ads-bg-color: #f4f4f4;
-  --block-count-color: #ce0707;
-  --background-color: white;
-  --link-color: #2284f7;
+  --premium-badge-bg-color: var(--popup-accent-color);
+  --premium-badge-text-color: white;
+  --premium-badge-border-color: var(--gray3);
+  --block-count-color: #e40d0d;
+  --popup-background-color: #f4f4f4;
+  --popup-card-background-color: white;
+  --popup-url-text-color: #333333;
   --disabled-link-color: #c6c6c6;
   --popup-button: #ffca00;
   --popup-button-text: #666666;
   --popup-button-disabled-text: #666666;
   --popup-link-text: #2284f7;
+  --popup-divider-line-color: #e6e6e6;
+  --popup-button-background-color: #f4f4f4;
+  --popup-button-outline-color: var(--gray4);
+  --popup-button-reenable-bg-color: white;
+  --popup-button-reenable-text-color: var(--gray1);
+  --popup-button-reenable-hovered-bg-color: var(--red1);
+  --popup-button-reenable-hovered-text-color: white;
+  --popup-yt-icon-color: #e40d0d;
+  --popup-twitch-icon-color: #663399;
   /* Additional for Options Page */
+  --background-color: white;
   --main-text-color: #666666;
   --sidebar-bg-color: #f1f1f1;
   --checkbox-bg-color: #03bcfc;
@@ -62,7 +93,6 @@ Global Styles
      custom properties, but might be further differentiated
      in future themes */
   --popup-link-hovered: var(--block-count-color);
-  --premium-badge: var(--popup-accent-color);
   --options-page-accent-text: var(--popup-main-text-color);
   --speech-bubble-border-color: var(--bottom-line-color);
   --hide-mab-enrollment: var(--help-icon-color);

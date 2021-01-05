@@ -1,17 +1,34 @@
 #dark_theme {
   /* Needed for Pop-up Menu */
-  --popup-main-text-color: #f4f4f4;
-  --popup-accent-color: #999999;
-  --popup-accent-hovered-color: #ffffff;
-  --popup-entry-hovered-bg-color: #000000;
-  --popup-block-ads-bg-color: #333333;
-  --block-count-color: #ff363b;
-  --background-color: #666666;
-  --link-color: #4ecdf9;
-  --popup-button: #fc1c1c;
-  --popup-button-text: #ffffff;
+  --popup-main-text-color: white;
+  --popup-accent-color: var(--gray2);
+  --popup-separator-color: var(--gray3);
+  --popup-accent-hovered-color: var(--gray3);
+  --premium-badge-bg-color: var(--popup-background-color);
+  --popup-entry-hovered-bg-color: #000000; /* unused on popup menu */
+  --popup-block-ads-bg-color: #333333; /* unused on popup menu */
+  --block-count-color: var(--red3);
+  --background-color: #666666; /* unused on popup menu */
+  --link-color: #4ecdf9; /* unused on popup menu */
+  --popup-button-text: white;
   --popup-button-disabled-text: #333333;
-  --popup-link-text: #4ecdf9;
+  --popup-link-text: var(--gray4);
+  --premium-badge-text-color: var(--gray2);
+  --premium-badge-border-color: var(--gray2);
+  --popup-background-color: var(--gray1);
+  --popup-card-background-color: var(--gray2);
+  --popup-url-text-color: var(--gray1);
+  --disabled-link-color: #c6c6c6; /* unused on popup menu */
+  --popup-divider-line-color: var(--gray3); /* unused on popup menu */
+  --popup-button-background-color: var(--gray1);
+  --popup-button-outline-color: var(--gray2);
+  --popup-button-reenable-bg-color: var(--red2);
+  --popup-button-reenable-text-color: white;
+  --popup-button-reenable-hovered-bg-color: var(--red1);
+  --popup-button-reenable-hovered-text-color: white;
+  --popup-yt-icon-color: #e40d0d;
+  --popup-twitch-icon-color: #663399;
+
   /* Additional for Options Page */
   --main-text-color: #f4f4f4;
   --sidebar-bg-color: #4c4c4c;
@@ -55,18 +72,31 @@
 }
 #default_theme {
   /* Needed for Pop-up Menu */
-  --popup-main-text-color: #333333;
-  --popup-accent-color: #c6c6c6;
-  --popup-accent-hovered-color: #666666;
-  --popup-entry-hovered-bg-color: #e6e6e6;
-  --popup-block-ads-bg-color: #f4f4f4;
-  --block-count-color: #ce0707;
-  --background-color: white;
-  --link-color: #2284f7;
-  --popup-button: #ffca00;
-  --popup-button-text: #666666;
+  --popup-main-text-color: var(--gray1);
+  --popup-accent-color: var(--gray3);
+  --popup-separator-color: var(--gray5);
+  --popup-accent-hovered-color: var(--gray2);
+  --premium-badge-bg-color: var(--gray3);
+  --premium-badge-text-color: white;
+  --premium-badge-border-color: var(--gray3);
+  --block-count-color: var(--red2);
+  --popup-background-color: var(--gray6);
+  --popup-card-background-color: white;
+  --popup-url-text-color: #white;
+  --disabled-link-color: #c6c6c6;
+  --popup-button-text: var(--gray2);
   --popup-button-disabled-text: #666666;
-  --popup-link-text: #2284f7;
+  --popup-link-text: var(--blue1);
+  --popup-divider-line-color: var(--gray5);
+  --popup-button-background-color: var(--gray6);
+  --popup-button-outline-color: var(--gray4);
+  --popup-button-reenable-bg-color: white;
+  --popup-button-reenable-text-color: var(--gray1);
+  --popup-button-reenable-hovered-bg-color: var(--red1);
+  --popup-button-reenable-hovered-text-color: white;
+  --popup-yt-icon-color: #e40d0d;
+  --popup-twitch-icon-color: #663399;
+
   /* Additional for Options Page */
   --main-text-color: #666666;
   --sidebar-bg-color: #f1f1f1;
@@ -113,16 +143,28 @@
   /* Needed for Pop-up Menu */
   --popup-main-text-color: #90a2a2;
   --popup-accent-color: #90a2a2;
-  --popup-accent-hovered-color: #f4f4f4;
-  --popup-entry-hovered-bg-color: #002c38;
-  --popup-block-ads-bg-color: #002c38;
-  --block-count-color: #ff363b;
-  --background-color: #003643;
-  --link-color: #009f94;
-  --popup-button: #fc1c1c;
-  --popup-button-text: #ffffff;
-  --popup-button-disabled-text: #ffffff;
-  --popup-link-text: #009f94;
+  --popup-separator-color: #2f5b61;
+  --popup-accent-hovered-color: #b1c7c7;
+  --premium-badge-bg-color: var(--popup-background-color);
+  --premium-badge-text-color: #90a2a2;
+  --premium-badge-border-color: var(--premium-badge-text-color);
+  --block-count-color: var(--red3);
+  --popup-background-color: #002c38;
+  --popup-card-background-color: #003643;
+  --popup-url-text-color: #90a2a2;
+  --disabled-link-color: #c6c6c6;
+  --popup-button-text: #90a2a2;
+  --popup-button-disabled-text: #666666;
+  --popup-link-text: #90a2a2;
+  --popup-divider-line-color: #366066;
+  --popup-button-background-color: #002c38;
+  --popup-button-outline-color: #90a2a2;
+  --popup-button-reenable-bg-color: var(--red2);
+  --popup-button-reenable-text-color: white;
+  --popup-button-reenable-hovered-bg-color: var(--red1);
+  --popup-button-reenable-hovered-text-color: white;
+  --popup-yt-icon-color: #e40d0d;
+  --popup-twitch-icon-color: #663399;
   /* Additional for Options Page */
   --main-text-color: #90a2a2;
   --sidebar-bg-color: #002c38;
@@ -163,27 +205,39 @@
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
-  --popup-themes-cta-icon: var(--checkbox-bg-color);
-  --popup-themes-cta-text: var(--popup-main-text-color);
-  --popup-themes-cta-background: var(--background-color);
-  --popup-themes-cta-background-on-hover: var(--checkbox-bg-color);
-  --popup-themes-cta-color-on-hover: var(--background-color);
+  --popup-themes-cta-icon: #00a498;
+  --popup-themes-cta-text: #90a2a2;
+  --popup-themes-cta-background: #003643;
+  --popup-themes-cta-background-on-hover: #00a498;
+  --popup-themes-cta-color-on-hover: #003643;
 }
 #solarized_light_theme,
 [data-theme-cta="solarized_light_theme"] {
   /* Needed for Pop-up Menu */
-  --popup-main-text-color: #607c84;
+  --popup-main-text-color: #76898d;
   --popup-accent-color: #607c84;
-  --popup-accent-hovered-color: #003643;
-  --popup-entry-hovered-bg-color: #eee8d5;
-  --popup-block-ads-bg-color: #eee8d5;
-  --block-count-color: #ff363b;
-  --background-color: #fdf6e3;
-  --link-color: #00a498;
-  --popup-button: #657b83;
-  --popup-button-text: #fdf6e3;
-  --popup-button-disabled-text: #a9b1ac;
-  --popup-link-text: #00a498;
+  --popup-separator-color: #eee8d5;
+  --popup-accent-hovered-color: #4c6369;
+  --premium-badge-bg-color: var(--popup-background-color);
+  --premium-badge-text-color: #607c84;
+  --premium-badge-border-color: var(--premium-badge-text-color);
+  --block-count-color: var(--red2);
+  --popup-background-color: #eee8d5;
+  --popup-card-background-color: #fdf6e3;
+  --popup-url-text-color: #657b83;
+  --disabled-link-color: #c6c6c6;
+  --popup-button-text: #76898d;
+  --popup-button-disabled-text: #666666;
+  --popup-link-text: #6d8288;
+  --popup-divider-line-color: #eee8d5;
+  --popup-button-background-color: #eee8d5;
+  --popup-button-outline-color: #ddd5bd;
+  --popup-button-reenable-bg-color: var(--red2);
+  --popup-button-reenable-text-color: white;
+  --popup-button-reenable-hovered-bg-color: var(--red1);
+  --popup-button-reenable-hovered-text-color: white;
+  --popup-yt-icon-color: #e40d0d;
+  --popup-twitch-icon-color: #663399;
   /* Additional for Options Page */
   --main-text-color: #607c84;
   --sidebar-bg-color: #eee8d5;
@@ -224,26 +278,38 @@
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
-  --popup-themes-cta-icon: var(--checkbox-bg-color);
-  --popup-themes-cta-text: var(--popup-main-text-color);
-  --popup-themes-cta-background: var(--background-color);
-  --popup-themes-cta-background-on-hover: var(--checkbox-bg-color);
-  --popup-themes-cta-color-on-hover: var(--background-color);
+  --popup-themes-cta-icon: #00a498;
+  --popup-themes-cta-text: #607c84;
+  --popup-themes-cta-background: #fdf6e3;
+  --popup-themes-cta-background-on-hover: #00a498;
+  --popup-themes-cta-color-on-hover: #fdf6e3;
 }
 #rebecca_purple_theme {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
   --popup-accent-color: #b399cc;
-  --popup-accent-hovered-color: #ffffff;
-  --popup-entry-hovered-bg-color: #3f2e56;
-  --popup-block-ads-bg-color: #48226e;
-  --block-count-color: #4ecdf9;
-  --background-color: #663399;
-  --link-color: #ffca00;
-  --popup-button: white;
-  --popup-button-text: #663399;
-  --popup-button-disabled-text: #663399;
-  --popup-link-text: #ffca00;
+  --popup-separator-color: #a98cc5;
+  --popup-accent-hovered-color: white;
+  --premium-badge-bg-color: var(--popup-background-color);
+  --premium-badge-text-color: #b399cc;
+  --premium-badge-border-color: var(--premium-badge-text-color);
+  --block-count-color: var(--blue3);
+  --popup-background-color: #48226e;
+  --popup-card-background-color: #663399;
+  --popup-url-text-color: white;
+  --disabled-link-color: #c6c6c6;
+  --popup-button-text: white;
+  --popup-button-disabled-text: #666666;
+  --popup-link-text: white;
+  --popup-divider-line-color: #b399cc;
+  --popup-button-background-color: #48226e;
+  --popup-button-outline-color: #b399cc;
+  --popup-button-reenable-bg-color: var(--blue3);
+  --popup-button-reenable-text-color: var(--gray1);
+  --popup-button-reenable-hovered-bg-color: var(--blue2);
+  --popup-button-reenable-hovered-text-color: var(--gray1);
+  --popup-yt-icon-color: #e40d0d;
+  --popup-twitch-icon-color: white;
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
@@ -256,79 +322,115 @@
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
   --popup-accent-color: #f18686;
-  --popup-accent-hovered-color: #ffffff;
-  --popup-entry-hovered-bg-color: #ce0707;
-  --popup-block-ads-bg-color: #ce0707;
+  --popup-separator-color: #f18686;
+  --popup-accent-hovered-color: white;
+  --premium-badge-bg-color: var(--popup-background-color);
+  --premium-badge-text-color: #f18686;
+  --premium-badge-border-color: var(--premium-badge-text-color);
   --block-count-color: white;
-  --background-color: #e40d0d;
-  --link-color: #333333;
-  --popup-button: #ffca00;
-  --popup-button-text: #333333;
-  --popup-button-disabled-text: #333333;
-  --popup-link-text: #ffffff;
+  --popup-background-color: #ce0707;
+  --popup-card-background-color: var(--red2);
+  --popup-url-text-color: white;
+  --disabled-link-color: #c6c6c6;
+  --popup-button-text: white;
+  --popup-button-disabled-text: #666666;
+  --popup-link-text: white;
+  --popup-divider-line-color: #f18686;
+  --popup-button-background-color: var(--red1);
+  --popup-button-outline-color: #f18686;
+  --popup-button-reenable-bg-color: white;
+  --popup-button-reenable-text-color: var(--red1);
+  --popup-button-reenable-hovered-bg-color: var(--red3);
+  --popup-button-reenable-hovered-text-color: white;
+  --popup-yt-icon-color: white;
+  --popup-twitch-icon-color: #663399;
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
   --premium-badge: var(--popup-accent-color);
   --popup-link-hovered: var(--block-count-color);
-  --popup-themes-cta-icon: var(--popup-main-text-color);
-  --popup-themes-cta-text: var(--popup-main-text-color);
-  --popup-themes-cta-background: var(--background-color);
-  --popup-themes-cta-background-on-hover: var(--link-color);
-  --popup-themes-cta-color-on-hover: var(--popup-main-text-color);
+  --popup-themes-cta-icon: white;
+  --popup-themes-cta-text: white;
+  --popup-themes-cta-background: #e40d0d;
+  --popup-themes-cta-background-on-hover: #333333;
+  --popup-themes-cta-color-on-hover: white;
 }
 #ocean_theme,
 [data-theme-cta="ocean_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
   --popup-accent-color: #81defe;
-  --popup-accent-hovered-color: #ffffff;
-  --popup-entry-hovered-bg-color: #2284f7;
-  --popup-block-ads-bg-color: #2284f7;
+  --popup-separator-color: #81defe;
+  --popup-accent-hovered-color: white;
+  --premium-badge-bg-color: var(--popup-background-color);
+  --premium-badge-text-color: #81defe;
+  --premium-badge-border-color: var(--premium-badge-text-color);
   --block-count-color: white;
-  --background-color: #03bcfc;
-  --link-color: #333333;
-  --popup-button: #ffca00;
-  --popup-button-text: #333333;
-  --popup-button-disabled-text: #333333;
-  --popup-link-text: #ffffff;
+  --popup-background-color: #2284f7;
+  --popup-card-background-color: #03bcfc;
+  --popup-url-text-color: white;
+  --disabled-link-color: #c6c6c6;
+  --popup-button-text: white;
+  --popup-button-disabled-text: #666666;
+  --popup-link-text: white;
+  --popup-divider-line-color: #81defe;
+  --popup-button-background-color: var(--blue1);
+  --popup-button-outline-color: #c6c6c6;
+  --popup-button-reenable-bg-color: white;
+  --popup-button-reenable-text-color: var(--blue1);
+  --popup-button-reenable-hovered-bg-color: var(--blue3);
+  --popup-button-reenable-hovered-text-color: white;
+  --popup-yt-icon-color: #e40d0d;
+  --popup-twitch-icon-color: #663399;
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
   --premium-badge: var(--popup-accent-color);
   --popup-link-hovered: var(--block-count-color);
-  --popup-themes-cta-icon: var(--popup-main-text-color);
-  --popup-themes-cta-text: var(--popup-main-text-color);
-  --popup-themes-cta-background: var(--background-color);
-  --popup-themes-cta-background-on-hover: var(--link-color);
-  --popup-themes-cta-color-on-hover: var(--popup-main-text-color);
+  --popup-themes-cta-icon: white;
+  --popup-themes-cta-text: white;
+  --popup-themes-cta-background: #03bcfc;
+  --popup-themes-cta-background-on-hover: #333333;
+  --popup-themes-cta-color-on-hover: white;
 }
 #sunshine_theme,
 [data-theme-cta="sunshine_theme"] {
   /* Needed for Pop-up Menu */
   --popup-main-text-color: white;
   --popup-accent-color: #ffd780;
-  --popup-accent-hovered-color: #ffffff;
-  --popup-entry-hovered-bg-color: #ff9c00;
-  --popup-block-ads-bg-color: #ff9c00;
-  --block-count-color: white;
-  --background-color: #ffae00;
-  --link-color: #7f5600;
-  --popup-button: #ce5001;
-  --popup-button-text: #ffffff;
-  --popup-button-disabled-text: #7f5600;
-  --popup-link-text: #7f5600;
+  --popup-separator-color: #ffd780;
+  --popup-accent-hovered-color: white;
+  --premium-badge-bg-color: var(--popup-background-color);
+  --premium-badge-text-color: #ffd780;
+  --premium-badge-border-color: var(--premium-badge-text-color);
+  --block-count-color: #ffd780;
+  --popup-background-color: #ff9c00;
+  --popup-card-background-color: var(--yellow2);
+  --popup-url-text-color: white;
+  --disabled-link-color: #c6c6c6;
+  --popup-button-text: white;
+  --popup-button-disabled-text: #666666;
+  --popup-link-text: white;
+  --popup-divider-line-color: #ffd780;
+  --popup-button-background-color: #ff9c00;
+  --popup-button-outline-color: #c6c6c6;
+  --popup-button-reenable-bg-color: white;
+  --popup-button-reenable-text-color: var(--yellow1);
+  --popup-button-reenable-hovered-bg-color: var(--yellow3);
+  --popup-button-reenable-hovered-text-color: var(--gray1);
+  --popup-yt-icon-color: #e40d0d;
+  --popup-twitch-icon-color: #663399;
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
      in future themes */
   --premium-badge: var(--popup-accent-color);
   --popup-link-hovered: var(--block-count-color);
-  --popup-themes-cta-icon: var(--link-color);
-  --popup-themes-cta-text: var(--link-color);
-  --popup-themes-cta-background: var(--background-color);
-  --popup-themes-cta-background-on-hover: var(--link-color);
-  --popup-themes-cta-color-on-hover: var(--popup-main-text-color);
+  --popup-themes-cta-icon: #7f5600;
+  --popup-themes-cta-text: #7f5600;
+  --popup-themes-cta-background: #ffae00;
+  --popup-themes-cta-background-on-hover: #333333;
+  --popup-themes-cta-color-on-hover: white;
 }

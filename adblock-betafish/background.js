@@ -197,6 +197,22 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse({ response: createPageWhitelistFilter(message.url) });
 });
 
+// Creates a custom filter entry that allowlists a given domain
+// Inputs: pageUrl:string url of the page
+// Returns: null if successful, otherwise an exception
+const createDomainAllowlistFilter = function (pageUrl) {
+  const theURL = new URL(pageUrl);
+  const host = theURL.hostname.replace(/^www\./, '');
+  const filter = `@@||${host}/*^$document`;
+  return addCustomFilter(filter);
+};
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command !== 'createDomainAllowlistFilter' || !message.url) {
+    return;
+  }
+  sendResponse({ response: createDomainAllowlistFilter(message.url) });
+});
+
 // UNWHITELISTING
 
 function getUserFilters() {
@@ -646,6 +662,7 @@ const getTab = function (tabId) {
 // lastGetStatusCode: int - status code for last GET request
 // lastGetErrorResponse: error object - error response for last GET request
 // lastPostStatusCode: int - status code for last POST request
+// allowlistRuleText: string - allowlist rule text for use on YouTube and Twitch
 // }
 // Returns: Promise
 const getCurrentTabInfo = function (secondTime, tabId) {
@@ -703,6 +720,9 @@ const getCurrentTabInfo = function (secondTime, tabId) {
           if (!result.youTubeChannelName && /ab_channel/.test(tab.url)) {
             result.youTubeChannelName = parseUri.parseSearch(tab.url).ab_channel;
           }
+          if (result.youTubeChannelName) {
+            result.allowlistRuleText = `@@||www.youtube.com/*${result.youTubeChannelName}|$document`;
+          }
         }
         if (
           twitchChannelNamePages
@@ -711,6 +731,9 @@ const getCurrentTabInfo = function (secondTime, tabId) {
           && parseUri(tab.url).hostname === 'www.twitch.tv'
         ) {
           result.twitchChannelName = twitchChannelNamePages.get(page.id);
+          if (result.twitchChannelName) {
+            result.allowlistRuleText = `@@||twitch.tv/*${result.twitchChannelName}^$document`;
+          }
         }
         return resolve(result);
       } catch (err) {

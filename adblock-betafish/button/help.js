@@ -13,6 +13,14 @@ let filterUpdateError = false;
 let logSent = false;
 let closeKeydownHandler;
 let backKeydownHandler;
+let primarysectionDisplay;
+let ytChannelSectionDisplay;
+let twitchChannelSectionDisplay;
+let disabledSiteSectionDisplay;
+let pauseSubsectionDisplay;
+let domainPausedSubsectionDisplay;
+let allPausedSubsectionDisplay;
+let allowlistedSubsectionDisplay;
 
 const logHelpFlowResults = function (source) {
   logSent = true;
@@ -28,7 +36,15 @@ $(window).on('unload', () => {
 const reset = function () {
   segueBreadCrumb = [];
   $('#help_content').empty();
-  $('#wrapper').show();
+  $('#primary_section').css('display', primarysectionDisplay);
+  $('#yt_channel_section').css('display', ytChannelSectionDisplay);
+  $('#twitch_channel_section').css('display', twitchChannelSectionDisplay);
+  $('#disabled_site_section').css('display', disabledSiteSectionDisplay);
+  $('#pause_subsection').css('display', pauseSubsectionDisplay);
+  $('#domain_paused_subsection').css('display', domainPausedSubsectionDisplay);
+  $('#all_paused_subsection').css('display', allPausedSubsectionDisplay);
+  $('#allowlisted_subsection').css('display', allowlistedSubsectionDisplay);
+
   $('#help_overlay').hide();
   // eslint-disable-next-line no-use-before-define
   selectedOff('#close_icon', closeClickHandler, closeKeydownHandler);
@@ -200,7 +216,23 @@ const postLoadInitialize = function () {
   closeKeydownHandler = selected('#close_icon', closeClickHandler);
   backKeydownHandler = selected('#back_icon', backClickHandler);
   transitionTo('start');
-  $('#wrapper').hide();
+  primarysectionDisplay = $('#primary_section').css('display');
+  ytChannelSectionDisplay = $('#yt_channel_section').css('display');
+  twitchChannelSectionDisplay = $('#twitch_channel_section').css('display');
+  disabledSiteSectionDisplay = $('#disabled_site_section').css('display');
+  pauseSubsectionDisplay = $('#pause_subsection').css('display');
+  domainPausedSubsectionDisplay = $('#domain_paused_subsection').css('display');
+  allPausedSubsectionDisplay = $('#all_paused_subsection').css('display');
+  allowlistedSubsectionDisplay = $('#allowlisted_subsection').css('display');
+
+  $('#primary_section').hide();
+  $('#yt_channel_section').hide();
+  $('#twitch_channel_section').hide();
+  $('#disabled_site_section').hide();
+  $('#pause_subsection').hide();
+  $('#domain_paused_subsection').hide();
+  $('#all_paused_subsection').hide();
+  $('#allowlisted_subsection').hide();
   $('#help_overlay').show();
   $('#separator_help').show();
 };

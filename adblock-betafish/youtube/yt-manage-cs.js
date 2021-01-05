@@ -465,7 +465,7 @@ const configureChildElements = function (parentNodeArg, adsAllowedArg) {
     lineTwoElem.style.backgroundColor = '#FFFFFF';
     lineTwoElem.style.cursor = 'pointer';
     lineOneTextElem.textContent = translate('youtube_onpage_icon_blocking_ads_on_channel');
-    lineTwoTextElem.textContent = translate('whitelist_channel');
+    lineTwoTextElem.textContent = translate('allowlist_channel');
   }
 };
 
