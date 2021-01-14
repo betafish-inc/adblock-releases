@@ -32,6 +32,9 @@ body {
   margin: 0;
   padding: 10px 0 15px 0;
 }
+.support-text {
+  font-size: 18px;
+}
 a {
   color: var(--main-text-color);
 }
@@ -195,6 +198,10 @@ button {
 .btn.red {
   color: var(--options-button-text);
   background-color: var(--options-button-bg);
+}
+.btn.green {
+  color: var(--options-button-text);
+  background-color: var(--options-button-complete-bg);
 }
 .btn.grey {
   color: var(--options-button-text);
@@ -484,6 +491,81 @@ select#language_select optgroup {
 }
 .savereminder {
   margin-right: 20px;
+}
+
+/* Support tab */
+h2[i18n="needhelp"] {
+  margin-bottom: 19px;
+}
+h2[i18n="aboutadblock"] {
+  margin-top: 65px;
+}
+#copiedDebugData,
+#copyDebugData {
+  font-size: 15px;
+}
+#btnCopyDebugData {
+  display: inline-flex;
+}
+#debugInfo::selection {
+  background: Cornflowerblue;
+}
+#debugInfo::-moz-selection {
+  background: Cornflowerblue;
+}
+.checkmark-circle {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  display: inline-block;
+  vertical-align: top;
+}
+.checkmark-circle .checkmark {
+  border-radius: 5px;
+}
+.checkmark-circle .checkmark.draw::after {
+  animation-delay: 10ms;
+  animation-duration: 350ms;
+  animation-timing-function: ease;
+  animation-name: checkmark;
+  transform: scaleX(-1) rotate(135deg);
+  animation-fill-mode: forwards;
+}
+.checkmark-circle .checkmark::after {
+  opacity: 0;
+  height: 16px;
+  width: 8px;
+  transform-origin: left top;
+  border-right: 4px solid white;
+  border-top: 4px solid white;
+  border-radius: 2px !important;
+  content: "";
+  left: -65px;
+  top: 9px;
+  position: absolute;
+}
+
+@keyframes checkmark {
+  0% {
+    height: 0;
+    width: 0;
+    opacity: 1;
+  }
+  20% {
+    height: 0;
+    width: 8px;
+    opacity: 1;
+  }
+  40% {
+    height: 8px;
+    width: 8px;
+    opacity: 1;
+  }
+  100% {
+    height: 16px;
+    width: 8px;
+    opacity: 1;
+  }
 }
 
 /* MISC */

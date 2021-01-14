@@ -4,17 +4,49 @@
 /* global browser, BG, selected, browser, determineUserLanguage */
 
 $(() => {
+  const resetCheckmark = function () {
+    $('#checkmark-circle-checkmark').removeClass('checkmark').removeClass('draw');
+    $('#checkmark-circle').removeClass('checkmark-circle').addClass('do-not-display');
+    $('#checkmark-circle').css('display', ''); // remove the "display: none;" style property that was set during fadeOut()
+  };
+
+  const observer = new MutationObserver(((mutations) => {
+    for (const mutation of mutations) {
+      if ($('#support').is(':visible') && mutation.attributeName === 'style') {
+        resetCheckmark();
+        $('#btnCopyDebugData').removeClass('green').addClass('red');
+        $('#copiedDebugData').addClass('do-not-display');
+        $('#copyDebugData').show();
+      }
+    }
+  }));
+
+  const target = document.querySelector('#support');
+  observer.observe(target, {
+    attributes: true,
+  });
+
   if (!determineUserLanguage().startsWith('en')) {
     $('.english-only').removeClass('do-not-display');
   }
   // Show debug info
-  selected('#debug', () => {
-    let debugInfo = null;
-    const showDebugInfo = function () {
-      $('#debugInfo').text(debugInfo)
-        .css({ width: '450px', height: '100px' })
-        .fadeIn();
-    };
+  let debugInfo = null;
+  const showDebugInfo = function () {
+    $('#debugInfo').text(debugInfo).fadeIn();
+    document.getElementById('debugInfo').select();
+    document.execCommand('copy');
+    $('#btnCopyDebugData').addClass('green').removeClass('red');
+    $('#checkmark-circle-checkmark').addClass('checkmark').addClass('draw');
+    $('#checkmark-circle').addClass('checkmark-circle').removeClass('do-not-display');
+    $('#copyDebugData').hide();
+    $('#copiedDebugData').removeClass('do-not-display');
+    setTimeout(() => {
+      $('#checkmark-circle').fadeOut(400, () => {
+        resetCheckmark();
+      });
+    }, 2500);
+  };
+  selected('#btnCopyDebugData', () => {
     // Get debug info
     BG.getDebugInfo((theDebugInfo) => {
       const content = [];
@@ -110,7 +142,7 @@ $(() => {
     fetch(browser.runtime.getURL('CHANGELOG.txt'))
       .then(response => response.text())
       .then((text) => {
-        $('#changes').text(text).css({ width: '670px', height: '200px' }).fadeIn();
+        $('#changes').text(text).fadeIn();
         $('body, html').animate({
           scrollTop: $('#changes').offset().top,
         }, 1000);
