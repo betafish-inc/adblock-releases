@@ -10,7 +10,6 @@ let manifest;
 function editManifest(dataParam, version, channel, target) {
   const data = dataParam;
   data.version = version;
-  data.name = `__MSG_name_${channel === 'development' ? 'dev' : channel}build__`;
 
   if (target === 'chrome') {
     delete data.applications;

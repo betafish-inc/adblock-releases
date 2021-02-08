@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '4.28.1',
+  version: '4.28.3',
   webpack: {
     bundles: [
       {
