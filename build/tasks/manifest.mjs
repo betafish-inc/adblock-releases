@@ -1,0 +1,62 @@
+
+import { resolve } from 'path';
+import fs from 'fs';
+import { Readable } from 'stream';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Vinyl from 'vinyl';
+
+let manifest;
+
+function editManifest(dataParam, version, channel, target) {
+  const data = dataParam;
+  data.version = version;
+  data.name = `__MSG_name_${channel === 'development' ? 'dev' : channel}build__`;
+
+  if (target === 'chrome') {
+    delete data.applications;
+    delete data.content_security_policy;
+    const tempArray = data.web_accessible_resources.concat(data.web_accessible_resources_chrome);
+    data.web_accessible_resources = tempArray;
+  }
+
+  if (target === 'firefox') {
+    const gecko = {};
+    gecko.strict_min_version = data.applications.gecko.strict_min_version;
+    gecko.id = data.applications.gecko.id;
+
+    delete data.storage;
+    delete data.minimum_chrome_version;
+    delete data.minimum_opera_version;
+    delete data.optional_permissions;
+
+    data.applications.gecko = gecko;
+  }
+  delete data.web_accessible_resources_chrome;
+
+  return data;
+}
+
+export function createManifest(contents) {
+  // eslint-disable-next-line new-cap
+  return new Readable.from([
+    new Vinyl({
+      // eslint-disable-next-line no-undef
+      contents: Buffer.from(JSON.stringify(contents, null, 2)),
+      path: 'manifest.json',
+    }),
+  ]);
+}
+
+export async function getManifestContent({
+  target, version, channel, path,
+}) {
+  if (manifest) {
+    return manifest;
+  }
+
+  const raw = JSON.parse(await fs.promises.readFile(resolve(path || 'build/manifest.json')));
+
+  manifest = editManifest(raw, version, channel, target);
+
+  return manifest;
+}
