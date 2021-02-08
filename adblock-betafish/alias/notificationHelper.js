@@ -2,10 +2,15 @@
 /** @module notificationHelper */
 
 /** original file adblockpluschrome\lib\notificationHelper.js */
+/*
+ * Same as the original source adblockpluschrome/lib/icon.js
+ * except:
+ * Most of the logic has been removed to prevent users from seeing notifications
+ * Only exported functions remain, which are no-op
+ *
+ */
 
 "use strict";
-
-const {startIconAnimation, stopIconAnimation} = require("../../adblockpluschrome/lib/icon");
 
 /**
  * Initializes the notification system.

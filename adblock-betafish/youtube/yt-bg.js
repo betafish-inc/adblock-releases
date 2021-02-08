@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, getSettings, settings, require, ext, setSetting,
-   addCustomFilter, checkWhitelisted, getUserFilters,
+   addCustomFilter, checkAllowlisted, getUserFilters,
    isWhitelistFilter */
 
 const { Filter } = require('filterClasses');
@@ -109,7 +109,7 @@ const ytHistoryHandler = function (details) {
         // so the content script does not have to wait for it to load.
         injectManagedContentScript(details, !(details.transitionQualifiers && details.transitionQualifiers.includes('forward_back')));
       }
-      filterNotifier.emit('page.WhitelistingStateRevalidate', myPage, checkWhitelisted(myPage));
+      filterNotifier.emit('page.WhitelistingStateRevalidate', myPage, checkAllowlisted(myPage));
     }
   }
 };

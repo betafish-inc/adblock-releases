@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, getSettings, settings, require, ext, setSetting,
-   addCustomFilter, filterNotifier, checkWhitelisted */
+   addCustomFilter, filterNotifier, checkAllowlisted */
 
 const browserAction = require('browserAction');
 
@@ -24,7 +24,7 @@ const twitchHistoryStateUpdateHandler = function (details) {
       myPage._url = myURL;
       myFrame.url = myURL;
       myFrame._url = myURL;
-      if (checkWhitelisted(myPage)) {
+      if (checkAllowlisted(myPage)) {
         browserAction.setBadge(details.tabId, { number: '' });
       }
     }
@@ -59,7 +59,7 @@ const twitchMessageHandler = function (message, sender, sendResponse) {
   }
   if (message.command === 'allowlistingStateRevalidate') {
     const page = new ext.Page(sender.tab);
-    filterNotifier.emit('page.WhitelistingStateRevalidate', page, checkWhitelisted(page));
+    filterNotifier.emit('page.WhitelistingStateRevalidate', page, checkAllowlisted(page));
     sendResponse({});
   }
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, onReady, DOMPurify */
+/* global browser, onReady, DOMPurify, parseUri */
 
 if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hostname) === true) {
   /*
@@ -18,9 +18,6 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
 
       2) Add listeners for messages from background page, and injected script
   */
-
-  /* For ESLint: List any global identifiers used in this file below */
-  /* global browser, parseUri, ytInitialPlayerResponse, DOMPurify */
 
   const toContentScriptRandomEventName = `ab-yt-channel-name-${Math.random().toString(36).substr(2)}`;
   const fromContentScriptRandomEventName = `yt-ab-channel-name-${Math.random().toString(36).substr(2)}`;

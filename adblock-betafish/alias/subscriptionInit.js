@@ -1,5 +1,7 @@
 /** @module adblock-betafish/alias/subscriptionInit */
 
+/** similar to adblockpluschrome\lib\subscriptionInit.js */
+
 "use strict";
 
 const {Subscription,
@@ -14,14 +16,11 @@ const {port} = require("../../adblockpluschrome/lib/messaging");
 const {Prefs} = require("prefs");
 const {synchronizer} = require("synchronizer");
 const {initNotifications} = require("notificationHelper");
-const {updatesVersion} = require("../../adblockpluschrome/adblockplusui/lib/prefs");
-const {
-  showProblemNotification,
-  showUpdatesNotification
-} = require("notifications");
+
 
 let firstRun;
 let subscriptionsCallback = null;
+let userNotificationCallback = null;
 let reinitialized = false;
 let dataCorrupted = false;
 
@@ -56,6 +55,18 @@ function detectFirstRun()
 }
 
 /**
+ * In case of data corruption, we don't want to show users
+ * any non-essential notifications so we need to instruct
+ * the notification manager to ignore them.
+ *
+ * @param {boolean} value
+ */
+function setDataCorrupted(value)
+{
+  dataCorrupted = value;
+}
+
+/**
  * Determines whether to add the default ad blocking subscriptions.
  * Returns true, if there are no filter subscriptions besides those
  * other subscriptions added automatically, and no custom filters.
@@ -73,7 +84,6 @@ function shouldAddDefaultSubscriptions()
   {
     if (subscription instanceof DownloadableSubscription &&
         subscription.url != Prefs.subscriptions_exceptionsurl &&
-        subscription.url != Prefs.subscriptions_antiadblockurl &&
         subscription.type != "circumvention")
       return false;
 
@@ -86,63 +96,45 @@ function shouldAddDefaultSubscriptions()
 }
 
 /**
- * Finds the elements for the default ad blocking filter subscriptions based
- * on the user's locale.
+ * Finds the default filter subscriptions.
+ *
+ * Returns an array that includes one subscription of the type "ads" for the
+ * current UI language, and any subscriptions of the type "circumvention".
  *
  * @param {Array.<object>} subscriptions
- * @return {Map.<string, object>}
+ * @return {Array.<object>}
  */
 function chooseFilterSubscriptions(subscriptions)
 {
-  let chosenSubscriptions = new Map();
+  let currentLang = browser.i18n.getUILanguage().split("-")[0];
+  let defaultLang = browser.runtime.getManifest().default_locale.split("_")[0];
 
-  let selectedLanguage = null;
-  let matchCount = 0;
+  let adSubscriptions = [];
+  let adSubscriptionsDefaultLang = [];
+  let chosenSubscriptions = [];
 
   for (let subscription of subscriptions)
   {
-    let {languages, type} = subscription;
-    let language = languages && languages.find(
-      lang => new RegExp("^" + lang + "\\b").test(browser.i18n.getUILanguage())
-    );
-
-    if ((type == "ads" || type == "circumvention") &&
-        !chosenSubscriptions.has(type))
+    switch (subscription.type)
     {
-      chosenSubscriptions.set(type, subscription);
-    }
+      case "ads":
+        if (subscription.languages.includes(currentLang))
+          adSubscriptions.push(subscription);
+        if (subscription.languages.includes(defaultLang))
+          adSubscriptionsDefaultLang.push(subscription);
+        break;
 
-    if (language)
-    {
-      // The "ads" subscription is the one driving the selection.
-      if (type == "ads")
-      {
-        if (!selectedLanguage || selectedLanguage.length < language.length)
-        {
-          chosenSubscriptions.set(type, subscription);
-          selectedLanguage = language;
-          matchCount = 1;
-        }
-        else if (selectedLanguage && selectedLanguage.length == language.length)
-        {
-          matchCount++;
-
-          // If multiple items have a matching language of the same length:
-          // Select one of the items randomly, probability should be the same
-          // for all items. So we replace the previous match here with
-          // probability 1/N (N being the number of matches).
-          if (Math.random() * matchCount < 1)
-          {
-            chosenSubscriptions.set(type, subscription);
-            selectedLanguage = language;
-          }
-        }
-      }
-      else if (type == "circumvention")
-      {
-        chosenSubscriptions.set(type, subscription);
-      }
+      case "circumvention":
+        chosenSubscriptions.push(subscription);
+        break;
     }
+  }
+
+  if (adSubscriptions.length > 0 || (adSubscriptions =
+                                     adSubscriptionsDefaultLang).length > 0)
+  {
+    let randomIndex = Math.floor(Math.random() * adSubscriptions.length);
+    chosenSubscriptions.unshift(adSubscriptions[randomIndex]);
   }
 
   return chosenSubscriptions;
@@ -179,17 +171,15 @@ function getSubscriptions()
     let cplSubscription = Subscription.fromURL('https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt');
     cplSubscription.title = "Cryptocurrency (Bitcoin) Mining Protection List";
     subscriptions.push(cplSubscription);
-
   }
 
   // Add default ad blocking subscriptions (e.g. EasyList, Anti-Circumvention)
   let addDefaultSubscription = shouldAddDefaultSubscriptions();
   if (addDefaultSubscription || !Prefs.subscriptions_addedanticv)
   {
-    for (let [, value] of chooseFilterSubscriptions(recommendations()))
+    for (let {url, type,
+      title, homepage} of chooseFilterSubscriptions(recommendations()))
     {
-      let {url, type, title, homepage} = value;
-
       // Make sure that we don't add Easylist again if we want
       // to just add the Anti-Circumvention subscription.
       if (!addDefaultSubscription && type != "circumvention")
@@ -270,53 +260,70 @@ function addSubscriptionsAndNotifyUser(subscriptions)
   // on Chromium (since the current updates page announces features that
   // aren't new to Firefox users), and only if this version of the
   // updates page hasn't been shown yet.
-  if (firstRun)
+  if (firstRun && !Prefs.suppress_first_run_page)
   {
-    return Prefs.set("last_updates_page_displayed", updatesVersion).catch(() =>
+    // Always show the first run page if a data corruption was detected
+    // (either through failure of reading from or writing to storage.local).
+    // The first run page notifies the user about the data corruption.
+    let url;
+    if (firstRun || dataCorrupted)
     {
-      dataCorrupted = true;
-    }).then(() =>
-    {
-      if (!Prefs.suppress_first_run_page)
+      // see if the there's a tab to the Premium Sunset page, if so, don't open /installed
+      browser.tabs.query({ currentWindow: true }).then((tabs) =>
       {
-        // Always show the first run page if a data corruption was detected
-        // (either through failure of reading from or writing to storage.local).
-        // The first run page notifies the user about the data corruption.
-        let url;
-        if (firstRun || dataCorrupted)
+        if (!tabs || tabs.length === 0)
         {
-          // see if the there's a tab to the Premium Sunset page, if so, don't open /installed
-          browser.tabs.query({ currentWindow: true }).then((tabs) =>
-          {
-            if (!tabs || tabs.length === 0)
-            {
-              openInstalled();
-              return;
-            }
-            const updateFreeURL = 'https://getadblockpremium.com/sunset/free/?';
-            const updatePaidURL = 'https://getadblockpremium.com/sunset/paid/?';
-            const sunsetFreePageFound = tabs.some((tab) =>
-            {
-              return (tab && tab.url && tab.url.startsWith(updateFreeURL));
-            });
-            const sunsetPaidPageFound = tabs.some((tab) =>
-            {
-              return (tab && tab.url && tab.url.startsWith(updatePaidURL));
-            });
-            if (!sunsetFreePageFound && !sunsetPaidPageFound)
-            {
-              openInstalled();
-            }
-          });
+          openInstalled();
+          return;
         }
-      }
-    });
+        const updateFreeURL = 'https://getadblockpremium.com/sunset/free/?';
+        const updatePaidURL = 'https://getadblockpremium.com/sunset/paid/?';
+        const sunsetFreePageFound = tabs.some((tab) =>
+        {
+          return (tab && tab.url && tab.url.startsWith(updateFreeURL));
+        });
+        const sunsetPaidPageFound = tabs.some((tab) =>
+        {
+          return (tab && tab.url && tab.url.startsWith(updatePaidURL));
+        });
+        if (!sunsetFreePageFound && !sunsetPaidPageFound)
+        {
+          openInstalled();
+        }
+      });
+    }
+  }
+
+  if (userNotificationCallback)
+    userNotificationCallback({dataCorrupted, firstRun, reinitialized});
+}
+
+/**
+ * We need to check whether we can safely write to/read from storage
+ * before we start relying on it for storing preferences.
+ */
+async function testStorage()
+{
+  let testKey = "readwrite_test";
+  let testValue = Math.random();
+
+  try
+  {
+    await browser.storage.local.set({[testKey]: testValue});
+    let result = await browser.storage.local.get(testKey);
+    if (result[testKey] != testValue)
+      throw new Error("Storage test: Failed to read and write value");
+  }
+  finally
+  {
+    await browser.storage.local.remove(testKey);
   }
 }
 
 Promise.all([
   filterEngine.initialize().then(() => synchronizer.start()),
-  Prefs.untilLoaded.catch(() => { dataCorrupted = true; })
+  Prefs.untilLoaded.catch(() => { setDataCorrupted(true); }),
+  testStorage().catch(() => { setDataCorrupted(true); })
 ]).then(detectFirstRun)
   .then(getSubscriptions)
   .then(addSubscriptionsAndNotifyUser)
@@ -343,6 +350,17 @@ exports.isDataCorrupted = () => dataCorrupted;
 exports.setSubscriptionsCallback = callback =>
 {
   subscriptionsCallback = callback;
+};
+
+/**
+ * Sets a callback that is called with environment information after
+ * initialization to notify users.
+ *
+ * @param {function} callback
+ */
+exports.setNotifyUserCallback = callback =>
+{
+  userNotificationCallback = callback;
 };
 
 // Exports for tests only

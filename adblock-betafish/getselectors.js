@@ -19,7 +19,7 @@ const {
 } = require('elemHide');
 const { RegExpFilter } = require('filterClasses');
 const { elemHideEmulation } = require('elemHideEmulation');
-const { checkWhitelisted } = require('whitelisting');
+const { checkAllowlisted } = require('allowlisting');
 const { extractHostFromFrame } = require('url');
 const { port } = require('messaging');
 
@@ -28,10 +28,10 @@ port.on('getSelectors', (_message, sender) => {
   let exceptions = [];
   const emulatedPatterns = [];
 
-  if (!checkWhitelisted(sender.page, sender.frame, null,
+  if (!checkAllowlisted(sender.page, sender.frame, null,
     RegExpFilter.typeMap.DOCUMENT || RegExpFilter.typeMap.ELEMHIDE)) {
     const hostname = extractHostFromFrame(sender.frame);
-    const specificOnly = checkWhitelisted(sender.page, sender.frame, null,
+    const specificOnly = checkAllowlisted(sender.page, sender.frame, null,
       RegExpFilter.typeMap.GENERICHIDE);
 
     ({ selectors, exceptions } = elemHide.generateStyleSheetForDomain(

@@ -1,4 +1,5 @@
 /** @module adblock-betafish/alias/uninstall */
+/** similar to adblockpluschrome\lib\uninstall.js */
 
 const {filterStorage} = require("filterStorage");
 const {STATS} = require('./../stats');

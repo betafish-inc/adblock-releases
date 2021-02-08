@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, translate, onReady, typeMap, imageSizesMap,
+/* global browser, translate, onReady, imageSizesMap,
    base64toBlob  */
 
 const { hostname } = window.location;
@@ -11,6 +11,18 @@ const hiddenElements = [];
 let cssRules = [];
 const minDimension = 60;
 const CUSTOM_IMAGES_KEY = 'customImages';
+
+const typeMap = new Map([
+  ['img', 'IMAGE'],
+  ['input', 'IMAGE'],
+  ['picture', 'IMAGE'],
+  ['audio', 'MEDIA'],
+  ['video', 'MEDIA'],
+  ['frame', 'SUBDOCUMENT'],
+  ['iframe', 'SUBDOCUMENT'],
+  ['object', 'OBJECT'],
+  ['embed', 'OBJECT'],
+]);
 
 browser.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
   if (response && response.selectors) {
@@ -674,13 +686,17 @@ onReady(() => {
     }
   }
 
+  // Add any elements from the collapsedElements array
+  for (let i = 0; i < window.collapsedElements.length; i++) {
+    const data = { el: window.collapsedElements[i] };
+    hiddenElements.push(data);
+  }
   // If no elements to swap, stop
   if (!hiddenElements.length && !hideElements.length) {
     return;
   }
 
   const allElements = hideElements.concat(hiddenElements);
-
   for (let i = 0; i < allElements.length; i++) {
     const data = allElements[i];
     const size = imageSwap.getSize(data);
@@ -698,7 +714,6 @@ onReady(() => {
 
   // Put first elements of larger dimensions
   elementsData = elementsData.sort((a, b) => (b.dimension > a.dimension ? 1 : -1));
-
   for (let i = 0; i < elementsData.length; i++) {
     imageSwap.replaceSection(elementsData[i], imageSwap.done);
   }

@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global Chart, browser, License, localizePage, BG
    DOMPurify,translate, filterNotifier, subscription, synchronizer,
-   filterStorage, Subscription, activateTab, channels */
+   filterStorage, Subscription, activateTab */
 
 Chart.defaults.global.defaultFontFamily = 'Lato';
 

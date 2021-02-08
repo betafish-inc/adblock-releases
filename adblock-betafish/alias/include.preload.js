@@ -7,6 +7,8 @@
  * - updated the `require` path to other modules
  * - added several checks & innovocations of the 'MyAdBlock' function
  *   checkElement()
+ * - added the collapsedElements array to collect any elements have been hidden,
+ *   or collapsed prior to the Image Swap content script loading
  */
 
 /*
@@ -31,114 +33,37 @@
 let {ElemHideEmulation} =
   require("../../adblockpluschrome/adblockpluscore/lib/content/elemHideEmulation");
 
-// This variable is also used by our other content scripts.
 let contentFiltering;
+let collapsedSelectors = new Set();
+window.collapsedElements = [];
 
-const typeMap = new Map([
-  ["img", "IMAGE"],
-  ["input", "IMAGE"],
-  ["picture", "IMAGE"],
-  ["audio", "MEDIA"],
-  ["video", "MEDIA"],
-  ["frame", "SUBDOCUMENT"],
-  ["iframe", "SUBDOCUMENT"],
-  ["object", "OBJECT"],
-  ["embed", "OBJECT"]
-]);
-
-let checkedSelectors = new Set();
-
-function getURLsFromObjectElement(element)
+// if the Image Swap function isn't found when the page loads, then remove all
+// elements from the array.
+function clearArrayIfNeccessary()
 {
-  let url = element.getAttribute("data");
-  if (url)
-    return [url];
-
-  for (let child of element.children)
-  {
-    if (child.localName != "param")
-      continue;
-
-    let name = child.getAttribute("name");
-    if (name != "movie" &&  // Adobe Flash
-        name != "source" && // Silverlight
-        name != "src" &&    // Real Media + Quicktime
-        name != "FileName") // Windows Media
-      continue;
-
-    let value = child.getAttribute("value");
-    if (!value)
-      continue;
-
-    return [value];
+  if (typeof checkElement !== "function") {
+    window.collapsedElements = [];
   }
-
-  return [];
 }
+window.addEventListener('load', clearArrayIfNeccessary, false);
 
-function getURLsFromAttributes(element)
+function getURLFromElement(element)
 {
-  let urls = [];
-
-  if (element.getAttribute("src") && "src" in element)
-    urls.push(element.src);
-
-  if (element.srcset)
+  if (element.localName == "object")
   {
-    for (let candidate of element.srcset.split(","))
+    if (element.data)
+      return element.data;
+
+    for (let child of element.children)
     {
-      let url = candidate.trim().replace(/\s+\S+$/, "");
-      if (url)
-        urls.push(url);
+      if (child.localName == "param" && child.name == "movie" && child.value)
+        return new URL(child.value, document.baseURI).href;
     }
+
+    return null;
   }
 
-  return urls;
-}
-
-function getURLsFromMediaElement(element)
-{
-  let urls = getURLsFromAttributes(element);
-
-  for (let child of element.children)
-  {
-    if (child.localName == "source" || child.localName == "track")
-      urls.push(...getURLsFromAttributes(child));
-  }
-
-  if (element.poster)
-    urls.push(element.poster);
-
-  return urls;
-}
-
-function getURLsFromElement(element)
-{
-  let urls;
-  switch (element.localName)
-  {
-    case "object":
-      urls = getURLsFromObjectElement(element);
-      break;
-
-    case "video":
-    case "audio":
-    case "picture":
-      urls = getURLsFromMediaElement(element);
-      break;
-
-    default:
-      urls = getURLsFromAttributes(element);
-      break;
-  }
-
-  for (let i = 0; i < urls.length; i++)
-  {
-    if (/^(?!https?:)[\w-]+:/i.test(urls[i]))
-      urls.splice(i--, 1);
-  }
-
-  return urls;
+  return element.currentSrc || element.src;
 }
 
 function getSelectorForBlockedElement(element)
@@ -149,15 +74,15 @@ function getSelectorForBlockedElement(element)
   if (element.localName == "frame")
     return null;
 
-  // If the <video> or <audio> element contains any <source> or <track>
-  // children, we cannot address it in CSS by the source URL; in that case we
+  // If the <video> or <audio> element contains any <source> children,
+  // we cannot address it in CSS by the source URL; in that case we
   // don't "collapse" it using a CSS selector but rather hide it directly by
   // setting the style="..." attribute.
   if (element.localName == "video" || element.localName == "audio")
   {
     for (let child of element.children)
     {
-      if (child.localName == "source" || child.localName == "track")
+      if (child.localName == "source")
         return null;
     }
   }
@@ -175,26 +100,39 @@ function getSelectorForBlockedElement(element)
 
 function hideElement(element, properties)
 {
-  if (element.localName == "frame")
-    properties = [["visibility", "hidden"]];
-  else if (!properties)
-    properties = [["display", "none"]];
+  let {style} = element;
+  let actualProperties = [];
 
-  function doHide()
+  if (element.localName == "frame")
+    actualProperties = properties = [["visibility", "hidden"]];
+  else if (!properties)
+    actualProperties = properties = [["display", "none"]];
+
+  for (let [key, value] of properties)
+    style.setProperty(key, value, "important");
+
+  if (!actualProperties)
   {
-    for (let [property, value] of properties)
-    {
-      if (element.style.getPropertyValue(property) != value ||
-          element.style.getPropertyPriority(property) != "important")
-        element.style.setProperty(property, value, "important");
-    }
+    actualProperties = [];
+    for (let [key] of properties)
+      actualProperties.push([key, style.getPropertyValue(key)]);
   }
+
   if (typeof checkElement === "function") {
     checkElement(element);
+  } else {
+    window.collapsedElements.push(element);
   }
-  doHide();
 
-  new MutationObserver(doHide).observe(
+  new MutationObserver(() =>
+  {
+    for (let [key, value] of actualProperties)
+    {
+      if (style.getPropertyValue(key) != value ||
+          style.getPropertyPriority(key) != "important")
+        style.setProperty(key, value, "important");
+    }
+  }).observe(
     element, {
       attributes: true,
       attributeFilter: ["style"]
@@ -202,43 +140,70 @@ function hideElement(element, properties)
   );
 }
 
-function checkCollapse(element)
+function collapseElement(element)
 {
-  let mediatype = typeMap.get(element.localName);
-  if (!mediatype)
-    return;
-
-  let urls = getURLsFromElement(element);
-  if (urls.length == 0)
-    return;
-
   let selector = getSelectorForBlockedElement(element);
   if (selector)
   {
-    if (checkedSelectors.has(selector))
-      return;
-    checkedSelectors.add(selector);
+    if (!collapsedSelectors.has(selector))
+    {
+      contentFiltering.addSelectors([selector], "collapsing", true);
+      collapsedSelectors.add(selector);
+    }
+    if (typeof checkElement === "function") {
+      checkElement(element);
+    } else {
+      window.collapsedElements.push(element);
+    }
   }
+  else
+  {
+    hideElement(element);
+  }
+}
 
-  browser.runtime.sendMessage(
+function startElementCollapsing()
+{
+  let deferred = null;
+
+  browser.runtime.onMessage.addListener((message, sender) =>
+  {
+    if (message.type != "filters.collapse")
+      return;
+
+    if (document.readyState == "loading")
     {
-      type: "filters.collapse",
-      urls,
-      mediatype,
-      baseURL: document.location.href
-    }).then(collapse =>
-    {
-      if (collapse)
+      if (!deferred)
       {
-        if (selector)
-          contentFiltering.addSelectors([selector], "collapsing", true);
-          if (typeof checkElement === "function") {
-            checkElement(element);
+        deferred = new Map();
+        document.addEventListener("DOMContentLoaded", () =>
+        {
+          for (let [selector, urls] of deferred)
+          {
+            for (let element of document.querySelectorAll(selector))
+            {
+              if (urls.has(getURLFromElement(element)))
+                collapseElement(element);
+            }
           }
-        else
-          hideElement(element);
+
+          deferred = null;
+        });
       }
-    });
+
+      let urls = deferred.get(message.selector) || new Set();
+      deferred.set(message.selector, urls);
+      urls.add(message.url);
+    }
+    else
+    {
+      for (let element of document.querySelectorAll(message.selector))
+      {
+        if (getURLFromElement(element) == message.url)
+          collapseElement(element);
+      }
+    }
+  });
 }
 
 function checkSitekey()
@@ -507,20 +472,9 @@ if (document instanceof HTMLDocument)
   contentFiltering = new ContentFiltering();
   contentFiltering.apply();
 
-  document.addEventListener("error", event =>
-  {
-    checkCollapse(event.target);
-  }, true);
-
-  document.addEventListener("load", event =>
-  {
-    let element = event.target;
-    if (/^i?frame$/.test(element.localName))
-      checkCollapse(element);
-  }, true);
+  startElementCollapsing();
 }
 
-window.checkCollapse = checkCollapse;
+window.collapseElement = collapseElement;
 window.contentFiltering = contentFiltering;
-window.typeMap = typeMap;
-window.getURLsFromElement = getURLsFromElement;
+window.getURLFromElement = getURLFromElement;

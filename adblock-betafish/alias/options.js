@@ -28,7 +28,7 @@
 
 "use strict";
 
-const {checkWhitelisted} = require("whitelisting");
+const {checkAllowlisted} = require("allowlisting");
 const info = require("info");
 const {port} = require("messaging");
 
@@ -210,7 +210,7 @@ browser.browserAction.onClicked.addListener(() =>
           args: [
             {
               host: currentPage.url.hostname.replace(/^www\./, ""),
-              whitelisted: !!checkWhitelisted(currentPage)
+              whitelisted: !!checkAllowlisted(currentPage)
             }
           ]
         });

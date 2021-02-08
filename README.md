@@ -3,10 +3,8 @@
 ## Intro
 
 [AdBlock](https://getadblock.com/) is a popular ad blocking extension for Chrome,
-Opera and Safari, now based on the [Adblock Plus](https://adblockplus.org/) code.
-By leveraging the Adblock Plus build system `build.py` and dependency management
-tool `ensure_dependencies.py` this repository is built on top of Adblock Plus
-and contains only what is necessary for AdBlock's branding and additional functionality.
+Edge and Firefox, now based on the [Adblock Plus](https://adblockplus.org/) code.
+
 
 ## Requirements
 
@@ -14,87 +12,57 @@ This repository has [the same requirements as the Adblock Plus](https://github.c
 
 Be sure that your build environment is up to date with the latest ABP dependencies (noted above).
 
-Note: when installing the fonttools module, you will probably need to run the installer with sudo or admin permissions.
-
-Finally, if the dependencies file has been changed to a different version of the ABP code, its a good idea to delete the adblockpluschrome and buildtools folders under the project's root directory.
-
 ## Usage
+Building
+---------
+
+### Requirements
+
+- [Node.js](https://nodejs.org/) (>= 12.17.0)
+
+### Building on Windows
+
+On Windows, you need a [Linux environment running on WSL](https://docs.microsoft.com/windows/wsl/install-win10).
+Then install the above requirements and run the commands below from within Bash.
+
+### Updating the dependencies
+
+Clone the external repositories:
+
+    git submodule update --init --recursive
+
+_Note: when building from a source archive, this step must be skipped._
+
+Install the required npm packages:
+
+    npm install
+
+Rerun the above commands when the dependencies might have changed,
+e.g. after checking out a new revison.
 
 ### Building the extension
 
-To produce an unsigned build, suitable for uploading to the Chrome Web Store
-and Opera Add-Ons, run the following command:
+Run the following command in the project directory:
 
-```bash
-./build.py build -t chrome -r
-```
+    npx gulp build -t {chrome|firefox} [-c development]
 
-This will create a build with a name in the form `adblockforchrome-VERSION.zip`
+This will create a build with a name in the form
+_adblockpluschrome-n.n.n.zip_ or _adblockplusfirefox-n.n.n.xpi_. These builds
+are unsigned. They can be submitted as-is to the extension stores, or if
+unpacked loaded in development mode for testing (same as devenv builds below).
 
-For Firefox, run the following command:
-
-```bash
-./build.py build -t gecko -r
-```
-
-This will create a build with a name in the form `adblockforfirefox-VERSION.xpi`
-
-### Development builds
+### Development environment
 
 To simplify the process of testing your changes you can create an unpacked
-development environment. For Chrome run:
+development environment. For that run one of the following command:
 
-```bash
-./build.py devenv -t chrome
-```
+    npx gulp devenv -t {chrome|firefox}
 
-This will create a `devenv.chrome` directory in the repository. In Chrome you should
-load it as an unpacked extension directory. After making changes to the
-source code re-run the command to update the development environment, the
-extension should reload automatically after a few seconds.
-
-For Firefox run:
-
-```bash
-./build.py devenv -t gecko && (cd devenv.gecko && npx web-ext run)
-```
-
-This creates a `devenv.gecko` directory in the repository and uses the Mozilla
-web-ext tool to launch the extension in Firefox.
-
-### Dependencies
-
-Our dependency management system is called `ensure_dependencies.py`, it's a
-small Python script that pulls the project's dependencies and checks out the
-correct revisions using source control. (Mercurial and Git are supported.)
-
-The project's dependencies are specified in the `dependencies` file, the format
-is [briefly documented in the script's source code](https://github.com/adblockplus/buildtools/blob/master/ensure_dependencies.py#L22-L35)
-and in the [original Trac issue](https://issues.adblockplus.org/ticket/170).
-
-The build script `./build.py` automatically triggers the dependencies script
-but if you need to run it manually for some reason you can do so like this:
-
-    ./ensure_dependencies.py
-
-Finally it's important to note that although the `ensure_dependencies.py` script
-is present in this repository, it should not be modified here directly. Instead
-modifications should be made to the script in the `buildtools` repository, the
-copy here can then be updated from there.
-
-## Overrides and customization
-
-In order to customize AdBlock, we've aliased some of ABP's core JS files.  All of
-these aliased files can be found in the
-[alias](https://github.com/betafish-inc/adblock-next-gen/tree/master/adblock-betafish/alias)
-folder.
-When updating the [dependencies](https://github.com/betafish-inc/adblock-next-gen/blob/master/dependencies)
-file to upgrade to a new version of ABP, be sure to review and update the
-corresponding files in the `alias` folder.
-
-Also, we've overridden some of the features and functions of the ABP build process in the
-[build.py](https://github.com/betafish-inc/adblock-next-gen/blob/master/build.py) file.
-The overriden functions should also be reviewed when updating to a new version of the build tool.
+This will create a _devenv.*_ directory in the project directory. You can load
+the directory as an unpacked extension under _chrome://extensions_ in
+Chromium-based browsers, and under _about:debugging_ in Firefox. After making
+changes to the source code re-run the command to update the development
+environment, and the extension should reload automatically after a few seconds.
 
 
 ## Code Style
@@ -114,88 +82,6 @@ The following npm commands are then available:
 * `npm run prettier` runs prettier on HTML, CSS, and JSON files in the adblock-betafish directory and list all files that need to be Prettier.
 * `npm run prettier-fix` runs prettier and automatically replaces with Prettier versions for HTML, CSS, and JSON files in the adblock-betafish directory.
 * `npm run html-hint` runs HTMLhint and flags any issues with the HTML templates such as missing `DOCTYPE`, tags and/or attributes. This does not run on pre-commits so it must be run manually. New AdBlock custom attributes should be added in `/rules/static/custom_attributes.json`. If mistakenly flagged, standard HTML attributes should be added in `/rules/static/aria_attributes.json` or `/rules/static/mapped_attributes.json`.
-
-## Development
-
-This repository leverages the existing Adblock Plus code. You should therefore
-make improvements to Adblock Plus and other dependencies instead where possible.
-When not possible you can add functionality by modifying the AdBlock specific
-meta data files and JavaScript code found in this repository.
-
-### Metadata
-
-The metadata files, for example `metadata.chrome`, are used by the build system
-to configure and build the extension. Each metadata file consists of sections,
-under which there are a series of keys and values. Some metadata files are
-specific to the various platforms, like Chrome or Safari. Other metadata files
-are used for all platforms.
-
-The metadata files in this repository inherit from the ones contained within
-the `adblockpluschrome` and `adblockplus` dependencies.
-
- - Options specified in this repository's metadata files will take precedence
-   over options specified in the `adblockplus` and `adblockpluschrome` metadata
-   files.
- - The values of options are always strings, however they sometimes are used
-   as space delimited lists. For those cases you can add or remove items with
-   the special `+=` and `-=` syntax. (You can also use this syntax to append
-   items to inherited values. For example to append the path of an additional
-   background script specific to AdBlock to a list that was inherited from the
-   Adblock Plus metadata files.)
-
-_Note: For changes to metadata files to take effect (as with changes to any
-other files) a new build must first be generated._
-
-### Extending functionality
-
-To extend this extension's functionality you can add additional content
-and background scripts using the metadata files mentioned above. Relevant
-metadata sections to modify include `general.backgroundScripts`,
-`contentScripts.document_start`, `contentScripts.document_end` and `mapping`.
-
-Example content and background scripts have already been added, `content.js`
-and `background.js` respectively, using `metadata.adblock`. For an example of
-more advanced usage I recommend taking a look at
-`adblockpluschrome/metadata.common`.
-
-### Adding to manifest.json
-
-There is now the ability to add any key/value pairs to the manifest.json file by
-adding them to the [manifest] section of the metadata.adblock file. The
-following rules apply: 
-
-* An option's key may be declared as a series of nested dictionary keys,
-  seperated by '.'.
-* Declaring an option's value in a new line (even if only one is given)
-  will define the option's value as a list.
-* When an option's value is defined as a list, no other nested
-  objects may follow.
-* A list is expandable by the ConfigParser's '+=' token (Note: A
-  previously declared string will be converted into a list).
-* Values may be marked as `number` or `bool` by prefixing them
-  accordingly (this also applies to values in a list):
-  * bool:<value>
-  * number:<value>
-* An inherited key may be removed by giving it a value of 'REMOVE'
-
-        Example:
-                                    {
-        foo = foo                     "foo": "foo",
-        asd =                         "asd": ["asd"],
-          asd                         "bar": {
-        bar.baz = a                     "baz": ["a", "c", "d"]
-        baz.foo = a                   },
-        baz.z =                       "baz": {
-          bar                           "foo": "a",
-          bool:true             ===>    "z": ["bar", true]
-        bar.baz +=                    },
-          c                           "bad": true,
-          d                           "good": false,
-        bad = bool:true               "is": {
-        good = bool:false               "integer": 1,
-        is.integer = number:1           "float": 1.4
-        is.float = number:1.4         }
-                                    }
 
 ## Developer Guide
 

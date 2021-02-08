@@ -4,7 +4,7 @@
 /* global browser, require, ext, adblockIsPaused, adblockIsDomainPaused
    recordGeneralMessage, log, License, reloadTab */
 
-const { checkWhitelisted } = require('whitelisting');
+const { checkAllowlisted } = require('allowlisting');
 const { filterNotifier } = require('filterNotifier');
 const { Prefs } = require('prefs');
 const browserAction = require('browserAction');
@@ -200,7 +200,7 @@ let updateContextMenuItems = function (page) {
     browser.contextMenus.create(contextMenuItem.unpauseAll);
   } else if (domainIsPaused) {
     browser.contextMenus.create(contextMenuItem.unpauseDomain);
-  } else if (checkWhitelisted(page)) {
+  } else if (checkAllowlisted(page)) {
     browser.contextMenus.create(contextMenuItem.pauseAll);
   } else {
     browser.contextMenus.create(contextMenuItem.blockThisAd);

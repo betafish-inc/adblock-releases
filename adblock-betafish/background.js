@@ -8,7 +8,7 @@
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
-const { checkWhitelisted } = require('whitelisting');
+const { checkAllowlisted } = require('allowlisting');
 const { Subscription } = require('subscriptionClasses');
 const { DownloadableSubscription } = require('subscriptionClasses');
 const { SpecialSubscription } = require('subscriptionClasses');
@@ -18,8 +18,8 @@ const { Prefs } = require('prefs');
 const { synchronizer } = require('synchronizer');
 const { getBlockedPerPage } = require('stats');
 const { RegExpFilter, InvalidFilter } = require('filterClasses');
+const info = require('info');
 const { URLRequest } = require('../adblockpluschrome/adblockpluscore/lib/url.js');
-const info = require('../buildtools/info');
 
 // Object's used on the option, pop up, etc. pages...
 const { STATS } = require('./stats');
@@ -58,7 +58,7 @@ Object.assign(window, {
   DownloadableSubscription,
   Filter,
   WhitelistFilter,
-  checkWhitelisted,
+  checkAllowlisted,
   info,
   getBlockedPerPage,
   STATS,
@@ -404,7 +404,7 @@ const pageIsUnblockable = function (url) {
 // Returns true if the page is whitelisted.
 // Called from a content script
 const pageIsWhitelisted = function (page) {
-  const whitelisted = checkWhitelisted(page);
+  const whitelisted = checkAllowlisted(page);
   return (whitelisted !== undefined && whitelisted !== null);
 };
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -702,7 +702,7 @@ const getCurrentTabInfo = function (secondTime, tabId) {
         };
 
         if (!disabledSite) {
-          result.whitelisted = checkWhitelisted(page);
+          result.whitelisted = checkAllowlisted(page);
         }
         if (License && License.isActiveLicense()) {
           result.activeLicense = true;

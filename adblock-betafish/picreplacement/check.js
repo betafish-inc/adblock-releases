@@ -7,7 +7,7 @@
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
-const { checkWhitelisted } = require('whitelisting');
+const { checkAllowlisted } = require('allowlisting');
 const { EventEmitter } = require('events');
 const browserAction = require('browserAction');
 const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
@@ -667,7 +667,7 @@ License.ready().then(() => {
     }
 
     const myPage = ext.getPage(sender.tab.id);
-    if (checkWhitelisted(myPage) || !License.isActiveLicense()) {
+    if (checkAllowlisted(myPage) || !License.isActiveLicense()) {
       sendResponse({ disabledOnPage: true });
       return;
     }
