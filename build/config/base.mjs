@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '4.28.3',
+  version: '4.28.4',
   webpack: {
     bundles: [
       {
@@ -93,10 +93,6 @@ export default {
         src: 'icons/themes/solarized/*.svg',
       },
       {
-        dest: 'icons/solarized_theme/',
-        src: 'icons/themes/solarized/*.svg',
-      },
-      {
         dest: 'icons/solarized_light_theme/',
         src: 'icons/themes/solarized_light/*.svg',
       },
@@ -144,8 +140,6 @@ export default {
       {
         dest: '',
         src: [
-          'adblockpluschrome/adblockpluscore/lib/content/snippets.js',
-          'adblock-betafish/alias/managed-storage-schema.json',
           'adblockpluschrome/polyfill.js',
           'adblock-betafish/lib/purify.min.js',
           'adblock-betafish/CHANGELOG.txt',
@@ -155,11 +149,8 @@ export default {
           'adblock-betafish/pubnub/pubnub.min.js',
           'adblock-betafish/lib/*',
           'adblock-betafish/adblock.css',
-          'adblockpluschrome/adblockpluscore/lib/content/snippets.js',
           'adblockpluschrome/devtools.html',
           'adblockpluschrome/adblockplusui/devtools-panel.js',
-          'adblock-betafish/alias/devtools.js',
-          'adblock-betafish/alias/devtools-panel.html',
           'adblockpluschrome/adblockplusui/i18n.js',
           'adblockpluschrome/adblockplusui/proxy.html',
         ],
