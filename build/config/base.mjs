@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '4.28.5',
+  version: '4.28.6',
   webpack: {
     bundles: [
       {
@@ -9,7 +9,7 @@ export default {
         src: [
           'adblockpluschrome/lib/devtools.js',
           'adblockpluschrome/lib/debug.js',
-          'adblockpluschrome/lib/requestBlocker.js',
+          'adblock-betafish/alias/requestBlocker.js',
           'adblockpluschrome/lib/popupBlocker.js',
           'adblockpluschrome/lib/stats.js',
           'adblockpluschrome/lib/csp.js',

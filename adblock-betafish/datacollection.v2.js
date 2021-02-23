@@ -7,12 +7,11 @@
 
 const { extractHostFromFrame } = require('url');
 const { ElemHideFilter } = require('filterClasses');
+const { filterNotifier } = require('filterNotifier');
 const { port } = require('messaging');
-const info = require('info');
-const { HitLogger } = require('hitLogger.js');
 const { postFilterStatsToLogServer } = require('./servermessages').ServerMessages;
+const info = require('../buildtools/info');
 const { idleHandler } = require('./idlehandler.js');
-
 
 const DataCollectionV2 = (function getDataCollectionV2() {
   const HOUR_IN_MS = 1000 * 60 * 60;
@@ -22,8 +21,6 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   let dataCollectionCache = {};
   dataCollectionCache.filters = {};
   dataCollectionCache.domains = {};
-
-  let tabFilterListeners = new Map();
 
   const handleTabUpdated = function (tabId, changeInfo, tabInfo) {
     if (browser.runtime.lastError) {
@@ -90,46 +87,6 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     }
   };
 
-  const filterListener = function (tab, request, filter) {
-    if (filter && getSettings().data_collection_v2 && !adblockIsPaused()) {
-      if (tab && !adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
-        addFilterToCache(filter, tab);
-      }
-    }
-  };
-
-  const handleTabCreated = function (tab) {
-    const hitListener = filterListener.bind(null, tab);
-    tabFilterListeners.set(tab.id.toString(), hitListener);
-    HitLogger.addListener(tab.id, hitListener);
-  };
-
-  const handleTabRemoved = function (tabId) {
-    if (tabId && tabFilterListeners.has(tabId.toString())) {
-      HitLogger.removeListener(tabId, tabFilterListeners.get(tabId.toString()));
-      tabFilterListeners.delete(tabId.toString());
-    }
-  };
-
-  const handleTabReplaced = function (addedTabId, removedTabId) {
-    handleTabRemoved(removedTabId);
-    browser.tabs.get(addedTabId).then((tab) => {
-      if (tab) {
-        handleTabCreated(tab);
-      }
-    });
-  };
-
-  const collectExistingTabs = function () {
-    const processTabs = function (tabs) {
-      for (const tab of tabs) {
-        handleTabCreated(tab);
-      }
-    };
-    browser.tabs.query({ url: 'http://*/*' }).then(processTabs);
-    browser.tabs.query({ url: 'https://*/*' }).then(processTabs);
-  };
-
   const addMessageListener = function () {
     port.on('datacollection.elementHide', (message, sender) => {
       const dataCollectionEnabled = getSettings().data_collection_v2;
@@ -182,6 +139,20 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     }
   };
 
+  const filterListener = function (item, newValue, oldValue, tabIds) {
+    if (getSettings().data_collection_v2 && !adblockIsPaused()) {
+      for (const tabId of tabIds) {
+        browser.tabs.get(tabId).then((tab) => {
+          if (tab && !adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
+            addFilterToCache(item, tab);
+          }
+        });
+      }
+    } else if (!getSettings().data_collection_v2) {
+      filterNotifier.off('filter.hitCount', filterListener);
+    }
+  };
+
   // If enabled at startup periodic saving of memory cache &
   // sending of data to the log server
   settings.onload().then(() => {
@@ -194,7 +165,11 @@ const DataCollectionV2 = (function getDataCollectionV2() {
             const subs = getAllSubscriptionsMinusText();
             for (const id in subs) {
               if (subs[id].subscribed) {
-                subscribedSubs.push(subs[id].url);
+                if (subs[id].url && subs[id].url.length > 256) {
+                  subscribedSubs.push(subs[id].url.substring(0, 256));
+                } else {
+                  subscribedSubs.push(subs[id].url);
+                }
               }
             }
             if (getUserFilters().length) {
@@ -264,15 +239,12 @@ const DataCollectionV2 = (function getDataCollectionV2() {
           }
         });
       }, HOUR_IN_MS);
+      filterNotifier.on('filter.hitCount', filterListener);
       browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
         urls: ['http://*/*', 'https://*/*'],
         types: ['main_frame'],
       });
       browser.tabs.onUpdated.addListener(handleTabUpdated);
-      browser.tabs.onCreated.addListener(handleTabCreated);
-      browser.tabs.onRemoved.addListener(handleTabRemoved);
-      browser.tabs.onReplaced.addListener(handleTabReplaced);
-      collectExistingTabs();
       addMessageListener();
     }
   });// End of then
@@ -281,28 +253,21 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   returnObj.start = function returnObjStart(callback) {
     dataCollectionCache.filters = {};
     dataCollectionCache.domains = {};
-    tabFilterListeners = new Map();
+    filterNotifier.on('filter.hitCount', filterListener);
     browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
       urls: ['http://*/*', 'https://*/*'],
       types: ['main_frame'],
     });
     browser.tabs.onUpdated.addListener(handleTabUpdated);
-    browser.tabs.onCreated.addListener(handleTabCreated);
-    browser.tabs.onRemoved.addListener(handleTabRemoved);
-    browser.tabs.onReplaced.addListener(handleTabReplaced);
     addMessageListener();
-    collectExistingTabs();
     setSetting('data_collection_v2', true, callback);
   };
   returnObj.end = function returnObjEnd(callback) {
     dataCollectionCache = {};
-    tabFilterListeners = null;
+    filterNotifier.off('filter.hitCount', filterListener);
     browser.webRequest.onBeforeRequest.removeListener(webRequestListener);
     browser.storage.local.remove(TIME_LAST_PUSH_KEY);
     browser.tabs.onUpdated.removeListener(handleTabUpdated);
-    browser.tabs.onCreated.removeListener(handleTabCreated);
-    browser.tabs.onRemoved.removeListener(handleTabRemoved);
-    browser.tabs.onReplaced.removeListener(handleTabReplaced);
     setSetting('data_collection_v2', false, callback);
   };
   returnObj.getCache = function returnObjGetCache() {

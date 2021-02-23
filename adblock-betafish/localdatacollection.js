@@ -9,8 +9,7 @@ const { extractHostFromFrame } = require('url');
 const { ElemHideFilter } = require('filterClasses');
 const { filterNotifier } = require('filterNotifier');
 const { port } = require('messaging');
-const info = require('info');
-const { HitLogger } = require('hitLogger.js');
+const info = require('../buildtools/info');
 
 const LocalDataCollection = (function getLocalDataCollection() {
   const easyPrivacyURL = 'https://easylist-downloads.adblockplus.org/easyprivacy.txt';
@@ -22,8 +21,6 @@ const LocalDataCollection = (function getLocalDataCollection() {
   // Setup memory cache
   let dataCollectionCache = {};
   dataCollectionCache.domains = {};
-
-  let tabFilterListeners = new Map();
 
   const initializeDomainIfNeeded = function (domain) {
     if (!(domain in dataCollectionCache.domains)) {
@@ -55,72 +52,34 @@ const LocalDataCollection = (function getLocalDataCollection() {
     }
   };
 
-  const addFilterToCache = function (filter, tab) {
+  const addFilterToCache = function (filter, page) {
     const validFilterText = filter && filter.text && (typeof filter.text === 'string');
     const validFilterType = (filter.type === 'blocking'
                              || filter.type === 'elemhide'
                              || filter.type === 'elemhideemulation'
                              || filter.type === 'snippet');
-    if (validFilterType && validFilterText && tab && tab.url) {
-      if (tab.incognito) {
-        return;
-      }
-      const theURL = new URL(tab.url);
-      const domain = theURL.hostname;
-      initializeDomainIfNeeded(domain);
-      const { text } = filter;
-      let isAd = true;
-      for (const sub of filterStorage.subscriptions(text)) {
-        if (!sub.disabled && sub.url && sub.url === easyPrivacyURL) {
-          isAd = false;
+    if (validFilterType && validFilterText && page && page.url) {
+      browser.tabs.get(page.id).then((tab) => {
+        if (tab.incognito) {
+          return;
         }
-      }
-      if (isAd) {
-        dataCollectionCache.domains[domain].ads += 1;
-      } else {
-        dataCollectionCache.domains[domain].trackers += 1;
-      }
+        const theURL = new URL(page.url);
+        const domain = theURL.hostname;
+        initializeDomainIfNeeded(domain);
+        const { text } = filter;
+        let isAd = true;
+        for (const sub of filterStorage.subscriptions(text)) {
+          if (!sub.disabled && sub.url && sub.url === easyPrivacyURL) {
+            isAd = false;
+          }
+        }
+        if (isAd) {
+          dataCollectionCache.domains[domain].ads += 1;
+        } else {
+          dataCollectionCache.domains[domain].trackers += 1;
+        }
+      });
     }
-  };
-
-  const filterListener = function (tab, request, filter) {
-    if (filter && getSettings().local_data_collection && !adblockIsPaused()) {
-      if (tab && !adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
-        addFilterToCache(filter, tab);
-      }
-    }
-  };
-
-  const handleTabCreated = function (tab) {
-    const hitListener = filterListener.bind(null, tab);
-    tabFilterListeners.set(tab.id.toString(), hitListener);
-    HitLogger.addListener(tab.id, hitListener);
-  };
-
-  const handleTabRemoved = function (tabId) {
-    if (tabId && tabFilterListeners.has(tabId.toString())) {
-      HitLogger.removeListener(tabId, tabFilterListeners.get(tabId.toString()));
-      tabFilterListeners.delete(tabId.toString());
-    }
-  };
-
-  const handleTabReplaced = function (addedTabId, removedTabId) {
-    handleTabRemoved(removedTabId);
-    browser.tabs.get(addedTabId).then((tab) => {
-      if (tab) {
-        handleTabCreated(tab);
-      }
-    });
-  };
-
-  const collectExistingTabs = function () {
-    const processTabs = function (tabs) {
-      for (const tab of tabs) {
-        handleTabCreated(tab);
-      }
-    };
-    browser.tabs.query({ url: 'http://*/*' }).then(processTabs);
-    browser.tabs.query({ url: 'https://*/*' }).then(processTabs);
   };
 
   const addMessageListener = function () {
@@ -162,6 +121,20 @@ const LocalDataCollection = (function getLocalDataCollection() {
         }
       }
     });
+  };
+
+  const filterListener = function (item, newValue, oldValue, tabIds) {
+    if (getSettings().local_data_collection && !adblockIsPaused()) {
+      for (const tabId of tabIds) {
+        browser.tabs.get(tabId).then((tab) => {
+          if (tab && tab.url && !adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
+            addFilterToCache(item, tab);
+          }
+        });
+      }
+    } else if (!getSettings().local_data_collection) {
+      LocalDataCollection.end();
+    }
   };
 
   const adReplacedListener = function (tabId, url) {
@@ -246,12 +219,9 @@ const LocalDataCollection = (function getLocalDataCollection() {
   settings.onload().then(() => {
     if (getSettings().local_data_collection) {
       startProcessInterval();
+      filterNotifier.on('filter.hitCount', filterListener);
       replacedCounts.adReplacedNotifier.on('adReplaced', adReplacedListener);
       browser.tabs.onUpdated.addListener(handleTabUpdated);
-      browser.tabs.onCreated.addListener(handleTabCreated);
-      browser.tabs.onRemoved.addListener(handleTabRemoved);
-      browser.tabs.onReplaced.addListener(handleTabReplaced);
-      collectExistingTabs();
       addMessageListener();
       cleanStoredData();
     }
@@ -261,13 +231,9 @@ const LocalDataCollection = (function getLocalDataCollection() {
   returnObj.EXT_STATS_KEY = EXT_STATS_KEY;
   returnObj.start = function returnObjStart(callback) {
     dataCollectionCache.domains = {};
-    filterNotifier.on('filter.hit', filterListener);
+    filterNotifier.on('filter.hitCount', filterListener);
     replacedCounts.adReplacedNotifier.on('adReplaced', adReplacedListener);
     browser.tabs.onUpdated.addListener(handleTabUpdated);
-    browser.tabs.onCreated.addListener(handleTabCreated);
-    browser.tabs.onRemoved.addListener(handleTabRemoved);
-    browser.tabs.onReplaced.addListener(handleTabReplaced);
-    collectExistingTabs();
     addMessageListener();
     startProcessInterval();
     setSetting('local_data_collection', true, callback);
@@ -276,12 +242,9 @@ const LocalDataCollection = (function getLocalDataCollection() {
     clearInterval(intervalFN);
     clearCache();
     storageSet(STORED_DATA_CLEAN);
+    filterNotifier.off('filter.hitCount', filterListener);
     replacedCounts.adReplacedNotifier.off('adReplaced', adReplacedListener);
-    tabFilterListeners = new Map();
     browser.tabs.onUpdated.removeListener(handleTabUpdated);
-    browser.tabs.onCreated.removeListener(handleTabCreated);
-    browser.tabs.onRemoved.removeListener(handleTabRemoved);
-    browser.tabs.onReplaced.removeListener(handleTabReplaced);
     setSetting('local_data_collection', false, callback);
   };
   returnObj.clearCache = clearCache;
