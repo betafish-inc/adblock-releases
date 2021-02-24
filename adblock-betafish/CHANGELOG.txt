@@ -2,6 +2,21 @@
 
 UNRELEASED:
 
+Version: 4.29.0, Date: 2021-02-24
+- Added a link to the AdBlock ProductBoard page to the AdBlock Options page on the Support tab
+- Fixed an issue when importing rotated images into the custom Image Swap feature
+- Updated the Twitch specific content script so that streaming ads should no longer shown
+- Removed the Malware Protection filter list from the AdBlock Options page since it is no longer available
+- Removed the legacy AdBlock Premium extension migration functionality
+- Updated the minimum version of Firefox to 63
+- Updated the bundled 3rd party libraries within AdBlock
+  - jQuery is now 3.5.1
+  - DOM Purify is now 2.2.6
+  - Chart JS is now 2.9.4
+- Fixed an issue when the extension was notified that a premium user's license expired and left the sync feature partially enabled
+-
+- Fixed an issue with filter list data collection process sending data URLs (very long strings of data)
+
 Version: 4.28.6, Date: 2021-02-23
 - Fixed a performance issue with the Stats and data collection functions
 

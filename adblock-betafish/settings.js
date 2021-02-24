@@ -4,7 +4,7 @@
 /* global browser, require, log, chromeStorageSetHelper, logging */
 
 const { EventEmitter } = require('events');
-const minjQuery = require('./jquery/jquery-3.4.1.min.js');
+const minjQuery = require('./jquery/jquery-3.5.1.min.js');
 
 const settingsNotifier = new EventEmitter();
 const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];

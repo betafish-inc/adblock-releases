@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '4.28.6',
+  version: '4.29.0',
   webpack: {
     bundles: [
       {
@@ -17,7 +17,7 @@ export default {
           'adblockpluschrome/lib/messageResponder.js',
           'adblockpluschrome/lib/filterConfiguration.js',
           'adblockpluschrome/lib/ml.js',
-          'adblock-betafish/jquery/jquery-3.4.1.min.js',
+          'adblock-betafish/jquery/jquery-3.5.1.min.js',
           'adblock-betafish/errorreporting.js',
           'adblock-betafish/functions.js',
           'adblock-betafish/survey.js',
@@ -145,7 +145,7 @@ export default {
           'adblock-betafish/CHANGELOG.txt',
           'adblock-betafish/LICENSE',
           'adblock-betafish/translators.json',
-          'adblock-betafish/jquery/jquery-3.4.1.min.js',
+          'adblock-betafish/jquery/jquery-3.5.1.min.js',
           'adblock-betafish/pubnub/pubnub.min.js',
           'adblock-betafish/lib/*',
           'adblock-betafish/adblock.css',

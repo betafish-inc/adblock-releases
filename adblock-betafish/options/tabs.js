@@ -126,7 +126,7 @@ const displayMABFeedbackCTA = function () {
   const lang = determineUserLanguage();
   if (lang === 'en' || lang.startsWith('en')) {
     $('div.mab-page-box > .option-page-content > footer').removeAttr('style');
-    const $feedbackButton = $('.mab-feedback-button');
+    const $feedbackButton = $('.mab-feedback-button, #support-feedback-button');
     $feedbackButton.on('click', (e) => {
       e.preventDefault();
       e.stopImmediatePropagation();

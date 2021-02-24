@@ -10,7 +10,7 @@ const {
   imageSizesMap, WIDE, TALL, SKINNYWIDE, SKINNYTALL,
 } = require('./image-sizes-map');
 
-const minjQuery = require('../jquery/jquery-3.4.1.min.js');
+const minjQuery = require('../jquery/jquery-3.5.1.min.js');
 
 const channelsNotifier = new EventEmitter();
 

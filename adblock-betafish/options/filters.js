@@ -110,7 +110,6 @@ FilterListUtil.getFilterListType = (filterList) => {
   } else if (
     filterList.id === 'easyprivacy'
     || filterList.id === 'antisocial'
-    || filterList.id === 'malware'
     || filterList.id === 'annoyances'
     || filterList.id === 'bitcoin_mining_protection'
     || filterList.id === 'warning_removal'

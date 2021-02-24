@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global ext, browser, require, storageGet, storageSet, log, STATS, Channels, Prefs,
    getSettings, setSetting, translate, reloadOptionsPageTabs, filterNotifier, openTab,
-   emitPageBroadcast */
+   emitPageBroadcast, SyncService */
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
@@ -11,7 +11,6 @@ const { checkAllowlisted } = require('allowlisting');
 const { EventEmitter } = require('events');
 const browserAction = require('browserAction');
 const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
-const { premiumMigration } = require('./../data_migration_premium');
 
 const licenseNotifier = new EventEmitter();
 
@@ -339,7 +338,9 @@ const License = (function getLicense() {
       theLicense.myadblock_enrollment = true;
       License.set(theLicense);
       setSetting('picreplacement', false);
-      setSetting('sync_settings', false);
+      if (getSettings().sync_settings) {
+        SyncService.disableSync();
+      }
       setSetting('color_themes', { popup_menu: 'default_theme', options_page: 'default_theme' });
       browser.alarms.clear(licenseAlarmName);
     },
@@ -563,7 +564,6 @@ const License = (function getLicense() {
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'payment_success' && request.version === 1) {
     License.activate();
-    premiumMigration.checkforLegacyAdBlockPremium(request.origin, sender);
     sendResponse({ ack: true });
   }
 });

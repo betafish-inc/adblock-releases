@@ -27,7 +27,7 @@ if (window.top === window.self && /(^|\.)twitch\.tv$/.test(window.location.hostn
       return;
     }
 
-    const isWhitelisted = false;
+    let isWhitelisted = false;
     let thePath = '';
 
     if (settings && settings.twitch_channel_allowlist) {
@@ -138,6 +138,9 @@ if (window.top === window.self && /(^|\.)twitch\.tv$/.test(window.location.hostn
     // process the event messages from the AdBlock content script
     document.addEventListener(fromContentScriptEventName, (event) => {
       if (event && event.detail && event.detail.path === window.location.pathname) {
+        if (event && event.detail && Object.prototype.hasOwnProperty.call(event.detail, 'isWhitelisted')) {
+          ({ isWhitelisted } = event.detail);
+        }
         thePath = event.detail.path;
         // if the URL doesn't contain the query string with the channel name in it, add it.
         // for example, this situation can occur when clicking between the same 'followed'
@@ -240,17 +243,32 @@ if (window.top === window.self && /(^|\.)twitch\.tv$/.test(window.location.hostn
     window.fetch = function theFetch(...args) {
       const params = args;
       let input = '';
+      let init = {};
       if (params.length >= 1) {
-        [input] = params;
+        [input, init] = params;
       }
       // This is the code that will prevent streaming ads
-
       if (params.length >= 2 && typeof input === 'string' && input.includes('/access_token')) {
         if ((thePath === window.location.pathname && !isWhitelisted)
             || (thePath !== window.location.pathname)) {
           const url = new URL(input);
-          url.searchParams.delete('platform');
+          url.searchParams.set('player_type', 'embed');
           params[0] = url.href;
+        }
+      }
+      if (
+        params.length >= 2
+        && typeof input === 'string'
+        && input.includes('/gql')
+        && init
+        && typeof init.body === 'string'
+        && init.body.includes('PlaybackAccessToken')
+      ) {
+        if ((thePath === window.location.pathname && !isWhitelisted)
+        || (thePath !== window.location.pathname)) {
+          const newBody = JSON.parse(init.body);
+          newBody.variables.playerType = 'embed';
+          init.body = JSON.stringify(newBody);
         }
       }
       preProcessCheck(input, params);

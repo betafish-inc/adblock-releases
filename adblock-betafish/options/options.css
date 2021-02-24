@@ -17,7 +17,7 @@ body {
   color: var(--options-page-accent-text);
 }
 .paragraph-title {
-  font-size: 21px;
+  font-size: 22px;
   font-weight: normal;
   font-style: normal;
   line-height: 29px;
@@ -500,12 +500,20 @@ h2[i18n="needhelp"] {
 h2[i18n="aboutadblock"] {
   margin-top: 65px;
 }
+h2[i18n="feedback_title"] {
+  margin-top: 65px;
+}
+h2[i18n="debuginfo"] {
+  max-width: 440px;
+}
 #copiedDebugData,
 #copyDebugData {
   font-size: 15px;
+  padding: 0 15px;
 }
 #btnCopyDebugData {
   display: inline-flex;
+  white-space: nowrap;
 }
 #debugInfo::selection {
   background: Cornflowerblue;
@@ -568,6 +576,22 @@ h2[i18n="aboutadblock"] {
   }
 }
 
+#feedback-info {
+  max-width: 440px;
+}
+.feedback-button {
+  border: 1px solid var(--mab-feedback-button-border);
+  min-width: 150px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--options-page-accent-text);
+  cursor: pointer;
+  background: var(--background-color);
+  padding: 0 7px;
+}
+.feedback-button:hover {
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
+}
 /* MISC */
 .pointer {
   cursor: pointer;
