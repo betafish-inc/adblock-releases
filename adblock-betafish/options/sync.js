@@ -8,7 +8,7 @@
 const onSyncDataInitialGetError = function () {
   $('#show-name-div').hide();
   $('#last-sync-now').hide();
-  SyncService.disableSync();
+  SyncService.disableSync(true);
   SyncService.syncNotifier.off('sync.data.getting.error.initial.fail', onSyncDataInitialGetError);
 };
 
@@ -25,28 +25,65 @@ const onSyncDataInitialGetError = function () {
   }
 
   const getAllExtensionNames = function () {
+    $('#sync-no-click-overlay').show();
+    $('#sync-loadingDiv').show();
+    $('#sync-extension-list-div').empty();
     SyncService.getAllExtensionNames((extensionNameResponse) => {
+      $('#sync-no-click-overlay').hide();
+      $('#sync-loadingDiv').fadeOut();
       if (extensionNameResponse && extensionNameResponse.hasData && extensionNameResponse.data) {
         $('#sync_extension_no_extension_msg').hide();
         $('.extension-name-item').remove();
         deviceNameArray = [];
         const currentExtensionName = SyncService.getCurrentExtensionName();
-        if (currentExtensionName) {
-          $('#current-extension-name').text(currentExtensionName);
-          $('#current-extension-name-block').show();
-        }
-        for (let inx = 0; inx < extensionNameResponse.data.length; inx++) {
-          const deviceInfo = extensionNameResponse.data[inx];
+        const sortedData = [...extensionNameResponse.data];
+        sortedData.sort((a, b) => {
+          let returnVal = 0;
+          if (a.deviceName && b.deviceName) {
+            if (a.deviceName.toLowerCase() > b.deviceName.toLowerCase()) {
+              returnVal = 1;
+            }
+            if (b.deviceName.toLowerCase() > a.deviceName.toLowerCase()) {
+              returnVal = -1;
+            }
+          } else if (!a.deviceName && b.deviceName) {
+            returnVal = -1;
+          } else if (a.deviceName && !b.deviceName) {
+            returnVal = 1;
+          } else if (!a.deviceName && !b.deviceName) {
+            returnVal = 0;
+          }
+          return returnVal;
+        });
+        for (let inx = 0; inx < sortedData.length; inx++) {
+          const deviceInfo = sortedData[inx];
           if (
             deviceInfo
             && deviceInfo.deviceName
-            && deviceInfo.deviceName !== currentExtensionName
+            && deviceInfo.extensionGUID
           ) {
             deviceNameArray.push(deviceInfo.deviceName);
+            let { deviceName } = deviceInfo;
+            if (deviceName === currentExtensionName) {
+              deviceName = `${currentExtensionName} ${translate('this_extension')}`;
+            }
+            let classText = 'extension-name-item content-block bottom-line';
+            if (inx === (sortedData.length - 1)) {
+              classText = 'extension-name-item content-block';
+            }
             $('#sync-extension-list-div')
               .append($('<p></p>')
-                .text(deviceInfo.deviceName)
-                .addClass('extension-name-item'));
+                .append($('<span></span>')
+                  .text(deviceName))
+                .addClass(classText)
+                .attr('data-deviceName', deviceInfo.deviceName)
+                .attr('data-extensionGUID', deviceInfo.extensionGUID)
+                .append($('<i></i>')
+                  .attr('id', `extension-delete-icon-${inx}`)
+                  .addClass('material-icons md-24 delete-icon')
+                  .attr('role', 'img')
+                  .attr('aria-hidden', 'true')
+                  .text('delete')));
           }
         }
         const now = new Date();
@@ -58,8 +95,82 @@ const onSyncDataInitialGetError = function () {
         if (!deviceNameArray.length && !currentExtensionName) {
           $('#sync_extension_no_extension_msg').show();
         }
+        $('.extension-name-item > i').on('click', function clickHandler() {
+          $('#sync-no-click-overlay').show();
+          const theParent = $(this).parent();
+          theParent.addClass('extension-name-item-hovered');
+          const theTrashCan = $(this);
+          theTrashCan.addClass('delete-icon-hovered');
+          const dataDeviceName = $(this).parent().attr('data-deviceName');
+          const dataExtensionGUID = $(this).parent().attr('data-extensionGUID');
+          const cancelClickHandler = function () {
+            $('#btnSyncCancelDeleteDevice').off('click', cancelClickHandler);
+            // eslint-disable-next-line no-use-before-define
+            $('#btnSyncDeleteDevice').off('click', deleteClickHandler);
+            $('#sync-no-click-overlay').hide();
+            $('#sync-delete-overlay').hide();
+            $('.delete-icon-hovered').removeClass('delete-icon-hovered');
+            $('.extension-name-item-hovered').removeClass('extension-name-item-hovered');
+          };
+          const deleteClickHandler = function () {
+            SyncService.removeExtensionName(dataDeviceName, dataExtensionGUID);
+            $('#btnSyncCancelDeleteDevice').off('click', cancelClickHandler);
+            $('#btnSyncDeleteDevice').off('click', deleteClickHandler);
+            $('#sync-no-click-overlay').show();
+            $('#sync-loadingDiv').show();
+            $('#sync-delete-overlay').hide();
+            $('.delete-icon-hovered').removeClass('delete-icon-hovered');
+            $('.extension-name-item-hovered').removeClass('extension-name-item-hovered');
+            if (currentExtensionName === dataDeviceName) {
+              $('#last-sync-now').hide();
+              SyncService.disableSync(true);
+              // eslint-disable-next-line no-use-before-define
+              removeSyncListeners();
+              $('#btnAddThisExtension').fadeIn('slow');
+            }
+            setTimeout(() => {
+              $('#sync-no-click-overlay').hide();
+              getAllExtensionNames();
+            }, FIVE_SECONDS); // wait 5 seconds to allow the above remove to complete
+          };
+          $('#btnSyncCancelDeleteDevice').on('click', cancelClickHandler);
+          $('#btnSyncDeleteDevice').on('click', deleteClickHandler);
+          const pos = $(this).position();
+          $('#sync-delete-overlay').css({
+            position: 'absolute',
+            top: `${pos.top}px`,
+            left: `${pos.left - 315}px`,
+          }).show()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
       }
     });
+  };
+
+  const initialize = function () {
+    $('.unsync-header').addClass('sync-message-hidden');
+    if (License.isActiveLicense() && License.get()) {
+      $('#toggle-sync-details').show();
+      if (!License.get().licenseId) {
+        $('#sync-tab-no-license-message').text(translate('sync_header_message_no_license'));
+        $('#sync-tab-message')
+          .removeClass('sync-message-hidden')
+          .addClass('sync-message-good');
+        $('#btnCheckStatus').show();
+      } else {
+        getAllExtensionNames();
+        const currentExtensionName = SyncService.getCurrentExtensionName();
+        $('#sync-info-block').show();
+        if (currentExtensionName && BG.getSettings().sync_settings) {
+          $('#last-sync-now').show();
+          $('#btnAddThisExtension').hide();
+        } else {
+          $('#btnAddThisExtension').show();
+          $('#last-sync-now').hide();
+        }
+      }
+    } else {
+      $('#get-sync').attr('href', License.MAB_CONFIG.payURL).show();
+    }
   };
 
   const onLicenseUpdating = function () {
@@ -114,6 +225,7 @@ const onSyncDataInitialGetError = function () {
     const observer = new MutationObserver(((mutations) => {
       for (const mutation of mutations) {
         if ($('#sync').is(':visible') && mutation.attributeName === 'style') {
+          initialize();
           getAllExtensionNames();
         }
       }
@@ -145,7 +257,7 @@ const onSyncDataInitialGetError = function () {
     $('#btnAddThisExtension').on('click', () => {
       $('#btnAddThisExtension').fadeOut('slow', () => {
         if (deviceNameArray.length === 0) {
-          $('#enter-name-div').show();
+          $('#enter-name-div').show()[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
           $('#btnCancelSyncName').show();
         } else {
           $('#show-verify-message').show();
@@ -167,7 +279,10 @@ const onSyncDataInitialGetError = function () {
       $('#verify-overwrite-div').fadeOut('slow', () => {
         $('#show-verify-message').hide();
         $('#sync_extension_section_list_title').show();
-        $('#enter-name-div').show();
+        if (SyncService.getCurrentExtensionName()) {
+          $('#extension-name').val(SyncService.getCurrentExtensionName());
+        }
+        $('#enter-name-div').show()[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
         $('#btnCancelSyncName').show();
       });
     });
@@ -182,22 +297,6 @@ const onSyncDataInitialGetError = function () {
       $('#extension-delete-block').fadeOut('slow', () => {
         $('#extension-delete-icon').show();
       });
-    });
-
-    $('#extension-delete-button').on('click', () => {
-      $('#last-sync-now').hide();
-      BG.setSetting('sync_settings', false);
-      SyncService.removeCurrentExtensionName();
-      SyncService.disableSync();
-      removeSyncListeners();
-      $('#current-extension-name-block').fadeOut('slow', () => {
-        $('#extension-delete-block').hide();
-        $('#extension-delete-icon').show();
-        $('#btnAddThisExtension').fadeIn('slow');
-      });
-      setTimeout(() => {
-        getAllExtensionNames();
-      }, FIVE_SECONDS); // wait 5 seconds to allow the above remove to complete
     });
 
     $('#btnSaveSyncName').on('click', () => {
@@ -256,31 +355,7 @@ const onSyncDataInitialGetError = function () {
     } else if (License.isActiveLicense()) {
       MABPayment.paidUserLogic(payInfo);
     }
-
-    if (License.isActiveLicense() && License.get()) {
-      $('#toggle-sync-details').show();
-      if (!License.get().licenseId) {
-        $('#sync-tab-no-license-message').text(translate('sync_header_message_no_license'));
-        $('#sync-tab-message')
-          .removeClass('sync-message-hidden')
-          .addClass('sync-message-good');
-        $('#btnCheckStatus').show();
-      } else {
-        getAllExtensionNames();
-        const currentExtensionName = SyncService.getCurrentExtensionName();
-        $('#sync-info-block').show();
-        if (currentExtensionName && BG.getSettings().sync_settings) {
-          $('#last-sync-now').show();
-          $('#btnAddThisExtension').hide();
-        } else {
-          $('#btnAddThisExtension').show();
-          $('#last-sync-now').hide();
-        }
-      }
-    } else {
-      $('#get-sync').attr('href', License.MAB_CONFIG.payURL).show();
-    }
-
+    initialize();
     showOrHideSyncDetails();
     documentEventsHandling();
   });

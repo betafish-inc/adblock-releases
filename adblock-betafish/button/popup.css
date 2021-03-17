@@ -213,11 +213,19 @@ button.premium-cta-close:hover {
   padding: 16px;
   border-radius: 4px;
 }
-
+#div_sync_removed_error_msg {
+  margin: 0 16px 16px 16px;
+  padding-left: 8px;
+  border-radius: 4px;
+  line-height: 36px;
+  align-items: center;
+  cursor: pointer;
+}
 #div_sync_outofdate_error_msg,
 #div_sync_error_msg,
 #div_sync_outofdate_error_msg a,
-#div_sync_outofdate_error_msg a span {
+#div_sync_outofdate_error_msg a span,
+#div_sync_removed_error_msg {
   background-color: var(--sync-error-msg-background-color);
   color: var(--sync-msg-color);
   text-align: center;
@@ -225,9 +233,19 @@ button.premium-cta-close:hover {
   font-size: 14px;
 }
 #div_sync_outofdate_error_msg,
-#div_sync_error_msg {
+#div_sync_error_msg,
+#div_sync_removed_error_msg {
   cursor: unset;
   display: none;
+}
+#div_sync_removed_error_msg.div_sync_removed_error_msg_hovered {
+  background-color: white;
+  color: #2284f7;
+}
+#sync_removed_error_msg_part_1,
+#sync_removed_error_msg_part_2 {
+  display: none;
+  cursor: pointer;
 }
 #div_sync_outofdate_error_msg a span {
   color: var(--sync-msg-color);
@@ -239,6 +257,25 @@ button.premium-cta-close:hover {
 }
 #div_sync_outofdate_error_msg a span:hover {
   font-weight: normal;
+}
+#sync_removed_error_icon {
+  margin-right: 8px;
+}
+#sync_removed_error_icon.removed_error_icon_hovered {
+  background-color: var(--sync-msg-color);
+  color: var(--sync-error-msg-background-color);
+}
+#sync_removed_error_close {
+  width: 36px;
+  height: 36px;
+  border-radius: 0 4px 4px 0;
+  margin-left: auto;
+  background-color: var(--sync-error-msg-background-color);
+  color: var(--sync-msg-color);
+}
+#sync_removed_error_close.sync_removed_error_close_hovered {
+  background-color: #999999;
+  color: white;
 }
 
 /* BUTTONS */

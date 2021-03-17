@@ -648,6 +648,19 @@ input.invisible-overlay {
 .extension-name-item {
   font-size: 18px;
 }
+.extension-name-item {
+  margin: 0px;
+  padding: 18px 3px;
+}
+.extension-name-item:hover,
+.extension-name-item-hovered {
+  background-color: var(--extension-name-bg-color-hovered);
+}
+.extension-name-item:hover .delete-icon,
+.selected-delete-icon {
+  background-color: var(--extension-name-bg-color-hovered);
+  color: var(--delete-icon-color-hovered);
+}
 #sync-box {
   min-height: 243px;
   flex-wrap: wrap;
@@ -708,7 +721,6 @@ input.invisible-overlay {
 }
 #sync-extension-block {
   border-bottom-color: var(--main-text-color);
-  margin-bottom: 26px;
   padding: 17px 0;
   justify-content: space-between;
 }
@@ -741,9 +753,6 @@ input.invisible-overlay {
 }
 #sync_extension_section_list_title {
   font-weight: bold;
-}
-#sync-icon {
-  margin-right: 16px;
 }
 #sync_extension_no_extension_msg {
   line-height: normal;
@@ -779,10 +788,16 @@ input.invisible-overlay {
   width: 100%;
   border-radius: 6px;
 }
+.extension-name-item {
+  justify-content: space-between;
+}
 #current-extension-name-block {
   height: 56px;
   margin: 6px 0 20px 0;
   justify-content: space-between;
+}
+.selected-delete-icon {
+  color: var(--selected-delete-icon-color);
 }
 .delete-icon {
   margin-right: 8px;
@@ -799,6 +814,58 @@ input.invisible-overlay {
 }
 #extension-delete-text {
   margin: 0;
+}
+#sync-delete-overlay {
+  position: absolute;
+  background-color: var(--sync-delete-bg-color);
+  color: var(--sync-delete-color);
+  z-index: 500;
+  border-radius: 6px;
+  width: 290px;
+  left: calc((100% - 290px) / 2);
+  top: calc((100% - 230px) / 2);
+  min-height: 230px;
+  height: max-content;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+#sync-no-click-overlay {
+  position: fixed;
+  top: 0px;
+  left: 200px;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: auto;
+  user-select: none;
+  background-color: var(--overlay-bg-color);
+}
+#sync-delete-overlay-title-div {
+  display: flex;
+  justify-content: center;
+  line-height: 22px;
+  border-bottom: 1px solid var(--stats-border-color);
+  padding-bottom: 12px;
+  color: var(--sync-delete-title-color);
+  font-weight: bold;
+}
+#sync-delete-overlay-msg-content {
+  padding: 16px 0;
+  color: var(--sync-delete-color);
+}
+#sync-delete-overlay-footer-div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 20px;
+  width: 250px;
+}
+#sync-delete-overlay-footer-div .btn {
+  margin: 0px;
+  min-width: 120px;
 }
 
 /* Sync Messages/Errors */
@@ -819,6 +886,7 @@ input.invisible-overlay {
   display: flex;
   justify-content: center;
 }
+.unsync-header-message .unsync-message-box,
 .sync-message-good .sync-message-box,
 .sync-message-error .sync-message-box,
 .sync-out-of-date-header-message .sync-message-box {
@@ -854,6 +922,31 @@ input.invisible-overlay {
 }
 .sync-message-hidden {
   display: none;
+}
+.unsync-header-message .unsync-message-box {
+  cursor: default;
+}
+.unsync-header-message .unsync-message-box span[i18n="sync_removed_error_msg_part_2"] {
+  cursor: pointer;
+}
+#unsync-message-box-close,
+#unsync-message-box-close-sync-tab {
+  float: right;
+  align-items: center;
+  min-height: 40px;
+}
+#sync-reload-page-message {
+  cursor: pointer;
+}
+#sync-loadingDiv i {
+  font-size: 128px;
+  position: absolute;
+  background-color: transparent;
+  z-index: 500;
+  left: calc((100% - 128px) / 2);
+  top: calc((100% - 128px) / 2);
+  padding: 16px;
+  color: var(--main-text-color);
 }
 
 /* Screen size support */

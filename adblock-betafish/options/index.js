@@ -3,7 +3,8 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, getSettings, translate, FilterListUtil, activateTab,
    CustomFilterListUploadUtil, localizePage, storageSet, chromeStorageSetHelper,
-   chromeStorageGetHelper, debounced, determineUserLanguage */
+   chromeStorageGetHelper, debounced, determineUserLanguage, setStorageCookie
+   THIRTY_MINUTES_IN_MILLISECONDS */
 
 const BG = browser.extension.getBackgroundPage();
 const { Filter } = BG;
@@ -29,7 +30,9 @@ const { info } = BG;
 const { rateUsCtaKey, vpnWaitlistCtaKey } = BG;
 const FIVE_SECONDS = 5000;
 const TWENTY_SECONDS = FIVE_SECONDS * 4;
+const SIXTY_SECONDS = FIVE_SECONDS * 20;
 let autoReloadingPage;
+let timeoutID;
 
 const language = determineUserLanguage();
 let optionalSettings = {};
@@ -178,17 +181,20 @@ function setSelectedThemeColor() {
 }
 
 const requestSyncMessageRemoval = function (delayTime) {
-  if (!delayTime) {
-    return;
-  }
-  setTimeout(() => {
-    $('.sync-header-message-text').text('');
-    $('.sync-header-message')
-      .removeClass('sync-message-good')
-      .removeClass('sync-message-error')
-      .addClass('sync-message-hidden');
-    $('.sync-out-of-date-header-message').addClass('sync-message-hidden');
-  }, delayTime);
+  return new Promise((resolve) => {
+    if (typeof delayTime !== 'number') {
+      resolve();
+    }
+    timeoutID = setTimeout(() => {
+      $('.sync-header-message-text').text('');
+      $('.unsync-header').addClass('sync-message-hidden');
+      $('.sync-header-message')
+        .removeClass('sync-message-good sync-message-error')
+        .addClass('sync-message-hidden');
+      $('.sync-out-of-date-header-message').addClass('sync-message-hidden');
+      resolve();
+    }, delayTime);
+  });
 };
 
 const showOutOfDateExtensionError = function () {
@@ -196,30 +202,71 @@ const showOutOfDateExtensionError = function () {
   requestSyncMessageRemoval(TWENTY_SECONDS);
 };
 
+const showNoLongerSyncError = function () {
+  if (timeoutID) {
+    window.clearTimeout(timeoutID);
+  }
+  requestSyncMessageRemoval(0).then(() => {
+    $('.unsync-header').removeClass('sync-message-hidden');
+    if ($('#sync').is(':visible')) {
+      const maxHeight = Math.max($('#unsync-message-box-close-sync-tab').height(),
+        $('#sync-reload-page-message').height());
+      $('#unsync-message-box-close-sync-tab').height(maxHeight);
+      $('#sync-reload-page-message').height(maxHeight);
+    }
+
+    SyncService.resetAllErrors();
+  });
+};
+
+const addUnSyncErrorClickHandler = function () {
+  $('span[i18n="sync_removed_error_msg_part_2"]').on('click', () => {
+    $('.unsync-header').addClass('sync-message-hidden');
+    activateTab('#sync');
+  });
+  $('#unsync-message-box-close i, #unsync-message-box-close-sync-tab i').on('click', () => {
+    $('.unsync-header').addClass('sync-message-hidden');
+  });
+  $('#sync-reload-page-message').on('click', () => {
+    window.location.reload();
+  });
+};
+
+// this function is invoked from the tabs.js module
+const checkForUnSyncError = function () {
+  if (
+    optionalSettings
+    && !optionalSettings.sync_settings
+    && (SyncService.getLastGetStatusCode() === 403
+        || SyncService.getLastPostStatusCode() === 403)
+  ) {
+    showNoLongerSyncError();
+    SyncService.resetAllErrors();
+  }
+};
+
 const showSyncMessage = function (msgText, doneIndicator, errorIndicator) {
   if (!msgText) {
     return;
   }
+  $('.unsync-header').addClass('sync-message-hidden');
   $('.sync-header-message-text').text(msgText);
   if (!doneIndicator && errorIndicator) {
     $('.sync-icon').text('error_outline');
     $('.sync-header-message')
-      .removeClass('sync-message-hidden')
-      .removeClass('sync-message-good')
+      .removeClass('sync-message-hidden sync-message-good')
       .addClass('sync-message-error');
     requestSyncMessageRemoval(TWENTY_SECONDS);
   } else if (doneIndicator && !errorIndicator) {
     $('.sync-icon').text('check_circle');
     $('.sync-header-message')
-      .removeClass('sync-message-hidden')
-      .removeClass('sync-message-error')
+      .removeClass('sync-message-hidden sync-message-error')
       .addClass('sync-message-good');
     requestSyncMessageRemoval(FIVE_SECONDS);
   } else {
     $('.sync-icon').text('sync');
     $('.sync-header-message')
-      .removeClass('sync-message-hidden')
-      .removeClass('sync-message-error')
+      .removeClass('sync-message-hidden sync-message-error')
       .addClass('sync-message-good');
   }
 };
@@ -246,7 +293,9 @@ const onPostDataSentError = function (errorCode, initialGet) {
   const $customizeSyncHeaderIcon = $('#customize .sync-icon');
   $customizeSyncHeaderIcon.text('error_outline');
 
-  if (errorCode === 409) {
+  if (errorCode === 403) {
+    showNoLongerSyncError();
+  } else if (errorCode === 409) {
     const errMsgPrefix = translate('sync_header_message_error_prefix');
     const oldCommitMsg2 = translate('sync_header_message_old_commit_version_part_2');
     const oldCommitMsg3 = translate('sync_header_message_old_commit_version_part_3');
@@ -285,6 +334,10 @@ const onSyncDataGettingError = function (errorCode, responseJSON) {
   // NOTE - currently, there are no error messages for  404, 500
   if (errorCode === 400 && responseJSON && responseJSON.code === 'invalid_sync_version') {
     showOutOfDateExtensionError();
+    return;
+  }
+  if (errorCode === 403) {
+    showNoLongerSyncError();
     return;
   }
   showSyncMessage(translate('sync_header_message_no_license'), false, true);

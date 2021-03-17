@@ -216,56 +216,61 @@ const STATS = (function exportStats() {
   };
   // Tell the server we exist.
   const pingNow = function () {
-    const handlePingResponse = function (responseData) {
-      SURVEY.maybeSurvey(responseData);
-    };
-
-    getPingData((data) => {
-      const pingData = data;
-
-      if (!pingData.u) {
-        return;
-      }
-      // attempt to stop users that are pinging us 'alot'
-      // by checking the current ping count,
-      // if the ping count is above a theshold,
-      // then only ping 'occasionally'
-      if (pingData.pc > 5000) {
-        if (pingData.pc > 5000 && pingData.pc < 100000 && ((pingData.pc % 5000) !== 0)) {
-          return;
-        }
-        if (pingData.pc >= 100000 && ((pingData.pc % 50000) !== 0)) {
-          return;
-        }
-      }
-      pingData.cmd = 'ping';
-      const ajaxOptions = {
-        type: 'POST',
-        url: statsUrl,
-        data: pingData,
-        success: handlePingResponse, // TODO: Remove when we no longer do a/b
-        // tests
-        error(e) {
-          // eslint-disable-next-line no-console
-          console.log('Ping returned error: ', e.status);
-        },
+    let pingData = {};
+    return new Promise((resolve, reject) => {
+      const handlePingResponse = function (responseData) {
+        SURVEY.maybeSurvey(responseData);
+        resolve(pingData);
       };
 
-      if (browser.management && browser.management.getSelf) {
-        browser.management.getSelf().then((info) => {
-          pingData.it = info.installType.charAt(0);
-          $.ajax(ajaxOptions);
-        });
-      } else {
-        $.ajax(ajaxOptions);
-      }
+      getPingData((data) => {
+        pingData = data;
 
-      if (typeof LocalCDN !== 'undefined') {
-        const missedVersions = LocalCDN.getMissedVersions();
-        if (missedVersions) {
-          recordGeneralMessage('cdn_miss_stats', undefined, { cdnm: missedVersions });
+        if (!pingData.u) {
+          return;
         }
-      }
+        // attempt to stop users that are pinging us 'alot'
+        // by checking the current ping count,
+        // if the ping count is above a theshold,
+        // then only ping 'occasionally'
+        if (pingData.pc > 5000) {
+          if (pingData.pc > 5000 && pingData.pc < 100000 && ((pingData.pc % 5000) !== 0)) {
+            return;
+          }
+          if (pingData.pc >= 100000 && ((pingData.pc % 50000) !== 0)) {
+            return;
+          }
+        }
+        pingData.cmd = 'ping';
+        const ajaxOptions = {
+          type: 'POST',
+          url: statsUrl,
+          data: pingData,
+          success: handlePingResponse, // TODO: Remove when we no longer do a/b
+          // tests
+          error(e) {
+            // eslint-disable-next-line no-console
+            console.log('Ping returned error: ', e.status);
+            reject(e);
+          },
+        };
+
+        if (browser.management && browser.management.getSelf) {
+          browser.management.getSelf().then((info) => {
+            pingData.it = info.installType.charAt(0);
+            $.ajax(ajaxOptions);
+          });
+        } else {
+          $.ajax(ajaxOptions);
+        }
+
+        if (typeof LocalCDN !== 'undefined') {
+          const missedVersions = LocalCDN.getMissedVersions();
+          if (missedVersions) {
+            recordGeneralMessage('cdn_miss_stats', undefined, { cdnm: missedVersions });
+          }
+        }
+      });
     });
   };
 

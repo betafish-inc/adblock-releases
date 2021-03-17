@@ -9,8 +9,8 @@ const { extractHostFromFrame } = require('url');
 const { ElemHideFilter } = require('filterClasses');
 const { filterNotifier } = require('filterNotifier');
 const { port } = require('messaging');
+const info = require('info');
 const { postFilterStatsToLogServer } = require('./servermessages').ServerMessages;
-const info = require('../buildtools/info');
 const { idleHandler } = require('./idlehandler.js');
 
 const DataCollectionV2 = (function getDataCollectionV2() {

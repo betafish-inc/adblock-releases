@@ -666,6 +666,28 @@ const checkElement = function (element) {
   }
 };
 
+
+// a slightly faster alternative to just using 'querySelectorAll'
+// Note: this function may return:
+//       - an HTMLCOllection of elements,
+//       - or a NodeList of elements
+//       - or an Array with 1 element
+const queryDOM = function (selectorText) {
+  if (selectorText.startsWith('#')) {
+    const element = document.getElementById(selectorText.substr(1));
+    if (element) {
+      return [element];
+    }
+    return [];
+  }
+  if (selectorText.startsWith('.')) {
+    const classes = selectorText.substr(1).replace(/\./g, ' ');
+    return document.getElementsByClassName(classes);
+  }
+  // Default to `querySelectorAll`
+  return document.querySelectorAll(selectorText);
+};
+
 // when the page has completed loading:
 // 1) get the currently loaded CSS hiding rules
 // 2) find any hidden elements using the hiding rules from #1 that meet the
@@ -677,9 +699,8 @@ const checkElement = function (element) {
 onReady(() => {
   let elementsData = [];
 
-  // Get elements hidden by cssRules
   for (let i = 0; i < cssRules.length; i++) {
-    const elements = document.querySelectorAll(cssRules[i]);
+    const elements = queryDOM(cssRules[i]);
     for (let j = 0; j < elements.length; j++) {
       const data = { el: elements[j] };
       hiddenElements.push(data);
@@ -691,6 +712,7 @@ onReady(() => {
     const data = { el: window.collapsedElements[i] };
     hiddenElements.push(data);
   }
+
   // If no elements to swap, stop
   if (!hiddenElements.length && !hideElements.length) {
     return;

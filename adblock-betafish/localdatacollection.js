@@ -9,7 +9,7 @@ const { extractHostFromFrame } = require('url');
 const { ElemHideFilter } = require('filterClasses');
 const { filterNotifier } = require('filterNotifier');
 const { port } = require('messaging');
-const info = require('../buildtools/info');
+const info = require('info');
 
 const LocalDataCollection = (function getLocalDataCollection() {
   const easyPrivacyURL = 'https://easylist-downloads.adblockplus.org/easyprivacy.txt';

@@ -67,6 +67,12 @@ const SyncService = (function getSyncService() {
     lastGetErrorResponse = newObject;
   }
 
+  function resetAllErrors() {
+    resetLastGetErrorResponse();
+    resetLastGetStatusCode();
+    resetLastPostStatusCode();
+  }
+
   const getCurrentExtensionName = function () {
     return currentExtensionName;
   };
@@ -404,6 +410,11 @@ const SyncService = (function getSyncService() {
     }
   };
 
+  const process403ErrorCode = function () {
+    // eslint-disable-next-line no-use-before-define
+    disableSync(false);
+  };
+
   // Retreive or 'get' the sync data from the sync server
   // Input: initialGet:boolean - if true, and the server returns a 404 error code,
   //                             then a 'post' is invoked
@@ -471,6 +482,9 @@ const SyncService = (function getSyncService() {
         syncNotifier.emit('sync.data.getting.error.initial.fail', statusCode);
       } else if (!disableEmitMsg) {
         syncNotifier.emit('sync.data.getting.error', statusCode, responseJSON);
+        if (statusCode === 403) {
+          process403ErrorCode();
+        }
       }
       if (typeof callback === 'function') {
         callback(statusCode);
@@ -556,11 +570,10 @@ const SyncService = (function getSyncService() {
       });
     }
   };
-
-  const removeCurrentExtensionName = function () {
+  const removeExtensionName = function (extensionName, extensionGUID) {
     const thedata = {
-      deviceName: currentExtensionName,
-      extensionGUID: STATS.userId(),
+      deviceName: extensionName,
+      extensionGUID,
       licenseId: License.get().licenseId,
       extInfo: getExtensionInfo(),
     };
@@ -570,8 +583,10 @@ const SyncService = (function getSyncService() {
       url: `${License.MAB_CONFIG.syncURL}/devices/remove`,
       type: 'post',
       success() {
-        currentExtensionName = '';
-        chromeStorageSetHelper(syncExtensionNameKey, currentExtensionName);
+        if (extensionName === currentExtensionName) {
+          currentExtensionName = '';
+          chromeStorageSetHelper(syncExtensionNameKey, currentExtensionName);
+        }
         syncNotifier.emit('extension.name.removed');
       },
       error(xhr) {
@@ -579,6 +594,11 @@ const SyncService = (function getSyncService() {
       },
       data: thedata,
     });
+  };
+
+
+  const removeCurrentExtensionName = function () {
+    removeExtensionName(currentExtensionName, STATS.userId());
   };
 
   // return all of the current user configurable extension options (settings, Prefs, filter list
@@ -676,6 +696,9 @@ const SyncService = (function getSyncService() {
             // 'disableEmitMsg' to true
             getSyncData(false, true);
             return;
+          }
+          if (xhr.status === 403) {
+            process403ErrorCode();
           }
           // all other currently known errors (0, 401, 404, 500).
           pendingPostData = true;
@@ -905,7 +928,7 @@ const SyncService = (function getSyncService() {
     pubnub = undefined;
   }
 
-  const disableSync = function () {
+  const disableSync = function (removeName) {
     setSetting('sync_settings', false);
     syncCommitVersion = 0;
     disablePubNub();
@@ -925,10 +948,12 @@ const SyncService = (function getSyncService() {
     }
 
     storedSyncDomainPauses = [];
-    removeCurrentExtensionName();
+    if (removeName) {
+      removeCurrentExtensionName();
 
-    currentExtensionName = '';
-    chromeStorageSetHelper(syncExtensionNameKey, currentExtensionName);
+      currentExtensionName = '';
+      chromeStorageSetHelper(syncExtensionNameKey, currentExtensionName);
+    }
 
     syncNotifier.off('sync.data.getting.error', onSyncDataGettingErrorAddLogEntry);
     syncNotifier.off('sync.data.getting.error.initial.fail', onSyncDataGettingErrorInitialFailAddLogEntry);
@@ -989,7 +1014,7 @@ const SyncService = (function getSyncService() {
         }
       },
       error(xhr, textStatus, errorThrown) {
-        if (xhr.status !== 404 && attemptCount < 3) {
+        if ((xhr.status !== 404 || xhr.status !== 403) && attemptCount < 3) {
           setTimeout(() => {
             requestSyncData(successCallback, errorCallback, attemptCount, shouldForce);
           }, 1000); // wait 1 second for retry
@@ -1039,6 +1064,13 @@ const SyncService = (function getSyncService() {
           sendResponse({});
         }
       });
+
+      browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.command === 'resetAllSyncErrors') {
+          resetAllErrors();
+          sendResponse({});
+        }
+      });
     });
   });
 
@@ -1051,6 +1083,7 @@ const SyncService = (function getSyncService() {
     getAllExtensionNames,
     setCurrentExtensionName,
     removeCurrentExtensionName,
+    removeExtensionName,
     syncNotifier,
     getCommitVersion,
     setCommitVersion,
@@ -1063,6 +1096,7 @@ const SyncService = (function getSyncService() {
     getLastGetErrorResponse,
     resetLastGetErrorResponse,
     setLastGetErrorResponse,
+    resetAllErrors,
     getSyncLog,
     deleteSyncLog,
     processUserSyncRequest,

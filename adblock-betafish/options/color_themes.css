@@ -54,6 +54,11 @@
   --options-button-bg: #ff363b;
   --options-button-complete-bg: var(--link-color);
   --options-premium-badge: #999999;
+  --primary-button-text-color: white;
+  --primary-button-bg-color: var(--red2);
+  --ancillary-button-bg-color: var(--gray2);
+  --ancillary-button-text-color: white;
+  --overlay-bg-color: rgba(0, 0, 0, 0.5);
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
@@ -70,6 +75,11 @@
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
+  --extension-name-bg-color-hovered: #4c4c4c;
+  --delete-icon-color-hovered: var(--gray3);
+  --sync-delete-bg-color: var(--gray2);
+  --sync-delete-color: var(--gray5);
+  --sync-delete-title-color: white;
 }
 #default_theme {
   /* Needed for Pop-up Menu */
@@ -83,7 +93,7 @@
   --block-count-color: var(--red2);
   --popup-background-color: var(--gray6);
   --popup-card-background-color: white;
-  --popup-url-text-color: #white;
+  --popup-url-text-color: white;
   --disabled-link-color: #c6c6c6;
   --popup-button-text: var(--gray2);
   --popup-button-disabled-text: #666666;
@@ -125,6 +135,11 @@
   --options-button-bg: #ff363b;
   --options-button-complete-bg: #10b501;
   --options-premium-badge: #666666;
+  --primary-button-text-color: white;
+  --primary-button-bg-color: #e40d0d;
+  --ancillary-button-bg-color: white;
+  --ancillary-button-text-color: #666666;
+  --overlay-bg-color: rgba(255, 255, 255, 0.5);
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
@@ -141,6 +156,11 @@
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
+  --extension-name-bg-color-hovered: var(--gray6);
+  --delete-icon-color-hovered: var(--gray3);
+  --sync-delete-bg-color: var(--background-color);
+  --sync-delete-color: #000000;
+  --sync-delete-title-color: #000000;
 }
 #solarized_theme,
 [data-theme-cta="solarized_theme"] {
@@ -192,10 +212,15 @@
   --mab-teaser-card-header-text-color: #90a2a2;
   --mab-feature-card-text-color: #002c38;
   --mab-feature-card-body-bg: #586e75;
-  --options-button-text: #003643;
+  --options-button-text: white;
   --options-button-bg: #dc322f;
   --options-button-complete-bg: var(--link-color);
   --options-premium-badge: #90a2a2;
+  --primary-button-text-color: white;
+  --primary-button-bg-color: var(--red2);
+  --ancillary-button-bg-color: #002c38;
+  --ancillary-button-text-color: #a9c3c3;
+  --overlay-bg-color: rgba(0, 0, 0, 0.5);
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
@@ -212,6 +237,11 @@
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
+  --extension-name-bg-color-hovered: #002c38;
+  --delete-icon-color-hovered: #90a2a2;
+  --sync-delete-bg-color: var(--sidebar-bg-color);
+  --sync-delete-color: #90a2a2;
+  --sync-delete-title-color: #a9c3c3;
   --popup-themes-cta-icon: #00a498;
   --popup-themes-cta-text: #90a2a2;
   --popup-themes-cta-background: #003643;
@@ -272,6 +302,11 @@
   --options-button-bg: #ff363b;
   --options-button-complete-bg: var(--link-color);
   --options-premium-badge: #607c84;
+  --primary-button-text-color: white;
+  --primary-button-bg-color: #e40d0d;
+  --ancillary-button-bg-color: #ede8d7;
+  --ancillary-button-text-color: #666666;
+  --overlay-bg-color: rgba(255, 255, 255, 0.5);
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
@@ -288,6 +323,11 @@
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
+  --extension-name-bg-color-hovered: #ede8d7;
+  --delete-icon-color-hovered: #7899a3;
+  --sync-delete-bg-color: #ede8d7;
+  --sync-delete-color: #607c84;
+  --sync-delete-title-color: #607c84;
   --popup-themes-cta-icon: #00a498;
   --popup-themes-cta-text: #607c84;
   --popup-themes-cta-background: #fdf6e3;

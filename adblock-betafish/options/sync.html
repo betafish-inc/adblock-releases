@@ -125,47 +125,42 @@
           class="accent-text main-text"
           i18n="sync_extension_no_extension_msg"
         ></p>
-        <div id="sync-extension-list-div"></div>
-        <div
-          id="current-extension-name-block"
-          class="accent-box main-text content-block"
-          style="display: none;"
-        >
-          <div id="extension-name-block" class="content-block">
-            <p id="current-extension-name" class="accent-text"></p>
-            <p id="this-extension" i18n="this_extension"></p>
-          </div>
-          <i
-            id="extension-delete-icon"
-            class="material-icons md-24 delete-icon"
-            role="img"
-            aria-hidden="true"
-            >delete</i
-          >
-          <div id="extension-delete-block" class="content-block" style="display: none;">
-            <p
-              id="extension-delete-warning"
-              i18n="confirm_delete_extension"
-              class="error-message main-text"
-            ></p>
-            <button id="extension-delete-button" class="btn red button-pair" type="button">
-              <i
-                id="extension-delete-button-icon"
-                class="material-icons md-24 delete-icon"
-                role="img"
-                aria-hidden="true"
-                >delete</i
-              >
-              <p id="extension-delete-text" i18n="delete"></p>
-            </button>
-            <button
-              id="extension-delete-cancel"
-              i18n="buttoncancel"
-              class="btn button-pair non-focused-btn"
-              type="button"
-            ></button>
+        <div id="sync-no-click-overlay" class="inactive"></div>
+        <div id="sync-delete-overlay" class="inactive">
+          <div id="delete-overlay-content">
+            <div id="sync-delete-overlay-title-div">
+              <span i18n="sync_delete_panel_title"></span>
+            </div>
+            <div id="sync-delete-overlay-msg-content">
+              <span i18n="confirm_delete_extension"></span>
+              <span i18n="cannot_be_undone"></span>
+            </div>
+            <div id="sync-delete-overlay-footer-div">
+              <button
+                class="ancillaryButton btn short right statsBtn"
+                type="button"
+                id="btnSyncCancelDeleteDevice"
+                i18n="buttoncancel"
+              ></button>
+              <button
+                class="btn red short right statsBtn"
+                type="button"
+                id="btnSyncDeleteDevice"
+                i18n="delete"
+              ></button>
+            </div>
           </div>
         </div>
+        <div id="sync-loadingDiv">
+          <i
+            id="loading_progress"
+            class="spin-counter-clockwise material-icons md-128 accent-text"
+            role="img"
+            i18n-aria-label="loading_in_progress"
+            >loop</i
+          >
+        </div>
+        <div id="sync-extension-list-div"></div>
         <div id="enter-name-div" style="display: none;">
           <div id="enter-name-child-div">
             <input
@@ -179,7 +174,6 @@
           <p class="error-message" id="error-message"></p>
         </div>
       </div>
-
       <div class="translation_credits italic do-not-display"></div>
     </section>
     <footer style="display: none;">

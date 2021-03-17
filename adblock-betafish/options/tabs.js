@@ -2,7 +2,8 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, License, localizePage, determineUserLanguage, getStorageCookie, setStorageCookie,
-   THIRTY_MINUTES_IN_MILLISECONDS */
+   THIRTY_MINUTES_IN_MILLISECONDS, checkForUnSyncError, addUnSyncErrorClickHandler, translate,
+   splitMessageWithReplacementText */
 
 function tabIsLocked(tabID) {
   const $tabToActivate = $(`.tablink[href='${tabID}']`);
@@ -19,6 +20,39 @@ const syncMessageDiv = `
       <span class="sync-header-message-text"></span>
     </div>
   </div>`;
+
+const unsyncMessageDiv = `
+<div class="unsync-header sync-message-hidden">
+  <span class="sync-message-error" id="unsync-message-box-close">
+    <i class="material-icons md-24" role="img" >close</i>
+  </span>
+  <div class="unsync-header-message sync-message-error">
+    <div class="unsync-message-box">
+      <i class="material-icons md-24" role="img" aria-hidden="true">error</i>
+      &nbsp;
+      <span i18n="unsync_error_msg_part_1"></span>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <span i18n="unsync_error_msg_part_2"></span>
+      &nbsp;&nbsp;
+      <span i18n="sync_removed_error_msg_part_2" class="sync-message-link"></span>
+    </div>
+  </div>
+</div>`;
+
+const unsyncErrorMsgPart3 = splitMessageWithReplacementText(browser.i18n.getMessage('unsync_error_msg_part_3'));
+const unsyncMessageDivSyncTab = `
+<div class="unsync-header sync-message-hidden">
+  <span class="sync-message-error" id="unsync-message-box-close-sync-tab">
+    <i class="material-icons md-24" role="img" >close</i>
+  </span>
+  <div class="unsync-header-message sync-message-error">
+    <div class="unsync-message-box">
+      <i class="material-icons md-24" role="img" aria-hidden="true">error</i>
+      &nbsp;
+      <span id="sync-reload-page-message">${translate('unsync_error_msg_part_1')}&nbsp;&nbsp;&nbsp;${translate('unsync_error_msg_part_2')}&nbsp;&nbsp;&nbsp;${unsyncErrorMsgPart3.anchorPrefixText}<span class="sync-message-link">${unsyncErrorMsgPart3.anchorText}</span>${unsyncErrorMsgPart3.anchorPostfixText}</span>
+    </div>
+  </div>
+</div>`;
 
 function getSyncOutOfDateMessageDiv(id) {
   return `
@@ -159,12 +193,20 @@ function loadTabPanelsHTML() {
       if ($panel.attr('syncMessageDiv')) {
         $messageContainer.prepend(syncMessageDiv);
       }
+      if ($panel.attr('unsyncMessageDiv')) {
+        $messageContainer.prepend(unsyncMessageDiv);
+      }
+      if ($panel.attr('unsyncMessage2Div')) {
+        $messageContainer.prepend(unsyncMessageDivSyncTab);
+      }
       localizePage();
       tabsLoaded += 1;
       if (tabsLoaded >= $tabPanels.length) {
         // all tabs have been loaded and localized - call
         // any post processing handlers here.
         displayMABFeedbackCTA();
+        checkForUnSyncError();
+        addUnSyncErrorClickHandler();
       }
     });
   });
