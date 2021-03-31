@@ -23,7 +23,8 @@ function selectorFromElm(el) {
 // properties to block.
 // clickedItem: the element that was right clicked, if any.
 // advancedUser:bool
-function BlacklistUi(clickedItem, advancedUser, $base) {
+// showBlacklistCTA:bool
+function BlacklistUi(clickedItem, advancedUser, isActiveLicense, showBlacklistCTA, $base) {
   // If a dialog is ever closed without setting this to false, the
   // object fires a cancel event.
   this.cancelled = true;
@@ -34,7 +35,9 @@ function BlacklistUi(clickedItem, advancedUser, $base) {
   this.callbacks = { cancel: [], block: [] };
 
   this.clickedItem = clickedItem;
+  this.isActiveLicense = isActiveLicense;
   this.advancedUser = advancedUser;
+  this.showBlacklistCTA = showBlacklistCTA;
   this.$dialog = $base;
   this.clickWatcher = null;
 }
@@ -61,9 +64,15 @@ BlacklistUi.prototype.fire = function fire(eventName, arg) {
 BlacklistUi.prototype.onClose = function onClose() {
   if (this.cancelled === true) {
     $('.adblock-ui-stylesheet').remove();
-    this.chain.current().show();
+    if (this.chain) {
+      this.chain.current().show();
+    }
     this.fire('cancel');
   }
+};
+BlacklistUi.prototype.CloseBtnClickHandler = function CloseBtnClickHandler() {
+  this.preview(null);
+  this.onClose();
 };
 BlacklistUi.prototype.handleChange = function handleChange() {
   this.last.show();
@@ -96,9 +105,8 @@ BlacklistUi.prototype.blockListViaCSS = function blockListViaCSS(selectors) {
   fillInCSSchunk();
 };
 
-BlacklistUi.prototype.show = function show() {
+BlacklistUi.prototype.show = function show(showBackButton) {
   const that = this;
-
   // If we don't know the clicked element, we must find it first.
   if (!that.clickedItem) {
     if (!that.clickWatcher) {
@@ -109,7 +117,7 @@ BlacklistUi.prototype.show = function show() {
       });
       that.clickWatcher.click((element) => {
         that.clickedItem = element;
-        that.show();
+        that.show(true);
       });
     }
     that.preview('*');
@@ -123,43 +131,75 @@ BlacklistUi.prototype.show = function show() {
         that.clickWatcher.highlighter.enable();
       });
     that.$dialog.children('.page').hide();
-    that.$dialog.children('#page_0').show();
+    const $pageZero = that.$dialog.children('#page_0');
+    $pageZero.show(showBackButton);
+    const $pageZeroCloseBtn = $pageZero.find('i.close');
+    const pageZeroCloseClickHandler = () => {
+      that.preview(null);
+      that.onClose();
+      if (that.clickWatcher) {
+        that.clickWatcher.disable();
+      }
+    };
+    $pageZeroCloseBtn.off('click', pageZeroCloseClickHandler);
+    $pageZeroCloseBtn.on('click', pageZeroCloseClickHandler);
     return;
   }
 
   // If we do know the clicked element, go straight to the slider.
-
   that.chain = new ElementChain(that.clickedItem);
-  that.buildPage1();
+  that.buildPage1(showBackButton);
   that.last = that.chain.current();
   that.chain.change(that, that.handleChange);
   that.chain.change();
   that.redrawPage1();
 };
 
-BlacklistUi.prototype.buildPage1 = function buildPage1() {
+BlacklistUi.prototype.buildPage1 = function buildPage1(showBackButton) {
   const that = this;
   let depth = 0;
   let $element = this.chain.current();
   const $pageOne = that.$dialog.children('#page_1');
   const $pageOneSlider = $pageOne.find('#slider');
   const $pageOneOkBtn = $pageOne.find('button.looks-good');
-  const $pageOneCancelBtn = $pageOne.find('button.cancel');
+  const $pageOneBackBtn = $pageOne.find('i.back');
+  const $pageOneCloseBtn = $pageOne.find('i.close');
 
   // Reset and hide all wizard pages
   that.$dialog.children('.page').hide();
 
   // Add events to page 1 and its components
-  $pageOneCancelBtn.on('click', () => {
-    that.preview(null);
-    that.onClose();
-  });
-  $pageOneOkBtn.on('click', () => {
+  if (showBackButton) {
+    const backBtnClickHandler = () => {
+      this.chain.current().show();
+      that.$dialog.children('.page').hide();
+      that.preview(null);
+      that.fire('cancel');
+      that.reset();
+      that.show();
+    };
+    $pageOneBackBtn.unbind();
+    $pageOneBackBtn.on('click', backBtnClickHandler);
+  } else {
+    $pageOneBackBtn.remove();
+    $pageOne.find('header').addClass('center-and-right').removeClass('left-center-right');
+  }
+
+  if (this.advancedUser) {
+    $pageOne.find('.non-advanced-user-text').hide();
+  }
+  const closeBtnClickHandler = this.CloseBtnClickHandler.bind(this);
+  $pageOneCloseBtn.off('click', closeBtnClickHandler);
+  $pageOneCloseBtn.on('click', closeBtnClickHandler);
+
+  const pageOneOkBtnClickHandler = () => {
     that.cancelled = false;
     that.buildPage2();
     that.cancelled = true;
     that.redrawPage2();
-  });
+  };
+  $pageOneOkBtn.unbind();
+  $pageOneOkBtn.on('click', pageOneOkBtnClickHandler);
 
   $pageOne.show();
   that.currentStep = 1;
@@ -179,72 +219,95 @@ BlacklistUi.prototype.buildPage1 = function buildPage1() {
 BlacklistUi.prototype.buildPage2 = function buildPage2() {
   const that = this;
   const $pageTwo = that.$dialog.children('#page_2');
-  const $pageTwoBlockItBtn = $pageTwo.find('button.block-it');
-  const $pageTwoEditBtn = $pageTwo.find('button.edit'); // advanced user only
-  const $pageTwoBackBtn = $pageTwo.find('button.back');
-  const $pageTwoCancelBtn = $pageTwo.find('button.cancel');
+  const $pageTwoConfirmBtn = $pageTwo.find('button.confirm');
+  const $pageTwoEditBtn = $pageTwo.find('#editBtnSpan'); // advanced user only
+  const $pageTwoEditIcon = $pageTwo.find('#editBtn'); // advanced user only
+  const $txtAdvanceFilter = $pageTwo.find('#txtAdvanceFilter'); // advanced user only
   const $summary = $pageTwo.find('#summary');
+  const $pageTwoBackBtn = $pageTwo.find('i.back');
+  const $pageTwoCancelBtn = $pageTwo.find('i.close');
+  const $pageTwoHelpIcon = $pageTwo.find('#helpIcon');
+  const $pageTwoWarningTxt = $pageTwo.find('#filter-warning-text');
+  const $pageTwoWarningSpan = $pageTwo.find('#warningIconSpan');
+  const $pageTwoWarningRow = $pageTwo.find('.filter-warning-row');
 
   // Reset and hide all wizard pages
   that.$dialog.children('.page').hide();
 
-  if (that.advancedUser) {
-    $pageTwoEditBtn.show();
-    $pageTwoEditBtn.on('click', () => {
-      let customFilter = `${document.location.hostname}##${$summary.data('filter-text')}`;
+  function displayErrorMessage(errMessage) {
+    if (that.advancedUser) {
+      $pageTwoWarningTxt.text(errMessage);
+      $pageTwoWarningSpan.css('display', 'inline-flex');
+      $pageTwoWarningRow.css('display', 'flex');
+    } else {
       // eslint-disable-next-line no-alert
-      customFilter = prompt(translate('blacklistereditfilter'), customFilter);
-      if (customFilter) { // null => user clicked cancel
-        if (!/##/.test(customFilter)) {
-          customFilter = `##${customFilter}`;
-        }
+      alert(errMessage);
+    }
+  }
+
+  if (that.advancedUser) {
+    $pageTwoEditBtn.unbind();
+    $pageTwoEditBtn.on('click', () => {
+      const inputFieldEnabled = $txtAdvanceFilter.prop('disabled');
+      const $checkBoxes = $pageTwo.find('input[type="checkbox"]');
+      if (inputFieldEnabled) {
+        $pageTwoEditIcon.text('check');
+        $pageTwoEditBtn.addClass('editEnabled');
+        $txtAdvanceFilter.prop('disabled', false);
+        $checkBoxes.prop('disabled', true);
+        $pageTwoConfirmBtn.prop('disabled', true);
+        $pageTwoConfirmBtn.addClass('disabled');
+      } else {
+        $pageTwoEditIcon.text('mode_edit');
+        $pageTwoEditBtn.removeClass('editEnabled');
+        $txtAdvanceFilter.prop('disabled', true);
+        $checkBoxes.prop('disabled', false);
+        $pageTwoConfirmBtn.prop('disabled', false);
+        $pageTwoConfirmBtn.removeClass('disabled');
+        const customFilter = $txtAdvanceFilter.val();
         browser.runtime.sendMessage({ command: 'parseFilter', filterTextToParse: customFilter }).then((parseResult) => {
-          if (parseResult && parseResult.filter && !parseResult.error) {
-            browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: parseResult.filter.text }).then((response) => {
-              if (!response.error) {
-                that.blockListViaCSS([customFilter.substr(customFilter.indexOf('##') + 2)]);
-                that.fire('block');
-                $pageTwoCancelBtn.trigger('click');
-              } else {
-                // eslint-disable-next-line no-alert
-                alert(translate('blacklistereditinvalid1', response.error));
-              }
-            });
-          } else if (parseResult.error) {
-            // eslint-disable-next-line no-alert
-            alert(translate('blacklistereditinvalid1', translate(parseResult.error.reason || parseResult.error.type)));
+          if (parseResult && parseResult.error) {
+            displayErrorMessage(translate('blacklistereditinvalid1', translate(parseResult.error.reason)));
+            $pageTwoConfirmBtn.prop('disabled', true);
+            $pageTwoConfirmBtn.addClass('disabled');
           }
         });
       }
     });
   }
 
-  $pageTwoBlockItBtn.on('click', () => {
-    if ($summary.text().length > 0) {
-      const filter = `${document.location.hostname}##${$summary.text()}`;
+  $pageTwoConfirmBtn.unbind();
+  $pageTwoConfirmBtn.on('click', () => {
+    const cssHidingText = $summary.data('filter-text');
+    $pageTwoWarningSpan.css('display', 'none');
+    if (cssHidingText) {
+      const filter = `${document.location.hostname}##${cssHidingText}`;
       browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then((response) => {
         if (!response.error) {
-          that.blockListViaCSS([$summary.text()]);
+          that.blockListViaCSS([cssHidingText]);
           that.fire('block');
-          that.blockedText = $summary.text();
+          that.blockedText = cssHidingText;
           that.buildPage3();
         } else {
-          // eslint-disable-next-line no-alert
-          alert(translate('blacklistereditinvalid1', response.error));
+          displayErrorMessage(translate('blacklistereditinvalid1', translate(response.error)));
         }
       });
     } else {
-      // eslint-disable-next-line no-alert
-      alert(translate('blacklisternofilter'));
+      displayErrorMessage(translate('blacklisternofilter'));
     }
   });
+  $pageTwoBackBtn.unbind();
   $pageTwoBackBtn.on('click', () => {
     that.$dialog.children('.page').hide();
     that.$dialog.children('#page_1').show();
   });
-  $pageTwoCancelBtn.on('click', () => {
-    that.preview(null);
-    that.onClose();
+
+  const closeBtnClickHandler = this.CloseBtnClickHandler.bind(this);
+  $pageTwoCancelBtn.off('click', closeBtnClickHandler);
+  $pageTwoCancelBtn.on('click', closeBtnClickHandler);
+  $pageTwoHelpIcon.unbind();
+  $pageTwoHelpIcon.on('click', () => {
+    browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'https://help.getadblock.com/support/solutions/articles/6000246376-about-the-adblock-hiding-wizard-and-html-tags/' });
   });
 
   // Show page 2
@@ -256,58 +319,40 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
 BlacklistUi.prototype.buildPage3 = function buildPage3() {
   const that = this;
   const $pageThree = that.$dialog.children('#page_3');
-  const $pageThreeDoneBtn = $pageThree.find('button.cancel');
-  const $pageThreeLearnMoreBtn = $pageThree.find('button.learn-more');
-  const $pageThreeCloseBtn = $pageThree.find('button.close');
-  const $pageThreeContinueBtn = $pageThree.find('button.remove-another');
-  const $summary = $pageThree.find('#summary-pg-3');
-  const $settingsLink = $pageThree.find('#settings-link');
-  const $premiumLink = $pageThree.find('#premium-link');
-  const $dismissedMsg = $pageThree.find('#dismissed-msg');
-  const $premiumCTA = $pageThree.find('#premium-cta');
-
-  $summary.text(that.blockedText);
+  const $pageThreeFindOutBtn = $pageThree.find('button#find_out_more');
+  const $pageThreeOptOutBtn = $pageThree.find('#opt-out-msg');
+  const $pageThreeCancelBtn = $pageThree.find('i.close');
 
   // Reset and hide all wizard pages
   that.$dialog.children('.page').hide();
 
-  $pageThreeContinueBtn.off('click');
-  $pageThreeContinueBtn.on('click', () => {
-    // Reset and hide all wizard pages
-    that.$dialog.children('.page').hide();
-    that.reset();
-    that.show();
-  });
-
-  $pageThreeDoneBtn.on('click', () => {
+  $pageThreeFindOutBtn.unbind();
+  $pageThreeFindOutBtn.on('click', () => {
+    browser.runtime.sendMessage({ command: 'openPremiumPayURL' });
+    browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_clicked' });
     that.preview(null);
     that.onClose();
   });
-  $pageThreeLearnMoreBtn.on('click', () => {
-    browser.runtime.sendMessage({ command: 'openPremiumPayURL' });
-    browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_clicked' });
-  });
-  $pageThreeCloseBtn.on('click', () => {
+  $pageThreeOptOutBtn.unbind();
+  $pageThreeOptOutBtn.on('click', () => {
     browser.runtime.sendMessage({ command: 'setBlacklistCTAStatus', isEnabled: false });
     browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_closed' });
-    $premiumCTA.hide();
-    $dismissedMsg.show();
+    that.preview(null);
+    that.onClose();
   });
-  $settingsLink.on('click', () => {
-    browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#customize' });
-  });
-  $premiumLink.on('click', () => {
-    browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
-  });
+  const closeBtnClickHandler = this.CloseBtnClickHandler.bind(this);
+  $pageThreeCancelBtn.off('click', closeBtnClickHandler);
+  $pageThreeCancelBtn.on('click', closeBtnClickHandler);
 
-  // Show page 3
-  $pageThree.show();
-  that.currentStep = 3;
-  that.preview($summary.text());
-
-  // Check whether CTA is shown
-  if ($pageThree.find('#blacklist-cta').is(':visible')) {
+  if (!this.isActiveLicense && this.showBlacklistCTA) {
+    // Show page 3
+    $pageThree.show();
+    that.currentStep = 3;
     browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_seen' });
+  } else {
+    // simulate the user clicking the cancel/close icon is the easiest way to trigger all of the
+    // close / clean up logic to run
+    $pageThreeCancelBtn.trigger('click');
   }
 };
 
@@ -317,27 +362,27 @@ BlacklistUi.prototype.redrawPage1 = function redrawPage1() {
   const attrs = ['id', 'class', 'name', 'src', 'href', 'data'];
   const $selectedData = this.$dialog.children('.page').find('#selected-data');
   const $selectedNodeName = $selectedData.find('#selected_node_name');
-  const $closingTag = $selectedData.find('#selected_closing_tag');
 
   // Set selected element tag name
   $selectedNodeName.text(elementTag);
 
   // Empty all previous HTML for name value pairs of attributes
-  $selectedData.find('.node_attr').each((i, nodeAttrElement) => {
-    $(nodeAttrElement).prev('br').remove();
-    $(nodeAttrElement).remove();
-  });
+  $selectedData.find('.node_attr').remove();
 
   // Add new HTML for name value pairs of attributes
+  let attrHTML = '';
   for (const i in attrs) {
     const attrName = attrs[i];
     const attrValue = BlacklistUi.ellipsis(element.attr(attrName));
     if (attrValue) {
-      const $attrHTML = $(`
-        <br/>
-        <i class="node_attr">${attrName}="${attrValue}"</i>`);
-      $attrHTML.insertBefore($closingTag);
+      attrHTML = `${attrHTML} <span class="node_attr">${attrName}="${attrValue}"</span>`;
     }
+  }
+  attrHTML = `<span class="node_attr">[</span>${attrHTML}<span class="node_attr">]</span>`;
+  $(attrHTML).insertAfter($selectedNodeName);
+
+  if (this.advancedUser) {
+    this.$dialog.find('#page_1 .advanced-user-row').css({ display: '-webkit-box' });
   }
 };
 
@@ -349,9 +394,13 @@ BlacklistUi.prototype.makeFilter = function makeFilter() {
   const el = this.chain.current();
   const $pageTwo = this.$dialog.children('#page_2');
   const $pageTwoDetails = $pageTwo.find('#adblock-details');
-  const $pageTwoWarning = $pageTwo.find('#filter-warning');
+  const $pageTwoWarningTxt = $pageTwo.find('#filter-warning-text');
+  const $pageTwoWarningRow = $pageTwo.find('.filter-warning-row');
+  const $pageTwoWarningSpan = $pageTwo.find('#warningIconSpan');
 
-  if ($("input[type='checkbox']#cknodeName", $pageTwoDetails).is(':checked')) {
+  if (
+    !this.advancedUser
+    || (this.advancedUser && $("input[type='checkbox']#cknodeName", $pageTwoDetails).is(':checked'))) {
     result.push(el.prop('nodeName'));
     // Some iframed ads are in a bland iframe.  If so, at least try to
     // be more specific by walking the chain from the body to the iframe
@@ -366,12 +415,15 @@ BlacklistUi.prototype.makeFilter = function makeFilter() {
   }
   const attrs = ['id', 'class', 'name', 'src', 'href', 'data'];
   for (const i in attrs) {
-    if ($(`input[type='checkbox']#ck${attrs[i]}`, $pageTwoDetails).is(':checked')) {
+    if (
+      el.attr(attrs[i])
+      && (!this.advancedUser
+      || (this.advancedUser && $(`#ck${attrs[i]}`, $pageTwoDetails).is(':checked')))) {
       result.push(`[${attrs[i]}=${JSON.stringify(el.attr(attrs[i]))}]`);
     }
   }
 
-  let warningMessage;
+  let warningMessage = '';
   if (result.length === 0) {
     warningMessage = translate('blacklisterwarningnofilter');
   } else if (
@@ -381,9 +433,15 @@ BlacklistUi.prototype.makeFilter = function makeFilter() {
     warningMessage = translate('blacklisterblocksalloftype', [result[0]]);
   }
 
-  $pageTwoWarning
-    .css('display', (warningMessage ? 'block' : 'none'))
-    .text(warningMessage);
+  $pageTwoWarningTxt.text(warningMessage);
+  if (this.advancedUser) {
+    if (warningMessage) {
+      $pageTwoWarningSpan.css('display', 'inline-flex');
+    } else {
+      $pageTwoWarningSpan.css('display', 'none');
+    }
+    $pageTwoWarningRow.css('display', 'flex');
+  }
   return result.join('');
 };
 
@@ -394,68 +452,76 @@ BlacklistUi.prototype.redrawPage2 = function redrawPage2() {
   const $pageTwo = that.$dialog.children('#page_2');
   const $pageTwoDetails = $pageTwo.find('#adblock-details');
   const $pageTwoSummary = $pageTwo.find('#summary');
-  const $pageTwoCount = $pageTwo.find('#count');
+  const $userInput = $pageTwo.find('#txtAdvanceFilter');
+  const $countRow = $pageTwo.find('#countRow');
 
   function updateFilter() {
     const theFilter = that.makeFilter();
-    $pageTwoSummary.text(BlacklistUi.ellipsis(theFilter, 250));
     $pageTwoSummary.data('filter-text', theFilter);
-    const matchCount = $(theFilter).not('.dialog').length;
+    $userInput.val(`${document.location.hostname}##${theFilter}`);
 
-    if (matchCount === 1) {
-      $pageTwoCount.text(translate('blacklistersinglematch'));
+    if (that.advancedUser) {
+      $countRow.hide();
     } else {
-      $pageTwoCount.html(DOMPurify.sanitize(translate('blacklistermatches', [`<b>${matchCount}</b>`]), { SAFE_FOR_JQUERY: true }));
-    }
-  }
-
-  $pageTwoDetails.empty();
-
-  for (let i = 0; i < attrs.length; i++) {
-    const attr = attrs[i];
-    const longVal = (attr === 'nodeName' ? el.prop('nodeName') : el.attr(attr));
-    const val = BlacklistUi.ellipsis(longVal);
-    const attrName = attr === 'nodeName' ? translate('blacklistertype') : attr;
-
-    if (val) {
-      // Check src, data and href only by default if no other identifiers are
-      // present except for the nodeName selector.
-      let checked = true;
-      if (attr === 'src' || attr === 'href' || attr === 'data') {
-        checked = $('input', $pageTwoDetails).length === 1;
+      const matchCount = $(theFilter).not('.dialog').length;
+      if (matchCount > 1) {
+        $pageTwo.find('#count').text(matchCount - 1);
+        $countRow.show();
+      } else {
+        $countRow.hide();
       }
-
-      // Create <label> tag
-      const nameHTML = `<b>${attrName}</b>`;
-      const valueHTML = `<i>${val}</i>`;
-      const $checkboxlabel = $('<label></label>')
-        .addClass('adblock')
-        .attr('for', `ck${attr}`)
-        .html(DOMPurify.sanitize(translate('blacklisterattrwillbe', [nameHTML, valueHTML]), { SAFE_FOR_JQUERY: true }));
-
-      // Create <input> tag
-      const $checkboxInput = $('<input></input')
-        .addClass('adblock')
-        .attr('type', 'checkbox')
-        .attr('checked', checked)
-        .attr('id', `ck${attr}`)
-        .on('change', () => {
-          updateFilter();
-          that.preview($pageTwoSummary.data('filter-text'));
-        });
-
-      // Aggregate <input> and <label> within a <div>
-      const $checkbox = $('<div></div>')
-        .addClass('adblock')
-        .addClass('check-box')
-        .addClass('small')
-        .append($checkboxInput)
-        .append($checkboxlabel);
-
-      $pageTwoDetails.append($checkbox);
     }
   }
+  if (that.advancedUser) {
+    $pageTwo.find('.non-advanced-user-text').hide();
+    $pageTwoDetails.empty();
 
+    for (let i = 0; i < attrs.length; i++) {
+      const attr = attrs[i];
+      const longVal = (attr === 'nodeName' ? el.prop('nodeName') : el.attr(attr));
+      const val = BlacklistUi.ellipsis(longVal);
+      const attrName = attr === 'nodeName' ? translate('blacklistertype') : attr;
+      if (val) {
+        // Check src, data and href only by default if no other identifiers are
+        // present except for the nodeName selector.
+        let checked = true;
+        if (attr === 'src' || attr === 'href' || attr === 'data') {
+          checked = $('input', $pageTwoDetails).length === 1;
+        }
+
+        // Create <label> tag
+        const nameHTML = `<b>${attrName}</b>`;
+        const valueHTML = `<i>${val}</i>`;
+        const $checkboxlabel = $('<label></label>')
+          .addClass('adblock')
+          .attr('for', `ck${attr}`)
+          .html(DOMPurify.sanitize(translate('blacklisterattrwillbe', [nameHTML, valueHTML]), { SAFE_FOR_JQUERY: true }));
+
+        // Create <input> tag
+        const $checkboxInput = $('<input></input')
+          .addClass('adblock')
+          .attr('type', 'checkbox')
+          .attr('checked', checked)
+          .attr('id', `ck${attr}`)
+          .on('change', () => {
+            updateFilter();
+            that.preview($pageTwoSummary.data('filter-text'));
+          });
+
+        // Aggregate <input> and <label> within a <div>
+        const $checkbox = $('<div class="advanced-user-row detail-row"></div>')
+          .addClass('adblock')
+          .addClass('check-box')
+          .addClass('small')
+          .append($checkboxInput)
+          .append($checkboxlabel);
+
+        $pageTwoDetails.append($checkbox);
+      }
+    }
+    this.$dialog.find('#page_2 .advanced-user-row').css({ display: 'flex' });
+    $pageTwoDetails.show();
+  }
   updateFilter();
 };
 
@@ -487,7 +553,6 @@ BlacklistUi.prototype.preview = function preview(selector) {
       opacity:1!important;
     }`;
   }
-
   document.documentElement.appendChild(csspreview);
 };
 

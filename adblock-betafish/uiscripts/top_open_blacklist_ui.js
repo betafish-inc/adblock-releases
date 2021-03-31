@@ -109,97 +109,76 @@ function topOpenBlacklistUI(options) {
       return;
     }
     const html = `
-    <div id='wizard'>
+    <div id='hiding-wizard'>
       <div class='page' id='page_0'>
-        <header>
-          <img aria-hidden='true' src='${browser.runtime.getURL('/icons/icon24.png')}'>
+        <header class="center-and-right">
           <h1>${translate('blockanadtitle')}</h1>
+          <i class="material-icons md-18 close" role="img" aria-label="${translate('close')}">close</i>
         </header>
         <section>
           <p>${translate('clickthead')}</p>
         </section>
-        <footer>
-          <button class='cancel'>${translate('buttoncancel')}</button>
-        </footer>
       </div>
       <div class='page' id='page_1' style='display:none;'>
-        <header>
-          <img aria-hidden='true' src='${browser.runtime.getURL('/icons/icon24.png')}'>
-          <h1>${translate('slidertitle')}</h1>
+        <header class="left-center-right">
+          <i class="material-icons md-18 back" role="img" aria-label="${translate('back')}">chevron_left</i>
+          <h1>${translate('blockanadtitle')}</h1>
+          <i class="material-icons md-18 close" role="img" aria-label="${translate('close')}">close</i>
         </header>
         <section>
+          <p class="boldText">${translate('isithidden')}</p>
+          <p class="advanced-user-row" >${translate('blacklisterblockedelement')}</p>
+          <p class="advanced-user-row" id='selected-data'>
+            <span id='selected_node_name'></span>
+          </p>
           <p>${translate('sliderexplanation')}</p>
           <input id='slider' type='range' min='0' value='0'/>
+          <p class="warningText non-advanced-user-text">${translate('sliderwarning')}</p>
+          <div class="buttonRow" ><button class='primary looks-good adblock-default-button'>${translate('buttonlooksgood')}</button></div>
         </section>
-        <section id='selected-data'>
-          <b>${translate('blacklisterblockedelement')}</b>
-          <br><br>
-          <span>&lt;&nbsp;</span><i id='selected_node_name'></i>
-          <i id='selected_closing_tag'>&nbsp;&gt;</i>
-        </section>
-        <footer>
-          <button class='primary looks-good adblock-default-button'>${translate('buttonlooksgood')}</button>
-          <button class='cancel'>${translate('buttoncancel')}</button>
-        </footer>
       </div>
       <div class='page' id='page_2' style='display:none;'>
-        <header>
-          <img aria-hidden='true' src='${browser.runtime.getURL('/icons/icon24.png')}'>
-          <h1>${translate('blacklisteroptionstitle')}</h1>
+        <header class="left-center-right">
+          <i class="material-icons md-18 back" role="img" aria-label="${translate('back')}">chevron_left</i>
+          <h1>${translate('blockanadtitle')}</h1>
+          <i class="material-icons md-18 close" role="img" aria-label="${translate('close')}">close</i>
         </header>
         <section>
-          <div>${translate('blacklisteroptions1')}</div>
+          <p class="boldText">${translate('blacklisteroptions1')}</p>
+          <p class="advanced-user-row" >
+            <input id="txtAdvanceFilter" type="text" disabled="true" />
+            <span id="editBtnSpan">
+              <i id="editBtn" class="material-icons md-18" role="img" aria-label="${translate('buttonedit')}">mode_edit</i>
+            </span>
+          </p>
+          <p class="filter-warning-row" >
+            <span id="warningIconSpan"><i id="warningIcon" class="material-icons md-18 warning-icon" role="img" aria-label="${translate('warning')}">warning</i></span><span id='filter-warning-text' ></span>
+          </p>
+          <p class="advanced-user-row boldText detail-header" id="add_info">${translate('add_info')}</p>
+          <p class="advanced-user-row detail-header" >${translate('confirm_msg')}</p>
           <div id='adblock-details'></div>
+          <div id='summary'></div>
+          <p>${translate('blacklisternotsure_part_I')} <span class="non-advanced-user-text">${translate('blacklisternotsure_part_II')}</span></p>
+          <p id="countRow"><span id="count"></span>&nbsp;${translate('hiddenelementmessagecount')} <i id="helpIcon" class="material-icons md-18" role="img" aria-label="${translate('learn_more_without_period')}">live_help</i></p>
+          <div class="buttonRow" ><button class='primary confirm adblock-default-button'>${translate('buttonconfirm')}</button></div>
         </section>
-        <center id='count'></center>
-        <section>
-          <div>${translate('blacklisternotsure')}</div>
-          <div>${translate('blacklisterthefilter')}</div>
-          <div>
-            <div id='summary'></div><br/>
-            <div id='filter-warning'></div>
-          </div>
-        </section>
-        <footer>
-          <button class='primary block-it adblock-default-button'>${translate('buttonblockit')}</button>
-          <button class='edit advanced-user'>${translate('buttonedit')}</button>
-          <button class='back'>${translate('buttonback')}</button>
-          <button class='cancel'>${translate('buttoncancel')}</button>
-        </footer>
       </div>
       <div class='page' id='page_3' style='display:none;'>
-        <header>
-          <img aria-hidden='true' src='${browser.runtime.getURL('/icons/icon24.png')}'>
-          <h1>${translate('blacklisteroptionstitle')}</h1>
+        <header class="center-and-right">
+          <h1>${translate('adblock_premium')}</h1>
+          <i class="material-icons md-18 close" role="img" aria-label="${translate('close')}">close</i>
         </header>
         <section>
-          <div class='messageWithLink' i18n_replacement_el='settings-link'>
-            ${i18nJoin('successfully_blocked_ad', 'future_ads_blocked', 'change_behavior_settings')}
-            <a id='settings-link' class='link' href='#'></a>
-          </div>
+          <span style="display: flex; flex-direction: column;">
+            <span style="font-size: 18px; font-weight: bold;">${translate('wizard_premium_cta_title')}</span>
+            <span style="margin-top: 22px;">${translate('wizard_premium_cta_part_I')}  ${translate('wizard_premium_cta_part_II')}</span>
+          </span>
+          <img aria-hidden='true' src='${browser.runtime.getURL('adblock-wizard_sync_cta.svg')}' style="height: 200px; width: 245px;">
         </section>
-        <section>
-          <div>${translate('rule_added_filters')}</div>
-          <div>
-            <div id='summary-pg-3'></div>
-          </div>
-        </section>
-        <section class='body-button'>
-          <button id="block_something_else_btn" class='primary remove-another adblock-default-button'>${translate('block_something_else')}</button>
-          <button class='cancel'>${translate('done')}</button>
-        </section>
-        <footer id='blacklist-cta' style='display:none;'>
-          <div id='dismissed-msg' class='messageWithLink' i18n_replacement_el='premium-link' style='display:none;'>
-            ${i18nJoin('wont_show_again', 'check_out_premium')}
-            <a id='premium-link' class='link' href='#'></a>
-          </div>
-          <div id='premium-cta'>
-            <div id='cta-msg'>${i18nJoin('blocked_something', 'never_lose_settings')}</div>
-            <div id='cta-buttons'>
-              <button class='learn-more'>${translate('learn_more_without_period')}</button>
-              <button class='close material-icons'>close</button>
-            </div>
-          </div>
+        <hr />
+        <footer id='blacklist-cta' >
+          <button id='find_out_more' class='btnClose'>${translate('find_out_more')}</button>
+          <span id='opt-out-msg' class='btnClose'>${translate('dont_show_me_again')}</span>
         </footer>
       </div>
     </div>
@@ -209,32 +188,25 @@ function topOpenBlacklistUI(options) {
       // eslint-disable-next-line no-new
       new DragElement(header, $dialog.get(0));
     });
-    $dialog.find('button.cancel').on('click', () => {
+
+    $dialog.find('i.close,.btnClose').on('click', () => {
       mayOpenDialogUi = true;
       (document.body || document.documentElement).removeChild(base);
     });
 
-    $dialog.find('.messageWithLink').each(function replaceLinks() {
-      processReplacementChildrenInContent($(this));
-    });
-    if (!options.isActiveLicense && options.showBlacklistCTA) {
-      $dialog.find('#blacklist-cta').show();
-    }
     setLangAndDirAttributes($dialog.get(0));
     bindEnterClickToDefault($dialog);
 
     $base.append($dialog);
-    browser.runtime.sendMessage({ command: 'getSettings' }).then((settings) => {
-      const advancedUser = settings.show_advanced_options;
-      const blacklistUI = new BlacklistUi(rightClickedItem, advancedUser, $dialog);
-      blacklistUI.cancel(() => {
-        mayOpenDialogUi = true;
-      });
-      blacklistUI.block(() => {
-        mayOpenDialogUi = true;
-      });
-      blacklistUI.show();
+    const blacklistUI = new BlacklistUi(rightClickedItem, options.settings.show_advanced_options,
+      options.isActiveLicense, options.showBlacklistCTA, $dialog);
+    blacklistUI.cancel(() => {
+      mayOpenDialogUi = true;
     });
+    blacklistUI.block(() => {
+      mayOpenDialogUi = true;
+    });
+    blacklistUI.show();
   });
   (document.body || document.documentElement).appendChild(base);
 }

@@ -1,6 +1,6 @@
 {
   "description": {
-    "message": "広告やYoutube、Facebook、Twitch、お気に入りのウェブサイト等の広告やポップアップ広告をブロックしましょう。",
+    "message": "Youtube、Facebook、Twitch、お気に入りのウェブサイト等の広告やポップアップ広告をブロックしましょう。",
     "description": "Extension description in manifest. Should not exceed 132 characters."
   },
   "description2": {
@@ -489,10 +489,6 @@
     "message": "インドネシア語 + EasyList",
     "description": "A filter list combined with EasyList"
   },
-  "filtermalware": {
-    "message": "マルウェア対策",
-    "description": "A filter list"
-  },
   "filterbitcoin_mining_protection": {
     "message": "仮想通貨 (ビットコイン) マイニング保護リスト",
     "description": "A filter list"
@@ -604,34 +600,6 @@
   "adreportvoluntary": {
     "message": "広告の報告は任意です。フィルタリストの管理者が誰のためにも広告をブロックできるようにし、他のユーザーにも役立ちます。あなたが他のユーザーを助ける必要などないと感じても、問題ありません。 このページを閉じ、自身のためだけに[[広告をブロック]]して下さい。",
     "description": "Introduction of the ad reporting page"
-  },
-  "malwarenotificationcheckboxmessage": {
-    "message": "マルウェアが検知されたときAdBlockから通知を受け取りたいですか？",
-    "description": "Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
-  },
-  "malwarenotificationmessage": {
-    "message": "AdBlockがマルウェアをホストするサイトからのダウンロードをブロックしました。",
-    "description": "Notification when a potential malware request has been blocked. This message should be under 90 characters!"
-  },
-  "malwarenotificationlearnmore": {
-    "message": "マルウェアについて学びましょう",
-    "description": "Button on the malware notification that opens a page about malware on the AdBlock website. Message should be under 45 characters!"
-  },
-  "malwarenotificationdisablethesemessages": {
-    "message": "この通知を無効にする",
-    "description": "Button on the malware notification to disable future notifications. Message should be under 45 characters!"
-  },
-  "malwarecheck": {
-    "message": "広告を表示しているマルウェアをチェックします:",
-    "description": "Section header on the ad report page"
-  },
-  "malwarewarning": {
-    "message": "お使いのコンピュータがマルウェアに感染している可能性があります。[[こちら]]をクリックして詳細を確認して下さい。",
-    "description": "On the ad report page, the ads the user is seeing might be caused by malware/adware"
-  },
-  "malwarenotfound": {
-    "message": "既知のマルウェアが見つかりませんでした。",
-    "description": "On the ad report page, the ads the user is seeing are probably not caused by malware/adware"
   },
   "disableaa": {
     "message": "控えめな広告用フィルタをチェックして下さい:",
@@ -2007,6 +1975,14 @@
     "message": "以下のカテゴリから選択してください。AdBlockは時々ユーザーの気分を和らげるために高品質の画像で広告を置き換えます。",
     "description": "The label text for the switch on the MyAdBlock Options page"
   },
+  "feedback_title": {
+    "message": "フィードバック",
+    "description": "Title for feedback call to action."
+  },
+  "feedback_info": {
+    "message": "ご意見・ご要望はありませんか？ぜひお聞かせください。",
+    "description": "Text describing the MyAdBlock feedback call to action."
+  },
   "myadblock_feedback_title": {
     "message": "あなたのご意見をお聞かせ下さい！",
     "description": "Title for MyAdBlock feedback call to action."
@@ -2377,6 +2353,26 @@
     "message": "あなたの設定を同期するために、[[AdBlockをアップデート]]して下さい。",
     "description": "button text on the Sync sub-tab of the Options page"
   },
+  "sync_removed_error_msg_part_1": {
+    "message": "この拡張機能は同期されてません",
+    "description": "sync error message text on the popup menu"
+  },
+  "sync_removed_error_msg_part_2": {
+    "message": "ここをクリックし、設定を更新してください",
+    "description": "sync error message text on the popup menu and options page"
+  },
+  "unsync_error_msg_part_1": {
+    "message": "同期エラー",
+    "description": "sync error message text on the options menu"
+  },
+  "unsync_error_msg_part_2": {
+    "message": "この拡張機能は今後同期されません。",
+    "description": "sync error message text on the popup menu"
+  },
+  "unsync_error_msg_part_3": {
+    "message": "ここをクリックしてこのページを更新し、「この拡張機能を追加する」をクリックしてこのデバイスを同期してください",
+    "description": "sync error message text on the Sync tab of the options page"
+  },
   "sync_premium_cta": {
     "message": "同期等のPremium機能を導入して広告ブロックのプロになりましょう。",
     "description": "AdBlock Premium CTA on the Sync tab"
@@ -2417,9 +2413,17 @@
     "message": "（当拡張機能）",
     "description": "description for name of the current extension"
   },
+  "sync_delete_panel_title": {
+    "message": "同期済み拡張機能の削除",
+    "description": "Panel title text on the delete device overlay"
+  },
   "confirm_delete_extension": {
     "message": "本当にこの拡張機能を削除しますか？",
-    "description": "Warning/confirmation message shown when the user clicks on the delete icon for this extension"
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
+  },
+  "cannot_be_undone": {
+    "message": "この操作は元に戻すことができません。",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
   },
   "delete": {
     "message": "削除",

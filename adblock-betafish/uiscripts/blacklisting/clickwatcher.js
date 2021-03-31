@@ -108,6 +108,14 @@ ClickWatcher.prototype.enable = function enable() {
   that.eventsListener();
 };
 
+// Clean up / remove added DOM elements.
+ClickWatcher.prototype.disable = function disable() {
+  $('body').off('click', '.adblock-killme-overlay, .adblock-highlight-node', this.clickHandler);
+  $('body').unbind();
+  Overlay.removeAll();
+  this.onClose();
+};
+
 // Called externally to close ClickWatcher.  Doesn't cause any events to
 // fire.
 ClickWatcher.prototype.close = function close() {
@@ -128,28 +136,23 @@ ClickWatcher.prototype.onClose = function onClose() {
   this.highlighter.destroy();
 };
 
+ClickWatcher.prototype.clickHandler = function clickHandler(event) {
+  if (event && event.data && event.data.clickWatcherRef) {
+    const theClickWatcherRef = event.data.clickWatcherRef;
+    theClickWatcherRef.clickedElement = theClickWatcherRef.highlighter.getCurrentNode(this);
+    theClickWatcherRef.disable();
+  }
+  return false;
+};
+
 // Catches clicks on elements and mouse hover on the wizard
 // when element is clicked we stored the element in clickedElement
 // and close all ClickWatcher processes
 ClickWatcher.prototype.eventsListener = function eventsListener() {
   const that = this;
 
-  function clickCatchThis() {
-    // eslint-disable-next-line no-use-before-define
-    return clickCatch(this);
-  }
-
-  function clickCatch(element) {
-    that.clickedElement = that.highlighter.getCurrentNode(element);
-    $('body').off('click',
-      '.adblock-killme-overlay, .adblock-highlight-node', clickCatchThis);
-    Overlay.removeAll();
-    that.onClose();
-    return false;
-  }
-
   // Most things can be blacklisted with a simple click handler.
-  $('body').on('click', '.adblock-killme-overlay, .adblock-highlight-node', clickCatchThis);
+  $('body').on('click', '.adblock-killme-overlay, .adblock-highlight-node', { clickWatcherRef: that }, that.clickHandler);
 
   // Since iframes that will get clicked will almost always be an entire
   // ad, and I *really* don't want to figure out inter-frame communication
@@ -163,7 +166,7 @@ ClickWatcher.prototype.eventsListener = function eventsListener() {
       }
       const killmeOverlay = new Overlay({
         domElement: el,
-        clickHandler: clickCatch,
+        clickHandler: that.clickHandler,
       });
       killmeOverlay.display();
     });

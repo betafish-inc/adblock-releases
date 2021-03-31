@@ -489,10 +489,6 @@
     "message": "Indonesiano + EasyList",
     "description": "A filter list combined with EasyList"
   },
-  "filtermalware": {
-    "message": "Protezione da malware",
-    "description": "A filter list"
-  },
   "filterbitcoin_mining_protection": {
     "message": "Lista di protezione dal mining di criptovalute (Bitcoin)",
     "description": "A filter list"
@@ -604,34 +600,6 @@
   "adreportvoluntary": {
     "message": "Segnalare la pubblicità è facoltativo, ma aiuta gli altri utenti perché consente ai gestori delle liste di filtri di bloccarla per tutti. Se in questo momento non ti senti in vena di altruismo, non c'è problema. Chiudi questa pagina e [[blocca la pubblicità]] solo per te.",
     "description": "Introduction of the ad reporting page"
-  },
-  "malwarenotificationcheckboxmessage": {
-    "message": "Desideri che AdBlock ti avverta quando rileva un malware?",
-    "description": "Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
-  },
-  "malwarenotificationmessage": {
-    "message": "AdBlock ha bloccato il download da un sito noto per ospitare malware.",
-    "description": "Notification when a potential malware request has been blocked. This message should be under 90 characters!"
-  },
-  "malwarenotificationlearnmore": {
-    "message": "Scopri di più sui malware",
-    "description": "Button on the malware notification that opens a page about malware on the AdBlock website. Message should be under 45 characters!"
-  },
-  "malwarenotificationdisablethesemessages": {
-    "message": "Disattiva queste notifiche",
-    "description": "Button on the malware notification to disable future notifications. Message should be under 45 characters!"
-  },
-  "malwarecheck": {
-    "message": "Verifica eventuali malware che potrebbero somministrare pubblicità:",
-    "description": "Section header on the ad report page"
-  },
-  "malwarewarning": {
-    "message": "Il tuo computer potrebbe essere infettato da un malware. Clicca [[qui]] per maggiori informazioni.",
-    "description": "On the ad report page, the ads the user is seeing might be caused by malware/adware"
-  },
-  "malwarenotfound": {
-    "message": "Non sono stati trovati malware noti.",
-    "description": "On the ad report page, the ads the user is seeing are probably not caused by malware/adware"
   },
   "disableaa": {
     "message": "Controlla i filtri Pubblicità Accettabili:",
@@ -1964,7 +1932,7 @@
     "description": "Part of Options page message letting users know of settings change."
   },
   "learn_more": {
-    "message": "Ulteriori informazioni.",
+    "message": "Scopri di più.",
     "description": "Link to Knowledge Base article with more information about the settings change"
   },
   "download_mac_app": {
@@ -2006,6 +1974,14 @@
   "myadblock_picreplacement_exlained": {
     "message": "Seleziona tra le categorie qui sotto e AdBlock sostituirà occasionalmente gli annunci con immagini in alta risoluzione per allietare la tua giornata.",
     "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "feedback_title": {
+    "message": "Commenti",
+    "description": "Title for feedback call to action."
+  },
+  "feedback_info": {
+    "message": "Hai un commento o una funzionalità da chiederci? Ci piacerebbe conoscere la tua opinione!",
+    "description": "Text describing the MyAdBlock feedback call to action."
   },
   "myadblock_feedback_title": {
     "message": "Ci piacerebbe conoscere la tua opinione!",
@@ -2377,6 +2353,26 @@
     "message": "[[Aggiorna AdBlock]] per consentirci di sincronizzare le tue impostazioni.",
     "description": "button text on the Sync sub-tab of the Options page"
   },
+  "sync_removed_error_msg_part_1": {
+    "message": "Questa estensione non è sincronizzata",
+    "description": "sync error message text on the popup menu"
+  },
+  "sync_removed_error_msg_part_2": {
+    "message": "Clicca qui per aggiornare le impostazioni",
+    "description": "sync error message text on the popup menu and options page"
+  },
+  "unsync_error_msg_part_1": {
+    "message": "Errore di sincronizzazione",
+    "description": "sync error message text on the options menu"
+  },
+  "unsync_error_msg_part_2": {
+    "message": "Questa estensione non è più sincronizzata.",
+    "description": "sync error message text on the popup menu"
+  },
+  "unsync_error_msg_part_3": {
+    "message": "Clicca qui per aggiornare questa pagina, quindi clicca su \"Aggiungi questa estensione\" per sincronizzare questo dispositivo",
+    "description": "sync error message text on the Sync tab of the options page"
+  },
   "sync_premium_cta": {
     "message": "Grazie alle funzioni Premium come la sincronizzazione, bloccherai gli annunci come un professionista.",
     "description": "AdBlock Premium CTA on the Sync tab"
@@ -2417,9 +2413,17 @@
     "message": "(questa estensione)",
     "description": "description for name of the current extension"
   },
+  "sync_delete_panel_title": {
+    "message": "Cancella l'estensione sincronizzata",
+    "description": "Panel title text on the delete device overlay"
+  },
   "confirm_delete_extension": {
     "message": "Vuoi davvero eliminare questa estensione?",
-    "description": "Warning/confirmation message shown when the user clicks on the delete icon for this extension"
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
+  },
+  "cannot_be_undone": {
+    "message": "Quest'azione non può essere annullata.",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
   },
   "delete": {
     "message": "Elimina",

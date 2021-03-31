@@ -146,28 +146,40 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
       }
     }
 
-    let ytInitialPlayerResponseWrapped;
-    const ytDescriptor = {
-      configurable: true,
-      get() {
-        return ytInitialPlayerResponseWrapped;
-      },
-      set(newValue) {
-        // eslint-disable-next-line no-console
-        ytInitialPlayerResponseWrapped = newValue;
-        if (
-          ytInitialPlayerResponseWrapped
-          && ytInitialPlayerResponseWrapped.videoDetails
-          && ytInitialPlayerResponseWrapped.videoDetails.author
-        ) {
-          const { author, videoId } = ytInitialPlayerResponseWrapped.videoDetails;
-          updateURLWrapped(author);
-          document.dispatchEvent(new CustomEvent(toContentScriptEventName,
-            { detail: { channelName: author, videoId } }));
-        }
-      },
-    };
-    Object.defineProperty(window, 'ytInitialPlayerResponse', ytDescriptor);
+    function processVideoData(data) {
+      if (
+        data
+        && data.videoDetails
+        && data.videoDetails.author
+      ) {
+        const { author, videoId } = data.videoDetails;
+        updateURLWrapped(author);
+        document.dispatchEvent(new CustomEvent(toContentScriptEventName,
+          { detail: { channelName: author, videoId } }));
+      }
+    }
+
+    let currentDescriptor = Object.getOwnPropertyDescriptor(window, 'ytInitialPlayerResponse');
+    if (currentDescriptor) {
+      const descOneSetOrigin = currentDescriptor.set;
+      currentDescriptor.set = function set(newValue) {
+        descOneSetOrigin(newValue);
+        processVideoData(newValue);
+      };
+    } else {
+      let ytInitialPlayerResponseWrapped;
+      currentDescriptor = {
+        configurable: true,
+        get() {
+          return ytInitialPlayerResponseWrapped;
+        },
+        set(newValue) {
+          ytInitialPlayerResponseWrapped = newValue;
+          processVideoData(newValue);
+        },
+      };
+    }
+    Object.defineProperty(window, 'ytInitialPlayerResponse', currentDescriptor);
 
     const theObjectDefineProperty = Object.defineProperty;
     Object.defineProperty = function defineProperties(obj, prop, descriptor) {

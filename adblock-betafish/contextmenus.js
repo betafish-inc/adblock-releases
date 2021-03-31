@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, require, ext, adblockIsPaused, adblockIsDomainPaused
-   recordGeneralMessage, log, License, reloadTab */
+   recordGeneralMessage, log, License, reloadTab, getSettings */
 
 const { checkAllowlisted } = require('allowlisting');
 const { filterNotifier } = require('filterNotifier');
@@ -158,8 +158,9 @@ const contextMenuItem = (() => ({
           fn: 'topOpenBlacklistUI',
           options: {
             info,
-            isActiveLicense: License.isActiveLicense(),
             showBlacklistCTA: License.shouldShowBlacklistCTA(),
+            isActiveLicense: License.isActiveLicense(),
+            settings: getSettings(),
           },
         }, {
           tab,
@@ -175,8 +176,9 @@ const contextMenuItem = (() => ({
           fn: 'topOpenBlacklistUI',
           options: {
             nothingClicked: true,
-            isActiveLicense: License.isActiveLicense(),
             showBlacklistCTA: License.shouldShowBlacklistCTA(),
+            isActiveLicense: License.isActiveLicense(),
+            settings: getSettings(),
           },
         }, {
           tab,
@@ -285,6 +287,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         nothingClicked: request.nothingClicked,
         isActiveLicense: License.isActiveLicense(),
         showBlacklistCTA: License.shouldShowBlacklistCTA(),
+        settings: getSettings(),
       },
       tabID: request.tabId,
     });

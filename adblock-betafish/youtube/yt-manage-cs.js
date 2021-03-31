@@ -626,10 +626,44 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'ping_yt_manage_cs') {
     sendResponse({ status: 'yes' });
   }
-  window.addEventListener('yt-page-data-updated', () => {
-    if (window.location.pathname !== '/feed/channels') {
-      removeInPageIcons();
-      removeOnPageIcon();
+});
+
+document.addEventListener('yt-page-data-updated', () => {
+  if (window.location.pathname !== '/feed/channels') {
+    removeInPageIcons();
+    removeOnPageIcon();
+  }
+});
+
+const toContentScriptRandomEventName = `ab-yt-event-${Math.random().toString(36).substr(2)}`;
+document.addEventListener(toContentScriptRandomEventName, (event) => {
+  if (event && event.detail && event.detail.actionName === 'yt-append-continuation-items-action') {
+    removeInPageIcons();
+    addInPageIcons(true);
+  }
+});
+
+const captureYTEvents = function (toContentScriptEventName) {
+  document.addEventListener('yt-action', (event) => {
+    if (event.detail && event.detail.actionName === 'yt-append-continuation-items-action') {
+      document.dispatchEvent(new CustomEvent(toContentScriptEventName,
+        { detail: { actionName: 'yt-append-continuation-items-action' } }));
     }
   });
-});
+};
+
+const injectWrappers = function () {
+  const elemDOMPurify = document.createElement('script');
+  elemDOMPurify.src = browser.runtime.getURL('purify.min.js');
+  const scriptToInject = `(${captureYTEvents.toString()})('${toContentScriptRandomEventName}');`;
+  const elem = document.createElement('script');
+  elem.appendChild(document.createTextNode(scriptToInject));
+  try {
+    (document.head || document.documentElement).appendChild(elemDOMPurify);
+    (document.head || document.documentElement).appendChild(elem);
+  } catch (ex) {
+    // eslint-disable-next-line no-console
+    console.log(ex);
+  }
+};
+injectWrappers();

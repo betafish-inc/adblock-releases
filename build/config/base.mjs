@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '4.30.0',
+  version: '4.31.0',
   webpack: {
     bundles: [
       {
@@ -568,6 +568,10 @@ export default {
       {
         dest: 'icons/adblock-picreplacement-images-bird-grayscale.png',
         src: 'adblock-betafish/picreplacement/images/bird_grayscale.png',
+      },
+      {
+        dest: 'adblock-wizard_sync_cta.svg',
+        src: 'adblock-betafish/uiscripts/wizard_sync_cta.svg',
       },
       {
         dest: 'managed-storage-schema.json',
