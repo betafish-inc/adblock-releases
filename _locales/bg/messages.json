@@ -23,6 +23,10 @@
     "message": "AdBlock. Блокер на реклами №1 с над 200 милиона изтегляния! Блокира реклами в световната мрежа.",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
   },
+  "name_adblock_on_youtube": {
+    "message": "AdBlock on YouTube",
+    "description": "Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
+  },
   "adblock_click_for_details": {
     "message": "Натиснете бутона на AdBlock за подробности",
     "description": "Tooltip on the AdBlock button, to help users understand that they can click the button to access more options."
@@ -67,28 +71,8 @@
     "message": "За да го скриете, щракнете с десен бутон по лентата и изберете „Премахни от лентата“. Можете да го покажете повторно в меню на Firefox -> Нагласи.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
-  "sliderexplanation": {
-    "message": "Движете плъзгача до пълно блокиране на рекламата в страницата и добра ползваемост на блокирания елемент.",
-    "description": "'Block an ad' wizard usage explanation"
-  },
   "slidertitle": {
     "message": "Първа стъпка: решете какво блокирате",
-    "description": "'Block an ad' wizard title"
-  },
-  "blacklisteroptions1": {
-    "message": "Смятате ли, че всеки път когато посещавате страницата, следното ще бъде вярно за рекламата?",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisternotsure": {
-    "message": "Не сте сигурен? — натиснете „Блокирай!“ по-долу.",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisterthefilter": {
-    "message": "Филтър, който може да бъде променен от страницата с настройки:",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisteroptionstitle": {
-    "message": "Последна стъпка: кое превръща елемента в реклама?",
     "description": "'Block an ad' wizard title"
   },
   "blacklisternofilter": {
@@ -170,14 +154,6 @@
   "findingads": {
     "message": "Намиране на реклами…\n\nЩе отнеме момент.",
     "description": "'Block an ad' wizard loading message"
-  },
-  "blockanadtitle": {
-    "message": "Блокиране на реклама",
-    "description": "Title of the first two dialogs of the 'Block an ad' wizard"
-  },
-  "clickthead": {
-    "message": "Щракнете по реклама, за да изминете пътя до нейното блокиране.",
-    "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock няма да се изпълнява в страници, съвпадащи с:",
@@ -461,10 +437,6 @@
     "message": "индонезийски + EasyList",
     "description": "A filter list combined with EasyList"
   },
-  "filtermalware": {
-    "message": "Разреши защитата от вредоносен софтуер",
-    "description": "A filter list"
-  },
   "filterbitcoin_mining_protection": {
     "message": "Разреши защитата от добив на криптовалута (биткоин)",
     "description": "A filter list"
@@ -576,34 +548,6 @@
   "adreportvoluntary": {
     "message": "Докладването е доброволно. Така помагате и на другите, защото позволявате доброволецът, поддържащ конкретния филтър, да я блокира за всички. Но ако не сте настроен алтруистично, всичко е наред. Затворете тази страница и [[блокирайте рекламата]] само за себе си.",
     "description": "Introduction of the ad reporting page"
-  },
-  "malwarenotificationcheckboxmessage": {
-    "message": "Уведомявай за установен от AdBlock вредоносен софтуер",
-    "description": "Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
-  },
-  "malwarenotificationmessage": {
-    "message": "AdBlock блокира изтегляне от сайт, за който се знае, че хоства вредоносен софтуер.",
-    "description": "Notification when a potential malware request has been blocked. This message should be under 90 characters!"
-  },
-  "malwarenotificationlearnmore": {
-    "message": "Повече за вредоносния софтуер",
-    "description": "Button on the malware notification that opens a page about malware on the AdBlock website. Message should be under 45 characters!"
-  },
-  "malwarenotificationdisablethesemessages": {
-    "message": "Забрани уведомяването",
-    "description": "Button on the malware notification to disable future notifications. Message should be under 45 characters!"
-  },
-  "malwarecheck": {
-    "message": "Проверете за вредоносен софтуер, инжектиращ реклами:",
-    "description": "Section header on the ad report page"
-  },
-  "malwarewarning": {
-    "message": "Компютърът вероятно e заразен с вредоносен софтуер. Щракнете [[тук]] за повече сведения.",
-    "description": "On the ad report page, the ads the user is seeing might be caused by malware/adware"
-  },
-  "malwarenotfound": {
-    "message": "Няма намерен вредоносен софтуер.",
-    "description": "On the ad report page, the ads the user is seeing are probably not caused by malware/adware"
   },
   "disableaa": {
     "message": "Да проверите филтъра Приемливи реклами:",
@@ -1109,10 +1053,6 @@
     "message": "AdBlock Изкачащо Меню",
     "description": "Title for the popup menu."
   },
-  "block_an_ad_on_this_page": {
-    "message": "Блокирай реклама в страницата",
-    "description": "Toolbar button menu entry and context menu entry"
-  },
   "block_this_ad": {
     "message": "Блокирай рекламата",
     "description": "Toolbar button menu entry and context menu entry"
@@ -1205,10 +1145,6 @@
     "message": "Не изпълнявай за страници от домейна",
     "description": "Menu entry to open the allowlist wizard"
   },
-  "dont_run_on_pages_on_site": {
-    "message": "Не изпълнявай за страници от сайта",
-    "description": "Menu entry to open the allowlist wizard"
-  },
   "disabled_on_this_page": {
     "message": "AdBlock е забранен за страницата.",
     "description": "Message shown in toolbar button on web pages that have been allowlisted"
@@ -1232,10 +1168,6 @@
   "status_universal_paused": {
     "message": "AdBlock е задържан за всички сайтове.",
     "description": "Message shown in toolbar button when AdBlock is not running on all domains"
-  },
-  "status_domain_paused": {
-    "message": "AdBlock е задържан само за сайта.",
-    "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
   },
   "resume_blocking_ads": {
     "message": "Поднови блокирането",
@@ -1291,10 +1223,6 @@
   },
   "undo_last_block": {
     "message": "Отмени блокираните в домейна",
-    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
-  },
-  "undo_last_block_site": {
-    "message": "Отмени блокираните в сайта",
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
@@ -1509,17 +1437,9 @@
     "message": "Поддръжка",
     "description": "Title of the Support tab of the Options page"
   },
-  "whatsnew": {
-    "message": "Какво е новото в изданието — вижте [[списъка с изменения]]!",
-    "description": "Link to display the changelog on the Support tab"
-  },
   "englishonly": {
     "message": "само на английски",
     "description": "Lets the user know that a link/page is only available in English."
-  },
-  "foundbug": {
-    "message": "Открихте грешка?",
-    "description": "Subtitle on the Support tab"
   },
   "adblockupdates": {
     "message": "Обновяване на AdBlock",
@@ -1529,33 +1449,13 @@
     "message": "Интересува ви какво движи AdBlock?",
     "description": "Subtitle on the Support tab. This section contains links to the AdBlock source code and contributors. In this context, 'tick' can be replaced with the word 'work'."
   },
-  "questionoridea": {
-    "message": "Имате въпрос или идея?",
+  "aboutadblock": {
+    "message": "За AdBlock",
     "description": "Subtitle on the Support tab"
-  },
-  "sourcecode": {
-    "message": "Изходният код е [[свободно достъпен]]!",
-    "description": "Link to the source code of AdBlock on the Support tab"
-  },
-  "contributors": {
-    "message": "А на тази [[страница]] ще откриете хората, които стоят зад AdBlock!",
-    "description": "Link to the contributors page on the Support tab"
-  },
-  "debuginfo": {
-    "message": "Изискват се предпроверочни данни? Щракнете [[тук]], за да ги предадете!",
-    "description": "Users can click this link to provide debug information to AdBlock staff"
-  },
-  "bugreport": {
-    "message": "Бихте ли изпратил [[доклад за грешка]]?",
-    "description": "Link to send a bug report on the Support tab"
   },
   "supportsite": {
     "message": "Споделете ги в нашия [[сайт за поддръжка]]!",
     "description": "Link to the support site on the Support tab"
-  },
-  "ad_report_please": {
-    "message": "Ако видите реклама, попълнете [[доклад за реклама]], а не доклад за грешка!",
-    "description": "Link to the ad report page on AdBlock's help site. This is found on the Support tab of the options."
   },
   "resourceblocktitle": {
     "message": "Всички ресурси",
@@ -1805,14 +1705,6 @@
     "message": "Разреши МоятАдблок",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
-  "adblockprotectenrollmentbutton": {
-    "message": "Опитай сега - Безплатно е",
-    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
-  },
-  "adblockprotectenrollmenttext": {
-    "message": "Съхранявай своята лична информация на сигурно място с AdBlock Защита",
-    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
-  },
   "myadblockoptionspageheader": {
     "message": "Настройки на МоятАдблок",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1901,29 +1793,9 @@
     "message": "Изпрати Съобщение",
     "description": "Text on the MyAdBlock feedback button"
   },
-  "error_msg_header": {
-    "message": "Упс! Съжаляваме, но менюто на AdBlock има проблем със зареждането.",
-    "description": "The text on the popup menu when an error has occurred"
-  },
-  "error_msg_help_us": {
-    "message": "Помогнете ни да разрешим проблем, като ни изпратите малко информация за проблема: Натисни ",
-    "description": "DO NOT TRANSLATE"
-  },
   "error_msg_thank_you": {
     "message": "Благодарим Ви",
     "description": "The text on the popup menu when an error has occurred"
-  },
-  "error_msg_reload": {
-    "message": "След това опитайте да презаредите разширението: Натисни ",
-    "description": "DO NOT TRANSLATE"
-  },
-  "error_msg_help": {
-    "message": "Ако това не проработи, проверете тук за повече помощ: Натисни ",
-    "description": "DO NOT TRANSLATE"
-  },
-  "error_msg_here": {
-    "message": "тук",
-    "description": "DO NOT TRANSLATE"
   },
   "generaloptions2": {
     "message": "Общи Настройки",
@@ -2067,7 +1939,7 @@
   },
   "confirm_delete_extension": {
     "message": "Сигурен ли си че искаш да изтриеш разширението?",
-    "description": "Warning/confirmation message shown when the user clicks on the delete icon for this extension"
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
   },
   "delete": {
     "message": "Изтрий",
@@ -2259,10 +2131,6 @@
     "message": "страница с настройки",
     "description": "General text used to define the extension options page."
   },
-  "pause_on_this_site": {
-    "message": "Пауза за този сайт.",
-    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
-  },
   "adblock_will_pause_on_this_site": {
     "message": "Ако го натиснеш AdBlock ще спре да блокира реклами на този сайт.",
     "description": "Second sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
@@ -2334,14 +2202,6 @@
   "never_lose_settings": {
     "message": "Приложи тези настройки на всички устройства и се увери че няма да загубиш настройките на AdBlock с услугата Запазване & Синхронизиране.",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
-  },
-  "successfully_blocked_ad": {
-    "message": "Успешно блокирахте тази реклама.",
-    "description": "Part of a message on the blocklist wizard"
-  },
-  "future_ads_blocked": {
-    "message": "В бъдеще реклами които съвпадат с тези условия ще продължат да бъдат блокирани.",
-    "description": "Part of a message on the blocklist wizard"
   },
   "overlay_notification_button_no": {
     "message": "Не"

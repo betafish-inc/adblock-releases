@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, License, localizePage, determineUserLanguage, getStorageCookie, setStorageCookie,
    THIRTY_MINUTES_IN_MILLISECONDS, checkForUnSyncError, addUnSyncErrorClickHandler, translate,
-   splitMessageWithReplacementText */
+   splitMessageWithReplacementText, setLangAndDirAttributes */
 
 function tabIsLocked(tabID) {
   const $tabToActivate = $(`.tablink[href='${tabID}']`);
@@ -131,6 +131,9 @@ function displayActiveTab($activeTab) {
   handleSubTabs($activeTab);
   loadTabPanelScript($activeTabPanel);
   $activeTabPanel.show();
+  if (document.readyState === 'complete') {
+    setLangAndDirAttributes();
+  }
 }
 
 function activateTab(tabHref) {

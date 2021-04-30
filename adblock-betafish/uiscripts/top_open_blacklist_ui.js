@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, translate, BlacklistUi, bindEnterClickToDefault, mayOpenDialogUi:true,
    setLangAndDirAttributes, rightClickedItem:true, loadWizardResources, i18nJoin,
-   processReplacementChildrenInContent */
+   processReplacementChildrenInContent, isLangRTL */
 
 // Global lock so we can't open more than once on a tab.
 if (typeof window.mayOpenDialogUi === 'undefined') {
@@ -184,6 +184,11 @@ function topOpenBlacklistUI(options) {
     </div>
     `;
     const $dialog = $(html);
+
+    // Make any right-to-left translation
+    if (isLangRTL()) {
+      $dialog.find('i.back').text('chevron_right');
+    }
     $dialog.find('header').each((i, header) => {
       // eslint-disable-next-line no-new
       new DragElement(header, $dialog.get(0));

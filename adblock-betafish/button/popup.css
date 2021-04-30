@@ -23,11 +23,11 @@ body {
   cursor: pointer;
   color: var(--popup-link-text);
 }
-.menu-entry:hover {
-  font-weight: bold;
-}
 .right {
   float: right;
+}
+.left {
+  float: left;
 }
 
 /* HEADER */
@@ -112,11 +112,8 @@ body {
   color: var(--block-count-color);
 }
 a {
-  color: var(--popup-url-text-color);
-}
-a:hover {
-  font-weight: bold;
-  color: var(--popup-link-hovered);
+  color: var(--popup-link-text);
+  text-decoration: var(--popup-link-text-decoration);
 }
 
 /* PREMIUM CTAs */
@@ -428,4 +425,9 @@ button.premium-cta-close:hover {
 #disabled_site_img {
   width: 100%;
   height: 233px;
+}
+
+/* RTL Language Specific rules */
+html[dir="rtl"] #blocked_n_in_total {
+  float: left;
 }

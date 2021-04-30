@@ -7,7 +7,7 @@ import Vinyl from 'vinyl';
 
 let manifest;
 
-function editManifest(dataParam, version, channel, target) {
+function editManifest(dataParam, version, channel, target, extensionId) {
   const data = dataParam;
   data.version = version;
 
@@ -21,7 +21,7 @@ function editManifest(dataParam, version, channel, target) {
   if (target === 'firefox') {
     const gecko = {};
     gecko.strict_min_version = data.applications.gecko.strict_min_version;
-    gecko.id = data.applications.gecko.id;
+    gecko.id = extensionId ? extensionId : data.applications.gecko.id;
 
     delete data.storage;
     delete data.minimum_chrome_version;
@@ -47,7 +47,7 @@ export function createManifest(contents) {
 }
 
 export async function getManifestContent({
-  target, version, channel, path,
+  target, version, channel, path, extensionId,
 }) {
   if (manifest) {
     return manifest;
@@ -55,7 +55,7 @@ export async function getManifestContent({
 
   const raw = JSON.parse(await fs.promises.readFile(resolve(path || 'build/manifest.json')));
 
-  manifest = editManifest(raw, version, channel, target);
+  manifest = editManifest(raw, version, channel, target, extensionId);
 
   return manifest;
 }

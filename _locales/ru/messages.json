@@ -79,8 +79,16 @@
     "message": "Чтобы скрыть кнопку, щелкните правой кнопкой мыши и выберите Удалить с панели инструментов.  Вы можете показать его снова, перейдя в меню Firefox-> Персонализация.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
+  "isithidden": {
+    "message": "Элемент скрыт?",
+    "description": "'Block an ad' wizard usage explanation"
+  },
   "sliderexplanation": {
-    "message": "Передвигайте ползунок до тех пор, пока объявление не будет заблокировано. Участок, на котором оно расположено, должен оставаться видимым.",
+    "message": "Если нет, используйте ползунок, чтобы скрыть дополнительные элементы на этой странице:",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderwarning": {
+    "message": "Внимание: если вы скроете слишком много элементов на странице, это может повлиять на работу",
     "description": "'Block an ad' wizard usage explanation"
   },
   "slidertitle": {
@@ -88,20 +96,26 @@
     "description": "'Block an ad' wizard title"
   },
   "blacklisteroptions1": {
-    "message": "Как вы считаете, какая особенность этого объявления будет сохраняться?",
+    "message": "Оставить элемент скрытым?",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisternotsure": {
-    "message": "Не уверены? Просто нажмите \"Заблокировать!\".",
+  "blacklisternotsure_part_I": {
+    "message": "В ваши настройки добавится правило, которое будет скрывать этот элемент при каждом посещении сайта.",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisterthefilter": {
-    "message": "Фильтр можно изменить на вкладке \"Настройки\":",
+  "blacklisternotsure_part_II": {
+    "message": "Вы можете изменить это в любой момент, выбрав «Очистить список скрытых элементов» в меню AdBlock.",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisteroptionstitle": {
-    "message": "Последний шаг: Из чего состоит это объявление?",
-    "description": "'Block an ad' wizard title"
+  "hiddenelementmessagecount": {
+    "message": "Временно скрытые элементы на этой странице: $count$",
+    "description": "The total number of ads or 'things' hidden on a page by the new rule.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "blacklisternofilter": {
     "message": "Фильтр не указан!",
@@ -138,6 +152,10 @@
         "example": "DIV"
       }
     }
+  },
+  "warning": {
+    "message": "внимание",
+    "description": "Warns the user about an error."
   },
   "blacklistersinglematch": {
     "message": "Найдено совпадений на странице: 1",
@@ -179,20 +197,24 @@
     "message": "Назад",
     "description": "Back to previous page button"
   },
-  "block_something_else": {
-    "message": "Заблокировать что-нибудь еще",
-    "description": "Button text on page 3 of the hiding wizard"
+  "add_info": {
+    "message": "Дополнительная информация",
+    "description": "section title on hidding wizard, shown when advance user option enabled"
+  },
+  "confirm_msg": {
+    "message": "Подтвердите, что тип и ID этого элемента верны:",
+    "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
     "message": "Ищем рекламу...\n\nПодождите секундочку.",
     "description": "'Block an ad' wizard loading message"
   },
   "blockanadtitle": {
-    "message": "Заблокировать рекламу",
+    "message": "Мастер скрытия AdBlock",
     "description": "Title of the first two dialogs of the 'Block an ad' wizard"
   },
   "clickthead": {
-    "message": "Щелкните по объявлению, и я помогу вам его заблокировать.",
+    "message": "Нажмите на любой элемент на этой странице, который вы хотите скрыть.",
     "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
@@ -210,6 +232,10 @@
   "buttonexclude": {
     "message": "Исключить",
     "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "buttonconfirm": {
+    "message": "Подтвердить",
+    "description": "Button for confirming a new rule in the hiding wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "Перезагрузить страницу.",
@@ -2843,6 +2869,10 @@
     "message": "Подробности",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
+  "find_out_more": {
+    "message": "Узнать больше",
+    "description": "Text in the button on the Premium CTA on the hiding wizard."
+  },
   "update_filter_lists_now": {
     "message": "Обновить список фильтров",
     "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
@@ -2935,20 +2965,24 @@
     "message": "Вы добавили сайт в разрешенный список!",
     "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
+  "dont_show_me_again": {
+    "message": "Не показывать снова",
+    "description": "opt out option on all-to-action on the blocklist / hiding wizard"
+  },
   "never_lose_settings": {
     "message": "Включите функцию Резервного копирования и Синхронизации на всех устройствах, чтобы не потерять персональные настройки вашего AdBLock.",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
   },
-  "successfully_blocked_ad": {
-    "message": "Реклама заблокирована.",
+  "wizard_premium_cta_title": {
+    "message": "Кстати, вам может понравиться AdBlock Premium",
     "description": "Part of a message on the blocklist wizard"
   },
-  "future_ads_blocked": {
-    "message": "Теперь реклама подобного типа будет блокироваться.",
+  "wizard_premium_cta_part_I": {
+    "message": "Вы заблокировали что-то на этом сайте.",
     "description": "Part of a message on the blocklist wizard"
   },
-  "rule_added_filters": {
-    "message": "Условия блокирования добавлены в фильтры:",
+  "wizard_premium_cta_part_II": {
+    "message": "Включите функцию Резервного копирования и Синхронизации на всех устройствах, чтобы не потерять персональные настройки вашего AdBlock.",
     "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
@@ -3354,5 +3388,29 @@
   "always": {
     "message": "Всегда",
     "description": "The button text on the popup menu"
+  },
+  "enable_on_this_site": {
+    "message": "Активировать AdBlock на этом сайте",
+    "description": "GFC messaging on the popup menu"
+  },
+  "premium_access_without_disabling": {
+    "message": "Благодаря новым функциям в AdBlock Premium вы легко можете получить доступ к любимому контенту, не отключая AdBlock.",
+    "description": "GFC messaging on the popup menu"
+  },
+  "dont_show_reminder": {
+    "message": "Не показывать снова",
+    "description": "GFC messaging on the popup menu"
+  },
+  "want_stop_seeing": {
+    "message": "Не хотите больше видеть это?",
+    "description": "GFC messaging on the popup menu"
+  },
+  "access_without_disabling": {
+    "message": "Получите легкий доступ к любимому контенту, не отключая AdBlock!",
+    "description": "GFC messaging on the popup menu"
+  },
+  "learn_more_lower": {
+    "message": "Узнать больше",
+    "description": "GFC messaging on the popup menu"
   }
 }

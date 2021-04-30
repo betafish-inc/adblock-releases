@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, translate, storageGet, localizePage, storageSet,
-  selected, selectedOnce, showHelpSetupPage, i18nJoin */
+  selected, selectedOnce, showHelpSetupPage, i18nJoin, setLangAndDirAttributes */
 
 let errorOccurred = false;
 
@@ -136,6 +136,12 @@ const processError = function (err, stack, message) {
 // the tab/page object, which contains |id| and |url| of
 // the current tab
 let pageInfo = null;
+
+document.addEventListener('readystatechange', () => {
+  if ((document.readyState === 'complete') && (typeof setLangAndDirAttributes === 'function')) {
+    setLangAndDirAttributes();
+  }
+});
 
 try {
   const popupMenuCtaClosedKey = 'popup_menu_cta_closed';

@@ -1,8 +1,4 @@
 {
-  "description": {
-    "message": "Den mest populære Chrome-utvidelsen med over 40 millioner brukere! Blokkerer annonser over hele internettet.",
-    "description": "Extension description in manifest. Should not exceed 132 characters."
-  },  
   "description2": {
     "message": "Den mest populære Chrome-utvidelsen med over 40 millioner brukere! Blokkerer annonser over hele internettet.",
     "description": "Extension description in manifest. Should not exceed 132 characters."
@@ -11,10 +7,14 @@
     "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
     "message": "AdBlock utviklings build"
   },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message": "AdBlock – den beste annonseblokkerer"
+  },
   "name": {
     "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
-    "message": "AdBlock — best ad blocker"
-  },  
+    "message": "AdBlock – den beste annonseblokkerer"
+  },
   "description_edge": {
     "message": "AdBlock. Reklameblokkerer #1 med over 200 millioner nedlastninger. Blokkerer reklamer over hele internettet.",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
@@ -67,28 +67,8 @@
     "message": "For å skjule knappen, høyreklikk og velg Fjern fra verktøylinje. Du kan vise den igjen ved å åpne menyen og velge Tilpass.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
-  "sliderexplanation": {
-    "message": "Drag glidebryteren helt til annonsen(e) er blokkert riktig på nettsiden, og det blokkerte elementet ser brukbart ut.",
-    "description": "'Block an ad' wizard usage explanation"
-  },
   "slidertitle": {
     "message": "Steg 1: Finn ut hva du skal blokkere.",
-    "description": "'Block an ad' wizard title"
-  },
-  "blacklisteroptions1": {
-    "message": "Tror du dette vil være sant om annonsen hver gang du besøker denne siden?",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisternotsure": {
-    "message": "Ikke sikker? Bare klikk 'Blokker den!' nedenfor.",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisterthefilter": {
-    "message": "Filteret, som kan bli endres i innstillingene:",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisteroptionstitle": {
-    "message": "Siste steg: Hva gjør dette til en annonse?",
     "description": "'Block an ad' wizard title"
   },
   "blacklisternofilter": {
@@ -167,21 +147,9 @@
     "message": "Tilbake",
     "description": "Back to previous page button"
   },
-  "block_something_else": {
-    "message": "Blokker noe annet",
-    "description": "Button text on page 3 of the hiding wizard"
-  },
   "findingads": {
     "message": "Finner annonser...\n\nDette tar bare øyeblikk.",
     "description": "'Block an ad' wizard loading message"
-  },
-  "blockanadtitle": {
-    "message": "Blokker en annonse",
-    "description": "Title of the first two dialogs of the 'Block an ad' wizard"
-  },
-  "clickthead": {
-    "message": "Klikk på annonsen, så hjelper jeg deg med å blokkere den.",
-    "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock vil ikke kjøre på disse sidene:",
@@ -357,6 +325,10 @@
     "message": "Mislyktes i å laste ned",
     "description": "Filter lists tab of the Options page: Generic filter list download error message."
   },
+  "ab_filters_subscription_lastDownload_invalidData": {
+    "message": "Mislyktes, ikke en gyldig filterliste",
+    "description": "Filter lists tab of the Options page: Invalid filter list file."
+  },
   "ab_filters_subscription_lastDownload_checksumMismatch": {
     "message": "Mislyktes, sjekksummene samsvarte ikke",
     "description": "Filter lists tab of the Options page: Corrupted filter list file."
@@ -469,10 +441,6 @@
     "message": "Indonesisk + EasyList",
     "description": "A filter list combined with EasyList"
   },
-  "filtermalware": {
-    "message": "Beskyttelse mot skadelig programvare",
-    "description": "A filter list"
-  },
   "filterbitcoin_mining_protection": {
     "message": "Beskyttelsesliste mot graving av krypto-myntenheter (f.eks. Bitcoin)",
     "description": "A filter list"
@@ -584,34 +552,6 @@
   "adreportvoluntary": {
     "message": "Å rapportere reklamer er valgfritt. Det hjelper andre folk ved å gjøre det mulig for listevedlikeholderne å blokkere reklamen for alle. Hvis du ikke føler deg altrusitisk akkurat nå, er det også greit. Lukk da denne siden, og [[blokker reklamen]] for deg selv.",
     "description": "Introduction of the ad reporting page"
-  },
-  "malwarenotificationcheckboxmessage": {
-    "message": "Skal AdBlock varsle deg når skadelig programvare oppdages?",
-    "description": "Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
-  },
-  "malwarenotificationmessage": {
-    "message": "AdBlock har blokkert en nedlasting fra et område kjent for malware.",
-    "description": "Notification when a potential malware request has been blocked. This message should be under 90 characters!"
-  },
-  "malwarenotificationlearnmore": {
-    "message": "Lær mer om skadelig programvare",
-    "description": "Button on the malware notification that opens a page about malware on the AdBlock website. Message should be under 45 characters!"
-  },
-  "malwarenotificationdisablethesemessages": {
-    "message": "Skru av disse varslene",
-    "description": "Button on the malware notification to disable future notifications. Message should be under 45 characters!"
-  },
-  "malwarecheck": {
-    "message": "Sjekk for malware som kan injisere annonser:",
-    "description": "Section header on the ad report page"
-  },
-  "malwarewarning": {
-    "message": "Datamaskinen din kan være infisert av skadevare. Klikk [[her]] for mer informasjon.",
-    "description": "On the ad report page, the ads the user is seeing might be caused by malware/adware"
-  },
-  "malwarenotfound": {
-    "message": "Ingen kjente skadevarer ble funnet.",
-    "description": "On the ad report page, the ads the user is seeing are probably not caused by malware/adware"
   },
   "disableaa": {
     "message": "Sjekk \"Akseptable reklamer\"-filterne:",
@@ -1113,10 +1053,6 @@
     "message": "OK, du kan fremdeles blokkere denne reklamen selv, under innstillinger. Takk!",
     "description": "Telling users who won't report an ad to us how to handle it for themselves"
   },
-  "block_an_ad_on_this_page": {
-    "message": "Blokker en annonse på denne siden",
-    "description": "Toolbar button menu entry and context menu entry"
-  },
   "block_this_ad": {
     "message": "Blokker denne annonsen",
     "description": "Toolbar button menu entry and context menu entry"
@@ -1209,10 +1145,6 @@
     "message": "Deaktiver på sider under dette domenet",
     "description": "Menu entry to open the allowlist wizard"
   },
-  "dont_run_on_pages_on_site": {
-    "message": "Deaktiver på sider under dette nettstedet",
-    "description": "Menu entry to open the allowlist wizard"
-  },
   "disabled_on_this_page": {
     "message": "AdBlock er deaktivert på denne siden.",
     "description": "Message shown in toolbar button on web pages that have been allowlisted"
@@ -1237,13 +1169,13 @@
     "message": "AdBlock er midlertidig stanset på alle nettsider.",
     "description": "Message shown in toolbar button when AdBlock is not running on all domains"
   },
-  "status_domain_paused": {
-    "message": "AdBlock er pauset på dette nettstedet.",
-    "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
-  },
   "resume_blocking_ads": {
     "message": "Gjenoppta blokkering av annonser",
     "description": "Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
+  "premium_status_short_msg": {
+    "message": "Aktiv",
+    "description": "Message shown on the premium tab of the option page when user is a licensed premium user"
   },
   "unpause_adblock": {
     "message": "Start AdBlock igjen",
@@ -1295,10 +1227,6 @@
   },
   "undo_last_block": {
     "message": "Angre all mine blokkeringer på dette domenet",
-    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
-  },
-  "undo_last_block_site": {
-    "message": "Angre all blokkering på dette nettstedet",
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
@@ -1499,10 +1427,6 @@
     "message": " — Velg språk — ",
     "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
-  "whitelist_channel": {
-    "message": "Tillat reklamer på denne kanalen",
-    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
-  },
   "confirm_undo_custom_filters": {
     "message": "Er du sikker på at du vil ta bort $count$ blokkeringene som du har fjernet på $host$?",
     "description": "Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",
@@ -1521,17 +1445,9 @@
     "message": "AdBlock Støtte",
     "description": "Title of the Support tab of the Options page"
   },
-  "whatsnew": {
-    "message": "Hva er nytt i den siste versjonen? Se [[oppdateringloggen]]!",
-    "description": "Link to display the changelog on the Support tab"
-  },
   "englishonly": {
     "message": "Kun på engelsk",
     "description": "Lets the user know that a link/page is only available in English."
-  },
-  "foundbug": {
-    "message": "Har du funnet en feil?",
-    "description": "Subtitle on the Support tab"
   },
   "adblockupdates": {
     "message": "AdBlock-oppdateringer",
@@ -1541,33 +1457,13 @@
     "message": "Vil du se hva som får AdBlock til å virke?",
     "description": "Subtitle on the Support tab. This section contains links to the AdBlock source code and contributors. In this context, 'tick' can be replaced with the word 'work'."
   },
-  "questionoridea": {
-    "message": "Har du et spørsmål eller en idé?",
+  "aboutadblock": {
+    "message": "Om AdBlock",
     "description": "Subtitle on the Support tab"
-  },
-  "sourcecode": {
-    "message": "Kildekoden er [[fritt tilgjengelig]]!",
-    "description": "Link to the source code of AdBlock on the Support tab"
-  },
-  "contributors": {
-    "message": "Vi har også en side som hjelper deg å lære om [[folkene bak AdBlock]]!",
-    "description": "Link to the contributors page on the Support tab"
-  },
-  "debuginfo": {
-    "message": "Har vårt team bedt om Feilsøkingsinformasjon? Trykk [[here]] for det!",
-    "description": "Users can click this link to provide debug information to AdBlock staff"
-  },
-  "bugreport": {
-    "message": "Hvorfor ikke sende oss en [[bug-rapportering]]?",
-    "description": "Link to send a bug report on the Support tab"
   },
   "supportsite": {
     "message": "La oss få vite det på vår [[støtteside]]!",
     "description": "Link to the support site on the Support tab"
-  },
-  "ad_report_please": {
-    "message": "Hvis du ser en annonse, ikke send en feilrapport. Send en [[annonserapport]] i stedet!",
-    "description": "Link to the ad report page on AdBlock's help site. This is found on the Support tab of the options."
   },
   "resourceblocktitle": {
     "message": "Alle ressurser",
@@ -1817,14 +1713,6 @@
     "message": "Aktiver MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
-  "adblockprotectenrollmentbutton": {
-    "message": "Prøv Nå - Det er Gratis",
-    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
-  },
-  "adblockprotectenrollmenttext": {
-    "message": "Hold din personlige informasjon trygg med Adblock Protec",
-    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
-  },
   "myadblockoptionspageheader": {
     "message": "MyAdBlock innstillinger",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1849,6 +1737,10 @@
     "message": "Landskap",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
   },
+  "oceanchannelswitchlabel": {
+    "message": "Verdenshav",
+    "description": "The label text for the Ocean switch on the MyAdBlock Options page"
+  },
   "customchannelswitchlabel": {
     "message": "Egendefinert",
     "description": "The label text for the Custom Image switch on the MyAdBlock Options page"
@@ -1858,7 +1750,7 @@
     "description": "Title for Options page message letting users know of settings change."
   },
   "settings_changed": {
-    "message": "Som en forberedelse, så fungerer Adblock annerledes nå og noen av dine innstillinger er kanskje endret.",
+    "message": "Som en forberedelse, så fungerer AdBlock annerledes nå og noen av dine innstillinger er kanskje endret.",
     "description": "Part of Options page message letting users know of settings change."
   },
   "learn_more": {
@@ -1905,33 +1797,21 @@
     "message": "Velg fra kategorien under og AdBlock vill fra tid til annen bytte ut reklamer med bilder av høy kvalitet for å lyse opp dagen din.",
     "description": "The label text for the switch on the MyAdBlock Options page"
   },
+  "myadblock_feedback_title": {
+    "message": "Vi vil gjerne høre fra deg!",
+    "description": "Title for MyAdBlock feedback call to action."
+  },
   "myadblock_feedback_button": {
     "message": "Send inn tilbakemelding",
     "description": "Text on the MyAdBlock feedback button"
   },
   "error_msg_header": {
-    "message": "Oops! Vi beklager men AdBlock menyen hadde problemer med å laste inn.",
-    "description": "The text on the popup menu when an error has occurred"
-  },
-  "error_msg_help_us": {
-    "message": "Hjelp oss å løse dette problemet ved å sende oss feilsøkingsinformasjon: Trykk ",
-    "description": "DO NOT TRANSLATE"
+    "message": "Oi!",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
   "error_msg_thank_you": {
     "message": "Takk",
     "description": "The text on the popup menu when an error has occurred"
-  },
-  "error_msg_reload": {
-    "message": "Neste, prøv å laste inn utvidelsen på nytt: Trykk ",
-    "description": "DO NOT TRANSLATE"
-  },
-  "error_msg_help": {
-    "message": "Om ikke det fungerer, sjekk her for mer hjelp: Trykk ",
-    "description": "DO NOT TRANSLATE"
-  },
-  "error_msg_here": {
-    "message": "her",
-    "description": "DO NOT TRANSLATE"
   },
   "generaloptions2": {
     "message": "Generelle Innstillinger",
@@ -2105,6 +1985,10 @@
     "message": "Sikkerhetskopier og synkroniser",
     "description": "Title of the Sync sub-tab of the Options page"
   },
+  "sync_turn_on_duplicate_name_text": {
+    "message": "Dette utvidelsesnavnet er allerede i bruk",
+    "description": "error message text on the Sync sub-tab of the Options page"
+  },
   "sync_extension_section_title": {
     "message": "Utvidelser",
     "description": "section title text on the Sync sub-tab of the Options page"
@@ -2183,6 +2067,10 @@
     "message": "Bare tillat reklamer uten tredjepartssporing",
     "description": "The text of an Acceptable Ads sub-option in the General tab"
   },
+  "devtools_action_remove": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Fjern regel"
+  },
   "devtools_action_unblock": {
     "description": "Button text on the dev tools panel.",
     "message": "Legg til et unntak"
@@ -2215,6 +2103,18 @@
     "description": "one of the items in the drop down list in the header of the dev tools panel",
     "message": "hvitelistet"
   },
+  "devtools_header_type_any": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "enhver"
+  },
+  "devtools_request_subtitle": {
+    "description": "sub title text for the request-column header of the dev tools panel",
+    "message": "Dokumentdomene"
+  },
+  "devtools_request_title": {
+    "description": "title text for the request-column header of the dev tools panel",
+    "message": "Forespørsel"
+  },
   "devtools_type_title": {
     "description": "Type column header text",
     "message": "Type"
@@ -2223,9 +2123,17 @@
     "message": "Nye",
     "description": "Max 4 characters. If it's not possible to translate in four characters or less, please don't translate. Text in the badge of our extension toolbar icon."
   },
+  "new_cta_hovered_text": {
+    "message": "Nyt en bedre nettlesing",
+    "description": "Text of a temporary call-to-action hovered item in the popup menu."
+  },
   "get_it_now": {
     "message": "Hent den nå",
     "description": "The text in a button visible to locked users in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_title": {
+    "message": "Se bilder, ikke reklamer",
+    "description": "The title of a feature box in the MyAdBlock Options page"
   },
   "sync_your_settings_title": {
     "message": "Synkroniser innstillingene dine",
@@ -2311,6 +2219,10 @@
     "message": "Bildebytte-eksempel",
     "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Image Swap feature."
   },
+  "sync_example": {
+    "message": "Synkroniseringseksempel",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Sync feature."
+  },
   "help": {
     "message": "Hjelp",
     "description": "Text in the aria-label attribute of the support icon on the pop-up menu."
@@ -2339,6 +2251,10 @@
     "message": "Lær mer",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
+  "update_filter_lists_now": {
+    "message": "Oppdater filterlister nå",
+    "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
+  },
   "popup_menu": {
     "message": "oppsprettsmeny",
     "description": "General text used to define the pop-up menu."
@@ -2346,10 +2262,6 @@
   "options_page": {
     "message": "innstillingsside",
     "description": "General text used to define the extension options page."
-  },
-  "pause_on_this_site": {
-    "message": "Pause på dette nettstedet.",
-    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
   },
   "pause_on_all_sites": {
     "message": "Pause på alle nettsteder.",
@@ -2381,8 +2293,14 @@
   "overlay_notification_button_yes": {
     "message": "Ja"
   },
+  "filter_invalid_domain": {
+    "message": "Ugyldig (eller tomt) domene ble spesifisert"
+  },
   "filter_invalid_regexp": {
     "message": "Ugyldig regulært uttrykk"
+  },
+  "filter_unknown_option": {
+    "message": "Ukjent filteralternativ"
   },
   "filter_invalid": {
     "message": "Ugyldig filter",
@@ -2468,6 +2386,10 @@
     "message": "I all tid",
     "description": "sub menu item text on the statistics page of the Options page"
   },
+  "delete_panel_title": {
+    "message": "Slett blokkeringsstatistikk",
+    "description": "title text on the delete overlay on the statistics page of the Options page"
+  },
   "delete_detail_page_2_msg_part_I": {
     "message": "Er du sikker?",
     "description": "text on page 2 of the delete modal box on the statistics page of the Options page"
@@ -2526,6 +2448,10 @@
   },
   "dontsend": {
     "message": "Ikke send",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "senddebugdata": {
+    "message": "Send inn avlusingsdata",
     "description": "button text on the error message on the image swap tab"
   },
   "custom_image_unsupported_title": {

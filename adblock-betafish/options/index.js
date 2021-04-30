@@ -4,7 +4,7 @@
 /* global browser, getSettings, translate, FilterListUtil, activateTab,
    CustomFilterListUploadUtil, localizePage, storageSet, chromeStorageSetHelper,
    chromeStorageGetHelper, debounced, determineUserLanguage, setStorageCookie
-   THIRTY_MINUTES_IN_MILLISECONDS */
+   THIRTY_MINUTES_IN_MILLISECONDS, setLangAndDirAttributes */
 
 const BG = browser.extension.getBackgroundPage();
 const { Filter } = BG;
@@ -499,3 +499,9 @@ window.onbeforeunload = function leavingOptionsPage() {
   }
   storageSet(License.userSawSyncCTAKey, true);
 };
+
+document.addEventListener('readystatechange', () => {
+  if ((document.readyState === 'complete') && (typeof setLangAndDirAttributes === 'function')) {
+    setLangAndDirAttributes();
+  }
+});

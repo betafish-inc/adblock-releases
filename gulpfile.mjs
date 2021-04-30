@@ -27,13 +27,14 @@ argumentParser.addArgument(
   },
 );
 argumentParser.addArgument(['-b', '--build-num']);
+argumentParser.addArgument(['--ext-version']);
+argumentParser.addArgument(['--ext-id']);
 argumentParser.addArgument('--config');
 argumentParser.addArgument(['-m', '--manifest']);
 argumentParser.addArgument(['--basename']);
 
 
 const args = argumentParser.parseKnownArgs()[0];
-
 const targetDir = `devenv.${args.target}`;
 
 async function getBuildSteps(options) {
@@ -46,7 +47,6 @@ async function getBuildSteps(options) {
       await tasks.addTestsPage({ scripts: options.tests.scripts, addonName }),
     );
   }
-
   buildSteps.push(
     tasks.mapping(options.mapping),
     tasks.webpack({
@@ -106,7 +106,6 @@ async function getBuildOptions(isDevenv, isSource) {
   opts.tests = configParser.getSection(configName, 'tests');
   opts.basename = configParser.getSection(configName, 'basename');
   opts.version = configParser.getSection(configName, 'version');
-
   if (args.basename) {
     opts.basename = args.basename;
   }
@@ -124,12 +123,16 @@ async function getBuildOptions(isDevenv, isSource) {
       `${opts.basename}${opts.target}-${opts.version}${opts.archiveType}`,
     );
   }
+  if (args.ext_version) {
+    opts.version = args.ext_version;
+  }
 
   opts.manifest = await tasks.getManifestContent({
     target: opts.target,
     version: opts.version,
     channel: opts.channel,
     path: args.manifest,
+    extensionId: args.ext_id,
   });
   return opts;
 }

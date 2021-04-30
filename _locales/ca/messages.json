@@ -23,6 +23,14 @@
     "message": "AdBlock. El millor bloquejador de publicitat amb més de 200 milions de baixades. Bloqueja tota la publicitat de la xarxa.",
     "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
   },
+  "description_yt": {
+    "message": "L'únic bloquejador d'anuncis de YouTube creat per l'AdBlock, l'extensió de Chrome més popular amb 60 milions d'usuaris a tot el món",
+    "description": "Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
+  },
+  "name_adblock_on_youtube": {
+    "message": "AdBlock al YouTube",
+    "description": "Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
+  },
   "adblock_click_for_details": {
     "message": "AdBlock – cliqueu per obtenir més detalls",
     "description": "Tooltip on the AdBlock button, to help users understand that they can click the button to access more options."
@@ -51,6 +59,10 @@
     "message": "Opcions d'AdBlock",
     "description": "Title for the Options page"
   },
+  "optionstitle_yt": {
+    "message": "Opcions d'AdBlock al YouTube",
+    "description": "Title for the Options page for the 'AdBlock on YouTube' extension."
+  },
   "chromebutton_how_to_hide2": {
     "message": "Feu clic amb el botó dret al botó AdBlock i seleccioneu «Amaga al menú de Chrome». Per mostrar-ho, feu clic al menú de Chrome, feu clic al botó dret al botó AdBlock i seleccioneu «Mantén a la barra d'eines».",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -67,28 +79,8 @@
     "message": "Per amagar el botó, feu clic amb el botó dret i escolliu «Elimina de la barra d'eines». Podeu tornar a mostrar-lo  al menú de Firefox - > Personalitza.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
-  "sliderexplanation": {
-    "message": "Feu lliscar el regulador fins que l'anunci sigui bloquejat correctament dins la pàgina i l'aspecte final sigui el desitjat.",
-    "description": "'Block an ad' wizard usage explanation"
-  },
   "slidertitle": {
     "message": "Pas 1: Identifiqueu el que s'ha de bloquejar",
-    "description": "'Block an ad' wizard title"
-  },
-  "blacklisteroptions1": {
-    "message": "Què creieu que serà veritat sobre aquest anunci cada cop que visiteu aquesta pàgina?",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisternotsure": {
-    "message": "No n'esteu segurs? Doncs premeu «Bloqueja-ho!» a continuació.",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisterthefilter": {
-    "message": "El filtre, el qual es pot canviar a la pàgina d'opcions:",
-    "description": "'Block an ad' wizard attribute choice page"
-  },
-  "blacklisteroptionstitle": {
-    "message": "Darrer pas: Què fa això un anunci?",
     "description": "'Block an ad' wizard title"
   },
   "blacklisternofilter": {
@@ -171,14 +163,6 @@
     "message": "S'estan trobant els anuncis…\n\nAixò només trigarà uns instants.",
     "description": "'Block an ad' wizard loading message"
   },
-  "blockanadtitle": {
-    "message": "Bloqueja un anunci",
-    "description": "Title of the first two dialogs of the 'Block an ad' wizard"
-  },
-  "clickthead": {
-    "message": "Feu clic a l'anunci i t'ajudaré a bloquejar-lo.",
-    "description": "User has to click the ad they want to block."
-  },
   "adblock_wont_run_on_pages_matching": {
     "message": "L'AdBlock no s'executarà en cap pàgina del següent domini:",
     "description": "Message displayed when the allowlist wizard will allowlist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
@@ -198,6 +182,10 @@
   "reloadpageafterwhitelist": {
     "message": "Recarrega la pàgina.",
     "description": "Checkbox in the allowlist wizard"
+  },
+  "wizardcantrunonframesets": {
+    "message": "Aquesta funció d'AdBlock no funciona en aquest lloc perquè utilitza tecnologia obsoleta. Podeu permetre o bloquejar anuncis manualment a la pestanya «Personalitza» de la pàgina d'opcions.",
+    "description": "Alert shown when the user tries to use a blocklist/allowlist wizard on an old website"
   },
   "subscribeconfirm": {
     "message": "Segur que us voleu subscriure a la llista de filtres $title$?",
@@ -353,6 +341,10 @@
     "message": "Ha fallat, no s'ha pogut baixar",
     "description": "Filter lists tab of the Options page: Generic filter list download error message."
   },
+  "ab_filters_subscription_lastDownload_invalidData": {
+    "message": "Ha fallat, la llista de filtres no és vàlida",
+    "description": "Filter lists tab of the Options page: Invalid filter list file."
+  },
   "ab_filters_subscription_lastDownload_checksumMismatch": {
     "message": "Ha fallat, la suma de comprovació no coincideix",
     "description": "Filter lists tab of the Options page: Corrupted filter list file."
@@ -449,6 +441,10 @@
     "message": "Txec i eslovac + EasyList",
     "description": "A filter list combined with EasyList"
   },
+  "filteridcac": {
+    "message": "No m'importen les galetes",
+    "description": "A filter list"
+  },
   "filtereasyprivacy": {
     "message": "EasyPrivacy (protecció de la privadesa)",
     "description": "A filter list"
@@ -460,10 +456,6 @@
   "filter_easylist_plus_indonesian": {
     "message": "Indonesi + EasyList",
     "description": "A filter list combined with EasyList"
-  },
-  "filtermalware": {
-    "message": "Protecció contra el programari maliciós",
-    "description": "A filter list"
   },
   "filterbitcoin_mining_protection": {
     "message": "Llista de protecció minera de criptomoneda (Bitcoin)",
@@ -576,34 +568,6 @@
   "adreportvoluntary": {
     "message": "Notificar anuncis és un acte voluntari. Ajuda a altres persones permetent que els editors de les llistes de filtres puguin bloquejar l'anunci per a tothom. Si en aquest moment no et sents altruista, cap problema. Tanca aquesta pàgina i [[bloqueja l'anunci]] només per a vós.",
     "description": "Introduction of the ad reporting page"
-  },
-  "malwarenotificationcheckboxmessage": {
-    "message": "Us hauria de notificar l'AdBlock quan detecti programari maliciós?",
-    "description": "Checkbox displayed when subscribing to the 'Malware protection' filter list on the Filter lists tab of the Options page"
-  },
-  "malwarenotificationmessage": {
-    "message": "L'AdBlock ha bloquejat una baixada d'un lloc del qual se sap que conté programari maliciós.",
-    "description": "Notification when a potential malware request has been blocked. This message should be under 90 characters!"
-  },
-  "malwarenotificationlearnmore": {
-    "message": "Aprendre'n més sobre programari maliciós",
-    "description": "Button on the malware notification that opens a page about malware on the AdBlock website. Message should be under 45 characters!"
-  },
-  "malwarenotificationdisablethesemessages": {
-    "message": "Desactiva aquestes notificacions",
-    "description": "Button on the malware notification to disable future notifications. Message should be under 45 characters!"
-  },
-  "malwarecheck": {
-    "message": "Comprova l'existència de programari maliciós sospitós d'injectar anuncis:",
-    "description": "Section header on the ad report page"
-  },
-  "malwarewarning": {
-    "message": "El vostre ordinador potser està infectat per programari maliciós. Cliqueu [[aquí]] per obtenir més informació.",
-    "description": "On the ad report page, the ads the user is seeing might be caused by malware/adware"
-  },
-  "malwarenotfound": {
-    "message": "No s'ha trobat programari maliciós conegut.",
-    "description": "On the ad report page, the ads the user is seeing are probably not caused by malware/adware"
   },
   "disableaa": {
     "message": "Comprova el filtre d'Anuncis Acceptables:",
@@ -1110,7 +1074,7 @@
     "description": "Title for the popup menu."
   },
   "block_an_ad_on_this_page": {
-    "message": "Bloqueja un anunci en aquesta pàgina",
+    "message": "Amaga alguna cosa en aquesta pàgina",
     "description": "Toolbar button menu entry and context menu entry"
   },
   "block_this_ad": {
@@ -1201,13 +1165,33 @@
     "message": "Ho sentim, l'AdBlock està deshabilitat en aquesta pàgina per una de les seves llistes de filtres.",
     "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list."
   },
+  "disabled_by_filter_lists_yt": {
+    "message": "L'AdBlock al YouTube està desactivat en aquesta pàgina per una de les seves opinions.",
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+  },
   "dont_run_on_pages_on_domain": {
     "message": "No actuar en les pàgines d'aquest domini",
     "description": "Menu entry to open the allowlist wizard"
   },
-  "dont_run_on_pages_on_site": {
-    "message": "No actuar a les pàgines d'aquest lloc",
+  "open_allowlist_wizard": {
+    "message": "Més opcions de pausa",
     "description": "Menu entry to open the allowlist wizard"
+  },
+  "disabled_site_title": {
+    "message": "Res a bloquejar aquí!",
+    "description": "header title on the menu when a user is on tab that extensions are disabled on (Chrome settings, etc)"
+  },
+  "allowlisted_channel": {
+    "message": "Heu configurat l'AdBlock perquè es mantingui en pausa en aquest canal per a cada visita.",
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
+  },
+  "disabled": {
+    "message": "L'AdBlock està en pausa.",
+    "description": "Title shown in menu when AdBlock is paused on all sites"
+  },
+  "disabled_on_all_sites": {
+    "message": "Heu configurat l'AdBlock perquè es mantingui en pausa a tots els llocs.",
+    "description": "Message shown in menu when AdBlock is paused on all sites"
   },
   "disabled_on_this_page": {
     "message": "L'AdBlock està desactivat en aquesta pàgina.",
@@ -1234,12 +1218,30 @@
     "description": "Message shown in toolbar button when AdBlock is not running on all domains"
   },
   "status_domain_paused": {
-    "message": "AdBlock està aturat en aquest lloc.",
+    "message": "L¡AdBlock està en pausa per aquesta visita. És possible que hagueu d'actualitzar la pàgina per veure els vostres canvis.",
     "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "status_allowlisted": {
+    "message": "Heu configurat l'AdBlock perquè es mantingui en pausa en aquest lloc per a cada visita.",
+    "description": "Message shown in toolbar button when AdBlock is not running on a page or website"
   },
   "resume_blocking_ads": {
     "message": "Reprèn el bloqueig d'anuncis",
     "description": "Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
+  "premium_status_msg": {
+    "message": "Col·laborador des de $date$",
+    "description": "Message shown on the premium tab of the options page when the user is a licensed premium user",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "January 2020"
+      }
+    }
+  },
+  "premium_status_short_msg": {
+    "message": "Actiu",
+    "description": "Message shown on the premium tab of the option page when user is a licensed premium user"
   },
   "unpause_adblock": {
     "message": "Reactiva l'AdBlock",
@@ -1294,7 +1296,7 @@
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "undo_last_block_site": {
-    "message": "Desfés els meus blocatges en aquest lloc",
+    "message": "Desfés els meus elements amagats",
     "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
   },
   "dont_run_on_this_page": {
@@ -1359,6 +1361,10 @@
   },
   "advanced_options2": {
     "message": "Sóc un usuari avançat, mostra les opcions avançades",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "onpage_messages": {
+    "message": "Permet que l'AdBlock em mostri missatges a les pàgines web quan sigui rellevant",
     "description": "Checkbox on the 'General' tab of the Options page"
   },
   "work_around_hulu_problems": {
@@ -1445,6 +1451,18 @@
     "message": "Mostra el número d'anuncis bloquejats al menú",
     "description": "Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
   },
+  "block_ads_on_youtube": {
+    "message": "Elimina la publicitat al YouTube",
+    "description": "Label for checkbox letting user choose whether to block ads on youtube.com"
+  },
+  "block_privacy_on_youtube": {
+    "message": "Protegeix la meva privacitat al YouTube",
+    "description": "Checkbox letting user choose whether to block privacy-related requests on youtube.com"
+  },
+  "block_annonyances_on_youtube": {
+    "message": "Elimina les molèsties al YouTube",
+    "description": "Checkbox letting user choose whether to block annoyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
+  },
   "show_devtools_panel": {
     "message": "Mostra el panell «AdBlock». en les eines per a desenvolupadors",
     "description": "Checkbox letting user choose whether the AdBlock tab should be displayed in the developer tools window"
@@ -1491,6 +1509,18 @@
     "message": " -- Seleccioneu un idioma -- ",
     "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
   },
+  "allowlist_channel": {
+    "message": "Permet anuncis en aquest canal",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
+  },
+  "manage_subscribed_channel": {
+    "message": "Gestiona els anuncis als canals subscrits",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel allow listing option"
+  },
+  "whitelist_youtube_channel_v2": {
+    "message": "Permet anuncis al canal de YouTube:",
+    "description": "Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
+  },
   "confirm_undo_custom_filters": {
     "message": "Esteu segurs que voleu eliminar els $count$ blocatges que heu creat a $host$?",
     "description": "Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",
@@ -1510,52 +1540,64 @@
     "description": "Title of the Support tab of the Options page"
   },
   "whatsnew": {
-    "message": "Què hi ha de nou en la darrera versió? Vegeu [[el registre de canvis]]!",
+    "message": "Consulteu les darreres actualitzacions al nostre [[changelog]]",
     "description": "Link to display the changelog on the Support tab"
   },
   "englishonly": {
     "message": "Només en anglès",
     "description": "Lets the user know that a link/page is only available in English."
   },
-  "foundbug": {
-    "message": "Heu trobat un error?",
+  "needhelp": {
+    "message": "Necessiteu ajuda?",
     "description": "Subtitle on the Support tab"
   },
   "adblockupdates": {
     "message": "Actualització d'AdBlock",
     "description": "Subtitle on the Support tab"
   },
+  "ytadblockupdates": {
+    "message": "Actualitzacions d'AdBlock al YouTube",
+    "description": "Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
+  },
   "whatmakesadblocktick": {
     "message": "Voleu veure els engranatges que mouen l'AdBlock?",
     "description": "Subtitle on the Support tab. This section contains links to the AdBlock source code and contributors. In this context, 'tick' can be replaced with the word 'work'."
   },
-  "questionoridea": {
-    "message": "Teniu alguna pregunta i/o suggeriment?",
+  "aboutadblock": {
+    "message": "Quant a l'AdBlock",
     "description": "Subtitle on the Support tab"
   },
   "sourcecode": {
-    "message": "El codi font està [[totalment disponible]]!",
+    "message": "Reviseu el nostre [[codi font]]",
     "description": "Link to the source code of AdBlock on the Support tab"
   },
   "contributors": {
-    "message": "Tenim una pàgina per tal que descobriu les [[persones que fan possible l'AdBlock]]!",
+    "message": "Més informació sobre [[el nostre equip]]",
     "description": "Link to the contributors page on the Support tab"
   },
   "debuginfo": {
-    "message": "El nostre equip us ha sol·licitat informació de depuració? Cliqueu [[here]] per enviar-la!",
+    "message": "El nostre equip ha sol·licitat informació de depuració?",
     "description": "Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport": {
-    "message": "Per què no ens envieu un [[informe d'error]]?",
+    "message": "Envieu-nos un [[informe d'errors]]",
     "description": "Link to send a bug report on the Support tab"
   },
   "supportsite": {
     "message": "Feu-nos-ho saber en el nostre [[lloc web de suport]]!",
     "description": "Link to the support site on the Support tab"
   },
-  "ad_report_please": {
-    "message": "Si veieu un anunci, no feu un informe d'errors, feu un [[Informe d'anuncis]]!",
-    "description": "Link to the ad report page on AdBlock's help site. This is found on the Support tab of the options."
+  "helpcenter": {
+    "message": "Visiteu el nostre [[Centre d'ajuda]]",
+    "description": "Link to AdBlock's help site. This is found on the Support tab of the options."
+  },
+  "copydebugdata": {
+    "message": "Copia les dades de depuració",
+    "description": "Button text on the Support tab of the options."
+  },
+  "copieddebugdata": {
+    "message": "S'ha copiat!",
+    "description": "Button text on the Support tab of the options."
   },
   "resourceblocktitle": {
     "message": "Tots els recursos",
@@ -1805,14 +1847,6 @@
     "message": "Activa el MyAdBlock",
     "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
   },
-  "adblockprotectenrollmentbutton": {
-    "message": "Proveu-ho ara: És gratis",
-    "description": "The text of the button in the menu item in the popup menu for AdBlock Protect extension.  Will automatically be converted to all uppercase"
-  },
-  "adblockprotectenrollmenttext": {
-    "message": "Manteniu la vostra informació personal segura amb l'AdBlock Protect",
-    "description": "The text of the menu item in the popup menu that takes users for the AdBlock Protect extension"
-  },
   "myadblockoptionspageheader": {
     "message": "Opcions del MyAdBlock",
     "description": "The text of the header the MyAdBlock Options page"
@@ -1836,6 +1870,22 @@
   "landscapechannelswitchlabel": {
     "message": "Paisatges",
     "description": "The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "goatchannelswitchlabel": {
+    "message": "Cabres",
+    "description": "The label text for the Goats switch on the MyAdBlock Options page"
+  },
+  "oceanchannelswitchlabel": {
+    "message": "Oceà",
+    "description": "The label text for the Ocean switch on the MyAdBlock Options page"
+  },
+  "foodchannelswitchlabel": {
+    "message": "Menjar",
+    "description": "The label text for the Food switch on the MyAdBlock Options page"
+  },
+  "birdchannelswitchlabel": {
+    "message": "Ocells",
+    "description": "The label text for the Birds switch on the MyAdBlock Options page"
   },
   "customchannelswitchlabel": {
     "message": "Personalitzat",
@@ -1893,6 +1943,14 @@
     "message": "Seleccioneu una de les categories següents i l'AdBlock reemplaçarà ocasionalment els anuncis amb imatges d'alta qualitat per alegrar-vos el dia.",
     "description": "The label text for the switch on the MyAdBlock Options page"
   },
+  "feedback_title": {
+    "message": "Comentaris",
+    "description": "Title for feedback call to action."
+  },
+  "feedback_info": {
+    "message": "Teniu algun comentari o sol·licitud per a nosaltres? Ens encanta conèixer la vostra opinió!",
+    "description": "Text describing the MyAdBlock feedback call to action."
+  },
   "myadblock_feedback_title": {
     "message": "Ens encanten els vostres comentaris!",
     "description": "Title for MyAdBlock feedback call to action."
@@ -1906,27 +1964,39 @@
     "description": "Text on the MyAdBlock feedback button"
   },
   "error_msg_header": {
-    "message": "Vaja! El menú de l'AdBlock ha tingut problemes per carregar-se.",
-    "description": "The text on the popup menu when an error has occurred"
+    "message": "Vaja!",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
-  "error_msg_help_us": {
-    "message": "Ajudeu-nos a resoldre aquest problema enviant-nos algunes dades de depuració: Feu clic a ",
+  "error_msg_partI": {
+    "message": "El menú de l'AdBlock ha tingut problemes per carregar-se.",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us_partI": {
+    "message": "Ajudeu-nos a resoldre aquest problema  ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_us_partII": {
+    "message": " enviant-nos algunes dades de depuració.",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_thank_you": {
     "message": "Gràcies",
     "description": "The text on the popup menu when an error has occurred"
   },
-  "error_msg_reload": {
-    "message": "A continuació, proveu de tornar a carregar l'extensió: Feu clic a ",
+  "error_msg_reload_partI": {
+    "message": "A continuació, proveu de tornar a carregar l'extensió per ",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_help": {
-    "message": "Si això no funciona, consulteu aquí per obtenir més ajuda: Feu clic a ",
+  "error_msg_reload_partII": {
+    "message": "fent clic aquí.",
     "description": "DO NOT TRANSLATE"
   },
-  "error_msg_here": {
-    "message": "aquí",
+  "error_msg_help_partI": {
+    "message": "Si això no funciona, ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_partII": {
+    "message": "consulteu aquí per obtenir més ajuda.",
     "description": "DO NOT TRANSLATE"
   },
   "generaloptions2": {
@@ -1969,6 +2039,10 @@
     "message": "elimina les advertències sobre l'ús de bloquejadors d'anuncis",
     "description": "A filter list explanation"
   },
+  "filter_idcac_explained": {
+    "message": "bloqueja les notificacions de galetes, cosa que significa que renuncieu al vostre dret a rebre notificacions sobre l'ús de galetes als llocs web que visiteu",
+    "description": "A filter list explanation"
+  },
   "filterlistsrock2": {
     "message": "Les llistes de filtres bloquegen la majoria dels anuncis al web. També podeu...",
     "description": "Header text on the Customize tab"
@@ -1993,6 +2067,10 @@
     "message": "Aneu amb compte: si cometeu un error aquí, molts altres filtres, inclosos els filtres oficials, també podrien malmetre's!",
     "description": "Warning when manually editing filters -- first part not clickable."
   },
+  "filtersavewarning_part2": {
+    "message": "Llegiu el [[tutorial de sintaxi de filtres]] per obtenir informació sobre com afegir filtres avançats de llista negra i llista de permisos.",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
   "pwyw2": {
     "message": "Pagueu el que desitgeu!",
     "description": "Text of a payment request link"
@@ -2004,6 +2082,18 @@
   "selectlanguage2": {
     "message": "seleccioneu l'idioma",
     "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "Permet anuncis en canals de YouTube específics",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "youtube_manage_subscribed": {
+    "message": "Gestioneu la configuració d'AdBlock des de la meva pàgina de subscripcions al YouTube",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "allowlisting_twitch_channels": {
+    "message": "Permet anuncis en canals específics de Twitch",
+    "description": "Checkbox on the 'General' tab of the Options page"
   },
   "require_restart_browser": {
     "message": "cal reiniciar el navegador",
@@ -2231,6 +2321,26 @@
     "message": "[[Actualitza l'AdBlock]] per tal de sincronitzar la vostra configuració.",
     "description": "button text on the Sync sub-tab of the Options page"
   },
+  "sync_removed_error_msg_part_1": {
+    "message": "Aquesta extensió no està sincronitzada",
+    "description": "sync error message text on the popup menu"
+  },
+  "sync_removed_error_msg_part_2": {
+    "message": "Feu clic aquí per actualitzar la configuració",
+    "description": "sync error message text on the popup menu and options page"
+  },
+  "unsync_error_msg_part_1": {
+    "message": "Error de sincronització",
+    "description": "sync error message text on the options menu"
+  },
+  "unsync_error_msg_part_2": {
+    "message": "Aquesta extensió ja no se sincronitza.",
+    "description": "sync error message text on the popup menu"
+  },
+  "unsync_error_msg_part_3": {
+    "message": "Feu clic aquí per actualitzar aquesta pàgina i, a continuació, feu clic a «Afegeix aquesta extensió» per sincronitzar aquest dispositiu",
+    "description": "sync error message text on the Sync tab of the options page"
+  },
   "sync_premium_cta": {
     "message": "Us convertireu en un professional del bloqueig d'anuncis amb funcions prèmium com ara Sync.",
     "description": "AdBlock Premium CTA on the Sync tab"
@@ -2271,9 +2381,17 @@
     "message": "(aquesta extensió)",
     "description": "description for name of the current extension"
   },
+  "sync_delete_panel_title": {
+    "message": "Suprimeix l'extensió sincronitzada",
+    "description": "Panel title text on the delete device overlay"
+  },
   "confirm_delete_extension": {
     "message": "Esteu segur que voleu suprimir aquesta extensió?",
-    "description": "Warning/confirmation message shown when the user clicks on the delete icon for this extension"
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
+  },
+  "cannot_be_undone": {
+    "message": "Aquesta acció no es pot desfer.",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
   },
   "delete": {
     "message": "Suprimeix",
@@ -2334,6 +2452,10 @@
   "devtools_header_state_blocked": {
     "description": "one of the items in the drop down list in the header of the dev tools panel",
     "message": "blocked"
+  },
+  "devtools_header_state_whitelisted": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "permès"
   },
   "devtools_header_type_any": {
     "description": "one of the items in the drop down list in the header of the dev tools panel",
@@ -2409,6 +2531,10 @@
     "message": "Sincronitza la vostra configuració",
     "description": "The title of a feature box in the MyAdBlock Options page"
   },
+  "sync_your_settings_description": {
+    "message": "Emporteu-vos les vostres regles i configuracions de bloqueig d'anuncis personalitzades a qualsevol ordinador que feu servir.",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
   "how_can_we_help": {
     "message": "Com us podem ajudar?",
     "description": "Message for help flow in popup menu."
@@ -2445,8 +2571,16 @@
     "message": "Entesos.",
     "description": "Message for help flow in popup menu."
   },
+  "check_whitelist": {
+    "message": "Anem a comprovar la configuració de la llista de permisos per veure si aquest pot ser el problema.",
+    "description": "Message for help flow in popup menu."
+  },
   "ok": {
     "message": "D'acord",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_is_whitelisted": {
+    "message": "Aquesta pàgina es troba a la vostra llista de permisos, motiu pel qual veieu un anunci.",
     "description": "Message for help flow in popup menu."
   },
   "want_to_remove": {
@@ -2457,12 +2591,20 @@
     "message": "No canviarem res així que continuareu veient l'anunci.",
     "description": "Message for help flow in popup menu."
   },
+  "removed_url": {
+    "message": "D'acord! Hem eliminat l'URL de la vostra llista de permisos.",
+    "description": "Message for help flow in popup menu."
+  },
   "reload_not_see_ad": {
     "message": "Recarregueu la pàgina per no veure'l més!",
     "description": "Message for help flow in popup menu."
   },
   "reload_the_page": {
     "message": "Recarrega la pàgina",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_not_whitelisted": {
+    "message": "Aquesta pàgina no es troba a la vostra llista de permisos.",
     "description": "Message for help flow in popup menu."
   },
   "updating_filter_lists": {
@@ -2682,8 +2824,8 @@
     "description": "General text used to define the extension options page."
   },
   "pause_on_this_site": {
-    "message": "Atura en aquest lloc.",
-    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+    "message": "Pausa en aquest lloc:",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site. This will be followed by the options 'Once' and 'Always'"
   },
   "adblock_will_pause_on_this_site": {
     "message": "En fer clic, l'AdBlock deixarà de bloquejar els anuncis en aquest lloc.",
@@ -2745,6 +2887,10 @@
     "message": "Si voleu obtenir més informació, consulteu [[Premium]].",
     "description": "Part 2 of message shown when user opts out of call-to-action"
   },
+  "successfully_whitelisted": {
+    "message": "Heu afegit correctament aquesta URL a la vostra llista de permisos.",
+    "description": "Part of a message on the allowlist wizard"
+  },
   "future_show_ads": {
     "message": "D'ara en endavant, aquestes pàgines continuaran mostrant anuncis.",
     "description": "Part of a message on the allowlist wizard"
@@ -2753,21 +2899,13 @@
     "message": "Podeu canviar aquest comportament a la [[settings]].",
     "description": "Part of a message on the allowlist and blocklist wizards"
   },
+  "whitelisted_a_site": {
+    "message": "Acabeu d'afegir un lloc a la vostra llista de permisos.",
+    "description": "Part 1 of a call-to-action on the allowlist wizard"
+  },
   "never_lose_settings": {
     "message": "Apliqueu aquesta configuració a tots els dispositius i assegureu-vos que no perdeu mai la configuració de l'AdBlock amb la còpia de seguretat i sincronització.",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
-  },
-  "successfully_blocked_ad": {
-    "message": "Heu bloquejat correctament aquest anunci.",
-    "description": "Part of a message on the blocklist wizard"
-  },
-  "future_ads_blocked": {
-    "message": "D'ara en endavant, es continuaran bloquejant els anuncis que coincideixin amb aquestes regles.",
-    "description": "Part of a message on the blocklist wizard"
-  },
-  "rule_added_filters": {
-    "message": "La següent regla s'ha afegit als vostres filtres:",
-    "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
     "message": "Acabeu de bloquejar alguna cosa en aquest lloc web!",
@@ -2837,6 +2975,14 @@
   },
   "rate_us": {
     "message": "Valoreu-nos",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "vpn_coming_soon": {
+    "message": "Consulteu què hi haurà properament a l'AdBlock",
+    "description": "Text of the tooltip of the rate us button CTA in the Options page."
+  },
+  "join_vpn_waitlist": {
+    "message": "Uniu-vos a la llista beta per accedir anticipadament.",
     "description": "Text of a menu item in the popup menu asking users to leave us a review."
   },
   "adblock_vpn": {
@@ -3116,5 +3262,53 @@
   "custom_image_supported_file_types": {
     "message": "*.bmp, *.gif, *.jpeg, *.png, *.svg, *.tiff, *.webp",
     "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
+  },
+  "youtube_onpage_icon_msg": {
+    "message": "Gestiona els anuncis als canals subscrits:",
+    "description": "The message text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allow_all_btn_text": {
+    "message": "Permet anuncis a tots",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_block_all_btn_text": {
+    "message": "Bloqueja anuncis a tots",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_one_moment_text": {
+    "message": "Un moment...",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowed_complete_text": {
+    "message": "Anuncis permesos a tots els canals subscrits",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocked_complete_text": {
+    "message": "Anuncis bloquejats a tots els canals subscrits",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowing_ads_on_channel": {
+    "message": "S'està permetent anuncis en aquest canal",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocking_ads_on_channel": {
+    "message": "S'està bloquejant anuncis en aquest canal",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_sign_in_text": {
+    "message": "Inicieu sessió al vostre compte del YouTube per gestionar els anuncis als vostres canals subscrits.",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_no_channels_text": {
+    "message": "Subscriviu-vos a almenys un canal del YouTube per gestionar els anuncis als vostres canals subscrits.",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "once": {
+    "message": "Una vegada",
+    "description": "The button text on the popup menu"
+  },
+  "always": {
+    "message": "Sempre",
+    "description": "The button text on the popup menu"
   }
 }

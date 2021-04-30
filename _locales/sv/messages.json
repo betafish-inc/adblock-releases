@@ -79,8 +79,16 @@
     "message": "Om du vill dölja knappen, högerklicka på den och välj Ta bort från verktygsfältet.  Du kan visa den igen under Firefoxmenyn -> Anpassa.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
+  "isithidden": {
+    "message": "Är objektet dolt?",
+    "description": "'Block an ad' wizard usage explanation"
+  },
   "sliderexplanation": {
-    "message": "Skjut reglaget tills annonsen blockeras korrekt på sidan, och det blockerade elementet ser användbart ut.",
+    "message": "Om inte, använd skjutreglaget för att dölja ytterligare objekt på den här sidan:",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderwarning": {
+    "message": "Var försiktig, att gömma för mycket på en sida kan förstöra vissa funktioner",
     "description": "'Block an ad' wizard usage explanation"
   },
   "slidertitle": {
@@ -88,20 +96,26 @@
     "description": "'Block an ad' wizard title"
   },
   "blacklisteroptions1": {
-    "message": "Vad tror du kommer att stämma om den här annonsen varje gång du besöker den här sidan?",
+    "message": "Håll detta objekt dolt?",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisternotsure": {
-    "message": "Inte säker? Tryck bara på \"Blockera det!' nedan.",
+  "blacklisternotsure_part_I": {
+    "message": "En regel kommer att läggas till i dina inställningar som döljer det här objektet varje gång du besöker webbplatsen.",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisterthefilter": {
-    "message": "Filtret, som kan ändras på Alternativ-sidan:",
+  "blacklisternotsure_part_II": {
+    "message": "Du kan ångra detta när som helst genom att välja \"Ångra mina dolda objekt på den här sidan\" från AdBlock-menyn.",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisteroptionstitle": {
-    "message": "Sista steget: Vad gör detta till en annons?",
-    "description": "'Block an ad' wizard title"
+  "hiddenelementmessagecount": {
+    "message": "$count$ andra objekt på denna sida döljs också tillfälligt",
+    "description": "The total number of ads or 'things' hidden on a page by the new rule.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "blacklisternofilter": {
     "message": "Inget filter angivet!",
@@ -138,6 +152,10 @@
         "example": "DIV"
       }
     }
+  },
+  "warning": {
+    "message": "varning",
+    "description": "Warns the user about an error."
   },
   "blacklistersinglematch": {
     "message": "Det matchar 1 objekt på den här sidan.",
@@ -179,20 +197,24 @@
     "message": "Tillbaka",
     "description": "Back to previous page button"
   },
-  "block_something_else": {
-    "message": "Blockera något mer",
-    "description": "Button text on page 3 of the hiding wizard"
+  "add_info": {
+    "message": "Ytterligare information",
+    "description": "section title on hidding wizard, shown when advance user option enabled"
+  },
+  "confirm_msg": {
+    "message": "Bekräfta att Typ och ID för det här objektet ser korrekta ut:",
+    "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
     "message": "Hittar annonser...\n\nDet tar bara ett ögonblick.",
     "description": "'Block an ad' wizard loading message"
   },
   "blockanadtitle": {
-    "message": "Blockera en annons",
+    "message": "AdBlock döljningsguide",
     "description": "Title of the first two dialogs of the 'Block an ad' wizard"
   },
   "clickthead": {
-    "message": "Klicka på annonsen så visar jag hur du blockerar den.",
+    "message": "Klicka på ett objekt på den här sidan som du vill dölja.",
     "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
@@ -210,6 +232,10 @@
   "buttonexclude": {
     "message": "Exkludera",
     "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "buttonconfirm": {
+    "message": "Bekräfta",
+    "description": "Button for confirming a new rule in the hiding wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "Ladda om sidan.",
@@ -2843,6 +2869,10 @@
     "message": "Läs mer",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
+  "find_out_more": {
+    "message": "Få reda på mer",
+    "description": "Text in the button on the Premium CTA on the hiding wizard."
+  },
   "update_filter_lists_now": {
     "message": "Uppdatera filterlistor nu",
     "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
@@ -2935,20 +2965,24 @@
     "message": "Du har precis lagt till en webbplats på din tillåt-lista!",
     "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
+  "dont_show_me_again": {
+    "message": "Visa inte det här meddelandet igen",
+    "description": "opt out option on all-to-action on the blocklist / hiding wizard"
+  },
   "never_lose_settings": {
     "message": "Ange denna inställning för alla dina enheter och se till att du aldrig förlorar dina AdBlock-inställningar med Säkerhetskopiering & synkronisering.",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
   },
-  "successfully_blocked_ad": {
-    "message": "Du har blockerat den här annonsen.",
+  "wizard_premium_cta_title": {
+    "message": "Du verkar gilla AdBlock Premium",
     "description": "Part of a message on the blocklist wizard"
   },
-  "future_ads_blocked": {
-    "message": "Annonser som matchar de här reglerna kommer att fortsätta blockeras.",
+  "wizard_premium_cta_part_I": {
+    "message": "Du blockerade precis något på den här sidan.",
     "description": "Part of a message on the blocklist wizard"
   },
-  "rule_added_filters": {
-    "message": "Följande regel har lagts till i dina filter:",
+  "wizard_premium_cta_part_II": {
+    "message": "Tillämpa denna inställning för alla dina enheter och se till att du aldrig förlorar dina AdBlock-inställningar med Säkerhetskopiering & synk.",
     "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
@@ -3354,5 +3388,29 @@
   "always": {
     "message": "Alltid",
     "description": "The button text on the popup menu"
+  },
+  "enable_on_this_site": {
+    "message": "Aktivera AdBlock på den här sidan",
+    "description": "GFC messaging on the popup menu"
+  },
+  "premium_access_without_disabling": {
+    "message": "Nya funktioner i AdBlock Premium gör det enkelt att få tillgång till innehållet du älskar utan att inaktivera AdBlock.",
+    "description": "GFC messaging on the popup menu"
+  },
+  "dont_show_reminder": {
+    "message": "Visa inte den här påminnelsen igen",
+    "description": "GFC messaging on the popup menu"
+  },
+  "want_stop_seeing": {
+    "message": "Vill du sluta se dessa?",
+    "description": "GFC messaging on the popup menu"
+  },
+  "access_without_disabling": {
+    "message": "Få enkel åtkomst till innehållet du älskar utan att inaktivera AdBlock!",
+    "description": "GFC messaging on the popup menu"
+  },
+  "learn_more_lower": {
+    "message": "Lär dig mer",
+    "description": "GFC messaging on the popup menu"
   }
 }

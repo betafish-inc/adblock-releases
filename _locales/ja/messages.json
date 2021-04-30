@@ -79,8 +79,16 @@
     "message": "ボタンを非表示にするには、右クリックして[ツールバーから削除]を選択します。Firefoxのメニュー - >カスタマイズで再度表示することができます。",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
+  "isithidden": {
+    "message": "アイテムは非表示化されていますか？",
+    "description": "'Block an ad' wizard usage explanation"
+  },
   "sliderexplanation": {
-    "message": "ページ上で広告が正しくブロックされるまでスライダをスライドさせると、ブロックされた要素が見えます。",
+    "message": "そうでない場合は、スライダーを使用して、このページアイテムをさらに非表示にしてください:",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderwarning": {
+    "message": "ページ上の要素を非表示化しすぎると、一部の機能が使えなくなるのでご注意ください。",
     "description": "'Block an ad' wizard usage explanation"
   },
   "slidertitle": {
@@ -88,20 +96,26 @@
     "description": "'Block an ad' wizard title"
   },
   "blacklisteroptions1": {
-    "message": "このページにアクセスする度にこの広告が該当する要素を選択して下さい。",
+    "message": "このアイテムを非表示化し続けますか？",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisternotsure": {
-    "message": "はっきり分かりませんか？下の「ブロックする」を押して下さい。",
+  "blacklisternotsure_part_I": {
+    "message": "ご利用の設定にルールが追加され、サイトにアクセスするたびにこのアイテムが非表示になります。",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisterthefilter": {
-    "message": "オプションページで変更できるフィルタ:",
+  "blacklisternotsure_part_II": {
+    "message": "この設定は、AdBlockメニューから「このページの非表示アイテムを元に戻す」を選択することで、いつでも元に戻すことができます。",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisteroptionstitle": {
-    "message": "最後の手順: これを広告とするのは何ですか？",
-    "description": "'Block an ad' wizard title"
+  "hiddenelementmessagecount": {
+    "message": "このページ上の別の $count$個のアイテムも一時的に非表示化されています",
+    "description": "The total number of ads or 'things' hidden on a page by the new rule.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "blacklisternofilter": {
     "message": "フィルタが指定されていません！",
@@ -138,6 +152,10 @@
         "example": "DIV"
       }
     }
+  },
+  "warning": {
+    "message": "警告",
+    "description": "Warns the user about an error."
   },
   "blacklistersinglematch": {
     "message": "このページ上の1つのアイテムに一致します。",
@@ -179,20 +197,24 @@
     "message": "戻る",
     "description": "Back to previous page button"
   },
-  "block_something_else": {
-    "message": "ブロックを実行",
-    "description": "Button text on page 3 of the hiding wizard"
+  "add_info": {
+    "message": "追加詳細",
+    "description": "section title on hidding wizard, shown when advance user option enabled"
+  },
+  "confirm_msg": {
+    "message": "このアイテムのタイプとIDが正しいことを確認してください:",
+    "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
     "message": "広告を探しています...",
     "description": "'Block an ad' wizard loading message"
   },
   "blockanadtitle": {
-    "message": "広告をブロックする",
+    "message": "AdBlock非表示ウィザード",
     "description": "Title of the first two dialogs of the 'Block an ad' wizard"
   },
   "clickthead": {
-    "message": "広告をクリックしたら、ブロックの仕方を説明します。",
+    "message": "非表示化したいこのページ上のアイテムをクリックしてください。",
     "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
@@ -210,6 +232,10 @@
   "buttonexclude": {
     "message": "除外",
     "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "buttonconfirm": {
+    "message": "確定",
+    "description": "Button for confirming a new rule in the hiding wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "ページを再読込みして下さい。",
@@ -2843,6 +2869,10 @@
     "message": "詳しくはこちら",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
+  "find_out_more": {
+    "message": "詳細はこちら",
+    "description": "Text in the button on the Premium CTA on the hiding wizard."
+  },
   "update_filter_lists_now": {
     "message": "今フィルタリストを更新する",
     "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
@@ -2935,20 +2965,24 @@
     "message": "サイトを許可リストに追加しました！",
     "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
+  "dont_show_me_again": {
+    "message": "このメッセージを今後表示しない",
+    "description": "opt out option on all-to-action on the blocklist / hiding wizard"
+  },
   "never_lose_settings": {
     "message": "この設定をすべての端末に適用して、「バックアップと同期」を利用してAdBlock設定が失われないようにしましょう。",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
   },
-  "successfully_blocked_ad": {
-    "message": "無事にこの広告をブロックしました。",
+  "wizard_premium_cta_title": {
+    "message": "AdBlock Premiumをご利用になってはいかがでしょうか",
     "description": "Part of a message on the blocklist wizard"
   },
-  "future_ads_blocked": {
-    "message": "今後、これらのルールに一致する広告は引き続きブロックされます。",
+  "wizard_premium_cta_part_I": {
+    "message": "このサイトで何かをブロックしました。",
     "description": "Part of a message on the blocklist wizard"
   },
-  "rule_added_filters": {
-    "message": "次のルールがフィルターに追加されました:",
+  "wizard_premium_cta_part_II": {
+    "message": "この設定をすべての端末に適用して、「バックアップと同期」を利用してAdBlock設定が失われないようにしましょう。",
     "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
@@ -3354,5 +3388,29 @@
   "always": {
     "message": "今後も",
     "description": "The button text on the popup menu"
+  },
+  "enable_on_this_site": {
+    "message": "このサイトでAdBlockを有効にしよう",
+    "description": "GFC messaging on the popup menu"
+  },
+  "premium_access_without_disabling": {
+    "message": "AdBlock Premiumの新機能により、AdBlockを無効にすることなく、お気に入りのコンテンツに簡単にアクセスできます。",
+    "description": "GFC messaging on the popup menu"
+  },
+  "dont_show_reminder": {
+    "message": "この通知を今後表示しない",
+    "description": "GFC messaging on the popup menu"
+  },
+  "want_stop_seeing": {
+    "message": "今後一切表示させたくないですか？",
+    "description": "GFC messaging on the popup menu"
+  },
+  "access_without_disabling": {
+    "message": "AdBlockを無効にすることなく、お気に入りのコンテンツに簡単にアクセスしましょう！",
+    "description": "GFC messaging on the popup menu"
+  },
+  "learn_more_lower": {
+    "message": "詳細はこちら",
+    "description": "GFC messaging on the popup menu"
   }
 }

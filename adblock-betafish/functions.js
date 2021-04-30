@@ -166,13 +166,38 @@ const setLangAndDirAttributes = function (el) {
     what: 'localeInfo',
   }).then((localeInfo) => {
     element.lang = localeInfo.locale;
-    element.dir = localeInfo.bidiDir;
+    // Note: the 'dir' attribute is only set to RTL on 'our' pages with the
+    // (AdBlock Menu, Options) to prevent AdBlock for incorrectly setting it on webpages where
+    // this file is injected.
+    if (
+      localeInfo
+      && localeInfo.bidiDir === 'rtl'
+      && (window.location.protocol.startsWith('moz-extension:')
+      || window.location.protocol.startsWith('chrome-extension:'))) {
+      let lang = determineUserLanguage();
+      // For RTL languages, only update the directionality of the page if
+      // an appropriate locale message file is bundled with the extension
+      // Note: this code is assuming that we would only have generic message files
+      // for any RTL languages (just 'ar'), and not any country
+      // specific RTL locale files like 'en-US'
+      lang = lang.substring(0, 2);
+      fetch(`_locales/${lang}/messages.json`).then(() => {
+        element.dir = localeInfo.bidiDir;
+      }).catch(() => {
+        element.dir = 'ltr';
+      });
+    } else {
+      element.dir = localeInfo.bidiDir;
+    }
   });
 };
 
-const localizePage = function () {
-  setLangAndDirAttributes();
+const isLangRTL = function (language) {
+  const lang = language || determineUserLanguage();
+  return (lang.startsWith('ar') || lang.startsWith('he') || lang.startsWith('fa'));
+};
 
+const localizePage = function () {
   // translate a page into the users language
   $('[i18n]:not(.i18n-replaced, [i18n_replacement_el])').each(function i18n() {
     $(this).text(translate($(this).attr('i18n')));
@@ -201,15 +226,6 @@ const localizePage = function () {
   $('[i18n-aria-label]').each(function i18nAriaLabel() {
     $(this).attr('aria-label', translate($(this).attr('i18n-aria-label')));
   });
-
-  // Make a right-to-left translation for Arabic and Hebrew languages
-  const language = determineUserLanguage();
-  if (language.startsWith('ar') || language.startsWith('he')) {
-    $('#main_nav').removeClass('right').addClass('left');
-    $('.adblock-logo').removeClass('left').addClass('right');
-    $('.closelegend').css('float', 'left');
-    document.documentElement.dir = 'rtl';
-  }
 }; // end of localizePage
 
 // Parse a URL. Based upon http://blog.stevenlevithan.com/archives/parseuri

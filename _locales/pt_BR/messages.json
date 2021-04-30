@@ -79,8 +79,16 @@
     "message": "Para esconder o botão, clique com o botão direito e escolha \"Remover da Barra de Ferramentas\". Você pode revelá-lo novamente no menu do Firefox -> Personalizar.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
+  "isithidden": {
+    "message": "O item está oculto?",
+    "description": "'Block an ad' wizard usage explanation"
+  },
   "sliderexplanation": {
-    "message": "Deslize o botão até que o anúncio seja bloqueado corretamente na página, e o elemento bloqueado pareça útil.",
+    "message": "Se não estiver, use o controle deslizante para ocultar mais itens nesta página:",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderwarning": {
+    "message": "Cuidado! Ocultar itens demais na página pode prejudicar o funcionamento de alguns recursos",
     "description": "'Block an ad' wizard usage explanation"
   },
   "slidertitle": {
@@ -88,20 +96,26 @@
     "description": "'Block an ad' wizard title"
   },
   "blacklisteroptions1": {
-    "message": "O que você acha que será verdadeiro sobre esse anúncio toda vez que você visitar essa página?",
+    "message": "Manter este item oculto?",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisternotsure": {
-    "message": "Não tem certeza? Basta clicar no \"Bloquear!\" abaixo.",
+  "blacklisternotsure_part_I": {
+    "message": "Uma regra será adicionada às suas configurações, ocultado este item sempre que você acessar o site.",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisterthefilter": {
-    "message": "O filtro, que pode ser alterado na página de Opções:",
+  "blacklisternotsure_part_II": {
+    "message": "Você pode desfazer essa configuração ao selecionar \"Desfazer meus itens ocultos nesta página\" no menu do AdBlock.",
     "description": "'Block an ad' wizard attribute choice page"
   },
-  "blacklisteroptionstitle": {
-    "message": "Último passo: O que faz com que isso seja um anúncio?",
-    "description": "'Block an ad' wizard title"
+  "hiddenelementmessagecount": {
+    "message": "Mais $count$ itens nesta página também estão ocultos temporariamente",
+    "description": "The total number of ads or 'things' hidden on a page by the new rule.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "blacklisternofilter": {
     "message": "Nenhum filtro determinado!",
@@ -138,6 +152,10 @@
         "example": "DIV"
       }
     }
+  },
+  "warning": {
+    "message": "aviso",
+    "description": "Warns the user about an error."
   },
   "blacklistersinglematch": {
     "message": "Isso corresponde a 1 item nessa página.",
@@ -179,20 +197,24 @@
     "message": "Voltar",
     "description": "Back to previous page button"
   },
-  "block_something_else": {
-    "message": "Bloquear algo mais",
-    "description": "Button text on page 3 of the hiding wizard"
+  "add_info": {
+    "message": "Informações adicionais",
+    "description": "section title on hidding wizard, shown when advance user option enabled"
+  },
+  "confirm_msg": {
+    "message": "Confirme que o Tipo e a ID deste item estão corretos:",
+    "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
     "message": "Procurando por anúncios...\n\nIsso só vai levar um momento.",
     "description": "'Block an ad' wizard loading message"
   },
   "blockanadtitle": {
-    "message": "Bloquear um anúncio",
+    "message": "Assistente de ocultação do AdBlock",
     "description": "Title of the first two dialogs of the 'Block an ad' wizard"
   },
   "clickthead": {
-    "message": "Clique no anúncio e vou te mostrar como podemos bloqueá-lo.",
+    "message": "Clique em algum item que você gostaria de ocultar nesta página.",
     "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
@@ -210,6 +232,10 @@
   "buttonexclude": {
     "message": "Excluir",
     "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "buttonconfirm": {
+    "message": "Confirmar",
+    "description": "Button for confirming a new rule in the hiding wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "Recarregar a página.",
@@ -2843,6 +2869,10 @@
     "message": "Saiba mais",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
+  "find_out_more": {
+    "message": "Saber mais",
+    "description": "Text in the button on the Premium CTA on the hiding wizard."
+  },
   "update_filter_lists_now": {
     "message": "Atualizar listas de filtros agora",
     "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
@@ -2935,20 +2965,24 @@
     "message": "Você acaba de adicionar um site à sua lista de permissões!",
     "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
+  "dont_show_me_again": {
+    "message": "Não exibir esta mensagem novamente",
+    "description": "opt out option on all-to-action on the blocklist / hiding wizard"
+  },
   "never_lose_settings": {
     "message": "Aplique essa configuração em todos os seus dispositivos para garantir que você nunca perca suas configurações do AdBlock com a cópia de segurança e sincronização.",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
   },
-  "successfully_blocked_ad": {
-    "message": "Você bloqueou esse anúncio com sucesso.",
+  "wizard_premium_cta_title": {
+    "message": "Ei, acho que você vai gostar do AdBlock Premium",
     "description": "Part of a message on the blocklist wizard"
   },
-  "future_ads_blocked": {
-    "message": "No futuro, anúncios que corresponderem a essas regras continuarão a ser bloqueados.",
+  "wizard_premium_cta_part_I": {
+    "message": "Você acabou de bloquear algo neste site.",
     "description": "Part of a message on the blocklist wizard"
   },
-  "rule_added_filters": {
-    "message": "A seguinte regra foi adicionada aos seus filtros:",
+  "wizard_premium_cta_part_II": {
+    "message": "Aplique esta preferência em todos os seus dispositivos para garantir que você nunca perca suas configurações do AdBlock com a cópia de segurança e sincronização.",
     "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
@@ -3354,5 +3388,29 @@
   "always": {
     "message": "Sempre",
     "description": "The button text on the popup menu"
+  },
+  "enable_on_this_site": {
+    "message": "Habilitar o AdBlock neste site",
+    "description": "GFC messaging on the popup menu"
+  },
+  "premium_access_without_disabling": {
+    "message": "Os novos recursos do AdBlock Premium facilitam o acesso ao seu conteúdo favorito sem desabilitar o AdBlock.",
+    "description": "GFC messaging on the popup menu"
+  },
+  "dont_show_reminder": {
+    "message": "Não exibir este lembrete novamente",
+    "description": "GFC messaging on the popup menu"
+  },
+  "want_stop_seeing": {
+    "message": "Quer parar de ver isso?",
+    "description": "GFC messaging on the popup menu"
+  },
+  "access_without_disabling": {
+    "message": "Obtenha acesso fácil ao seu conteúdo favorito sem desabilitar o AdBlock!",
+    "description": "GFC messaging on the popup menu"
+  },
+  "learn_more_lower": {
+    "message": "Saber mais",
+    "description": "GFC messaging on the popup menu"
   }
 }

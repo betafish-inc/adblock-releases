@@ -64,6 +64,13 @@ Chromium-based browsers, and under _about:debugging_ in Firefox. After making
 changes to the source code re-run the command to update the development
 environment, and the extension should reload automatically after a few seconds.
 
+### Other Build options
+
+Two other build options are provided to aid in testing of the extension.
+
+`--ext-version` - specifiying this parameter at build time will override the version specified in the `build/config/base.mjs` file.  Most information about the format of the version in the manifest.json file can be found [here](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/version/format).
+
+`--ext-id` - specifiying this parameter at build time will override the Firefox / Mozilla extension id specified in the `build/manifest.json` file. More information about the format and when to provide the Extension / Add-on ID can be found [here](https://extensionworkshop.com/documentation/develop/extensions-and-the-add-on-id/).
 
 ## Code Style
 

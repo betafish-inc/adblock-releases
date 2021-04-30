@@ -58,7 +58,7 @@ function topOpenWhitelistCompletionUI(options) {
       </section>
       <section >
         <div>${translate('adblock_wont_run_on_pages_matching')}</div>
-        <div id="adblock-rule"></div>
+        <div dir="ltr" id="adblock-rule"></div>
       </section>
       <section class='body-button'>
         <button class='cancel'>${translate('done')}</button>

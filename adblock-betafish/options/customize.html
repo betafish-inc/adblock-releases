@@ -55,11 +55,11 @@
             <tr></tr>
             <tr>
               <td>
-                <input id="txtBlockUrl" type="text" placeholder=".com/flashAd" />
+                <input id="txtBlockUrl" type="text" placeholder=".com/flashAd" dir="ltr" />
               </td>
               <td class="italic light-grey-text center">$domain=</td>
               <td colspan="3">
-                <input id="txtBlockUrlDomain" placeholder="*" type="text" />
+                <input id="txtBlockUrlDomain" placeholder="*" type="text" dir="ltr" />
               </td>
             </tr>
             <tr>
@@ -96,13 +96,14 @@
             <tr></tr>
             <tr>
               <td colspan="2">
-                <input id="txtUserFilterDomain" type="text" placeholder="*" />
+                <input id="txtUserFilterDomain" type="text" placeholder="*" dir="ltr" />
               </td>
               <td class="center italic light-grey-text">##</td>
               <td colspan="3">
                 <input
                   id="txtUserFilterCss"
                   type="text"
+                  dir="ltr"
                   placeholder='div[class*="exampleClass"][id="someBigAd"]'
                 />
               </td>
@@ -133,32 +134,32 @@
           </span>
         </a>
         <div id="divExcludeBlock" class="addControls" style="display:none;">
-          <table class="customize-entry-table">
-            <tr>
-              <td></td>
-              <td colspan="3" i18n="excludedomainorurl" class="italic light-grey-text"></td>
-            </tr>
-            <tr></tr>
-            <tr>
-              <td class="center italic light-grey-text">@@</td>
-              <td colspan="4">
-                <input id="txtUnblock" type="text" placeholder="http://example.com" />
-              </td>
-              <td class="center italic light-grey-text">$document</td>
-            </tr>
-            <tr>
-              <td colspan="4"></td>
-              <td colspan="2">
-                <button
-                  id="btnAddExcludeFilter"
-                  class="btn short red right"
-                  type="button"
-                  i18n="buttonok"
-                  disabled="disabled"
-                ></button>
-              </td>
-            </tr>
-          </table>
+          <div class="exclude-block-grid" dir="ltr">
+            <span
+              i18n="excludedomainorurl"
+              class="exclude-block-grid-header-a italic light-grey-text"
+            ></span>
+          </div>
+          <div class="exclude-block-grid" dir="ltr">
+            <span class="exclude-block-grid-content-c center italic light-grey-text">@@</span>
+            <span class="exclude-block-grid-content-d">
+              <input id="txtUnblock" type="text" placeholder="http://example.com" />
+            </span>
+            <span class="exclude-block-grid-content-e center italic light-grey-text"
+              >$document</span
+            >
+          </div>
+          <div class="exclude-block-grid">
+            <div class="exclude-block-grid-footer-e">
+              <button
+                id="btnAddExcludeFilter"
+                class="btn short red"
+                type="button"
+                i18n="buttonok"
+                disabled="disabled"
+              ></button>
+            </div>
+          </div>
         </div>
         <div class="bottom-line"></div>
       </div>
@@ -171,48 +172,43 @@
           </span>
         </a>
         <div id="divBlacklistBlock" class="addControls" style="display:none;">
-          <table class="customize-entry-table">
-            <tr>
-              <td></td>
-              <td
-                colspan="5"
-                i18n="only_block_ads_on_these_sites"
-                class="italic light-grey-text"
-              ></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td colspan="5" i18n="format_site1_site2_site3" class="italic light-grey-text"></td>
-            </tr>
-            <tr>
-              <td class="center italic light-grey-text">@@*$document,domain=</td>
-              <td colspan="5"><input id="txtBlacklist" type="text" /></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td colspan="3">
-                <div id="messageBlacklist" class="bold preserve-whitespace"></div>
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td colspan="3">
-                <div
-                  class="standout-message bold italic preserve-whitespace"
-                  i18n="warning_overrules_filters"
-                ></div>
-              </td>
-              <td colspan="2">
-                <button
-                  id="btnAddBlacklist"
-                  class="btn short red right"
-                  type="button"
-                  i18n="buttonok"
-                  disabled="disabled"
-                ></button>
-              </td>
-            </tr>
-          </table>
+          <div class="blacklist-block-grid">
+            <span
+              i18n="only_block_ads_on_these_sites"
+              class="blacklist-block-grid-header-a italic light-grey-text"
+            ></span>
+            <span class="blacklist-block-grid-header-b italic light-grey-text">
+              <span i18n="format"></span>
+              ~site1.com|~site2.com|~news.site3.org
+            </span>
+          </div>
+          <div class="blacklist-block-grid" dir="ltr">
+            <span class="blacklist-block-grid-content-c italic light-grey-text"
+              >@@*$document,domain=</span
+            >
+            <span
+              ><input class="blacklist-block-grid-content-d" id="txtBlacklist" type="text"
+            /></span>
+          </div>
+          <div class="blacklist-block-grid">
+            <span
+              id="messageBlacklist"
+              class="blacklist-block-grid-footer-e bold preserve-whitespace"
+            ></span>
+            <span class="blacklist-block-grid-footer-f">
+              <span
+                class="standout-message bold italic preserve-whitespace"
+                i18n="warning_overrules_filters"
+              ></span>
+              <button
+                id="btnAddBlacklist"
+                class="btn short red"
+                type="button"
+                i18n="buttonok"
+                disabled="disabled"
+              ></button>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -256,7 +252,7 @@
     ></div>
 
     <div>
-      <textarea id="txtFiltersAdvanced" class="widest" disabled></textarea>
+      <textarea id="txtFiltersAdvanced" dir="ltr" class="widest" disabled></textarea>
     </div>
 
     <div id="migrationErrorMessageDiv" style="display: none">
