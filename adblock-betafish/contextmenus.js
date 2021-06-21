@@ -4,10 +4,10 @@
 /* global browser, require, ext, adblockIsPaused, adblockIsDomainPaused
    recordGeneralMessage, log, License, reloadTab, getSettings */
 
-const { checkAllowlisted } = require('allowlisting');
 const { filterNotifier } = require('filterNotifier');
 const { Prefs } = require('prefs');
-const browserAction = require('browserAction');
+const { checkAllowlisted } = require('../adblockplusui/adblockpluschrome/lib/allowlisting');
+const browserAction = require('../adblockplusui/adblockpluschrome/lib/browserAction');
 
 const updateButtonUIAndContextMenus = function () {
   browser.tabs.query({}).then((tabs) => {

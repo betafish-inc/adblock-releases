@@ -106,14 +106,13 @@ const LocalCDN = (function getLocalCDN() {
   const addMissedVersion = function (targetLibrary, version) {
     // get stored missed versions
     const storedMissedVersions = getStoredValue(missedVersionsKey, {});
-    const storedMissedVersion = storedMissedVersions[targetLibrary][version];
 
     // add new missed version
     if (!storedMissedVersions[targetLibrary]) {
       storedMissedVersions[targetLibrary] = {};
     }
     if (storedMissedVersions[targetLibrary][version] > 0) {
-      storedMissedVersions[targetLibrary][version] = storedMissedVersion + 1;
+      storedMissedVersions[targetLibrary][version] += 1;
     } else {
       storedMissedVersions[targetLibrary][version] = 1;
     }

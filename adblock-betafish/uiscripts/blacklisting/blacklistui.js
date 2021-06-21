@@ -246,6 +246,8 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
   }
 
   if (that.advancedUser) {
+    const originalFilterRule = $txtAdvanceFilter.val() || '';
+    $summary.data('original-filter-text', true);
     $pageTwoEditBtn.unbind();
     $pageTwoEditBtn.on('click', () => {
       const inputFieldEnabled = $txtAdvanceFilter.prop('disabled');
@@ -255,21 +257,28 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
         $pageTwoEditBtn.addClass('editEnabled');
         $txtAdvanceFilter.prop('disabled', false);
         $checkBoxes.prop('disabled', true);
+        $pageTwo.find('.advanced-user-row-disarm').css('color', 'var(--button-background-disable)');
         $pageTwoConfirmBtn.prop('disabled', true);
         $pageTwoConfirmBtn.addClass('disabled');
       } else {
+        const customFilter = $txtAdvanceFilter.val();
+        if (originalFilterRule === customFilter) {
+          $checkBoxes.prop('disabled', false);
+          $pageTwo.find('.advanced-user-row-disarm').css('color', 'var(--text-color)');
+        }
         $pageTwoEditIcon.text('mode_edit');
         $pageTwoEditBtn.removeClass('editEnabled');
         $txtAdvanceFilter.prop('disabled', true);
-        $checkBoxes.prop('disabled', false);
         $pageTwoConfirmBtn.prop('disabled', false);
         $pageTwoConfirmBtn.removeClass('disabled');
-        const customFilter = $txtAdvanceFilter.val();
         browser.runtime.sendMessage({ command: 'parseFilter', filterTextToParse: customFilter }).then((parseResult) => {
           if (parseResult && parseResult.error) {
             displayErrorMessage(translate('blacklistereditinvalid1', translate(parseResult.error.reason)));
             $pageTwoConfirmBtn.prop('disabled', true);
             $pageTwoConfirmBtn.addClass('disabled');
+          } else {
+            $summary.data('filter-text', customFilter);
+            $summary.data('original-filter-text', (originalFilterRule === customFilter));
           }
         });
       }
@@ -281,10 +290,24 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
     const cssHidingText = $summary.data('filter-text');
     $pageTwoWarningSpan.css('display', 'none');
     if (cssHidingText) {
-      const filter = `${document.location.hostname}##${cssHidingText}`;
+      let filter = `${document.location.hostname}##${cssHidingText}`;
+      // if it's an advance user, and the rule text been validated above,
+      // add what ever they've enterred
+      if (that.advancedUser) {
+        const useOriginalText = $summary.data('original-filter-text');
+        if (!useOriginalText) {
+          filter = cssHidingText;
+        }
+      }
       browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then((response) => {
         if (!response.error) {
-          that.blockListViaCSS([cssHidingText]);
+          // if it's an advance user, and they've edited the rule text, they could have changed
+          // any / all of the rule text to some other rule type
+          // (e.g. - a blocking rule on a different site), so don't attempt to add a hiding rule
+          // to the document
+          if (!that.advancedUser) {
+            that.blockListViaCSS([cssHidingText]);
+          }
           that.fire('block');
           that.blockedText = cssHidingText;
           that.buildPage3();
@@ -509,7 +532,7 @@ BlacklistUi.prototype.redrawPage2 = function redrawPage2() {
           });
 
         // Aggregate <input> and <label> within a <div>
-        const $checkbox = $('<div class="advanced-user-row detail-row"></div>')
+        const $checkbox = $('<div class="advanced-user-row detail-row advanced-user-row-disarm"></div>')
           .addClass('adblock')
           .addClass('check-box')
           .addClass('small')

@@ -8,31 +8,24 @@ import del from 'del';
 import url from 'url';
 import * as tasks from './build/tasks/index.mjs';
 import * as config from './build/config/index.mjs';
-import * as configParser from './adblockpluschrome/build/configParser.mjs';
-import * as gitUtils from './adblockpluschrome/build/utils/git.mjs';
+import * as configParser from './adblockplusui/adblockpluschrome/build/configParser.js';
+import * as gitUtils from './adblockplusui/adblockpluschrome/build/utils/git.js';
 
 const argumentParser = new argparse.ArgumentParser({
   description: 'Build the extension',
 });
 
-argumentParser.addArgument(
-  ['-t', '--target'],
-  { choices: ['chrome', 'firefox'] },
-);
-argumentParser.addArgument(
-  ['-c', '--channel'],
-  {
-    choices: ['development', 'release'],
-    defaultValue: 'release',
-  },
-);
+argumentParser.addArgument(['-t', '--target'], { choices: ['chrome', 'firefox'] });
+argumentParser.addArgument(['-c', '--channel'], {
+  choices: ['development', 'release'],
+  defaultValue: 'release',
+});
 argumentParser.addArgument(['-b', '--build-num']);
 argumentParser.addArgument(['--ext-version']);
 argumentParser.addArgument(['--ext-id']);
 argumentParser.addArgument('--config');
 argumentParser.addArgument(['-m', '--manifest']);
 argumentParser.addArgument(['--basename']);
-
 
 const args = argumentParser.parseKnownArgs()[0];
 const targetDir = `devenv.${args.target}`;
@@ -44,7 +37,7 @@ async function getBuildSteps(options) {
   if (options.isDevenv) {
     buildSteps.push(
       tasks.addDevEnvVersion(),
-      await tasks.addTestsPage({ scripts: options.tests.scripts, addonName }),
+      await tasks.addUnitTestsPage({ scripts: options.unitTests.scripts, addonName }),
     );
   }
   buildSteps.push(
@@ -75,7 +68,9 @@ async function getBuildOptions(isDevenv, isSource) {
 
   // eslint-disable-next-line no-nested-ternary
   opts.sourceMapType = opts.target === 'chrome'
-    ? isDevenv === true ? 'inline-cheap-source-maps' : 'none'
+    ? isDevenv === true
+      ? 'inline-cheap-source-maps'
+      : 'none'
     : 'source-maps';
 
   if (args.config) {
@@ -98,12 +93,10 @@ async function getBuildOptions(isDevenv, isSource) {
   if (opts.target === 'chrome') {
     opts.mapping.copy.push({
       dest: 'localLib/jquery',
-      src: [
-        'adblock-betafish/localLib/jquery/*',
-      ],
+      src: ['adblock-betafish/localLib/jquery/*'],
     });
   }
-  opts.tests = configParser.getSection(configName, 'tests');
+  opts.unitTests = configParser.getSection(configName, 'unitTests');
   opts.basename = configParser.getSection(configName, 'basename');
   opts.version = configParser.getSection(configName, 'version');
   if (args.basename) {
@@ -119,9 +112,7 @@ async function getBuildOptions(isDevenv, isSource) {
         : opts.version.concat('.', await gitUtils.getBuildnum());
     }
 
-    opts.output = zip.dest(
-      `${opts.basename}${opts.target}-${opts.version}${opts.archiveType}`,
-    );
+    opts.output = zip.dest(`${opts.basename}${opts.target}-${opts.version}${opts.archiveType}`);
   }
   if (args.ext_version) {
     opts.version = args.ext_version;
@@ -139,31 +130,22 @@ async function getBuildOptions(isDevenv, isSource) {
 
 async function buildDevenv() {
   const options = await getBuildOptions(true);
-  return merge(await getBuildSteps(options))
-    .pipe(options.output);
+  return merge(await getBuildSteps(options)).pipe(options.output);
 }
 
 async function buildPacked() {
   const options = await getBuildOptions(false);
 
-  return merge(await getBuildSteps(options))
-    .pipe(options.output);
+  return merge(await getBuildSteps(options)).pipe(options.output);
 }
 
 function cleanDir() {
   return del(targetDir);
 }
 
-export const devenv = gulp.series(
-  cleanDir,
-  tasks.buildUI,
-  buildDevenv,
-);
+export const devenv = gulp.series(cleanDir, buildDevenv);
 
-export const build = gulp.series(
-  tasks.buildUI,
-  buildPacked,
-);
+export const build = gulp.series(buildPacked);
 
 export async function source() {
   const options = await getBuildOptions(false, true);
@@ -172,21 +154,12 @@ export async function source() {
 
 function startWatch() {
   gulp.watch(
-    [
-      'adblock-betafish/*',
-      '!gulpfile.js',
-    ],
+    ['*.js', '*.html', 'adblock-betafish/*', '!gulpfile.js'],
     {
       ignoreInitial: false,
     },
-    gulp.series(
-      cleanDir,
-      buildDevenv,
-    ),
+    gulp.series(cleanDir, buildDevenv),
   );
 }
 
-export const watch = gulp.series(
-  tasks.buildUI,
-  startWatch,
-);
+export const watch = gulp.series(startWatch);

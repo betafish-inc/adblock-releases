@@ -7,9 +7,9 @@
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
-const { checkAllowlisted } = require('allowlisting');
 const { EventEmitter } = require('events');
-const browserAction = require('browserAction');
+const { checkAllowlisted } = require('../../adblockplusui/adblockpluschrome/lib/allowlisting');
+const browserAction = require('../../adblockplusui/adblockpluschrome/lib/browserAction');
 const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
 
 const licenseNotifier = new EventEmitter();

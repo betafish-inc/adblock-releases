@@ -64,14 +64,6 @@
     "title": "Japanese"
   },
   {
-    "url": "https://adblock.gardar.net/is.abp.txt",
-    "id": "icelandic",
-    "homepage": "mailto:adblock at gardar.net",
-    "languages": ["is"],
-    "type": "ads",
-    "title": "Icelandic"
-  },
-  {
     "url": "https://easylist-downloads.adblockplus.org/abpindo+easylist.txt",
     "id": "easylist_plus_indonesian",
     "homepage": "http://abpindo.blogspot.com/",
@@ -187,7 +179,7 @@
     "url": "https://easylist-downloads.adblockplus.org/indianlist+easylist.txt",
     "id": "easylist_plus_indian",
     "homepage": "https://easylist.to/",
-    "languages": ["bn", "gu", "hi", "pa"],
+    "languages": ["bn", "gu", "hi", "pa", "as", "mr", "ml", "te", "kn", "or", "ne", "si"],
     "type": "ads",
     "title": "IndianList+EasyList"
   },
@@ -232,6 +224,16 @@
     "title": "RuAdList+EasyList"
   },
   {
+    "type": "ads",
+    "languages": ["ro"],
+    "id": "easylist_plus_romanian",
+    "title": "ROList+EasyList",
+    "url": "https://easylist-downloads.adblockplus.org/rolist+easylist.txt",
+    "homepage": "https://zoso.ro/rolist/",
+    "language": true,
+    "hidden": false
+  },
+  {
     "url": "https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt",
     "id": "anticircumvent",
     "homepage": "https://github.com/abp-filters/abp-filters-anti-cv",
@@ -248,11 +250,11 @@
     "title": "EasyPrivacy"
   },
   {
-    "url": "https://www.i-dont-care-about-cookies.eu/abp/",
+    "url": "https://easylist-downloads.adblockplus.org/i_dont_care_about_cookies.txt",
     "id": "idcac",
     "homepage": "https://www.i-dont-care-about-cookies.eu/",
     "languages": [],
-    "type": "privacy",
+    "type": "cookies",
     "title": "I Don't Care About Cookies"
   },
   {
@@ -270,6 +272,14 @@
     "languages": [],
     "type": "social",
     "title": "Fanboy's Annoyances"
+  },
+  {
+    "type": "notifications",
+    "id": "fb_notifications",
+    "title": "Fanboy's Notifications Blocking List",
+    "url": "https://easylist-downloads.adblockplus.org/fanboy-notifications.txt",
+    "homepage": "https://easylist.to/",
+    "languages": []
   },
   {
     "url": "https://fanboy.co.nz/fanboy-turkish.txt",
@@ -362,10 +372,13 @@
     "hidden": true
   },
   {
-    "url": "https://raw.githubusercontent.com/DandelionSprout/adfilt/master/NorwegianExperimentalList%20alternate%20versions/NordicFiltersABP.txt",
-    "id": "norwegian",
+    "type": "ads",
+    "languages": ["no", "nb", "nn", "da", "is", "fo", "kl", "sv", "fi"],
+    "title": "Dandelion Sprout's Nordic Filters+EasyList",
+    "url": "https://easylist-downloads.adblockplus.org/dandelion_sprouts_nordic_filters+easylist.txt",
+    "homepage": "https://github.com/DandelionSprout/adfilt",
     "language": true,
     "hidden": false,
-    "languages": ["no"]
+    "id": "nordic"
   }
 ]

@@ -1,48 +1,44 @@
-// This file is based on this similar ABP file:
-// https://github.com/adblockplus/adblockpluschrome/blob/master/devtools.js
+/*
+ * Same as the original source adblockplusui\adblockpluschrome\devtools.js
+ * except:
+ * - updated the panel name, and icon file name
+ */
 "use strict";
 
 let panelWindow = null;
 
-// Versions of Firefox before 54 do not support the devtools.panels API; on
-// these platforms, even when the option is enabled, we cannot show the
-// devtools panel.
-if ("panels" in browser.devtools)
+(async() =>
 {
-  browser.runtime.sendMessage(
+  // Versions of Firefox before 54 do not support the devtools.panels API; on
+  // these platforms, even when the option is enabled, we cannot show the
+  // devtools panel.
+  if ("panels" in browser.devtools)
+  {
+    let enabled = await browser.runtime.sendMessage(
+      {type: "prefs.get", key: "show_devtools_panel"}
+    );
+    if (enabled)
     {
-      type: "prefs.get",
-      key: "show_devtools_panel"
-    }).then(enabled =>
-    {
-      if (enabled)
+      let panel = await browser.devtools.panels.create(
+        "AdBlock", "icons/ab-32.png", "devtools-panel.html"
+      );
+
+      panel.onShown.addListener(window =>
       {
-        browser.devtools.panels.create(
-          "AdBlock",
-          "icons/ab-32.png",
-          "devtools-panel.html").then(panel =>
-          {
-            panel.onShown.addListener(window =>
-            {
-              panelWindow = window;
-            });
+        panelWindow = window;
+      });
 
-            panel.onHidden.addListener(window =>
-            {
-              panelWindow = null;
-            });
+      panel.onHidden.addListener(window => {
+        panelWindow = null;
+      });
 
-            if (panel.onSearch)
-            {
-              panel.onSearch.addListener((eventName, queryString) =>
-              {
-                if (panelWindow)
-                  panelWindow.postMessage({type: eventName, queryString}, "*");
-              });
-            }
+      if (panel.onSearch) {
+        panel.onSearch.addListener((eventName, queryString) => {
+          if (panelWindow) {
+            panelWindow.postMessage({ type: eventName, queryString }, "*");
           }
-        );
+        });
       }
     }
-  );
-}
+  }
+})();

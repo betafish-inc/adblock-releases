@@ -10,7 +10,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global require, */
+/* global require, URLFilter */
 
 const {
   elemHide,
@@ -19,9 +19,9 @@ const {
 } = require('elemHide');
 const { RegExpFilter } = require('filterClasses');
 const { elemHideEmulation } = require('elemHideEmulation');
-const { checkAllowlisted } = require('allowlisting');
 const { extractHostFromFrame } = require('url');
 const { port } = require('messaging');
+const { checkAllowlisted } = require('../adblockplusui/adblockpluschrome/lib/allowlisting');
 
 port.on('getSelectors', (_message, sender) => {
   let selectors = [];
@@ -29,10 +29,10 @@ port.on('getSelectors', (_message, sender) => {
   const emulatedPatterns = [];
 
   if (!checkAllowlisted(sender.page, sender.frame, null,
-    RegExpFilter.typeMap.DOCUMENT || RegExpFilter.typeMap.ELEMHIDE)) {
+    URLFilter.typeMap.DOCUMENT || URLFilter.typeMap.ELEMHIDE)) {
     const hostname = extractHostFromFrame(sender.frame);
     const specificOnly = checkAllowlisted(sender.page, sender.frame, null,
-      RegExpFilter.typeMap.GENERICHIDE);
+      URLFilter.typeMap.GENERICHIDE);
 
     ({ selectors, exceptions } = elemHide.generateStyleSheetForDomain(
       hostname,

@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, exports, log, getSettings,
+/* global browser, exports, require, log, getSettings
  */
 const OnPageIconManager = (function initialize() {
   const MAX_MSG_TEXT_LENGTH = 280;

@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, exports, settings, getSettings, setSetting, License, STATS, channels,
+/* global browser, settings, getSettings, setSetting, License, STATS, channels, exports, require,
    getSubscriptionsMinusText, chromeStorageSetHelper, getUserFilters, Prefs, abpPrefPropertyNames,
    Subscription, adblockIsDomainPaused, PubNub, adblockIsPaused, filterStorage, parseFilter,
    synchronizer, pausedFilterText1, pausedFilterText2, getUrlFromId, channelsNotifier,

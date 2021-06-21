@@ -1,7 +1,7 @@
 
 import path from 'path';
 
-const tmplLoaderPath = path.resolve('adblockpluschrome', 'build', 'utils', 'wp-template-loader.js');
+const tmplLoaderPath = path.resolve('adblockplusui', 'adblockpluschrome', 'build', 'utils', 'wp-template-loader.cjs');
 
 export default {
   optimization: {
@@ -18,7 +18,7 @@ export default {
       events$: 'events.js',
       punycode$: 'punycode.js',
       url$: 'url.js',
-      prefs: path.resolve('', 'adblockpluschrome/lib/prefs.js'),
+      prefs: path.resolve('', 'adblockplusui/adblockpluschrome/lib/prefs.js'),
       './options': '../../adblock-betafish/alias/options.js',
       './icon': '../../adblock-betafish/alias/icon.js',
       subscriptionInit: '../../adblock-betafish/alias/subscriptionInit.js',
@@ -27,9 +27,9 @@ export default {
       notificationHelper: '../../adblock-betafish/alias/notificationHelper.js',
     },
     modules: [
-      'adblockpluschrome/lib',
-      'adblockpluschrome/adblockpluscore/lib',
-      'adblockpluschrome/adblockplusui/lib',
+      'adblockplusui/adblockpluschrome/lib',
+      'adblockplusui/adblockpluschrome/adblockpluscore/lib',
+      'adblockplusui/lib',
       'build/templates',
       'node_modules',
     ],

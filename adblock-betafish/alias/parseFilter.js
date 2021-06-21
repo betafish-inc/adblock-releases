@@ -1,5 +1,5 @@
 /*
- * Same as the original source adblockpluschrome/adblockpluscore/lib/messageResponder.js
+ * Similar to some previous functionality in ABP - adblockpluschrome/adblockpluscore/lib/messageResponder.js
  * except:
  * - only included the FilterError class and the parseFilter function
  * - added 'parseFilter' message listener
@@ -26,20 +26,17 @@
 
 "use strict";
 
-const { InvalidFilter } = require('filterClasses');
+import { InvalidFilter } from "filterClasses";
 
-class FilterError
-{
-  constructor(type, reason = null)
-  {
+class FilterError {
+  constructor(type, reason = null) {
     this.lineno = null;
     this.reason = reason;
     this.selector = null;
     this.type = type;
   }
 
-  toJSON()
-  {
+  toJSON() {
     return {
       lineno: this.lineno,
       reason: this.reason,
@@ -49,24 +46,18 @@ class FilterError
   }
 }
 
-function parseFilter(text)
-{
+function parseFilter(text) {
   let filter = null;
   let error = null;
 
   text = Filter.normalize(text);
-  if (text)
-  {
-    if (text[0] == "[")
-    {
+  if (text) {
+    if (text[0] == "[") {
       filter = text;
       error = new FilterError("unexpected_filter_list_header");
-    }
-    else
-    {
+    } else {
       filter = Filter.fromText(text);
-      if (filter instanceof InvalidFilter)
-        error = new FilterError("invalid_filter", filter.reason);
+      if (filter instanceof InvalidFilter) error = new FilterError("invalid_filter", filter.reason);
     }
   }
 
@@ -74,12 +65,12 @@ function parseFilter(text)
 }
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'parseFilter' || !message.filterTextToParse) {
+  if (message.command !== "parseFilter" || !message.filterTextToParse) {
     return;
   }
   sendResponse(parseFilter(message.filterTextToParse));
 });
 
 Object.assign(window, {
-  parseFilter,
+  parseFilter
 });

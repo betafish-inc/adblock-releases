@@ -21,7 +21,7 @@ function editManifest(dataParam, version, channel, target, extensionId) {
   if (target === 'firefox') {
     const gecko = {};
     gecko.strict_min_version = data.applications.gecko.strict_min_version;
-    gecko.id = extensionId ? extensionId : data.applications.gecko.id;
+    gecko.id = extensionId || data.applications.gecko.id;
 
     delete data.storage;
     delete data.minimum_chrome_version;

@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, ext, exports, chromeStorageSetHelper, getSettings, adblockIsPaused,
+/* global browser, ext, exports, require, chromeStorageSetHelper, getSettings, adblockIsPaused,
    adblockIsDomainPaused, filterStorage, Filter, parseUri, settings, getAllSubscriptionsMinusText,
    getUserFilters, setSetting */
 
@@ -81,7 +81,11 @@ const DataCollectionV2 = (function getDataCollectionV2() {
       for (const sub of filterStorage.subscriptions(text)) {
         const dataCollectionSubscriptions = dataCollectionCache.filters[text].subscriptions;
         if (!sub.disabled && sub.url && dataCollectionSubscriptions.indexOf(sub.url) === -1) {
-          dataCollectionCache.filters[text].subscriptions.push(sub.url);
+          if (sub.url.length > 256) {
+            dataCollectionCache.filters[text].subscriptions.push(sub.substring(0, 256));
+          } else {
+            dataCollectionCache.filters[text].subscriptions.push(sub.url);
+          }
         }
       }
     }

@@ -33,9 +33,18 @@ Clone the external repositories:
 
 _Note: when building from a source archive, this step must be skipped._
 
-Install the required npm packages:
+Install the required npm packages for AdBlock:
 
     npm install
+
+Install the required npm packages for Adblock Plus:
+ cd adblockplusui
+ npm install
+ cd adblockpluschrome
+ npm install
+ cd ..
+ npm run dist
+ cd ..
 
 Rerun the above commands when the dependencies might have changed,
 e.g. after checking out a new revison.

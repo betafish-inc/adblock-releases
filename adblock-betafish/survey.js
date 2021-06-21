@@ -9,7 +9,7 @@
 // gracefully processes the request
 const stats = require('stats');
 const { OnPageIconManager } = require('./onpageIcon/onpage-icon-bg.js');
-const { domainSuffixes, parseDomains } = require('../adblockpluschrome/adblockpluscore/lib/url.js');
+const { domainSuffixes, parseDomains } = require('../adblockplusui/adblockpluschrome/adblockpluscore/lib/url.js');
 const { recordGeneralMessage, recordErrorMessage } = require('./servermessages').ServerMessages;
 
 const SURVEY = (function getSurvey() {

@@ -4,7 +4,7 @@
 /* global browser, getSettings, settings, require, ext, setSetting,
    addCustomFilter, filterNotifier, checkAllowlisted */
 
-const browserAction = require('browserAction');
+const browserAction = require('../adblockplusui/adblockpluschrome/lib/browserAction');
 
 const twitchChannelNamePages = new Map();
 

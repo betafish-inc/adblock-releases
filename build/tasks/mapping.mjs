@@ -15,19 +15,15 @@
  * along with Adblock Plus.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export let addonName = "{{addonName}}";
-export let addonVersion = "{{addonVersion}}";
-export let application = "unknown";
-export let applicationVersion = "0";
-export let platform = "gecko";
-export let platformVersion = "0";
+import gulp from 'gulp';
+import merge from 'merge-stream';
+import changePath from '../../adblockplusui/adblockpluschrome/build/utils/gulp-change-path.js';
 
-let match = /\brv:(\d+(?:\.\d+)?)\b/.exec(navigator.userAgent);
-if (match)
-  platformVersion = match[1];
-
-browser.runtime.getBrowserInfo().then(browserInfo =>
-{
-  application = browserInfo.name.toLowerCase();
-  applicationVersion = browserInfo.version;
-});
+export default function mapping(bundles) {
+  return merge(
+    bundles.copy.map(bundle => gulp.src(bundle.src)
+      .pipe(changePath(bundle.dest))),
+    bundles.rename.map(bundle => gulp.src(bundle.src)
+      .pipe(changePath(bundle.dest, { rename: true }))),
+  );
+}

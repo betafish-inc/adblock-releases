@@ -23,24 +23,21 @@
 
 /** @module requestBlocker */
 
-"use strict";
+import {Filter, URLFilter,
+        BlockingFilter} from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterClasses.js";
+import {contentTypes} from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/contentTypes.js";
+import {Subscription} from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/subscriptionClasses.js";
+import {defaultMatcher} from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/matcher.js";
+import {filterNotifier} from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterNotifier.js";
+import {filterState} from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterState.js";
+import {parseURL} from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/url.js";
+import {checkAllowlisted, getKey} from "../../adblockplusui/adblockpluschrome/lib/allowlisting.js";
+import {extractHostFromFrame} from "../../adblockplusui/adblockpluschrome/lib/url.js";
+import {port} from "../../adblockplusui/adblockpluschrome/lib/messaging.js";
+import {logRequest as hitLoggerLogRequest} from "../../adblockplusui/adblockpluschrome/lib/hitLogger.js";
+import {recordBlockedRequest} from "../../adblockplusui/adblockpluschrome/lib/stats.js";
 
-const {Filter, URLFilter, BlockingFilter} =
-  require("../../adblockpluschrome/adblockpluscore/lib/filterClasses");
-const {contentTypes} = require("../../adblockpluschrome/adblockpluscore/lib/contentTypes");
-const {Subscription} = require("../../adblockpluschrome/adblockpluscore/lib/subscriptionClasses");
-const {defaultMatcher} = require("../../adblockpluschrome/adblockpluscore/lib/matcher");
-const {filterNotifier} = require("../../adblockpluschrome/adblockpluscore/lib/filterNotifier");
-const {filterState} = require("../../adblockpluschrome/adblockpluscore/lib/filterState");
-const {parseURL} = require("../../adblockpluschrome/adblockpluscore/lib/url");
-const {Prefs} = require("prefs");
-const {checkAllowlisted, getKey} = require("allowlisting");
-const {extractHostFromFrame} = require("url");
-const {port} = require("messaging");
-const {logRequest: hitLoggerLogRequest} = require("hitLogger");
-const {recordBlockedRequest} = require("stats");
-
-const extensionProtocol = new URL(browser.extension.getURL("")).protocol;
+const extensionProtocol = new URL(browser.runtime.getURL("")).protocol;
 
 // Map of content types reported by the browser to the respecitve content types
 // used by Adblock Plus. Other content types are simply mapped to OTHER.
@@ -69,7 +66,7 @@ let typeSelectors = new Map([
   ["OBJECT", "object,embed"]
 ]);
 
-exports.filterTypes = new Set(function*()
+export let filterTypes = new Set(function*()
 {
   for (let type in browser.webRequest.ResourceType)
     yield resourceTypes.get(browser.webRequest.ResourceType[type]) || "OTHER";
@@ -94,13 +91,13 @@ function getDocumentInfo(page, frame, originUrl)
   ];
 }
 
-function getRelatedTabIds(details)
+async function getRelatedTabIds(details)
 {
   // This is the common case, the request is associated with a single tab.
   // If tabId is -1, its not (e.g. the request was sent by
   // a Service/Shared Worker) and we have to identify the related tabs.
   if (details.tabId != -1)
-    return Promise.resolve([details.tabId]);
+    return [details.tabId];
 
   let url;
   if (details.originUrl)
@@ -113,9 +110,10 @@ function getRelatedTabIds(details)
     // Firefox except that its not a full URL but just an origin (proto + host).
     url = details.initiator + "/*";
   else
-    return Promise.resolve([]);
+    return [];
 
-  return browser.tabs.query({url}).then(tabs => tabs.map(tab => tab.id));
+  let tabs = await browser.tabs.query({url});
+  return tabs.map(tab => tab.id);
 }
 
 function logRequest(tabIds, request, filter)
@@ -143,7 +141,20 @@ async function collapse(tabId, frameId, type, url)
   }
 }
 
-browser.webRequest.onBeforeRequest.addListener(details =>
+/**
+ * @typedef {object} MatchingResult
+ * @property {?webRequest.BlockingResponse} result The blocking response.
+ * @property {?Filter} filter The matched filter.
+ */
+
+/**
+ * Listener for the webRequest
+ * @param {function} matchFunction Function that will match the request and
+ *  returns a {@link MatchingResult}.
+ * @param {object} details The details of the webRequest.
+ * @return {?webRequest.BlockingResponse} The blocking response or undefined.
+ */
+function listener(matchFunction, details)
 {
   // Filter out requests from non web protocols. Ideally, we'd explicitly
   // specify the protocols we are interested in (i.e. http://, https://,
@@ -198,28 +209,12 @@ browser.webRequest.onBeforeRequest.addListener(details =>
   let type = resourceTypes.get(details.type) || "OTHER";
   let [docDomain, sitekey, specificOnly] = getDocumentInfo(page, frame,
                                                            originUrl);
-  let filter = defaultMatcher.match(url, contentTypes[type],
-                                    docDomain, sitekey, specificOnly);
 
-  let result;
-  let rewrittenUrl;
+  let {result, filter} = matchFunction(
+    details, url, frameId, docDomain, sitekey, type, specificOnly);
 
-  if (filter instanceof BlockingFilter)
-  {
-    if (typeof filter.rewrite == "string")
-    {
-      rewrittenUrl = filter.rewriteUrl(details.url);
-      // If no rewrite happened (error, different origin), we'll
-      // return undefined in order to avoid an "infinite" loop.
-      if (rewrittenUrl != details.url)
-        result = {redirectUrl: rewrittenUrl};
-    }
-    else
-    {
-      collapse(details.tabId, frameId, type, details.url);
-      result = {cancel: true};
-    }
-  }
+  if (result && result.cancel)
+    collapse(details.tabId, frameId, type, details.url);
 
   getRelatedTabIds(details).then(tabIds =>
   {
@@ -227,18 +222,79 @@ browser.webRequest.onBeforeRequest.addListener(details =>
       tabIds,
       {
         url: details.url, type, docDomain,
-        sitekey, specificOnly, rewrittenUrl
+        sitekey, specificOnly,
+        rewrittenUrl: result ? result.redirectUrl : void 0
       },
       filter
     );
   });
 
   return result;
-}, {
-  types: Object.values(browser.webRequest.ResourceType)
-               .filter(type => type != "main_frame"),
-  urls: ["<all_urls>"]
-}, ["blocking"]);
+}
+
+function urlMatch(details, url, frameId, docDomain, sitekey, type, specificOnly)
+{
+  let filter = defaultMatcher.match(url, contentTypes[type],
+                                    docDomain, sitekey, specificOnly);
+
+  let result;
+  if (filter instanceof BlockingFilter)
+  {
+    if (typeof filter.rewrite == "string")
+    {
+      let redirectUrl = filter.rewriteUrl(details.url);
+      // If no rewrite happened (error, different origin), we'll
+      // return undefined in order to avoid an "infinite" loop.
+      if (redirectUrl != details.url)
+        result = {redirectUrl};
+    }
+    else
+    {
+      result = {cancel: true};
+    }
+  }
+  return {result, filter};
+}
+
+browser.webRequest.onBeforeRequest.addListener(
+  listener.bind(null, urlMatch),
+  {
+    types: Object.values(browser.webRequest.ResourceType)
+                 .filter(type => type != "main_frame"),
+    urls: ["<all_urls>"]
+  }, ["blocking"]);
+
+function headerMatch(details, url, frameId, docDomain, sitekey, type,
+                     specificOnly)
+{
+  let match = defaultMatcher.match(url,
+                                   contentTypes.HEADER | contentTypes[type],
+                                   docDomain, sitekey, specificOnly);
+
+  // The presence of an exception filter is enough.
+  if (!(match instanceof BlockingFilter))
+    return {filter: match};
+
+  let {blocking} = defaultMatcher.search(url, contentTypes.HEADER,
+                                         docDomain, sitekey, specificOnly,
+                                         "blocking");
+
+  for (let filter of blocking)
+  {
+    if (filter.filterHeaders(details.responseHeaders))
+      return {result: {cancel: true}, filter};
+  }
+
+  return {};
+}
+
+browser.webRequest.onHeadersReceived.addListener(
+  listener.bind(null, headerMatch),
+  {
+    types: Object.values(browser.webRequest.ResourceType)
+                 .filter(type => type != "main_frame"),
+    urls: ["<all_urls>"]
+  }, ["blocking", "responseHeaders"]);
 
 /**
  * Returns true if the given WebRTC request should be blocked, false otherwise.

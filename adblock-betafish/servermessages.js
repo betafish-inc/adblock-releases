@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, exports, STATS, log, logging, determineUserLanguage */
+/* global exports, browser, STATS, log, logging, determineUserLanguage */
 
 // Log an 'error' message on GAB log server.
 const ServerMessages = (function serverMessages() {

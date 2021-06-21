@@ -28,26 +28,14 @@
  * along with Adblock Plus.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+import {ElemHideEmulation}
+  from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/content/elemHideEmulation.js";
 
-let {ElemHideEmulation} =
-  require("../../adblockpluschrome/adblockpluscore/lib/content/elemHideEmulation");
-
-let contentFiltering;
+export let contentFiltering;
 let collapsedSelectors = new Set();
 window.collapsedElements = [];
 
-// if the Image Swap function isn't found when the page loads, then remove all
-// elements from the array.
-function clearArrayIfNeccessary()
-{
-  if (typeof checkElement !== "function") {
-    window.collapsedElements = [];
-  }
-}
-window.addEventListener('load', clearArrayIfNeccessary, false);
-
-function getURLFromElement(element)
+export function getURLFromElement(element)
 {
   if (element.localName == "object")
   {
@@ -140,7 +128,7 @@ function hideElement(element, properties)
   );
 }
 
-function collapseElement(element)
+export function collapseElement(element)
 {
   let selector = getSelectorForBlockedElement(element);
   if (selector)
@@ -213,21 +201,23 @@ function checkSitekey()
     browser.runtime.sendMessage({type: "filters.addKey", token: attr});
 }
 
-function ElementHidingTracer(selectors, exceptions)
+class ElementHidingTracer
 {
-  this.selectors = selectors;
-  this.exceptions = exceptions;
-  this.changedNodes = [];
-  this.timeout = null;
-  this.observer = new MutationObserver(this.observe.bind(this));
-  this.trace = this.trace.bind(this);
+  constructor(selectors, exceptions)
+  {
+    this.selectors = selectors;
+    this.exceptions = exceptions;
+    this.changedNodes = [];
+    this.timeout = null;
+    this.observer = new MutationObserver(this.observe.bind(this));
+    this.trace = this.trace.bind(this);
 
-  if (document.readyState == "loading")
-    document.addEventListener("DOMContentLoaded", this.trace);
-  else
-    this.trace();
-}
-ElementHidingTracer.prototype = {
+    if (document.readyState == "loading")
+      document.addEventListener("DOMContentLoaded", this.trace);
+    else
+      this.trace();
+  }
+
   checkNodes(nodes)
   {
     let effectiveSelectors = [];
@@ -265,14 +255,14 @@ ElementHidingTracer.prototype = {
         filters: effectiveExceptions
       });
     }
-  },
+  }
 
   onTimeout()
   {
     this.checkNodes(this.changedNodes);
     this.changedNodes = [];
     this.timeout = null;
-  },
+  }
 
   observe(mutations)
   {
@@ -327,7 +317,7 @@ ElementHidingTracer.prototype = {
     // (like YouTube) freeze when the devtools panel is active.
     if (this.timeout == null)
       this.timeout = setTimeout(this.onTimeout.bind(this), 1000);
-  },
+  }
 
   trace()
   {
@@ -341,7 +331,7 @@ ElementHidingTracer.prototype = {
         subtree: true
       }
     );
-  },
+  }
 
   disconnect()
   {
@@ -349,16 +339,19 @@ ElementHidingTracer.prototype = {
     this.observer.disconnect();
     clearTimeout(this.timeout);
   }
-};
-
-function ContentFiltering()
-{
-  this.styles = new Map();
-  this.tracer = null;
-  this.cssProperties = null;
-  this.elemHideEmulation = new ElemHideEmulation(this.hideElements.bind(this));
 }
-ContentFiltering.prototype = {
+
+class ContentFiltering
+{
+  constructor()
+  {
+    this.styles = new Map();
+    this.tracer = null;
+    this.cssProperties = null;
+    this.elemHideEmulation =
+      new ElemHideEmulation(this.hideElements.bind(this));
+  }
+
   addRulesInline(rules, groupName = "standard", appendOnly = false)
   {
     let style = this.styles.get(groupName);
@@ -393,32 +386,30 @@ ContentFiltering.prototype = {
 
     for (let rule of rules)
       style.sheet.insertRule(rule, style.sheet.cssRules.length);
-  },
+  }
 
-  addSelectors(selectors, groupName = "standard", appendOnly = false)
+  async addSelectors(selectors, groupName = "standard", appendOnly = false)
   {
-    browser.runtime.sendMessage({
+    let rules = await browser.runtime.sendMessage({
       type: "content.injectSelectors",
       selectors,
       groupName,
       appendOnly
-    }).then(rules =>
-    {
-      if (rules)
-      {
-        // Insert the rules inline if we have been instructed by the background
-        // page to do so. This is rarely the case, except on platforms that do
-        // not support user stylesheets via the browser.tabs.insertCSS API, i.e.
-        // Firefox <53 and Chrome <66.
-        // Once all supported platforms have implemented this API, we can remove
-        // the code below. See issue #5090.
-        // Related Chrome and Firefox issues:
-        // https://bugs.chromium.org/p/chromium/issues/detail?id=632009
-        // https://bugzilla.mozilla.org/show_bug.cgi?id=1310026
-        this.addRulesInline(rules, groupName, appendOnly);
-      }
     });
-  },
+    if (rules)
+    {
+      // Insert the rules inline if we have been instructed by the background
+      // page to do so. This is rarely the case, except on platforms that do
+      // not support user stylesheets via the browser.tabs.insertCSS API, i.e.
+      // Firefox <53 and Chrome <66.
+      // Once all supported platforms have implemented this API, we can remove
+      // the code below. See issue #5090.
+      // Related Chrome and Firefox issues:
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=632009
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1310026
+      this.addRulesInline(rules, groupName, appendOnly);
+    }
+  }
 
   hideElements(elements, filters)
   {
@@ -433,37 +424,36 @@ ContentFiltering.prototype = {
         filters
       });
     }
-  },
+  }
 
-  apply(filterTypes)
+  async apply(filterTypes)
   {
-    browser.runtime.sendMessage({
+    let response = await browser.runtime.sendMessage({
       type: "content.applyFilters",
       filterTypes
-    }).then(response =>
-    {
-      if (this.tracer)
-      {
-        this.tracer.disconnect();
-        this.tracer = null;
-      }
-
-      if (response.inline)
-        this.addRulesInline(response.rules);
-
-      if (response.trace)
-      {
-        this.tracer = new ElementHidingTracer(
-          response.selectors,
-          response.exceptions
-        );
-      }
-
-      this.cssProperties = response.cssProperties;
-      this.elemHideEmulation.apply(response.emulatedPatterns);
     });
+
+    if (this.tracer)
+    {
+      this.tracer.disconnect();
+      this.tracer = null;
+    }
+
+    if (response.inline)
+      this.addRulesInline(response.rules);
+
+    if (response.trace)
+    {
+      this.tracer = new ElementHidingTracer(
+        response.selectors,
+        response.exceptions
+      );
+    }
+
+    this.cssProperties = response.cssProperties;
+    this.elemHideEmulation.apply(response.emulatedPatterns);
   }
-};
+}
 
 if (document instanceof HTMLDocument)
 {
@@ -474,7 +464,3 @@ if (document instanceof HTMLDocument)
 
   startElementCollapsing();
 }
-
-window.collapseElement = collapseElement;
-window.contentFiltering = contentFiltering;
-window.getURLFromElement = getURLFromElement;

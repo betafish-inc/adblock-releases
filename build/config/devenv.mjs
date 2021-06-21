@@ -3,7 +3,7 @@ const common = {
   webpack: {
     bundles: [
       {
-        dest: 'qunit/tests.js',
+        dest: 'tests/tests.js',
         src: ['./tests/*'],
       },
     ],
@@ -11,18 +11,24 @@ const common = {
   mapping: {
     copy: [
       {
-        dest: 'qunit',
-        src: ['./adblockpluschrome/qunit/qunit.*'],
+        dest: 'tests',
+        src: [
+          'adblockplusui/adblockpluschrome/node_modules/mocha/mocha.js',
+          'adblockplusui/adblockpluschrome/node_modules/mocha/mocha.css',
+          'adblockplusui/adblockpluschrome/test/unit-tests/mocha/*',
+        ],
       },
     ],
   },
-  tests: {
+  unitTests: {
     scripts: [
-      'qunit.js',
+      'mocha.js',
+      'mocha-setup.js',
       '../polyfill.js',
-      ' ../ext/common.js',
+      '../ext/common.js',
       '../ext/background.js',
-      'tests.js',
+      'unit-tests.js',
+      'mocha-runner.js',
     ],
   },
 };

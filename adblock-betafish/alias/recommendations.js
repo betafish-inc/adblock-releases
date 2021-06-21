@@ -12,13 +12,12 @@
 "use strict";
 
 /**
- * A <code>Recommendation</code> object represents a recommended filter
- * subscription.
+ * A `Recommendation` object represents a recommended filter subscription.
  */
 class Recommendation
 {
   /**
-   * Creates a <code>Recommendation</code> object from the given source object.
+   * Creates a `Recommendation` object from the given source object.
    * @param {object} source The source object.
    * @private
    */
@@ -107,10 +106,8 @@ class Recommendation
  * @yields {Recommendation} An object representing a recommended filter
  *   subscription.
  */
-function* recommendations()
+ exports.recommendations = function* recommendations()
 {
   for (let source of require("../data/betafish-subscriptions.json"))
     yield new Recommendation(source);
 }
-
-exports.recommendations = recommendations;

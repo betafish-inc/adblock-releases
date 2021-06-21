@@ -232,6 +232,34 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
       return mySend.apply(this, args);
     };
 
+    const postRequestCheck = function (response) {
+      if (response && response.url && response.url.startsWith('https://www.youtube.com/youtubei/v1/player')) {
+        response.clone().json().then((respObj) => {
+          if (respObj && respObj.videoDetails) {
+            const { author, videoId } = respObj.videoDetails;
+            updateURLWrapped(author);
+            document.dispatchEvent(new CustomEvent(toContentScriptEventName,
+              { detail: { channelName: author, videoId } }));
+          }
+        });
+      }
+    };
+
+    const myFetch = window.fetch;
+    window.fetch = function theFetch(...args) {
+      return new Promise((resolve, reject) => {
+        myFetch.apply(this, args)
+          .then((response) => {
+            postRequestCheck(response);
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    };
+
+
     // process the event messages from the content script
     document.addEventListener(fromContentScriptEventName, (event) => {
       if (event && event.detail && event.detail.channelName) {

@@ -8,7 +8,6 @@
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
-const { checkAllowlisted } = require('allowlisting');
 const { Subscription } = require('subscriptionClasses');
 const { DownloadableSubscription } = require('subscriptionClasses');
 const { SpecialSubscription } = require('subscriptionClasses');
@@ -17,9 +16,10 @@ const { filterNotifier } = require('filterNotifier');
 const { Prefs } = require('prefs');
 const { synchronizer } = require('synchronizer');
 const { getBlockedPerPage } = require('stats');
-const { RegExpFilter, InvalidFilter } = require('filterClasses');
+const { RegExpFilter, InvalidFilter, URLFilter } = require('filterClasses');
 const info = require('info');
-const { URLRequest } = require('../adblockpluschrome/adblockpluscore/lib/url.js');
+const { checkAllowlisted } = require('../adblockplusui/adblockpluschrome/lib/allowlisting');
+const { URLRequest } = require('../adblockplusui/adblockpluschrome/adblockpluscore/lib/url.js');
 
 // Object's used on the option, pop up, etc. pages...
 const { STATS } = require('./stats');
@@ -29,7 +29,7 @@ const { DataCollectionV2 } = require('./datacollection.v2');
 const { LocalDataCollection } = require('./localdatacollection');
 const { ServerMessages } = require('./servermessages');
 const { recommendations } = require('./alias/recommendations');
-const { uninstallInit } = require('./alias/uninstall');
+const { setUninstallURL } = require('./alias/uninstall');
 const { ExcludeFilter } = require('./excludefilter');
 const {
   recordGeneralMessage,
@@ -80,6 +80,7 @@ Object.assign(window, {
   getIdFromURL,
   getSubscriptionInfoFromURL,
   ExcludeFilter,
+  URLFilter,
 });
 
 // CUSTOM FILTERS
@@ -269,7 +270,7 @@ const tryToUnwhitelist = function (pageUrl) {
     if (isWhitelistFilter(text)) {
       try {
         const filter = Filter.fromText(text);
-        if (filter.matches(URLRequest.from(url), RegExpFilter.typeMap.DOCUMENT, false)) {
+        if (filter.matches(URLRequest.from(url), URLFilter.typeMap.DOCUMENT, false)) {
           filterStorage.removeFilter(filter);
           return true;
         }
@@ -762,97 +763,11 @@ if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
 // Note:  be sure to check the 'suppress_update_page' on the Settings object before showing
 //        the /update page
 const updateStorageKey = 'last_known_version';
-// browser.runtime.onInstalled.addListener((details) => {
-//   if (details.reason === 'update' || details.reason === 'install') {
-//     localStorage.setItem(updateStorageKey, browser.runtime.getManifest().version);
-//   }
-// });
-
-if (browser.runtime.id) {
-  let updateTabRetryCount = 0;
-  const getUpdatedURL = function () {
-    const encodedVersion = encodeURIComponent('4.32.0');
-    let updatedURL = `https://getadblock.com/update/${STATS.flavor.toLowerCase()}/${encodedVersion}/?u=${STATS.userId()}`;
-    if (License && License.isActiveLicense()) {
-      updatedURL = `https://getadblock.com/update/p/${encodedVersion}/?u=${STATS.userId()}`;
-    }
-    updatedURL = `${updatedURL}&bc=${Prefs.blocked_total}`;
-    updatedURL = `${updatedURL}&rt=${updateTabRetryCount}`;
-    return updatedURL;
-  };
-  const waitForUserAction = function () {
-    browser.tabs.onCreated.removeListener(waitForUserAction);
-    setTimeout(() => {
-      updateTabRetryCount += 1;
-      // eslint-disable-next-line no-use-before-define
-      openUpdatedPage();
-    }, 10000); // 10 seconds
-  };
-  const openUpdatedPage = function () {
-    const updatedURL = getUpdatedURL();
-    browser.tabs.create({ url: updatedURL }).then((tab) => {
-      // if we couldn't open a tab to '/updated_tab', send a message
-      if (!tab) {
-        recordErrorMessage('updated_tab_failed_to_open');
-        browser.tabs.onCreated.removeListener(waitForUserAction);
-        browser.tabs.onCreated.addListener(waitForUserAction);
-        return;
-      }
-      if (updateTabRetryCount > 0) {
-        recordGeneralMessage(`updated_tab_retry_success_count_${updateTabRetryCount}`);
-      }
-    }).catch(() => {
-      // if we couldn't open a tab to '/updated_tab', send a message
-      recordErrorMessage('updated_tab_failed_to_open');
-      browser.tabs.onCreated.removeListener(waitForUserAction);
-      browser.tabs.onCreated.addListener(waitForUserAction);
-    });
-  };
-  const shouldShowUpdate = function () {
-    const checkQueryState = function () {
-      browser.idle.queryState(60, (state) => {
-        if (state === 'active') {
-          openUpdatedPage();
-        } else {
-          browser.tabs.onCreated.removeListener(waitForUserAction);
-          browser.tabs.onCreated.addListener(waitForUserAction);
-        }
-      });
-    };
-    if (browser.management && browser.management.getSelf) {
-      browser.management.getSelf().then((extensionInfo) => {
-        if (extensionInfo && extensionInfo.installType !== 'admin') {
-          License.ready().then(checkQueryState);
-        } else if (extensionInfo && extensionInfo.installType === 'admin') {
-          recordGeneralMessage('update_tab_not_shown_admin_user');
-        }
-      });
-    } else {
-      License.ready().then(checkQueryState);
-    }
-  };
-  const slashUpdateReleases = ['4.32.0', '4.32.1', '4.33.0'];
-  // Display updated page after each update
-  browser.runtime.onInstalled.addListener((details) => {
-    const lastKnownVersion = localStorage.getItem(updateStorageKey);
-    const currentVersion = browser.runtime.getManifest().version;
-    if (
-      details.reason === 'update'
-          && slashUpdateReleases.includes(currentVersion)
-          && !slashUpdateReleases.includes(lastKnownVersion)
-          && browser.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
-    ) {
-      settings.onload().then(() => {
-        if (!getSettings().suppress_update_page) {
-          STATS.untilLoaded(() => {
-            Prefs.untilLoaded.then(shouldShowUpdate);
-          });
-        }
-      });
-    }
-    localStorage.setItem(updateStorageKey, currentVersion);
-  });
-}
+browser.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'update' || details.reason === 'install') {
+    localStorage.setItem(updateStorageKey, browser.runtime.getManifest().version);
+  }
+});
 
 const openTab = function (url) {
   browser.tabs.create({ url });
@@ -1060,7 +975,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 STATS.untilLoaded(() => {
   STATS.startPinging();
-  uninstallInit();
+  setUninstallURL();
 });
 
 // Create the "blockage stats" for the uninstall logic ...

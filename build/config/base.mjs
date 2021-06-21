@@ -1,22 +1,22 @@
 
 export default {
   basename: 'adblock',
-  version: '4.33.0',
+  version: '4.34.0',
   webpack: {
     bundles: [
       {
         dest: 'abp-background.js',
         src: [
-          'adblockpluschrome/lib/devtools.js',
-          'adblockpluschrome/lib/debug.js',
+          'adblockplusui/adblockpluschrome/lib/devtools.js',
+          'adblockplusui/adblockpluschrome/lib/debug.js',
           'adblock-betafish/alias/requestBlocker.js',
-          'adblockpluschrome/lib/popupBlocker.js',
-          'adblockpluschrome/lib/stats.js',
-          'adblockpluschrome/lib/csp.js',
-          'adblockpluschrome/lib/contentFiltering.js',
-          'adblockpluschrome/lib/messageResponder.js',
-          'adblockpluschrome/lib/filterConfiguration.js',
-          'adblockpluschrome/lib/ml.js',
+          'adblockplusui/adblockpluschrome/lib/popupBlocker.js',
+          'adblockplusui/adblockpluschrome/lib/stats.js',
+          'adblockplusui/adblockpluschrome/lib/csp.js',
+          'adblockplusui/adblockpluschrome/lib/contentFiltering.js',
+          'adblockplusui/adblockpluschrome/lib/messageResponder.js',
+          'adblockplusui/adblockpluschrome/lib/filterConfiguration.js',
+          'adblockplusui/adblockpluschrome/lib/ml.js',
           'adblock-betafish/jquery/jquery-3.5.1.min.js',
           'adblock-betafish/errorreporting.js',
           'adblock-betafish/functions.js',
@@ -51,14 +51,14 @@ export default {
         dest: 'include.preload.js',
         src: [
           'adblock-betafish/alias/include.preload.js',
-          'adblockpluschrome/inject.preload.js',
+          'adblockplusui/adblockpluschrome/inject.preload.js',
           'adblock-betafish/picreplacement/contentscript-loader.js',
         ],
       },
       {
         dest: 'subscriptionLink.postload.js',
         src: [
-          'adblockpluschrome/subscriptionLink.postload.js',
+          'adblockplusui/adblockpluschrome/subscriptionLink.postload.js',
         ],
       },
     ],
@@ -127,20 +127,20 @@ export default {
       {
         dest: 'data/mlHideIfGraphMatches',
         src: [
-          'adblockpluschrome/adblockpluscore/data/mlHideIfGraphMatches/model.json',
-          'adblockpluschrome/adblockpluscore/data/mlHideIfGraphMatches/group1-shard1of1.dat',
+          'adblockplusui/adblockpluschrome/adblockpluscore/data/mlHideIfGraphMatches/model.json',
+          'adblockplusui/adblockpluschrome/adblockpluscore/data/mlHideIfGraphMatches/group1-shard1of1.dat',
         ],
       },
       {
         dest: 'ext',
         src: [
-          'adblockpluschrome/ext/**',
+          'adblockplusui/adblockpluschrome/ext/**',
         ],
       },
       {
         dest: '',
         src: [
-          'adblockpluschrome/polyfill.js',
+          'adblockplusui/adblockpluschrome/polyfill.js',
           'adblock-betafish/lib/purify.min.js',
           'adblock-betafish/CHANGELOG.txt',
           'adblock-betafish/LICENSE',
@@ -149,10 +149,10 @@ export default {
           'adblock-betafish/pubnub/pubnub.min.js',
           'adblock-betafish/lib/*',
           'adblock-betafish/adblock.css',
-          'adblockpluschrome/devtools.html',
-          'adblockpluschrome/adblockplusui/devtools-panel.js',
-          'adblockpluschrome/adblockplusui/i18n.js',
-          'adblockpluschrome/adblockplusui/proxy.html',
+          'adblockplusui/adblockpluschrome/devtools.html',
+          'adblockplusui/devtools-panel.js',
+          'adblockplusui/i18n.js',
+          'adblockplusui/proxy.html',
         ],
       },
     ],
@@ -446,8 +446,8 @@ export default {
         src: 'adblock-betafish/alias/devtools.js',
       },
       {
-        dest: 'devtools-panel.css',
-        src: 'adblockpluschrome/adblockplusui/skin/devtools-panel.css',
+        dest: 'skin/devtools-panel.css',
+        src: 'adblockplusui/skin/devtools-panel.css',
       },
       {
         dest: 'snippets.js',

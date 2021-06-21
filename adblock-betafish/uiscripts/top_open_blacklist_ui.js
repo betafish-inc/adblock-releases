@@ -154,8 +154,8 @@ function topOpenBlacklistUI(options) {
           <p class="filter-warning-row" >
             <span id="warningIconSpan"><i id="warningIcon" class="material-icons md-18 warning-icon" role="img" aria-label="${translate('warning')}">warning</i></span><span id='filter-warning-text' ></span>
           </p>
-          <p class="advanced-user-row boldText detail-header" id="add_info">${translate('add_info')}</p>
-          <p class="advanced-user-row detail-header" >${translate('confirm_msg')}</p>
+          <p class="advanced-user-row advanced-user-row-disarm boldText detail-header" id="add_info">${translate('add_info')}</p>
+          <p class="advanced-user-row advanced-user-row-disarm detail-header" >${translate('confirm_msg')}</p>
           <div id='adblock-details'></div>
           <div id='summary'></div>
           <p>${translate('blacklisternotsure_part_I')} <span class="non-advanced-user-text">${translate('blacklisternotsure_part_II')}</span></p>

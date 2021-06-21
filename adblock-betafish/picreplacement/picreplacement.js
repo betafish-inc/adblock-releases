@@ -42,11 +42,11 @@ const imageSwap = {
   * */
   replaceSection(data, callback) {
     const { el } = data;
-
     // We may have already replaced this section...
-    if (data.picreplacementreplaced) {
+    if (el.getAttribute('picreplacementreplaced')) {
       return;
     }
+    el.setAttribute('picreplacementreplaced', true);
 
     if (data.blocked) {
       const size = this.getStyle(data, 'backgroundPosition').match(/^(\w+) (\w+)$/);
@@ -585,9 +585,6 @@ const imageSwap = {
       const containerNodes = that.createNewPicContainer(placement);
       that.injectCSS(data, placement, containerNodes.container.id);
       that.setupEventHandlers(placement, containerNodes);
-
-      // No need to hide the replaced element -- regular AdBlock will do that.
-      data.picreplacementreplaced = true;
 
       data.el.parentNode.insertBefore(containerNodes.container, data.el);
 

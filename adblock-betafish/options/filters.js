@@ -114,6 +114,7 @@ FilterListUtil.getFilterListType = (filterList) => {
     || filterList.id === 'bitcoin_mining_protection'
     || filterList.id === 'warning_removal'
     || filterList.id === 'idcac'
+    || filterList.id === 'fb_notifications'
   ) {
     filterListType = 'otherFilterList';
   } else if (filterList.language === true) {
