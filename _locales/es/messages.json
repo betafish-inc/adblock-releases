@@ -202,7 +202,7 @@
     "description": "section title on hidding wizard, shown when advance user option enabled"
   },
   "confirm_msg": {
-    "message": "Confirma que el tipo y el ID de este elemento parecen correctos:",
+    "message": "Confirma que los atributos de este elemento parecen correctos:",
     "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
@@ -461,6 +461,10 @@
   },
   "filterannoyances": {
     "message": "Fanboy's Annoyances (bloquea elementos emergentes, widgets de redes sociales y similares, y otras molestias en la página)",
+    "description": "A filter list"
+  },
+  "filterfb_notifications": {
+    "message": "Fanboy's Notifications (bloquea elementos emergentes, widgets de redes sociales y similares y otras molestias en la página)",
     "description": "A filter list"
   },
   "filterwarning_removal": {
@@ -1244,7 +1248,7 @@
     "description": "Message shown in toolbar button on web pages that have been allowlisted"
   },
   "disabled": {
-    "message": "AdBlock está rn pausa",
+    "message": "AdBlock está en pausa",
     "description": "Title shown in menu when AdBlock is paused on all sites"
   },
   "disabled_on_all_sites": {
@@ -1445,8 +1449,8 @@
     "message": "Bloquear solo los anuncios en estos sitios web:",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
   },
-  "format_site1_site2_site3": {
-    "message": "Formato: ~sitio1.com|~sitio2.com|~noticias.sitio3.org",
+  "format": {
+    "message": "Formato:",
     "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
@@ -2030,7 +2034,7 @@
     "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
   "error_msg_help_us_partI": {
-    "message": "Help us resolve this problem  ",
+    "message": "Ayúdanos a resolver este problema ",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_help_us_partII": {
@@ -3412,5 +3416,111 @@
   "learn_more_lower": {
     "message": "Más información",
     "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "Control de distracciones",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "¡Controla tu navegador para navegar como prefieras!",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "Deshazte de las ventanas emergentes de los boletines, los vídeos flotantes y otras molestas distracciones con el control de distracciones.",
+    "description": "Description of the distraction control option"
+  },
+  "block_site_notifications": {
+    "message": "Bloquea las notificaciones de sitios",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "Rechaza automáticamente las solicitudes para permitir notificaciones de los sitios web que visites.",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "Detén la reproducción automática de vídeos",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "Evita que los vídeos se reproduzcan automáticamente y que los vídeos \"flotantes\" te sigan mientras navegas.",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "Oculta los elementos emergentes de los boletines",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "Bloquea las molestas ventanas emergentes que te invitan a suscribirte al boletín de un sitio web.",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "Ignora las solicitudes de encuestas",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "Descarta al instante las invitaciones de sitios web para participar en encuestas.",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "swap_ads_for_images": {
+    "message": "Cambia anuncios por imágenes",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "Personaliza tu experiencia de navegación y saca aún más provecho de AdBlock para $browser$.",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "Con el cambio de imagen seguiremos bloqueando los anuncios, pero sustituiremos algunos de ellos con fotos de tus categorías favoritas.",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "Personaliza AdBlock",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
+  "fun_way_customize": {
+    "message": "Los temas son una forma divertida de personalizar AdBlock en tu navegador.",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "Podrás elegir la apariencia y el tamaño de fuente de AdBlock gracias a sus controles intuitivos. ¡Personaliza AdBlock según tu estilo!",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "Guarda tus ajustes de AdBlock en varios dispositivos",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Aplica todas tus reglas de bloqueo de anuncios, suscripciones a listas de filtros y listas blancas personalizadas a todos tus perfiles de Chrome.",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "¡Configura AdBlock una sola vez y llévate tus ajustes contigo!",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "Experimenta una navegación sin molestias",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "Modo de omisión",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "Visualiza menos muros anti-AdBlock",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "Las ventanas emergentes que requieren la desactivación de AdBlock cada vez abundan más en Internet.",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "Con el modo de omisión, podrás evitar algunas de esas ventanas emergentes sin necesidad de desactivar AdBlock.",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }

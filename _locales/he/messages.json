@@ -79,9 +79,43 @@
     "message": "כדי להסתיר את הכפתור, לחץ לחיצה ימנית עליו ובחר הסר מסרגל הכלים. אתה יכול להראותו שוב תחת תפריט Firefox -> התאם אישית.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
+  "isithidden": {
+    "message": "האם הפריט מוסתר?",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderexplanation": {
+    "message": "אם לא, השתמש במַחְלֵק כדי להסתיר פריטים נוספים בדף הזה:",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderwarning": {
+    "message": "היזהר, הסתרה יותר מדי בדף יכולה לשבור תפקודיות",
+    "description": "'Block an ad' wizard usage explanation"
+  },
   "slidertitle": {
     "message": "צעד 1: הבן מה לחסום",
     "description": "'Block an ad' wizard title"
+  },
+  "blacklisteroptions1": {
+    "message": "להשאיר את הפריט מוסתר?",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "blacklisternotsure_part_I": {
+    "message": "כלל יתווסף אל ההגדרות שלך שיסתיר את הפריט הזה בכל פעם שאתה מבקר באתר.",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "blacklisternotsure_part_II": {
+    "message": "אתה יכול לבטל עשייה של זה בכל זמן שהוא ע״י בחירה 'בטל הסתרה של פריטים מוסתרים' מתפריט AdBlock.",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "hiddenelementmessagecount": {
+    "message": "$count$ פריטים אחרים בדף הזה מוסתרים גם באופן זמני",
+    "description": "The total number of ads or 'things' hidden on a page by the new rule.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "blacklisternofilter": {
     "message": "לא צוין מסנן!",
@@ -119,6 +153,10 @@
       }
     }
   },
+  "warning": {
+    "message": "אזהרה",
+    "description": "Warns the user about an error."
+  },
   "blacklistersinglematch": {
     "message": "אלמנט 1 נמצא בדף.",
     "description": "Tells the user only one match was found"
@@ -155,13 +193,21 @@
     "message": "נִרְאֶה טוב",
     "description": "Confirmation button after user chose what to block on the page"
   },
-  "buttonback": {
-    "message": "הקודם",
-    "description": "Back to previous page button"
+  "add_info": {
+    "message": "מידע נוסף",
+    "description": "section title on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
     "message": "מוצא פרסומות…\n\nזה יקח רק רגע.",
     "description": "'Block an ad' wizard loading message"
+  },
+  "blockanadtitle": {
+    "message": "אשף הסתרה של AdBlock",
+    "description": "Title of the first two dialogs of the 'Block an ad' wizard"
+  },
+  "clickthead": {
+    "message": "לחץ על פריט כלשהו להסתיר בדף הזה שתרצה להסתיר אותו.",
+    "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock לא ירוץ על כל דף שתואם אל:",
@@ -178,6 +224,10 @@
   "buttonexclude": {
     "message": "שלול",
     "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "buttonconfirm": {
+    "message": "אשר",
+    "description": "Button for confirming a new rule in the hiding wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "טען מחדש את הדף.",
@@ -403,6 +453,10 @@
   },
   "filterannoyances": {
     "message": "מטרדי מעריצים (חוסם חלונות קופצים בתוך־דף, מדיה חברתית ויישומונים קשורים, ומטרדים אחרים)",
+    "description": "A filter list"
+  },
+  "filterfb_notifications": {
+    "message": "התראות של Fanboy (חוסם חלונות קופצים בתוך־עמוד, מדיה חברתית ויישומונים קשורים, ומטרדים אחרים)",
     "description": "A filter list"
   },
   "filterwarning_removal": {
@@ -1386,10 +1440,6 @@
   "only_block_ads_on_these_sites": {
     "message": "חסום פרסומות רק באתרים אלו:",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
-  },
-  "format_site1_site2_site3": {
-    "message": "תסדיר: ~site1.com|~site2.com|~news.site3.org",
-    "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
     "message": "אזהרה: בכל האתרים האחרים תראה פרסומות!\nזה גובר על כל המסננים האחרים עבור האתרים הללו.",
@@ -2611,10 +2661,6 @@
     "message": "AdBlock מעדכן את רשימות המסננים שלך כעת כדי לראות אם הן עשויות להיות הבעיה.",
     "description": "Message for help flow in popup menu."
   },
-  "done_reload_page": {
-    "message": "ברגע שנסיים, אנא טען מחדש את הדף.",
-    "description": "Message for help flow in popup menu."
-  },
   "checked_basics": {
     "message": "סימנו את היסודות, ועידכנו את רשימות המסננים שלך.",
     "description": "Message for help flow in popup menu."
@@ -2811,6 +2857,10 @@
     "message": "למד עוד",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
+  "find_out_more": {
+    "message": "גלה עוד",
+    "description": "Text in the button on the Premium CTA on the hiding wizard."
+  },
   "update_filter_lists_now": {
     "message": "עדכן רשימות מסננים כעת",
     "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
@@ -2903,9 +2953,25 @@
     "message": "הוספת הרגע אתר אל רשימת ההתרה שלך!",
     "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
+  "dont_show_me_again": {
+    "message": "אל תראה לי הודעה זו שוב",
+    "description": "opt out option on all-to-action on the blocklist / hiding wizard"
+  },
   "never_lose_settings": {
     "message": "החל הגדרה זו בכל המכשירים שלך ווודא שלעולם לא תאבד את הגדרות AdBlock שלך עם גיבוי וסינכרון.",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
+  },
+  "wizard_premium_cta_title": {
+    "message": "היי, נראה שתאהב את AdBlock Premium",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "wizard_premium_cta_part_I": {
+    "message": "חסמת הרגע משהו באתר הזה.",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "wizard_premium_cta_part_II": {
+    "message": "החל העדפה זו בכל המכשירים שלך ווודא שלעולם לא תאבד את הגדרות AdBlock שלך עם גיבוי וסינכרון.",
+    "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
     "message": "חסמת הרגע משהו באתר זה!",
@@ -3310,5 +3376,45 @@
   "always": {
     "message": "תמיד",
     "description": "The button text on the popup menu"
+  },
+  "enable_on_this_site": {
+    "message": "אפשר את AdBlock באתר הזה",
+    "description": "GFC messaging on the popup menu"
+  },
+  "premium_access_without_disabling": {
+    "message": "מאפיינים חדשים ב‏־AdBlock Premium מקלים להשיג גישה אל התוכן שאתה אוהב בלי להשבית את AdBlock.",
+    "description": "GFC messaging on the popup menu"
+  },
+  "dont_show_reminder": {
+    "message": "אל תראה לי תזכורת זו שוב",
+    "description": "GFC messaging on the popup menu"
+  },
+  "want_stop_seeing": {
+    "message": "רוצה להפסיק לראות את אלו?",
+    "description": "GFC messaging on the popup menu"
+  },
+  "access_without_disabling": {
+    "message": "השג גישה קלה אל התוכן שאתה אוהב בלי להשבית את AdBlock!",
+    "description": "GFC messaging on the popup menu"
+  },
+  "learn_more_lower": {
+    "message": "למד עוד",
+    "description": "GFC messaging on the popup menu"
+  },
+  "decline_allow_notifications": {
+    "message": "דחה באופן אוטומטי בקשות 'התר התראות' מאתרים שאתה מבקר בהם.",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "מנע מסרטונים להתנגן באופן אוטומטי ועצור סרטונים 'צפים' ממעקב אחריך בזמן שאתה גולש.",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "חסום חלונות קופצים מטרידים מהזמנה שלך להירשם אל עלון של אתר.",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "done_reload_page": {
+    "message": "ברגע שנסיים, אנא טען מחדש את הדף.",
+    "description": "text on panel in the help flow"
   }
 }

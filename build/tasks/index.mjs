@@ -13,4 +13,5 @@ export {
 } from '../../adblockplusui/adblockpluschrome/build/tasks/devenv.js';
 export {
   default as sourceDistribution,
-} from '../../adblockplusui/adblockpluschrome/build/tasks/sourceDistribution.js';
+} from './sourceDistribution.mjs';
+export { buildSnippets } from "./snippets-dependency.mjs";

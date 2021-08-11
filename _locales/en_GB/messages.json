@@ -193,7 +193,7 @@
     "message": "Looks good",
     "description": "Confirmation button after user chose what to block on the page"
   },
-  "buttonback": {
+  "back": {
     "message": "Back",
     "description": "Back to previous page button"
   },
@@ -2673,10 +2673,6 @@
     "message": "AdBlock is updating your filter lists now to see if that might be the problem.",
     "description": "Message for help flow in popup menu."
   },
-  "done_reload_page": {
-    "message": "As soon as we're done, please reload the page.",
-    "description": "Message for help flow in popup menu."
-  },
   "checked_basics": {
     "message": "We've checked the basics, and updated your filter lists.",
     "description": "Message for help flow in popup menu."
@@ -2776,6 +2772,74 @@
   "thanks": {
     "message": "Thanks",
     "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions": {
+    "message": "I'm seeing distractions on this site",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "Seeing Distractions",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "We’ve updated your preferences.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "Do you still see the distraction?",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "Awesome, problem solved.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "Which Distractions?",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "Additional details on distractions blocked by AdBlock Premium can be found [[here]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "If you would like to adjust your preferences for Distraction Control features you may do so [[here]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "To contact our support team, visit our [[Help Center]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "Newsletter pop-ups",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "Auto-play videos",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "Surveys",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "“Allow Notifications” requests",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "Next",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "Report received",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "Thanks for reporting this issue!",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "Our team has been alerted and will investigate further.",
+    "description": "Text for help flow in popup menu."
   },
   "adblock_logo": {
     "message": "AdBlock logo",
@@ -3416,5 +3480,147 @@
   "learn_more_lower": {
     "message": "Learn more",
     "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "Distraction Control",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "Take control of your browser and browse the way you want to!",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "Say goodbye to newsletter pop-ups, floating videos, and other annoying distractions with Distraction Control.",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "Distraction Control example",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
+  "block_site_notifications": {
+    "message": "Block Site Notifications",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "Automatically decline 'allow notifications' requests from the websites you visit.",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "Stop Autoplay Videos",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "Prevent videos from playing automatically and stop 'floating' videos from following you as you browse.",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "Hide Newsletter Pop-ups",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "Block annoying pop-ups inviting you to sign up for a website's newsletter.",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "Ignore Survey Requests",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "Instantly dismiss invitations from websites to participate in surveys.",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "Submit URL",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "In order to help us troubleshoot, we would greatly appreciate it if you could share this URL with us.",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "Feature Disabled",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "Looks like you do not have that feature enabled. Let’s see if opting into that fixes the issue.",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "AdBlock is updating your preferences now.",
+    "description": "text on panel in the help flow"
+  },
+  "done_reload_page": {
+    "message": "As soon as we're done, please reload the page.",
+    "description": "text on panel in the help flow"
+  },
+  "no_thanks": {
+    "message": "No thanks",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "If you change your mind you can enable additional Distraction Control features [[here]].",
+    "description": "text in the help flow"
+  },
+  "swap_ads_for_images": {
+    "message": "Swap Ads for Images",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "Personalize your browsing experience and get even more out of AdBlock for $browser$.",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "With Image Swap we’ll still block ads, but we’ll replace some with photos from your favorite categories.",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "Customize Your AdBlock",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
+  "fun_way_customize": {
+    "message": "Themes are a fun way to customize AdBlock on your browser.",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "Take control of the look, feel, and font size of AdBlock with easy-to-use controls. Make AdBlock yours!",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "Save Your AdBlock Settings On Multiple Devices",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Take your custom ad blocking rules, filter list subscriptions, and whitelists with you on all your Chrome profiles.",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "Set AdBlock up once and take your settings with you!",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "Experience Annoyance-Free Browsing",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "Bypass Mode",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "See Fewer Anti-AdBlock Walls",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "Pop-ups that require you to disable AdBlock are becoming increasingly common on the web.",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "With Bypass Mode, you’ll be able to get around some of those pop-ups without disabling AdBlock.",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }

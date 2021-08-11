@@ -202,7 +202,7 @@
     "description": "section title on hidding wizard, shown when advance user option enabled"
   },
   "confirm_msg": {
-    "message": "確認該項目的類型與 ID 正確：",
+    "message": "確認該元素的屬性正確：",
     "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
@@ -461,6 +461,10 @@
   },
   "filterannoyances": {
     "message": "Fanboy's Annoyances（阻擋頁面內彈出視窗、社群媒體與相關小工具以及其他煩惱）",
+    "description": "A filter list"
+  },
+  "filterfb_notifications": {
+    "message": "Fanboy 通知 (阻擋頁面內彈出視窗、社群媒體與相關小工具，以及其他擾人內容)",
     "description": "A filter list"
   },
   "filterwarning_removal": {
@@ -1445,8 +1449,8 @@
     "message": "只在這些網站上阻擋廣告：",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
   },
-  "format_site1_site2_site3": {
-    "message": "格式：~網站1.com|~網站2.com|~新聞.網站3.org",
+  "format": {
+    "message": "格式：",
     "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
@@ -2030,7 +2034,7 @@
     "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
   "error_msg_help_us_partI": {
-    "message": "Help us resolve this problem  ",
+    "message": "協助我們解決這個問題 ",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_help_us_partII": {
@@ -3412,5 +3416,111 @@
   "learn_more_lower": {
     "message": "進一步了解",
     "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "干擾控制",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "掌控您的瀏覽器，依您的喜好瀏覽！",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "利用干擾控制功能，告別電子報彈出視窗、浮動視窗影片以及其他擾人的內容。",
+    "description": "Description of the distraction control option"
+  },
+  "block_site_notifications": {
+    "message": "阻擋網站通知",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "自動拒絕所造訪網站的「允許通知」要求。",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "停止自動播放影片",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "防止您瀏覽網頁時影片自動播放，亦可停止「浮動視窗」影片跟著移動。",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "隱藏電子報彈出視窗",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "阻擋邀請您註冊網站電子報的擾人彈出視窗。",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "忽略問卷填寫要求",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "立即關閉網站發出的問卷調查邀請。",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "swap_ads_for_images": {
+    "message": "廣告交換圖片",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "將您的瀏覽體驗個人化，充分利用 $browser$ 版 AdBlock。",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "使用圖片交換功能，我們仍會阻擋廣告，但是會以您喜歡的照片類型取代。",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "自訂 AdBlock",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
+  "fun_way_customize": {
+    "message": "主題是在您的瀏覽器中自訂 AdBlock 的有趣方式。",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "利用輕鬆使用的控制方式來自訂 AdBlock 的外觀、體驗與字型大小。讓 AdBlock 為您所用！",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "在多個裝置上儲存您的 AdBlock 設定",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "在您所有的 Chrome 個人檔案中使用自己的自訂廣告阻擋規則、過濾清單訂閱與白名單。",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "只需要一次設定，就可以將設定帶著走！",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "體驗無干擾的瀏覽方式",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "略過模式",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "更少看見反 AdBlock 牆",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "網路上要求您停用 AdBlock 的彈出視窗越來越常見。",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "有了略過模式，您將能在不停用 AdBlock 的情況下略過那些彈出視窗。",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }

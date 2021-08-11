@@ -79,9 +79,43 @@
     "message": "Per amagar el botó, feu clic amb el botó dret i escolliu «Elimina de la barra d'eines». Podeu tornar a mostrar-lo  al menú de Firefox - > Personalitza.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
+  "isithidden": {
+    "message": "L'element està ocult?",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderexplanation": {
+    "message": "Si no, utilitzeu el control lliscant per ocultar elements addicionals en aquesta pàgina:",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderwarning": {
+    "message": "Aneu amb compte, si oculteu massa en una pàgina pot trencar algunes funcions",
+    "description": "'Block an ad' wizard usage explanation"
+  },
   "slidertitle": {
     "message": "Pas 1: Identifiqueu el que s'ha de bloquejar",
     "description": "'Block an ad' wizard title"
+  },
+  "blacklisteroptions1": {
+    "message": "Voleu mantenir aquest element ocultat?",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "blacklisternotsure_part_I": {
+    "message": "S'afegirà una regla a la configuració que ocultarà aquest element cada vegada que visiteu el lloc.",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "blacklisternotsure_part_II": {
+    "message": "Podeu desfer-ho en qualsevol moment si seleccioneu «Desfés els meus elements ocults en aquesta pàgina» al menú de l'AdBlock.",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "hiddenelementmessagecount": {
+    "message": "Altres $count$ elements d'aquesta pàgina també s'oculten temporalment",
+    "description": "The total number of ads or 'things' hidden on a page by the new rule.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "blacklisternofilter": {
     "message": "No s'ha especificat cap filtre!",
@@ -119,6 +153,10 @@
       }
     }
   },
+  "warning": {
+    "message": "avís",
+    "description": "Warns the user about an error."
+  },
   "blacklistersinglematch": {
     "message": "Això es relaciona amb 1 ítem en aquesta pàgina.",
     "description": "Tells the user only one match was found"
@@ -155,13 +193,21 @@
     "message": "Pinta bé",
     "description": "Confirmation button after user chose what to block on the page"
   },
-  "buttonback": {
-    "message": "Enrere",
-    "description": "Back to previous page button"
+  "add_info": {
+    "message": "Informació addicional",
+    "description": "section title on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
     "message": "S'estan trobant els anuncis…\n\nAixò només trigarà uns instants.",
     "description": "'Block an ad' wizard loading message"
+  },
+  "blockanadtitle": {
+    "message": "Assistent d'ocultació de l'AdBlock",
+    "description": "Title of the first two dialogs of the 'Block an ad' wizard"
+  },
+  "clickthead": {
+    "message": "Feu clic a qualsevol element d’aquesta pàgina que vulgueu ocultar.",
+    "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
     "message": "L'AdBlock no s'executarà en cap pàgina del següent domini:",
@@ -178,6 +224,10 @@
   "buttonexclude": {
     "message": "Exclou",
     "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "buttonconfirm": {
+    "message": "Confirma",
+    "description": "Button for confirming a new rule in the hiding wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "Recarrega la pàgina.",
@@ -1386,10 +1436,6 @@
   "only_block_ads_on_these_sites": {
     "message": "Només bloqueja els anuncis en aquests llocs:",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
-  },
-  "format_site1_site2_site3": {
-    "message": "Format: ~lloc1.com|~lloc2.com|~notícies.lloc3.org",
-    "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
     "message": "Alerta: a tots els altres llocs veureu anuncis!\nAixò es salta les normes de tots els altres filtres per a aquests llocs.",
@@ -2611,10 +2657,6 @@
     "message": "L'AdBlock està actualitzant les vostres llistes de filtres per veure si podria ser el problema.",
     "description": "Message for help flow in popup menu."
   },
-  "done_reload_page": {
-    "message": "Una vegada hàgiu acabat, recarregueu la pàgina.",
-    "description": "Message for help flow in popup menu."
-  },
   "checked_basics": {
     "message": "Hem comprovat els conceptes bàsics i actualitzat les vostres llistes de filtres.",
     "description": "Message for help flow in popup menu."
@@ -2811,6 +2853,10 @@
     "message": "Més informació",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
+  "find_out_more": {
+    "message": "Troba més",
+    "description": "Text in the button on the Premium CTA on the hiding wizard."
+  },
   "update_filter_lists_now": {
     "message": "Actualitza les llistes de filtres ara",
     "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
@@ -2903,9 +2949,25 @@
     "message": "Acabeu d'afegir un lloc a la vostra llista de permisos.",
     "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
+  "dont_show_me_again": {
+    "message": "No tornis a mostrar aquest missatge",
+    "description": "opt out option on all-to-action on the blocklist / hiding wizard"
+  },
   "never_lose_settings": {
     "message": "Apliqueu aquesta configuració a tots els dispositius i assegureu-vos que no perdeu mai la configuració de l'AdBlock amb la còpia de seguretat i sincronització.",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
+  },
+  "wizard_premium_cta_title": {
+    "message": "Ep, sembla que us pot agradar l'AdBlock Premium",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "wizard_premium_cta_part_I": {
+    "message": "Acabeu de bloquejar alguna cosa en aquest lloc web.",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "wizard_premium_cta_part_II": {
+    "message": "Apliqueu aquesta preferència a tots els dispositius i assegureu-vos que no perdeu mai la configuració de l'AdBlock amb la còpia de seguretat i sincronització.",
+    "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
     "message": "Acabeu de bloquejar alguna cosa en aquest lloc web!",
@@ -3310,5 +3372,37 @@
   "always": {
     "message": "Sempre",
     "description": "The button text on the popup menu"
+  },
+  "enable_on_this_site": {
+    "message": "Activa l'AdBlock en aquesta pàgina",
+    "description": "GFC messaging on the popup menu"
+  },
+  "premium_access_without_disabling": {
+    "message": "Les noves funcions de l'AdBlock Premium faciliten l'accés al contingut que més us agrada sense desactivar l'AdBlock.",
+    "description": "GFC messaging on the popup menu"
+  },
+  "dont_show_reminder": {
+    "message": "No tornis a mostrar aquest recordatori",
+    "description": "GFC messaging on the popup menu"
+  },
+  "want_stop_seeing": {
+    "message": "Voleu deixar de veure-les?",
+    "description": "GFC messaging on the popup menu"
+  },
+  "access_without_disabling": {
+    "message": "Accediu fàcilment al contingut que us agrada sense desactivar l'AdBlock!",
+    "description": "GFC messaging on the popup menu"
+  },
+  "learn_more_lower": {
+    "message": "Més informació",
+    "description": "GFC messaging on the popup menu"
+  },
+  "done_reload_page": {
+    "message": "Una vegada hàgiu acabat, recarregueu la pàgina.",
+    "description": "text on panel in the help flow"
+  },
+  "fun_way_customize": {
+    "message": "Els temes són una manera divertida de personalitzar l'AdBlock al navegador.",
+    "description": "Description of Themes on the main Premium options page"
   }
 }

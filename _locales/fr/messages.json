@@ -202,7 +202,7 @@
     "description": "section title on hidding wizard, shown when advance user option enabled"
   },
   "confirm_msg": {
-    "message": "Confirmez que le type et l'identifiant de l'objet semblent corrects :",
+    "message": "Confirmez que les attributs de cet élément sont corrects :",
     "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
@@ -461,6 +461,10 @@
   },
   "filterannoyances": {
     "message": "Fanboy's Annoyances (bloque les pop-ups à l'intérieur des pages, les widgets de réseaux sociaux et d'autres désagréments)",
+    "description": "A filter list"
+  },
+  "filterfb_notifications": {
+    "message": "Notifications de Fanboy (bloque les pop-ups à l'intérieur des pages, les widgets de réseaux sociaux et d'autres désagréments)",
     "description": "A filter list"
   },
   "filterwarning_removal": {
@@ -1445,8 +1449,8 @@
     "message": "Bloquer seulement les publicités sur ces sites :",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
   },
-  "format_site1_site2_site3": {
-    "message": "Format : ~site1.com|~site2.com|~info.site3.org",
+  "format": {
+    "message": "Format :",
     "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
@@ -2030,7 +2034,7 @@
     "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
   "error_msg_help_us_partI": {
-    "message": "Help us resolve this problem  ",
+    "message": "Aidez-nous à résoudre ce problème ",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_help_us_partII": {
@@ -3412,5 +3416,111 @@
   "learn_more_lower": {
     "message": "En savoir plus",
     "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "Contrôle des distractions",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "Prenez le contrôle de votre navigateur et surfez comme vous le souhaitez !",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "Avec le contrôle des distractions, dites adieu aux fenêtres pop-up des bulletins d'information, aux vidéos flottantes et aux autres distractions gênantes.",
+    "description": "Description of the distraction control option"
+  },
+  "block_site_notifications": {
+    "message": "Bloquez les notifications des sites",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "Refusez automatiquement les demandes d'autorisation de notifications des sites Web que vous visitez.",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "Arrêtez les vidéos en lecture automatique",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "Empêchez la lecture automatique des vidéos et les vidéos \"flottantes\" de vous suivre lorsque vous naviguez.",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "Masquez les fenêtres pop-up des newsletters",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "Bloquez les fenêtres pop-up enquiquinantes qui vous invitent à vous inscrire à la newsletter d'un site Web.",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "Ignorez les demandes d'enquête",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "Annulez instantanément les invitations de sites web à participer à des enquêtes.",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "swap_ads_for_images": {
+    "message": "Remplacez les publicités par des images",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "Personnalisez votre expérience de navigation et profitez encore plus d'AdBlock pour $browser$.",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "Avec Image Swap, nous bloquerons toujours les publicités, mais nous en remplacerons certaines par des photos de vos catégories préférées.",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "Personnalisez votre AdBlock",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
+  "fun_way_customize": {
+    "message": "Les thèmes sont une manière amusante de personnaliser AdBlock sur votre navigateur.",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "Prenez le contrôle de l'apparence, du look et de la taille de la police d'AdBlock avec des contrôles faciles à utiliser. C'est VOTRE AdBlock !",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "Sauvegardez vos paramètres AdBlock sur plusieurs appareils",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Conservez vos règles personnalisées de blocage des publicités, vos abonnements à des listes de filtres et vos listes blanches avec vous sur tous vos profils Chrome.",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "Configurez AdBlock une fois et conservez vos paramètres !",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "Laissez-vous captiver par une navigation tout confort",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "Mode Contournement",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "Voyez moins de murs anti-AdBlock",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "Les fenêtres pop-up qui vous demandent de désactiver AdBlock sont de plus en plus courantes sur Internet.",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "Avec le mode Contournement, vous serez en mesure de contourner certaines de ces fenêtres pop-up sans désactiver AdBlock.",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }

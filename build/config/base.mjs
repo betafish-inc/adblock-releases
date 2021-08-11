@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '4.34.0',
+  version: '4.35.0',
   webpack: {
     bundles: [
       {
@@ -450,8 +450,8 @@ export default {
         src: 'adblockplusui/skin/devtools-panel.css',
       },
       {
-        dest: 'snippets.js',
-        src: 'adblock-betafish/alias/snippets.js',
+        dest: 'snippets.min.js',
+        src: 'vendor/abp-snippets/dist/*snippets.min.js',
       },
       {
         dest: 'icons/ab-16.png',

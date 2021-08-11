@@ -202,7 +202,7 @@
     "description": "section title on hidding wizard, shown when advance user option enabled"
   },
   "confirm_msg": {
-    "message": "Bekräfta att Typ och ID för det här objektet ser korrekta ut:",
+    "message": "Bekräfta att attributen hos detta element ser korrekta ut:",
     "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
@@ -461,6 +461,10 @@
   },
   "filterannoyances": {
     "message": "Fanboy-irritationen (blockerar popups, sociala medier och relaterade widgets och andra irritationsmoment)",
+    "description": "A filter list"
+  },
+  "filterfb_notifications": {
+    "message": "Fanboy-aviseringar (blockerar popups, sociala nätverk och relaterade widgets på sidor, såväl som andra irritationsmoment)",
     "description": "A filter list"
   },
   "filterwarning_removal": {
@@ -1445,8 +1449,8 @@
     "message": "Blockera bara annonser på dessa webbplatser:",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
   },
-  "format_site1_site2_site3": {
-    "message": "Format: ~webbplats1.com|~webbplats2.com|~nyheter.webbplats3.org",
+  "format": {
+    "message": "Format:",
     "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
@@ -2030,7 +2034,7 @@
     "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
   "error_msg_help_us_partI": {
-    "message": "Help us resolve this problem  ",
+    "message": "Hjälp oss att lösa detta problem ",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_help_us_partII": {
@@ -3412,5 +3416,111 @@
   "learn_more_lower": {
     "message": "Lär dig mer",
     "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "Distraktionskontroll",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "Ta kontroll över din webbläsare och surfa som du vill!",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "Säg farväl till popups om nyhetsbrev, flytande videor och andra irriterande distraktioner med Distraktionskontroll.",
+    "description": "Description of the distraction control option"
+  },
+  "block_site_notifications": {
+    "message": "Blockera sidaviseringar",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "Neka automatiskt förfrågningar om att \"tillåta aviseringar\" från webbplatser du besöker.",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "Hindra auto-uppspelande videor",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "Förhindra att videor spelas automatiskt och hindra \"flytande videor\" från att följa med när du surfar.",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "Dölj popups om nyhetsbrev",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "Blockera irriterande popups som bjuder in dig att prenumerera på webbplatsens nyhetsbrev.",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "Ignorera förfrågningar om undersökningar",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "Avfärda omedelbart inbjudningar från webbplatser om att delta i undersökningar.",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "swap_ads_for_images": {
+    "message": "Byt ut annonser mot bilder",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "Skräddarsy din surfupplevelse och få ut ännu mer av AdBlock för $browser$.",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "Med Bildbyte blockerar vi fortfarande annonser, men byter ut en del mot bilder från dina favoritkategorier.",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "Skräddarsy din AdBlock",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
+  "fun_way_customize": {
+    "message": "Teman är ett roligt sätt att skräddarsy AdBlock i din webbläsare.",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "Ta kontroll över utseende, känslan och typsnittsstorleken hos AdBlock med lättanvända kontroll. Gör AdBlock till just din!",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "Spara dina AdBlock-inställningar på flera enheter",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Ta med dig dina skräddarsydda regler för annonsblockering, prenumerationer på filterlistor och vitlistor till alla dina Chrome-profiler.",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "Ställ in AdBlock en gång och ta med dig dina inställningar!",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "Upplev irritationsfri surfning",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "Bypass-läge",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "Se färre anti-AdBlock-väggar",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "Popuper som kräver att du inaktiverar AdBlock blir allt vanligare på webben.",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "Med Bypass-läget kan du kringgå vissa av dessa popups utan att inaktivera AdBlock.",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }

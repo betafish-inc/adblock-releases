@@ -202,7 +202,7 @@
     "description": "section title on hidding wizard, shown when advance user option enabled"
   },
   "confirm_msg": {
-    "message": "Подтвердите, что тип и ID этого элемента верны:",
+    "message": "Подтвердите, что атрибуты этого элемента верны:",
     "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
@@ -460,6 +460,10 @@
     "description": "A filter list"
   },
   "filterannoyances": {
+    "message": "Услада фаната (скрывает всплывающие окна, виджеты социальных сетей и прочую рекламу)",
+    "description": "A filter list"
+  },
+  "filterfb_notifications": {
     "message": "Услада фаната (скрывает всплывающие окна, виджеты социальных сетей и прочую рекламу)",
     "description": "A filter list"
   },
@@ -1445,8 +1449,8 @@
     "message": "Блокировать рекламу только на этих сайтах:",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
   },
-  "format_site1_site2_site3": {
-    "message": "Формат: ~сайт1.com|~сайт2.com|~вести.сайт3.org",
+  "format": {
+    "message": "Формат:",
     "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
@@ -2030,7 +2034,7 @@
     "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
   "error_msg_help_us_partI": {
-    "message": "Help us resolve this problem  ",
+    "message": "Help us resolve this problem ",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_help_us_partII": {
@@ -3412,5 +3416,111 @@
   "learn_more_lower": {
     "message": "Узнать больше",
     "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "Никаких отвлечений",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "Настройте свой браузер, чтобы видеть только то, что вам хочется!",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "Забудьте о всплывающих новостных рассылках, всплывающих видео и других отвлекающих элементах.",
+    "description": "Description of the distraction control option"
+  },
+  "block_site_notifications": {
+    "message": "Блокировка уведомлений",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "Автоматически отклоняйте запросы сайтов на отображение уведомлений.",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "Запрет на автовоспроизведение",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "Отключите автоматическое воспроизведение видео на сайтах. Всплывающие видео больше не будут отвлекать вас во время путешествия по интернету.",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "Скройте уведомления о новостной рассылке",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "Заблокируйте назойливые уведомления с предложением оформить новостную рассылку.",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "Больше никаких опросов",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "Мгновенно отклоняйте приглашения сайтов принять участие опросах.",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "swap_ads_for_images": {
+    "message": "Замена рекламы на изображения",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "Настройте ваши предпочтения и даже больше — с AdBlock для $browser$.",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "Функция Замены изображений позволяет не просто блокировать рекламу, а менять некоторые объявления на понравившиеся вам изображения.",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "Настройте AdBlock под себя",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
+  "fun_way_customize": {
+    "message": "Темы украсят AdBlock в вашем браузере.",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "Меняйте внешний вид и размер шрифта в AdBlock с помощью несложных настроек. Настройте AdBlock для себя!",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "Синхронизируйте ваши персональные настройки AdBlock на нескольких устройствах",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Примените ваши настройки блокировки рекламы, предпочтений и белого списка на всех устройствах с аккаунтом Chrome.",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "Настройте AdBlock один раз для всех устройств!",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "Проводите время в интернете без помех",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "Режим обхода блокировки",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "Меньше запретов на использование AdBlock",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "В интернете становится все больше уведомлений, которые требуют отключить AdBlock.",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "С режимом обхода блокировки вы сможете избавиться от некоторых уведомлений, не отключая AdBlock.",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }

@@ -247,6 +247,7 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
 
   if (that.advancedUser) {
     const originalFilterRule = $txtAdvanceFilter.val() || '';
+    $summary.data('filter-text', originalFilterRule);
     $summary.data('original-filter-text', true);
     $pageTwoEditBtn.unbind();
     $pageTwoEditBtn.on('click', () => {
@@ -290,12 +291,13 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
     const cssHidingText = $summary.data('filter-text');
     $pageTwoWarningSpan.css('display', 'none');
     if (cssHidingText) {
+      let useOriginalText = true;
       let filter = `${document.location.hostname}##${cssHidingText}`;
       // if it's an advance user, and the rule text been validated above,
       // add what ever they've enterred
       if (that.advancedUser) {
-        const useOriginalText = $summary.data('original-filter-text');
-        if (!useOriginalText) {
+        useOriginalText = $summary.data('original-filter-text');
+        if (!useOriginalText || (useOriginalText && cssHidingText.startsWith(`${document.location.hostname}##`))) {
           filter = cssHidingText;
         }
       }
@@ -307,6 +309,9 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
           // to the document
           if (!that.advancedUser) {
             that.blockListViaCSS([cssHidingText]);
+          } else if (that.advancedUser && useOriginalText) {
+            const theFilter = that.makeFilter();
+            that.blockListViaCSS([theFilter]);
           }
           that.fire('block');
           that.blockedText = cssHidingText;
@@ -441,7 +446,7 @@ BlacklistUi.prototype.makeFilter = function makeFilter() {
     if (
       el.attr(attrs[i])
       && (!this.advancedUser
-      || (this.advancedUser && $(`#ck${attrs[i]}`, $pageTwoDetails).is(':checked')))) {
+        || (this.advancedUser && $(`#ck${attrs[i]}`, $pageTwoDetails).is(':checked')))) {
       result.push(`[${attrs[i]}=${JSON.stringify(el.attr(attrs[i]))}]`);
     }
   }
@@ -597,8 +602,7 @@ BlacklistUi.ellipsis = function ellipsis(valueToTruncate, maxSize) {
 
   const half = size / 2 - 2; // With ellipsis, the total length will be ~= size
   if (value.length > size) {
-    value = (`${value.substring(0, half)}...${
-      value.substring(value.length - half)}`);
+    value = (`${value.substring(0, half)}...${value.substring(value.length - half)}`);
   }
 
   return value;

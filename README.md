@@ -8,7 +8,7 @@ Edge and Firefox, now based on the [Adblock Plus](https://adblockplus.org/) code
 
 ## Requirements
 
-This repository has [the same requirements as the Adblock Plus](https://github.com/adblockplus/adblockpluschrome#requirements).
+This repository has [the same requirements as the Adblock Plus](https://gitlab.com/eyeo/adblockplus/abpui/adblockplusui).
 
 Be sure that your build environment is up to date with the latest ABP dependencies (noted above).
 
@@ -27,29 +27,24 @@ Then install the above requirements and run the commands below from within Bash.
 
 ### Updating the dependencies
 
-Clone the external repositories:
+In order to build the extension, you need to use the `npm run submodules:update` npm script. This build won't include the snippets library.
 
-    git submodule update --init --recursive
+In order to create a build which includes the snippets library, you should use the `npm run submodules:update-with-snippets` npm script instead. This will work only if you have access to the [abp-snippets repository](https://gitlab.com/eyeo/adblockplus/abp-snippets).
 
-_Note: when building from a source archive, this step must be skipped._
+_Note: when building from a source archive, the above step must be skipped._
 
-Install the required npm packages for AdBlock:
+Run the following command to install all of the required packages
 
     npm install
 
-Install the required npm packages for Adblock Plus:
- cd adblockplusui
- npm install
- cd adblockpluschrome
- npm install
- cd ..
- npm run dist
- cd ..
+The above script will install the required npm packages for AdBlock, Adblock Plus, and run any pre & post install processing scripts.
 
 Rerun the above commands when the dependencies might have changed,
 e.g. after checking out a new revison.
 
 ### Building the extension
+
+
 
 Run the following command in the project directory:
 

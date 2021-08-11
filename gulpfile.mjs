@@ -143,9 +143,9 @@ function cleanDir() {
   return del(targetDir);
 }
 
-export const devenv = gulp.series(cleanDir, buildDevenv);
+export const devenv = gulp.series(cleanDir, tasks.buildSnippets, buildDevenv);
 
-export const build = gulp.series(buildPacked);
+export const build = gulp.series(tasks.buildSnippets, buildPacked);
 
 export async function source() {
   const options = await getBuildOptions(false, true);

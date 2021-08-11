@@ -202,7 +202,7 @@
     "description": "section title on hidding wizard, shown when advance user option enabled"
   },
   "confirm_msg": {
-    "message": "Bevestig dat het type en de ID van dit item er correct uitziet:",
+    "message": "Bevestig dat de attributen van dit element er correct uitzien:",
     "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
@@ -461,6 +461,10 @@
   },
   "filterannoyances": {
     "message": "Fanboy's Annoyances (blokkeert pop-ups op pagina's, sociale media en gerelateerde widgets, en andere irritante zaken)",
+    "description": "A filter list"
+  },
+  "filterfb_notifications": {
+    "message": "Fanboy's Notifications (blokkeert pop-ups op pagina's, sociale media en gerelateerde widgets, en andere irritante zaken)",
     "description": "A filter list"
   },
   "filterwarning_removal": {
@@ -1445,8 +1449,8 @@
     "message": "Alleen advertenties op deze sites blokkeren:",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
   },
-  "format_site1_site2_site3": {
-    "message": "Indeling: ~site1.com|~site2.com|~nieuws.site3.org",
+  "format": {
+    "message": "Indeling:",
     "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
@@ -2030,7 +2034,7 @@
     "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
   },
   "error_msg_help_us_partI": {
-    "message": "Help us resolve this problem  ",
+    "message": "Help ons om dit probleem op te lossen ",
     "description": "DO NOT TRANSLATE"
   },
   "error_msg_help_us_partII": {
@@ -3412,5 +3416,111 @@
   "learn_more_lower": {
     "message": "Meer info",
     "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "Afleidingscontrole",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "Neem de controle over je browser en surf online zoals jij dat wilt!",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "Zeg maar dag tegen pop-ups van nieuwsbrieven, zwevende video's en andere irritante afleidingen met Afleidingscontrole.",
+    "description": "Description of the distraction control option"
+  },
+  "block_site_notifications": {
+    "message": "Blokkeer sitemeldingen",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "Wijs 'meldingen toestaan'-verzoeken automatisch af op de websites die je bezoekt.",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "Stop automatische video's",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "Voorkom dat video's automatisch worden afgespeeld en stop 'zwevende' video's die je tijdens het surfen volgen.",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "Verberg pop-ups van nieuwsbrieven",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "Blokkeer irritante pop-ups die je uitnodigen om je aan te melden voor de nieuwsbrief van een website.",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "Negeer enquêteverzoeken",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "Negeer direct uitnodigingen van websites voor deelname aan enquêtes.",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "swap_ads_for_images": {
+    "message": "Wissel advertenties om voor afbeeldingen",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "Personaliseer je surfervaring en haal nog meer uit AdBlock voor $browser$.",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "Met Afbeeldingswissel blokkeren we advertenties nog steeds, maar sommige vervangen we door foto's uit je favoriete categorieën.",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "Pas je AdBlock aan",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
+  "fun_way_customize": {
+    "message": "Thema's zijn een leuke manier om AdBlock aan te passen in je browser.",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "Neem de controle over de look, het gevoel en het lettertype van AdBlock met eenvoudig te gebruiken besturing. Maak AdBlock eigen!",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "Sla je AdBlock-instellingen op meerdere apparaten op",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Neem je aangepaste advertentieblokkerende regels, abonnementen op filterlijsten en acceptatielijsten met je mee in al je Chrome-profielen.",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "Stel AdBlock eenmalig in en neem je instellingen met je mee!",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "Geniet van online surfen zonder irritaties",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "Bypass-modus",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "Bekijk minder Anti-Adblock-walls",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "Pop-ups die eisen dat je AdBlock uitschakelt, komen steeds vaker voor op internet.",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "Met de Bypass-modus kun je een aantal van die pop-ups omzeilen zonder dat je AdBlock hoeft uit te schakelen.",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }
