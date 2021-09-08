@@ -193,7 +193,7 @@
     "message": "Prima",
     "description": "Confirmation button after user chose what to block on the page"
   },
-  "buttonback": {
+  "back": {
     "message": "Terug",
     "description": "Back to previous page button"
   },
@@ -542,6 +542,10 @@
   "filteranticircumvent": {
     "message": "Anti-ontwijkingsfilters",
     "description": "A filter list"
+  },
+  "filternordic": {
+    "message": "Scandinavische filters + EasyList",
+    "description": "A filter list combined with EasyList"
   },
   "blacklistclickmessage": {
     "message": "Klik met de rechterknop op een advertentie op een pagina om deze te blokkeren - of blokkeer die hier handmatig.",
@@ -2673,10 +2677,6 @@
     "message": "AdBlock werkt je filterlijsten nu bij om te zien of dat het probleem is.",
     "description": "Message for help flow in popup menu."
   },
-  "done_reload_page": {
-    "message": "Zodra we klaar zijn, kun je de pagina herladen.",
-    "description": "Message for help flow in popup menu."
-  },
   "checked_basics": {
     "message": "We hebben de basisonderdelen bekeken en je filterlijsten bijgewerkt.",
     "description": "Message for help flow in popup menu."
@@ -2776,6 +2776,78 @@
   "thanks": {
     "message": "Bedankt",
     "description": "Message for help flow in popup menu."
+  },
+  "got_it_no_period": {
+    "message": "Ik snap het",
+    "description": "Button text on the DC options page."
+  },
+  "seeing_distractions": {
+    "message": "Ik zie afleidingen op deze site",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "Ik zie afleidingen",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "We hebben je voorkeuren geüpdatet.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "Zie je de afleiding nog steeds?",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "Geweldig, probleem opgelost.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "Welke afleidingen?",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "Extra informatie over de afleidingen die AdBlock Premium blokkeert, kun je [[hier]] vinden.",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "Als je je voorkeuren wilt aanpassen voor afleidingscontrole, dan kun je dat [[hier]] doen.",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "Om contact op te nemen met ons ondersteuningsteam kun je ons [[hulpcentrum]] bezoeken.",
+    "description": "Message for help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "Pop-ups van nieuwsbrieven",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "Automatisch afspelende video's",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "Enquêtes",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "Verzoeken tot \"meldingen toestaan\"",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "Volgende",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "Rapport ontvangen",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "Bedankt dat je dit probleem bij ons gemeld hebt!",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "Ons team is op de hoogte gebracht en zal nader onderzoek doen.",
+    "description": "Text for help flow in popup menu."
   },
   "adblock_logo": {
     "message": "AdBlock-logo",
@@ -2999,6 +3071,14 @@
   },
   "check_out_themes": {
     "message": "Bekijk thema's!",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "new_premium_feature": {
+    "message": "Nieuwe Premium-functie beschikbaar!",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_dc": {
+    "message": "Blokkeer meer met afleidingscontrole",
     "description": "Part 2 of a call-to-action on the Popup menu"
   },
   "notification_antiadblock_message": {
@@ -3429,6 +3509,26 @@
     "message": "Zeg maar dag tegen pop-ups van nieuwsbrieven, zwevende video's en andere irritante afleidingen met Afleidingscontrole.",
     "description": "Description of the distraction control option"
   },
+  "please_note": {
+    "message": "Let op: ",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_new": {
+    "message": "Afleidingscontrole is een nieuwe functie en er wordt nog aan gewerkt. ",
+    "description": "Description of the distraction control option"
+  },
+  "your_participation": {
+    "message": "Je deelname en feedback helpen ons om het bereik en de functionaliteit ervan te blijven verbeteren. ",
+    "description": "Description of the distraction control option"
+  },
+  "dc_more_information": {
+    "message": "Meer informatie vind je [[hier]].",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "Voorbeeld van afleidingscontrole",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
   "block_site_notifications": {
     "message": "Blokkeer sitemeldingen",
     "description": "Sub-header on the distraction control options page"
@@ -3438,11 +3538,11 @@
     "description": "Description of 'block site notifications' on the distraction control options page"
   },
   "stop_autoplay_videos": {
-    "message": "Stop automatische video's",
+    "message": "Stop zwevende video's",
     "description": "Sub-header on the distraction control options page"
   },
   "prevent_videos": {
-    "message": "Voorkom dat video's automatisch worden afgespeeld en stop 'zwevende' video's die je tijdens het surfen volgen.",
+    "message": "Voorkom dat de meeste video's automatisch worden afgespeeld en stop zwevende video's die je tijdens het surfen volgen.",
     "description": "Description of 'stop autoplay videos' on the distraction control options page"
   },
   "hide_newsletter_popups": {
@@ -3460,6 +3560,38 @@
   "dismiss_invitations": {
     "message": "Negeer direct uitnodigingen van websites voor deelname aan enquêtes.",
     "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "URL opsturen",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "Om ons te helpen het probleem op te lossen, zouden we het waarderen als je deze URL met ons wilt delen.",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "Functie uitgeschakeld",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "Het lijkt erop dat je die functie niet hebt ingeschakeld. Laten we eens kijken of de functie gebruiken het probleem verhelpt.",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "AdBlock update nu je voorkeuren.",
+    "description": "text on panel in the help flow"
+  },
+  "done_reload_page": {
+    "message": "Zodra we klaar zijn, kun je de pagina herladen.",
+    "description": "text on panel in the help flow"
+  },
+  "no_thanks": {
+    "message": "Nee, bedankt",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "Als je van gedachten verandert, kun je de extra afleidingscontrolefuncties [[hier]] inschakelen.",
+    "description": "text in the help flow"
   },
   "swap_ads_for_images": {
     "message": "Wissel advertenties om voor afbeeldingen",

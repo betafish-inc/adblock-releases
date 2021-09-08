@@ -27,9 +27,17 @@ Then install the above requirements and run the commands below from within Bash.
 
 ### Updating the dependencies
 
-In order to build the extension, you need to use the `npm run submodules:update` npm script. This build won't include the snippets library.
+In order to build the extension, you need to run the
 
-In order to create a build which includes the snippets library, you should use the `npm run submodules:update-with-snippets` npm script instead. This will work only if you have access to the [abp-snippets repository](https://gitlab.com/eyeo/adblockplus/abp-snippets).
+`npm run submodules:update`
+
+script. This build won't include the snippets library.
+
+In order to create a build which includes the snippets library, you should run the
+
+`npm run submodules:update-with-snippets`
+
+script instead. This will work only if you have access to the [abp-snippets repository](https://gitlab.com/eyeo/adblockplus/abp-snippets).
 
 _Note: when building from a source archive, the above step must be skipped._
 
@@ -43,8 +51,6 @@ Rerun the above commands when the dependencies might have changed,
 e.g. after checking out a new revison.
 
 ### Building the extension
-
-
 
 Run the following command in the project directory:
 

@@ -193,7 +193,7 @@
     "message": "Вроде, порядок",
     "description": "Confirmation button after user chose what to block on the page"
   },
-  "buttonback": {
+  "back": {
     "message": "Назад",
     "description": "Back to previous page button"
   },
@@ -542,6 +542,10 @@
   "filteranticircumvent": {
     "message": "Противообходные фильтры",
     "description": "A filter list"
+  },
+  "filternordic": {
+    "message": "Nordic Filters + EasyList",
+    "description": "A filter list combined with EasyList"
   },
   "blacklistclickmessage": {
     "message": "Щелкните по объявлению на странице правой кнопкой мыши, чтобы заблокировать его — или заблокируйте его здесь вручную.",
@@ -2673,10 +2677,6 @@
     "message": "AdBlock обновляет списки фильтров, чтобы понять, в чем может быть проблема.",
     "description": "Message for help flow in popup menu."
   },
-  "done_reload_page": {
-    "message": "Перезагрузите страницу, как только мы закончим.",
-    "description": "Message for help flow in popup menu."
-  },
   "checked_basics": {
     "message": "Мы обновили список ваших фильтров.",
     "description": "Message for help flow in popup menu."
@@ -2776,6 +2776,78 @@
   "thanks": {
     "message": "Спасибо",
     "description": "Message for help flow in popup menu."
+  },
+  "got_it_no_period": {
+    "message": "Понятно",
+    "description": "Button text on the DC options page."
+  },
+  "seeing_distractions": {
+    "message": "Некоторые элементы на этом сайте мне мешают",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "Вижу то, что мешает",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "Мы обновили ваши настройки.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "Вам все еще что-то мешает?",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "Отлично, проблема решена!",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "Что вам мешает?",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "Дополнительную информацию об отвлекающих элементах, которые может заблокировать AdBlock Premium, вы найдете [[здесь]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "Чтобы настроить управление отвлекающими элементами, перейдите [[сюда]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "Чтобы связаться с нашей службой поддержки, перейдите на страницу [[центра помощи]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "Уведомления о новостной рассылке",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "Автовоспроизведение видео",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "Опросы",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "Запросы на отображение уведомлений",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "Далее",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "Сообщение получено",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "Спасибо, что рассказали о проблеме.",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "Наша команда получила сообщение и вскоре займется проблемой.",
+    "description": "Text for help flow in popup menu."
   },
   "adblock_logo": {
     "message": "Логотип AdBlock",
@@ -2999,6 +3071,14 @@
   },
   "check_out_themes": {
     "message": "Что скажете об этих темах?",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "new_premium_feature": {
+    "message": "Доступна новая премиум-функция!",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_dc": {
+    "message": "Блокируйте еще больше отвлекающих элементов",
     "description": "Part 2 of a call-to-action on the Popup menu"
   },
   "notification_antiadblock_message": {
@@ -3429,6 +3509,26 @@
     "message": "Забудьте о всплывающих новостных рассылках, всплывающих видео и других отвлекающих элементах.",
     "description": "Description of the distraction control option"
   },
+  "please_note": {
+    "message": "Обратите внимание: ",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_new": {
+    "message": "Управление отвлекающими элементами — новая функция, находящаяся в доработке.",
+    "description": "Description of the distraction control option"
+  },
+  "your_participation": {
+    "message": "Ваше использование этой функции и обратная связь помогут нам улучшить её доступность и имеющиеся возможности. ",
+    "description": "Description of the distraction control option"
+  },
+  "dc_more_information": {
+    "message": "Подробности можно узнать [[здесь]].",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "Пример управления отвлекающими элементами",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
   "block_site_notifications": {
     "message": "Блокировка уведомлений",
     "description": "Sub-header on the distraction control options page"
@@ -3438,11 +3538,11 @@
     "description": "Description of 'block site notifications' on the distraction control options page"
   },
   "stop_autoplay_videos": {
-    "message": "Запрет на автовоспроизведение",
+    "message": "Убрать всплывающие видео",
     "description": "Sub-header on the distraction control options page"
   },
   "prevent_videos": {
-    "message": "Отключите автоматическое воспроизведение видео на сайтах. Всплывающие видео больше не будут отвлекать вас во время путешествия по интернету.",
+    "message": "Отключает автоматическое воспроизведение большей части видео на сайтах. Всплывающие видео больше не будут отвлекать вас во время просмотра веб-страниц.",
     "description": "Description of 'stop autoplay videos' on the distraction control options page"
   },
   "hide_newsletter_popups": {
@@ -3460,6 +3560,38 @@
   "dismiss_invitations": {
     "message": "Мгновенно отклоняйте приглашения сайтов принять участие опросах.",
     "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "Отправить URL",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "Отправьте нам URL страницы, чтобы нам было проще разобраться с проблемой.",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "Функция отключена",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "Похоже, у вас не включена эта функция. Попробуем включить ее, чтобы решить вашу проблему.",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "AdBlock обновляет ваши настройки.",
+    "description": "text on panel in the help flow"
+  },
+  "done_reload_page": {
+    "message": "Перезагрузите страницу, как только мы закончим.",
+    "description": "text on panel in the help flow"
+  },
+  "no_thanks": {
+    "message": "Нет, спасибо",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "Если вы передумаете, дополнительные функции управления отвлекающими элементами можно включить [[здесь]].",
+    "description": "text in the help flow"
   },
   "swap_ads_for_images": {
     "message": "Замена рекламы на изображения",

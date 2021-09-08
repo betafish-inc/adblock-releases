@@ -193,7 +193,7 @@
     "message": "Va bene",
     "description": "Confirmation button after user chose what to block on the page"
   },
-  "buttonback": {
+  "back": {
     "message": "Indietro",
     "description": "Back to previous page button"
   },
@@ -542,6 +542,10 @@
   "filteranticircumvent": {
     "message": "Filtri anti-elusione",
     "description": "A filter list"
+  },
+  "filternordic": {
+    "message": "Filtri nordici + EasyList",
+    "description": "A filter list combined with EasyList"
   },
   "blacklistclickmessage": {
     "message": "Clicca con il tasto destro la pubblicità su una pagina per bloccarla, oppure bloccala qui manualmente.",
@@ -2673,10 +2677,6 @@
     "message": "AdBlock sta aggiornando le tue liste di filtri per vedere se potrebbe essere quello il problema.",
     "description": "Message for help flow in popup menu."
   },
-  "done_reload_page": {
-    "message": "Appena la procedura sarà finita, ricarica la pagina.",
-    "description": "Message for help flow in popup menu."
-  },
   "checked_basics": {
     "message": "Abbiamo controllato le basi e aggiornato le liste di filtri.",
     "description": "Message for help flow in popup menu."
@@ -2776,6 +2776,78 @@
   "thanks": {
     "message": "Grazie",
     "description": "Message for help flow in popup menu."
+  },
+  "got_it_no_period": {
+    "message": "Capito",
+    "description": "Button text on the DC options page."
+  },
+  "seeing_distractions": {
+    "message": "Vedo degli elementi di distrazione su questo sito",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "Vedo distrazioni",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "Abbiamo aggiornato le tue preferenze.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "Vedi ancora la distrazione?",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "Fantastico, problema risolto.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "Quali elementi di distrazione?",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "[[Qui]] puoi trovare i dettagli aggiuntivi sulle distrazioni bloccate da AdBlock Premium.",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "Se vuoi regolare le preferenze per le funzioni di Controllo distrazioni, puoi farlo [[qui]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "Per contattare la squadra di assistenza, visita il nostro [[Centro assistenza]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "Pop-up sulle newsletter",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "Riproduzione automatica video",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "Sondaggi",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "Richieste \"Consenti notifiche\"",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "Avanti",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "Segnalazione ricevuta",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "Grazie per aver segnalato questo problema!",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "La nostra squadra è stata informata e svolgerà ulteriori indagini.",
+    "description": "Text for help flow in popup menu."
   },
   "adblock_logo": {
     "message": "Logo di AdBlock",
@@ -2999,6 +3071,14 @@
   },
   "check_out_themes": {
     "message": "Dai un'occhiata ai temi!",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "new_premium_feature": {
+    "message": "Nuova funzionalità Premium disponibile!",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_dc": {
+    "message": "Blocca di più con Controllo distrazioni",
     "description": "Part 2 of a call-to-action on the Popup menu"
   },
   "notification_antiadblock_message": {
@@ -3429,6 +3509,26 @@
     "message": "Di' addio ai pop-up sulle newsletter, ai video fluttuanti e ad altre distrazioni fastidiose col Controllo distrazioni.",
     "description": "Description of the distraction control option"
   },
+  "please_note": {
+    "message": "Nota: ",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_new": {
+    "message": "Controllo distrazioni è una nuova funzionalità ed è ancora in fase di perfezionamento. ",
+    "description": "Description of the distraction control option"
+  },
+  "your_participation": {
+    "message": "La tua partecipazione e feedback ci aiuteranno a continuare a migliorarne portata e funzionamento. ",
+    "description": "Description of the distraction control option"
+  },
+  "dc_more_information": {
+    "message": "Puoi trovare maggiori informazioni [[qui]].",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "Esempio Controllo distrazioni",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
   "block_site_notifications": {
     "message": "Blocco notifiche siti",
     "description": "Sub-header on the distraction control options page"
@@ -3438,11 +3538,11 @@
     "description": "Description of 'block site notifications' on the distraction control options page"
   },
   "stop_autoplay_videos": {
-    "message": "Ferma i video automatici",
+    "message": "Ferma i video fluttuanti",
     "description": "Sub-header on the distraction control options page"
   },
   "prevent_videos": {
-    "message": "Impedisci la visualizzazione automatica dei video e impedisci a quelli \"fluttuanti\" di seguirti mentre navighi.",
+    "message": "Impedisci la visualizzazione automatica della maggior parte dei video, e impedisci a quelli fluttuanti di seguirti mentre navighi.",
     "description": "Description of 'stop autoplay videos' on the distraction control options page"
   },
   "hide_newsletter_popups": {
@@ -3460,6 +3560,38 @@
   "dismiss_invitations": {
     "message": "Rifiuta immediatamente gli inviti dei siti a partecipare ai sondaggi.",
     "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "Invia URL",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "Per aiutarci a risolvere il problema, ti saremmo grati se volessi condividere con noi questo URL.",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "Funzione disattivata",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "Sembra che quella funzione non sia attiva. Vediamo se attivarla risolve il problema.",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "AdBlock sta aggiornando le tue preferenze.",
+    "description": "text on panel in the help flow"
+  },
+  "done_reload_page": {
+    "message": "Appena la procedura sarà finita, ricarica la pagina.",
+    "description": "text on panel in the help flow"
+  },
+  "no_thanks": {
+    "message": "No, grazie",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "Se cambi idea, puoi attivare funzioni aggiuntive di Controllo distrazioni [[qui]].",
+    "description": "text in the help flow"
   },
   "swap_ads_for_images": {
     "message": "Sostituisci gli annunci con le immagini",

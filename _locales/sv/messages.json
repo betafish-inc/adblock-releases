@@ -193,7 +193,7 @@
     "message": "Ser bra ut",
     "description": "Confirmation button after user chose what to block on the page"
   },
-  "buttonback": {
+  "back": {
     "message": "Tillbaka",
     "description": "Back to previous page button"
   },
@@ -542,6 +542,10 @@
   "filteranticircumvent": {
     "message": "Blockering av kringgående filter",
     "description": "A filter list"
+  },
+  "filternordic": {
+    "message": "Nordiska filter + EasyList",
+    "description": "A filter list combined with EasyList"
   },
   "blacklistclickmessage": {
     "message": "Högerklicka på en annons på en sida för att blockera den -- eller blockera den manuellt här.",
@@ -2673,10 +2677,6 @@
     "message": "AdBlock uppdaterar dina filterlistor nu för att se om det är dom som skapar problem.",
     "description": "Message for help flow in popup menu."
   },
-  "done_reload_page": {
-    "message": "Uppdatera sidan så snart vi är klara.",
-    "description": "Message for help flow in popup menu."
-  },
   "checked_basics": {
     "message": "Nu är kontroller klar och vi har uppdaterat dina filterlistor.",
     "description": "Message for help flow in popup menu."
@@ -2776,6 +2776,78 @@
   "thanks": {
     "message": "Tack",
     "description": "Message for help flow in popup menu."
+  },
+  "got_it_no_period": {
+    "message": "Jag förstår",
+    "description": "Button text on the DC options page."
+  },
+  "seeing_distractions": {
+    "message": "Jag ser distraktioner på den här sidan",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "Ser distraktioner",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "Vi har uppdaterat dina inställningar.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "Ser du fortfarande distraktionerna?",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "Perfekt! Då är problemet löst.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "Vilka distraktioner?",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "Ytterligare detaljer om distraktioner som blockerats av AdBlock Premium hittas [[här]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "Om du vill justera dina inställningar angående funktionerna för Distraktionskontroll kan du göra det [[här]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "För att kontakta vårt supportteam, besök vårt [[Hjälpcenter]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "Popups om nyhetsbrev",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "Autospelande videor",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "Undersökningar",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "Förfrågningar om att \"Tillåta aviseringar\"",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "Nästa",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "Rapport mottagen",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "Tack för din rapport om problemet!",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "Vårt team har underrättats och kommer att undersöka det.",
+    "description": "Text for help flow in popup menu."
   },
   "adblock_logo": {
     "message": "Logotyp för AdBlock",
@@ -2999,6 +3071,14 @@
   },
   "check_out_themes": {
     "message": "Kolla in våra teman!",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "new_premium_feature": {
+    "message": "Ny Premiumfunktion tillgänglig!",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_dc": {
+    "message": "Blockera mer med Distraktionskontroll",
     "description": "Part 2 of a call-to-action on the Popup menu"
   },
   "notification_antiadblock_message": {
@@ -3429,6 +3509,26 @@
     "message": "Säg farväl till popups om nyhetsbrev, flytande videor och andra irriterande distraktioner med Distraktionskontroll.",
     "description": "Description of the distraction control option"
   },
+  "please_note": {
+    "message": "OBS: ",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_new": {
+    "message": "Distraktionskontroll är en ny funktion som vi fortfarande arbetar med. ",
+    "description": "Description of the distraction control option"
+  },
+  "your_participation": {
+    "message": "Ditt deltagande och din återkoppling hjälper oss att fortsätta förbättra dess räckvidd och funktionalitet. ",
+    "description": "Description of the distraction control option"
+  },
+  "dc_more_information": {
+    "message": "Mer information hittas [[här]].",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "Exempel på Distraktionskontroll",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
   "block_site_notifications": {
     "message": "Blockera sidaviseringar",
     "description": "Sub-header on the distraction control options page"
@@ -3438,11 +3538,11 @@
     "description": "Description of 'block site notifications' on the distraction control options page"
   },
   "stop_autoplay_videos": {
-    "message": "Hindra auto-uppspelande videor",
+    "message": "Stoppa flytande videor",
     "description": "Sub-header on the distraction control options page"
   },
   "prevent_videos": {
-    "message": "Förhindra att videor spelas automatiskt och hindra \"flytande videor\" från att följa med när du surfar.",
+    "message": "Hindra de flesta videor från att spelas automatiskt och förhindra att flytande videor följer med när du surfar.",
     "description": "Description of 'stop autoplay videos' on the distraction control options page"
   },
   "hide_newsletter_popups": {
@@ -3460,6 +3560,38 @@
   "dismiss_invitations": {
     "message": "Avfärda omedelbart inbjudningar från webbplatser om att delta i undersökningar.",
     "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "Inskicka URL",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "För att hjälpa oss att felsöka skulle vi uppskatta om du kunde dela denna URL med oss.",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "Funktion Inaktiverad",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "Det verkar som att du inte har aktiverat den funktionen. Vi kan se om problemet fixas om du aktiverar den.",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "AdBlock uppdaterar nu dina inställningar.",
+    "description": "text on panel in the help flow"
+  },
+  "done_reload_page": {
+    "message": "Uppdatera sidan så snart vi är klara.",
+    "description": "text on panel in the help flow"
+  },
+  "no_thanks": {
+    "message": "Nej tack",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "Om du ändrar dig kan du aktivera ytterligare funktioner för Distraktionskontroll [[här]].",
+    "description": "text in the help flow"
   },
   "swap_ads_for_images": {
     "message": "Byt ut annonser mot bilder",

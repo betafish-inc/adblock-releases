@@ -193,7 +193,7 @@
     "message": "看起來不錯",
     "description": "Confirmation button after user chose what to block on the page"
   },
-  "buttonback": {
+  "back": {
     "message": "返回",
     "description": "Back to previous page button"
   },
@@ -542,6 +542,10 @@
   "filteranticircumvent": {
     "message": "反規避過濾條件",
     "description": "A filter list"
+  },
+  "filternordic": {
+    "message": "Nordic Filter + EasyList",
+    "description": "A filter list combined with EasyList"
   },
   "blacklistclickmessage": {
     "message": "在頁面上的廣告按右鍵以阻擋它，或從這裡手動阻擋。",
@@ -2673,10 +2677,6 @@
     "message": "AdBlock 正在更新您的過濾清單，檢查是否有問題。",
     "description": "Message for help flow in popup menu."
   },
-  "done_reload_page": {
-    "message": "請在我們完成後重新載入頁面。",
-    "description": "Message for help flow in popup menu."
-  },
   "checked_basics": {
     "message": "我們已經檢查了基本項目，並更新了您的過濾清單。",
     "description": "Message for help flow in popup menu."
@@ -2776,6 +2776,78 @@
   "thanks": {
     "message": "謝謝",
     "description": "Message for help flow in popup menu."
+  },
+  "got_it_no_period": {
+    "message": "知道了",
+    "description": "Button text on the DC options page."
+  },
+  "seeing_distractions": {
+    "message": "我在這個網站上看到干擾內容",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "看見干擾內容",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "我們已更新您的偏好設定。",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "您仍會看到干擾內容嗎？",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "太棒了！問題解決了。",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "哪些干擾內容？",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "關於 AdBlock Premium 阻擋干擾內容的詳細資訊請參閱[[此處]]。",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "如果您想調整干擾控制功能的偏好設定，請到[[此處]]。",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "若要聯絡我們的支援團隊，請前往[[幫助中心]]。",
+    "description": "Message for help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "電子報彈出視窗",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "自動播放影片",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "問卷調查",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "「允許通知」要求",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "繼續",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "已收到報告",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "感謝報告此問題！",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "我們的團隊已收到通知，將會進一步調查。",
+    "description": "Text for help flow in popup menu."
   },
   "adblock_logo": {
     "message": "AdBlock 標誌",
@@ -2999,6 +3071,14 @@
   },
   "check_out_themes": {
     "message": "快來看看各種主題！",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "new_premium_feature": {
+    "message": "新的 Premium 功能已上線！",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_dc": {
+    "message": "啟用干擾控制阻擋更多廣告",
     "description": "Part 2 of a call-to-action on the Popup menu"
   },
   "notification_antiadblock_message": {
@@ -3429,6 +3509,26 @@
     "message": "利用干擾控制功能，告別電子報彈出視窗、浮動視窗影片以及其他擾人的內容。",
     "description": "Description of the distraction control option"
   },
+  "please_note": {
+    "message": "請注意： ",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_new": {
+    "message": "干擾控制為新功能，而且仍繼續開發以臻完善。 ",
+    "description": "Description of the distraction control option"
+  },
+  "your_participation": {
+    "message": "您的參與及回饋將有助我們提升普及程度及功能性。 ",
+    "description": "Description of the distraction control option"
+  },
+  "dc_more_information": {
+    "message": "詳情請見[[此處]]。",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "干擾控制範例",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
   "block_site_notifications": {
     "message": "阻擋網站通知",
     "description": "Sub-header on the distraction control options page"
@@ -3438,11 +3538,11 @@
     "description": "Description of 'block site notifications' on the distraction control options page"
   },
   "stop_autoplay_videos": {
-    "message": "停止自動播放影片",
+    "message": "停止浮動視窗影片",
     "description": "Sub-header on the distraction control options page"
   },
   "prevent_videos": {
-    "message": "防止您瀏覽網頁時影片自動播放，亦可停止「浮動視窗」影片跟著移動。",
+    "message": "防止您瀏覽網頁時大部分影片自動播放，亦可停止浮動視窗影片跟著移動。",
     "description": "Description of 'stop autoplay videos' on the distraction control options page"
   },
   "hide_newsletter_popups": {
@@ -3460,6 +3560,38 @@
   "dismiss_invitations": {
     "message": "立即關閉網站發出的問卷調查邀請。",
     "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "送交網址",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "如果您能與我們分享此網址，協助我們排除問題，我們將不勝感激。",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "功能已停用",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "看來您並沒有啟用該功能。 讓我們看看啟用功能是否可以解決問題。",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "AdBlock 正在更新您的偏好設定。",
+    "description": "text on panel in the help flow"
+  },
+  "done_reload_page": {
+    "message": "請在我們完成後重新載入頁面。",
+    "description": "text on panel in the help flow"
+  },
+  "no_thanks": {
+    "message": "不用，謝謝",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "如果您改變主意，可以從[[這裡]]啟用額外的干擾控制功能。",
+    "description": "text in the help flow"
   },
   "swap_ads_for_images": {
     "message": "廣告交換圖片",
