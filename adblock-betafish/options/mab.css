@@ -121,6 +121,11 @@
 
 /* Start: MAB Feedback CTA */
 
+#support footer {
+  border-top: none;
+  margin: -15px -15px -15px -15px;
+}
+
 div.mab-page-box > .option-page-content {
   justify-content: space-between;
 }
@@ -131,21 +136,21 @@ div.mab-page-box > .option-page-content > footer h2 {
   color: var(--options-page-accent-text);
 }
 
-div.mab-page-box > .option-page-content > footer p {
+.myadblock_feedback_footer p {
   font-size: 16px;
   color: var(--main-text-color);
 }
 
-div.mab-page-box > .option-page-content > footer {
-  display: flex;
+.myadblock_feedback_footer {
+  display: none;
   flex-wrap: wrap;
   position: relative;
   border-top: 1px solid var(--speech-bubble-border-color);
   margin: 60px -15px -15px -15px;
 }
 
-div.mab-page-box > .option-page-content > footer::before,
-div.mab-page-box > .option-page-content > footer::after {
+.myadblock_feedback_footer::before,
+.myadblock_feedback_footer::after {
   background-color: var(--background-color);
   content: "";
   display: block;
@@ -154,24 +159,24 @@ div.mab-page-box > .option-page-content > footer::after {
   width: 15px;
 }
 
-div.mab-page-box > .option-page-content > footer::before {
+.myadblock_feedback_footer::before {
   top: -1px;
   left: -1px;
 }
 
-div.mab-page-box > .option-page-content > footer::after {
+.myadblock_feedback_footer::after {
   top: -1px;
   right: -1px;
 }
 
-div.mab-page-box > .option-page-content > footer > section {
+.myadblock_feedback_footer > section {
   flex: 1000 1 auto;
   width: min-content;
   min-width: 350px;
   margin: 15px;
 }
 
-div.mab-page-box > .option-page-content > footer > div {
+.myadblock_feedback_footer > div {
   display: flex;
   align-items: flex-start;
   justify-content: center;

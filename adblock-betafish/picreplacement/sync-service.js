@@ -26,6 +26,12 @@ const SyncService = (function getSyncService() {
   let lastGetStatusCode = 200;
   let lastGetErrorResponse = {};
   const debounceWaitTime = 3000; // time in ms before posting data
+  // Below is a list of filter list ids that have been added since the
+  // sync feature was added to AdBlock, therefore these filter lists should be sent
+  // with an ID of 'url:...' instead of the id in the betafish-subscriptions.json file
+  // any adds to the the betafish-subscriptions.json file should be added here as well.
+  const sendFilterListByURL = ['nordic', 'annoyances',
+    'fb_notifications', 'easylist_plus_romanian', 'idcac'];
 
   function setCommitVersion(newVersionNum) {
     syncCommitVersion = newVersionNum;
@@ -212,7 +218,7 @@ const SyncService = (function getSyncService() {
   const isPauseFilter = function (filterText) {
     return (
       isWhitelistFilter(filterText) && ((pausedFilterText1 === filterText)
-      || (pausedFilterText2 === filterText))
+        || (pausedFilterText2 === filterText))
     );
   };
 
@@ -338,7 +344,13 @@ const SyncService = (function getSyncService() {
     if (payload.subscriptions) {
       const currentSubs = getSubscriptionsMinusText();
       for (const id in currentSubs) {
-        if (!payload.subscriptions[id] && currentSubs[id].subscribed) {
+        const tempId = `url:${currentSubs[id].url}`;
+        if (
+          !payload.subscriptions[id]
+          && !payload.subscriptions[tempId]
+          && currentSubs[id].subscribed
+          && currentSubs[id].url
+        ) {
           const subscription = Subscription.fromURL(currentSubs[id].url);
           setTimeout(() => {
             filterStorage.removeSubscription(subscription);
@@ -613,7 +625,11 @@ const SyncService = (function getSyncService() {
 
     for (const id in subscriptions) {
       if (subscriptions[id].subscribed && subscriptions[id].url) {
-        payload.subscriptions[id] = subscriptions[id].url;
+        if (sendFilterListByURL.includes(id)) {
+          payload.subscriptions[`url:${subscriptions[id].url}`] = subscriptions[id].url;
+        } else {
+          payload.subscriptions[id] = subscriptions[id].url;
+        }
       }
     }
     payload.customFilterRules = cleanCustomFilter(getUserFilters());

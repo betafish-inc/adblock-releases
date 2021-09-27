@@ -65,7 +65,7 @@
         "http://*/*",
         "https://*/*"
       ],
-      "run_at": "document_end"
+      "run_at": "document_start"
     },
     {
       "all_frames": true,
@@ -105,7 +105,7 @@
         "https://*.xfiles.noads.it/*",
         "https://*.zoso.ro/*"
       ],
-      "run_at": "document_end"
+      "run_at": "document_start"
     },
     {
       "all_frames": true,
@@ -142,8 +142,8 @@
   ],
   "content_security_policy": "default-src 'self'; img-src 'self' blob: https://cdn.adblockcdn.com; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://getadblock.com",
   "manifest_version": 2,
-  "minimum_chrome_version": "55.0",
-  "minimum_opera_version": "42.0",
+  "minimum_chrome_version": "60.0",
+  "minimum_opera_version": "47.0",
   "name": "__MSG_name__",
   "short_name": "__MSG_name__",
   "description": "__MSG_description__",

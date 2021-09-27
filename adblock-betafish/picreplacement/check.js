@@ -439,8 +439,8 @@ const License = (function getLicense() {
     },
     shouldShowMyAdBlockEnrollment() {
       return License.isMyAdBlockEnrolled()
-             && !License.isActiveLicense()
-             && License.shouldShowPremiumCTA();
+        && !License.isActiveLicense()
+        && License.shouldShowPremiumCTA();
     },
     shouldShowPremiumCTA() {
       return !(License && License.get().suppress_premium_cta === true);
@@ -503,14 +503,13 @@ const License = (function getLicense() {
         Prefs.show_statsinicon = false;
         // wait 10 seconds to allow any other ABP setup tasks to finish
         setTimeout(() => {
-          // process currrently opened tabs
+          // process all currently opened tabs
           browser.tabs.query({}).then((tabs) => {
             for (const tab of tabs) {
-              browserAction.setBadge(tab.id, { color: '#03bcfc', number: newBadgeText });
+              if (tab.url && tab.url.startsWith('http')) {
+                browserAction.setBadge(tab.id, { color: '#03bcfc', number: newBadgeText });
+              }
             }
-            // set for new tabs
-            browser.browserAction.setBadgeBackgroundColor({ color: '#03bcfc' });
-            browser.browserAction.setBadgeText({ text: newBadgeText });
           });
         }, 10000); // 10 seconds
       } else {

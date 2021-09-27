@@ -162,7 +162,7 @@ function activateTab(tabHref) {
 const displayMABFeedbackCTA = function () {
   const lang = determineUserLanguage();
   if (lang === 'en' || lang.startsWith('en')) {
-    $('div.mab-page-box > .option-page-content > footer').removeAttr('style');
+    $('footer.myadblock_feedback_footer').css('display', 'flex');
     const $feedbackButton = $('.mab-feedback-button, #support-feedback-button');
     $feedbackButton.on('click', (e) => {
       e.preventDefault();
@@ -236,8 +236,8 @@ $(() => {
   // Note: this check is done here to minimize the chance of the user
   //       seeing the Options menu change when the 'Premium' item is removed
   if (browser.extension.getBackgroundPage()
-      && browser.extension.getBackgroundPage().License
-      && browser.extension.getBackgroundPage().License.shouldShowPremiumCTA() === false) {
+    && browser.extension.getBackgroundPage().License
+    && browser.extension.getBackgroundPage().License.shouldShowPremiumCTA() === false) {
     $('#sidebar-tabs a[href="#mab"]').parent().hide();
   }
 

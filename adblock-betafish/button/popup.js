@@ -151,7 +151,6 @@ try {
   const shown = {};
 
   browser.runtime.sendMessage({ command: 'cleanUpSevenDayAlarm' });
-  browser.runtime.sendMessage({ command: 'showIconBadgeCTA', value: false });
 
   let popupMenuTheme = 'default_theme';
   const themeCTA = '';
@@ -192,7 +191,7 @@ try {
 
       // Set menu entries appropriately for the selected tab.
       $('.menu-entry, .menu-status, .premium-cta, .separator').hide();
-      browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'popup_opened' });
+
       let tabId;
       if (document.location.search && document.location.search.indexOf('tabId') > 0) {
         const params = new URLSearchParams(document.location.search);
@@ -201,6 +200,16 @@ try {
       browser.runtime.sendMessage({ command: 'getCurrentTabInfo', tabId }).then((info) => {
         if (info) {
           try {
+            browser.browserAction.getBadgeText({ tabId: info.id }, (text) => {
+              let newBadgeText = translate('new_badge');
+              // Text that exceeds 4 characters is truncated on the toolbar badge,
+              // so we default to English
+              if (!newBadgeText || newBadgeText.length >= 5) {
+                newBadgeText = 'New';
+              }
+              browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'popup_opened', additionalParams: { isBadgeTextNew: (text === newBadgeText) } });
+              browser.runtime.sendMessage({ command: 'showIconBadgeCTA', value: false });
+            });
             if (info.settings) {
               popupMenuTheme = info.settings.color_themes.popup_menu;
             }
@@ -323,8 +332,8 @@ try {
               browser.runtime.sendMessage({ command: 'resetLastGetErrorResponse' }); // reset the code, so it doesn't show again.
             } else if (
               !info.settings.sync_settings
-                && (info.lastGetStatusCode === 403
-                    || info.lastPostStatusCode === 403)
+              && (info.lastGetStatusCode === 403
+                || info.lastPostStatusCode === 403)
             ) {
               show(['div_sync_removed_error_msg', 'sync_removed_error_msg_part_1']);
               browser.runtime.sendMessage({ command: 'resetAllSyncErrors' }); // reset all of  the errors, so it doesn't show again.
