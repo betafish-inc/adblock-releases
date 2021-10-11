@@ -16,6 +16,7 @@ $(() => {
 
   if (License.shouldShowMyAdBlockEnrollment()) {
     MABPayment.freeUserLogic(payInfo);
+    $('#get-it-now-mab').on('click', MABPayment.userClickedPremiumCTA);
     $pageTitle.text(translate('premium_page_title'));
   } else if (License.isActiveLicense()) {
     MABPayment.paidUserLogic(payInfo);

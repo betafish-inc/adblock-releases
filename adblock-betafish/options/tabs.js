@@ -3,13 +3,16 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, License, localizePage, determineUserLanguage, getStorageCookie, setStorageCookie,
    THIRTY_MINUTES_IN_MILLISECONDS, checkForUnSyncError, addUnSyncErrorClickHandler, translate,
-   splitMessageWithReplacementText, setLangAndDirAttributes */
+   splitMessageWithReplacementText, setLangAndDirAttributes, storageSet, storageGet */
 
 function tabIsLocked(tabID) {
   const $tabToActivate = $(`.tablink[href='${tabID}']`);
   const $locked = $tabToActivate.parent('li.locked');
   return !!$locked.length;
 }
+
+const userSeenNewDCPageKey = 'options_menu_dc_key';
+let userSeenNewDCPage = storageGet(userSeenNewDCPageKey);
 
 const syncMessageContainer = '<div class="sync-message-container"></div>';
 
@@ -64,6 +67,52 @@ function getSyncOutOfDateMessageDiv(id) {
       href="https://help.getadblock.com/support/solutions/articles/6000087857-how-do-i-make-sure-adblock-is-up-to-date-" target="_blank"> <span id="oldversionlink_${id}" class="sync-message-link"></span> </a>
     </div>
   </div>`;
+}
+
+function showNewIcon() {
+  $('#dcIcon').fadeOut();
+  $('a[href="#distractioncontrol"] .newItemIcon').fadeIn();
+}
+
+function showDcIcon() {
+  $('#dcIcon').fadeIn();
+  $('a[href="#distractioncontrol"] .newItemIcon').fadeOut();
+}
+
+function hideBothIcons() {
+  $('#dcIcon').fadeOut();
+  $('a[href="#distractioncontrol"] .newItemIcon').fadeOut();
+}
+
+function checkWindowWidth() {
+  const currentWidth = $(window).width();
+  const minimumWindowWidthFullMenu = 871;
+  if (!userSeenNewDCPage) {
+    showNewIcon();
+  } else if (currentWidth <= minimumWindowWidthFullMenu) {
+    if (!userSeenNewDCPage) {
+      showNewIcon();
+    } else {
+      showDcIcon();
+    }
+  } else {
+    hideBothIcons();
+  }
+}
+
+function shouldShowDCNewIcon() {
+  if (!userSeenNewDCPage) {
+    window.addEventListener('resize', checkWindowWidth);
+    checkWindowWidth();
+  }
+}
+
+function checkDCNewIcon(tabID) {
+  if (tabID === '#distractioncontrol') {
+    userSeenNewDCPage = true;
+    storageSet(userSeenNewDCPageKey, userSeenNewDCPage);
+    checkWindowWidth();
+  }
 }
 
 // Output an array of all tab ids in HTML
@@ -150,6 +199,8 @@ function activateTab(tabHref) {
   setStorageCookie('active_tab', $activeTab.attr('href'), THIRTY_MINUTES_IN_MILLISECONDS);
 
   displayActiveTab($activeTab);
+
+  checkDCNewIcon(tabID);
 }
 
 // displayMABFeedbackCTA checks if the user has set their language to english and
@@ -210,6 +261,7 @@ function loadTabPanelsHTML() {
         displayMABFeedbackCTA();
         checkForUnSyncError();
         addUnSyncErrorClickHandler();
+        shouldShowDCNewIcon();
       }
     });
   });

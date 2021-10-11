@@ -41,9 +41,11 @@ Global Styles
   --popup-card-background-color: white;
   --popup-url-text-color: #333333;
   --disabled-link-color: #c6c6c6;
-  --popup-button: #ffca00;
+  --popup-help-button-bg-color: #ffca00;
   --popup-button-text: #666666;
-  --popup-button-disabled-text: #666666;
+  --popup-button-secondary-text: var(--gray2);
+  --popup-button-disabled-text: var(--gray3);
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: var(--blue1);
   --popup-link-text-decoration: none;
   --popup-divider-line-color: #e6e6e6;
@@ -82,6 +84,11 @@ Global Styles
   --options-button-bg: #ff363b;
   --options-button-complete-bg: #10b501;
   --options-premium-badge: #666666;
+  --popup-dc-cta-background-color: #ffca00;
+  --popup-dc-cta-color: var(--gray1);
+  --popup-dc-cta-close-background-color-on-hover: #ffd949;
+  --new-item-icon-text-color: #000000;
+  --new-item-icon-bg-color: #ffca00;
   /* Defaults for all themes:
      These are all the same for the current themes,
      but might be differentiated in future themes */
@@ -107,6 +114,10 @@ Global Styles
   --image-swap-section-bg-selected: var(--background-color);
   --sync-error-msg-background-color: var(--options-button-bg-hover);
   --sync-msg-color: var(--options-button-text);
+  --dc-icon-color: var(--gray1);
+  --dc-list-title: var(--gray1);
+  --dc-warning-color: #000000;
+  --dc-warning-bg-color: #ffca00;
   /* Aliases for Themes CTA:
      normally these are defined by other custom properties, but here they are set
      with the solarized colors since it's the default Theme CTA to use */
@@ -237,6 +248,9 @@ Icons global styling (needs to @import 'fonts/font-face.css')
 }
 .material-icons.md-18 {
   font-size: 18px;
+}
+.material-icons.md-20 {
+  font-size: 20px;
 }
 .material-icons.md-24 {
   font-size: 24px;

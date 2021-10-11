@@ -10,7 +10,7 @@
 }
 #sidebar-tabs ul[data-parent-tab] {
   display: none;
-  margin-left: 41px;
+  margin-left: 34px;
   border-radius: 3px 0px 0px 3px;
   opacity: 0;
   transition: opacity 0.2s linear;
@@ -71,6 +71,20 @@
   line-height: normal;
   word-break: break-word;
 }
+.separator {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #c6c6c6;
+  width: 160px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 20px;
+}
+.newItemIcon {
+  margin-right: -18px;
+  position: relative;
+  left: -35px;
+}
 
 /* Tab content */
 
@@ -90,6 +104,7 @@
     z-index: 100;
     border-radius: 6px;
     width: fit-content;
+    white-space: nowrap;
     min-width: 188px;
     color: var(--active-tab-color, #666);
     background-color: var(--background-color, white);
@@ -97,7 +112,7 @@
     box-shadow: 0px 5px 15px rgba(10, 14, 71, 0.2);
   }
   #sidebar-tabs ul[data-parent-tab] {
-    margin-left: 15px;
+    margin-left: 0px;
     border-bottom-left-radius: 0px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -121,6 +136,17 @@
   }
   #sidebar-tabs ul[data-parent-tab] li.locked a:not(.active):hover > i.locked {
     color: #999999;
+  }
+  .separator {
+    width: 25px;
+  }
+  #sidebar-tabs .tablink.newItem {
+    margin-left: 8px;
+    padding: 2px 11px;
+  }
+  .newItemIcon {
+    left: 0px;
+    margin-right: -3px;
   }
 }
 /* RTL Language Specific rules */

@@ -43,6 +43,7 @@ const {
   unsubscribe,
   getSubscriptionsMinusText,
   getAllSubscriptionsMinusText,
+  getDCSubscriptionsMinusText,
   getIdFromURL,
   getSubscriptionInfoFromURL,
   isLanguageSpecific,
@@ -77,6 +78,7 @@ Object.assign(window, {
   recommendations,
   getSubscriptionsMinusText,
   getAllSubscriptionsMinusText,
+  getDCSubscriptionsMinusText,
   getIdFromURL,
   getSubscriptionInfoFromURL,
   ExcludeFilter,
@@ -697,6 +699,7 @@ const getCurrentTabInfo = function (secondTime, tabId) {
           customFilterCount: countCache.getCustomFilterCount(customFilterCheckUrl),
           showMABEnrollment: License.shouldShowMyAdBlockEnrollment(),
           popupMenuThemeCTA: License.getCurrentPopupMenuThemeCTA(),
+          showDcCTA: License.shouldShowPremiumDcCTA(),
           lastGetStatusCode: SyncService.getLastGetStatusCode(),
           lastGetErrorResponse: SyncService.getLastGetErrorResponse(),
           lastPostStatusCode: SyncService.getLastPostStatusCode(),
@@ -707,11 +710,12 @@ const getCurrentTabInfo = function (secondTime, tabId) {
         }
         if (License && License.isActiveLicense()) {
           result.activeLicense = true;
+          result.subscriptions = getSubscriptionsMinusText();
         }
         if (
           getSettings()
-              && getSettings().youtube_channel_whitelist
-              && parseUri(tab.url).hostname === 'www.youtube.com'
+          && getSettings().youtube_channel_whitelist
+          && parseUri(tab.url).hostname === 'www.youtube.com'
         ) {
           result.youTubeChannelName = ytChannelNamePages.get(page.id);
           // handle the odd occurence of when the  YT Channel Name
@@ -794,9 +798,9 @@ const getDebugInfo = function (callback) {
   if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
     response.otherInfo.buildtype = ' Beta';
   } else if (browser.runtime.id === 'gighmmpiobklfepjocnamgkkbiglidom'
-            || browser.runtime.id === 'aobdicepooefnbaeokijohmhjlleamfj'
-            || browser.runtime.id === 'ndcileolkflehcjpmjnfbnaibdcgglog'
-            || browser.runtime.id === 'jid1-NIfFY2CA8fy1tg@jetpack') {
+    || browser.runtime.id === 'aobdicepooefnbaeokijohmhjlleamfj'
+    || browser.runtime.id === 'ndcileolkflehcjpmjnfbnaibdcgglog'
+    || browser.runtime.id === 'jid1-NIfFY2CA8fy1tg@jetpack') {
     response.otherInfo.buildtype = ' Stable';
   } else {
     response.otherInfo.buildtype = ' Unofficial';

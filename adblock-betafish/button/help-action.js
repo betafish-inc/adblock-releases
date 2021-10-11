@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global pageInfo, transitionTo, logHelpFlowResults, filterUpdateError:true,
-  browser */
+  browser, savedData, translate */
 
 // Help flow button actions -- called when the associated buttons are clicked
 const popupMenuHelpActionMap = {
@@ -111,5 +111,61 @@ const popupMenuHelpActionMap = {
   },
   stillBrokenAdBlockAction() {
     transitionTo('stillBrokenAdBlock', false);
+  },
+  reportRecievedAction() {
+    const msg = {
+      command: 'sendDCReport',
+      url: pageInfo.url.origin + pageInfo.url.pathname,
+      type: savedData.titleText,
+      id: savedData.subId,
+    };
+    browser.runtime.sendMessage(msg).then(() => {
+      transitionTo('finishDCSubmission', false);
+    });
+  },
+  checkIfSubscribedToList(segue) {
+    const subId = segue.correlates_to_filter_list;
+    const titleText = segue.content;
+    savedData = { subId, titleText };
+    if (pageInfo && pageInfo.subscriptions && pageInfo.subscriptions[subId]) {
+      transitionTo('requestDCSubmission', false);
+    } else {
+      transitionTo('enableDCFeature', false);
+    }
+  },
+  distractionControlFeatureDisabled() {
+    transitionTo('distractionControlFeatureDisabled', false);
+  },
+  requestDCSubmission() {
+    transitionTo('requestDCSubmission', false);
+  },
+  showDCHelpPanel() {
+    transitionTo('showDCHelpPanel', false);
+  },
+  subscribeToFilterList() {
+    transitionTo('waitToRefreshPage', false);
+    const port = browser.runtime.connect({ name: 'ui' });
+    port.onMessage.addListener((message) => {
+      if (message && message.type === 'subscriptions.respond' && message.action === 'downloadStatus') {
+        setTimeout(() => { // wait at least 2 seconds for the user to see the button / icon change
+          port.disconnect();
+          $('#help_content button.button[disabled]').text(translate('reload_the_page')).attr('disabled', false);
+        }, 2000);
+      }
+    });
+
+    port.postMessage({
+      type: 'subscriptions.listen',
+      filter: ['added', 'downloadStatus'],
+    });
+
+    browser.runtime.sendMessage({ command: 'subscribe', id: savedData.subId });
+  },
+  reloadcheckedDistractions() {
+    browser.tabs.reload();
+    transitionTo('checkedDistractions', false);
+  },
+  distractionsProblemSolvedAction() {
+    transitionTo('seeingDistractionsProblemSolved', false);
   },
 };

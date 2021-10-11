@@ -70,6 +70,7 @@
                   ><span i18n="tabsupport"></span>
                 </a>
               </li>
+              <div class="separator"></div>
               <li>
                 <a href="#mab" class="tablink">
                   <i class="material-icons md-18" role="img" aria-hidden="true">account_circle</i>
@@ -89,9 +90,6 @@
                       <i class="material-icons md-18 unlocked" role="img" aria-hidden="true"
                         >image</i
                       >
-                      <i class="material-icons md-18 locked" role="img" i18n-aria-label="locked"
-                        >lock</i
-                      >
                       <span i18n="image_swap"></span>
                     </a>
                   </li>
@@ -101,6 +99,24 @@
                         >sync</i
                       >
                       <span i18n="sync_tab_item"></span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#distractioncontrol" class="tablink">
+                      <img
+                        class="newItemIcon do-not-display"
+                        id="newItemIconImg"
+                        type="image/svg+xml"
+                        src="icons/one-icon.svg"
+                      />
+                      <i
+                        class="material-icons md-18 unlocked"
+                        role="img"
+                        aria-hidden="true"
+                        id="dcIcon"
+                        >block</i
+                      >
+                      <span i18n="distraction_control"></span>
                     </a>
                   </li>
                 </ul>
@@ -173,6 +189,7 @@
       <div id="support" class="tab"></div>
       <div id="mab-image-swap" class="tab" syncMessageDiv="true" unsyncMessageDiv="true"></div>
       <div id="sync" class="tab" syncMessageDiv="true" unsyncMessage2Div="true"></div>
+      <div id="distractioncontrol" class="tab" syncMessageDiv="true" unsyncMessageDiv="true"></div>
       <div id="mab-themes" class="tab" syncMessageDiv="true" unsyncMessageDiv="true"></div>
     </div>
   </body>

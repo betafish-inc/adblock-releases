@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global selectedOff, selected, pageInfo, popupMenuHelpActionMap, browser,
-  localizePage, DOMPurify */
+  localizePage, DOMPurify, ellipsis */
 
 let cleanButtonHTML;
 let cleanSegueHTML;
@@ -33,6 +33,8 @@ $(window).on('unload', () => {
   }
 });
 
+let savedData = {};
+
 const reset = function () {
   segueBreadCrumb = [];
   $('#help_content').empty();
@@ -51,6 +53,7 @@ const reset = function () {
   // eslint-disable-next-line no-use-before-define
   selectedOff('#back_icon', backClickHandler, backKeydownHandler);
   filterUpdateError = false;
+  savedData = {};
 };
 
 // Show the next help page.
@@ -70,27 +73,36 @@ const transitionTo = function (segueToId, backIconClicked) {
     segueBreadCrumb.push(segueToId);
   }
   if (nextHelpPage.title) {
-    $('#help_title').attr('i18n', nextHelpPage.title);
+    if (nextHelpPage.title.useSavedData && savedData.titleText) {
+      $('#help_title').attr('i18n', savedData.titleText);
+    } else {
+      $('#help_title').attr('i18n', nextHelpPage.title);
+    }
   }
   const $textContainer = $('<div id="text_container">');
   $content.append($textContainer);
   // process any segues - will be displayed first
   if (Array.isArray(nextHelpPage.segues)) {
     for (const segue of nextHelpPage.segues) {
-      const $cleanCloneSegueHTML = $(cleanSegueHTML);
-      $cleanCloneSegueHTML.find('.segue-text').attr('i18n', segue.content);
-      selected($cleanCloneSegueHTML.find('.segue-box'), () => {
-        if (segue.segueToIfPaused && (pageInfo.paused || pageInfo.domainPaused)) {
-          transitionTo(segue.segueToIfPaused);
-          return;
-        }
-        if (segue.segueToIfWhitelisted && pageInfo.whitelisted) {
-          transitionTo(segue.segueToIfWhitelisted);
-          return;
-        }
-        transitionTo(segue.segueTo);
-      });
-      $textContainer.append($cleanCloneSegueHTML);
+      if (!segue.showIfPremiumUser || pageInfo.activeLicense) {
+        const $cleanCloneSegueHTML = $(cleanSegueHTML);
+        $cleanCloneSegueHTML.find('.segue-text').attr('i18n', segue.content);
+        selected($cleanCloneSegueHTML.find('.segue-box'), () => {
+          if (segue.segueToIfPaused && (pageInfo.paused || pageInfo.domainPaused)) {
+            transitionTo(segue.segueToIfPaused);
+            return;
+          }
+          if (segue.segueToIfWhitelisted && pageInfo.whitelisted) {
+            transitionTo(segue.segueToIfWhitelisted);
+            return;
+          }
+          if (segue.action && popupMenuHelpActionMap[segue.action]) {
+            popupMenuHelpActionMap[segue.action](segue);
+          }
+          transitionTo(segue.segueTo);
+        });
+        $textContainer.append($cleanCloneSegueHTML);
+      }
     }
   }
   // sections
@@ -118,45 +130,105 @@ const transitionTo = function (segueToId, backIconClicked) {
           textSpan.append(linkAnchor);
           textSpan.append(document.createTextNode(' '));
         }
-        textSpan.attr('i18n', content.text);
+        if (content.displayURL) {
+          const displayURL = ellipsis(pageInfo.url.origin + pageInfo.url.pathname, 90);
+          textSpan.text(displayURL);
+          textSpan.addClass('url-info');
+        }
+        if (content.text) {
+          textSpan.attr('i18n', content.text);
+        }
         textSpan.after('&nbsp;');
       }
     }
   }
+  // disabled checkboxes (no click handler)
+  if (nextHelpPage.disabledCheckbox) {
+    const $checkboxContainer = $('<div class="disabledCheckbox-container">');
+    const $checkbox = $('<i class="material-icons md-18 disabledCheckbox">check_box</i>');
+    const $labelElem = $('<span></span>');
+    $labelElem.text(savedData.subTitleText);
+    $checkboxContainer.append($checkbox);
+    $checkboxContainer.append($labelElem);
+    $content.append($checkboxContainer);
+  }
   // buttons
+  let multipleButton = false;
   if (Array.isArray(nextHelpPage.buttons)) {
     const $buttonContainer = $('<div class="button-container">');
-    let multipleButton = false;
     if (nextHelpPage.buttons.length > 1) {
       multipleButton = true;
     }
     for (const button of nextHelpPage.buttons) {
       const $cleanCloneButtonHTML = $(cleanButtonHTML);
-      $cleanCloneButtonHTML.find('.button-text').attr('i18n', button.text);
+      if (button.text) {
+        $cleanCloneButtonHTML.find('.button-text').attr('i18n', button.text);
+      }
       if (button.icon) {
         $cleanCloneButtonHTML.find('.button-icon').text(button.icon);
       } else {
         $cleanCloneButtonHTML.find('.button-icon').hide();
       }
-      selected($cleanCloneButtonHTML, () => {
-        if (popupMenuHelpActionMap[button.action]) {
-          popupMenuHelpActionMap[button.action]();
-        }
-      });
+      if (button.rotateIcon) {
+        $cleanCloneButtonHTML.find('.button-icon').addClass('spin-counter-clockwise');
+      }
+      if (button.disabled) {
+        $cleanCloneButtonHTML.attr('disabled', true);
+      }
+      if (button.action) {
+        selected($cleanCloneButtonHTML, () => {
+          if ($cleanCloneButtonHTML.prop('disabled')) {
+            return;
+          }
+          if (popupMenuHelpActionMap[button.action]) {
+            popupMenuHelpActionMap[button.action]();
+          }
+        });
+      }
       if (multipleButton) {
         $cleanCloneButtonHTML.addClass('multiple-button');
+      }
+      $cleanCloneButtonHTML.addClass('help-button');
+      if (button.secondaryButton) {
+        $cleanCloneButtonHTML.addClass('secondary');
+        $cleanCloneButtonHTML.removeClass('help-button');
       }
       $buttonContainer.append($cleanCloneButtonHTML);
     }
     $content.append($buttonContainer);
   }
+
   if (nextHelpPage.footer) {
-    $('#help_footer').show();
+    $('#help_footer').parent().show();
     $('#help_footer').attr('i18n', nextHelpPage.footer);
   } else {
-    $('#help_footer').hide();
+    $('#help_footer').parent().hide();
+  }
+  if (nextHelpPage.dc_help_footer) {
+    selected($('#dc_help_footer'), () => {
+      if (popupMenuHelpActionMap[nextHelpPage.dc_help_footer]) {
+        popupMenuHelpActionMap[nextHelpPage.dc_help_footer]();
+      }
+    });
+    $('#dc_help_footer').parent().show();
+  } else {
+    $('#dc_help_footer').parent().hide();
   }
   localizePage();
+  // if there's multiple buttons, make sure each of them are the same max height
+  if ($content.find('.multiple-button').length) {
+    const $buttons = $('#help_content .multiple-button');
+    $buttons.each(function outerFN() {
+      let maxHeight = 0;
+      $content.find('.multiple-button', this).each(function innerFN() {
+        if ($(this).height() > maxHeight) {
+          maxHeight = $(this).height();
+        }
+      });
+      $content.find('.multiple-button', this).css('height', maxHeight);
+    });
+  }
+
   if (backIconClicked) {
     $content.addClass('previousPage');
     $content.one('animationend', () => {
@@ -233,7 +305,7 @@ const postLoadInitialize = function () {
   $('#domain_paused_subsection').hide();
   $('#all_paused_subsection').hide();
   $('#allowlisted_subsection').hide();
-  $('#help_overlay').show();
+  $('#help_overlay').css({ display: 'flex' });
   $('#separator_help').show();
 };
 

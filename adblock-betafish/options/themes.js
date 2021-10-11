@@ -140,7 +140,6 @@
     selectCurrentThemes(colorThemes);
     showSelectedOptionsThemePreview();
     showSelectedPopupThemePreview();
-
     if (!License || $.isEmptyObject(License) || !MABPayment) {
       return;
     }
@@ -148,6 +147,7 @@
     const payInfo = MABPayment.initialize('themes');
     if (License.shouldShowMyAdBlockEnrollment()) {
       MABPayment.freeUserLogic(payInfo);
+      $('#get-it-now-themes').on('click', MABPayment.userClickedPremiumCTA);
     } else if (License.isActiveLicense()) {
       MABPayment.paidUserLogic(payInfo);
     }

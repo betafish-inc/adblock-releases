@@ -8,8 +8,11 @@
   --popup-entry-hovered-bg-color: #000000; /* unused on popup menu */
   --popup-block-ads-bg-color: #333333; /* unused on popup menu */
   --block-count-color: var(--red3);
+  --popup-help-button-bg-color: #e40d0d;
   --popup-button-text: white;
+  --popup-button-secondary-text: white;
   --popup-button-disabled-text: #333333;
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: var(--red4);
   --popup-link-text-decoration: none;
   --premium-badge-text-color: var(--gray2);
@@ -27,6 +30,11 @@
   --popup-button-reenable-hovered-text-color: white;
   --popup-yt-icon-color: #e40d0d;
   --popup-twitch-icon-color: #663399;
+  --popup-dc-cta-background-color: var(--red2);
+  --popup-dc-cta-color: white;
+  --popup-dc-cta-close-background-color-on-hover: #a60000;
+  --new-item-icon-text-color: #ffffff;
+  --new-item-icon-bg-color: #e40d0d;
 
   /* Additional for Options Page */
   --main-text-color: #f4f4f4;
@@ -81,6 +89,10 @@
   --sync-delete-bg-color: var(--gray2);
   --sync-delete-color: var(--gray5);
   --sync-delete-title-color: white;
+  --dc-icon-color: white;
+  --dc-list-title: white;
+  --dc-warning-color: #000000;
+  --dc-warning-bg-color: #ffca00;
 }
 #default_theme {
   /* Needed for Pop-up Menu */
@@ -96,8 +108,11 @@
   --popup-card-background-color: white;
   --popup-url-text-color: white;
   --disabled-link-color: #c6c6c6;
-  --popup-button-text: var(--gray2);
-  --popup-button-disabled-text: #666666;
+  --popup-help-button-bg-color: #ffca00;
+  --popup-button-text: var(--gray1);
+  --popup-button-secondary-text: var(--gray2);
+  --popup-button-disabled-text: var(--gray3);
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: var(--blue1);
   --popup-link-text-decoration: none;
   --popup-divider-line-color: var(--gray5);
@@ -109,6 +124,11 @@
   --popup-button-reenable-hovered-text-color: white;
   --popup-yt-icon-color: #e40d0d;
   --popup-twitch-icon-color: #663399;
+  --popup-dc-cta-background-color: #ffca00;
+  --popup-dc-cta-color: var(--gray1);
+  --popup-dc-cta-close-background-color-on-hover: #ffd949;
+  --new-item-icon-text-color: #000000;
+  --new-item-icon-bg-color: #ffca00;
 
   /* Additional for Options Page */
   --main-text-color: #666666;
@@ -163,6 +183,10 @@
   --sync-delete-bg-color: var(--background-color);
   --sync-delete-color: #000000;
   --sync-delete-title-color: #000000;
+  --dc-icon-color: var(--gray1);
+  --dc-list-title: var(--gray1);
+  --dc-warning-color: #000000;
+  --dc-warning-bg-color: #ffca00;
 }
 #solarized_theme,
 [data-theme-cta="solarized_theme"] {
@@ -179,8 +203,11 @@
   --popup-card-background-color: #003643;
   --popup-url-text-color: #90a2a2;
   --disabled-link-color: #c6c6c6;
+  --popup-help-button-bg-color: #e40d0d;
   --popup-button-text: #90a2a2;
+  --popup-button-secondary-text: #90a2a2;
   --popup-button-disabled-text: #666666;
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: var(--red4);
   --popup-link-text-decoration: none;
   --popup-divider-line-color: #366066;
@@ -192,6 +219,12 @@
   --popup-button-reenable-hovered-text-color: white;
   --popup-yt-icon-color: #e40d0d;
   --popup-twitch-icon-color: #663399;
+  --popup-dc-cta-background-color: var(--red2);
+  --popup-dc-cta-color: white;
+  --popup-dc-cta-close-background-color-on-hover: #a60000;
+  --new-item-icon-text-color: #ffffff;
+  --new-item-icon-bg-color: #e40d0d;
+
   /* Additional for Options Page */
   --main-text-color: #90a2a2;
   --background-color: #003643;
@@ -250,6 +283,10 @@
   --popup-themes-cta-background: #003643;
   --popup-themes-cta-background-on-hover: #00a498;
   --popup-themes-cta-color-on-hover: #003643;
+  --dc-icon-color: var(--gray1);
+  --dc-list-title: #90a2a2;
+  --dc-warning-color: #ffffff;
+  --dc-warning-bg-color: #ffca00;
 }
 #solarized_light_theme,
 [data-theme-cta="solarized_light_theme"] {
@@ -266,8 +303,11 @@
   --popup-card-background-color: #fdf6e3;
   --popup-url-text-color: #657b83;
   --disabled-link-color: #c6c6c6;
+  --popup-help-button-bg-color: #e40d0d;
   --popup-button-text: #76898d;
+  --popup-button-secondary-text: #657b83;
   --popup-button-disabled-text: #666666;
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: var(--red3);
   --popup-link-text-decoration: none;
   --popup-divider-line-color: #eee8d5;
@@ -279,6 +319,12 @@
   --popup-button-reenable-hovered-text-color: white;
   --popup-yt-icon-color: #e40d0d;
   --popup-twitch-icon-color: #663399;
+  --popup-dc-cta-background-color: var(--red2);
+  --popup-dc-cta-color: white;
+  --popup-dc-cta-close-background-color-on-hover: #a60000;
+  --new-item-icon-text-color: #ffffff;
+  --new-item-icon-bg-color: #e40d0d;
+
   /* Additional for Options Page */
   --main-text-color: #607c84;
   --background-color: #fdf6e3;
@@ -337,6 +383,10 @@
   --popup-themes-cta-background: #fdf6e3;
   --popup-themes-cta-background-on-hover: #00a498;
   --popup-themes-cta-color-on-hover: #fdf6e3;
+  --dc-icon-color: var(--gray1);
+  --dc-list-title: #657b83;
+  --dc-warning-color: #000000;
+  --dc-warning-bg-color: #ffca00;
 }
 #rebecca_purple_theme {
   /* Needed for Pop-up Menu */
@@ -352,8 +402,11 @@
   --popup-card-background-color: #663399;
   --popup-url-text-color: white;
   --disabled-link-color: #c6c6c6;
+  --popup-help-button-bg-color: #4ecdf9;
   --popup-button-text: white;
+  --popup-button-secondary-text: white;
   --popup-button-disabled-text: #666666;
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: #4ecdf9;
   --popup-link-text-decoration: none;
   --popup-divider-line-color: #b399cc;
@@ -365,6 +418,10 @@
   --popup-button-reenable-hovered-text-color: var(--gray1);
   --popup-yt-icon-color: #e40d0d;
   --popup-twitch-icon-color: white;
+  --popup-dc-cta-background-color: #4ecdf9;
+  --popup-dc-cta-color: #48226e;
+  --popup-dc-cta-close-background-color-on-hover: #86e0ff;
+
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
@@ -387,8 +444,11 @@
   --popup-card-background-color: var(--red2);
   --popup-url-text-color: white;
   --disabled-link-color: #c6c6c6;
+  --popup-help-button-bg-color: white;
   --popup-button-text: white;
+  --popup-button-secondary-text: white;
   --popup-button-disabled-text: #666666;
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: white;
   --popup-link-text-decoration: underline;
   --popup-divider-line-color: #f18686;
@@ -400,6 +460,10 @@
   --popup-button-reenable-hovered-text-color: white;
   --popup-yt-icon-color: white;
   --popup-twitch-icon-color: #663399;
+  --popup-dc-cta-background-color: white;
+  --popup-dc-cta-color: var(--gray1);
+  --popup-dc-cta-close-background-color-on-hover: #f18686;
+
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
@@ -427,8 +491,11 @@
   --popup-card-background-color: #03bcfc;
   --popup-url-text-color: white;
   --disabled-link-color: #c6c6c6;
+  --popup-help-button-bg-color: white;
   --popup-button-text: white;
+  --popup-button-secondary-text: white;
   --popup-button-disabled-text: #666666;
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: white;
   --popup-link-text-decoration: underline;
   --popup-divider-line-color: #81defe;
@@ -440,6 +507,10 @@
   --popup-button-reenable-hovered-text-color: white;
   --popup-yt-icon-color: #e40d0d;
   --popup-twitch-icon-color: #663399;
+  --popup-dc-cta-background-color: white;
+  --popup-dc-cta-color: var(--gray1);
+  --popup-dc-cta-close-background-color-on-hover: #86e0ff;
+
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated
@@ -467,8 +538,11 @@
   --popup-card-background-color: var(--yellow2);
   --popup-url-text-color: white;
   --disabled-link-color: #c6c6c6;
+  --popup-help-button-bg-color: white;
   --popup-button-text: white;
+  --popup-button-secondary-text: white;
   --popup-button-disabled-text: #666666;
+  --popup-button-disabled-background-color: var(--gray5);
   --popup-link-text: #ffd780;
   --popup-link-text-decoration: none;
   --popup-divider-line-color: #ffd780;
@@ -480,6 +554,10 @@
   --popup-button-reenable-hovered-text-color: var(--gray1);
   --popup-yt-icon-color: #e40d0d;
   --popup-twitch-icon-color: #663399;
+  --popup-dc-cta-background-color: white;
+  --popup-dc-cta-color: var(--gray1);
+  --popup-dc-cta-close-background-color-on-hover: #ffd780;
+
   /* Aliases of other properties:
      These are currently all defined by other
      custom properties, but might be further differentiated

@@ -352,6 +352,7 @@ const onSyncDataInitialGetError = function () {
     const payInfo = MABPayment.initialize('sync');
     if (License.shouldShowMyAdBlockEnrollment()) {
       MABPayment.freeUserLogic(payInfo);
+      $('#get-it-now-sync').on('click', MABPayment.userClickedPremiumCTA);
     } else if (License.isActiveLicense()) {
       MABPayment.paidUserLogic(payInfo);
     }

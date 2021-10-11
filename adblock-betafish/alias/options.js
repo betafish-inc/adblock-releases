@@ -28,7 +28,7 @@
 
 import { checkAllowlisted } from "../../adblockplusui/adblockpluschrome/lib/allowlisting.js";
 import * as info from "info";
-import { port } from "./messaging.js";
+import { port } from "messaging.js";
 
 const optionsUrl = browser.runtime.getManifest().options_ui.page;
 

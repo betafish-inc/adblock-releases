@@ -215,6 +215,7 @@ if (info.application === 'gecko') {
   };
 
   const freeUserSetup = function () {
+    $('#get-it-now-image-swap').on('click', MABPayment.userClickedPremiumCTA);
     $('input.invisible-overlay').prop('hidden', true);
     $('.channel-box > a[id^=get-it-now]').closest('li').addClass('locked');
     $('.channel-box').first().closest('li').addClass('selected');
@@ -312,7 +313,7 @@ if (info.application === 'gecko') {
         browser.storage.local.get(listing.url).then((savedImage) => {
           if (
             savedImage[listing.url]
-              && savedImage[listing.url].src
+            && savedImage[listing.url].src
           ) {
             generatePreviewThumbnail(savedImage[listing.url].src, listing.url);
           } else {

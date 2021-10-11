@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global ext, browser, require, storageGet, storageSet, log, STATS, Channels, Prefs,
    getSettings, setSetting, translate, reloadOptionsPageTabs, filterNotifier, openTab,
-   emitPageBroadcast, SyncService */
+   emitPageBroadcast, SyncService, Subscription, filterStorage, unsubscribe */
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
@@ -11,8 +11,10 @@ const { EventEmitter } = require('events');
 const { checkAllowlisted } = require('../../adblockplusui/adblockpluschrome/lib/allowlisting');
 const browserAction = require('../../adblockplusui/adblockpluschrome/lib/browserAction');
 const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
+const { loadAdBlockSnippets } = require('./../alias/contentFiltering');
 
 const licenseNotifier = new EventEmitter();
+const newBadgeShownForDCKey = 'new_badge_shown_dc';
 
 const License = (function getLicense() {
   const isProd = true;
@@ -24,6 +26,7 @@ const License = (function getLicense() {
   const pageReloadedOnSettingChangeKey = 'page_reloaded_on_user_settings_change';
   const licenseAlarmName = 'licenseAlarm';
   const sevenDayAlarmName = 'sevenDayLicenseAlarm';
+
   let theLicense;
   const fiveMinutes = 300000;
   const initialized = false;
@@ -342,6 +345,10 @@ const License = (function getLicense() {
         SyncService.disableSync();
       }
       setSetting('color_themes', { popup_menu: 'default_theme', options_page: 'default_theme' });
+      unsubscribe({ id: 'distraction-control-push' });
+      unsubscribe({ id: 'distraction-control-newsletter' });
+      unsubscribe({ id: 'distraction-control-survey' });
+      unsubscribe({ id: 'distraction-control-video' });
       browser.alarms.clear(licenseAlarmName);
     },
     ready() {
@@ -407,6 +414,7 @@ const License = (function getLicense() {
         }, delay);
       }
       setSetting('picreplacement', false);
+      loadAdBlockSnippets();
     },
     getFormattedActiveSinceDate() {
       if (
@@ -441,6 +449,9 @@ const License = (function getLicense() {
       return License.isMyAdBlockEnrolled()
         && !License.isActiveLicense()
         && License.shouldShowPremiumCTA();
+    },
+    shouldShowPremiumDcCTA() {
+      return (License && License.isActiveLicense() && License.get().suppress_premium_cta !== true);
     },
     shouldShowPremiumCTA() {
       return !(License && License.get().suppress_premium_cta === true);
@@ -518,8 +529,15 @@ const License = (function getLicense() {
         if (typeof storedValue === 'boolean') {
           Prefs.show_statsinicon = storedValue;
           storageSet(statsInIconKey); // remove the data, since we no longer need it
-
-          browser.browserAction.setBadgeText({ text: '' });
+          browser.tabs.query({}).then((tabs) => {
+            for (const tab of tabs) {
+              browser.browserAction.setBadgeText({
+                tabId: tab.id,
+                text: '',
+              });
+            }
+          });
+          browser.browserAction.setBadgeText({ text: ' ' });
         }
       }
     },
@@ -636,6 +654,14 @@ Promise.all([onInstalledPromise, License.ready(), onBehaviorPromise]).then((deta
       License.addSevenDayAlarmStateListener();
       browser.storage.local.set({ [License.sevenDayAlarmName]: true });
     }
+    // on update, show 'new' badge text to Premium users
+    if (detailsArray[0].reason === 'update' && License.isActiveLicense()) {
+      const newBadgeShownForDC = storageGet(newBadgeShownForDCKey);
+      if (newBadgeShownForDC === undefined) {
+        storageSet(newBadgeShownForDCKey, true);
+        License.showIconBadgeCTA(true);
+      }
+    }
   }
 });
 
@@ -645,13 +671,32 @@ License.ready().then(() => {
     if (!(request.message === 'load_my_adblock')) {
       return;
     }
-    if (sender.url && sender.url.startsWith('http') && getSettings().picreplacement) {
+    if (
+      License.isActiveLicense()
+      && sender.url
+      && sender.url.startsWith('http')
+      && getSettings().picreplacement
+    ) {
       const logError = function (e) {
         // eslint-disable-next-line no-console
         console.error(e);
       };
       browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement-image-sizes-map.js', frameId: sender.frameId, runAt: 'document_start' }).catch(logError);
       browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement.js', frameId: sender.frameId, runAt: 'document_start' }).catch(logError);
+    }
+    const subscription = Subscription.fromURL('https://cdn.adblockcdn.com/filters/distraction-control-push.txt');
+    if (
+      License.isActiveLicense()
+      && sender.url
+      && sender.url.startsWith('http')
+      && filterStorage.hasSubscription(subscription)
+      && !checkAllowlisted(new ext.Page(sender.tab))
+    ) {
+      const logError = function (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      };
+      browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement-push-notification-wrapper-cs.js', runAt: 'document_start' }).catch(logError);
     }
     sendResponse({});
   });
@@ -735,6 +780,9 @@ License.ready().then(() => {
       sendResponse({ url: License.MAB_CONFIG[request.url] });
     }
   });
+  if (License.isActiveLicense()) {
+    loadAdBlockSnippets();
+  }
 });
 
 License.initialize(() => {

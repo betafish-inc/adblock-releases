@@ -173,7 +173,7 @@ const setLangAndDirAttributes = function (el) {
       localeInfo
       && localeInfo.bidiDir === 'rtl'
       && (window.location.protocol.startsWith('moz-extension:')
-      || window.location.protocol.startsWith('chrome-extension:'))) {
+        || window.location.protocol.startsWith('chrome-extension:'))) {
       let lang = determineUserLanguage();
       // For RTL languages, only update the directionality of the page if
       // an appropriate locale message file is bundled with the extension
@@ -553,6 +553,30 @@ function debounced(delay, fn) {
   };
 }
 
+// Return a copy of value that has been truncated with an ellipsis in
+// the middle if it is too long.
+// Inputs: valueToTruncate:string - value to truncate
+//         maxSize?:int - max size above which to truncate, defaults to 50
+const ellipsis = function ellipsis(valueToTruncate, maxSize) {
+  let value = valueToTruncate;
+  let size = maxSize;
+
+  if (!value) {
+    return value;
+  }
+
+  if (!size) {
+    size = 50;
+  }
+
+  const half = size / 2 - 2; // With ellipsis, the total length will be ~= size
+  if (value.length > size) {
+    value = (`${value.substring(0, half)}...${value.substring(value.length - half)}`);
+  }
+
+  return value;
+};
+
 Object.assign(window, {
   sessionStorageSet,
   sessionStorageGet,
@@ -575,4 +599,5 @@ Object.assign(window, {
   getStorageCookie,
   THIRTY_MINUTES_IN_MILLISECONDS,
   debounced,
+  ellipsis,
 });

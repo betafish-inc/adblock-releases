@@ -130,10 +130,12 @@ FilterListUtil.prepareSubscriptions = (subs) => {
   for (const id in subs) {
     if (id) {
       const entry = subs[id];
-      entry.label = translateIDs(id);
-      entry.id = id;
-      const filterListType = FilterListUtil.getFilterListType(entry);
-      filterListSections[filterListType].array.push(entry);
+      if (entry && entry.type !== 'distraction-control') {
+        entry.label = translateIDs(id);
+        entry.id = id;
+        const filterListType = FilterListUtil.getFilterListType(entry);
+        filterListSections[filterListType].array.push(entry);
+      }
     }
   }
 
@@ -855,8 +857,10 @@ CustomFilterListUploadUtil.bindControls = () => {
     const subscribeTo = `url:${url}`;
 
     const existingFilterList = FilterListUtil.checkUrlForExistingFilterList(url);
-
     if (existingFilterList) {
+      if (existingFilterList.type === 'distraction-control') {
+        return;
+      }
       CustomFilterListUploadUtil.updateExistingFilterList(existingFilterList);
     } else if (/^https?:\/\/[^<]+$/.test(url)) {
       CustomFilterListUploadUtil.performUpload(url, subscribeTo);
@@ -877,6 +881,9 @@ CustomFilterListUploadUtil.bindControls = () => {
 };
 
 function onFilterChangeHandler(action, item) {
+  if (item && item.type === 'distraction-control') {
+    return;
+  }
   // A user can either add, remove or update a filter list from the UI.
   // Each 'subscription.added' action leads to a 'subscription.updated' so we
   // can show the CTAs simply when a subscription is either removed or updated

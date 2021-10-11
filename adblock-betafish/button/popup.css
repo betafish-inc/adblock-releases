@@ -117,7 +117,6 @@ a {
 }
 
 /* PREMIUM CTAs */
-
 .premium-cta {
   display: flex;
   align-items: stretch;
@@ -132,10 +131,12 @@ a {
 .premium-cta .cta-message {
   margin-left: 8px;
 }
-.premium-cta:hover .cta-message > span {
+.premium-cta:hover .cta-message > span,
+.premium-cta:hover .dc-cta-message > span {
   display: none;
 }
-.premium-cta:hover .cta-message::after {
+.premium-cta:hover .cta-message::after,
+.premium-cta:hover .dc-cta-message::after {
   font-weight: bold;
 }
 .cta-description {
@@ -145,11 +146,18 @@ a {
   padding: 0px 16px;
   cursor: pointer;
 }
+.dc-cta-description {
+  padding-left: 16px;
+  padding-right: 10px;
+}
 button.premium-cta-close {
   display: none;
   width: 28px;
   height: auto;
   border-radius: 0 4px 4px 0;
+}
+button.premium-dc-cta-close {
+  width: 40px;
 }
 button.premium-cta-close:hover {
   box-shadow: none;
@@ -200,6 +208,20 @@ button.premium-cta-close:hover {
 }
 .separator.hide-on-new-cta-hover {
   background-color: var(--popup-background-color);
+}
+.premium-dc-cta {
+  font-size: 13px;
+  background-color: var(--popup-dc-cta-background-color);
+  color: var(--popup-dc-cta-color);
+}
+.premium-dc-cta-close i {
+  color: var(--popup-dc-cta-color);
+}
+.premium-dc-cta:hover .dc-cta-message {
+  font-weight: bold;
+}
+.premium-dc-cta:hover .premium-dc-cta-close {
+  background-color: var(--popup-dc-cta-close-background-color-on-hover);
 }
 
 /* STATUS & SYNC */

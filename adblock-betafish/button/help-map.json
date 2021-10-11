@@ -11,6 +11,11 @@
         "content": "website_broken",
         "segueTo": "websiteBroken",
         "segueToIfPaused": "brokenPaused"
+      },
+      {
+        "content": "seeing_distractions",
+        "segueTo": "whichDistractions",
+        "showIfPremiumUser": true
       }
     ],
     "footer": "dont_know_help_me"
@@ -391,6 +396,32 @@
       }
     ]
   },
+  "whichDistractions": {
+    "title": "which_distractions",
+    "segues": [
+      {
+        "content": "newsletter_popups",
+        "correlates_to_filter_list": "distraction-control-newsletter",
+        "action": "checkIfSubscribedToList"
+      },
+      {
+        "content": "autoplay_videos",
+        "action": "checkIfSubscribedToList",
+        "correlates_to_filter_list": "distraction-control-video"
+      },
+      {
+        "content": "surveys",
+        "correlates_to_filter_list": "distraction-control-survey",
+        "action": "checkIfSubscribedToList"
+      },
+      {
+        "content": "allow_notification_requests",
+        "correlates_to_filter_list": "distraction-control-push",
+        "action": "checkIfSubscribedToList"
+      }
+    ],
+    "dc_help_footer": "showDCHelpPanel"
+  },
   "websiteBroken": {
     "title": "website_broken",
     "sections": [
@@ -497,6 +528,211 @@
       {
         "text": "ok",
         "action": "finishFlowAction"
+      }
+    ]
+  },
+  "requestDCSubmission": {
+    "title": "request_submission_permission",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "request_submission_url"
+          },
+          {
+            "displayURL": true
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "buttonsubmit",
+        "action": "reportRecievedAction"
+      }
+    ]
+  },
+  "finishDCSubmission": {
+    "title": "report_recieved",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "report_recieved_partI"
+          },
+          {
+            "text": "report_recieved_partII"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "ok",
+        "action": "finishFlowAction"
+      }
+    ]
+  },
+  "enableDCFeature": {
+    "title": {
+      "useSavedData": true
+    },
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "feature_disabled_text"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "no_thanks",
+        "action": "distractionControlFeatureDisabled",
+        "secondaryButton": true
+      },
+      {
+        "text": "trackers_button_text",
+        "action": "subscribeToFilterList"
+      }
+    ]
+  },
+  "distractionControlFeatureDisabled": {
+    "title": "feature_disabled",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "got_it"
+          },
+          {
+            "text": "where_to_enable_dc",
+            "linkURL": "/options.html#distractioncontrol"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "done",
+        "action": "finishFlowAction"
+      }
+    ]
+  },
+  "waitToRefreshPage": {
+    "title": "reload_the_page",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "updating_preferences"
+          },
+          {
+            "text": "done_reload_page"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "icon": "loop",
+        "disabled": true,
+        "action": "reloadcheckedDistractions",
+        "rotateIcon": true
+      }
+    ]
+  },
+  "refreshPageReady": {
+    "title": "reload_the_page",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "updating_preferences"
+          },
+          {
+            "text": "done_reload_page"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "reload_the_page",
+        "action": "reloadCheckAction"
+      }
+    ]
+  },
+  "checkedDistractions": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "update_preferences"
+          },
+          {
+            "text": "still_see_distractions"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "yes",
+        "action": "requestDCSubmission"
+      },
+      {
+        "text": "no",
+        "action": "distractionsProblemSolvedAction"
+      }
+    ]
+  },
+  "seeingDistractionsProblemSolved": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "awesome_problem_solved"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "done",
+        "action": "finishFlowAction"
+      }
+    ]
+  },
+  "showDCHelpPanel": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "distractions_control_details",
+            "linkURL": "https://help.getadblock.com/support/solutions/articles/6000250028-about-distraction-control"
+          }
+        ]
+      },
+      {
+        "content": [
+          {
+            "text": "distractions_control_options",
+            "linkURL": "/options.html#distractioncontrol"
+          }
+        ]
+      },
+      {
+        "content": [
+          {
+            "text": "distractions_control_help",
+            "linkURL": "https://help.getadblock.com/"
+          }
+        ]
       }
     ]
   }

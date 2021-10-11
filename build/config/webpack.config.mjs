@@ -1,4 +1,3 @@
-
 import path from 'path';
 
 const tmplLoaderPath = path.resolve('adblockplusui', 'adblockpluschrome', 'build', 'utils', 'wp-template-loader.cjs');
@@ -22,9 +21,10 @@ export default {
       './options': '../../adblock-betafish/alias/options.js',
       './icon': '../../adblock-betafish/alias/icon.js',
       subscriptionInit: '../../adblock-betafish/alias/subscriptionInit.js',
+      './filterListener': '../../../../adblock-betafish/alias/filterListener.js',
       './requestBlocker.js': '../../../adblock-betafish/alias/requestBlocker.js',
       uninstall: '../../adblock-betafish/alias/uninstall.js',
-      recommendations: '../../adblock-betafish/alias/recommendations.js',
+      './recommendations': '../../../../adblock-betafish/alias/recommendations.js',
       notificationHelper: '../../adblock-betafish/alias/notificationHelper.js',
     },
     modules: [

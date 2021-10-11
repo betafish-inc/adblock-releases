@@ -79,5 +79,10 @@ const MABPayment = (function mabPayment() {
     userClickedSyncCTA: () => {
       BG.recordGeneralMessage('options_page_sync_cta_clicked');
     },
+    userClickedPremiumCTA: () => {
+      BG.recordGeneralMessage(`options_page_premium_cta_clicked_${$('.tablink.active span').parent().attr('href').replace('#', '')
+        .replace('-', '_')
+        .replace('-', '_')}`);
+    },
   };
 }());

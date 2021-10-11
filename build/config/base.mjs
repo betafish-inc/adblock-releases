@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '4.37.0',
+  version: '4.38.0',
   webpack: {
     bundles: [
       {
@@ -13,7 +13,7 @@ export default {
           'adblockplusui/adblockpluschrome/lib/popupBlocker.js',
           'adblockplusui/adblockpluschrome/lib/stats.js',
           'adblockplusui/adblockpluschrome/lib/csp.js',
-          'adblockplusui/adblockpluschrome/lib/contentFiltering.js',
+          'adblock-betafish/alias/contentFiltering.js',
           'adblockplusui/adblockpluschrome/lib/messageResponder.js',
           'adblockplusui/adblockpluschrome/lib/filterConfiguration.js',
           'adblockplusui/adblockpluschrome/lib/ml.js',
@@ -41,6 +41,7 @@ export default {
           'adblock-betafish/picreplacement/unknown-channel.js',
           'adblock-betafish/picreplacement/check.js',
           'adblock-betafish/picreplacement/sync-service.js',
+          'adblock-betafish/picreplacement/distraction-control-bg.js',
           'adblock-betafish/getselectors.js',
           'adblock-betafish/data_migration.js',
           'adblock-betafish/twitchSettings.js',
@@ -242,6 +243,14 @@ export default {
         src: 'adblock-betafish/options/general.html',
       },
       {
+        dest: 'adblock-options-distractioncontrol.js',
+        src: 'adblock-betafish/options/distractioncontrol.js',
+      },
+      {
+        dest: 'adblock-options-distractioncontrol.html',
+        src: 'adblock-betafish/options/distractioncontrol.html',
+      },
+      {
         dest: 'adblock-options-filters.js',
         src: 'adblock-betafish/options/filters.js',
       },
@@ -382,6 +391,10 @@ export default {
         src: 'adblock-betafish/picreplacement/image-sizes-map.js',
       },
       {
+        dest: 'adblock-picreplacement-push-notification-wrapper-cs.js',
+        src: 'adblock-betafish/picreplacement/push-notification-wrapper-cs.js',
+      },
+      {
         dest: 'adblock-options-mab.html',
         src: 'adblock-betafish/options/mab.html',
       },
@@ -452,6 +465,10 @@ export default {
       {
         dest: 'snippets.min.js',
         src: 'vendor/abp-snippets/dist/*snippets.min.js',
+      },
+      {
+        dest: 'adblock-snippets.js',
+        src: 'adblock-betafish/alias/adblock-snippets.js',
       },
       {
         dest: 'icons/ab-16.png',

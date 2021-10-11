@@ -146,8 +146,10 @@ document.addEventListener('readystatechange', () => {
 try {
   const popupMenuCtaClosedKey = 'popup_menu_cta_closed';
   const showPopupMenuThemesCtaKey = 'popup_menu_themes_cta';
+  const popupMenuDCCtaClosedKey = 'popup_menu_dc_cta_closed';
   const userClosedCta = storageGet(popupMenuCtaClosedKey);
   const showThemesCTA = storageGet(showPopupMenuThemesCtaKey);
+  const userClosedDCCta = storageGet(popupMenuDCCtaClosedKey);
   const shown = {};
 
   browser.runtime.sendMessage({ command: 'cleanUpSevenDayAlarm' });
@@ -316,6 +318,9 @@ try {
               browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'premium_themes_cta_seen', additionalParams: { theme: info.popupMenuThemeCTA.replace('_theme', '') } });
             } else if (info.showMABEnrollment && !userClosedCta) {
               show(['div_myadblock_enrollment_v2']);
+            } else if (info.showDcCTA && !userClosedDCCta && !info.disabledSite) {
+              show(['div_premium_dc_cta']);
+              browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'premium_dc_cta_seen' });
             }
 
             if (info.activeLicense === true) {
@@ -492,6 +497,7 @@ try {
       });
 
       selected('#svg_options', () => {
+        storageSet(popupMenuDCCtaClosedKey, true);
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'options_clicked' });
         browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html') }).then(() => {
           closeAndReloadPopup();
@@ -532,6 +538,22 @@ try {
         storageSet(showPopupMenuThemesCtaKey, false);
       });
 
+      selected('#div_premium_dc_cta', (event) => {
+        event.stopPropagation();
+        storageSet(popupMenuDCCtaClosedKey, true);
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'premium_dc_cta_clicked' });
+        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html#distractioncontrol') }).then(() => {
+          closeAndReloadPopup();
+        });
+      });
+
+      selected('#close-premium-dc-cta', (event) => {
+        event.stopPropagation();
+        storageSet(popupMenuDCCtaClosedKey, true);
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'premium_dc_cta_closed' });
+        $('#div_premium_dc_cta').slideUp();
+      });
+
       selected('#help_link', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'feedback_clicked' });
         if (!pageInfo.disabledSite) {
@@ -555,6 +577,12 @@ try {
         $('#mab_new_cta_text').text(translate('new_cta_hovered_text'));
       }).on('mouseleave', () => {
         $('#mab_new_cta_text').text(translate('new_cta_default_text'));
+      });
+
+      $('#div_premium_dc_cta').on('mouseenter', () => {
+        $('#dc-cta-text').text(translate('check_out_dc'));
+      }).on('mouseleave', () => {
+        $('#dc-cta-text').text(translate('new_premium_feature'));
       });
 
       $('#div_premium_themes_cta').on('mouseenter', function handleIn() {
