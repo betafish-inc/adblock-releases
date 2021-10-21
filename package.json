@@ -25,7 +25,8 @@
     "install-abp-ui": "npm install --only=production --loglevel=error --no-audit --no-fund --no-optional --prefix ./adblockplusui/",
     "post-install-abp-ui": "npm run dist --prefix ./adblockplusui/",
     "install-abp-chrome": "npm install --no-audit --no-fund --no-optional --prefix ./adblockplusui/adblockpluschrome/",
-    "install-snippets": "npm install --loglevel=error --no-audit --no-fund --no-optional --prefix ./vendor/abp-snippets || echo 'Skipping abp-snippets installation'"
+    "install-snippets": "npm install --loglevel=error --no-audit --no-fund --no-optional --prefix ./vendor/abp-snippets || echo 'Skipping abp-snippets installation'",
+    "build":"npx gulp devenv -t chrome"
   },
   "devDependencies": {
     "eslint": "^7.9.0",
@@ -54,10 +55,5 @@
     "gulp-vinyl-zip": "^2.2.1",
     "merge-stream": "^2.0.0",
     "stylelint": "^12.0.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "sh ./noMasterCommits.sh && lint-staged"
-    }
   }
 }
