@@ -11,7 +11,7 @@ const gabHostnamesWithProtocal = ['https://getadblock.com', 'http://dev.getadblo
 let abort = (function shouldAbort() {
   if (document instanceof HTMLDocument === false) {
     if (document instanceof XMLDocument === false
-            || document.createElement('div') instanceof HTMLDivElement === false) {
+      || document.createElement('div') instanceof HTMLDivElement === false) {
       return true;
     }
   }
@@ -31,7 +31,7 @@ if (!abort) {
       let hn = '';
       let max = 10;
       try {
-        for (;;) {
+        for (; ;) {
           hn = win.location.hostname;
           if (hn !== '') {
             return hn;
@@ -137,10 +137,10 @@ function receiveMessage(event) {
       const adblockVersion = browser.runtime.getManifest().version;
       const elem = document.createElement('script');
       const scriptToInject = `(${getAdblockDomain.toString()})();`
-            + `(${cleanup.toString()})();`
-            + `(${getAdblockDomainWithUserID.toString()})('${adblockUserId}');`
-            + `(${getAdblockExtId.toString()})('${browser.runtime.id}');`
-            + `(${getAdblockVersion.toString()})('${adblockVersion}');`;
+        + `(${cleanup.toString()})();`
+        + `(${getAdblockDomainWithUserID.toString()})('${adblockUserId}');`
+        + `(${getAdblockExtId.toString()})('${browser.runtime.id}');`
+        + `(${getAdblockVersion.toString()})('${adblockVersion}');`;
       elem.appendChild(document.createTextNode(scriptToInject));
       try {
         (document.head || document.documentElement).appendChild(elem);
@@ -222,6 +222,22 @@ const runBandaids = function () {
           };
         }
       }
+
+      // Listen to clicks 'here' link on the Fall 2021 /update page
+      const optionPageLinks = document.querySelectorAll('#distractionControlLink,#distractionControlHere');
+      if (optionPageLinks.length) {
+        for (let i = 0; i < optionPageLinks.length; ++i) {
+          optionPageLinks[i].onclick = function clickHandler(event) {
+            if (event.isTrusted === false) {
+              return;
+            }
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#distractioncontrol' });
+          };
+        }
+      }
+
 
       // add click handler for adblock subscribe clicks
       // similiar to the code here:
