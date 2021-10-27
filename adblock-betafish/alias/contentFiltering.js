@@ -23,64 +23,84 @@
 
 /** @module contentFiltering */
 
-"use strict";
+'use strict'
 
-const { contentTypes } = require("../../adblockplusui/adblockpluschrome/adblockpluscore/lib/contentTypes");
+const {
+  contentTypes,
+} = require('../../adblockplusui/adblockpluschrome/adblockpluscore/lib/contentTypes')
 const {
   elemHide,
   createStyleSheet,
-  rulesFromStyleSheet
-} = require("../../adblockplusui/adblockpluschrome/adblockpluscore/lib/elemHide");
+  rulesFromStyleSheet,
+} = require('../../adblockplusui/adblockpluschrome/adblockpluscore/lib/elemHide')
 const {
-  elemHideEmulation
-} = require("../../adblockplusui/adblockpluschrome/adblockpluscore/lib/elemHideEmulation");
-const { filterNotifier } = require("../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterNotifier");
-const { snippets, compileScript } = require("../../adblockplusui/adblockpluschrome/adblockpluscore/lib/snippets");
-const { checkAllowlisted } = require("../../adblockplusui/adblockpluschrome/lib/allowlisting");
-const { extractHostFromFrame } = require("../../adblockplusui/adblockpluschrome/lib/url");
-const { port } = require("../../adblockplusui/adblockpluschrome/lib/messaging");
-const { HitLogger, logRequest } = require("../../adblockplusui/adblockpluschrome/lib/hitLogger");
-const { recordBlockedRequest } = require("../../adblockplusui/adblockpluschrome/lib/stats");
-const { Prefs } = require("../../adblockplusui/adblockpluschrome/lib/prefs");
-const info = require("info");
+  elemHideEmulation,
+} = require('../../adblockplusui/adblockpluschrome/adblockpluscore/lib/elemHideEmulation')
+const {
+  filterNotifier,
+} = require('../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterNotifier')
+const {
+  snippets,
+  compileScript,
+} = require('../../adblockplusui/adblockpluschrome/adblockpluscore/lib/snippets')
+const {
+  checkAllowlisted,
+} = require('../../adblockplusui/adblockpluschrome/lib/allowlisting')
+const {
+  extractHostFromFrame,
+} = require('../../adblockplusui/adblockpluschrome/lib/url')
+const { port } = require('../../adblockplusui/adblockpluschrome/lib/messaging')
+const {
+  HitLogger,
+  logRequest,
+} = require('../../adblockplusui/adblockpluschrome/lib/hitLogger')
+const {
+  recordBlockedRequest,
+} = require('../../adblockplusui/adblockpluschrome/lib/stats')
+const { Prefs } = require('../../adblockplusui/adblockpluschrome/lib/prefs')
+const info = require('info')
 
-const DEBUG_CSS_PROPERTIES = [["background", "#e67370"], ["outline", "solid red"]];
+const DEBUG_CSS_PROPERTIES = [
+  ['background', '#e67370'],
+  ['outline', 'solid red'],
+]
 
 const DEBUG_CSS_PROPERTIES_SNIPPETS = [
   [
-    "background",
-    "repeating-linear-gradient(to bottom, " + "#e67370 0, #e67370 9px, white 9px, white 10px)"
+    'background',
+    'repeating-linear-gradient(to bottom, ' +
+      '#e67370 0, #e67370 9px, white 9px, white 10px)',
   ],
-  ["outline", "solid red"]
-];
+  ['outline', 'solid red'],
+]
 
 // Chromium's support for tabs.removeCSS is still a work in progress and the
 // API is likely to be different from Firefox's; for now we just don't use it
 // at all, even if it's available.
 // See https://crbug.com/608854
-const styleSheetRemovalSupported = info.platform == "gecko";
+const styleSheetRemovalSupported = info.platform == 'gecko'
 
-let userStyleSheetsSupported = true;
+let userStyleSheetsSupported = true
 
-let snippetsLibrarySource = "";
+let snippetsLibrarySource = ''
 
 function addStyleSheet(tabId, frameId, styleSheet) {
   try {
     let promise = browser.tabs.insertCSS(tabId, {
       code: styleSheet,
-      cssOrigin: "user",
+      cssOrigin: 'user',
       frameId,
       matchAboutBlank: true,
-      runAt: "document_start"
-    });
+      runAt: 'document_start',
+    })
 
     // See error handling notes in the catch block.
-    promise.catch(() => { });
+    promise.catch(() => {})
   } catch (error) {
     // If the error is about the "cssOrigin" option, this is an older version
     // of Chromium (65 and below) or Firefox (52 and below) that does not
     // support user style sheets.
-    if (/\bcssOrigin\b/.test(error.message)) userStyleSheetsSupported = false;
+    if (/\bcssOrigin\b/.test(error.message)) userStyleSheetsSupported = false
 
     // For other errors, we simply return false to indicate failure.
     //
@@ -96,32 +116,39 @@ function addStyleSheet(tabId, frameId, styleSheet) {
     // Firefox, while on Chromium it is an asychronous promise rejection. In
     // the latter case, we cannot indicate failure to the caller, but we still
     // explicitly ignore the error.
-    return false;
+    return false
   }
 
-  return true;
+  return true
 }
 
 function removeStyleSheet(tabId, frameId, styleSheet) {
-  if (!styleSheetRemovalSupported) return;
+  if (!styleSheetRemovalSupported) return
 
   browser.tabs.removeCSS(tabId, {
     code: styleSheet,
-    cssOrigin: "user",
+    cssOrigin: 'user',
     frameId,
-    matchAboutBlank: true
-  });
+    matchAboutBlank: true,
+  })
 }
 
-function updateFrameStyles(tabId, frameId, styleSheet, groupName = "standard", appendOnly = false) {
-  let frame = ext.getFrame(tabId, frameId);
-  if (!frame) return false;
+function updateFrameStyles(
+  tabId,
+  frameId,
+  styleSheet,
+  groupName = 'standard',
+  appendOnly = false
+) {
+  let frame = ext.getFrame(tabId, frameId)
+  if (!frame) return false
 
-  if (!frame.state.injectedStyleSheets) frame.state.injectedStyleSheets = new Map();
+  if (!frame.state.injectedStyleSheets)
+    frame.state.injectedStyleSheets = new Map()
 
-  let oldStyleSheet = frame.state.injectedStyleSheets.get(groupName);
+  let oldStyleSheet = frame.state.injectedStyleSheets.get(groupName)
 
-  if (appendOnly && oldStyleSheet) styleSheet = oldStyleSheet + styleSheet;
+  if (appendOnly && oldStyleSheet) styleSheet = oldStyleSheet + styleSheet
 
   // Ideally we would compare the old and new style sheets and skip this code
   // if they're the same. But first we need to ensure that there are no edge
@@ -131,49 +158,52 @@ function updateFrameStyles(tabId, frameId, styleSheet, groupName = "standard", a
 
   // Add the new style sheet first to keep previously hidden elements from
   // reappearing momentarily.
-  if (styleSheet && !addStyleSheet(tabId, frameId, styleSheet)) return false;
+  if (styleSheet && !addStyleSheet(tabId, frameId, styleSheet)) return false
 
   // Sometimes the old and new style sheets can be exactly the same. In such a
   // case, do not remove the "old" style sheet, because it is in fact the new
   // style sheet now.
-  if (oldStyleSheet && oldStyleSheet != styleSheet) removeStyleSheet(tabId, frameId, oldStyleSheet);
+  if (oldStyleSheet && oldStyleSheet != styleSheet)
+    removeStyleSheet(tabId, frameId, oldStyleSheet)
 
   // The standard style sheet is ~660 KB per frame (as of Adblock Plus 3.3.2).
   // Keeping it in memory would only really be useful on Firefox, which allows
   // us to remove it via the tabs.removeCSS API. By choosing not to hold on to
   // it, we save potentially several megabytes per tab (#6967).
-  if (groupName != "standard") frame.state.injectedStyleSheets.set(groupName, styleSheet);
-  return true;
+  if (groupName != 'standard')
+    frame.state.injectedStyleSheets.set(groupName, styleSheet)
+  return true
 }
 
 function executeScripts(scripts, tabId, frameId) {
   try {
-    let environment = {};
-    if (Prefs.elemhide_debug) environment.debugCSSProperties = DEBUG_CSS_PROPERTIES_SNIPPETS;
+    let environment = {}
+    if (Prefs.elemhide_debug)
+      environment.debugCSSProperties = DEBUG_CSS_PROPERTIES_SNIPPETS
 
     let details = {
       frameId,
       code: compileScript(scripts, [snippetsLibrarySource], environment),
       matchAboutBlank: true,
-      runAt: "document_start"
-    };
+      runAt: 'document_start',
+    }
 
-    return browser.tabs.executeScript(tabId, details).catch(error => {
+    return browser.tabs.executeScript(tabId, details).catch((error) => {
       // Sometimes a frame is added and removed very quickly, in such cases we
       // simply ignore the error.
-      if (error.message == "The frame was removed.") return;
+      if (error.message == 'The frame was removed.') return
 
       // Sometimes the frame in question is just not found. We don't know why
       // this is exactly, but we simply ignore the error.
-      if (/^No frame with id \d+ in tab \d+\.$/.test(error.message)) return;
+      if (/^No frame with id \d+ in tab \d+\.$/.test(error.message)) return
 
-      throw error;
-    });
+      throw error
+    })
   } catch (error) {
     // See the comment in the catch block associated with the call to
     // tabs.insertCSS for why we catch any error here and simply
     // return a rejected promise.
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
 }
 
@@ -199,38 +229,40 @@ function executeScripts(scripts, tabId, frameId) {
  *                                  "elemhide, "snippets" or both.
  * @returns {contentApplyFiltersResult}
  */
-port.on("content.applyFilters", (message, sender) => {
-  let styleSheet = { code: "", selectors: [] };
-  let emulatedPatterns = [];
-  let trace = HitLogger.hasListener(sender.page.id);
-  let debug = Prefs.elemhide_debug;
-  let inline = !userStyleSheetsSupported;
+port.on('content.applyFilters', (message, sender) => {
+  let styleSheet = { code: '', selectors: [] }
+  let emulatedPatterns = []
+  let trace = HitLogger.hasListener(sender.page.id)
+  let debug = Prefs.elemhide_debug
+  let inline = !userStyleSheetsSupported
 
-  let filterTypes = message.filterTypes || { elemhide: true, snippets: true };
+  let filterTypes = message.filterTypes || { elemhide: true, snippets: true }
 
-  if (!checkAllowlisted(sender.page, sender.frame, null, contentTypes.DOCUMENT)) {
-    let docDomain = extractHostFromFrame(sender.frame);
+  if (
+    !checkAllowlisted(sender.page, sender.frame, null, contentTypes.DOCUMENT)
+  ) {
+    let docDomain = extractHostFromFrame(sender.frame)
 
     if (filterTypes.snippets) {
-      let filters = snippets.getFilters(docDomain);
+      let filters = snippets.getFilters(docDomain)
       if (filters.length) {
-        let scripts = filters.filter(ok => ok).map(({ script }) => script);
+        let scripts = filters.filter((ok) => ok).map(({ script }) => script)
         executeScripts(scripts, sender.page.id, sender.frame.id).then(() => {
           for (let filter of filters) {
-            let tabIds = [sender.page.id];
-            if (filter) recordBlockedRequest(filter, tabIds);
+            let tabIds = [sender.page.id]
+            if (filter) recordBlockedRequest(filter, tabIds)
 
             logRequest(
               tabIds,
               {
                 url: sender.frame.url.href,
-                type: "SNIPPET",
-                docDomain
+                type: 'SNIPPET',
+                docDomain,
               },
               filter
-            );
+            )
           }
-        });
+        })
       }
     }
 
@@ -243,39 +275,53 @@ port.on("content.applyFilters", (message, sender) => {
         sender.frame,
         null,
         contentTypes.GENERICHIDE
-      );
-      styleSheet = elemHide.getStyleSheet(docDomain, specificOnly, trace || debug, trace);
+      )
+      styleSheet = elemHide.getStyleSheet(
+        docDomain,
+        specificOnly,
+        trace || debug,
+        trace
+      )
 
       if (debug) {
-        let declarationBlock = "{";
+        let declarationBlock = '{'
         for (let [property, value] of DEBUG_CSS_PROPERTIES)
-          declarationBlock += `${property}: ${value} !important;`;
-        declarationBlock += "}";
+          declarationBlock += `${property}: ${value} !important;`
+        declarationBlock += '}'
 
-        styleSheet.code = createStyleSheet(styleSheet.selectors, declarationBlock);
+        styleSheet.code = createStyleSheet(
+          styleSheet.selectors,
+          declarationBlock
+        )
       }
 
       for (let filter of elemHideEmulation.getFilters(docDomain))
-        emulatedPatterns.push({ selector: filter.selector, text: filter.text });
+        emulatedPatterns.push({ selector: filter.selector, text: filter.text })
     }
   }
 
-  if (!inline && !updateFrameStyles(sender.page.id, sender.frame.id, styleSheet.code))
-    inline = true;
+  if (
+    !inline &&
+    !updateFrameStyles(sender.page.id, sender.frame.id, styleSheet.code)
+  )
+    inline = true
 
-  let response = { trace, inline, emulatedPatterns };
+  let response = { trace, inline, emulatedPatterns }
 
-  if (inline) response.rules = [...rulesFromStyleSheet(styleSheet.code)];
+  if (inline) response.rules = [...rulesFromStyleSheet(styleSheet.code)]
 
   if (trace) {
-    response.selectors = styleSheet.selectors;
-    response.exceptions = styleSheet.exceptions.map(({ text, selector }) => ({ text, selector }));
+    response.selectors = styleSheet.selectors
+    response.exceptions = styleSheet.exceptions.map(({ text, selector }) => ({
+      text,
+      selector,
+    }))
   }
 
-  if (debug) response.cssProperties = DEBUG_CSS_PROPERTIES;
+  if (debug) response.cssProperties = DEBUG_CSS_PROPERTIES
 
-  return response;
-});
+  return response
+})
 
 /**
  * Inject the given CSS selectors into the page.
@@ -288,8 +334,8 @@ port.on("content.applyFilters", (message, sender) => {
  *                                  selectors.
  * @returns {?string[]} Array of CSS rules which were injected, if any.
  */
-port.on("content.injectSelectors", (message, sender) => {
-  let styleSheet = createStyleSheet(message.selectors);
+port.on('content.injectSelectors', (message, sender) => {
+  let styleSheet = createStyleSheet(message.selectors)
   if (
     !userStyleSheetsSupported ||
     !updateFrameStyles(
@@ -300,36 +346,35 @@ port.on("content.injectSelectors", (message, sender) => {
       message.appendOnly
     )
   )
-    return [...rulesFromStyleSheet(styleSheet)];
-});
+    return [...rulesFromStyleSheet(styleSheet)]
+})
 
 async function loadSnippets() {
   try {
-    let response =
-      await fetch(browser.runtime.getURL("/snippets.min.js"),
-        { cache: "no-cache" });
-    snippetsLibrarySource = response.ok ? (await response.text()) : "";
-  }
-  catch (e) {
+    let response = await fetch(browser.runtime.getURL('/snippets.min.js'), {
+      cache: 'no-cache',
+    })
+    snippetsLibrarySource = response.ok ? await response.text() : ''
+  } catch (e) {
     // If the request fails, the snippets library is not
     // bundled with the extension, so we silently ignore this error.
   }
-};
-loadSnippets();
+}
+loadSnippets()
 
 async function loadAdBlockSnippets() {
   try {
-    let adblockSnippetResponse =
-      await fetch(browser.runtime.getURL("/adblock-snippets.js"),
-        { cache: "no-cache" });
-    const abtext = adblockSnippetResponse.ok ? (await adblockSnippetResponse.text()) : "";
-    snippetsLibrarySource = snippetsLibrarySource + "\n" + abtext;
-  }
-  catch (e) {
+    let adblockSnippetResponse = await fetch(
+      browser.runtime.getURL('/adblock-snippets.js'),
+      { cache: 'no-cache' }
+    )
+    const abtext = adblockSnippetResponse.ok
+      ? await adblockSnippetResponse.text()
+      : ''
+    snippetsLibrarySource = snippetsLibrarySource + '\n' + abtext
+  } catch (e) {
     // If the request fails, the snippets library is not
     // bundled with the extension, so we silently ignore this error.
   }
-};
-exports.loadAdBlockSnippets = loadAdBlockSnippets;
-
-
+}
+exports.loadAdBlockSnippets = loadAdBlockSnippets

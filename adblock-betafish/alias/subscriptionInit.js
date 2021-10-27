@@ -2,30 +2,30 @@
 
 /** similar to adblockpluschrome\lib\subscriptionInit.js */
 
-"use strict";
+'use strict'
 
 /** @module subscriptionInit */
 
 import {
   Subscription,
   DownloadableSubscription,
-  SpecialSubscription
-} from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/subscriptionClasses.js";
-import { filterStorage } from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterStorage.js";
-import { filterEngine } from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterEngine.js";
-import { recommendations } from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/recommendations.js";
-import { notifications } from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/notifications.js";
-import { synchronizer } from "../../adblockplusui/adblockpluschrome/adblockpluscore/lib/synchronizer.js";
-import * as info from "info";
-import { port } from "messaging.js";
-import { Prefs } from "prefs.js";
-import { initNotifications } from "./notificationHelper.js";
+  SpecialSubscription,
+} from '../../adblockplusui/adblockpluschrome/adblockpluscore/lib/subscriptionClasses.js'
+import { filterStorage } from '../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterStorage.js'
+import { filterEngine } from '../../adblockplusui/adblockpluschrome/adblockpluscore/lib/filterEngine.js'
+import { recommendations } from '../../adblockplusui/adblockpluschrome/adblockpluscore/lib/recommendations.js'
+import { notifications } from '../../adblockplusui/adblockpluschrome/adblockpluscore/lib/notifications.js'
+import { synchronizer } from '../../adblockplusui/adblockpluschrome/adblockpluscore/lib/synchronizer.js'
+import * as info from 'info'
+import { port } from 'messaging.js'
+import { Prefs } from 'prefs.js'
+import { initNotifications } from './notificationHelper.js'
 
-let firstRun;
-let subscriptionsCallback = null;
-let userNotificationCallback = null;
-let reinitialized = false;
-let dataCorrupted = false;
+let firstRun
+let subscriptionsCallback = null
+let userNotificationCallback = null
+let reinitialized = false
+let dataCorrupted = false
 
 /**
  * If there aren't any filters, the default subscriptions are added.
@@ -38,22 +38,22 @@ let dataCorrupted = false;
  * and therefore will be reinitialized.
  */
 function detectFirstRun() {
-  return new Promise(resolve => {
-    firstRun = filterStorage.getSubscriptionCount() == 0;
+  return new Promise((resolve) => {
+    firstRun = filterStorage.getSubscriptionCount() == 0
 
     if (firstRun && (!filterStorage.firstRun || Prefs.currentVersion)) {
-      reinitialized = true;
+      reinitialized = true
     }
-    Prefs.currentVersion = info.addonVersion;
+    Prefs.currentVersion = info.addonVersion
 
-    browser.storage.local.get(null).then(currentData => {
-      const edgeMigrationNeeded = currentData.filter_lists;
+    browser.storage.local.get(null).then((currentData) => {
+      const edgeMigrationNeeded = currentData.filter_lists
       if (edgeMigrationNeeded && firstRun) {
-        firstRun = false;
+        firstRun = false
       }
-      resolve();
-    });
-  });
+      resolve()
+    })
+  })
 }
 
 /**
@@ -64,8 +64,8 @@ function detectFirstRun() {
  * @param {boolean} value
  */
 function setDataCorrupted(value) {
-  dataCorrupted = value;
-  notifications.ignored = value;
+  dataCorrupted = value
+  notifications.ignored = value
 }
 
 /**
@@ -85,14 +85,18 @@ function shouldAddDefaultSubscriptions() {
     if (
       subscription instanceof DownloadableSubscription &&
       subscription.url != Prefs.subscriptions_exceptionsurl &&
-      subscription.type != "circumvention"
+      subscription.type != 'circumvention'
     )
-      return false;
+      return false
 
-    if (subscription instanceof SpecialSubscription && subscription.filterCount > 0) return false;
+    if (
+      subscription instanceof SpecialSubscription &&
+      subscription.filterCount > 0
+    )
+      return false
   }
 
-  return true;
+  return true
 }
 
 /**
@@ -105,33 +109,37 @@ function shouldAddDefaultSubscriptions() {
  * @return {Array.<object>}
  */
 export function chooseFilterSubscriptions(subscriptions) {
-  let currentLang = browser.i18n.getUILanguage().split("-")[0];
-  let defaultLang = browser.runtime.getManifest().default_locale.split("_")[0];
+  let currentLang = browser.i18n.getUILanguage().split('-')[0]
+  let defaultLang = browser.runtime.getManifest().default_locale.split('_')[0]
 
-  let adSubscriptions = [];
-  let adSubscriptionsDefaultLang = [];
-  let chosenSubscriptions = [];
+  let adSubscriptions = []
+  let adSubscriptionsDefaultLang = []
+  let chosenSubscriptions = []
 
   for (let subscription of subscriptions) {
     switch (subscription.type) {
-      case "ads":
-        if (subscription.languages.includes(currentLang)) adSubscriptions.push(subscription);
+      case 'ads':
+        if (subscription.languages.includes(currentLang))
+          adSubscriptions.push(subscription)
         if (subscription.languages.includes(defaultLang))
-          adSubscriptionsDefaultLang.push(subscription);
-        break;
+          adSubscriptionsDefaultLang.push(subscription)
+        break
 
-      case "circumvention":
-        chosenSubscriptions.push(subscription);
-        break;
+      case 'circumvention':
+        chosenSubscriptions.push(subscription)
+        break
     }
   }
 
-  if (adSubscriptions.length > 0 || (adSubscriptions = adSubscriptionsDefaultLang).length > 0) {
-    let randomIndex = Math.floor(Math.random() * adSubscriptions.length);
-    chosenSubscriptions.unshift(adSubscriptions[randomIndex]);
+  if (
+    adSubscriptions.length > 0 ||
+    (adSubscriptions = adSubscriptionsDefaultLang).length > 0
+  ) {
+    let randomIndex = Math.floor(Math.random() * adSubscriptions.length)
+    chosenSubscriptions.unshift(adSubscriptions[randomIndex])
   }
 
-  return chosenSubscriptions;
+  return chosenSubscriptions
 }
 
 /**
@@ -140,104 +148,118 @@ export function chooseFilterSubscriptions(subscriptions) {
  * @return {Promise|Subscription[]}
  */
 function getSubscriptions() {
-  let subscriptions = [];
+  let subscriptions = []
 
   // Add pre-configured subscriptions
-  for (let url of Prefs.additional_subscriptions) subscriptions.push(Subscription.fromURL(url));
+  for (let url of Prefs.additional_subscriptions)
+    subscriptions.push(Subscription.fromURL(url))
 
   // Add "acceptable ads", "AdBlock Custom", and "BitCoing Mining Protection List" subscriptions
   if (firstRun) {
-    if (info.platform !== "gecko") {
-      let acceptableAdsSubscription = Subscription.fromURL(Prefs.subscriptions_exceptionsurl);
-      acceptableAdsSubscription.title = "Allow non-intrusive advertising";
-      subscriptions.push(acceptableAdsSubscription);
+    if (info.platform !== 'gecko') {
+      let acceptableAdsSubscription = Subscription.fromURL(
+        Prefs.subscriptions_exceptionsurl
+      )
+      acceptableAdsSubscription.title = 'Allow non-intrusive advertising'
+      subscriptions.push(acceptableAdsSubscription)
     }
 
     let abcSubscription = Subscription.fromURL(
-      "https://cdn.adblockcdn.com/filters/adblock_custom.txt"
-    );
-    abcSubscription.title = "AdBlock custom filters";
-    subscriptions.push(abcSubscription);
+      'https://cdn.adblockcdn.com/filters/adblock_custom.txt'
+    )
+    abcSubscription.title = 'AdBlock custom filters'
+    subscriptions.push(abcSubscription)
 
     let cplSubscription = Subscription.fromURL(
-      "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt"
-    );
-    cplSubscription.title = "Cryptocurrency (Bitcoin) Mining Protection List";
-    subscriptions.push(cplSubscription);
+      'https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt'
+    )
+    cplSubscription.title = 'Cryptocurrency (Bitcoin) Mining Protection List'
+    subscriptions.push(cplSubscription)
   }
 
   // Add default ad blocking subscriptions (e.g. EasyList, Anti-Circumvention)
-  let addDefaultSubscription = shouldAddDefaultSubscriptions();
+  let addDefaultSubscription = shouldAddDefaultSubscriptions()
   if (addDefaultSubscription || !Prefs.subscriptions_addedanticv) {
-    for (let { url, type, title, homepage } of chooseFilterSubscriptions(recommendations())) {
+    for (let { url, type, title, homepage } of chooseFilterSubscriptions(
+      recommendations()
+    )) {
       // Make sure that we don't add Easylist again if we want
       // to just add the Anti-Circumvention subscription.
-      if (!addDefaultSubscription && type != "circumvention") continue;
+      if (!addDefaultSubscription && type != 'circumvention') continue
 
-      let subscription = Subscription.fromURL(url);
-      subscription.disabled = false;
-      subscription.title = title;
-      subscription.homepage = homepage;
-      subscriptions.push(subscription);
+      let subscription = Subscription.fromURL(url)
+      subscription.disabled = false
+      subscription.title = title
+      subscription.homepage = homepage
+      subscriptions.push(subscription)
 
-      if (subscription.type == "circumvention") Prefs.subscriptions_addedanticv = true;
+      if (subscription.type == 'circumvention')
+        Prefs.subscriptions_addedanticv = true
     }
 
-    return subscriptions;
+    return subscriptions
   }
 
-  return subscriptions;
+  return subscriptions
 }
 
 function removeSubscriptions() {
-  return new Promise(function(resolve, reject) {
-    if ("managed" in browser.storage) {
+  return new Promise(function (resolve, reject) {
+    if ('managed' in browser.storage) {
       browser.storage.managed.get(null).then(
-        items => {
+        (items) => {
           for (let key in items) {
-            if (key === "remove_subscriptions" && Array.isArray(items[key]) && items[key].length) {
+            if (
+              key === 'remove_subscriptions' &&
+              Array.isArray(items[key]) &&
+              items[key].length
+            ) {
               for (let inx = 0; inx < items[key].length; inx++) {
-                let subscription = Subscription.fromURL(items[key][inx]);
-                filterStorage.removeSubscription(subscription);
+                let subscription = Subscription.fromURL(items[key][inx])
+                filterStorage.removeSubscription(subscription)
               }
             }
           }
-          resolve();
+          resolve()
         },
 
         // Opera doesn't support browser.storage.managed, but instead of simply
         // removing the API, it gives an asynchronous error which we ignore here.
         () => {
-          resolve();
+          resolve()
         }
-      );
+      )
     } else {
-      resolve();
+      resolve()
     }
-  });
+  })
 }
 
 function openInstalled() {
-  STATS.untilLoaded(function(userID) {
+  STATS.untilLoaded(function (userID) {
     browser.tabs.create({
       url:
-        "https://getadblock.com/installed/?u=" +
+        'https://getadblock.com/installed/?u=' +
         userID +
-        "&lg=" +
+        '&lg=' +
         browser.i18n.getUILanguage() +
-        "&dc=" +
-        dataCorrupted
-    });
-  });
+        '&dc=' +
+        dataCorrupted,
+    })
+  })
 }
 
 function addSubscriptionsAndNotifyUser(subscriptions) {
-  if (subscriptionsCallback) subscriptions = subscriptionsCallback(subscriptions);
+  if (subscriptionsCallback)
+    subscriptions = subscriptionsCallback(subscriptions)
 
   for (let subscription of subscriptions) {
-    filterStorage.addSubscription(subscription);
-    if (subscription instanceof DownloadableSubscription && !subscription.lastDownload)
-      synchronizer.execute(subscription);
+    filterStorage.addSubscription(subscription)
+    if (
+      subscription instanceof DownloadableSubscription &&
+      !subscription.lastDownload
+    )
+      synchronizer.execute(subscription)
   }
 
   // Show first run page or the updates page. The latter is only shown
@@ -248,31 +270,31 @@ function addSubscriptionsAndNotifyUser(subscriptions) {
     // Always show the first run page if a data corruption was detected
     // (either through failure of reading from or writing to storage.local).
     // The first run page notifies the user about the data corruption.
-    let url;
+    let url
     if (firstRun || dataCorrupted) {
       // see if the there's a tab to the Premium Sunset page, if so, don't open /installed
-      browser.tabs.query({ currentWindow: true }).then(tabs => {
+      browser.tabs.query({ currentWindow: true }).then((tabs) => {
         if (!tabs || tabs.length === 0) {
-          openInstalled();
-          return;
+          openInstalled()
+          return
         }
-        const updateFreeURL = "https://getadblockpremium.com/sunset/free/?";
-        const updatePaidURL = "https://getadblockpremium.com/sunset/paid/?";
-        const sunsetFreePageFound = tabs.some(tab => {
-          return tab && tab.url && tab.url.startsWith(updateFreeURL);
-        });
-        const sunsetPaidPageFound = tabs.some(tab => {
-          return tab && tab.url && tab.url.startsWith(updatePaidURL);
-        });
+        const updateFreeURL = 'https://getadblockpremium.com/sunset/free/?'
+        const updatePaidURL = 'https://getadblockpremium.com/sunset/paid/?'
+        const sunsetFreePageFound = tabs.some((tab) => {
+          return tab && tab.url && tab.url.startsWith(updateFreeURL)
+        })
+        const sunsetPaidPageFound = tabs.some((tab) => {
+          return tab && tab.url && tab.url.startsWith(updatePaidURL)
+        })
         if (!sunsetFreePageFound && !sunsetPaidPageFound) {
-          openInstalled();
+          openInstalled()
         }
-      });
+      })
     }
   }
 
   if (userNotificationCallback)
-    userNotificationCallback({ dataCorrupted, firstRun, reinitialized });
+    userNotificationCallback({ dataCorrupted, firstRun, reinitialized })
 }
 
 /**
@@ -280,38 +302,38 @@ function addSubscriptionsAndNotifyUser(subscriptions) {
  * before we start relying on it for storing preferences.
  */
 async function testStorage() {
-  let testKey = "readwrite_test";
-  let testValue = Math.random();
+  let testKey = 'readwrite_test'
+  let testValue = Math.random()
 
   try {
-    await browser.storage.local.set({ [testKey]: testValue });
-    let result = await browser.storage.local.get(testKey);
+    await browser.storage.local.set({ [testKey]: testValue })
+    let result = await browser.storage.local.get(testKey)
     if (result[testKey] != testValue)
-      throw new Error("Storage test: Failed to read and write value");
+      throw new Error('Storage test: Failed to read and write value')
   } finally {
-    await browser.storage.local.remove(testKey);
+    await browser.storage.local.remove(testKey)
   }
 }
 
-(async () => {
+;(async () => {
   await Promise.all([
     filterEngine.initialize().then(() => synchronizer.start()),
     Prefs.untilLoaded.catch(() => {
-      setDataCorrupted(true);
+      setDataCorrupted(true)
     }),
     testStorage().catch(() => {
-      setDataCorrupted(true);
-    })
-  ]);
-  await detectFirstRun();
-  let subscriptions = await getSubscriptions();
-  addSubscriptionsAndNotifyUser(subscriptions);
-  await removeSubscriptions();
+      setDataCorrupted(true)
+    }),
+  ])
+  await detectFirstRun()
+  let subscriptions = await getSubscriptions()
+  addSubscriptionsAndNotifyUser(subscriptions)
+  await removeSubscriptions()
   // We have to require the "uninstall" module on demand,
   // as the "uninstall" module in turn requires this module.
-  (await import("./uninstall.js")).setUninstallURL();
-  initNotifications(firstRun);
-})();
+  ;(await import('./uninstall.js')).setUninstallURL()
+  initNotifications(firstRun)
+})()
 
 /**
  * Gets a value indicating whether a data corruption was detected.
@@ -319,7 +341,7 @@ async function testStorage() {
  * @return {boolean}
  */
 export function isDataCorrupted() {
-  return dataCorrupted;
+  return dataCorrupted
 }
 
 /**
@@ -330,7 +352,7 @@ export function isDataCorrupted() {
  * @param {function} callback
  */
 export function setSubscriptionsCallback(callback) {
-  subscriptionsCallback = callback;
+  subscriptionsCallback = callback
 }
 
 /**
@@ -340,7 +362,7 @@ export function setSubscriptionsCallback(callback) {
  * @param {function} callback
  */
 export function setNotifyUserCallback(callback) {
-  userNotificationCallback = callback;
+  userNotificationCallback = callback
 }
 
 /**
@@ -358,4 +380,7 @@ export function setNotifyUserCallback(callback) {
  * @event "subscriptions.getInitIssues"
  * @returns {subscriptionsGetInitIssuesResult}
  */
-port.on("subscriptions.getInitIssues", (message, sender) => ({ dataCorrupted, reinitialized }));
+port.on('subscriptions.getInitIssues', (message, sender) => ({
+  dataCorrupted,
+  reinitialized,
+}))

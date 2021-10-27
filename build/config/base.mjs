@@ -1,4 +1,3 @@
-
 export default {
   basename: 'adblock',
   version: '4.38.0',
@@ -58,9 +57,7 @@ export default {
       },
       {
         dest: 'subscriptionLink.postload.js',
-        src: [
-          'adblockplusui/adblockpluschrome/subscriptionLink.postload.js',
-        ],
+        src: ['adblockplusui/adblockpluschrome/subscriptionLink.postload.js'],
       },
     ],
   },
@@ -68,18 +65,11 @@ export default {
     copy: [
       {
         dest: '_locales',
-        src: [
-          '_locales/**/*.json',
-        ],
+        src: ['_locales/**/*.json'],
       },
       {
         dest: 'icons',
-        src: [
-          'icons/*.png',
-          'icons/*.gif',
-          'icons/*.svg',
-          'icons/*.woff2',
-        ],
+        src: ['icons/*.png', 'icons/*.gif', 'icons/*.svg', 'icons/*.woff2'],
       },
       {
         dest: 'icons/dark_theme/',
@@ -134,9 +124,7 @@ export default {
       },
       {
         dest: 'ext',
-        src: [
-          'adblockplusui/adblockpluschrome/ext/**',
-        ],
+        src: ['adblockplusui/adblockpluschrome/ext/**'],
       },
       {
         dest: '',
@@ -600,4 +588,4 @@ export default {
     dest: '',
     src: [],
   },
-};
+}

@@ -24,17 +24,17 @@
 
 /** @module */
 
-"use strict";
+'use strict'
 
 /**
  * @fileOverview Synchronization between filter storage and the filter engine.
  */
 
-const { filterStorage } = require("filterStorage");
-const { filterNotifier } = require("filterNotifier");
-const { isActiveFilter, Filter } = require("filterClasses");
-const { SpecialSubscription } = require("subscriptionClasses");
-const { filterState } = require("filterState");
+const { filterStorage } = require('filterStorage')
+const { filterNotifier } = require('filterNotifier')
+const { isActiveFilter, Filter } = require('filterClasses')
+const { SpecialSubscription } = require('subscriptionClasses')
+const { filterState } = require('filterState')
 
 /**
  * Checks whether filters from a given subscription should be deployed to the
@@ -50,7 +50,7 @@ const { filterState } = require("filterState");
  *   to the filter engine.
  */
 function shouldDeployFilters(subscription) {
-  return subscription.valid && !subscription.disabled;
+  return subscription.valid && !subscription.disabled
 }
 
 /**
@@ -75,33 +75,34 @@ function shouldDeployFilters(subscription) {
  *   {@link module:filterStorage.filterStorage filter storage}.
  */
 function deployFilter(engine, filter, subscriptions = null) {
-  if (!isActiveFilter(filter) || !filterState.isEnabled(filter.text)) return;
+  if (!isActiveFilter(filter) || !filterState.isEnabled(filter.text)) return
 
-  let deploy = false;
-  let allowSnippets = false;
+  let deploy = false
+  let allowSnippets = false
 
-  for (let subscription of subscriptions || filterStorage.subscriptions(filter.text)) {
+  for (let subscription of subscriptions ||
+    filterStorage.subscriptions(filter.text)) {
     if (shouldDeployFilters(subscription)) {
-      deploy = true;
+      deploy = true
 
       // Allow snippets to be executed only by the circumvention lists or the
       // user's own filters.
       if (
-        subscription.type == "circumvention" ||
-        subscription.type == "distraction-control" ||
+        subscription.type == 'circumvention' ||
+        subscription.type == 'distraction-control' ||
         subscription instanceof SpecialSubscription
       ) {
-        allowSnippets = true;
-        break;
+        allowSnippets = true
+        break
       }
     }
   }
 
-  if (!deploy) return;
+  if (!deploy) return
 
-  if (!allowSnippets && filter.type == "snippet") return;
+  if (!allowSnippets && filter.type == 'snippet') return
 
-  engine.add(filter);
+  engine.add(filter)
 }
 
 /**
@@ -115,21 +116,21 @@ function deployFilter(engine, filter, subscriptions = null) {
  * @param {module:filterClasses.Filter} filter The filter.
  */
 function undeployFilter(engine, filter) {
-  if (!isActiveFilter(filter)) return;
+  if (!isActiveFilter(filter)) return
 
   if (filterState.isEnabled(filter.text)) {
-    let keep = false;
+    let keep = false
     for (let subscription of filterStorage.subscriptions(filter.text)) {
       if (shouldDeployFilters(subscription)) {
-        keep = true;
-        break;
+        keep = true
+        break
       }
     }
 
-    if (keep) return;
+    if (keep) return
   }
 
-  engine.remove(filter);
+  engine.remove(filter)
 }
 
 /**
@@ -152,14 +153,14 @@ class FilterListener {
      * @type {?module:filterEngine~FilterEngine}
      * @private
      */
-    this._engine = null;
+    this._engine = null
 
     /**
      * Increases on filter changes, filters will be saved if it exceeds 1.
      * @type {number}
      * @private
      */
-    this._isDirty = 0;
+    this._isDirty = 0
   }
 
   /**
@@ -171,16 +172,17 @@ class FilterListener {
    * @package
    */
   async initialize(engine) {
-    if (engine == null || typeof engine != "object")
-      throw new Error("engine must be a non-null object.");
+    if (engine == null || typeof engine != 'object')
+      throw new Error('engine must be a non-null object.')
 
-    if (this._engine != null) throw new Error("Filter listener already initialized.");
+    if (this._engine != null)
+      throw new Error('Filter listener already initialized.')
 
-    this._engine = engine;
+    this._engine = engine
 
-    await filterStorage.loadFromDisk();
+    await filterStorage.loadFromDisk()
 
-    let promise = Promise.resolve();
+    let promise = Promise.resolve()
 
     // Initialize filters from each subscription asynchronously on startup by
     // setting up a chain of promises.
@@ -188,37 +190,67 @@ class FilterListener {
       if (shouldDeployFilters(subscription)) {
         promise = promise.then(() => {
           for (let text of subscription.filterText())
-            deployFilter(this._engine, Filter.fromText(text), [subscription]);
-        });
+            deployFilter(this._engine, Filter.fromText(text), [subscription])
+        })
       }
     }
 
-    await promise;
+    await promise
 
-    filterNotifier.on("filter.added", this._onFilterAdded.bind(this));
-    filterNotifier.on("filter.removed", this._onFilterRemoved.bind(this));
-    filterNotifier.on("filter.moved", this._onGenericChange.bind(this));
+    filterNotifier.on('filter.added', this._onFilterAdded.bind(this))
+    filterNotifier.on('filter.removed', this._onFilterRemoved.bind(this))
+    filterNotifier.on('filter.moved', this._onGenericChange.bind(this))
 
-    filterNotifier.on("filterState.enabled", this._onFilterStateEnabled.bind(this));
-    filterNotifier.on("filterState.hitCount", this._onFilterStateHitCount.bind(this));
-    filterNotifier.on("filterState.lastHit", this._onFilterStateLastHit.bind(this));
+    filterNotifier.on(
+      'filterState.enabled',
+      this._onFilterStateEnabled.bind(this)
+    )
+    filterNotifier.on(
+      'filterState.hitCount',
+      this._onFilterStateHitCount.bind(this)
+    )
+    filterNotifier.on(
+      'filterState.lastHit',
+      this._onFilterStateLastHit.bind(this)
+    )
 
-    filterNotifier.on("subscription.added", this._onSubscriptionAdded.bind(this));
-    filterNotifier.on("subscription.removed", this._onSubscriptionRemoved.bind(this));
-    filterNotifier.on("subscription.disabled", this._onSubscriptionDisabled.bind(this));
-    filterNotifier.on("subscription.updated", this._onSubscriptionUpdated.bind(this));
-    filterNotifier.on("subscription.title", this._onGenericChange.bind(this));
-    filterNotifier.on("subscription.fixedTitle", this._onGenericChange.bind(this));
-    filterNotifier.on("subscription.homepage", this._onGenericChange.bind(this));
-    filterNotifier.on("subscription.downloadStatus", this._onGenericChange.bind(this));
-    filterNotifier.on("subscription.lastCheck", this._onGenericChange.bind(this));
-    filterNotifier.on("subscription.errors", this._onGenericChange.bind(this));
+    filterNotifier.on(
+      'subscription.added',
+      this._onSubscriptionAdded.bind(this)
+    )
+    filterNotifier.on(
+      'subscription.removed',
+      this._onSubscriptionRemoved.bind(this)
+    )
+    filterNotifier.on(
+      'subscription.disabled',
+      this._onSubscriptionDisabled.bind(this)
+    )
+    filterNotifier.on(
+      'subscription.updated',
+      this._onSubscriptionUpdated.bind(this)
+    )
+    filterNotifier.on('subscription.title', this._onGenericChange.bind(this))
+    filterNotifier.on(
+      'subscription.fixedTitle',
+      this._onGenericChange.bind(this)
+    )
+    filterNotifier.on('subscription.homepage', this._onGenericChange.bind(this))
+    filterNotifier.on(
+      'subscription.downloadStatus',
+      this._onGenericChange.bind(this)
+    )
+    filterNotifier.on(
+      'subscription.lastCheck',
+      this._onGenericChange.bind(this)
+    )
+    filterNotifier.on('subscription.errors', this._onGenericChange.bind(this))
 
-    filterNotifier.on("load", this._onLoad.bind(this));
-    filterNotifier.on("save", this._onSave.bind(this));
+    filterNotifier.on('load', this._onLoad.bind(this))
+    filterNotifier.on('save', this._onSave.bind(this))
 
     // Indicate that all filters are ready for use.
-    filterNotifier.emit("ready");
+    filterNotifier.emit('ready')
   }
 
   /**
@@ -234,104 +266,108 @@ class FilterListener {
    * @private
    */
   _setDirty(factor) {
-    if (factor == 0 && this._isDirty > 0) this._isDirty = 1;
-    else this._isDirty += factor;
+    if (factor == 0 && this._isDirty > 0) this._isDirty = 1
+    else this._isDirty += factor
     if (this._isDirty >= 1) {
-      this._isDirty = 0;
-      filterStorage.saveToDisk();
+      this._isDirty = 0
+      filterStorage.saveToDisk()
     }
   }
 
   _onSubscriptionAdded(subscription) {
-    this._setDirty(1);
+    this._setDirty(1)
 
     if (shouldDeployFilters(subscription)) {
       for (let text of subscription.filterText())
-        deployFilter(this._engine, Filter.fromText(text), [subscription]);
+        deployFilter(this._engine, Filter.fromText(text), [subscription])
     }
   }
 
   _onSubscriptionRemoved(subscription) {
-    this._setDirty(1);
+    this._setDirty(1)
 
     if (shouldDeployFilters(subscription)) {
       for (let text of subscription.filterText())
-        undeployFilter(this._engine, Filter.fromText(text));
+        undeployFilter(this._engine, Filter.fromText(text))
     }
   }
 
   _onSubscriptionDisabled(subscription, newValue) {
-    this._setDirty(1);
+    this._setDirty(1)
 
     if (filterStorage.hasSubscription(subscription)) {
       if (newValue == false) {
         for (let text of subscription.filterText())
-          deployFilter(this._engine, Filter.fromText(text), [subscription]);
+          deployFilter(this._engine, Filter.fromText(text), [subscription])
       } else {
         for (let text of subscription.filterText())
-          undeployFilter(this._engine, Filter.fromText(text));
+          undeployFilter(this._engine, Filter.fromText(text))
       }
     }
   }
 
   _onSubscriptionUpdated(subscription, textDelta) {
-    this._setDirty(1);
+    this._setDirty(1)
 
-    if (shouldDeployFilters(subscription) && filterStorage.hasSubscription(subscription)) {
-      for (let text of textDelta.removed) undeployFilter(this._engine, Filter.fromText(text));
+    if (
+      shouldDeployFilters(subscription) &&
+      filterStorage.hasSubscription(subscription)
+    ) {
+      for (let text of textDelta.removed)
+        undeployFilter(this._engine, Filter.fromText(text))
 
       for (let text of textDelta.added)
-        deployFilter(this._engine, Filter.fromText(text), [subscription]);
+        deployFilter(this._engine, Filter.fromText(text), [subscription])
     }
   }
 
   _onFilterAdded(filter) {
-    this._setDirty(1);
+    this._setDirty(1)
 
-    if (filterState.isEnabled(filter.text)) deployFilter(this._engine, filter);
+    if (filterState.isEnabled(filter.text)) deployFilter(this._engine, filter)
   }
 
   _onFilterRemoved(filter) {
-    this._setDirty(1);
+    this._setDirty(1)
 
-    if (filterState.isEnabled(filter.text)) undeployFilter(this._engine, filter);
+    if (filterState.isEnabled(filter.text)) undeployFilter(this._engine, filter)
   }
 
   _onFilterStateEnabled(text, newValue) {
-    this._setDirty(1);
+    this._setDirty(1)
 
-    if (newValue == false) undeployFilter(this._engine, Filter.fromText(text));
-    else deployFilter(this._engine, Filter.fromText(text));
+    if (newValue == false) undeployFilter(this._engine, Filter.fromText(text))
+    else deployFilter(this._engine, Filter.fromText(text))
   }
 
   _onFilterStateHitCount(text, newValue) {
-    if (newValue == 0) this._setDirty(0);
-    else this._setDirty(0.002);
+    if (newValue == 0) this._setDirty(0)
+    else this._setDirty(0.002)
   }
 
   _onFilterStateLastHit() {
-    this._setDirty(0.002);
+    this._setDirty(0.002)
   }
 
   _onGenericChange() {
-    this._setDirty(1);
+    this._setDirty(1)
   }
 
   _onLoad() {
-    this._isDirty = 0;
+    this._isDirty = 0
 
-    this._engine.clear();
+    this._engine.clear()
 
     for (let subscription of filterStorage.subscriptions()) {
       if (shouldDeployFilters(subscription)) {
         for (let text of subscription.filterText())
-          deployFilter(this._engine, Filter.fromText(text), [subscription]);
+          deployFilter(this._engine, Filter.fromText(text), [subscription])
       }
     }
   }
 
   _onSave() {
-    this._isDirty = 0;
+    this._isDirty = 0
   }
 }
 
@@ -340,4 +376,4 @@ class FilterListener {
  * @type {module:filterListener~FilterListener}
  * @package
  */
-exports.filterListener = new FilterListener();
+exports.filterListener = new FilterListener()

@@ -1,16 +1,16 @@
-'use strict';
+'use strict'
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global exports, log, registerDependencies, setDebug, debug */
 
 function querySelector(selct) {
-  return document.querySelector(selct);
+  return document.querySelector(selct)
 }
 
 function evalXPath(xpression) {
   return document
     .evaluate(xpression, document, null, XPathResult.ANY_TYPE, null)
-    .iterateNext();
+    .iterateNext()
 }
 
 /**
@@ -26,14 +26,13 @@ function clickElement(elem, delayTime) {
   setTimeout(() => {
     if (elem) {
       if (elem.click) {
-        elem.click();
+        elem.click()
       } else {
-        elem.dispatchEvent(new Event('click', { bubbles: true }));
+        elem.dispatchEvent(new Event('click', { bubbles: true }))
       }
     }
-  }, delayTime);
+  }, delayTime)
 }
-
 
 /**
  * Checks if any of the rules in the parsedArgs that
@@ -43,15 +42,15 @@ function clickElement(elem, delayTime) {
  * @param {array of objects} parsedArgs The parsed rules.
  */
 function areAllElementsClicked(parsedArgs) {
-  const debugLog = (debug ? log : () => { }).bind(null, 'areAllElementsClicked');
-  let allElementsClicked = true;
+  const debugLog = (debug ? log : () => {}).bind(null, 'areAllElementsClicked')
+  let allElementsClicked = true
   for (const arg of parsedArgs) {
     if (arg.click) {
-      allElementsClicked = allElementsClicked && arg.clicked;
+      allElementsClicked = allElementsClicked && arg.clicked
     }
   }
-  debugLog(allElementsClicked);
-  return allElementsClicked;
+  debugLog(allElementsClicked)
+  return allElementsClicked
 }
 
 /**
@@ -67,27 +66,27 @@ function areAllElementsClicked(parsedArgs) {
  *
  */
 function clickElemsIfNecessary(parsedArgs, delayTime = 0) {
-  let elemsExists = true;
+  let elemsExists = true
   for (const arg of parsedArgs) {
-    let elem;
+    let elem
     if (!arg.found) {
       if (arg.xpath) {
-        elem = evalXPath(arg.selector);
+        elem = evalXPath(arg.selector)
       } else if (!arg.xpath) {
-        elem = querySelector(arg.selector);
+        elem = querySelector(arg.selector)
       }
       if (!elem) {
-        elemsExists = false;
+        elemsExists = false
       } else {
-        arg.found = true;
+        arg.found = true
       }
     }
     if (elemsExists && arg.click && !arg.clicked) {
-      arg.clicked = true;
-      clickElement(elem, delayTime);
+      arg.clicked = true
+      clickElement(elem, delayTime)
     }
   }
-  return areAllElementsClicked(parsedArgs);
+  return areAllElementsClicked(parsedArgs)
 }
 
 /**
@@ -96,11 +95,11 @@ function clickElemsIfNecessary(parsedArgs, delayTime = 0) {
  * @param {array of objects} parsedArgs The parsed rules.
  */
 function shouldContinueMO(parsedArgs) {
-  let isContinueSet = false;
+  let isContinueSet = false
   for (const arg of parsedArgs) {
-    isContinueSet = isContinueSet || arg.continue;
+    isContinueSet = isContinueSet || arg.continue
   }
-  return isContinueSet;
+  return isContinueSet
 }
 
 /**
@@ -113,8 +112,8 @@ function shouldContinueMO(parsedArgs) {
  */
 function resetAttributes(parsedArgs) {
   for (const arg of parsedArgs) {
-    arg.clicked = false;
-    arg.found = false;
+    arg.clicked = false
+    arg.found = false
   }
 }
 
@@ -132,23 +131,31 @@ function resetAttributes(parsedArgs) {
  *
  */
 function createMO(parsedArgs, delayTimeArg) {
-  const debugLog = (debug ? log : () => { }).bind(null, 'createMO');
-  let observer;
+  const debugLog = (debug ? log : () => {}).bind(null, 'createMO')
+  let observer
   const callback = () => {
     if (clickElemsIfNecessary(parsedArgs, delayTimeArg)) {
-      debugLog('element(s) clicked');
-      observer.disconnect();
+      debugLog('element(s) clicked')
+      observer.disconnect()
       if (shouldContinueMO(parsedArgs)) {
-        resetAttributes(parsedArgs);
+        resetAttributes(parsedArgs)
         setTimeout(() => {
-          debugLog('re-connectting observer');
-          observer.observe(document, { attributes: true, childList: true, subtree: true });
-        }, (delayTimeArg + 1));
+          debugLog('re-connectting observer')
+          observer.observe(document, {
+            attributes: true,
+            childList: true,
+            subtree: true,
+          })
+        }, delayTimeArg + 1)
       }
     }
-  };
-  observer = new MutationObserver(callback);
-  observer.observe(document, { attributes: true, childList: true, subtree: true });
+  }
+  observer = new MutationObserver(callback)
+  observer.observe(document, {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  })
 }
 
 /**
@@ -176,7 +183,7 @@ function createMO(parsedArgs, delayTimeArg) {
  */
 function parseArg(theRule) {
   if (!theRule) {
-    return null;
+    return null
   }
   const result = {
     selector: '',
@@ -185,23 +192,23 @@ function parseArg(theRule) {
     click: false,
     clicked: false,
     found: false,
-  };
-  const textArr = theRule.split('$');
-  let options = [];
-  if (textArr.length >= 2) {
-    options = textArr[1].toLowerCase().split(',');
   }
-  [result.selector] = textArr;
+  const textArr = theRule.split('$')
+  let options = []
+  if (textArr.length >= 2) {
+    options = textArr[1].toLowerCase().split(',')
+  }
+  ;[result.selector] = textArr
   for (const option of options) {
     if (option === 'click') {
-      result.click = true;
+      result.click = true
     } else if (option === 'xpath') {
-      result.xpath = true;
+      result.xpath = true
     } else if (option === 'continue') {
-      result.continue = true;
+      result.continue = true
     }
   }
-  return result;
+  return result
 }
 
 /**
@@ -226,33 +233,46 @@ function parseArg(theRule) {
  */
 
 function specificClicker(...args) {
-  const debugLog = (debug ? log : () => { }).bind(null, 'specificClicker');
-  const delayTime = 100;
-  const MAX_ARGS = 7;
-  debugLog(args);
-  let parsedArgs = [];
+  const debugLog = (debug ? log : () => {}).bind(null, 'specificClicker')
+  const delayTime = 100
+  const MAX_ARGS = 7
+  debugLog(args)
+  let parsedArgs = []
   for (const arg of args) {
-    const result = parseArg(arg);
+    const result = parseArg(arg)
     if (result) {
-      parsedArgs.push(result);
+      parsedArgs.push(result)
     }
   }
 
-  if (parsedArgs.length > MAX_ARGS) { // Truncate any parameters after
-    parsedArgs = parsedArgs.slice(0, MAX_ARGS);
+  if (parsedArgs.length > MAX_ARGS) {
+    // Truncate any parameters after
+    parsedArgs = parsedArgs.slice(0, MAX_ARGS)
   }
-  const [last] = parsedArgs.slice(-1);
-  last.click = true;
+  const [last] = parsedArgs.slice(-1)
+  last.click = true
 
-  debugLog(parsedArgs);
+  debugLog(parsedArgs)
 
-  if (document.readyState === 'complete' && clickElemsIfNecessary(parsedArgs, delayTime)) {
-    debugLog('element clicked, returning');
+  if (
+    document.readyState === 'complete' &&
+    clickElemsIfNecessary(parsedArgs, delayTime)
+  ) {
+    debugLog('element clicked, returning')
   } else {
-    debugLog('creating MO');
-    createMO(parsedArgs, delayTime);
+    debugLog('creating MO')
+    createMO(parsedArgs, delayTime)
   }
 }
-registerDependencies(specificClicker, log, parseArg, createMO, clickElemsIfNecessary,
-  shouldContinueMO, clickElement, resetAttributes, areAllElementsClicked);
-exports.specificClicker = specificClicker;
+registerDependencies(
+  specificClicker,
+  log,
+  parseArg,
+  createMO,
+  clickElemsIfNecessary,
+  shouldContinueMO,
+  clickElement,
+  resetAttributes,
+  areAllElementsClicked
+)
+exports.specificClicker = specificClicker
