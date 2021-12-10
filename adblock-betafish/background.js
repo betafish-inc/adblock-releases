@@ -20,9 +20,13 @@ const { RegExpFilter, InvalidFilter, URLFilter } = require('filterClasses');
 const info = require('info');
 const { checkAllowlisted } = require('../adblockplusui/adblockpluschrome/lib/allowlisting');
 const { URLRequest } = require('../adblockplusui/adblockpluschrome/adblockpluscore/lib/url.js');
+const { getNewBadgeTextReason } = require('./alias/icon.js');
 
 // Object's used on the option, pop up, etc. pages...
 const { STATS } = require('./stats');
+
+const { CtaABManager } = require('./ctaabmanager');
+
 const { SURVEY } = require('./survey');
 const { SyncService } = require('./picreplacement/sync-service');
 const { DataCollectionV2 } = require('./datacollection.v2');
@@ -83,6 +87,8 @@ Object.assign(window, {
   getSubscriptionInfoFromURL,
   ExcludeFilter,
   URLFilter,
+  CtaABManager,
+  getNewBadgeTextReason,
 });
 
 // CUSTOM FILTERS
@@ -699,10 +705,14 @@ const getCurrentTabInfo = function (secondTime, tabId) {
           customFilterCount: countCache.getCustomFilterCount(customFilterCheckUrl),
           showMABEnrollment: License.shouldShowMyAdBlockEnrollment(),
           popupMenuThemeCTA: License.getCurrentPopupMenuThemeCTA(),
+          showVPNCTA: CtaABManager.isEnrolled(),
+          showVPNCTAVar: CtaABManager.getVar(),
+          showVPNCTAExp: CtaABManager.getExp(),
           showDcCTA: License.shouldShowPremiumDcCTA(),
           lastGetStatusCode: SyncService.getLastGetStatusCode(),
           lastGetErrorResponse: SyncService.getLastGetErrorResponse(),
           lastPostStatusCode: SyncService.getLastPostStatusCode(),
+          newBadgeTextReason: getNewBadgeTextReason(),
         };
 
         if (!disabledSite) {
@@ -796,15 +806,9 @@ if (browser.runtime.id) {
   const openUpdatedPage = function () {
     const updatedURL = getUpdatedURL();
     browser.tabs.create({ url: updatedURL }).then((tab) => {
-      // if we couldn't open a tab to '/updated_tab', send a message
       if (!tab) {
-        recordErrorMessage('updated_tab_failed_to_open');
         browser.tabs.onCreated.removeListener(waitForUserAction);
         browser.tabs.onCreated.addListener(waitForUserAction);
-        return;
-      }
-      if (updateTabRetryCount > 0) {
-        recordGeneralMessage(`updated_tab_retry_success_count_${updateTabRetryCount}`);
       }
     }).catch(() => {
       // if we couldn't open a tab to '/updated_tab', send a message
@@ -836,7 +840,7 @@ if (browser.runtime.id) {
       License.ready().then(checkQueryState);
     }
   };
-  const slashUpdateReleases = ['4.39.0', '4.39.1'];
+  const slashUpdateReleases = ['4.39.0', '4.39.1', '4.40.0', '4.41.0'];
   // Display updated page after each update
   browser.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);
@@ -978,45 +982,57 @@ const getDebugInfo = function (callback) {
                 response.otherInfo[key] = messages[i];
               }
             }
-            if (License.isActiveLicense()) {
-              response.otherInfo.licenseInfo = {};
-              response.otherInfo.licenseInfo.extensionGUID = STATS.userId();
-              response.otherInfo.licenseInfo.licenseId = License.get().licenseId;
-              if (getSettings().sync_settings) {
-                response.otherInfo.syncInfo = {};
-                response.otherInfo.syncInfo.SyncCommitVersion = SyncService.getCommitVersion();
-                response.otherInfo.syncInfo.SyncCommitName = SyncService.getCurrentExtensionName();
-                response.otherInfo.syncInfo.SyncCommitLog = SyncService.getSyncLog();
-              }
-              browser.alarms.getAll((alarms) => {
-                if (alarms && alarms.length > 0) {
-                  response.otherInfo['Alarm info'] = `length: ${alarms.length}`;
-                  for (let i = 0; i < alarms.length; i++) {
-                    const alarm = alarms[i];
-                    response.otherInfo[`${i} Alarm Name`] = alarm.name;
-                    response.otherInfo[`${i} Alarm Scheduled Time`] = new Date(alarm.scheduledTime);
-                  }
-                } else {
-                  response.otherInfo['No alarm info'] = 'No alarm info';
+            const getDebugLicenseInfo = function () {
+              if (License.isActiveLicense()) {
+                response.otherInfo.licenseInfo = {};
+                response.otherInfo.licenseInfo.extensionGUID = STATS.userId();
+                response.otherInfo.licenseInfo.licenseId = License.get().licenseId;
+                if (getSettings().sync_settings) {
+                  const syncInfo = {};
+                  syncInfo.SyncCommitVersion = SyncService.getCommitVersion();
+                  syncInfo.SyncCommitName = SyncService.getCurrentExtensionName();
+                  syncInfo.SyncCommitLog = SyncService.getSyncLog();
+                  response.otherInfo.syncInfo = syncInfo;
                 }
-                License.getLicenseInstallationDate((installdate) => {
-                  response.otherInfo['License Installation Date'] = installdate;
-                  const customChannelId = channels.getIdByName('CustomChannel');
-                  if (channels.getGuide()[customChannelId].enabled) {
-                    const customChannel = channels.channelGuide[customChannelId].channel;
-                    customChannel.getTotalBytesInUse().then((result) => {
-                      response.otherInfo['Custom Channel total bytes in use'] = result;
-                      if (typeof callback === 'function') {
-                        callback(response);
-                      }
-                    });
-                  } else if (typeof callback === 'function') {
-                    callback(response);
+                browser.alarms.getAll((alarms) => {
+                  if (alarms && alarms.length > 0) {
+                    response.otherInfo['Alarm info'] = `length: ${alarms.length}`;
+                    for (let i = 0; i < alarms.length; i++) {
+                      const alarm = alarms[i];
+                      response.otherInfo[`${i} Alarm Name`] = alarm.name;
+                      response.otherInfo[`${i} Alarm Scheduled Time`] = new Date(alarm.scheduledTime);
+                    }
+                  } else {
+                    response.otherInfo['No alarm info'] = 'No alarm info';
                   }
+                  License.getLicenseInstallationDate((installdate) => {
+                    response.otherInfo['License Installation Date'] = installdate;
+                    const customChannelId = channels.getIdByName('CustomChannel');
+                    if (channels.getGuide()[customChannelId].enabled) {
+                      const customChannel = channels.channelGuide[customChannelId].channel;
+                      customChannel.getTotalBytesInUse().then((result) => {
+                        response.otherInfo['Custom Channel total bytes in use'] = result;
+                        if (typeof callback === 'function') {
+                          callback(response);
+                        }
+                      });
+                    } else if (typeof callback === 'function') {
+                      callback(response);
+                    }
+                  });
                 });
+              } else if (typeof callback === 'function') { // License is not active
+                callback(response);
+              }
+            };
+            if (browser.permissions && browser.permissions.getAll) {
+              browser.permissions.getAll((allPermissions) => {
+                response.otherInfo.hostPermissions = allPermissions;
+                getDebugLicenseInfo();
               });
-            } else if (typeof callback === 'function') { // License is not active
-              callback(response);
+            } else {
+              response.otherInfo.hostPermissions = 'no data';
+              getDebugLicenseInfo();
             }
           });
         });
@@ -1099,6 +1115,7 @@ function isAcceptableAdsPrivacy(filterList) {
 
 const rateUsCtaKey = 'rate-us-cta-clicked';
 const vpnWaitlistCtaKey = 'vpn-waitlist-cta-clicked';
+const mailCtaKey = 'mail-cta-clicked';
 
 // Attach methods to window
 Object.assign(window, {
@@ -1132,5 +1149,6 @@ Object.assign(window, {
   isAcceptableAds,
   isAcceptableAdsPrivacy,
   rateUsCtaKey,
+  mailCtaKey,
   vpnWaitlistCtaKey,
 });

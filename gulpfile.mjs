@@ -143,9 +143,9 @@ function cleanDir() {
   return del(targetDir);
 }
 
-export const devenv = gulp.series(cleanDir, tasks.buildSnippets, buildDevenv);
+export const devenv = gulp.series(cleanDir, tasks.buildAdBlockSnippets, tasks.buildSnippets, buildDevenv);
 
-export const build = gulp.series(tasks.buildSnippets, buildPacked);
+export const build = gulp.series(tasks.buildAdBlockSnippets, tasks.buildSnippets, buildPacked);
 
 export async function source() {
   const options = await getBuildOptions(false, true);

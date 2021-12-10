@@ -150,7 +150,7 @@
             </section>
 
             <a
-              href="https://getadblock.com/beta/vpn"
+              href="https://vpn.getadblock.com/?s=ao/"
               id="vpn-waitlist-link"
               class="btn secondary"
               target="_blank"
@@ -159,6 +159,62 @@
                 i18n="adblock_vpn"
               ></span>
             </a>
+          </section>
+
+          <section id="mail-dialog" style="display: none;" class="cta-speech-bubble">
+            <section id="mail-dialog-content">
+              <div id="mail-dialog-header">
+                <span i18n="keep_touch"></span>
+                <span tabindex="0" id="mail-cta-close-icon" class="close-button" role="button">
+                  <i class="material-icons md-18" role="img" data-send-close-event="true">close</i>
+                </span>
+              </div>
+              <section id="mail-dialog-body">
+                <span i18n="sign_up_mailing"></span>
+                <input
+                  type="email"
+                  id="mail-cta-address"
+                  i18n_placeholder="email_address_placeholder"
+                  dir="ltr"
+                  required
+                />
+                <section id="mail-dialog-confirm">
+                  <span class="mail-dialog-checkbox checkbox md-stack">
+                    <input type="checkbox" id="mail-cta-confirm-checkbox" />
+                    <i class="unchecked material-icons md-18" role="img">check_box_outline_blank</i>
+                    <i class="checked material-icons md-18" role="img">check_box</i>
+                  </span>
+                  <span id="mail-dialog-confirm-subsection">
+                    <span i18n="please_click_confirm"></span>
+                    <span i18n="never_share_email"></span>
+                    <a
+                      href="https://getadblock.com/privacy"
+                      target="_blank"
+                      i18n="privacy_policy"
+                    ></a>
+                  </span>
+                </section>
+                <section id="mail-dialog-err-message"></section>
+                <span i18n="join_mailing_list" class="btn" id="mail-dialog-join-btn"></span>
+              </section>
+            </section>
+            <section id="mail-dialog-done-content">
+              <div id="mail-dialog-header">
+                <span i18n="all_set"></span>
+                <span tabindex="0" id="mail-cta-done-close-icon" class="close-button" role="button">
+                  <i class="material-icons md-18" role="img">close</i>
+                </span>
+              </div>
+              <section id="mail-dialog-body">
+                <span i18n="youre_awesome"></span>
+                <span i18n="added_mailing_list"></span>
+              </section>
+              <img id="mail-dialog-done" src="icons/mail-cta-done.svg" dir="ltr" />
+            </section>
+          </section>
+
+          <section id="mail-cta" style="display: none;">
+            <span i18n="adblock_newsletter" class="hover-shadow btn secondary"></span>
           </section>
 
           <div id="sidebar-social-links">

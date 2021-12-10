@@ -6,10 +6,12 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, exports, require, log, getSettings, determineUserLanguage,
    replacedCounts, chromeStorageSetHelper, getAllSubscriptionsMinusText,
-   checkPingResponseForProtect, License, channels, LocalCDN */
+   License, channels, LocalCDN, Filter, SpecialSubscription, filterStorage */
+
 
 const { Prefs } = require('prefs');
 const { SURVEY } = require('./survey');
+const { CtaABManager } = require('./ctaabmanager');
 const { recordGeneralMessage, recordErrorMessage } = require('./servermessages').ServerMessages;
 
 const STATS = (function exportStats() {
@@ -203,9 +205,29 @@ const STATS = (function exportStats() {
         data.dcp = subs['distraction-control-push'].subscribed ? '1' : '0';
       }
 
+      data.crctotal = 0;
+      data.crcsnippet = 0;
+      data.crcelemhideemulation = 0;
+      data.crcelemhideexception = 0;
+      data.crcelemhide = 0;
+      data.crcallowing = 0;
+      data.crcblocking = 0;
+      data.crccomment = 0;
+      data.crcinvalid = 0;
+
+      for (const subscription of filterStorage.subscriptions()) {
+        if ((subscription instanceof SpecialSubscription)) {
+          for (let j = 0; j < subscription._filterText.length; j++) {
+            const filter = Filter.fromText(subscription._filterText[j]);
+            data[`crc${filter.type}`] += 1;
+            data.crctotal += 1;
+          }
+        }
+      }
+
       data.dc = dataCorrupt ? '1' : '0';
       SURVEY.types((res) => {
-        data.st = res;
+        data.st = res + CtaABManager.types();
         if (browser.permissions && browser.permissions.getAll) {
           browser.permissions.getAll((allPermissions) => {
             data.dhp = allPermissions.origins && allPermissions.origins.includes('<all_urls>') ? '1' : '0';
@@ -224,6 +246,7 @@ const STATS = (function exportStats() {
     return new Promise((resolve, reject) => {
       const handlePingResponse = function (responseData) {
         SURVEY.maybeSurvey(responseData);
+        CtaABManager.maybeCtaAB(responseData);
         resolve(pingData);
       };
 

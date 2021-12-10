@@ -162,7 +162,9 @@ button.premium-dc-cta-close {
 button.premium-cta-close:hover {
   box-shadow: none;
 }
-.premium-cta:hover .premium-cta-close {
+.premium-cta:hover .premium-cta-close,
+#vpn_cta_1_close,
+#vpn_cta_2_close {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -179,12 +181,79 @@ button.premium-cta-close:hover {
 #mab_new_cta_close {
   background-color: #03bcfc;
 }
+.div_vpn_cta_bold {
+  font-weight: bold;
+}
 #mab_new_cta_close > i {
   color: white;
 }
+#vpn_cta_1_close,
+#vpn_cta_2_close {
+  background-color: var(--popup-card-background-color);
+}
+#vpn_cta_1_close_icon,
+#vpn_cta_2_close_icon {
+  color: var(--popup-vpn-cta-close-icon-color);
+  background-color: var(--popup-card-background-color);
+}
+#div_vpn_cta_3,
+#div_vpn_cta_4 {
+  background: linear-gradient(
+    338deg,
+    var(--popup-vpn-cta-linear-gradient-a) 50%,
+    var(--popup-vpn-cta-linear-gradient-b) 50%
+  );
+  background-size: 100% calc(100% + 75px);
+  background-position: bottom -25px right 0px;
+  padding: 16px;
+  filter: drop-shadow(0px 5px 20px rgba(0, 0, 0, 0.15));
+  font-size: 14px;
+  cursor: default;
+}
+#div_vpn_cta_3 span,
+#div_vpn_cta_4 span {
+  color: var(--popup-large-vpn-cta-text-color);
+}
+#vpn_cta_3_close,
+#vpn_cta_4_close {
+  margin-left: 24px;
+  cursor: pointer;
+}
+.vpn-top-row {
+  line-height: 140%;
+}
+.vpn-button-row {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.vpn-cta-button {
+  border-radius: 3px;
+  border-width: 0;
+  background-color: #0055b7;
+  color: #ffffff;
+  width: 115px;
+  height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 #div_myadblock_enrollment_v2:hover {
   color: white;
   background-color: #2284f7;
+}
+#div_vpn_cta_1:hover,
+#div_vpn_cta_2:hover {
+  background-color: var(--popup-vpn-cta-hover-bg-color);
+  color: var(--popup-vpn-cta-hover-color);
+}
+#div_vpn_cta_1:hover button,
+#div_vpn_cta_2:hover button,
+#div_vpn_cta_1:hover #vpn_cta_1_close_icon,
+#div_vpn_cta_2:hover #vpn_cta_2_close_icon {
+  background-color: var(--popup-vpn-cta-hover-close-bg-color);
+  color: var(--popup-vpn-cta-hover-close-color);
 }
 #div_premium_themes_cta {
   color: var(--popup-themes-cta-text);

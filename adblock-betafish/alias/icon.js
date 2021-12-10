@@ -6,6 +6,8 @@
  * - use the term 'whitelisted' instead of 'allowlisted' for now
  * - call renderIcons() at the end of the module for all platforms,
  *   not just Chromium
+ * - added the showIconBadgeCTA, getNewBadgeTextReason functions, and related
+ *   message listeners
  */
 /*
  * This file is part of Adblock Plus <https://adblockplus.org/>,
@@ -28,12 +30,15 @@
 
 "use strict";
 
-import {filterNotifier} from "filterNotifier";
-import {setIconPath, setIconImageData, toggleBadge} from "../../adblockplusui/adblockpluschrome/lib/browserAction";
+import { filterNotifier } from "filterNotifier";
+import { setIconPath, setIconImageData, toggleBadge } from "../../adblockplusui/adblockpluschrome/lib/browserAction";
 import * as info from "info";
+const browserAction = require('../../adblockplusui/adblockpluschrome/lib/browserAction');
 
 const ANIMATION_LOOPS = 3;
 const FRAME_IN_MS = 100;
+
+export const statsInIconKey = 'current_show_statsinicon';
 
 let frameOpacities = calculateFrameOpacities(9, 7);
 let frameOpacitiesCritical = calculateFrameOpacities(5, 3);
@@ -45,15 +50,13 @@ let allowlistedState = new ext.PageMap();
 
 let icons = [null, null];
 
-function easeOut(progress)
-{
+function easeOut(progress) {
   // This is merely an approximation to the built-in ease-out timing function
   // https://css-tricks.com/emulating-css-timing-functions-javascript/
   return 1 - Math.pow(1 - progress, 1.675);
 }
 
-function calculateFrameOpacities(keyframeFrames, transitionFrames)
-{
+function calculateFrameOpacities(keyframeFrames, transitionFrames) {
   let opacities = [];
 
   // Show second half of first keyframe
@@ -77,22 +80,19 @@ function calculateFrameOpacities(keyframeFrames, transitionFrames)
   return opacities;
 }
 
-async function loadImage(url)
-{
+async function loadImage(url) {
   let response = await fetch(url);
   let blob = await response.blob();
   return createImageBitmap(blob);
 }
 
-async function renderIcons()
-{
+async function renderIcons() {
   let paths = [
     "icons/ab-16.png", "icons/ab-16-whitelisted.png",
     "icons/ab-32.png", "icons/ab-32-whitelisted.png"
   ];
 
-  for (let path of paths)
-  {
+  for (let path of paths) {
     let image = await loadImage(path);
     let [, size, allowlisted] = /\/ab-(16|32)(-whitelisted)?\./.exec(path);
 
@@ -108,34 +108,28 @@ async function renderIcons()
   }
 }
 
-function setIcon(page, opacity, frames)
-{
+function setIcon(page, opacity, frames) {
   opacity = opacity || 0;
   let allowlisted = !!allowlistedState.get(page);
 
-  if (!frames)
-  {
-    if (opacity > 0.5)
-    {
+  if (!frames) {
+    if (opacity > 0.5) {
       setIconPath(
         page.id,
         "/icons/ab-$size-notification.png"
       );
     }
-    else if (icons[allowlisted | 0])
-    {
+    else if (icons[allowlisted | 0]) {
       setIconImageData(page.id, icons[allowlisted | 0]);
     }
-    else
-    {
+    else {
       setIconPath(
         page.id,
         "/icons/ab-$size" + (allowlisted ? "-allowlisted" : "") + ".png"
       );
     }
   }
-  else
-  {
+  else {
     browser.browserAction.setIcon({
       tabId: page.id,
       imageData: frames["" + opacity + allowlisted]
@@ -143,15 +137,13 @@ function setIcon(page, opacity, frames)
   }
 }
 
-filterNotifier.on("page.AllowlistingStateRevalidate", (page, filter) =>
-{
+filterNotifier.on("page.AllowlistingStateRevalidate", (page, filter) => {
   allowlistedState.set(page, !!filter);
   if (canUpdateIcon)
     setIcon(page);
 });
 
-async function renderFrames(opacities)
-{
+async function renderFrames(opacities) {
   let images = await Promise.all([
     loadImage("icons/ab-16.png"),
     loadImage("icons/ab-16-whitelisted.png"),
@@ -166,44 +158,40 @@ async function renderFrames(opacities)
     loadImage("icons/ab-40-whitelisted.png"),
     loadImage("icons/ab-40-whitelisted.png"),
   ]);
-    opacities = new Set(opacities);
-    let imageMap = {
-      16: {base: [images[0], images[1]], overlay: images[2]},
-      20: {base: [images[3], images[4]], overlay: images[5]},
-      32: {base: [images[6], images[7]], overlay: images[8]},
-      40: {base: [images[9], images[10]], overlay: images[11]}
-    };
+  opacities = new Set(opacities);
+  let imageMap = {
+    16: { base: [images[0], images[1]], overlay: images[2] },
+    20: { base: [images[3], images[4]], overlay: images[5] },
+    32: { base: [images[6], images[7]], overlay: images[8] },
+    40: { base: [images[9], images[10]], overlay: images[11] }
+  };
 
-    let frames = {};
-    let canvas = new OffscreenCanvas(0, 0);
-    let context = canvas.getContext("2d");
+  let frames = {};
+  let canvas = new OffscreenCanvas(0, 0);
+  let context = canvas.getContext("2d");
 
-    for (let allowlisted of [false, true])
-    {
-      for (let opacity of opacities)
-      {
-        let imageData = {};
-        let sizes = [16, 20, 32, 40];
-        for (let size of sizes)
-        {
-          canvas.width = size;
-          canvas.height = size;
-          context.globalAlpha = 1;
-          context.drawImage(imageMap[size]["base"][allowlisted | 0], 0, 0);
-          context.globalAlpha = opacity;
-          context.drawImage(imageMap[size]["overlay"], 0, 0);
-          imageData[size] = context.getImageData(0, 0, size, size);
-        }
-        frames["" + opacity + allowlisted] = imageData;
+  for (let allowlisted of [false, true]) {
+    for (let opacity of opacities) {
+      let imageData = {};
+      let sizes = [16, 20, 32, 40];
+      for (let size of sizes) {
+        canvas.width = size;
+        canvas.height = size;
+        context.globalAlpha = 1;
+        context.drawImage(imageMap[size]["base"][allowlisted | 0], 0, 0);
+        context.globalAlpha = opacity;
+        context.drawImage(imageMap[size]["overlay"], 0, 0);
+        imageData[size] = context.getImageData(0, 0, size, size);
       }
+      frames["" + opacity + allowlisted] = imageData;
     }
+  }
 
   return frames;
 }
 
-async function animateIcon(opacities, frames)
-{
-  let tabs = await browser.tabs.query({active: true});
+async function animateIcon(opacities, frames) {
+  let tabs = await browser.tabs.query({ active: true });
   let pages = tabs.map(tab => new ext.Page(tab));
 
   let animationLoop = 0;
@@ -211,8 +199,7 @@ async function animateIcon(opacities, frames)
   let numberOfFrames = opacities.length;
   let opacity = 0;
 
-  let onActivated = page =>
-  {
+  let onActivated = page => {
     pages.push(page);
     setIcon(page, opacity, frames);
     toggleBadge(page.id, true);
@@ -222,26 +209,20 @@ async function animateIcon(opacities, frames)
   canUpdateIcon = false;
   for (let page of pages)
     toggleBadge(page.id, true);
-  return new Promise((resolve, reject) =>
-  {
-    let interval = setInterval(() =>
-    {
+  return new Promise((resolve, reject) => {
+    let interval = setInterval(() => {
       let oldOpacity = opacity;
       opacity = opacities[animationStep++];
 
-      if (opacity != oldOpacity)
-      {
-        for (let page of pages)
-        {
+      if (opacity != oldOpacity) {
+        for (let page of pages) {
           if (allowlistedState.has(page))
             setIcon(page, opacity, frames);
         }
       }
 
-      if (animationStep > numberOfFrames)
-      {
-        if (++animationLoop > ANIMATION_LOOPS - 1 || stopRequested)
-        {
+      if (animationStep > numberOfFrames) {
+        if (++animationLoop > ANIMATION_LOOPS - 1 || stopRequested) {
           clearInterval(interval);
           ext.pages.onActivated.removeListener(onActivated);
           for (let page of pages)
@@ -249,8 +230,7 @@ async function animateIcon(opacities, frames)
           canUpdateIcon = true;
           resolve();
         }
-        else
-        {
+        else {
           animationStep = 0;
         }
       }
@@ -265,8 +245,7 @@ async function animateIcon(opacities, frames)
  * @return {Promise} A promise that is fullfilled when
  *                   the icon animation has been stopped.
  */
-export async function stopIconAnimation()
-{
+export async function stopIconAnimation() {
   stopRequested = true;
   await notRunning;
   stopRequested = false;
@@ -280,15 +259,13 @@ export async function stopIconAnimation()
  * @param {string} type  The notification type (i.e: "information" or
  *                       "critical".)
  */
-export function startIconAnimation(type)
-{
+export function startIconAnimation(type) {
   let opacities = frameOpacities;
   if (type == "critical")
     opacities = frameOpacitiesCritical;
 
   notRunning = Promise.all([renderFrames(opacities), stopIconAnimation()])
-    .then(results =>
-    {
+    .then(results => {
       if (stopRequested)
         return;
 
@@ -298,3 +275,86 @@ export function startIconAnimation(type)
 }
 
 renderIcons();
+
+/**
+ * Returns the Object containing all of the reasons the text on the toolbar icon / badge is 'new'
+ *
+ */
+export const NEW_BADGE_REASONS = {
+  SEVEN_DAY: 'seven day',
+  UPDATE: 'update',
+  VPN_CTA: 'vpn cta',
+};
+
+/**
+ * Handles the display of the New badge on the toolbar icon.
+ * @param {Boolean} [showBadge] true shows the badge, false removes the badge
+ */
+
+let newBadgeTextReason = "";
+
+export function showIconBadgeCTA(showBadge, reason) {
+  if (!License.shouldShowPremiumCTA()) {
+    return;
+  }
+  if (showBadge) {
+    let newBadgeText = translate('new_badge');
+    // Text that exceeds 4 characters is truncated on the toolbar badge,
+    // so we default to English
+    if (!newBadgeText || newBadgeText.length >= 5) {
+      newBadgeText = 'New';
+    }
+    storageSet(statsInIconKey, Prefs.show_statsinicon);
+    Prefs.show_statsinicon = false;
+    // wait 10 seconds to allow any other ABP setup tasks to finish
+    setTimeout(() => {
+      // process all currently opened tabs
+      browser.tabs.query({}).then((tabs) => {
+        for (const tab of tabs) {
+          if (tab.url && tab.url.startsWith('http')) {
+            browserAction.setBadge(tab.id, { color: '#03bcfc', number: newBadgeText });
+            newBadgeTextReason = reason || '';
+          }
+        }
+      });
+    }, 10000); // 10 seconds
+  } else {
+    // Restore show_statsinicon if we previously stored its value
+    const storedValue = storageGet(statsInIconKey);
+    if (typeof storedValue === 'boolean') {
+      Prefs.show_statsinicon = storedValue;
+      storageSet(statsInIconKey); // remove the data, since we no longer need it
+      browser.tabs.query({}).then((tabs) => {
+        for (const tab of tabs) {
+          browser.browserAction.setBadgeText({
+            tabId: tab.id,
+            text: '',
+          });
+        }
+      });
+      browser.browserAction.setBadgeText({ text: ' ' });
+    }
+  }
+};
+
+/**
+ * Returns the String reason the text on the toolbar icon / badge is 'new'
+ *
+ */
+export function getNewBadgeTextReason() {
+  return newBadgeTextReason;
+};
+
+
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'showIconBadgeCTA' && typeof request.value === 'boolean') {
+    showIconBadgeCTA(request.value);
+    sendResponse({});
+  }
+});
+
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'getNewBadgeTextReason') {
+    sendResponse({ reason: getNewBadgeTextReason() });
+  }
+});

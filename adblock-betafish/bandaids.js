@@ -6,7 +6,7 @@
 const invalidGUIDChars = /[^a-z0-9]/g;
 
 const gabHostnames = ['getadblock.com', 'dev.getadblock.com', 'dev1.getadblock.com', 'dev2.getadblock.com', 'getadblockpremium.com'];
-const gabHostnamesWithProtocal = ['https://getadblock.com', 'http://dev.getadblock.com', 'http://dev1.getadblock.com', 'http://dev2.getadblock.com', 'https://getadblockpremium.com'];
+const gabHostnamesWithProtocal = ['https://getadblock.com', 'https://dev.getadblock.com', 'https://dev1.getadblock.com', 'https://dev2.getadblock.com'];
 
 let abort = (function shouldAbort() {
   if (document instanceof HTMLDocument === false) {
@@ -184,6 +184,15 @@ const runBandaids = function () {
           elemDiv.style.display = 'none';
           document.body.appendChild(elemDiv);
         }
+      });
+
+      browser.runtime.sendMessage({ command: 'isActiveLicense' }).then((response) => {
+        const elemDiv = document.createElement('div');
+        elemDiv.id = 'isAdblockLicenseActive';
+        elemDiv.innerText = response;
+        elemDiv.style.display = 'none';
+        elemDiv.dataset.isAdblockLicenseActive = response;
+        document.body.appendChild(elemDiv);
       });
       const enableShowSurvey = document.getElementById('enable_show_survey');
       if (enableShowSurvey) {

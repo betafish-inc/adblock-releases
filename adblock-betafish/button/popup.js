@@ -147,9 +147,12 @@ try {
   const popupMenuCtaClosedKey = 'popup_menu_cta_closed';
   const showPopupMenuThemesCtaKey = 'popup_menu_themes_cta';
   const popupMenuDCCtaClosedKey = 'popup_menu_dc_cta_closed';
+  const popupMenuVPNCtaClosedKey = 'popup_menu_vpn_cta_closed';
   const userClosedCta = storageGet(popupMenuCtaClosedKey);
   const showThemesCTA = storageGet(showPopupMenuThemesCtaKey);
   const userClosedDCCta = storageGet(popupMenuDCCtaClosedKey);
+  const userClosedVPNCta = storageGet(popupMenuVPNCtaClosedKey);
+
   const shown = {};
 
   browser.runtime.sendMessage({ command: 'cleanUpSevenDayAlarm' });
@@ -209,7 +212,13 @@ try {
               if (!newBadgeText || newBadgeText.length >= 5) {
                 newBadgeText = 'New';
               }
-              browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'popup_opened', additionalParams: { isBadgeTextNew: (text === newBadgeText) } });
+              let { newBadgeTextReason } = info;
+              const isBadgeTextNew = (text === newBadgeText);
+              if (!isBadgeTextNew) {
+                newBadgeTextReason = '';
+              }
+              const genMsgData = { command: 'recordGeneralMessage', msg: 'popup_opened', additionalParams: { isBadgeTextNew, reason: newBadgeTextReason } };
+              browser.runtime.sendMessage(genMsgData);
               browser.runtime.sendMessage({ command: 'showIconBadgeCTA', value: false });
             });
             if (info.settings) {
@@ -310,9 +319,19 @@ try {
             if (popupMenuTheme && browser.runtime && browser.runtime.id === betaExtId) {
               $('.header-logo').attr('src', `icons/${popupMenuTheme}/beta_logo.svg`);
             }
-
-            // Premium CTAs
-            if (info.showMABEnrollment && userClosedCta && showThemesCTA) {
+            // VPN CTAs
+            if (
+              info.showVPNCTA
+              && info.showVPNCTAVar
+              && info.showVPNCTAExp
+              && !userClosedVPNCta
+              && !info.disabledSite
+              && !info.whitelisted
+            ) {
+              show([`div_vpn_cta_${info.showVPNCTAVar}`]);
+              browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_seen', additionalParams: { var: info.showVPNCTAVar, exp: info.showVPNCTAExp } });
+              // Premium CTAs
+            } else if (info.showMABEnrollment && userClosedCta && showThemesCTA) {
               show(['div_premium_themes_cta']);
               $('#div_premium_themes_cta').attr('data-theme-cta', info.popupMenuThemeCTA);
               browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'premium_themes_cta_seen', additionalParams: { theme: info.popupMenuThemeCTA.replace('_theme', '') } });
@@ -521,6 +540,22 @@ try {
         storageSet(showPopupMenuThemesCtaKey, true);
       });
 
+      selected('#div_vpn_cta_1, #div_vpn_cta_2, #vpn_cta_3_learn_more, #vpn_cta_4_learn_more', (event) => {
+        event.stopPropagation();
+        storageSet(popupMenuVPNCtaClosedKey, true);
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_clicked', additionalParams: { var: pageInfo.showVPNCTAVar, exp: pageInfo.showVPNCTAExp } });
+        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: `https://vpn.getadblock.com/?s=ap${pageInfo.showVPNCTAVar}` }).then(() => {
+          closeAndReloadPopup();
+        });
+      });
+
+      selected('#vpn_cta_1_close, #vpn_cta_2_close, #vpn_cta_3_close, #vpn_cta_4_close', (event) => {
+        event.stopPropagation();
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_closed', additionalParams: { var: pageInfo.showVPNCTAVar, exp: pageInfo.showVPNCTAExp } });
+        $('#div_vpn_cta_1, #div_vpn_cta_2, #div_vpn_cta_3, #div_vpn_cta_4').slideUp();
+        storageSet(popupMenuVPNCtaClosedKey, true);
+      });
+
       selected('#div_premium_themes_cta', (event) => {
         event.stopPropagation();
         const theme = themeCTA ? themeCTA.replace('_theme', '') : '';
@@ -571,6 +606,18 @@ try {
 
       selected('#sync_removed_error_close', () => {
         $('#div_sync_removed_error_msg').fadeOut();
+      });
+
+      $('#div_vpn_cta_1').on('mouseenter', () => {
+        $('#vpn_cta_1').text('Enjoy worry-free internet');
+      }).on('mouseleave', () => {
+        $('#vpn_cta_1').text('Introducing AdBlock VPN');
+      });
+
+      $('#div_vpn_cta_2').on('mouseenter', () => {
+        $('#vpn_cta_2').text('Try AdBlock VPN!');
+      }).on('mouseleave', () => {
+        $('#vpn_cta_2').text('Tired of being tracked?');
       });
 
       $('#div_myadblock_enrollment_v2').on('mouseenter', () => {

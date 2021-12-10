@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '4.39.1',
+  version: '4.41.0',
   webpack: {
     bundles: [
       {
@@ -16,7 +16,6 @@ export default {
           'adblock-betafish/alias/contentFiltering.js',
           'adblockplusui/adblockpluschrome/lib/messageResponder.js',
           'adblockplusui/adblockpluschrome/lib/filterConfiguration.js',
-          'adblockplusui/adblockpluschrome/lib/ml.js',
           'adblock-betafish/jquery/jquery-3.5.1.min.js',
           'adblock-betafish/errorreporting.js',
           'adblock-betafish/functions.js',
@@ -46,6 +45,8 @@ export default {
           'adblock-betafish/data_migration.js',
           'adblock-betafish/twitchSettings.js',
           'adblock-betafish/youtube/yt-bg.js',
+          // marked as optional using wildcard
+          'vendor/abp-snippets/dist/ml/bundle*.ml.mjs',
         ],
       },
       {
@@ -126,11 +127,11 @@ export default {
         src: '/data/*.json',
       },
       {
-        dest: 'data/mlHideIfGraphMatches',
+        dest: "data/hideIfGraphMatches",
         src: [
-          'adblockplusui/adblockpluschrome/adblockpluscore/data/mlHideIfGraphMatches/model.json',
-          'adblockplusui/adblockpluschrome/adblockpluscore/data/mlHideIfGraphMatches/group1-shard1of1.dat',
-        ],
+          // marked as optional using wildcard
+          "vendor/abp-snippets/dist/ml/hideIfGraphMatches/*"
+        ]
       },
       {
         dest: 'ext',
@@ -154,6 +155,8 @@ export default {
           'adblockplusui/devtools-panel.js',
           'adblockplusui/i18n.js',
           'adblockplusui/proxy.html',
+          // marked as optional using wildcard
+          'vendor/abp-snippets/dist/webext/snippets*.json',
         ],
       },
     ],
@@ -463,12 +466,8 @@ export default {
         src: 'adblockplusui/skin/devtools-panel.css',
       },
       {
-        dest: 'snippets.min.js',
-        src: 'vendor/abp-snippets/dist/*snippets.min.js',
-      },
-      {
-        dest: 'adblock-snippets.js',
-        src: 'adblock-betafish/alias/adblock-snippets.js',
+        dest: 'adblock-snippets.json',
+        src: 'dist/adblock-snippets.json',
       },
       {
         dest: 'icons/ab-16.png',

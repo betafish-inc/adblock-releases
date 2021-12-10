@@ -62,7 +62,7 @@ const styleSheetRemovalSupported = info.platform == "gecko";
 
 let userStyleSheetsSupported = true;
 
-let snippetsLibrarySource = "";
+let snippetsSource = {};
 
 function addStyleSheet(tabId, frameId, styleSheet) {
   try {
@@ -153,7 +153,12 @@ function executeScripts(scripts, tabId, frameId) {
 
     let details = {
       frameId,
-      code: compileScript(scripts, [snippetsLibrarySource], environment),
+      code: compileScript(
+        scripts,
+        snippetsSource.isolatedCode,
+        snippetsSource.injectedCode,
+        snippetsSource.injectedList,
+        environment),
       matchAboutBlank: true,
       runAt: "document_start"
     };
@@ -211,7 +216,11 @@ port.on("content.applyFilters", (message, sender) => {
   if (!checkAllowlisted(sender.page, sender.frame, null, contentTypes.DOCUMENT)) {
     let docDomain = extractHostFromFrame(sender.frame);
 
-    if (filterTypes.snippets) {
+    // If snippetsSource is an empty object,
+    // then the snippets library was not bundled with the extension.
+    // For compatibility reasons with `compileScript` we avoid
+    // injecting anything into the page.
+    if (filterTypes.snippets && Object.keys(snippetsSource).length > 0) {
       let filters = snippets.getFilters(docDomain);
       if (filters.length) {
         let scripts = filters.filter(ok => ok).map(({ script }) => script);
@@ -220,15 +229,11 @@ port.on("content.applyFilters", (message, sender) => {
             let tabIds = [sender.page.id];
             if (filter) recordBlockedRequest(filter, tabIds);
 
-            logRequest(
-              tabIds,
-              {
-                url: sender.frame.url.href,
-                type: "SNIPPET",
-                docDomain
-              },
-              filter
-            );
+            logRequest(tabIds, {
+              url: sender.frame.url.href,
+              type: "SNIPPET",
+              docDomain
+            }, filter);
           }
         });
       }
@@ -306,9 +311,9 @@ port.on("content.injectSelectors", (message, sender) => {
 async function loadSnippets() {
   try {
     let response =
-      await fetch(browser.runtime.getURL("/snippets.min.js"),
+      await fetch(browser.runtime.getURL("/snippets.json"),
         { cache: "no-cache" });
-    snippetsLibrarySource = response.ok ? (await response.text()) : "";
+    snippetsSource = response.ok ? (await response.json()) : {};
   }
   catch (e) {
     // If the request fails, the snippets library is not
@@ -319,11 +324,20 @@ loadSnippets();
 
 async function loadAdBlockSnippets() {
   try {
-    let adblockSnippetResponse =
-      await fetch(browser.runtime.getURL("/adblock-snippets.js"),
+    let response =
+      await fetch(browser.runtime.getURL("/adblock-snippets.json"),
         { cache: "no-cache" });
-    const abtext = adblockSnippetResponse.ok ? (await adblockSnippetResponse.text()) : "";
-    snippetsLibrarySource = snippetsLibrarySource + "\n" + abtext;
+    let ABsnippetsSource = response.ok ? (await response.json()) : {};
+
+    if (ABsnippetsSource.injectedCode) {
+      snippetsSource.injectedCode = snippetsSource.injectedCode + ABsnippetsSource.injectedCode;
+    }
+    if (ABsnippetsSource.injectedList) {
+      snippetsSource.injectedList = snippetsSource.injectedList.concat(ABsnippetsSource.injectedList);
+    }
+    if (ABsnippetsSource.isolatedCode) {
+      snippetsSource.isolatedCode = snippetsSource.isolatedCode + ABsnippetsSource.isolatedCode;
+    }
   }
   catch (e) {
     // If the request fails, the snippets library is not

@@ -8,6 +8,8 @@
    filterStorage, getUrlFromId, synchronizer, DownloadableSubscription, Prefs, parseFilter,
    recordAnonymousMessage, info, storageGet, storageSet, License */
 
+const { statsInIconKey } = require('./alias/icon.js');
+
 (() => {
   const migrateLogMessageKey = 'migrateFirefoxLogMessageKey';
   const storeMigrationLogs = (...args) => {
@@ -122,8 +124,8 @@
 
           // We might have just changed the value of Pref.show_statsinicon. Therefore, if it exists,
           // we must update the stored copy in localStorage as part of the 'showIconBadgeCTA' logic
-          if (key === 'display_stats' && typeof storageGet(License.statsInIconKey) === 'boolean') {
-            storageSet(License.statsInIconKey, Prefs.show_statsinicon);
+          if (key === 'display_stats' && typeof storageGet(statsInIconKey) === 'boolean') {
+            storageSet(statsInIconKey, Prefs.show_statsinicon);
           }
         }
       }
@@ -186,8 +188,8 @@
           storeMigrationLogs(`Migration for '${key}' done.`);
           break;
         default:
-          // Do nothing since all other keys don't need to be migrated. Some are automatically
-          // migrated, some don't need to be migrated and will be removed.
+        // Do nothing since all other keys don't need to be migrated. Some are automatically
+        // migrated, some don't need to be migrated and will be removed.
       }
     }
 

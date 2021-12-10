@@ -27,7 +27,7 @@ const { SyncService } = BG;
 const { isValidTheme } = BG;
 const { abpPrefPropertyNames } = BG;
 const { info } = BG;
-const { rateUsCtaKey, vpnWaitlistCtaKey } = BG;
+const { rateUsCtaKey, vpnWaitlistCtaKey, mailCtaKey } = BG;
 const FIVE_SECONDS = 5000;
 const TWENTY_SECONDS = FIVE_SECONDS * 4;
 const SIXTY_SECONDS = FIVE_SECONDS * 20;
@@ -238,7 +238,7 @@ const checkForUnSyncError = function () {
     optionalSettings
     && !optionalSettings.sync_settings
     && (SyncService.getLastGetStatusCode() === 403
-        || SyncService.getLastPostStatusCode() === 403)
+      || SyncService.getLastPostStatusCode() === 403)
   ) {
     showNoLongerSyncError();
     SyncService.resetAllErrors();
@@ -452,7 +452,6 @@ const shouldShowVPNWaitlistCTA = function () {
         $('#waitlist-cta a#vpn-waitlist-link').on('click', () => {
           chromeStorageSetHelper(vpnWaitlistCtaKey, true);
           $('#waitlist-cta').hide();
-          shouldShowRateUsCTA();
         });
       } else {
         shouldShowRateUsCTA();
@@ -461,6 +460,93 @@ const shouldShowVPNWaitlistCTA = function () {
   }
 };
 
+const shouldShowEmailCTA = function () {
+  const mql = window.matchMedia('(max-width: 890px)');
+  if (!mql.matches) {
+    chromeStorageGetHelper(mailCtaKey).then((alreadyClickedMailCTA) => {
+      if (!alreadyClickedMailCTA) {
+        BG.recordGeneralMessage('mail_option_cta_seen');
+        const mailCTA$ = $('#mail-cta');
+        mailCTA$.show();
+        const checkBox$ = $('#mail-cta-confirm-checkbox');
+        const emailAddress$ = $('#mail-cta-address');
+        const placePanel = function () {
+          const recs = mailCTA$.get(0).getBoundingClientRect();
+          $('#mail-dialog').css({ top: (recs.top - 360), left: (recs.left + 5), position: 'absolute' });
+        };
+        mailCTA$.on('click', () => {
+          // reset the error messages, indicates, fields, etc.
+          $('#mail-dialog-err-message').text('');
+          checkBox$.prop('checked', false);
+          emailAddress$.val('');
+          $('.mail-dialog-checkbox i').css({ color: '' });
+          emailAddress$.css({ border: '1px solid var(--mail-dialog-textfield-border-color)' });
+          $(window).on('resize', placePanel);
+          placePanel();
+          $('#mail-dialog').fadeToggle(() => {
+            if ($('#mail-dialog').is(':visible')) {
+              BG.recordGeneralMessage('mail_option_cta_clicked');
+            }
+          });
+        });
+        $('#mail-cta-close-icon, #mail-cta-done-close-icon').on('click', (event) => {
+          if (
+            event
+            && event.target
+            && event.target.dataset
+            && event.target.dataset.sendCloseEvent
+          ) {
+            BG.recordGeneralMessage('mail_option_cta_closed');
+          }
+          $('#mail-dialog-err-message').text('');
+          $('#mail-dialog').fadeOut();
+          $('#mail-dialog-done-content').fadeOut();
+          mailCTA$.fadeOut();
+          $(window).off('resize', placePanel);
+          chromeStorageSetHelper(mailCtaKey, true);
+        });
+        $('#mail-dialog-join-btn').on('click', () => {
+          const emailAddressTxt = emailAddress$.val().trim().toLowerCase();
+          let errorMsg = '';
+          const updateErrorMsg = function (newText) {
+            if (errorMsg) {
+              errorMsg = `${errorMsg}\n${newText}`;
+            } else {
+              errorMsg = newText;
+            }
+          };
+          if (!checkBox$.is(':checked')) {
+            $('.mail-dialog-checkbox i').css({ color: 'var(--email-error-message-color)' });
+            updateErrorMsg(translate('please_confirm'));
+          } else {
+            $('.mail-dialog-checkbox i').css({ color: '' });
+          }
+          if (!emailAddressTxt) {
+            emailAddress$.css({ border: '1px solid var(--email-error-message-color)' });
+            updateErrorMsg(translate('valid_email_address'));
+          } else if (emailAddressTxt && !emailAddress$.get(0).checkValidity()) {
+            emailAddress$.css({ border: '1px solid var(--email-error-message-color)' });
+            updateErrorMsg(translate('valid_email_address'));
+          } else {
+            emailAddress$.css({ border: '1px solid var(--mail-dialog-textfield-border-color)' });
+          }
+          if (errorMsg) {
+            $('#mail-dialog-err-message').text(errorMsg);
+          } else {
+            $('#mail-dialog-err-message').text('');
+            $('#mail-dialog-content').fadeOut(() => {
+              $('#mail-dialog-done-content').fadeIn();
+            });
+            BG.recordGeneralMessage('newsletter_optin', undefined, { emailAddress: emailAddressTxt });
+            chromeStorageSetHelper(mailCtaKey, true);
+          }
+        });
+      } else {
+        shouldShowVPNWaitlistCTA();
+      }
+    });
+  }
+};
 
 $(() => {
   // delay opening of a second port due to a race condition in the ABP code
@@ -489,7 +575,7 @@ $(() => {
   displayVersionNumber();
   localizePage();
   displayTranslationCredit();
-  shouldShowVPNWaitlistCTA();
+  shouldShowEmailCTA();
 });
 
 storageSet(License.pageReloadedOnSettingChangeKey, false);

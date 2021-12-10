@@ -9,9 +9,9 @@
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
 const { EventEmitter } = require('events');
 const { checkAllowlisted } = require('../../adblockplusui/adblockpluschrome/lib/allowlisting');
-const browserAction = require('../../adblockplusui/adblockpluschrome/lib/browserAction');
 const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
 const { loadAdBlockSnippets } = require('./../alias/contentFiltering');
+const { showIconBadgeCTA, NEW_BADGE_REASONS } = require('./../alias/icon.js');
 
 const licenseNotifier = new EventEmitter();
 const newBadgeShownForDCKey = 'new_badge_shown_dc';
@@ -20,7 +20,6 @@ const License = (function getLicense() {
   const isProd = true;
   const licenseStorageKey = 'license';
   const installTimestampStorageKey = 'install_timestamp';
-  const statsInIconKey = 'current_show_statsinicon';
   const userClosedSyncCTAKey = 'user_closed_sync_cta';
   const userSawSyncCTAKey = 'user_saw_sync_cta';
   const pageReloadedOnSettingChangeKey = 'page_reloaded_on_user_settings_change';
@@ -84,7 +83,7 @@ const License = (function getLicense() {
 
   const processSevenDayAlarm = function () {
     cleanUpSevenDayAlarm();
-    License.showIconBadgeCTA(true);
+    showIconBadgeCTA(true, NEW_BADGE_REASONS.SEVEN_DAY);
   };
 
   browser.alarms.onAlarm.addListener((alarm) => {
@@ -134,7 +133,7 @@ const License = (function getLicense() {
     browser.alarms.get(License.sevenDayAlarmName, (alarm) => {
       if (alarm && Date.now() > alarm.scheduledTime) {
         browser.alarms.clear(License.sevenDayAlarmName, () => {
-          License.showIconBadgeCTA(true);
+          showIconBadgeCTA(true, NEW_BADGE_REASONS.SEVEN_DAY);
           removeSevenDayAlarmStateListener();
           browser.storage.local.remove(License.sevenDayAlarmName);
         });
@@ -163,7 +162,7 @@ const License = (function getLicense() {
                 const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
                 const diffDays = Math.round((now - installDate) / oneDay);
                 if (diffDays >= 7) {
-                  License.showIconBadgeCTA(true);
+                  showIconBadgeCTA(true, NEW_BADGE_REASONS.SEVEN_DAY);
                   removeSevenDayAlarmStateListener();
                   browser.storage.local.remove(License.sevenDayAlarmName);
                 }
@@ -213,7 +212,6 @@ const License = (function getLicense() {
   };
 
   return {
-    statsInIconKey,
     licenseStorageKey,
     userClosedSyncCTAKey,
     userSawSyncCTAKey,
@@ -237,7 +235,7 @@ const License = (function getLicense() {
           theLicense.myadblock_enrollment = true;
           License.set(theLicense);
           if (enrollReason === 'update') {
-            License.showIconBadgeCTA(true);
+            showIconBadgeCTA(true, NEW_BADGE_REASONS.UPDATE);
           }
         }
       });
@@ -495,52 +493,6 @@ const License = (function getLicense() {
       const variant = License.get() ? License.get().var : undefined;
       return License && isNotActive && [3, 4].includes(variant) && License.shouldShowPremiumCTA();
     },
-    /**
-     * Handles the display of the New badge on the toolbar icon.
-     * @param {Boolean} [showBadge] true shows the badge, false removes the badge
-     */
-    showIconBadgeCTA(showBadge) {
-      if (!License.shouldShowPremiumCTA()) {
-        return;
-      }
-      if (showBadge) {
-        let newBadgeText = translate('new_badge');
-        // Text that exceeds 4 characters is truncated on the toolbar badge,
-        // so we default to English
-        if (!newBadgeText || newBadgeText.length >= 5) {
-          newBadgeText = 'New';
-        }
-        storageSet(statsInIconKey, Prefs.show_statsinicon);
-        Prefs.show_statsinicon = false;
-        // wait 10 seconds to allow any other ABP setup tasks to finish
-        setTimeout(() => {
-          // process all currently opened tabs
-          browser.tabs.query({}).then((tabs) => {
-            for (const tab of tabs) {
-              if (tab.url && tab.url.startsWith('http')) {
-                browserAction.setBadge(tab.id, { color: '#03bcfc', number: newBadgeText });
-              }
-            }
-          });
-        }, 10000); // 10 seconds
-      } else {
-        // Restore show_statsinicon if we previously stored its value
-        const storedValue = storageGet(statsInIconKey);
-        if (typeof storedValue === 'boolean') {
-          Prefs.show_statsinicon = storedValue;
-          storageSet(statsInIconKey); // remove the data, since we no longer need it
-          browser.tabs.query({}).then((tabs) => {
-            for (const tab of tabs) {
-              browser.browserAction.setBadgeText({
-                tabId: tab.id,
-                text: '',
-              });
-            }
-          });
-          browser.browserAction.setBadgeText({ text: ' ' });
-        }
-      }
-    },
     // fetchLicenseAPI automates the common steps required to call the /license/api endpoint.
     // POST bodies will always automatically contain the command, license and userid so only
     // provide the missing fields in the body parameter. The ok callback handler receives the
@@ -654,14 +606,6 @@ Promise.all([onInstalledPromise, License.ready(), onBehaviorPromise]).then((deta
       License.addSevenDayAlarmStateListener();
       browser.storage.local.set({ [License.sevenDayAlarmName]: true });
     }
-    // on update, show 'new' badge text to Premium users
-    if (detailsArray[0].reason === 'update' && License.isActiveLicense()) {
-      const newBadgeShownForDC = storageGet(newBadgeShownForDCKey);
-      if (newBadgeShownForDC === undefined) {
-        storageSet(newBadgeShownForDCKey, true);
-        License.showIconBadgeCTA(true);
-      }
-    }
   }
 });
 
@@ -769,17 +713,17 @@ License.ready().then(() => {
   });
 
   browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.command === 'showIconBadgeCTA' && typeof request.value === 'boolean') {
-      License.showIconBadgeCTA(request.value);
-      sendResponse({});
-    }
-  });
-
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.command === 'License.MAB_CONFIG' && typeof request.url === 'string') {
       sendResponse({ url: License.MAB_CONFIG[request.url] });
     }
   });
+
+  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.command === 'isActiveLicense') {
+      sendResponse(License.isActiveLicense());
+    }
+  });
+
   if (License.isActiveLicense()) {
     loadAdBlockSnippets();
   }
