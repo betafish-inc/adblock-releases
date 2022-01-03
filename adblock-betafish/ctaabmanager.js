@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, require, exports, STATS, log, getSettings, Prefs, openTab,
-   License
+   License, settings, storageGet
  */
 
 const { showIconBadgeCTA, NEW_BADGE_REASONS } = require('./alias/icon.js');
@@ -83,3 +83,20 @@ const CtaABManager = (function get() {
 }());
 
 exports.CtaABManager = CtaABManager;
+
+// Display the new badge text after an update
+browser.runtime.onInstalled.addListener((details) => {
+  const popupMenuDCCtaClosedKey = 'popup_menu_dc_cta_closed';
+  const userClosedDCCta = storageGet(popupMenuDCCtaClosedKey);
+  if (
+    !userClosedDCCta
+    && details.reason === 'update'
+    && browser.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
+  ) {
+    License.ready().then(() => {
+      if (License.shouldShowMyAdBlockEnrollment()) {
+        showIconBadgeCTA(true, NEW_BADGE_REASONS.FREE_DC_UPDATE);
+      }
+    });
+  }
+});

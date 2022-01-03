@@ -14,7 +14,8 @@
       },
       {
         "content": "seeing_distractions",
-        "segueTo": "whichDistractions",
+        "segueTo": "seeDistraction",
+        "segueToIfPaused": "seeDCPaused",
         "showIfPremiumUser": true
       }
     ],
@@ -54,6 +55,27 @@
       }
     ]
   },
+  "seeDistraction": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "got_it"
+          },
+          {
+            "text": "check_whitelist"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "ok",
+        "action": "okCheckWhitelistDistractionsAction"
+      }
+    ]
+  },
   "seeAdOnWhitelist": {
     "title": "see_ad",
     "sections": [
@@ -85,6 +107,35 @@
       }
     ]
   },
+  "seeDistractionOnWhitelist": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "page_is_whitelisted_distraction"
+          }
+        ]
+      },
+      {
+        "content": [
+          {
+            "text": "want_to_remove"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "yes",
+        "action": "removeWhitelistDistractionAction"
+      },
+      {
+        "text": "no",
+        "action": "dontRemoveWhitelistDistractionAction"
+      }
+    ]
+  },
   "seeAdNotOnWhitelist": {
     "title": "see_ad",
     "sections": [
@@ -110,6 +161,34 @@
       {
         "text": "reload_the_page",
         "action": "reloadCheckAction"
+      }
+    ]
+  },
+  "seeDistractionNotOnWhitelist": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "page_not_whitelisted"
+          }
+        ]
+      },
+      {
+        "content": [
+          {
+            "text": "updating_filter_lists"
+          },
+          {
+            "text": "done_reload_page"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "reload_the_page",
+        "action": "reloadCheckDistractionAction"
       }
     ]
   },
@@ -151,6 +230,24 @@
       }
     ]
   },
+  "dontRemoveWhitelistDistraction": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "wont_change_anything_distraction"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "ok",
+        "action": "finishFlowAction"
+      }
+    ]
+  },
   "removeWhitelist": {
     "title": "see_ad",
     "sections": [
@@ -161,6 +258,27 @@
           },
           {
             "text": "reload_not_see_ad"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "reload_the_page",
+        "action": "reloadFinishFlowAction"
+      }
+    ]
+  },
+  "removeWhitelistDistraction": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "removed_url"
+          },
+          {
+            "text": "reload_not_see_distraction"
           }
         ]
       }
@@ -200,6 +318,35 @@
         "text": "no",
         "action": "problemSolvedAction",
         "icon": "close"
+      }
+    ]
+  },
+  "checkedDistractionBasics": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "checked_basics"
+          }
+        ]
+      },
+      {
+        "content": [
+          {
+            "text": "still_see_distraction"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "yes",
+        "action": "stillSeeDistractionAction"
+      },
+      {
+        "text": "no",
+        "action": "distractionsProblemSolvedAction"
       }
     ]
   },
@@ -351,6 +498,32 @@
       }
     ]
   },
+  "seeDCPaused": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "paused_not_blocking_distraction"
+          },
+          {
+            "text": "resume_reload_distraction"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "no_thanks",
+        "action": "dontChangeSeeDistractionAction",
+        "secondaryButton": true
+      },
+      {
+        "text": "yes",
+        "action": "unpauseAndReloadActionDistraction"
+      }
+    ]
+  },
   "unpauseAndReload": {
     "title": "see_ad",
     "sections": [
@@ -378,6 +551,31 @@
       }
     ]
   },
+  "unpauseAndReloadDistraction": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "unpaused_reload"
+          },
+          {
+            "text": "still_see_distractions"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "no",
+        "action": "distractionsProblemSolvedAction"
+      },
+      {
+        "text": "yes",
+        "action": "whichDistractionsAction"
+      }
+    ]
+  },
   "dontChangeSeeAds": {
     "title": "see_ad",
     "sections": [
@@ -385,6 +583,24 @@
         "content": [
           {
             "text": "no_changes_see_ad"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      {
+        "text": "ok",
+        "action": "finishFlowAction"
+      }
+    ]
+  },
+  "dontChangeSeeDistraction": {
+    "title": "seeing_distractions_title",
+    "sections": [
+      {
+        "content": [
+          {
+            "text": "wont_change_anything_distraction"
           }
         ]
       }

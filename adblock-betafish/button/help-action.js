@@ -38,6 +38,34 @@ const popupMenuHelpActionMap = {
       }, 1000); // wait one second and check
     }
   },
+  okCheckWhitelistDistractionsAction() {
+    if (pageInfo.whitelisted) {
+      transitionTo('seeDistractionOnWhitelist', false);
+    } else {
+      transitionTo('seeDistractionNotOnWhitelist', false);
+      $('button').prop('disabled', true);
+      browser.runtime.sendMessage({ command: 'updateFilterLists' });
+      setTimeout(() => {
+        browser.runtime.sendMessage({ command: 'checkUpdateProgress' }).then((progress) => {
+          if (progress.inProgress) {
+            setTimeout(() => {
+              browser.runtime.sendMessage({ command: 'checkUpdateProgress' }).then((progress2) => {
+                if (progress2.inProgress || progress2.filterError) {
+                  filterUpdateError = true;
+                }
+                $('button').prop('disabled', false);
+              });
+            }, 5000); // wait five seconds and check again
+          } else {
+            $('button').prop('disabled', false);
+          }
+          if (progress.filterError && !progress.inProgress) {
+            filterUpdateError = true;
+          }
+        });
+      }, 1000); // wait one second and check
+    }
+  },
   dontRemoveWhitelistAction() {
     transitionTo('dontRemoveWhitelist', false);
   },
@@ -46,6 +74,15 @@ const popupMenuHelpActionMap = {
       browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href });
     }
     transitionTo('removeWhitelist', false);
+  },
+  dontRemoveWhitelistDistractionAction() {
+    transitionTo('dontRemoveWhitelistDistraction', false);
+  },
+  removeWhitelistDistractionAction() {
+    if (pageInfo.url) {
+      browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href });
+    }
+    transitionTo('removeWhitelistDistraction', false);
   },
   finishFlowAction() {
     logHelpFlowResults('finishFlow');
@@ -60,11 +97,22 @@ const popupMenuHelpActionMap = {
     browser.tabs.reload();
     transitionTo('checkedBasics', false);
   },
+  reloadCheckDistractionAction() {
+    browser.tabs.reload();
+    transitionTo('checkedDistractionBasics', false);
+  },
   stillSeeAdAction() {
     if (filterUpdateError) {
       transitionTo('seeAdFilterError', false);
     } else {
       transitionTo('seeAdFiltersGood', false);
+    }
+  },
+  stillSeeDistractionAction() {
+    if (filterUpdateError) {
+      transitionTo('seeDistractionFilterError', false);
+    } else {
+      transitionTo('whichDistractions', false);
     }
   },
   problemSolvedAction() {
@@ -93,8 +141,40 @@ const popupMenuHelpActionMap = {
       transitionTo('unpauseAndReload', false);
     }
   },
+  // Unpauses and reloads the page
+  unpauseAndReloadActionDistraction() {
+    if (pageInfo.paused) {
+      browser.runtime.sendMessage({ command: 'adblockIsPaused', newValue: false }).then(() => {
+        browser.tabs.reload();
+        browser.runtime.sendMessage({ command: 'getCurrentTabInfo' }).then((info) => {
+          // eslint-disable-next-line no-global-assign
+          pageInfo = info;
+          transitionTo('unpauseAndReloadDistraction', false);
+        });
+      });
+    } else if (pageInfo.url) {
+      browser.runtime.sendMessage({ command: 'adblockIsDomainPaused', activeTab: { url: pageInfo.url.href, id: pageInfo.id }, newValue: false }).then(() => {
+        browser.tabs.reload();
+        browser.runtime.sendMessage({ command: 'getCurrentTabInfo' }).then((info) => {
+          // eslint-disable-next-line no-global-assign
+          pageInfo = info;
+          transitionTo('unpauseAndReloadDistraction', false);
+        });
+      });
+    } else {
+      browser.tabs.reload();
+      browser.runtime.sendMessage({ command: 'getCurrentTabInfo' }).then((info) => {
+        // eslint-disable-next-line no-global-assign
+        pageInfo = info;
+        transitionTo('unpauseAndReloadDistraction', false);
+      });
+    }
+  },
   dontChangeSeeAdsAction() {
     transitionTo('dontChangeSeeAds', false);
+  },
+  dontChangeSeeDistractionAction() {
+    transitionTo('dontChangeSeeDistraction', false);
   },
   seeAdsUnpausedAction() {
     transitionTo('seeAdFiltersGood', false);
@@ -167,5 +247,8 @@ const popupMenuHelpActionMap = {
   },
   distractionsProblemSolvedAction() {
     transitionTo('seeingDistractionsProblemSolved', false);
+  },
+  whichDistractionsAction() {
+    transitionTo('seeDistraction', false);
   },
 };

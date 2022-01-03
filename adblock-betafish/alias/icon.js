@@ -284,6 +284,7 @@ export const NEW_BADGE_REASONS = {
   SEVEN_DAY: 'seven day',
   UPDATE: 'update',
   VPN_CTA: 'vpn cta',
+  FREE_DC_UPDATE: 'free dc update',
 };
 
 /**

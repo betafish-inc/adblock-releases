@@ -9,10 +9,8 @@
   list-style-type: none;
 }
 #sidebar-tabs ul[data-parent-tab] {
-  display: none;
   margin-left: 34px;
   border-radius: 3px 0px 0px 3px;
-  opacity: 0;
   transition: opacity 0.2s linear;
   padding-top: 5px;
 }
@@ -80,10 +78,14 @@
   margin-bottom: 12px;
   margin-left: 20px;
 }
-.newItemIcon {
-  margin-right: -18px;
+#sidebar-tabs li a i#new-dc-icon {
+  margin-right: -20px;
   position: relative;
   left: -35px;
+  width: 20px;
+  color: var(--red2);
+  font-size: 16px;
+  display: none;
 }
 
 /* Tab content */
@@ -144,9 +146,12 @@
     margin-left: 8px;
     padding: 2px 11px;
   }
-  .newItemIcon {
-    left: 0px;
-    margin-right: -3px;
+  #sidebar-tabs li a i#new-dc-icon {
+    margin-left: 2px;
+    position: unset;
+  }
+  #sidebar-tabs a:not(.active):hover span#dc-menu-item.newItem {
+    margin-left: 30px;
   }
 }
 /* RTL Language Specific rules */

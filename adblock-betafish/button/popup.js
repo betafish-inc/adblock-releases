@@ -146,10 +146,12 @@ document.addEventListener('readystatechange', () => {
 try {
   const popupMenuCtaClosedKey = 'popup_menu_cta_closed';
   const showPopupMenuThemesCtaKey = 'popup_menu_themes_cta';
+  const popupMenuFreeDCCtaClosedKey = 'popup_menu_free_dc_cta_closed';
   const popupMenuDCCtaClosedKey = 'popup_menu_dc_cta_closed';
   const popupMenuVPNCtaClosedKey = 'popup_menu_vpn_cta_closed';
   const userClosedCta = storageGet(popupMenuCtaClosedKey);
   const showThemesCTA = storageGet(showPopupMenuThemesCtaKey);
+  const userClosedFreeDCCta = storageGet(popupMenuFreeDCCtaClosedKey);
   const userClosedDCCta = storageGet(popupMenuDCCtaClosedKey);
   const userClosedVPNCta = storageGet(popupMenuVPNCtaClosedKey);
 
@@ -319,6 +321,7 @@ try {
             if (popupMenuTheme && browser.runtime && browser.runtime.id === betaExtId) {
               $('.header-logo').attr('src', `icons/${popupMenuTheme}/beta_logo.svg`);
             }
+
             // VPN CTAs
             if (
               info.showVPNCTA
@@ -331,12 +334,20 @@ try {
               show([`div_vpn_cta_${info.showVPNCTAVar}`]);
               browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_seen', additionalParams: { var: info.showVPNCTAVar, exp: info.showVPNCTAExp } });
               // Premium CTAs
-            } else if (info.showMABEnrollment && userClosedCta && showThemesCTA) {
+            } else if (
+              info.showMABEnrollment
+              && userClosedCta
+              && showThemesCTA
+              && userClosedFreeDCCta
+            ) {
               show(['div_premium_themes_cta']);
               $('#div_premium_themes_cta').attr('data-theme-cta', info.popupMenuThemeCTA);
               browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'premium_themes_cta_seen', additionalParams: { theme: info.popupMenuThemeCTA.replace('_theme', '') } });
-            } else if (info.showMABEnrollment && !userClosedCta) {
+            } else if (info.showMABEnrollment && !userClosedCta && userClosedFreeDCCta) {
               show(['div_myadblock_enrollment_v2']);
+            } else if (info.showMABEnrollment && !userClosedFreeDCCta) {
+              show(['div_free_dc_cta']);
+              browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'free_dc_cta_seen' });
             } else if (info.showDcCTA && !userClosedDCCta && !info.disabledSite) {
               show(['div_premium_dc_cta']);
               browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'premium_dc_cta_seen' });
@@ -540,6 +551,21 @@ try {
         storageSet(showPopupMenuThemesCtaKey, true);
       });
 
+      selected('#div_free_dc_cta', () => {
+        storageSet(popupMenuFreeDCCtaClosedKey, true);
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'free_dc_cta_clicked' });
+        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'https://getadblock.com/premium/enrollment/distraction-control/' }).then(() => {
+          closeAndReloadPopup();
+        });
+      });
+
+      selected('#div_free_dc_cta_close', (event) => {
+        event.stopPropagation();
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'free_dc_cta_closed' });
+        $('#div_free_dc_cta').slideUp();
+        storageSet(popupMenuFreeDCCtaClosedKey, true);
+      });
+
       selected('#div_vpn_cta_1, #div_vpn_cta_2, #vpn_cta_3_learn_more, #vpn_cta_4_learn_more', (event) => {
         event.stopPropagation();
         storageSet(popupMenuVPNCtaClosedKey, true);
@@ -630,6 +656,13 @@ try {
         $('#dc-cta-text').text(translate('check_out_dc'));
       }).on('mouseleave', () => {
         $('#dc-cta-text').text(translate('new_premium_feature'));
+      });
+
+
+      $('#div_free_dc_cta').on('mouseenter', () => {
+        $('#free-dc-cta-text').text(translate('get_distractioncontrol'));
+      }).on('mouseleave', () => {
+        $('#free-dc-cta-text').text(translate('block_floating_videos'));
       });
 
       $('#div_premium_themes_cta').on('mouseenter', function handleIn() {

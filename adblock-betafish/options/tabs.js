@@ -71,17 +71,20 @@ function getSyncOutOfDateMessageDiv(id) {
 
 function showNewIcon() {
   $('#dcIcon').fadeOut();
-  $('a[href="#distractioncontrol"] .newItemIcon').fadeIn();
+  $('#new-dc-icon').fadeIn();
+  $('#dc-menu-item').addClass('newItem');
 }
 
 function showDcIcon() {
   $('#dcIcon').fadeIn();
-  $('a[href="#distractioncontrol"] .newItemIcon').fadeOut();
+  $('#new-dc-icon').fadeOut();
+  $('#dc-menu-item').removeClass('newItem');
 }
 
 function hideBothIcons() {
   $('#dcIcon').fadeOut();
-  $('a[href="#distractioncontrol"] .newItemIcon').fadeOut();
+  $('#new-dc-icon').fadeOut();
+  $('#dc-menu-item').removeClass('newItem');
 }
 
 function checkWindowWidth() {
@@ -133,28 +136,6 @@ function validateTabID(tabID) {
   return tabID;
 }
 
-// Show or hide Premium subtabs based on
-// which tab is currently active. All subtabs
-// links must have a data-parent-tab attribute
-// Inputs: $activeTab -- jQuery object
-function handleSubTabs($activeTab) {
-  const activeTabHref = $activeTab.attr('href');
-  const $activeTabNestedUL = $(`[data-parent-tab='${activeTabHref}']`);
-  const $activeTabUL = $activeTab.closest('ul');
-  const subtabIsActive = $activeTabUL[0].hasAttribute('data-parent-tab');
-  const parentTabIsActive = !!$activeTabNestedUL.length;
-
-  // hide all subtabs ul elements
-  $('[data-parent-tab]').hide();
-
-  if (subtabIsActive) {
-    $activeTabUL.show().fadeTo('slow', 1);
-  } else if (parentTabIsActive) {
-    $activeTabNestedUL.show().fadeTo('slow', 1);
-  }
-}
-
-
 // Load tab panel script in the document when the tab is
 // activated for the first time.
 // Inputs: $activeTabPanel -- jQuery Object
@@ -177,7 +158,6 @@ function loadTabPanelScript($activeTabPanel) {
 // Inputs: $activeTab - active tab jQuery object
 function displayActiveTab($activeTab) {
   const $activeTabPanel = $($activeTab.attr('href'));
-  handleSubTabs($activeTab);
   loadTabPanelScript($activeTabPanel);
   $activeTabPanel.show();
   if (document.readyState === 'complete') {
