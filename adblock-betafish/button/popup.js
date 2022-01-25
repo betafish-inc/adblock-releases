@@ -42,7 +42,7 @@ const processError = function (err, stack, message) {
         en: 'Help us resolve this problem ',
       },
       error_msg_help_us_partII: {
-        en: ' by sending us some dubug data.',
+        en: ' by sending us some debug data.',
       },
       error_msg_thank_you: {
         en: 'Thank you',
@@ -203,6 +203,9 @@ try {
       if (document.location.search && document.location.search.indexOf('tabId') > 0) {
         const params = new URLSearchParams(document.location.search);
         tabId = params.get('tabId');
+        if (tabId === 'error') { // allows testing of the error handling logic
+          throw new Error('anError');
+        }
       }
       browser.runtime.sendMessage({ command: 'getCurrentTabInfo', tabId }).then((info) => {
         if (info) {
@@ -529,10 +532,19 @@ try {
       selected('#svg_options', () => {
         storageSet(popupMenuDCCtaClosedKey, true);
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'options_clicked' });
-        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html') }).then(() => {
+        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html#general') }).then(() => {
           closeAndReloadPopup();
         });
       });
+
+      selected('#premium_status_msg', () => {
+        storageSet(popupMenuDCCtaClosedKey, true);
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'premium_options_clicked' });
+        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html#mab') }).then(() => {
+          closeAndReloadPopup();
+        });
+      });
+
 
       selected('#div_myadblock_enrollment_v2', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'myadblock_cta_clicked' });

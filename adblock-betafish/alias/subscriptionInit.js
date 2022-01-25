@@ -145,7 +145,7 @@ function getSubscriptions() {
   // Add pre-configured subscriptions
   for (let url of Prefs.additional_subscriptions) subscriptions.push(Subscription.fromURL(url));
 
-  // Add "acceptable ads", "AdBlock Custom", and "BitCoing Mining Protection List" subscriptions
+  // Add "acceptable ads", and "AdBlock Custom" subscriptions
   if (firstRun) {
     if (info.platform !== "gecko") {
       let acceptableAdsSubscription = Subscription.fromURL(Prefs.subscriptions_exceptionsurl);
@@ -159,11 +159,6 @@ function getSubscriptions() {
     abcSubscription.title = "AdBlock custom filters";
     subscriptions.push(abcSubscription);
 
-    let cplSubscription = Subscription.fromURL(
-      "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt"
-    );
-    cplSubscription.title = "Cryptocurrency (Bitcoin) Mining Protection List";
-    subscriptions.push(cplSubscription);
   }
 
   // Add default ad blocking subscriptions (e.g. EasyList, Anti-Circumvention)

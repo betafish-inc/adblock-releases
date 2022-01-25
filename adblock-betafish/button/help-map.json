@@ -96,14 +96,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "removeWhitelistAction",
-        "icon": "check"
+        "text": "no",
+        "action": "dontRemoveWhitelistAction"
       },
       {
-        "text": "no",
-        "action": "dontRemoveWhitelistAction",
-        "icon": "close"
+        "text": "yes",
+        "action": "removeWhitelistAction"
       }
     ]
   },
@@ -127,12 +125,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "removeWhitelistDistractionAction"
-      },
-      {
         "text": "no",
         "action": "dontRemoveWhitelistDistractionAction"
+      },
+      {
+        "text": "yes",
+        "action": "removeWhitelistDistractionAction"
       }
     ]
   },
@@ -310,14 +308,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "stillSeeAdAction",
-        "icon": "check"
+        "text": "no",
+        "action": "problemSolvedAction"
       },
       {
-        "text": "no",
-        "action": "problemSolvedAction",
-        "icon": "close"
+        "text": "yes",
+        "action": "stillSeeAdAction"
       }
     ]
   },
@@ -341,12 +337,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "stillSeeDistractionAction"
-      },
-      {
         "text": "no",
         "action": "distractionsProblemSolvedAction"
+      },
+      {
+        "text": "yes",
+        "action": "stillSeeDistractionAction"
       }
     ]
   },
@@ -408,14 +404,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "seeAdEnglishSiteAction",
-        "icon": "check"
+        "text": "no",
+        "action": "seeAdNotEnglishSiteAction"
       },
       {
-        "text": "no",
-        "action": "seeAdNotEnglishSiteAction",
-        "icon": "close"
+        "text": "yes",
+        "action": "seeAdEnglishSiteAction"
       }
     ]
   },
@@ -487,14 +481,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "unpauseAndReloadAction",
-        "icon": "check"
+        "text": "no",
+        "action": "dontChangeSeeAdsAction"
       },
       {
-        "text": "no",
-        "action": "dontChangeSeeAdsAction",
-        "icon": "close"
+        "text": "yes",
+        "action": "unpauseAndReloadAction"
       }
     ]
   },
@@ -540,14 +532,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "seeAdsUnpausedAction",
-        "icon": "check"
+        "text": "no",
+        "action": "problemSolvedAction"
       },
       {
-        "text": "no",
-        "action": "problemSolvedAction",
-        "icon": "close"
+        "text": "yes",
+        "action": "seeAdsUnpausedAction"
       }
     ]
   },
@@ -672,14 +662,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "stillBrokenNotAdBlockAction",
-        "icon": "check"
+        "text": "no",
+        "action": "stillBrokenAdBlockAction"
       },
       {
-        "text": "no",
-        "action": "stillBrokenAdBlockAction",
-        "icon": "close"
+        "text": "yes",
+        "action": "stillBrokenNotAdBlockAction"
       }
     ]
   },
@@ -896,12 +884,12 @@
     ],
     "buttons": [
       {
-        "text": "yes",
-        "action": "requestDCSubmission"
-      },
-      {
         "text": "no",
         "action": "distractionsProblemSolvedAction"
+      },
+      {
+        "text": "yes",
+        "action": "requestDCSubmission"
       }
     ]
   },
