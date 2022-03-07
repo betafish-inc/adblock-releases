@@ -97,6 +97,15 @@ class Recommendation
   {
     return this._source.hidden || false;
   }
+
+  /**
+   * The unique index of the recommended filter subscription.
+   * @type {Integer}
+   */
+   get index()
+   {
+    return this._source.index;
+   }
 }
 
 /**

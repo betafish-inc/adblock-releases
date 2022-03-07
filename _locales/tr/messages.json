@@ -79,9 +79,43 @@
     "message": "Düğmeyi gizlemek için sağ tıklatın ve araç çubuğu'ndan Kaldır'ı seçin.  Firefox menüsü -> Özelleştir altında bu  butonu yeniden gösterebilirsiniz.",
     "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
   },
+  "isithidden": {
+    "message": "Öğe gizli mi?\n",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderexplanation": {
+    "message": "Değilse, bu sayfadaki ek öğeleri gizlemek için kaydırıcıyı kullanın:\n",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderwarning": {
+    "message": "Dikkatli olun, bir sayfada çok fazla reklam gizlemek bazı işlevleri bozabilir\n",
+    "description": "'Block an ad' wizard usage explanation"
+  },
   "slidertitle": {
     "message": "İlk Adım: Nelerin engelleneceğini belirle",
     "description": "'Block an ad' wizard title"
+  },
+  "blacklisteroptions1": {
+    "message": "Bu öğe gizli tutulsun mu?\n",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "blacklisternotsure_part_I": {
+    "message": "Ayarlarınıza, siteyi her ziyaret ettiğinizde bu öğeyi gizleyecek bir kural eklenecektir.\n",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "blacklisternotsure_part_II": {
+    "message": "AdBlock menüsünden 'Bu sayfadaki gizli öğelerimi geri al'ı seçerek bunu istediğiniz zaman geri alabilirsiniz.\n",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "hiddenelementmessagecount": {
+    "message": "$count$ Bu sayfadaki diğer öğeler de geçici olarak gizlendi\n",
+    "description": "The total number of ads or 'things' hidden on a page by the new rule.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "blacklisternofilter": {
     "message": "Filtre tanımlanmamış.",
@@ -119,6 +153,10 @@
       }
     }
   },
+  "warning": {
+    "message": "Uyarı",
+    "description": "Warns the user about an error."
+  },
   "blacklistersinglematch": {
     "message": "Bu sayfada 1 benzer öğe bulundu.",
     "description": "Tells the user only one match was found"
@@ -155,9 +193,29 @@
     "message": "İyi görünüyor",
     "description": "Confirmation button after user chose what to block on the page"
   },
+  "back": {
+    "message": "Geri",
+    "description": "Back to previous page button"
+  },
+  "add_info": {
+    "message": "Ek Bilgiler\n",
+    "description": "section title on hidding wizard, shown when advance user option enabled"
+  },
+  "confirm_msg": {
+    "message": "Bu öğenin özelliklerinin doğru göründüğünü onaylayın:",
+    "description": "text on hidding wizard, shown when advance user option enabled"
+  },
   "findingads": {
     "message": "Reklamlar bulunuyor..\n\nBu sadece birkaç saniye sürecek.",
     "description": "'Block an ad' wizard loading message"
+  },
+  "blockanadtitle": {
+    "message": "AdBlock Gizleme Sihirbazı\n",
+    "description": "Title of the first two dialogs of the 'Block an ad' wizard"
+  },
+  "clickthead": {
+    "message": "Bu sayfadaki gizlemek istediğiniz herhangi bir öğeye tıklayın.\n",
+    "description": "User has to click the ad they want to block."
   },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock şu durumlarla eşleşen sayfalarda çalışmayacak:",
@@ -174,6 +232,10 @@
   "buttonexclude": {
     "message": "İstisna",
     "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "buttonconfirm": {
+    "message": "Onayla",
+    "description": "Button for confirming a new rule in the hiding wizard"
   },
   "reloadpageafterwhitelist": {
     "message": "Sayfayı yeniden yükle.",
@@ -401,6 +463,10 @@
     "message": "Fanboy's Annoyances (sayfa içi pop-upları, sosyal medyadaki ve önerilen widgetları, ve diğer can sıkan reklamları engeller)",
     "description": "A filter list"
   },
+  "filterfb_notifications": {
+    "message": "Fanboy'un Bildirimleri (sayfa içi açılır pencereleri, sosyal medyayı ve ilgili widget'ları ve diğer rahatsızlıkları engeller)",
+    "description": "A filter list"
+  },
   "filterwarning_removal": {
     "message": "Adblock Uyarı Kaldırma listesi (reklam engelleyicilerin kullanımı hakkında uyarır)",
     "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
@@ -476,6 +542,10 @@
   "filteranticircumvent": {
     "message": "Anti-önleme filtreleri",
     "description": "A filter list"
+  },
+  "filternordic": {
+    "message": "İskandinav Filtreleri + Kolay Liste\n",
+    "description": "A filter list combined with EasyList"
   },
   "blacklistclickmessage": {
     "message": "Reklamı engellemek için sağ tıklayın -- ya da buradan manuel olarak engelleyin.",
@@ -1383,6 +1453,10 @@
     "message": "Sadece bu sitelerdeki reklamları engelle:",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
   },
+  "format": {
+    "message": "Biçim:",
+    "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
+  },
   "warning_overrules_filters": {
     "message": "Dikkat: bu sitelerin dışında tüm sitelerde reklamları görebileceksiniz!\n Kullandığınız filtreler bu siteler dışında geçersiz olacak.",
     "description": "Message on the 'Customize' tab of the options page, explaining the danger of adding a allowlist filter for all websites with only some exceptions."
@@ -1531,9 +1605,17 @@
     "message": "AdBlock Destek",
     "description": "Title of the Support tab of the Options page"
   },
+  "whatsnew": {
+    "message": "[[Changelog]] sayfamızdaki en son güncellemeleri görün\n",
+    "description": "Link to display the changelog on the Support tab"
+  },
   "englishonly": {
     "message": "Yalnızca İngilizce",
     "description": "Lets the user know that a link/page is only available in English."
+  },
+  "needhelp": {
+    "message": "Yardıma mı ihtiyacınız var?",
+    "description": "Subtitle on the Support tab"
   },
   "adblockupdates": {
     "message": "AdBlock güncellemeleri",
@@ -1551,9 +1633,37 @@
     "message": "AdBlock Hakkında",
     "description": "Subtitle on the Support tab"
   },
+  "sourcecode": {
+    "message": "[[Kaynak kodu]] sayfamızı inceleyin\n",
+    "description": "Link to the source code of AdBlock on the Support tab"
+  },
+  "contributors": {
+    "message": "[[Ekibimiz]] hakkında daha fazla bilgi edinin\n",
+    "description": "Link to the contributors page on the Support tab"
+  },
+  "debuginfo": {
+    "message": "Ekibimiz bazı hata ayıklama bilgileri istedi mi?\n",
+    "description": "Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport": {
+    "message": "Bize bir [[hata raporu]] gönderin\n",
+    "description": "Link to send a bug report on the Support tab"
+  },
   "supportsite": {
     "message": "[[Destek sitemize]] bildirin!",
     "description": "Link to the support site on the Support tab"
+  },
+  "helpcenter": {
+    "message": "[[Yardım Merkezimizi]] ziyaret edin\n",
+    "description": "Link to AdBlock's help site. This is found on the Support tab of the options."
+  },
+  "copydebugdata": {
+    "message": "Hata ayıklama verilerini kopyala\n",
+    "description": "Button text on the Support tab of the options."
+  },
+  "copieddebugdata": {
+    "message": "Kopyalandı!",
+    "description": "Button text on the Support tab of the options."
   },
   "resourceblocktitle": {
     "message": "Tüm Kaynaklar",
@@ -1898,6 +2008,14 @@
   "myadblock_picreplacement_exlained": {
     "message": "Aşağıdaki kategorilerden birini seç ve AdBlock gününü aydınlatmak için reklamların yerini yüksek kalite resimlerle değiştirecektir.",
     "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "feedback_title": {
+    "message": "Geri bildirim",
+    "description": "Title for feedback call to action."
+  },
+  "feedback_info": {
+    "message": "Bizim için bir yorum veya özellik talebiniz mi var? Sizden geribildirim almak isteriz!\n",
+    "description": "Text describing the MyAdBlock feedback call to action."
   },
   "myadblock_feedback_title": {
     "message": "Sizden haber almak isteriz!",
@@ -2265,6 +2383,30 @@
     "message": "AdBlock'un eski bir sürümünü kullanıyorsunuz.",
     "description": "button text on the Sync sub-tab of the Options page"
   },
+  "sync_message_old_version_part_2": {
+    "message": "Ayarlarınızı senkronize edebilmemiz için lütfen [[AdBlock'u güncelleyin]].\n",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_removed_error_msg_part_1": {
+    "message": "Bu uzantı senkronize değil\n",
+    "description": "sync error message text on the popup menu"
+  },
+  "sync_removed_error_msg_part_2": {
+    "message": "Ayarlarınızı güncellemek için burayı tıklayın\n",
+    "description": "sync error message text on the popup menu and options page"
+  },
+  "unsync_error_msg_part_1": {
+    "message": "Senkronizasyon Hatası",
+    "description": "sync error message text on the options menu"
+  },
+  "unsync_error_msg_part_2": {
+    "message": "Bu uzantı artık senkronize edilmiyor.\n",
+    "description": "sync error message text on the popup menu"
+  },
+  "unsync_error_msg_part_3": {
+    "message": "Bu sayfayı yenilemek için burayı tıklayın, ardından bu cihazı senkronize etmek için \"Bu Uzantıyı Ekle\" yi tıklayın\n",
+    "description": "sync error message text on the Sync tab of the options page"
+  },
   "sync_premium_cta": {
     "message": "Eşitle gibi Premium özelliklerle bir reklam engelleme prosu olacaksın.",
     "description": "AdBlock Premium CTA on the Sync tab"
@@ -2305,8 +2447,16 @@
     "message": "(bu eklenti)",
     "description": "description for name of the current extension"
   },
+  "sync_delete_panel_title": {
+    "message": "Senkronize Edilen Uzantıyı Sil\n",
+    "description": "Panel title text on the delete device overlay"
+  },
   "confirm_delete_extension": {
     "message": "Bu eklentiyi silmek istediğinize emin misiniz?",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
+  },
+  "cannot_be_undone": {
+    "message": "Bu eylem geri alınamaz.\n",
     "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
   },
   "delete": {
@@ -2627,6 +2777,102 @@
     "message": "Teşekkürler",
     "description": "Message for help flow in popup menu."
   },
+  "got_it_no_period": {
+    "message": "Anladım",
+    "description": "Button text on the DC options page."
+  },
+  "seeing_distractions": {
+    "message": "Bu sitede dikkat dağıtıcı şeyler görüyorum",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "Dikkat dağıtan şeyler görüyorum",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "Tercihlerinizi güncelledik",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "Hala dağınıklık görüyor musun?",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "Harika, sorun çözüldü.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "Hangi dağınıklıklar?",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "AdBlock Premium tarafından engellenen dikkat dağıtıcılarla ilgili ek ayrıntılar [[here]] bulunabilir",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "Dikkat Dağıtma Kontrolü özellikleri için tercihlerinizi ayarlamak isterseniz bunu [[buradan]] yapabilirsiniz.",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "Destek ekibimizle iletişime geçmek için [[Yardım Merkezimizi]] ziyaret edin.",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_is_whitelisted_distraction": {
+    "message": "Bu sayfa beyaz listenizde, bu yüzden bir reklam görüyorsunuz.",
+    "description": "Message for help flow in popup menu."
+  },
+  "wont_change_anything_distraction": {
+    "message": "Hiçbir şeyi değiştirmeyeceğiz, böylece reklamları görmeye devam edeceksiniz.",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_not_see_distraction": {
+    "message": "Artık bu reklamı görmemeniz için sayfayı yeniden yükleyin!",
+    "description": "Message for help flow in popup menu."
+  },
+  "still_see_distraction": {
+    "message": "Hala dağınıklık görüyor musun?",
+    "description": "Message for help flow in popup menu."
+  },
+  "paused_not_blocking_distraction": {
+    "message": "AdBlock şu anda duraklatılmış, bu nedenle hiçbir reklamı engellemiyoruz.",
+    "description": "panel text on the help flow in popup menu."
+  },
+  "resume_reload_distraction": {
+    "message": "Reklamları engellemeye devam etmek ve sayfayı yeniden yüklemek istiyor musunuz?",
+    "description": "panel text on the help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "Bülten açılır pencereleri\n",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "Kayan videolar",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "Anketler",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "\"Bildirimlere İzin Ver\" istekleri",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "İleri",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "Rapor alındı",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "Hata bildiriminiz için teşekkürler!",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "Ekibimiz uyarıldı hata araştırılacak.",
+    "description": "Text for help flow in popup menu."
+  },
   "adblock_logo": {
     "message": "AdBlock logosu",
     "description": "Text in the alt attribute of an AdBlock logo image."
@@ -2723,6 +2969,10 @@
     "message": "Daha fazlasını öğren",
     "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
   },
+  "find_out_more": {
+    "message": "Daha Fazla Bilgi",
+    "description": "Text in the button on the Premium CTA on the hiding wizard."
+  },
   "update_filter_lists_now": {
     "message": "Filtre Listelerini Güncelle",
     "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
@@ -2815,9 +3065,25 @@
     "message": "Beyaz listene bir web sitesi ekledin!",
     "description": "Part 1 of a call-to-action on the allowlist wizard"
   },
+  "dont_show_me_again": {
+    "message": "Bu mesajı bir daha gösterme",
+    "description": "opt out option on all-to-action on the blocklist / hiding wizard"
+  },
   "never_lose_settings": {
     "message": "Bu ayarı tüm cihazlarınıza uygulayın ve Yedekleme ile AdBlock ayarlarınızı asla kaybetmediğinizden emin olun & Senkronize et.",
     "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
+  },
+  "wizard_premium_cta_title": {
+    "message": "Hey, görünüşe göre AdBlock Premium'u beğenebilirsin\n",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "wizard_premium_cta_part_I": {
+    "message": "Bu sitede az önce bir şeyi engellediniz.\n",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "wizard_premium_cta_part_II": {
+    "message": "Bu tercihi tüm cihazlarınıza uygulayın ve Yedekleme ve Senkronizasyon ile AdBlock ayarlarınızı asla kaybetmediğinizden emin olun.\n",
+    "description": "Part of a message on the blocklist wizard"
   },
   "blocked_something": {
     "message": "Bu sitede yeni bir şey engellediniz!",
@@ -2829,6 +3095,22 @@
   },
   "check_out_themes": {
     "message": "Temalara göz atın!",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "new_premium_feature": {
+    "message": "Yeni Premium Özellik mevcut!",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_dc": {
+    "message": "Dikkat Dağıtma Kontrolü ile daha fazlasını engelleyin\n",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "block_floating_videos": {
+    "message": "Kayan videoları durdur",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "get_distractioncontrol": {
+    "message": "Dikkat dağıtıcı kontrolü",
     "description": "Part 2 of a call-to-action on the Popup menu"
   },
   "notification_antiadblock_message": {
@@ -2899,6 +3181,54 @@
   },
   "adblock_vpn": {
     "message": "AdBlock VPN",
+    "description": "Text of a Options page lower menu button"
+  },
+  "adblock_newsletter": {
+    "message": "AdBlock Bülteni",
+    "description": "Text of a Options page lower menu button"
+  },
+  "keep_touch": {
+    "message": "İletişimi koparma!",
+    "description": "Text of a Options page lower menu button"
+  },
+  "all_set": {
+    "message": "Hepsi Ayarlandı!",
+    "description": "Text of a Options page lower menu button"
+  },
+  "youre_awesome": {
+    "message": "Teşekkürler, harikasın!",
+    "description": "Text of a Options page lower menu button"
+  },
+  "added_mailing_list": {
+    "message": "AdBlock posta listesine eklendiniz.",
+    "description": "Text of a Options page lower menu button"
+  },
+  "sign_up_mailing": {
+    "message": "AdBlock'taki son gelişmelerden haberdar olmak için e-posta listemize kaydolun.",
+    "description": "Text of a Options page lower menu button"
+  },
+  "email_address_placeholder": {
+    "message": "E-posta adresinizi girin",
+    "description": "Text of a Options page lower menu button"
+  },
+  "please_click_confirm": {
+    "message": "Ekibimizden ara sıra e-posta güncellemeleri almak istediğinizi onaylamak için lütfen buraya tıklayınız.",
+    "description": "Text of a Options page lower menu button"
+  },
+  "never_share_email": {
+    "message": "E-postanızı asla kimseyle paylaşmayacağız.",
+    "description": "Text of a Options page lower menu button"
+  },
+  "join_mailing_list": {
+    "message": "Mail listemize katılın",
+    "description": "Text of a Options page lower menu button"
+  },
+  "valid_email_address": {
+    "message": "Lütfen geçerli bir e-posta adresi girin",
+    "description": "Text of a Options page lower menu button"
+  },
+  "please_confirm": {
+    "message": "Lütfen devam etmek için onaylayın",
     "description": "Text of a Options page lower menu button"
   },
   "youve_blocked_num_ads": {
@@ -3223,12 +3553,186 @@
     "message": "Her Zaman",
     "description": "The button text on the popup menu"
   },
+  "enable_on_this_site": {
+    "message": "Bu sayfada AdBlock'u etkinleştir",
+    "description": "GFC messaging on the popup menu"
+  },
+  "premium_access_without_disabling": {
+    "message": "AdBlock Premium'daki yeni özellikler, AdBlock'u devre dışı bırakmadan sevdiğiniz içeriğe erişmeyi kolaylaştırır.\n",
+    "description": "GFC messaging on the popup menu"
+  },
+  "dont_show_reminder": {
+    "message": "Bu hatırlatıcıyı bir daha gösterme\n",
+    "description": "GFC messaging on the popup menu"
+  },
+  "want_stop_seeing": {
+    "message": "Bunları Görmekten Vazgeçmek İstiyor musunuz?\n",
+    "description": "GFC messaging on the popup menu"
+  },
+  "access_without_disabling": {
+    "message": "AdBlock'u devre dışı bırakmadan sevdiğiniz içeriğe kolayca erişin!\n",
+    "description": "GFC messaging on the popup menu"
+  },
+  "learn_more_lower": {
+    "message": "Daha Fazlasını Öğrenin",
+    "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "Dikkat dağıtıcı kontrolü",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "Tarayıcınızın kontrolünü elinize alın ve istediğiniz şekilde gezinin!",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "Dikkat Dağıtma Kontrolü ile açılır pencerelere, kayan videolara ve diğer rahatsız edici dikkat dağıtıcı şeylere veda edin.",
+    "description": "Description of the distraction control option"
+  },
+  "please_note": {
+    "message": "Lütfen dikkat:",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_new": {
+    "message": "Dikkat Dağıtma Kontrolü yeni bir özelliktir ve halen geliştirilmektedir.\n",
+    "description": "Description of the distraction control option"
+  },
+  "your_participation": {
+    "message": "Katılımınız ve geri bildiriminiz, erişimini ve işlevselliğini iyileştirmeye devam etmemize yardımcı olacaktır.\n",
+    "description": "Description of the distraction control option"
+  },
+  "dc_more_information": {
+    "message": "Daha fazla bilgi: [[here]]",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "Dikkat Dağıtma Kontrolü örneği\n ",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
+  "block_site_notifications": {
+    "message": "Tüm bildirimleri engelle",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "Ziyaret ettiğiniz web sitelerinden gelen 'bildirimlere izin ver' isteklerini otomatik olarak reddedin.\n",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "Kayan videoları durdur",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "Videoların otomatik olarak oynatılmasını önleyin ve siz gezinirken 'kayan' videoların sizi takip etmesini durdurun.\n",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "Bülten Pop-up'larını Gizle\n",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "Sizi bir web sitesinin haber bültenine kaydolmaya davet eden can sıkıcı açılır pencereleri engelleyin.\n",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "Anket isteklerini Yoksay",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "Anketlere katılmak için web sitelerinden gelen davetleri anında reddedin.\n",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "URL'yi Gönder\n",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "Sorunu gidermemize yardımcı olmak için bu URL'yi bizimle paylaşırsanız çok memnun oluruz.\n",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "Özellik Devre Dışı",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "Görünüşe göre bu özelliği etkinleştirmemişsiniz. Bunu seçmenin sorunu çözüp çözmediğini görelim.\n",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "AdBlock şimdi tercihlerinizi güncelliyor.\n",
+    "description": "text on panel in the help flow"
+  },
   "done_reload_page": {
     "message": "İşimiz biter bitmez, lütfen sayfayı yeniden yükleyin.",
     "description": "text on panel in the help flow"
   },
+  "no_thanks": {
+    "message": "Teşekkür yok",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "Fikrinizi değiştirirseniz, ek Dikkat Dağıtma Kontrolü özelliklerini [[buradan]] etkinleştirebilirsiniz.\n",
+    "description": "text in the help flow"
+  },
+  "swap_ads_for_images": {
+    "message": "Reklamları Görsellerle Değiştirin\n",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "Tarama deneyiminizi kişiselleştirin ve $browser$ karşılığında AdBlock'tan daha da fazlasını elde edin.\n",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "Resim Değiştirme ile reklamları engellemeye devam edeceğiz, ancak bazılarını en sevdiğiniz kategorilerdeki fotoğraflarla değiştireceğiz.\n",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "AdBlock'u özelleştir",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
   "fun_way_customize": {
     "message": "Temalar tarayıcınızdaki AdBlock'u kişiselleştirmek için eğlenceli bir yol.",
     "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "Kullanımı kolay kontrollerle AdBlock'un görünümünü, hissini ve yazı tipi boyutunu kontrol edin. AdBlock'u sizin yapın!\n",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "AdBlock Ayarlarınızı Birden Fazla Cihaza Kaydedin\n",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Özel reklam engelleme kurallarınızı, filtre listesi aboneliklerinizi ve beyaz listelerinizi tüm Chrome profillerinizde yanınıza alın.\n",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "AdBlock'u bir kez kurun, ayarlarınızı yanınıza alın!\n",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "Sıkıntısız Gezinmeyi Yaşayın\n",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "Baypass modu",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "Daha Az Anti-AdBlock Duvarı Görün\n",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "AdBlock'u devre dışı bırakmanızı gerektiren açılır pencereler, web'de giderek daha yaygın hale geliyor.\n",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "Bypass Modu ile, AdBlock'u devre dışı bırakmadan bu pop-up'lardan bazılarının etrafından dolaşabileceksiniz.\n",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }

@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, require, exports, STATS, log, getSettings, Prefs, openTab,
-   License, settings, storageGet, storageSet, determineUserLanguage
+   License, settings,
  */
 
 const { showIconBadgeCTA, NEW_BADGE_REASONS } = require('./alias/icon.js');
@@ -83,66 +83,3 @@ const CtaABManager = (function get() {
 }());
 
 exports.CtaABManager = CtaABManager;
-
-async function isProTranslatedAndNotEnglish() {
-  const language = determineUserLanguage();
-  return new Promise((resolve) => {
-    if (language === 'en' || language.startsWith('en')) {
-      resolve(false);
-      return;
-    }
-    fetch(browser.runtime.getURL('translators.json'))
-      .then(res => res.json())
-      .then((response) => {
-        let matchFound = false;
-        const langSubstring = language.substring(0, 2);
-        let langEnd = '';
-        if (language.length >= 5) {
-          langEnd = language.substring(3, 5).toLowerCase();
-        }
-        for (const id in response) {
-          const idEqualToLang = id === language || id === language.toLowerCase();
-          const idEqualToLangSubstring = id.substring(0, 2) === langSubstring
-          || id.substring(0, 2) === langSubstring.toLowerCase();
-
-          // if matching id hasn't been found and id matches lang
-          if (
-            !matchFound
-          && (idEqualToLang || idEqualToLangSubstring)
-          && (((id.length <= 3)
-              || (id.length >= 5 && langEnd === id.substring(3, 5).toLowerCase())))
-          ) {
-            matchFound = true;
-            // Check if this language is professionally translated
-            for (const translator in response[id].translators) {
-              if (response[id].translators[translator].professional) {
-                return resolve(true);
-              }
-            }
-          }
-        }
-        return resolve(false);
-      });
-  });
-}
-
-
-// Display the new badge text after an update
-browser.runtime.onInstalled.addListener((details) => {
-  isProTranslatedAndNotEnglish().then((response) => {
-    if (response) {
-      const popupMenuDCCtaClosedKey = 'popup_menu_free_dc_cta_closed';
-      storageSet(popupMenuDCCtaClosedKey); // reset the closed setting so we show the CTA again
-      if (
-        details.reason === 'update'
-        && browser.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
-      ) {
-        License.ready().then(() => {
-          if (License.shouldShowMyAdBlockEnrollment()) {
-            showIconBadgeCTA(true, NEW_BADGE_REASONS.FREE_DC_UPDATE);
-          }
-        });
-      }
-    }
-  });
-});

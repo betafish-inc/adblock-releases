@@ -6,7 +6,8 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, exports, require, log, getSettings, determineUserLanguage,
    replacedCounts, chromeStorageSetHelper, getAllSubscriptionsMinusText,
-   License, channels, LocalCDN, Filter, SpecialSubscription, filterStorage */
+   License, channels, LocalCDN, Filter, SpecialSubscription, filterStorage,
+   getSubscriptionsChecksum, BigInt */
 
 
 const { Prefs } = require('prefs');
@@ -143,6 +144,11 @@ const STATS = (function exportStats() {
       const totalPings = response[STATS.totalPingStorageKey] || localTotalPings || 0;
       const themeOptionsPage = settingsObj.color_themes.options_page.replace('_theme', '');
       const themePopupMenu = settingsObj.color_themes.popup_menu.replace('_theme', '');
+      let subsStr = '-1';
+      if (typeof BigInt === 'function') {
+        subsStr = BigInt(`0b${getSubscriptionsChecksum()}`).toString();
+      }
+
       const data = {
         u: userID,
         v: version,
@@ -168,6 +174,7 @@ const STATS = (function exportStats() {
         ss: settingsObj.suppress_surveys ? '1' : '0',
         sfrp: settingsObj.suppress_first_run_page ? '1' : '0',
         opm: settingsObj.onpageMessages ? '1' : '0',
+        subs: subsStr,
       };
 
       if (typeof LocalCDN !== 'undefined') {

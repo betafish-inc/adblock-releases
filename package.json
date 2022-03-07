@@ -28,39 +28,56 @@
     "install-abp-ui": "npm install --only=production --loglevel=error --no-audit --no-fund --no-optional --prefix ./adblockplusui/",
     "post-install-abp-ui": "npm run dist --prefix ./adblockplusui/",
     "install-abp-chrome": "npm install --no-audit --no-fund --no-optional --prefix ./adblockplusui/adblockpluschrome/",
-    "install-snippets": "npm install --loglevel=error --no-audit --no-fund --no-optional --prefix ./vendor/abp-snippets || echo 'Skipping abp-snippets installation'"
+    "install-snippets": "npm install --loglevel=error --no-audit --no-fund --no-optional --prefix ./vendor/abp-snippets || echo 'Skipping abp-snippets installation'",
+    "test-snippets": "npm run --prefix ./vendor/abp-snippets build && npm run ab-snippet-build && node ./tests/snippet_test_runner.mjs",
+    "test-snippets-debug": "npm run --prefix ./vendor/abp-snippets build && npm run ab-snippet-build && node ./tests/snippet_test_runner.mjs --debugPrint"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "21.0.0",
     "@rollup/plugin-node-resolve": "13.0.5",
-    "eslint": "^7.9.0",
+    "chai": "^4.2.0",
+    "chrome-remote-interface": "^0.27.2",
+    "chromedriver": "2.36.0",
+    "dmg": "0.1.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-no-unsanitized": "^3.0.2",
+    "extract-zip": "^2.0.0",
+    "geckodriver": "^1.9.0",
     "gulp-gzip": "^1.4.2",
     "gulp-tar": "^3.1.0",
     "handlebars": "^4.7.6",
     "htmlhint": "^0.11.0",
     "husky": "^3.0.5",
     "lint-staged": "^9.2.5",
+    "mocha": "^7.1.1",
+    "ncp": "2.0.0",
     "prettier": "1.18.2",
     "rollup": "2.52.8",
     "rollup-plugin-license": "2.5.0",
     "rollup-plugin-node-polyfills": "0.2.1",
     "rollup-plugin-terser": "7.0.2",
-    "webpack-merge": "^5.1.4",
-    "webpack-stream": "^6.1.0"
+    "script-loader": "0.7.0",
+    "selenium-webdriver": "^4.0.0-alpha",
+    "webpack": "^4.41.6",
+    "webpack-merge": "5.1.4",
+    "webpack-stream": "6.1.1"
   },
   "engines": {
     "node": ">12.0 || <12.0"
   },
   "dependencies": {
+    "@tensorflow/tfjs-converter": "1.3.2",
+    "@tensorflow/tfjs-core": "1.3.2",
     "argparse": "^1.0.10",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-vinyl-zip": "^2.2.1",
+    "got": "^11.6.2",
     "merge-stream": "^2.0.0",
-    "stylelint": "^12.0.0"
+    "stylelint": "^12.0.0",
+    "webextension-polyfill": "0.8.0"
   },
   "husky": {
     "hooks": {

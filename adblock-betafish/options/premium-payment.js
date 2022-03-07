@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global License, parseUri, BG, storageSet, storageGet */
+/* global License, parseUri, BG, storageSet, storageGet, getFormattedTabName */
 
 // MABPayment can be used in all the Options page tabs and should be used to display
 // the CTAs to pay for Premium.
@@ -80,9 +80,7 @@ const MABPayment = (function mabPayment() {
       BG.recordGeneralMessage('options_page_sync_cta_clicked');
     },
     userClickedPremiumCTA: () => {
-      BG.recordGeneralMessage(`options_page_premium_cta_clicked_${$('.tablink.active span').parent().attr('href').replace('#', '')
-        .replace('-', '_')
-        .replace('-', '_')}`);
+      BG.recordGeneralMessage(`options_page_premium_cta_clicked_${getFormattedTabName()}`);
     },
   };
 }());

@@ -104,6 +104,61 @@ The following npm commands are then available:
 
 General guidelines for developing AdBlock specific code.
 
+Running the unit tests
+----------------------
+
+### Requirements
+
+In order to run the unit test suite you need
+[Node.js 12.17.0 or higher](https://nodejs.org/). Once Node.js is installed
+please run `npm install` in the repository directory in order to install the
+required dependencies.
+
+You will also need to access to the [abp-snippets repository](https://gitlab.com/eyeo/adblockplus/abp-snippets).
+
+### Running Snippets tests
+
+The `./tests/snippets/browser` folder contains the unit tests files.
+
+`npm run test-snippets` will run all tests in the `tests` directory of the repository.
+
+### Running Snippet tests with the '--debugPrint' parameter
+
+Since Snippets can have a 'debug' flag set. Calling debug before a snippet turns on the debug flag. If the other snippets support it, they'll enable their debug mode.
+
+To see the output from the debug for a Snippet, or the console.log statements in the Mocha test script, run the `npm run test-snippets-with-debug` command.  Currently, this command will only work in the Chromium remote browser.
+
+### Running the browser tests in a real browser
+
+The tests under `./tests/snippets/browser` require a browser environment. `npm run test-snippets` will
+run these in a headless browser, with each module being loaded in a new frame.
+
+The default is to run in both Chromium (using the remote interface)
+and Firefox. You can select which runners to use by setting the
+BROWSER_TEST_RUNNERS environment, the default is
+"chromium_remote,firefox". Possible values (separated by a ',') are:
+
+- "chromium_remote": Chromium 60 (using the remote interface)
+- "chromium": Chrome 63 (using WebDriver)
+- "firefox": Firefox 57 (using WebDriver)
+
+You can not set a specific version of the browser at runtime.
+
+Browser tests run headless by default (except on Windows). If you want
+to disable headless mode on the WebDriver controlled tests, set the
+BROWSER_TEST_HEADLESS environment to 0.
+
+### Running the unit tests on Windows
+
+On Windows, you'll need to run the tests under [Linux environment running on WSL](https://docs.microsoft.com/windows/wsl/install-win10).  Also, the Firefox tests will fail to run on Windows.  
+
+
+Note:  If you see the following error:
+`chromium-linux-467222/chrome-linux/chrome: error while loading shared libraries: libgconf-2.so.4: cannot open shared object file: No such file or directory`
+
+run the following command in WSL: `sudo apt install libgconf-2-4` 
+This command will install the necessary library.
+
 ### Icons and Graphics
 
 All graphics use SVG when at all possible. The current exception is the extension toolbar icon which is currently a PNG. There is work in progress to replace this image with SVG.

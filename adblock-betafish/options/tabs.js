@@ -3,7 +3,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, License, localizePage, determineUserLanguage, getStorageCookie, setStorageCookie,
    THIRTY_MINUTES_IN_MILLISECONDS, checkForUnSyncError, addUnSyncErrorClickHandler, translate,
-   splitMessageWithReplacementText, setLangAndDirAttributes, storageSet, storageGet */
+   splitMessageWithReplacementText, setLangAndDirAttributes, storageSet, storageGet, BG */
 
 function tabIsLocked(tabID) {
   const $tabToActivate = $(`.tablink[href='${tabID}']`);
@@ -260,6 +260,12 @@ function activateTabOnPageLoad() {
   activateTab(activeTabID);
 }
 
+function getFormattedTabName() {
+  return $('.tablink.active span').parent().attr('href')
+    .replace('#', '')
+    .replace(/-/g, '_');
+}
+
 $(() => {
   // 1. load all the tab panels templates in respective panel DIVs
   loadTabPanelsHTML();
@@ -280,7 +286,9 @@ $(() => {
   $('.tablink').on('click', function tabLinkClicked() {
     const tabID = $(this).attr('href');
     activateTab(tabID);
+    BG.recordGeneralMessage(`options_page_tab_clicked_${getFormattedTabName()}`);
   });
+  BG.recordGeneralMessage(`options_page_opened_tab_${getFormattedTabName()}`);
 
   // 5. Display CTA - a future library update will support
   // automatically injecting the CTA HTML as well.

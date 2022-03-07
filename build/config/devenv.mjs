@@ -2,10 +2,7 @@
 const common = {
   webpack: {
     bundles: [
-      {
-        dest: 'tests/tests.js',
-        src: ['./tests/*'],
-      },
+
     ],
   },
   mapping: {

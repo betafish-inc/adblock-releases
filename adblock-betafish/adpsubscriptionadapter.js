@@ -99,6 +99,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
               tempSub.homepage = subscriptionInfo.homepage;
               tempSub.title = subscriptionInfo.title;
               tempSub.hidden = subscriptionInfo.hidden;
+              tempSub.index = subscriptionInfo.index;
             }
           }
           if (attr !== '_filterText' && attr !== '_filterTextIndex') {
@@ -126,13 +127,44 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
     return result;
   };
 
+  const rareFilterLists = {
+    'http://fanboy.co.nz/fanboy-turkish.txt': 56,
+    'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&mimetype=plaintext': 57,
+    'https://adblock.gardar.net/is.abp.txt': 58,
+    'https://github.com/SlashArash/adblockfa': 59,
+    'https://adblock.ee/list.php': 60,
+  };
+
+  // Get a binary string representation of the users subscriptions
+  const getSubscriptionsChecksum = function () {
+    let resultA = 0;
+    let resultB = 0;
+    for (const subscription of filterStorage.subscriptions()) {
+      if (subscription instanceof DownloadableSubscription) {
+        const subscriptionInfo = getSubscriptionInfoFromURL(subscription.url);
+        let index = (subscriptionInfo && subscriptionInfo.index) || 0; // 0 is the 'unkown' index
+        // if URL wasn't found in our subscription file, check the rareFilterLists to get the index
+        if (index === 0 && rareFilterLists[subscription.url]) {
+          index = rareFilterLists[subscription.url];
+        }
+        index = parseInt(index, 10);
+        if (index < 32) {
+          resultA |= (2 ** index); // eslint-disable-line no-bitwise
+        } else {
+          resultB |= (2 ** (index - 32)); // eslint-disable-line no-bitwise
+        }
+      }
+    }
+    return resultB.toString(2).padStart(32, '0') + resultA.toString(2).padStart(32, '0');
+  };
+
   // Get all subscriptions in the AB format
   // without the filter contents (text)
   const getAllSubscriptionsMinusText = function () {
     const userSubs = getSubscriptionsMinusText();
     for (const subscription of recommendations()) {
       const {
-        url, id, languages, language, type, title, homepage, hidden,
+        url, id, languages, language, type, title, homepage, hidden, index,
       } = subscription;
       if (!(id in userSubs)) {
         userSubs[id] = {};
@@ -146,6 +178,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
         userSubs[id].type = type;
         userSubs[id].title = title;
         userSubs[id].homepage = homepage;
+        userSubs[id].index = index;
       }
     }
     return userSubs;
@@ -157,7 +190,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
     const result = {};
     for (const id in userSubs) {
       const {
-        url, type, title, homepage, hidden, subscribed,
+        url, type, title, homepage, hidden, subscribed, index,
       } = userSubs[id];
       if (type === 'distraction-control') {
         result[id] = {};
@@ -169,6 +202,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
         result[id].type = type;
         result[id].title = title;
         result[id].homepage = homepage;
+        result[id].index = index;
       }
     }
     return result;
@@ -211,6 +245,7 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
     getUrlFromId,
     unsubscribe,
     getSubscriptionsMinusText,
+    getSubscriptionsChecksum,
     getAllSubscriptionsMinusText,
     getDCSubscriptionsMinusText,
     getIdFromURL,

@@ -193,9 +193,17 @@
     "message": "Pinta bé",
     "description": "Confirmation button after user chose what to block on the page"
   },
+  "back": {
+    "message": "Enrere",
+    "description": "Back to previous page button"
+  },
   "add_info": {
     "message": "Informació addicional",
     "description": "section title on hidding wizard, shown when advance user option enabled"
+  },
+  "confirm_msg": {
+    "message": "Confirmeu que els atributs d'aquest element es vegin correctes:",
+    "description": "text on hidding wizard, shown when advance user option enabled"
   },
   "findingads": {
     "message": "S'estan trobant els anuncis…\n\nAixò només trigarà uns instants.",
@@ -455,6 +463,10 @@
     "message": "Fanboy's Annoyances (bloqueja finestres emergents, ginys de xarxes socials i de mitjans de comunicació i altres molèsties)",
     "description": "A filter list"
   },
+  "filterfb_notifications": {
+    "message": "Fanboy's Notifications (bloqueja finestres emergents, ginys de xarxes socials i de mitjans de comunicació i altres molèsties)",
+    "description": "A filter list"
+  },
   "filterwarning_removal": {
     "message": "Llista d'eliminació d'avisos d'AdBlocks (elimina els avisos sobre l'utilització de bloquejadors de publicitat)",
     "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
@@ -530,6 +542,10 @@
   "filteranticircumvent": {
     "message": "Filtres anti-elusió",
     "description": "A filter list"
+  },
+  "filternordic": {
+    "message": "Nordic Filters + EasyList",
+    "description": "A filter list combined with EasyList"
   },
   "blacklistclickmessage": {
     "message": "Feu clic dret a un anunci en una pàgina per bloquejar-lo –– o bé bloquejeu-lo aquí manualment.",
@@ -1436,6 +1452,10 @@
   "only_block_ads_on_these_sites": {
     "message": "Només bloqueja els anuncis en aquests llocs:",
     "description": "Label for textbox where user enters a list of sites on Customize tab"
+  },
+  "format": {
+    "message": "Format:",
+    "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
   },
   "warning_overrules_filters": {
     "message": "Alerta: a tots els altres llocs veureu anuncis!\nAixò es salta les normes de tots els altres filtres per a aquests llocs.",
@@ -2757,6 +2777,82 @@
     "message": "Gràcies",
     "description": "Message for help flow in popup menu."
   },
+  "got_it_no_period": {
+    "message": "Entesos",
+    "description": "Button text on the DC options page."
+  },
+  "seeing_distractions": {
+    "message": "Veig distraccions en aquest lloc",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "Veig distraccions",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "Hem actualitzat les vostres preferències.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "Encara veieu la distracció?",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "Impressionant, problema resolt.",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "Quines distraccions?",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "Podeu trobar detalls addicionals sobre les distraccions bloquejades per l'AdBlock Premium [[here]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "Si voleu ajustar les vostres preferències per a les funcions de control de distracció, podeu fer-ho [[here]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "Per contactar amb el nostre equip d'assistència, visiteu el nostre [[Centre d'ajuda]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "still_see_distraction": {
+    "message": "Encara veieu la distracció?",
+    "description": "Message for help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "Finestres emergents de butlletins",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "Vídeos flotants",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "Enquestes",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "Sol·licituds «Permet notificacions»",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "Següent",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "Informe rebut",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "Gràcies per informar d'aquest problema!",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "El nostre equip ha estat informat i ho investigarà a fons.",
+    "description": "Text for help flow in popup menu."
+  },
   "adblock_logo": {
     "message": "Logo de l'AdBlock",
     "description": "Text in the alt attribute of an AdBlock logo image."
@@ -2981,6 +3077,14 @@
     "message": "Feu un cop d'ull als temes!",
     "description": "Part 2 of a call-to-action on the Popup menu"
   },
+  "new_premium_feature": {
+    "message": "Hi ha una nova funció Premium disponible!",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_dc": {
+    "message": "Bloqueja més amb el Control de distracció",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
   "notification_antiadblock_message": {
     "message": "Se sap que aquest lloc mostra missatges dirigits als usuaris de l'AdBlock. Voleu que l'AdBlock oculti els missatges dirigits?"
   },
@@ -3049,6 +3153,54 @@
   },
   "adblock_vpn": {
     "message": "AdBlock VPN",
+    "description": "Text of a Options page lower menu button"
+  },
+  "adblock_newsletter": {
+    "message": "Butlletí de l'AdBlock",
+    "description": "Text of a Options page lower menu button"
+  },
+  "keep_touch": {
+    "message": "Estem en contacte!",
+    "description": "Text of a Options page lower menu button"
+  },
+  "all_set": {
+    "message": "Tot a punt!",
+    "description": "Text of a Options page lower menu button"
+  },
+  "youre_awesome": {
+    "message": "Gràcies, sou genial!",
+    "description": "Text of a Options page lower menu button"
+  },
+  "added_mailing_list": {
+    "message": "Us hem afegit a la llista de correu d'AdBlock.",
+    "description": "Text of a Options page lower menu button"
+  },
+  "sign_up_mailing": {
+    "message": "Inscriviu-vos a la nostra llista de correu per estar al dia de les últimes novetats d'AdBlock.",
+    "description": "Text of a Options page lower menu button"
+  },
+  "email_address_placeholder": {
+    "message": "Introduïu la vostra adreça de correu",
+    "description": "Text of a Options page lower menu button"
+  },
+  "please_click_confirm": {
+    "message": "Feu clic aquí per confirmar que voleu rebre actualitzacions ocasionals per correu del nostre equip.",
+    "description": "Text of a Options page lower menu button"
+  },
+  "never_share_email": {
+    "message": "Mai compartirem el vostre correu amb ningú.",
+    "description": "Text of a Options page lower menu button"
+  },
+  "join_mailing_list": {
+    "message": "Uniu-vos a la nostra llista de correu",
+    "description": "Text of a Options page lower menu button"
+  },
+  "valid_email_address": {
+    "message": "Introduïu una adreça de correu vàlida",
+    "description": "Text of a Options page lower menu button"
+  },
+  "please_confirm": {
+    "message": "Confirmeu per continuar",
     "description": "Text of a Options page lower menu button"
   },
   "youve_blocked_num_ads": {
@@ -3397,12 +3549,162 @@
     "message": "Més informació",
     "description": "GFC messaging on the popup menu"
   },
+  "distraction_control": {
+    "message": "Control de distracció",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "Preneu el control del navegador i navegueu com vulgueu!",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "Acomiadeu-vos de les finestres emergents del butlletí, vídeos flotants i altres distraccions moletes amb el Control de distracció.",
+    "description": "Description of the distraction control option"
+  },
+  "please_note": {
+    "message": "Tingueu en compte: ",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_new": {
+    "message": "El Control de distracció és una característica nova i encara s'està perfeccionant. ",
+    "description": "Description of the distraction control option"
+  },
+  "your_participation": {
+    "message": "La vostra participació i comentaris ens ajudaran a seguir millorant el seu abast i funcionalitat. ",
+    "description": "Description of the distraction control option"
+  },
+  "dc_more_information": {
+    "message": "Podeu trobar més informació [[here]].",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "Exemple de Control de distracció",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
+  "block_site_notifications": {
+    "message": "Bloqueja les notificacions del lloc",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "Rebutja automàticament les sol·licituds «permet notificacions» dels llocs web que visiteu.",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "Atura els vídeos flotants",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "Evita que la majoria dels vídeos es reprodueixin automàticament i evita que els vídeos flotants us segueixin mentre navegueu.",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "Amaga les finestres emergents del butlletí",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "Bloqueja les molestes finestres emergents que us conviden a registrar-vos al butlletí d'un lloc web.",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "Ignora les sol·licituds d'enquestes",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "Ignora a l'instant les invitacions de llocs web per participar en enquestes.",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "Envia l'URL",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "Per ajudar-nos a solucionar els problemes, agrairíem que compartiu aquest URL amb nosaltres.",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "Característica desactivada",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "Sembla que no teniu activada aquesta funció. Vegem si això soluciona el problema.",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "L'AdBlock està actualitzant les vostres preferències ara.",
+    "description": "text on panel in the help flow"
+  },
   "done_reload_page": {
     "message": "Una vegada hàgiu acabat, recarregueu la pàgina.",
     "description": "text on panel in the help flow"
   },
+  "no_thanks": {
+    "message": "No, gràcies",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "Si canvieu d'opinió, podeu activar funcions addicionals del Control de distracció [[here]].",
+    "description": "text in the help flow"
+  },
+  "swap_ads_for_images": {
+    "message": "Canvia anuncis per imatges",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "Personalitzeu la vostra experiència de navegació i aprofiteu encara més l'AdBlock per a $browser$.",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "Amb el canvi d'imatges, continuarem bloquejant els anuncis, però substituirem alguns per fotos de les vostres categories preferides.",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "Personalitzeu el vostre AdBlock",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
   "fun_way_customize": {
     "message": "Els temes són una manera divertida de personalitzar l'AdBlock al navegador.",
     "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "Controleu l'aspecte, el comportament i la mida de la font de l'AdBlock amb controls fàcils d'utilitzar. Feu que l'AdBlock sigui vostre!",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "Deseu la configuració de l'AdBlock en diversos dispositius",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Emporteu-vos les regles de bloqueig d'anuncis personalitzades, les subscripcions a les llistes de filtres i les llistes de permesos a tots els perfils del Chrome.",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "Configureu l'AdBlock una vegada i emporteu-vos la configuració!",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "Experimenteu una navegació sense molèsties",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "Mode de derivació",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "Veure menys parets Anti-AdBlock",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "Les finestres emergents que requereixen que desactiveu l'AdBlock són cada vegada més habituals al web.",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "Amb el mode de derivació, podreu evitar algunes d'aquestes finestres emergents sense desactivar l'AdBlock.",
+    "description": "Description of Bypass Mode on the main Premium options page"
   }
 }
