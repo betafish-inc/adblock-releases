@@ -106,10 +106,10 @@ function topOpenWhitelistCompletionUI(options) {
       $dismissedMsg.show();
     });
     $settingsLink.on('click', () => {
-      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#customize' });
+      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html#customize') });
     });
     $premiumLink.on('click', () => {
-      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
+      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html#mab') });
     });
 
     $dialog.find('.messageWithLink').each(function replaceLinks() {

@@ -194,12 +194,6 @@ const runBandaids = function () {
         elemDiv.dataset.isAdblockLicenseActive = response;
         document.body.appendChild(elemDiv);
       });
-      const enableShowSurvey = document.getElementById('enable_show_survey');
-      if (enableShowSurvey) {
-        enableShowSurvey.onclick = function showSurvey() {
-          browser.runtime.sendMessage({ command: 'setSetting', name: 'show_survey', isEnabled: !enableShowSurvey.checked });
-        };
-      }
       const aaElements = document.querySelectorAll('#disableacceptableads');
       if (aaElements && aaElements.length) {
         for (let i = 0; i < aaElements.length; ++i) {
@@ -210,7 +204,7 @@ const runBandaids = function () {
             event.preventDefault();
             browser.runtime.sendMessage({ command: 'unsubscribe', id: 'acceptable_ads' }).then(() => {
               browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'disableacceptableads_clicked' }).then(() => {
-                browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html?aadisabled=true#general' });
+                browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html?aadisabled=true#general') });
               });
             });
           };
@@ -227,22 +221,7 @@ const runBandaids = function () {
             }
             event.stopImmediatePropagation();
             event.preventDefault();
-            browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab' });
-          };
-        }
-      }
-
-      // Listen to clicks 'here' link on the Fall 2021 /update page
-      const optionPageLinks = document.querySelectorAll('#distractionControlLink,#distractionControlHere');
-      if (optionPageLinks.length) {
-        for (let i = 0; i < optionPageLinks.length; ++i) {
-          optionPageLinks[i].onclick = function clickHandler(event) {
-            if (event.isTrusted === false) {
-              return;
-            }
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#distractioncontrol' });
+            browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html#mab') });
           };
         }
       }

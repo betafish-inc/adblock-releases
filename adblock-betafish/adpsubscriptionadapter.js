@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global require, exports, recommendations, Subscription
-   DownloadableSubscription, browser, synchronizer */
+   DownloadableSubscription, browser, synchronizer, isTrustedSender, isTrustedSenderDomain */
 
 const { filterStorage } = require('filterStorage');
 const subClasses = require('subscriptionClasses');
@@ -210,11 +210,10 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
 
 
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.command !== 'unsubscribe' || !message.id) {
-      return;
+    if (message.command === 'unsubscribe' && message.id && isTrustedSenderDomain(sender)) {
+      unsubscribe({ id: message.id });
+      sendResponse({});
     }
-    unsubscribe({ id: message.id });
-    sendResponse({});
   });
 
   // Subcribe the user to the subscription specified in the argument
@@ -232,11 +231,10 @@ const SubscriptionAdapter = (function getSubscriptionAdapter() {
   };
 
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.command !== 'subscribe' || !message.id) {
-      return;
+    if (message.command === 'subscribe' && message.id && isTrustedSender(sender)) {
+      subscribe({ id: message.id });
+      sendResponse({});
     }
-    subscribe({ id: message.id });
-    sendResponse({});
   });
 
 

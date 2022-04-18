@@ -325,19 +325,14 @@ try {
               $('.header-logo').attr('src', `icons/${popupMenuTheme}/beta_logo.svg`);
             }
 
-            // VPN CTAs
-            if (
-              info.showVPNCTA
-              && info.showVPNCTAVar
-              && info.showVPNCTAExp
-              && !userClosedVPNCta
+            // CTAs
+            if (!userClosedVPNCta // VPN CTA
               && !info.disabledSite
               && !info.whitelisted
             ) {
-              show([`div_vpn_cta_${info.showVPNCTAVar}`]);
-              browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_seen', additionalParams: { var: info.showVPNCTAVar, exp: info.showVPNCTAExp } });
-              // Premium CTAs
-            } else if (
+              show(['div_vpn_cta']);
+              browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_seen' });
+            } else if ( // Premium CTAs
               info.showMABEnrollment
               && userClosedCta
               && showThemesCTA
@@ -578,19 +573,19 @@ try {
         storageSet(popupMenuFreeDCCtaClosedKey, true);
       });
 
-      selected('#div_vpn_cta_1, #div_vpn_cta_2, #vpn_cta_3_learn_more, #vpn_cta_4_learn_more', (event) => {
+      selected('#div_vpn_cta', (event) => {
         event.stopPropagation();
         storageSet(popupMenuVPNCtaClosedKey, true);
-        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_clicked', additionalParams: { var: pageInfo.showVPNCTAVar, exp: pageInfo.showVPNCTAExp } });
-        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: `https://vpn.getadblock.com/?s=ap${pageInfo.showVPNCTAVar}` }).then(() => {
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_clicked' });
+        browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'https://vpn.getadblock.com/?s=ap1' }).then(() => {
           closeAndReloadPopup();
         });
       });
 
-      selected('#vpn_cta_1_close, #vpn_cta_2_close, #vpn_cta_3_close, #vpn_cta_4_close', (event) => {
+      selected('#vpn_cta_close', (event) => {
         event.stopPropagation();
-        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_closed', additionalParams: { var: pageInfo.showVPNCTAVar, exp: pageInfo.showVPNCTAExp } });
-        $('#div_vpn_cta_1, #div_vpn_cta_2, #div_vpn_cta_3, #div_vpn_cta_4').slideUp();
+        browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'vpn_cta_closed' });
+        $('#div_vpn_cta').slideUp();
         storageSet(popupMenuVPNCtaClosedKey, true);
       });
 
@@ -632,7 +627,7 @@ try {
         if (!pageInfo.disabledSite) {
           showHelpSetupPage();
         } else {
-          browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'http://help.getadblock.com/' });
+          browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'https://help.getadblock.com/' });
         }
       });
 
@@ -646,16 +641,10 @@ try {
         $('#div_sync_removed_error_msg').fadeOut();
       });
 
-      $('#div_vpn_cta_1').on('mouseenter', () => {
-        $('#vpn_cta_1').text('Enjoy worry-free internet');
+      $('#div_vpn_cta').on('mouseenter', () => {
+        $('#vpn_cta').text(translate('vpn_cta_msg_hover'));
       }).on('mouseleave', () => {
-        $('#vpn_cta_1').text('Introducing AdBlock VPN');
-      });
-
-      $('#div_vpn_cta_2').on('mouseenter', () => {
-        $('#vpn_cta_2').text('Try AdBlock VPN!');
-      }).on('mouseleave', () => {
-        $('#vpn_cta_2').text('Tired of being tracked?');
+        $('#vpn_cta').text(translate('vpn_cta_msg'));
       });
 
       $('#div_myadblock_enrollment_v2').on('mouseenter', () => {
@@ -669,7 +658,6 @@ try {
       }).on('mouseleave', () => {
         $('#dc-cta-text').text(translate('new_premium_feature'));
       });
-
 
       $('#div_free_dc_cta').on('mouseenter', () => {
         $('#free-dc-cta-text').text(translate('get_distractioncontrol'));

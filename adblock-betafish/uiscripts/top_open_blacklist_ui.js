@@ -204,7 +204,8 @@ function topOpenBlacklistUI(options) {
 
     $base.append($dialog);
     const blacklistUI = new BlacklistUi(rightClickedItem, options.settings.show_advanced_options,
-      options.isActiveLicense, options.showBlacklistCTA, $dialog);
+      options.isActiveLicense, options.showBlacklistCTA, $dialog,
+      options.addCustomFilterRandomName);
     blacklistUI.cancel(() => {
       mayOpenDialogUi = true;
     });

@@ -24,7 +24,8 @@ function selectorFromElm(el) {
 // clickedItem: the element that was right clicked, if any.
 // advancedUser:bool
 // showBlacklistCTA:bool
-function BlacklistUi(clickedItem, advancedUser, isActiveLicense, showBlacklistCTA, $base) {
+function BlacklistUi(clickedItem, advancedUser, isActiveLicense,
+  showBlacklistCTA, $base, addCustomFilterRandomName) {
   // If a dialog is ever closed without setting this to false, the
   // object fires a cancel event.
   this.cancelled = true;
@@ -40,6 +41,7 @@ function BlacklistUi(clickedItem, advancedUser, isActiveLicense, showBlacklistCT
   this.showBlacklistCTA = showBlacklistCTA;
   this.$dialog = $base;
   this.clickWatcher = null;
+  this.addCustomFilterRandomName = addCustomFilterRandomName;
 }
 
 BlacklistUi.prototype.reset = function reset() {
@@ -301,7 +303,7 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
           filter = cssHidingText;
         }
       }
-      browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then((response) => {
+      browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter, addCustomFilterRandomName: that.addCustomFilterRandomName }).then((response) => {
         if (!response.error) {
           // if it's an advance user, and they've edited the rule text, they could have changed
           // any / all of the rule text to some other rule type

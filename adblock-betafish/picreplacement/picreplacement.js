@@ -555,10 +555,10 @@ const imageSwap = {
       const height = placement.listingHeight;
       const channel = placement.channelName;
       const queryStrings = `url=${url}&width=${width}&height=${height}&channel=${channel}`;
-      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: `adblock-picreplacement-imageview.html?${queryStrings}` });
+      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL(`adblock-picreplacement-imageview.html?${queryStrings}`) });
     });
     containerNodes.settingsIcon.addEventListener('click', () => {
-      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: 'options.html#mab-image-swap' });
+      browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html#mab-image-swap') });
     });
     containerNodes.closeIcon.addEventListener('click', () => {
       containerNodes.container.parentNode.removeChild(containerNodes.container);

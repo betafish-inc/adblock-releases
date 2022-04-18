@@ -154,6 +154,7 @@ const contextMenuItem = (() => ({
       title: browser.i18n.getMessage('block_this_ad'),
       contexts: ['all'],
       onclick(info, tab) {
+        window.addCustomFilterRandomName = `ab-${Math.random().toString(36).substr(2)}`;
         emitPageBroadcast({
           fn: 'topOpenBlacklistUI',
           options: {
@@ -161,6 +162,7 @@ const contextMenuItem = (() => ({
             showBlacklistCTA: License.shouldShowBlacklistCTA(),
             isActiveLicense: License.isActiveLicense(),
             settings: getSettings(),
+            addCustomFilterRandomName: window.addCustomFilterRandomName,
           },
         }, {
           tab,
@@ -172,6 +174,7 @@ const contextMenuItem = (() => ({
       title: browser.i18n.getMessage('block_an_ad_on_this_page'),
       contexts: ['all'],
       onclick(info, tab) {
+        window.addCustomFilterRandomName = `ab-${Math.random().toString(36).substr(2)}`;
         emitPageBroadcast({
           fn: 'topOpenBlacklistUI',
           options: {
@@ -179,6 +182,7 @@ const contextMenuItem = (() => ({
             showBlacklistCTA: License.shouldShowBlacklistCTA(),
             isActiveLicense: License.isActiveLicense(),
             settings: getSettings(),
+            addCustomFilterRandomName: window.addCustomFilterRandomName,
           },
         }, {
           tab,
@@ -233,12 +237,6 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   }
 });
 
-browser.runtime.onMessage.addListener((msg, sender) => {
-  if (msg.type === 'report-html-page') {
-    updateContextMenuItems(sender.page);
-  }
-});
-
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command !== 'sendContentToBack') {
     return;
@@ -281,6 +279,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'showBlacklist' && typeof request.nothingClicked === 'boolean') {
+    window.addCustomFilterRandomName = `ab-${Math.random().toString(36).substr(2)}`;
     emitPageBroadcast({
       fn: 'topOpenBlacklistUI',
       options: {
@@ -288,6 +287,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         isActiveLicense: License.isActiveLicense(),
         showBlacklistCTA: License.shouldShowBlacklistCTA(),
         settings: getSettings(),
+        addCustomFilterRandomName: window.addCustomFilterRandomName,
       },
       tabID: request.tabId,
     });
@@ -297,9 +297,12 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'showWhitelist') {
+    window.addCustomFilterRandomName = `ab-${Math.random().toString(36).substr(2)}`;
     emitPageBroadcast({
       fn: 'topOpenWhitelistUI',
-      options: {},
+      options: {
+        addCustomFilterRandomName: window.addCustomFilterRandomName,
+      },
       tabID: request.tabId,
     });
     sendResponse({});

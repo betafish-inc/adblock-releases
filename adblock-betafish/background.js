@@ -4,7 +4,8 @@
 /* global browser, require, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
   blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
-  storageGet, parseFilter, channels, twitchChannelNamePages, ytChannelNamePages */
+  storageGet, parseFilter, channels, twitchChannelNamePages, ytChannelNamePages,
+  determineUserLanguage */
 
 const { Filter } = require('filterClasses');
 const { WhitelistFilter } = require('filterClasses');
@@ -54,6 +55,26 @@ const {
   isLanguageSpecific,
 } = require('./adpsubscriptionadapter').SubscriptionAdapter;
 
+// Message verification
+const trustedBaseUrl = browser.runtime.getURL('');
+const gabHostnames = ['https://getadblock.com', 'https://dev.getadblock.com', 'https://dev1.getadblock.com', 'https://dev2.getadblock.com', 'https://vpn.getadblock.com', 'https://help.getadblock.com'];
+
+const isTrustedSender = sender => sender.url.startsWith(trustedBaseUrl);
+
+const isTrustedTarget = url => (url.startsWith(trustedBaseUrl)
+                            || gabHostnames.includes(new URL(url).origin));
+
+const isTrustedSenderDomain = (sender) => {
+  if (sender.origin) {
+    return gabHostnames.includes(sender.origin);
+  }
+  if (sender.url) {
+    return gabHostnames.includes(new URL(sender.url).origin);
+  }
+  return false;
+};
+const addCustomFilterRandomName = '';
+
 Object.assign(window, {
   filterStorage,
   filterNotifier,
@@ -91,6 +112,9 @@ Object.assign(window, {
   URLFilter,
   CtaABManager,
   getNewBadgeTextReason,
+  isTrustedSender,
+  isTrustedSenderDomain,
+  addCustomFilterRandomName,
 });
 
 // CUSTOM FILTERS
@@ -186,26 +210,15 @@ const addCustomFilter = function (filterText) {
   }
 };
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'addCustomFilter' || !message.filterTextToAdd) {
+  if (
+    message.command !== 'addCustomFilter'
+    || !message.filterTextToAdd
+    || message.addCustomFilterRandomName !== window.addCustomFilterRandomName
+  ) {
     return;
   }
   sendResponse({ response: addCustomFilter(message.filterTextToAdd) });
-});
-
-// Creates a custom filter entry that whitelists a given page
-// Inputs: pageUrl:string url of the page
-// Returns: null if successful, otherwise an exception
-const createPageWhitelistFilter = function (pageUrl) {
-  const theURL = new URL(pageUrl);
-  const host = theURL.hostname.replace(/^www\./, '');
-  const filter = `@@||${host}${theURL.pathname}${theURL.search}^$document`;
-  return addCustomFilter(filter);
-};
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'createPageWhitelistFilter' || !message.url) {
-    return;
-  }
-  sendResponse({ response: createPageWhitelistFilter(message.url) });
+  window.addCustomFilterRandomName = '';
 });
 
 // Creates a custom filter entry that allowlists a given domain
@@ -457,7 +470,7 @@ const adblockIsPaused = function (newValue) {
   return undefined;
 };
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'adblockIsPaused') {
+  if (message.command !== 'adblockIsPaused' || !isTrustedSender(sender)) {
     return;
   }
   sendResponse(adblockIsPaused(message.newValue));
@@ -576,7 +589,7 @@ const adblockIsDomainPaused = function (activeTab, newValue) {
   return undefined;
 };
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'adblockIsDomainPaused') {
+  if (message.command !== 'adblockIsDomainPaused' || !isTrustedSender(sender)) {
     return;
   }
   sendResponse(adblockIsDomainPaused(message.activeTab, message.newValue));
@@ -707,9 +720,6 @@ const getCurrentTabInfo = function (secondTime, tabId) {
           customFilterCount: countCache.getCustomFilterCount(customFilterCheckUrl),
           showMABEnrollment: License.shouldShowMyAdBlockEnrollment(),
           popupMenuThemeCTA: License.getCurrentPopupMenuThemeCTA(),
-          showVPNCTA: CtaABManager.isEnrolled(),
-          showVPNCTAVar: CtaABManager.getVar(),
-          showVPNCTAExp: CtaABManager.getExp(),
           showDcCTA: License.shouldShowPremiumDcCTA(),
           lastGetStatusCode: SyncService.getLastGetStatusCode(),
           lastGetErrorResponse: SyncService.getLastGetErrorResponse(),
@@ -777,22 +787,88 @@ if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
 }
 
 const updateStorageKey = 'last_known_version';
-browser.runtime.onInstalled.addListener((details) => {
-  if (details.reason === 'update' || details.reason === 'install') {
-    localStorage.setItem(updateStorageKey, browser.runtime.getManifest().version);
-  }
-});
+if (browser.runtime.id) {
+  let updateTabRetryCount = 0;
+  const getUpdatedURL = function () {
+    const encodedVersion = encodeURIComponent('4.46.0');
+    let updatedURL = `https://getadblock.com/update/${STATS.flavor.toLowerCase()}/${encodedVersion}/?u=${STATS.userId()}`;
+    if (License && License.isActiveLicense()) {
+      updatedURL = `https://getadblock.com/update/p/${encodedVersion}/?u=${STATS.userId()}`;
+    }
+    updatedURL = `${updatedURL}&bc=${Prefs.blocked_total}`;
+    updatedURL = `${updatedURL}&rt=${updateTabRetryCount}`;
+    return updatedURL;
+  };
+  const waitForUserAction = function () {
+    browser.tabs.onCreated.removeListener(waitForUserAction);
+    setTimeout(() => {
+      updateTabRetryCount += 1;
+      // eslint-disable-next-line no-use-before-define
+      openUpdatedPage();
+    }, 10000); // 10 seconds
+  };
+  const openUpdatedPage = function () {
+    const updatedURL = getUpdatedURL();
+    browser.tabs.create({ url: updatedURL });
+  };
+  const shouldShowUpdate = function () {
+    const checkQueryState = function () {
+      browser.idle.queryState(60, (state) => {
+        if (state === 'active') {
+          openUpdatedPage();
+        } else {
+          browser.tabs.onCreated.removeListener(waitForUserAction);
+          browser.tabs.onCreated.addListener(waitForUserAction);
+        }
+      });
+    };
+    if (browser.management && browser.management.getSelf) {
+      browser.management.getSelf().then((extensionInfo) => {
+        if (extensionInfo && extensionInfo.installType !== 'admin') {
+          License.ready().then(checkQueryState);
+        }
+      });
+    } else {
+      License.ready().then(checkQueryState);
+    }
+  };
+  const slashUpdateReleases = ['4.46.0'];
+  // Display updated page after each update
+  browser.runtime.onInstalled.addListener((details) => {
+    const lastKnownVersion = localStorage.getItem(updateStorageKey);
+    const currentVersion = browser.runtime.getManifest().version;
+    // don't open the /update page for Ukraine or Russian users.
+    const shouldShowUpdateForLocale = function () {
+      const language = determineUserLanguage();
+      return !(language && (language.startsWith('ru') || language.startsWith('uk')));
+    };
+    if (
+      details.reason === 'update'
+      && shouldShowUpdateForLocale()
+      && slashUpdateReleases.includes(currentVersion)
+      && !slashUpdateReleases.includes(lastKnownVersion)
+      && browser.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
+    ) {
+      settings.onload().then(() => {
+        if (!getSettings().suppress_update_page) {
+          STATS.untilLoaded(() => {
+            Prefs.untilLoaded.then(shouldShowUpdate);
+          });
+        }
+      });
+    }
+    localStorage.setItem(updateStorageKey, currentVersion);
+  });
+}
 
 const openTab = function (url) {
   browser.tabs.create({ url });
 };
-
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'openTab' || !message.urlToOpen) {
-    return;
+  if (message.command === 'openTab' && isTrustedTarget(message.urlToOpen)) {
+    openTab(message.urlToOpen);
+    sendResponse({});
   }
-  openTab(message.urlToOpen);
-  sendResponse({});
 });
 
 // These functions are usually only called by content scripts.
@@ -1040,7 +1116,6 @@ const mailCtaKey = 'mail-cta-clicked';
 // Attach methods to window
 Object.assign(window, {
   adblockIsPaused,
-  createPageWhitelistFilter,
   getUserFilters,
   updateFilterLists,
   checkUpdateProgress,

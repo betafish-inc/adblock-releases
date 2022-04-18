@@ -121,7 +121,11 @@ const transitionTo = function (segueToId, backIconClicked) {
           const i18nReplacementElId = randLetter + randNumber;
           linkAnchor.attr('id', i18nReplacementElId);
           selected(linkAnchor, () => {
-            browser.runtime.sendMessage({ command: 'openTab', urlToOpen: content.linkURL });
+            let urlToOpen = content.linkURL;
+            if (!/^https:/.test(urlToOpen)) {
+              urlToOpen = browser.runtime.getURL(urlToOpen);
+            }
+            browser.runtime.sendMessage({ command: 'openTab', urlToOpen });
             logHelpFlowResults('link');
             reset();
           });

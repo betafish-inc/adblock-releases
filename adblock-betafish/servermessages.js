@@ -142,11 +142,10 @@ const ServerMessages = (function serverMessages() {
   };
 
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.command !== 'recordGeneralMessage' || !message.msg) {
-      return;
+    if (message.command === 'recordGeneralMessage' && message.msg) {
+      recordGeneralMessage(message.msg, undefined, message.additionalParams);
+      sendResponse({});
     }
-    recordGeneralMessage(message.msg, undefined, message.additionalParams);
-    sendResponse({});
   });
 
   return {

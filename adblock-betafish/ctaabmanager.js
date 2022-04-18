@@ -1,7 +1,7 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, exports, STATS, log, getSettings, Prefs, openTab,
+/* global browser, require, exports, STATS, log, getSettings, Prefs,
    License, settings,
  */
 

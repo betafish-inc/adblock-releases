@@ -124,16 +124,6 @@ const STATS = (function exportStats() {
     );
   }
 
-  browser.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (message.command !== 'get_adblock_user_id') {
-      return undefined;
-    }
-    readUserIDPromisified().then((resolvedUserID) => {
-      sendResponse(resolvedUserID);
-    });
-    return true;
-  });
-
   const getPingData = function (callbackFN) {
     if (!callbackFN && (typeof callbackFN !== 'function')) {
       return;

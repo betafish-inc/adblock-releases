@@ -17,7 +17,7 @@ if (typeof window.mayOpenDialogUi === 'undefined') {
 
 // topOpenWhitelistUI displays the whitelist wizard if it's not already open. See README for
 // details.
-function topOpenWhitelistUI() {
+function topOpenWhitelistUI(options) {
   // DragElement makes a given DOM element draggable. It assumes the element is positioned
   // absolutely and adjusts the element's `top` and `left` styles directly.
   // Inputs:
@@ -249,7 +249,7 @@ function topOpenWhitelistUI() {
         $pathSlider.valueAsNumber,
       );
       const filter = `@@||${rule}$document`;
-      browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter }).then(() => {
+      browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter, addCustomFilterRandomName: options.addCustomFilterRandomName }).then(() => {
         if ($dialog.find('#adblock-reload-page').is(':checked')) {
           browser.runtime.sendMessage({ command: 'reloadTabForWhitelist', rule });
         } else {

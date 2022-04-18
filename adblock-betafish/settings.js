@@ -1,7 +1,8 @@
 'use strict';
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, log, chromeStorageSetHelper, logging */
+/* global browser, require, log, chromeStorageSetHelper, logging
+   isTrustedSender */
 
 const { EventEmitter } = require('events');
 const minjQuery = require('./jquery/jquery-3.5.1.min.js');
@@ -120,11 +121,10 @@ const setSetting = function (name, isEnabled, callback) {
 };
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'setSetting' || !message.name || (typeof message.isEnabled === 'undefined')) {
-    return;
+  if (message.command === 'setSetting' && message.name && message.isEnabled && isTrustedSender(sender)) {
+    setSetting(message.name, message.isEnabled);
+    sendResponse({});
   }
-  setSetting(message.name, message.isEnabled);
-  sendResponse({});
 });
 
 const disableSetting = function (name) {

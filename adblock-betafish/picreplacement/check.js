@@ -3,7 +3,8 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global ext, browser, require, storageGet, storageSet, log, STATS, Channels, Prefs,
    getSettings, setSetting, translate, reloadOptionsPageTabs, filterNotifier, openTab,
-   emitPageBroadcast, SyncService, Subscription, filterStorage, unsubscribe */
+   emitPageBroadcast, SyncService, Subscription, filterStorage, unsubscribe,
+   isTrustedSenderDomain */
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
@@ -531,7 +532,7 @@ const License = (function getLicense() {
 }());
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.command === 'payment_success' && request.version === 1) {
+  if (request.command === 'payment_success' && request.version === 1 && isTrustedSenderDomain(sender)) {
     License.activate();
     sendResponse({ ack: true });
   }
