@@ -832,7 +832,7 @@ if (browser.runtime.id) {
       License.ready().then(checkQueryState);
     }
   };
-  const slashUpdateReleases = ['4.46.0'];
+  const slashUpdateReleases = ['4.46.0', '4.46.1'];
   // Display updated page after each update
   browser.runtime.onInstalled.addListener((details) => {
     const lastKnownVersion = localStorage.getItem(updateStorageKey);
