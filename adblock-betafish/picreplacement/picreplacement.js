@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, translate, onReady, imageSizesMap,
@@ -8,9 +8,8 @@ const { hostname } = window.location;
 let totalSwaps = 0;
 const hideElements = [];
 const hiddenElements = [];
-let cssRules = [];
+const cssRules = [];
 const minDimension = 60;
-const CUSTOM_IMAGES_KEY = 'customImages';
 
 const typeMap = new Map([
   ['img', 'IMAGE'],
@@ -24,11 +23,57 @@ const typeMap = new Map([
   ['embed', 'OBJECT'],
 ]);
 
-browser.runtime.sendMessage({ type: 'getSelectors' }).then((response) => {
-  if (response && response.selectors) {
-    cssRules = response.selectors;
+const imageSizesMap = new Map([
+  ['NONE', 0],
+  ['wide', 1],
+  ['tall', 2],
+  ['skinnywide', 4],
+  ['skinnytall', 8],
+  ['big', 16],
+  ['small', 32],
+]);
+
+const deferred = new Map();
+let urls;
+
+function getURLFromElement(element) {
+  if (element.localName !== 'object') {
+    return element.currentSrc || element.src;
   }
-});
+
+  if (element.data) {
+    return element.data;
+  }
+
+  for (const child of element.children) {
+    if (child.localName === 'param' && child.name === 'movie' && child.value) {
+      return new URL(child.value, document.baseURI).href;
+    }
+  }
+
+  return null;
+}
+
+// a slightly faster alternative to just using 'querySelectorAll'
+// Note: this function may return:
+//       - an HTMLCOllection of elements,
+//       - or a NodeList of elements
+//       - or an Array with 1 element
+const queryDOM = function (selectorText) {
+  if (selectorText.startsWith('#')) {
+    const element = document.getElementById(selectorText.substr(1));
+    if (element) {
+      return [element];
+    }
+    return [];
+  }
+  if (selectorText.startsWith('.')) {
+    const classes = selectorText.substr(1).replace(/\./g, ' ');
+    return document.getElementsByClassName(classes);
+  }
+  // Default to `querySelectorAll`
+  return document.querySelectorAll(selectorText);
+};
 
 const imageSwap = {
   /**
@@ -663,28 +708,6 @@ const checkElement = function (element) {
   }
 };
 
-
-// a slightly faster alternative to just using 'querySelectorAll'
-// Note: this function may return:
-//       - an HTMLCOllection of elements,
-//       - or a NodeList of elements
-//       - or an Array with 1 element
-const queryDOM = function (selectorText) {
-  if (selectorText.startsWith('#')) {
-    const element = document.getElementById(selectorText.substr(1));
-    if (element) {
-      return [element];
-    }
-    return [];
-  }
-  if (selectorText.startsWith('.')) {
-    const classes = selectorText.substr(1).replace(/\./g, ' ');
-    return document.getElementsByClassName(classes);
-  }
-  // Default to `querySelectorAll`
-  return document.querySelectorAll(selectorText);
-};
-
 // when the page has completed loading:
 // 1) get the currently loaded CSS hiding rules
 // 2) find any hidden elements using the hiding rules from #1 that meet the
@@ -704,10 +727,12 @@ onReady(() => {
     }
   }
 
-  // Add any elements from the collapsedElements array
-  for (let i = 0; i < window.collapsedElements.length; i++) {
-    const data = { el: window.collapsedElements[i] };
-    hiddenElements.push(data);
+  for (const [selector] of deferred) {
+    for (const element of document.querySelectorAll(selector)) {
+      if (urls.has(getURLFromElement(element))) {
+        checkElement(element);
+      }
+    }
   }
 
   // If no elements to swap, stop
@@ -735,5 +760,31 @@ onReady(() => {
   elementsData = elementsData.sort((a, b) => (b.dimension > a.dimension ? 1 : -1));
   for (let i = 0; i < elementsData.length; i++) {
     imageSwap.replaceSection(elementsData[i], imageSwap.done);
+  }
+});
+
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.command === 'addSelector') {
+    if (document.readyState === 'complete') {
+      const elements = queryDOM(request.hidingSelector);
+      for (let j = 0; j < elements.length; j++) {
+        const data = { el: elements[j] };
+        const size = imageSwap.getSize(data);
+        if (!imageSwap.isInvalidSize(size)) {
+          data.size = size;
+          data.dimension = (size.x * size.y);
+          imageSwap.replaceSection(data, imageSwap.done);
+        }
+      }
+    } else {
+      cssRules.push(request.hidingSelector);
+    }
+    sendResponse({});
+  }
+  if (request.command === 'addBlockingSelector') {
+    urls = deferred.get(request.selector) || new Set();
+    deferred.set(request.selector, urls);
+    urls.add(request.url);
+    sendResponse({});
   }
 });

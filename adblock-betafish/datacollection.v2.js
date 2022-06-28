@@ -1,58 +1,37 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, ext, exports, require, chromeStorageSetHelper, getSettings, adblockIsPaused,
-   adblockIsDomainPaused, filterStorage, Filter, parseUri, settings, getAllSubscriptionsMinusText,
-   getUserFilters, setSetting */
+/* global browser, chromeStorageSetHelper, adblockIsPaused,
+   adblockIsDomainPaused, parseUri,
+   getUserFilters, */
 
-const { extractHostFromFrame } = require('url');
-const { ElemHideFilter } = require('filterClasses');
-const { filterNotifier } = require('filterNotifier');
-const { port } = require('messaging');
-const info = require('info');
-const { postFilterStatsToLogServer } = require('./servermessages').ServerMessages;
-const { idleHandler } = require('./idlehandler.js');
+import * as info from 'info';
+import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
+import SubscriptionAdapter from './subscriptionadapter';
+import ServerMessages from './servermessages';
+import { getSettings, settings, setSetting } from './settings';
+
+import idleHandler from './idlehandler';
 
 const DataCollectionV2 = (function getDataCollectionV2() {
   const HOUR_IN_MS = 1000 * 60 * 60;
   const TIME_LAST_PUSH_KEY = 'timeLastPush';
+  const REPORTING_OPTIONS = {
+    filterType: 'all',
+    includeElementHiding: true,
+  };
 
   // Setup memory cache
   let dataCollectionCache = {};
   dataCollectionCache.filters = {};
   dataCollectionCache.domains = {};
 
-  const handleTabUpdated = function (tabId, changeInfo, tabInfo) {
-    if (browser.runtime.lastError) {
-      return;
-    }
-    if (!tabInfo || !tabInfo.url || !tabInfo.url.startsWith('http')) {
-      return;
-    }
-    if (
-      getSettings().data_collection_v2
-      && !adblockIsPaused()
-      && !adblockIsDomainPaused({ url: tabInfo.url, id: tabId })
-      && changeInfo.status === 'complete'
-    ) {
-      browser.tabs.sendMessage(tabId, { command: 'ping_dc_content_script' }).then((pingResponse) => {
-        if (pingResponse && pingResponse.status === 'yes') {
-          return;
-        }
-        browser.tabs.executeScript(tabId, {
-          file: 'adblock-datacollection-contentscript.js',
-          allFrames: true,
-        });
-      });
-    }
-  };
-
-  const addFilterToCache = function (filter, page) {
+  const addFilterToCache = function (details, filter) {
     const validFilterText = filter && filter.text && (typeof filter.text === 'string');
-    if (validFilterText && page && page.url) {
-      let domain = page.url.hostname;
+    if (validFilterText && details && details.url) {
+      let domain = details.url.hostname;
       if (!domain) {
-        domain = new URL(page.url).hostname;
+        domain = new URL(details.url).hostname;
         if (!domain) {
           return;
         }
@@ -78,7 +57,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
         }
         dataCollectionCache.filters[text].firstParty[domain].hits += 1;
       }
-      for (const sub of filterStorage.subscriptions(text)) {
+      for (const sub of ewe.subscriptions.getDownloadable()) {
         const dataCollectionSubscriptions = dataCollectionCache.filters[text].subscriptions;
         if (!sub.disabled && sub.url && dataCollectionSubscriptions.indexOf(sub.url) === -1) {
           if (sub.url.length > 256) {
@@ -89,47 +68,6 @@ const DataCollectionV2 = (function getDataCollectionV2() {
         }
       }
     }
-  };
-
-  const addMessageListener = function () {
-    port.on('datacollection.elementHide', (message, sender) => {
-      const dataCollectionEnabled = getSettings().data_collection_v2;
-      const domainInfo = { url: sender.page.url, id: sender.page.id };
-      if (dataCollectionEnabled && !adblockIsPaused() && !adblockIsDomainPaused(domainInfo)) {
-        const { selectors } = message;
-        const docDomain = extractHostFromFrame(sender.frame);
-        for (const subscription of filterStorage.subscriptions()) {
-          if (!subscription.disabled) {
-            for (const text of subscription.filterText()) {
-              const filter = Filter.fromText(text);
-              // We only know the exact filter in case of element hiding emulation.
-              // For regular element hiding filters, the content script only knows
-              // the selector, so we have to find a filter that has an identical
-              // selector and is active on the domain the match was reported from.
-              const isActiveElemHideFilter = filter instanceof ElemHideFilter
-                                           && selectors.includes(filter.selector)
-                                           && filter.isActiveOnDomain(docDomain);
-              if (isActiveElemHideFilter) {
-                addFilterToCache(filter, sender.page);
-              }
-            }
-          }
-        }
-      }
-    });
-    port.on('datacollection.exceptionElementHide', (message, sender) => {
-      const domainInfo = { url: sender.page.url, id: sender.page.id };
-      if (
-        getSettings().data_collection_v2
-          && !adblockIsPaused()
-          && !adblockIsDomainPaused(domainInfo)) {
-        const selectors = message.exceptions;
-        for (const text of selectors) {
-          const filter = Filter.fromText(text);
-          addFilterToCache(filter, sender.page);
-        }
-      }
-    });
   };
 
   const webRequestListener = function (details) {
@@ -143,17 +81,11 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     }
   };
 
-  const filterListener = function (item, newValue, oldValue, tabIds) {
+  const filterListener = function ({ request, filter }) {
     if (getSettings().data_collection_v2 && !adblockIsPaused()) {
-      for (const tabId of tabIds) {
-        browser.tabs.get(tabId).then((tab) => {
-          if (tab && !adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
-            addFilterToCache(item, tab);
-          }
-        });
-      }
+      addFilterToCache(request, filter);
     } else if (!getSettings().data_collection_v2) {
-      filterNotifier.off('filter.hitCount', filterListener);
+      ewe.reporting.onBlockableItem.removeListener(filterListener, REPORTING_OPTIONS);
     }
   };
 
@@ -163,10 +95,10 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     const dataCollectionEnabled = getSettings().data_collection_v2;
     if (dataCollectionEnabled) {
       window.setInterval(() => {
-        idleHandler.scheduleItemOnce(() => {
+        idleHandler.scheduleItemOnce(async () => {
           if (dataCollectionEnabled && Object.keys(dataCollectionCache.filters).length > 0) {
             const subscribedSubs = [];
-            const subs = getAllSubscriptionsMinusText();
+            const subs = SubscriptionAdapter.getAllSubscriptionsMinusText();
             for (const id in subs) {
               if (subs[id].subscribed) {
                 if (subs[id].url && subs[id].url.length > 256) {
@@ -176,7 +108,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
                 }
               }
             }
-            if (getUserFilters().length) {
+            if (await getUserFilters().length) {
               subscribedSubs.push('customlist');
             }
             const data = {
@@ -222,7 +154,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
                 timeLastPush = `${yearStr}-${monthStr}-${dateStr} ${hourStr}:${minStr}:00`;
               }
               data.timeOfLastPush = timeLastPush;
-              postFilterStatsToLogServer(data, (text, status, xhr) => {
+              ServerMessages.postFilterStatsToLogServer(data, (text, status, xhr) => {
                 let nowTimestamp = (new Date()).toGMTString();
                 if (xhr && typeof xhr.getResponseHeader === 'function') {
                   try {
@@ -243,13 +175,11 @@ const DataCollectionV2 = (function getDataCollectionV2() {
           }
         });
       }, HOUR_IN_MS);
-      filterNotifier.on('filter.hitCount', filterListener);
+      ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
       browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
         urls: ['http://*/*', 'https://*/*'],
         types: ['main_frame'],
       });
-      browser.tabs.onUpdated.addListener(handleTabUpdated);
-      addMessageListener();
     }
   });// End of then
 
@@ -257,21 +187,18 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   returnObj.start = function returnObjStart(callback) {
     dataCollectionCache.filters = {};
     dataCollectionCache.domains = {};
-    filterNotifier.on('filter.hitCount', filterListener);
+    ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
     browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
       urls: ['http://*/*', 'https://*/*'],
       types: ['main_frame'],
     });
-    browser.tabs.onUpdated.addListener(handleTabUpdated);
-    addMessageListener();
     setSetting('data_collection_v2', true, callback);
   };
   returnObj.end = function returnObjEnd(callback) {
     dataCollectionCache = {};
-    filterNotifier.off('filter.hitCount', filterListener);
+    ewe.reporting.onBlockableItem.removeListener(filterListener, REPORTING_OPTIONS);
     browser.webRequest.onBeforeRequest.removeListener(webRequestListener);
     browser.storage.local.remove(TIME_LAST_PUSH_KEY);
-    browser.tabs.onUpdated.removeListener(handleTabUpdated);
     setSetting('data_collection_v2', false, callback);
   };
   returnObj.getCache = function returnObjGetCache() {
@@ -281,4 +208,4 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   return returnObj;
 }());
 
-exports.DataCollectionV2 = DataCollectionV2;
+export default DataCollectionV2;

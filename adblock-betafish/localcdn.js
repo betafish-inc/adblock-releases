@@ -1,8 +1,15 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, parseUri, exports, getAvailableFiles, adblockIsPaused
-   getSettings, settings */
+/* global browser, parseUri, adblockIsPaused */
+
+// This module is conditional imported only into a Chrome build via the
+// build config file in ..build\config\chrome.mjs
+
+import getAvailableFiles from './localFilesIndex';
+import {
+  getSettings, settings,
+} from './settings';
 
 const LocalCDN = (function getLocalCDN() {
   const urlsMatchPattern = ['http://*/*', 'https://*/*'];
@@ -212,6 +219,7 @@ const LocalCDN = (function getLocalCDN() {
     setUp,
     // Starts the LocalCDN listeners
     start() {
+      setUp();
       browser.webRequest.onBeforeRequest.addListener(libRequestHandler, { urls: urlsMatchPattern }, ['blocking']);
       browser.webRequest.onBeforeSendHeaders.addListener(stripMetadataHandler, { urls: urlsMatchPattern }, ['blocking', 'requestHeaders']);
     },
@@ -237,14 +245,14 @@ const LocalCDN = (function getLocalCDN() {
   };
 }());
 
-exports.LocalCDN = LocalCDN;
+export default LocalCDN;
+
+Object.assign(window, {
+  LocalCDN,
+});
 
 settings.onload().then(() => {
   if (getSettings().local_cdn) {
     LocalCDN.start();
   }
-});
-
-Object.assign(window, {
-  LocalCDN,
 });

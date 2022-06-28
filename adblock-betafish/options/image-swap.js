@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global BG, channelsNotifier, License, localizePage, MABPayment,
@@ -187,6 +187,7 @@ if (info.application === 'gecko') {
 
     if (atLeastOneSelected) {
       setSetting('picreplacement', true);
+      channels.initializeListeners();
       $stopFeatureInput.prop('checked', false);
       $stopFeatureInput.parent('.channel-box').removeClass('selected');
     } else {

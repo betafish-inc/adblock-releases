@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, adblock_installed, adblock_userid, adblock_version, adblock_ext_id */
@@ -151,6 +151,7 @@ function receiveMessage(event) {
   }
 }());
 
+/* eslint-disable-next-line no-unused-vars */
 const runBandaids = function () {
   const { hostname } = window.location;
   // Tests to determine whether a particular bandaid should be applied

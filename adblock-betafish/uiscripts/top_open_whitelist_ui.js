@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, translate, bindEnterClickToDefault, mayOpenDialogUi:true,
@@ -17,6 +17,7 @@ if (typeof window.mayOpenDialogUi === 'undefined') {
 
 // topOpenWhitelistUI displays the whitelist wizard if it's not already open. See README for
 // details.
+/* eslint-disable-next-line no-unused-vars */
 function topOpenWhitelistUI(options) {
   // DragElement makes a given DOM element draggable. It assumes the element is positioned
   // absolutely and adjusts the element's `top` and `left` styles directly.
@@ -249,7 +250,9 @@ function topOpenWhitelistUI(options) {
         $pathSlider.valueAsNumber,
       );
       const filter = `@@||${rule}$document`;
-      browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter, addCustomFilterRandomName: options.addCustomFilterRandomName }).then(() => {
+      browser.runtime.sendMessage({
+        command: 'addCustomFilter', filterTextToAdd: filter, addCustomFilterRandomName: options.addCustomFilterRandomName, origin: 'wizard',
+      }).then(() => {
         if ($dialog.find('#adblock-reload-page').is(':checked')) {
           browser.runtime.sendMessage({ command: 'reloadTabForWhitelist', rule });
         } else {

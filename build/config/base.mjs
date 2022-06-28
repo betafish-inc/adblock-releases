@@ -1,68 +1,39 @@
 
 export default {
   basename: 'adblock',
-  version: '4.46.2',
+  version: '5.0.2',
   webpack: {
     bundles: [
       {
+        dest: "polyfill.js",
+        src: [
+          "vendor/adblockplusui/adblockpluschrome/lib/polyfill.js"
+        ]
+      },
+      {
         dest: 'abp-background.js',
         src: [
-          'adblockplusui/adblockpluschrome/lib/devtools.js',
-          'adblockplusui/adblockpluschrome/lib/debug.js',
-          'adblock-betafish/alias/requestBlocker.js',
-          'adblockplusui/adblockpluschrome/lib/popupBlocker.js',
-          'adblockplusui/adblockpluschrome/lib/stats.js',
-          'adblockplusui/adblockpluschrome/lib/csp.js',
+          'adblock-betafish/functions.js',
+          'adblock-betafish/settings.js',
+          'vendor/adblockplusui/adblockpluschrome/lib/devtools.js',
+          'vendor/adblockplusui/adblockpluschrome/lib/debug.js',
+          'adblock-betafish/alias/subscriptionInit.js',
           'adblock-betafish/alias/contentFiltering.js',
-          'adblockplusui/adblockpluschrome/lib/messageResponder.js',
-          'adblockplusui/adblockpluschrome/lib/filterConfiguration.js',
+          'vendor/adblockplusui/adblockpluschrome/lib/messageResponder.js',
+          'vendor/adblockplusui/adblockpluschrome/lib/filterConfiguration.js',
           'adblock-betafish/jquery/jquery-3.5.1.min.js',
           'adblock-betafish/errorreporting.js',
-          'adblock-betafish/functions.js',
           'adblock-betafish/survey.js',
-          'adblock-betafish/settings.js',
           'adblock-betafish/alias/parseFilter.js',
           'adblock-betafish/background.js',
+          'adblock-betafish/allowlisting.js',
           'adblock-betafish/contextmenus.js',
-          'adblock-betafish/alias/subscriptionInit.js',
           'adblock-betafish/alias/icon.js',
-          'adblock-betafish/excludefilter.js',
-          'adblock-betafish/picreplacement/image-sizes-map.js',
-          'adblock-betafish/picreplacement/channels.js',
-          'adblock-betafish/picreplacement/cat-channel.js',
-          'adblock-betafish/picreplacement/dog-channel.js',
-          'adblock-betafish/picreplacement/landscape-channel.js',
-          'adblock-betafish/picreplacement/custom-channel.js',
-          'adblock-betafish/picreplacement/birds-channel.js',
-          'adblock-betafish/picreplacement/food-channel.js',
-          'adblock-betafish/picreplacement/goat-channel.js',
-          'adblock-betafish/picreplacement/ocean-channel.js',
-          'adblock-betafish/picreplacement/unknown-channel.js',
-          'adblock-betafish/picreplacement/check.js',
-          'adblock-betafish/picreplacement/sync-service.js',
-          'adblock-betafish/picreplacement/distraction-control-bg.js',
-          'adblock-betafish/getselectors.js',
-          'adblock-betafish/data_migration.js',
           'adblock-betafish/twitchSettings.js',
           'adblock-betafish/youtube/yt-bg.js',
-          // marked as optional using wildcard
-          'vendor/abp-snippets/dist/ml/bundle*.ml.mjs',
+          'adblock-betafish/picreplacement/distraction-control-bg.js',
         ],
-      },
-      {
-        dest: 'include.preload.js',
-        src: [
-          'adblock-betafish/alias/include.preload.js',
-          'adblockplusui/adblockpluschrome/inject.preload.js',
-          'adblock-betafish/picreplacement/contentscript-loader.js',
-        ],
-      },
-      {
-        dest: 'subscriptionLink.postload.js',
-        src: [
-          'adblockplusui/adblockpluschrome/subscriptionLink.postload.js',
-        ],
-      },
+      }
     ],
   },
   mapping: {
@@ -123,10 +94,6 @@ export default {
         src: 'adblock-betafish/fonts/font-face.css',
       },
       {
-        dest: 'data/',
-        src: '/data/*.json',
-      },
-      {
         dest: "data/hideIfGraphMatches",
         src: [
           // marked as optional using wildcard
@@ -136,13 +103,12 @@ export default {
       {
         dest: 'ext',
         src: [
-          'adblockplusui/adblockpluschrome/ext/**',
+          'vendor/adblockplusui/adblockpluschrome/ext/**',
         ],
       },
       {
         dest: '',
         src: [
-          'adblockplusui/adblockpluschrome/polyfill.js',
           'adblock-betafish/lib/purify.min.js',
           'adblock-betafish/CHANGELOG.txt',
           'adblock-betafish/LICENSE',
@@ -151,12 +117,12 @@ export default {
           'adblock-betafish/pubnub/pubnub.min.js',
           'adblock-betafish/lib/*',
           'adblock-betafish/adblock.css',
-          'adblockplusui/adblockpluschrome/devtools.html',
-          'adblockplusui/devtools-panel.js',
-          'adblockplusui/i18n.js',
-          'adblockplusui/proxy.html',
-          // marked as optional using wildcard
+          'adblock-betafish/picreplacement/contentscript-loader.js',
           'vendor/abp-snippets/dist/webext/snippets*.json',
+          'vendor/adblockplusui/adblockpluschrome/devtools.html',
+          'adblock-betafish/alias/devtools-panel.js',
+          'adblock-betafish/alias/i18n.js',
+          'vendor/adblockplusui/proxy.html'
         ],
       },
     ],
@@ -172,10 +138,6 @@ export default {
       {
         dest: 'adblock-bandaids.js',
         src: 'adblock-betafish/bandaids.js',
-      },
-      {
-        dest: 'adblock-datacollection-contentscript.js',
-        src: 'adblock-betafish/datacollection-contentscript.js',
       },
       {
         dest: 'adblock-yt-cs.js',
@@ -463,11 +425,11 @@ export default {
       },
       {
         dest: 'skin/devtools-panel.css',
-        src: 'adblockplusui/skin/devtools-panel.css',
+        src: 'adblock-betafish/alias/devtools-panel.css',
       },
       {
         dest: 'adblock-snippets.json',
-        src: 'dist/adblock-snippets.json',
+        src: './dist/adblock-snippets.json',
       },
       {
         dest: 'icons/ab-16.png',
@@ -593,6 +555,10 @@ export default {
         dest: 'managed-storage-schema.json',
         src: 'adblock-betafish/alias/managed-storage-schema.json',
       },
+      {
+        dest: "vendor/webext-sdk/content.js",
+        src: "vendor/webext-sdk/dist/ewe-content.js"
+      }
     ],
   },
   translations: {

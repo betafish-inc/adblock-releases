@@ -28,12 +28,8 @@
 
 /** @module icon */
 
-"use strict";
-
-import { filterNotifier } from "filterNotifier";
-import { setIconPath, setIconImageData, toggleBadge } from "../../adblockplusui/adblockpluschrome/lib/browserAction";
-import * as info from "info";
-const browserAction = require('../../adblockplusui/adblockpluschrome/lib/browserAction');
+import { allowlistingState } from "../../vendor/adblockplusui/adblockpluschrome/lib/allowlisting";
+import { setIconPath, setIconImageData, toggleBadge, setBadge } from "../../vendor/adblockplusui/adblockpluschrome/lib/browserAction";
 
 const ANIMATION_LOOPS = 3;
 const FRAME_IN_MS = 100;
@@ -137,8 +133,8 @@ function setIcon(page, opacity, frames) {
   }
 }
 
-filterNotifier.on("page.AllowlistingStateRevalidate", (page, filter) => {
-  allowlistedState.set(page, !!filter);
+allowlistingState.addListener("changed", (page, isAllowlisted) => {
+  allowlistedState.set(page, isAllowlisted);
   if (canUpdateIcon)
     setIcon(page);
 });
@@ -313,7 +309,7 @@ export function showIconBadgeCTA(showBadge, reason) {
       browser.tabs.query({}).then((tabs) => {
         for (const tab of tabs) {
           if (tab.url && tab.url.startsWith('http')) {
-            browserAction.setBadge(tab.id, { color: '#03bcfc', number: newBadgeText });
+            setBadge(tab.id, { color: '#03bcfc', number: newBadgeText });
             newBadgeTextReason = reason || '';
           }
         }

@@ -1,5 +1,5 @@
 /*
- * Same as the original source adblockplusui\adblockpluschrome\devtools.js
+ * Same as the original source vendor\adblockplusui\adblockpluschrome\devtools.js
  * except:
  * - updated the panel name, and icon file name
  */

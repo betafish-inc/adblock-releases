@@ -1,13 +1,24 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, settings, getSettings, setSetting, License, STATS, channels, exports, require,
-   getSubscriptionsMinusText, chromeStorageSetHelper, getUserFilters, Prefs, abpPrefPropertyNames,
-   Subscription, adblockIsDomainPaused, PubNub, adblockIsPaused, filterStorage, parseFilter,
-   synchronizer, pausedFilterText1, pausedFilterText2, getUrlFromId, channelsNotifier,
-   settingsNotifier, filterNotifier, isWhitelistFilter, recordGeneralMessage */
+/* global browser, channels, createFilterMetaData,
+   chromeStorageSetHelper, getUserFilters, Prefs, abpPrefPropertyNames,
+   adblockIsDomainPaused, PubNub, adblockIsPaused,
+   pausedFilterText1, pausedFilterText2,
+   isWhitelistFilter, getCustomFilterMetaData */
 
-const { EventEmitter } = require('events');
+/** @module SyncService */
+
+import { TELEMETRY } from '../telemetry';
+import { EventEmitter } from '../../vendor/adblockplusui/adblockpluschrome/lib/events';
+import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
+import { License } from './check';
+import { channelsNotifier } from './channels';
+import SubscriptionAdapter from '../subscriptionadapter';
+import {
+  getSettings, setSetting, settingsNotifier, settings,
+} from '../settings';
+import ServerMessages from '../servermessages';
 
 const SyncService = (function getSyncService() {
   let storedSyncDomainPauses = [];
@@ -111,14 +122,30 @@ const SyncService = (function getSyncService() {
   // return meta data about the extension installation
   const getExtensionInfo = function () {
     return {
-      flavor: STATS.flavor,
-      browserVersion: STATS.browserVersion,
-      os: STATS.os,
-      osVersion: STATS.osVersion,
-      extVersion: STATS.version,
+      flavor: TELEMETRY.flavor,
+      browserVersion: TELEMETRY.browserVersion,
+      os: TELEMETRY.os,
+      osVersion: TELEMETRY.osVersion,
+      extVersion: TELEMETRY.version,
       syncSchemaVersion,
     };
   };
+
+  /*
+  ** @param arrOne, arrTwo - Arrays to compare
+  ** @returns {boolean} - true if a and b are the same array
+  **                      has the length and same values in any order
+  **                      otherwise false
+  */
+  function arrayComparison(arrOne, arrTwo) {
+    if (!Array.isArray(arrOne) || !Array.isArray(arrTwo)) {
+      return false;
+    }
+    if (arrOne.length !== arrTwo.length) {
+      return false;
+    }
+    return arrOne.every(element => arrTwo.includes(element));
+  }
 
   /*
   ** @param a, b        - values (Object, Date, etc.)
@@ -192,6 +219,10 @@ const SyncService = (function getSyncService() {
     // If they don't have the same number of keys, return false
     if (aKeys.length !== bKeys.length) {
       return false;
+    }
+
+    if (Array.isArray(a) && Array.isArray(b)) {
+      return arrayComparison(a, b);
     }
 
     // Check they have the same keys
@@ -325,7 +356,7 @@ const SyncService = (function getSyncService() {
     return filters;
   }
 
-  const processSyncUpdate = function (payload) {
+  const processSyncUpdate = async function (payload) {
     // do we need a check or comparison of payload.version vs. syncSchemaVersion ?
     if (payload.settings) {
       const keywords = Object.keys(payload.settings);
@@ -335,38 +366,40 @@ const SyncService = (function getSyncService() {
       for (let inx = 0, p = Promise.resolve(); inx < keywords.length; inx++) {
         const id = keywords[inx];
         p = p.then(() => new Promise((resolve) => {
-          setSetting(id, payload.settings[id], () => {
+          let value = payload.settings[id];
+          // since we receive a 'show_statsinpopup' property on the |Prefs| object
+          // from older versions of AdBLock, use the incoming value from |Prefs|
+          // object for backward compatability
+          if (
+            id === 'display_menu_stats'
+            && payload.prefs
+            && Object.prototype.hasOwnProperty.call(payload.prefs, 'show_statsinpopup')
+          ) {
+            value = payload.prefs.show_statsinpopup;
+          }
+          setSetting(id, value, () => {
             resolve();
           });
         }));
       }
     }
     if (payload.subscriptions) {
-      const currentSubs = getSubscriptionsMinusText();
+      const currentSubs = SubscriptionAdapter.getSubscriptionsMinusText();
       for (const id in currentSubs) {
-        const tempId = `url:${currentSubs[id].url}`;
-        if (
-          !payload.subscriptions[id]
-          && !payload.subscriptions[tempId]
-          && currentSubs[id].subscribed
-          && currentSubs[id].url
-        ) {
-          const subscription = Subscription.fromURL(currentSubs[id].url);
-          setTimeout(() => {
-            filterStorage.removeSubscription(subscription);
-          }, 1);
+        if (!payload.subscriptions[id] && currentSubs[id].subscribed) {
+          ewe.subscriptions.remove(currentSubs[id].url);
         }
       }
       for (const id in payload.subscriptions) {
         if (!currentSubs[id] || !currentSubs[id].subscribed) {
-          let url = getUrlFromId(id);
-          let subscription = Subscription.fromURL(url);
+          let url = SubscriptionAdapter.getUrlFromId(id);
           if (!url && id.startsWith('url:')) {
             url = id.slice(4);
-            subscription = Subscription.fromURL(url);
           }
-          filterStorage.addSubscription(subscription);
-          synchronizer.execute(subscription);
+          if (url) {
+            ewe.subscriptions.add(url);
+            ewe.subscriptions.sync(url);
+          }
         }
       }
     }
@@ -374,29 +407,39 @@ const SyncService = (function getSyncService() {
     if (payload.customFilterRules) {
       // capture, then remove all current custom filters, account for pause filters in
       // current processing
-      let currentUserFilters = getUserFilters();
+      let currentUserFilters = await getUserFilters();
+      let results = [];
       for (const inx in payload.customFilterRules) {
-        const result = parseFilter(payload.customFilterRules[inx]);
-        if (result.filter) {
-          filterStorage.addFilter(result.filter);
+        if (!ewe.filters.validate(payload.customFilterRules[inx])) {
+          results.push(ewe.filters.add([payload.customFilterRules[inx]]));
         }
       }
+      await Promise.all(results);
+      results = [];
       if (currentUserFilters && currentUserFilters.length) {
         currentUserFilters = cleanCustomFilter(currentUserFilters);
         // Delete / remove filters the user removed...
         if (currentUserFilters) {
           for (let i = 0; (i < currentUserFilters.length); i++) {
-            let filter = currentUserFilters[i];
-            if (payload.customFilterRules.indexOf(filter) === -1) {
-              filter = filter.trim();
-              if (filter.length > 0) {
-                const result = parseFilter(filter);
-                if (result.filter) {
-                  filterStorage.removeFilter(result.filter);
+            const filter = currentUserFilters[i];
+            if (!payload.customFilterRules.includes(filter.text)) {
+              if (filter.text.length > 0) {
+                if (!ewe.filters.validate(filter.text)) {
+                  results.push(ewe.filters.remove([filter.text]));
                 }
               }
             }
           }
+        }
+      }
+      await Promise.all(results);
+    }
+    if (payload.customRuleMetaData) {
+      let currentUserFilters = await getUserFilters();
+      currentUserFilters = currentUserFilters.map(filter => filter.text);
+      for (const ruleText in payload.customRuleMetaData) {
+        if (currentUserFilters.includes(ruleText)) {
+          ewe.filters.setMetadata(ruleText, payload.customRuleMetaData[ruleText]);
         }
       }
     }
@@ -406,6 +449,11 @@ const SyncService = (function getSyncService() {
         // add any new Prefs to the array of Preferences we're tracking for sync
         if (abpPrefPropertyNames.indexOf(key) < 0) {
           abpPrefPropertyNames.push(key);
+        }
+        // since we no long use the 'show_statsinpopup' property on the |Prefs| object,
+        // manually set Settings property for backward compatability
+        if (key === 'show_statsinpopup') {
+          setSetting('display_menu_stats', payload.prefs[key]);
         }
       }
     }
@@ -519,7 +567,7 @@ const SyncService = (function getSyncService() {
       cache: false,
       headers: {
         'X-GABSYNC-PARAMS': JSON.stringify({
-          extensionGUID: STATS.userId(),
+          extensionGUID: TELEMETRY.userId(),
           licenseId: License.get().licenseId,
           extInfo: getExtensionInfo(),
         }),
@@ -563,7 +611,7 @@ const SyncService = (function getSyncService() {
       chromeStorageSetHelper(syncExtensionNameKey, currentExtensionName);
       const thedata = {
         deviceName: currentExtensionName,
-        extensionGUID: STATS.userId(),
+        extensionGUID: TELEMETRY.userId(),
         licenseId: License.get().licenseId,
         extInfo: getExtensionInfo(),
       };
@@ -610,18 +658,18 @@ const SyncService = (function getSyncService() {
 
 
   const removeCurrentExtensionName = function () {
-    removeExtensionName(currentExtensionName, STATS.userId());
+    removeExtensionName(currentExtensionName, TELEMETRY.userId());
   };
 
   // return all of the current user configurable extension options (settings, Prefs, filter list
   // sub, custom rules, themes, etc. Since a comparison will be done in this, and other sync'd
   // extensions, the payload should only contain settings, Prefs, etc and not data that can change
   // from browser to brower, version to version, etc.
-  const getSyncInformation = function () {
+  const getSyncInformation = async function () {
     const payload = {};
     payload.settings = getSettings();
     payload.subscriptions = {};
-    const subscriptions = getSubscriptionsMinusText();
+    const subscriptions = SubscriptionAdapter.getSubscriptionsMinusText();
 
     for (const id in subscriptions) {
       if (subscriptions[id].subscribed && subscriptions[id].url) {
@@ -632,12 +680,29 @@ const SyncService = (function getSyncService() {
         }
       }
     }
-    payload.customFilterRules = cleanCustomFilter(getUserFilters());
+    let userFilters = await getUserFilters();
+    userFilters = userFilters.map(filter => filter.text).sort();
+    payload.customFilterRules = cleanCustomFilter(userFilters);
+
+    const metaDataArr = await getCustomFilterMetaData();
+    if (metaDataArr && metaDataArr.length) {
+      const ruleMetaData = {};
+      for (let inx = 0; inx < metaDataArr.length; inx++) {
+        if (metaDataArr[inx].text && metaDataArr[inx].metaData) {
+          ruleMetaData[metaDataArr[inx].text] = metaDataArr[inx].metaData;
+        }
+      }
+      payload.customRuleMetaData = ruleMetaData;
+    }
     payload.prefs = {};
     for (const inx in abpPrefPropertyNames) {
       const name = abpPrefPropertyNames[inx];
       payload.prefs[name] = Prefs[name];
     }
+    // since we no long use the 'show_statsinpopup' property on the |Prefs| object,
+    // manually set it using the new 'show_statsinpopup' property on the Settings object
+    // for backward compatability
+    payload.prefs.show_statsinpopup = getSettings().display_menu_stats;
     payload.channels = {};
     const guide = channels.getGuide();
     for (const id in guide) {
@@ -646,19 +711,18 @@ const SyncService = (function getSyncService() {
     return payload;
   };
 
-  const postDataSync = function (callback, initialGet) {
+  const postDataSync = async function (callback, initialGet) {
     if (!getSettings().sync_settings) {
       return;
     }
-    const payload = getSyncInformation();
+    const payload = await getSyncInformation();
     const thedata = {
       data: JSON.stringify(payload),
       commitVersion: syncCommitVersion,
-      extensionGUID: STATS.userId(),
+      extensionGUID: TELEMETRY.userId(),
       licenseId: License.get().licenseId,
       extInfo: getExtensionInfo(),
     };
-
     browser.storage.local.get(syncPreviousDataKey).then((response) => {
       const previousData = response[syncPreviousDataKey] || '{}';
       if (objectComparison(payload, JSON.parse(previousData))) {
@@ -853,7 +917,7 @@ const SyncService = (function getSyncService() {
   function enablePubNub() {
     pubnub = new PubNub({
       subscribeKey: License.MAB_CONFIG.subscribeKey,
-      authKey: `${License.get().licenseId}_${STATS.userId()}`,
+      authKey: `${License.get().licenseId}_${TELEMETRY.userId()}`,
       ssl: true,
     });
 
@@ -870,7 +934,7 @@ const SyncService = (function getSyncService() {
           });
         }
         if (msg.error === true && msg.category && msg.operation) {
-          recordGeneralMessage('pubnub_error', undefined, { licenseId: License.get().licenseId, category: msg.category, operation: msg.operation });
+          ServerMessages.recordGeneralMessage('pubnub_error', undefined, { licenseId: License.get().licenseId, category: msg.category, operation: msg.operation });
         }
       },
     });
@@ -900,11 +964,14 @@ const SyncService = (function getSyncService() {
       syncNotifier.on('extension.names.downloaded', onExtensionNamesDownloadedAddLogEntry);
       syncNotifier.on('extension.names.downloading.error', onExtensionNamesDownloadingErrorAddLogEntry);
 
-      filterNotifier.on('subscription.removed', onFilterListsSubRemoved);
-      filterNotifier.on('subscription.added', onFilterListsSubAdded);
+      // eslint-disable-next-line no-use-before-define
+      License.licenseNotifier.on('license.expired', disableSync);
 
-      filterNotifier.on('filter.added', onFilterAdded);
-      filterNotifier.on('filter.removed', onFilterRemoved);
+      ewe.subscriptions.onAdded.addListener(onFilterListsSubAdded);
+      ewe.subscriptions.onRemoved.addListener(onFilterListsSubRemoved);
+
+      ewe.filters.onAdded.addListener(onFilterAdded);
+      ewe.filters.onRemoved.addListener(onFilterRemoved);
 
       settingsNotifier.on('settings.changed', onSettingsChanged);
       channelsNotifier.on('channels.changed', postDataSyncHandler);
@@ -948,12 +1015,11 @@ const SyncService = (function getSyncService() {
     setSetting('sync_settings', false);
     syncCommitVersion = 0;
     disablePubNub();
+    ewe.subscriptions.onAdded.removeListener(onFilterListsSubAdded);
+    ewe.subscriptions.onRemoved.removeListener(onFilterListsSubRemoved);
 
-    filterNotifier.off('subscription.added', onFilterListsSubAdded);
-    filterNotifier.off('subscription.removed', onFilterListsSubRemoved);
-
-    filterNotifier.off('filter.added', onFilterAdded);
-    filterNotifier.off('filter.removed', onFilterRemoved);
+    ewe.filters.onAdded.removeListener(onFilterAdded);
+    ewe.filters.onRemoved.removeListener(onFilterRemoved);
 
     settingsNotifier.off('settings.changed', onSettingsChanged);
     channelsNotifier.off('channels.changed', postDataSyncHandler);
@@ -988,6 +1054,7 @@ const SyncService = (function getSyncService() {
     syncNotifier.off('extension.names.downloaded', onExtensionNamesDownloadedAddLogEntry);
     syncNotifier.off('extension.names.downloading.error', onExtensionNamesDownloadingErrorAddLogEntry);
 
+    License.licenseNotifier.off('license.expired', disableSync);
     window.removeEventListener('online', updateNetworkStatus);
     window.removeEventListener('offline', updateNetworkStatus);
   };
@@ -1015,7 +1082,7 @@ const SyncService = (function getSyncService() {
       cache: false,
       headers: {
         'X-GABSYNC-PARAMS': JSON.stringify({
-          extensionGUID: STATS.userId(),
+          extensionGUID: TELEMETRY.userId(),
           licenseId: License.get().licenseId,
           commitVersion: syncCommitVersion,
           force: forceParam,
@@ -1120,4 +1187,4 @@ const SyncService = (function getSyncService() {
   };
 }());
 
-exports.SyncService = SyncService;
+export default SyncService;

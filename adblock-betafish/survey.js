@@ -1,16 +1,18 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, exports, STATS, log, getSettings, Prefs, openTab,
-   License
+/* global browser, TELEMETRY, License, log, openTab,
  */
 
 // if the ping response indicates a survey (tab or overlay)
 // gracefully processes the request
-const stats = require('stats');
-const { OnPageIconManager } = require('./onpageIcon/onpage-icon-bg.js');
-const { domainSuffixes, parseDomains } = require('../adblockplusui/adblockpluschrome/adblockpluscore/lib/url.js');
-const { recordGeneralMessage, recordErrorMessage } = require('./servermessages').ServerMessages;
+
+import { Prefs } from 'prefs';
+import { domainSuffixes, parseDomains } from 'adblockpluscore/lib/url';
+import { getSettings } from './settings';
+import { getBlockedPerPage } from '../vendor/adblockplusui/adblockpluschrome/lib/stats';
+import OnPageIconManager from './onpageIcon/onpage-icon-bg';
+
 
 const SURVEY = (function getSurvey() {
   // Only allow one survey per browser startup, to make sure users don't get
@@ -69,11 +71,11 @@ const SURVEY = (function getSurvey() {
     // based on surveyAllowed.
     log('shouldShowSurvey::surveyAllowed: ', surveyAllowed);
     if (surveyAllowed) {
-      let data = { cmd: 'survey', u: STATS.userId(), sid: surveyData.survey_id };
-      if (STATS.flavor === 'E' && Prefs.blocked_total) {
+      let data = { cmd: 'survey', u: TELEMETRY.userId(), sid: surveyData.survey_id };
+      if (TELEMETRY.flavor === 'E' && Prefs.blocked_total) {
         data.b = Prefs.blocked_total;
       }
-      $.post(STATS.statsUrl, data, (responseData) => {
+      $.post(TELEMETRY.statsUrl, data, (responseData) => {
         try {
           data = JSON.parse(responseData);
         } catch (e) {
@@ -170,8 +172,8 @@ const SURVEY = (function getSurvey() {
         const cleanDomain = myURL.hostname.replace(/^www\./, ''); // remove lead 'www.'
         log('processIcon:: checking if isActiveOnDomain', cleanDomain, isActiveOnDomain(cleanDomain, parsedDomains));
         if (isActiveOnDomain(cleanDomain, parsedDomains)) {
-          log('processIcon:: block count check', stats.getBlockedPerPage(tab), surveyData.block_count);
-          if (surveyData.block_count <= stats.getBlockedPerPage(tab)) {
+          log('processIcon:: block count check', getBlockedPerPage(tab), surveyData.block_count);
+          if (surveyData.block_count <= getBlockedPerPage(tab)) {
             shouldShowOnPageIcon();
           }
         }
@@ -249,7 +251,7 @@ const SURVEY = (function getSurvey() {
       openTabIfAllowed();
     };
 
-    browser.idle.queryState(60, (state) => {
+    browser.idle.queryState(60).then((state) => {
       if (state === 'active') {
         openTabIfAllowed();
       } else {
@@ -285,4 +287,4 @@ const SURVEY = (function getSurvey() {
   };
 }());
 
-exports.SURVEY = SURVEY;
+export default SURVEY;

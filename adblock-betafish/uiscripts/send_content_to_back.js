@@ -1,4 +1,4 @@
-'use strict';
+
 
 function sendContentToBack() {
   // Objects and embeds can catch our clicks unless we lay a div over

@@ -1,10 +1,12 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, getSettings, settings, require, ext, setSetting,
-   addCustomFilter, filterNotifier, checkAllowlisted */
+/* global browser, ext,
+   addCustomFilter, */
 
-const browserAction = require('../adblockplusui/adblockpluschrome/lib/browserAction');
+import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
+import setBadge from '../vendor/adblockplusui/adblockpluschrome/lib/browserAction';
+import { getSettings, settings } from './settings';
 
 const twitchChannelNamePages = new Map();
 
@@ -24,8 +26,8 @@ const twitchHistoryStateUpdateHandler = function (details) {
       myPage._url = myURL;
       myFrame.url = myURL;
       myFrame._url = myURL;
-      if (checkAllowlisted(myPage)) {
-        browserAction.setBadge(details.tabId, { number: '' });
+      if (ewe.filters.getAllowingFilters(myPage.id).length) {
+        setBadge(details.tabId, { number: '' });
       }
     }
   }
@@ -34,7 +36,7 @@ const twitchHistoryStateUpdateHandler = function (details) {
 // Creates a custom filter entry that whitelists a YouTube channel
 // Inputs: url:string url of the page
 // Returns: null if successful, otherwise an exception
-const createWhitelistFilterForTwitchChannel = function (url) {
+const createWhitelistFilterForTwitchChannel = function (url, origin) {
   let twitchChannel;
   if (/ab_channel=/.test(url)) {
     [, twitchChannel] = url.match(/ab_channel=([^]*)/);
@@ -43,23 +45,18 @@ const createWhitelistFilterForTwitchChannel = function (url) {
   }
   if (twitchChannel) {
     const filter = `@@||twitch.tv/*${twitchChannel}^$document`;
-    return addCustomFilter(filter);
+    return addCustomFilter(filter, origin);
   }
   return undefined;
 };
 
 const twitchMessageHandler = function (message, sender, sendResponse) {
   if (message.command === 'createWhitelistFilterForTwitchChannel' && message.url) {
-    sendResponse(createWhitelistFilterForTwitchChannel(message.url));
+    sendResponse(createWhitelistFilterForTwitchChannel(message.url, message.origin));
     return;
   }
   if (message.command === 'updateTwitchChannelName' && message.channelName) {
     twitchChannelNamePages.set(sender.tab.id, message.channelName);
-    sendResponse({});
-  }
-  if (message.command === 'allowlistingStateRevalidate') {
-    const page = new ext.Page(sender.tab);
-    filterNotifier.emit('page.WhitelistingStateRevalidate', page, checkAllowlisted(page));
     sendResponse({});
   }
 };

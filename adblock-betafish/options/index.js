@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, getSettings, translate, FilterListUtil, activateTab,
@@ -7,35 +7,35 @@
    THIRTY_MINUTES_IN_MILLISECONDS, setLangAndDirAttributes */
 
 const BG = browser.extension.getBackgroundPage();
-const { Filter } = BG;
-const { WhitelistFilter } = BG;
-const { Subscription } = BG;
-const { SpecialSubscription } = BG;
-const { DownloadableSubscription } = BG;
-const { parseFilter } = BG;
-const { filterStorage } = BG;
-const { filterNotifier } = BG;
 const { settingsNotifier } = BG;
+/* eslint-disable-next-line no-unused-vars */
 const { channelsNotifier } = BG;
+/* eslint-disable-next-line no-unused-vars */
 const { Prefs } = BG;
-const { synchronizer } = BG;
+/* eslint-disable-next-line no-unused-vars */
 const { isSelectorFilter } = BG;
+/* eslint-disable-next-line no-unused-vars */
 const { isWhitelistFilter } = BG;
+/* eslint-disable-next-line no-unused-vars */
 const { isSelectorExcludeFilter } = BG;
 const { License } = BG;
 const { SyncService } = BG;
+/* eslint-disable-next-line no-unused-vars */
 const { isValidTheme } = BG;
+/* eslint-disable-next-line no-unused-vars */
 const { abpPrefPropertyNames } = BG;
 const { info } = BG;
 const { rateUsCtaKey, vpnWaitlistCtaKey, mailCtaKey } = BG;
 const FIVE_SECONDS = 5000;
 const TWENTY_SECONDS = FIVE_SECONDS * 4;
+/* eslint-disable-next-line no-unused-vars */
 const SIXTY_SECONDS = FIVE_SECONDS * 20;
 let autoReloadingPage;
 let timeoutID;
 
 const language = determineUserLanguage();
 let optionalSettings = {};
+/* eslint-disable-next-line no-unused-vars */
 let delayedSubscriptionSelection = null;
 const port = browser.runtime.connect({ name: 'ui' });
 let syncErrorCode = 0;
@@ -43,6 +43,7 @@ let syncErrorCode = 0;
 // Function to check the last known Sync Error Code,
 // only allows an event handler to run if there is
 // no error to prevent data loss
+/* eslint-disable-next-line no-unused-vars */
 function checkForSyncError(handler) {
   return function syncError(event) {
     if (syncErrorCode >= 400) {
@@ -465,7 +466,7 @@ const shouldShowEmailCTA = function () {
   if (!mql.matches) {
     chromeStorageGetHelper(mailCtaKey).then((alreadyClickedMailCTA) => {
       if (!alreadyClickedMailCTA) {
-        BG.recordGeneralMessage('mail_option_cta_seen');
+        BG.ServerMessages.recordGeneralMessage('mail_option_cta_seen');
         const mailCTA$ = $('#mail-cta');
         mailCTA$.show();
         const checkBox$ = $('#mail-cta-confirm-checkbox');
@@ -485,7 +486,7 @@ const shouldShowEmailCTA = function () {
           placePanel();
           $('#mail-dialog').fadeToggle(() => {
             if ($('#mail-dialog').is(':visible')) {
-              BG.recordGeneralMessage('mail_option_cta_clicked');
+              BG.ServerMessages.recordGeneralMessage('mail_option_cta_clicked');
             }
           });
         });
@@ -496,7 +497,7 @@ const shouldShowEmailCTA = function () {
             && event.target.dataset
             && event.target.dataset.sendCloseEvent
           ) {
-            BG.recordGeneralMessage('mail_option_cta_closed');
+            BG.ServerMessages.recordGeneralMessage('mail_option_cta_closed');
           }
           $('#mail-dialog-err-message').text('');
           $('#mail-dialog').fadeOut();
@@ -537,7 +538,7 @@ const shouldShowEmailCTA = function () {
             $('#mail-dialog-content').fadeOut(() => {
               $('#mail-dialog-done-content').fadeIn();
             });
-            BG.recordGeneralMessage('newsletter_optin', undefined, { emailAddress: emailAddressTxt });
+            BG.ServerMessages.recordGeneralMessage('newsletter_optin', undefined, { emailAddress: emailAddressTxt });
             chromeStorageSetHelper(mailCtaKey, true);
           }
         });

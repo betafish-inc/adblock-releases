@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, translate, storageGet, localizePage, storageSet,
@@ -210,7 +210,7 @@ try {
       browser.runtime.sendMessage({ command: 'getCurrentTabInfo', tabId }).then((info) => {
         if (info) {
           try {
-            browser.browserAction.getBadgeText({ tabId: info.id }, (text) => {
+            browser.browserAction.getBadgeText({ tabId: info.id }).then((text) => {
               let newBadgeText = translate('new_badge');
               // Text that exceeds 4 characters is truncated on the toolbar badge,
               // so we default to English
@@ -394,7 +394,7 @@ try {
             }
 
             if (
-              !info.showStatsInPopup
+              !info.settings.display_menu_stats
               || info.paused
               || info.domainPaused
               || info.disabledSite
@@ -421,10 +421,12 @@ try {
       selected('#btn_enable_adblock_on_this_page', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'enable_adblock_clicked' });
         if (pageInfo.url) {
-          browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href }).then((response) => {
-            if (response.unwhitelisted) {
-              browser.tabs.reload();
-              closeAndReloadPopup();
+          browser.runtime.sendMessage({ command: 'tryToUnwhitelist', url: pageInfo.url.href, id: pageInfo.id }).then((response) => {
+            if (response) {
+              browser.runtime.sendMessage({ command: 'updateButtonUIAndContextMenus' }).then(() => {
+                browser.tabs.reload();
+                closeAndReloadPopup();
+              });
             } else {
               $('#div_status_allowlisted').replaceWith(translate('disabled_by_filter_lists'));
             }
@@ -465,9 +467,9 @@ try {
       selected('#btn_allowlist_yt_channel', () => {
         if (pageInfo.url && pageInfo.url.hostname === 'www.youtube.com') {
           browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_youtube_clicked' });
-          browser.runtime.sendMessage({ command: 'createWhitelistFilterForYoutubeChannel', url: pageInfo.url.href }).then(() => {
-            closeAndReloadPopup();
+          browser.runtime.sendMessage({ command: 'createWhitelistFilterForYoutubeChannel', url: pageInfo.url.href, origin: 'popup' }).then(() => {
             browser.tabs.reload();
+            closeAndReloadPopup();
           });
         }
       });
@@ -475,9 +477,9 @@ try {
       selected('#btn_allowlist_twitch_channel', () => {
         if (pageInfo.url && pageInfo.url.hostname === 'www.twitch.tv') {
           browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'whitelist_twitch_clicked' });
-          browser.runtime.sendMessage({ command: 'createWhitelistFilterForTwitchChannel', url: pageInfo.url.href }).then(() => {
-            closeAndReloadPopup();
+          browser.runtime.sendMessage({ command: 'createWhitelistFilterForTwitchChannel', url: pageInfo.url.href, origin: 'popup' }).then(() => {
             browser.tabs.reload();
+            closeAndReloadPopup();
           });
         }
       });
@@ -517,9 +519,11 @@ try {
       selected('#btn_pause_always', () => {
         browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'allowlist_domain_clicked' });
         if (pageInfo.url) {
-          browser.runtime.sendMessage({ command: 'createDomainAllowlistFilter', url: pageInfo.url.href }).then(() => {
-            closeAndReloadPopup();
-            browser.tabs.reload();
+          browser.runtime.sendMessage({ command: 'createDomainAllowlistFilter', url: pageInfo.url.href, origin: 'popup' }).then(() => {
+            browser.runtime.sendMessage({ command: 'updateButtonUIAndContextMenus' }).then(() => {
+              browser.tabs.reload();
+              closeAndReloadPopup();
+            });
           });
         }
       });

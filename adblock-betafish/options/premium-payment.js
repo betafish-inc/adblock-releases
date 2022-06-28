@@ -1,10 +1,12 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global License, parseUri, BG, storageSet, storageGet, getFormattedTabName */
 
 // MABPayment can be used in all the Options page tabs and should be used to display
 // the CTAs to pay for Premium.
+
+/* eslint-disable-next-line no-unused-vars */
 const MABPayment = (function mabPayment() {
   const userClosedSyncCTA = storageGet(License.userClosedSyncCTAKey);
   const userSawSyncCTA = storageGet(License.userSawSyncCTAKey);
@@ -57,7 +59,7 @@ const MABPayment = (function mabPayment() {
       }
       if (!alreadyShowingCTAs && (userChangedSettings || !userSawSyncCTA)) {
         $('.sync-cta').fadeIn(1000);
-        BG.recordGeneralMessage('options_page_sync_cta_seen');
+        BG.ServerMessages.recordGeneralMessage('options_page_sync_cta_seen');
       }
     },
     userClosedSyncCTA: () => {
@@ -74,13 +76,13 @@ const MABPayment = (function mabPayment() {
         });
       });
       storageSet(License.userClosedSyncCTAKey, true);
-      BG.recordGeneralMessage('options_page_sync_cta_closed');
+      BG.ServerMessages.recordGeneralMessage('options_page_sync_cta_closed');
     },
     userClickedSyncCTA: () => {
-      BG.recordGeneralMessage('options_page_sync_cta_clicked');
+      BG.ServerMessages.recordGeneralMessage('options_page_sync_cta_clicked');
     },
     userClickedPremiumCTA: () => {
-      BG.recordGeneralMessage(`options_page_premium_cta_clicked_${getFormattedTabName()}`);
+      BG.ServerMessages.recordGeneralMessage(`options_page_premium_cta_clicked_${getFormattedTabName()}`);
     },
   };
 }());

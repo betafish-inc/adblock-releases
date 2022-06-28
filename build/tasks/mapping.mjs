@@ -17,7 +17,7 @@
 
 import gulp from 'gulp';
 import merge from 'merge-stream';
-import changePath from '../../adblockplusui/adblockpluschrome/build/utils/gulp-change-path.js';
+import changePath from "../utils/gulp-change-path.mjs";
 
 export default function mapping(bundles) {
   return merge(

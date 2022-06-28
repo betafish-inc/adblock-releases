@@ -1,27 +1,20 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global Channel, Listing, require */
+/* global  */
 
-const landscapeData = require('./data/landscapes.json');
+import landscapeData from './data/landscapes.json';
+
+import Channel from './channel';
 
 // Channel containing hard coded Landscapes loaded from CDN.
 // Subclass of Channel.
-function LandscapesChannel() {
-  Channel.call(this);
-}
-LandscapesChannel.prototype = {
-  __proto__: Channel.prototype,
-
+class LandscapesChannel extends Channel {
   getLatestListings(callback) {
-    const listingArray = [];
     for (const landscape of landscapeData) {
-      listingArray.push(this.listingFactory(landscape.width, landscape.height, landscape.url, 'This is a landscape!', 'landscapechannelswitchlabel'));
+      this.listings.push(Channel.listingFactory(landscape.width, landscape.height, landscape.url, 'This is a landscape!', 'landscapechannelswitchlabel'));
     }
-    callback(listingArray);
-  },
-};
-
-Object.assign(window, {
-  LandscapesChannel,
-});
+    callback(this.listings);
+  }
+}
+export default LandscapesChannel;

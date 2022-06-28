@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, BG, selected, browser, determineUserLanguage */
@@ -54,7 +54,6 @@ $(() => {
         content.push('=== Filter Lists ===');
         for (const sub in theDebugInfo.subscriptions) {
           content.push(`Id:${sub}`);
-          content.push(`  Download Count: ${theDebugInfo.subscriptions[sub].downloadCount}`);
           content.push(`  Download Status: ${theDebugInfo.subscriptions[sub].downloadStatus}`);
           content.push(`  Last Download: ${theDebugInfo.subscriptions[sub].lastDownload}`);
           content.push(`  Last Success: ${theDebugInfo.subscriptions[sub].lastSuccess}`);

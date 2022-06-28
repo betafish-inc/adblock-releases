@@ -1,8 +1,8 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global BG, synchronizer, optionalSettings, Subscription, filterStorage,
-   filterNotifier, translate, DownloadableSubscription, updateAcceptableAdsUI, port,
+/* global BG, optionalSettings,
+   translate, updateAcceptableAdsUI, port,
    delayedSubscriptionSelection, startSubscriptionSelection, selected, activateTab, License,
    MABPayment, getStorageCookie, setStorageCookie, THIRTY_MINUTES_IN_MILLISECONDS */
 
@@ -183,9 +183,7 @@ FilterListUtil.updateSubscriptionInfoForId = (id) => {
   if ($infoLabel.text() === translate('invalidListUrl')) {
     return;
   }
-  if (synchronizer.isExecuting(subscription.url)) {
-    text = translate('fetchinglabel');
-  } else if (subscription.downloadStatus && subscription.downloadStatus !== 'synchronize_ok') {
+  if (subscription.downloadStatus && subscription.downloadStatus !== 'synchronize_ok') {
     const map = {
       synchronize_invalid_url: translate('ab_filters_subscription_lastDownload_invalidURL'),
       synchronize_connection_error: translate('ab_filters_subscription_lastDownload_connectionError'),
@@ -333,7 +331,7 @@ SubscriptionUtil.subscribe = (id, title) => {
   const cachedSubscription = FilterListUtil.cachedSubscriptions[id];
   let subscription;
   if (cachedSubscription) {
-    subscription = Subscription.fromURL(cachedSubscription.url);
+    subscription = cachedSubscription;
   } else if (/^url:.*/.test(id)) { // Working with an unknown list: create the list entry
     const newSub = {
       userSubmitted: true,
@@ -342,13 +340,10 @@ SubscriptionUtil.subscribe = (id, title) => {
       title,
     };
     FilterListUtil.cachedSubscriptions[id] = newSub;
-    subscription = Subscription.fromURL(newSub.url);
+    subscription = newSub;
   }
-
-  filterStorage.addSubscription(subscription);
-  if (subscription instanceof DownloadableSubscription) {
-    synchronizer.execute(subscription);
-  }
+  BG.ewe.subscriptions.add(subscription.url);
+  BG.ewe.subscriptions.sync(subscription.url);
 
   if (BG.isAcceptableAds(cachedSubscription)) {
     updateAcceptableAdsUI(true, false);
@@ -356,7 +351,9 @@ SubscriptionUtil.subscribe = (id, title) => {
 
   if (BG.isAcceptableAdsPrivacy(cachedSubscription)) {
     const aa = FilterListUtil.cachedSubscriptions.acceptable_ads;
-    filterStorage.removeSubscription(Subscription.fromURL(aa.url));
+    setTimeout(() => {
+      BG.ewe.subscriptions.remove(aa.url);
+    }, 1);
     updateAcceptableAdsUI(true, true);
   }
 
@@ -372,14 +369,15 @@ SubscriptionUtil.subscribe = (id, title) => {
 SubscriptionUtil.unsubscribe = (id) => {
   SubscriptionUtil.updateCacheValue(id);
   const cachedSubscription = FilterListUtil.cachedSubscriptions[id];
-  const subscription = Subscription.fromURL(cachedSubscription.url);
   setTimeout(() => {
-    filterStorage.removeSubscription(subscription);
+    BG.ewe.subscriptions.remove(cachedSubscription.url);
   }, 1);
 
   if (BG.isAcceptableAds(cachedSubscription)) {
     const aaPrivacy = FilterListUtil.cachedSubscriptions.acceptable_ads_privacy;
-    filterStorage.removeSubscription(Subscription.fromURL(aaPrivacy.url));
+    setTimeout(() => {
+      BG.ewe.subscriptions.remove(aaPrivacy.url);
+    }, 1);
     updateAcceptableAdsUI(false, false);
   }
 
@@ -901,7 +899,7 @@ function onFilterChangeHandler(action, item) {
           FilterListUtil.cachedSubscriptions[entry.id][properties[i]] = entry[properties[i]];
         }
       }
-      entry.language = BG.isLanguageSpecific(entry.id);
+      entry.language = BG.SubscriptionAdapter.isLanguageSpecific(entry.id);
 
       if (eventAction && eventAction === 'subscription.added') {
         FilterListUtil.cachedSubscriptions[entry.id].subscribed = true;
@@ -910,11 +908,17 @@ function onFilterChangeHandler(action, item) {
           changeEvent.addedViaBackground = true;
           $(`#language_select option[value='${entry.id}']`).prop('selected', true).trigger(changeEvent);
         }
+        if (BG.isAcceptableAdsPrivacy(entryToUpdate)) {
+          $(`label[title="${BG.ewe.subscriptions.ACCEPTABLE_ADS_URL}"]`).prev().find('input').prop('checked', true);
+        }
       }
       if (eventAction && eventAction === 'subscription.removed') {
         FilterListUtil.cachedSubscriptions[entry.id].subscribed = false;
         if (entry.language && $(`#language_select option[value='${entry.id}']`).length === 0) {
           $(`div[name='${entry.id}']`).find('input').trigger('click');
+        }
+        if (BG.isAcceptableAdsPrivacy(entryToUpdate)) {
+          $(`label[title="${BG.ewe.subscriptions.ACCEPTABLE_ADS_URL}"]`).prev().find('input').prop('checked', false);
         }
       }
 
@@ -936,7 +940,7 @@ function onFilterChangeHandler(action, item) {
       updateEntry(itemToUpdateWithId, action);
     };
 
-    let id = BG.getIdFromURL(item.url);
+    let id = BG.SubscriptionAdapter.getIdFromURL(item.url);
     const { param1, param2 } = window; // TODO: remove if legacy code
 
     if (id) {
@@ -955,15 +959,16 @@ function onFilterChangeHandler(action, item) {
     ) {
       CustomFilterListUploadUtil.performUpload(item.url, `url:${item.url}`, item.title);
       return;
-    } if (action === 'subscription.title' && param1) {
+    }
+    if (action === 'subscription.title' && param1) {
       // or if the URL changed due to a redirect, we may not be able to determine
       // the correct id, but should be able to using one of the params
-      id = BG.getIdFromURL(param1);
+      id = BG.SubscriptionAdapter.getIdFromURL(param1);
       if (id) {
         updateItem(item, id);
         return;
       }
-      id = BG.getIdFromURL(param2);
+      id = BG.SubscriptionAdapter.getIdFromURL(param2);
       if (id) {
         updateItem(item, id);
         return;
@@ -971,7 +976,7 @@ function onFilterChangeHandler(action, item) {
     }
   }
   // If we didn't get an entry or id, loop through all of the subscriptions.
-  const subs = BG.getAllSubscriptionsMinusText();
+  const subs = BG.SubscriptionAdapter.getAllSubscriptionsMinusText();
   const { cachedSubscriptions } = FilterListUtil;
   for (const id in cachedSubscriptions) {
     const entry = subs[id];
@@ -981,7 +986,7 @@ function onFilterChangeHandler(action, item) {
 
 $(() => {
   // Retrieves list of filter lists from the background.
-  const subs = BG.getAllSubscriptionsMinusText();
+  const subs = BG.SubscriptionAdapter.getAllSubscriptionsMinusText();
   // Initialize page using subscriptions from the background.
   // Copy from update subscription list + setsubscriptionlist
   FilterListUtil.prepareSubscriptions(subs);
@@ -994,43 +999,25 @@ $(() => {
   LanguageSelectUtil.init();
   CustomFilterListUploadUtil.bindControls();
 
-  const onSave = function (item) {
-    onFilterChangeHandler('save', item);
-  };
-  filterNotifier.on('save', onSave);
-
   const onSubAdded = function (item) {
     onFilterChangeHandler('subscription.added', item);
   };
-  filterNotifier.on('subscription.added', onSubAdded);
+  BG.ewe.subscriptions.onAdded.addListener(onSubAdded);
 
   const onSubRemoved = function (item) {
     onFilterChangeHandler('subscription.removed', item);
   };
-  filterNotifier.on('subscription.removed', onSubRemoved);
+  BG.ewe.subscriptions.onRemoved.addListener(onSubRemoved);
 
   const onSubUpdated = function (item) {
     onFilterChangeHandler('subscription.updated', item);
   };
-  filterNotifier.on('subscription.updated', onSubUpdated);
-
-  const onStatusChanged = function (item) {
-    onFilterChangeHandler('subscription.downloadStatus', item);
-  };
-  filterNotifier.on('subscription.downloadStatus', onStatusChanged);
-
-  const onError = function (item) {
-    onFilterChangeHandler('subscription.errors', item);
-  };
-  filterNotifier.on('subscription.errors', onError);
+  BG.ewe.subscriptions.onChanged.addListener(onSubUpdated);
 
   window.addEventListener('unload', () => {
-    filterNotifier.off('save', onSave);
-    filterNotifier.off('subscription.added', onSubAdded);
-    filterNotifier.off('subscription.removed', onSubRemoved);
-    filterNotifier.off('subscription.updated', onSubUpdated);
-    filterNotifier.off('subscription.downloadStatus', onStatusChanged);
-    filterNotifier.off('subscription.errors', onError);
+    BG.ewe.subscriptions.onAdded.removeListener(onSubAdded);
+    BG.ewe.subscriptions.onRemoved.removeListener(onSubRemoved);
+    BG.ewe.subscriptions.onChanged.removeListener(onSubUpdated);
   });
 
   port.onMessage.addListener((message) => {

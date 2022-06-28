@@ -10,9 +10,8 @@ const common = {
       {
         dest: 'tests',
         src: [
-          'adblockplusui/adblockpluschrome/node_modules/mocha/mocha.js',
-          'adblockplusui/adblockpluschrome/node_modules/mocha/mocha.css',
-          'adblockplusui/adblockpluschrome/test/unit-tests/mocha/*',
+          'node_modules/mocha/mocha.js',
+          'node_modules/mocha/mocha.css',
         ],
       },
     ],

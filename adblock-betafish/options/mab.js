@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global License, MABPayment, localizePage, activateTab, translate, BG */

@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, onReady, DOMPurify */
@@ -275,7 +275,6 @@ if (window.top === window.self && /(^|\.)twitch\.tv$/.test(window.location.hostn
           document.dispatchEvent(new CustomEvent(fromContentScriptRandomEventName,
             { detail: { path: event.detail.path, isWhitelisted } }));
         });
-        browser.runtime.sendMessage({ command: 'allowlistingStateRevalidate' });
       }
     });
   };

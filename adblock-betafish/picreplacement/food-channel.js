@@ -1,28 +1,20 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global Channel, Listing, require */
+/* global */
 
-const foodData = require('./data/food.json');
+import foodData from './data/food.json';
+
+import Channel from './channel';
 
 // Channel containing hard coded cats loaded from disk.
 // Subclass of Channel.
-function FoodChannel() {
-  Channel.call(this);
-}
-
-FoodChannel.prototype = {
-  __proto__: Channel.prototype,
-
+class FoodChannel extends Channel {
   getLatestListings(callback) {
-    const listingArray = [];
     for (const food of foodData) {
-      listingArray.push(this.listingFactory(food.width, food.height, food.url, 'This is food!', 'foodchannelswitchlabel'));
+      this.listings.push(Channel.listingFactory(food.width, food.height, food.url, 'This is food!', 'foodchannelswitchlabel'));
     }
-    callback(listingArray);
-  },
-};
-
-Object.assign(window, {
-  FoodChannel,
-});
+    callback(this.listings);
+  }
+}
+export default FoodChannel;

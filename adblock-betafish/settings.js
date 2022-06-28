@@ -1,18 +1,19 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, log, chromeStorageSetHelper, logging
-   isTrustedSender */
+/* global browser, chromeStorageSetHelper, log, logging, extend,
+  isTrustedSender */
 
-const { EventEmitter } = require('events');
-const minjQuery = require('./jquery/jquery-3.5.1.min.js');
+import { EventEmitter } from '../vendor/adblockplusui/adblockpluschrome/lib/events';
 
-const settingsNotifier = new EventEmitter();
-const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_statsinpopup', 'show_devtools_panel'];
+import * as $ from './jquery/jquery-3.5.1.min';
+// export for others scripts to use
+const jQuery = $;
+
+export const settingsNotifier = new EventEmitter();
+const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_devtools_panel'];
 const validThemes = ['default_theme', 'dark_theme', 'watermelon_theme', 'solarized_theme', 'solarized_light_theme', 'rebecca_purple_theme', 'ocean_theme', 'sunshine_theme'];
 
-window.jQuery = minjQuery;
-window.$ = minjQuery;
 
 // OPTIONAL SETTINGS
 function Settings() {
@@ -23,6 +24,7 @@ function Settings() {
     youtube_manage_subscribed: true,
     show_advanced_options: false,
     show_block_counts_help_link: true,
+    display_menu_stats: true,
     show_survey: true,
     local_cdn: false,
     picreplacement: false,
@@ -37,7 +39,7 @@ function Settings() {
   this.init = new Promise(((resolve) => {
     browser.storage.local.get(that.settingsKey).then((response) => {
       const settings = response.settings || {};
-      that.data = $.extend(that.defaults, settings);
+      that.data = extend(that.defaults, settings);
       if (settings.debug_logging) {
         logging(true);
       }
@@ -98,10 +100,10 @@ Settings.prototype = {
 
 };
 
-const settings = new Settings();
+export const settings = new Settings();
 settings.onload();
 
-const getSettings = function () {
+export const getSettings = function () {
   return settings.getAll();
 };
 
@@ -112,7 +114,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse(getSettings());
 });
 
-const setSetting = function (name, isEnabled, callback) {
+export const setSetting = function (name, isEnabled, callback) {
   settings.set(name, isEnabled, callback);
 
   if (name === 'debug_logging') {
@@ -142,4 +144,6 @@ Object.assign(window, {
   settingsNotifier,
   isValidTheme,
   abpPrefPropertyNames,
+  $,
+  jQuery,
 });

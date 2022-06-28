@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, onReady, DOMPurify, parseUri */
@@ -140,6 +140,9 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
     };
 
     function updateURLWrapped(channelName) {
+      if (window.location.pathname !== '/watch') {
+        return;
+      }
       if (channelName) {
         const parsedChannelName = parseChannelName(channelName);
         let updatedUrl;
@@ -154,6 +157,7 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
         window.history.replaceState(null, null, updatedUrl);
       }
     }
+
 
     function processVideoData(data) {
       if (
@@ -201,6 +205,25 @@ if (window.top === window.self && /^www\.youtube\.com$/.test(window.location.hos
       }
       theObjectDefineProperty(obj, prop, descriptor);
     };
+
+
+    document.addEventListener('yt-navigate-finish', (event) => {
+      if (event
+        && event.detail
+        && event.detail.response
+        && event.detail.response.playerResponse
+        && event.detail.response.playerResponse.videoDetails
+        && event.detail.response.playerResponse.videoDetails.author
+      ) {
+        const { author, videoId } = event.detail.response.playerResponse.videoDetails;
+        updateURLWrapped(author);
+        window.postMessage({
+          eventName: toContentScriptEventName,
+          channelName: String(author),
+          videoId,
+        }, '*');
+      }
+    });
 
     const XHR = XMLHttpRequest.prototype;
     XMLHttpRequest.wrapped = true;

@@ -1,28 +1,20 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global Channel, Listing, require */
+/* global  */
 
-const goatData = require('./data/goats.json');
+import goatData from './data/goats.json';
+
+import Channel from './channel';
 
 // Channel containing hard coded cats loaded from disk.
 // Subclass of Channel.
-function GoatsChannel() {
-  Channel.call(this);
-}
-
-GoatsChannel.prototype = {
-  __proto__: Channel.prototype,
-
+class GoatsChannel extends Channel {
   getLatestListings(callback) {
-    const listingArray = [];
     for (const goat of goatData) {
-      listingArray.push(this.listingFactory(goat.width, goat.height, goat.url, 'This is a goat!', 'goatchannelswitchlabel'));
+      this.listings.push(Channel.listingFactory(goat.width, goat.height, goat.url, 'This is a goat!', 'goatchannelswitchlabel'));
     }
-    callback(listingArray);
-  },
-};
-
-Object.assign(window, {
-  GoatsChannel,
-});
+    callback(this.listings);
+  }
+}
+export default GoatsChannel;

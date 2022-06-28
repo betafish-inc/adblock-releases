@@ -1,4 +1,4 @@
-'use strict';
+
 
 function Overlay(options) {
   const el = $(options.domElement);

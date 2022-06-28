@@ -3,22 +3,16 @@
 ## Intro
 
 [AdBlock](https://getadblock.com/) is a popular ad blocking extension for Chrome,
-Edge and Firefox, now based on the [Adblock Plus](https://adblockplus.org/) code.
-
+Edge and Firefox.
 
 ## Requirements
 
-This repository has [the same requirements as the Adblock Plus](https://gitlab.com/eyeo/adblockplus/abpui/adblockplusui).
-
-Be sure that your build environment is up to date with the latest ABP dependencies (noted above).
+- Node >= 16.10.0
+- npm >= 7
 
 ## Usage
 Building
 ---------
-
-### Requirements
-
-- [Node.js](https://nodejs.org/) (>= 12.17.0)
 
 ### Building on Windows
 
@@ -43,7 +37,7 @@ _Note: when building from a source archive, the above step must be skipped._
 
 Run the following command to install all of the required packages
 
-    npm install
+`npm install`
 
 The above script will install the required npm packages for AdBlock, Adblock Plus, and run any pre & post install processing scripts.
 
@@ -54,7 +48,7 @@ e.g. after checking out a new revison.
 
 Run the following command in the project directory:
 
-    npx gulp build -t {chrome|firefox} [-c development]
+`npx gulp build -t {chrome|firefox} [-c development]`
 
 This will create a build with a name in the form
 _adblockpluschrome-n.n.n.zip_ or _adblockplusfirefox-n.n.n.xpi_. These builds
@@ -66,7 +60,7 @@ unpacked loaded in development mode for testing (same as devenv builds below).
 To simplify the process of testing your changes you can create an unpacked
 development environment. For that run one of the following command:
 
-    npx gulp devenv -t {chrome|firefox}
+`npx gulp devenv -t {chrome|firefox}`
 
 This will create a _devenv.*_ directory in the project directory. You can load
 the directory as an unpacked extension under _chrome://extensions_ in
@@ -110,7 +104,7 @@ Running the unit tests
 ### Requirements
 
 In order to run the unit test suite you need
-[Node.js 12.17.0 or higher](https://nodejs.org/). Once Node.js is installed
+[Node.js 16.10.0 or higher](https://nodejs.org/). Once Node.js is installed
 please run `npm install` in the repository directory in order to install the
 required dependencies.
 

@@ -1,17 +1,15 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, log, License, runBandaids, openTab */
 
 // Set to true to get noisier console.log statements
 const VERBOSE_DEBUG = false;
-let loggingEnable = false;
 const THIRTY_MINUTES_IN_MILLISECONDS = 1800000;
 
 // Enabled in adblock_start_common.js and background.js if the user wants
 const logging = function (enabled) {
   if (enabled) {
-    loggingEnable = true;
     window.log = function log(...args) {
       if (VERBOSE_DEBUG || args[0] !== '[DEBUG]') { // comment out for verbosity
         // eslint-disable-next-line no-console
@@ -21,8 +19,6 @@ const logging = function (enabled) {
   } else {
     window.log = function log() {
     };
-
-    loggingEnable = false;
   }
 };
 
@@ -161,35 +157,27 @@ const determineUserLanguage = function () {
 // Set dir and lang attributes to the given el or to document.documentElement by default
 const setLangAndDirAttributes = function (el) {
   const element = el instanceof HTMLElement ? el : document.documentElement;
-  browser.runtime.sendMessage({
-    type: 'app.get',
-    what: 'localeInfo',
-  }).then((localeInfo) => {
-    element.lang = localeInfo.locale;
-    // Note: the 'dir' attribute is only set to RTL on 'our' pages with the
-    // (AdBlock Menu, Options) to prevent AdBlock for incorrectly setting it on webpages where
-    // this file is injected.
-    if (
-      localeInfo
-      && localeInfo.bidiDir === 'rtl'
-      && (window.location.protocol.startsWith('moz-extension:')
-        || window.location.protocol.startsWith('chrome-extension:'))) {
-      let lang = determineUserLanguage();
-      // For RTL languages, only update the directionality of the page if
-      // an appropriate locale message file is bundled with the extension
-      // Note: this code is assuming that we would only have generic message files
-      // for any RTL languages (just 'ar'), and not any country
-      // specific RTL locale files like 'en-US'
-      lang = lang.substring(0, 2);
-      fetch(`_locales/${lang}/messages.json`).then(() => {
-        element.dir = localeInfo.bidiDir;
-      }).catch(() => {
-        element.dir = 'ltr';
-      });
-    } else {
-      element.dir = localeInfo.bidiDir;
-    }
-  });
+  element.lang = browser.i18n.getUILanguage();
+  // Note: the 'dir' attribute is only set to RTL on 'our' pages with the
+  // (AdBlock Menu, Options) to prevent AdBlock for incorrectly setting it on webpages where
+  // this file is injected.
+  if (
+    browser.i18n.getMessage('@@bidi_dir') === 'rtl'
+    && (window.location.protocol.startsWith('moz-extension:')
+      || window.location.protocol.startsWith('chrome-extension:'))) {
+    let lang = determineUserLanguage();
+    // For RTL languages, only update the directionality of the page if
+    // an appropriate locale message file is bundled with the extension
+    // Note: this code is assuming that we would only have generic message files
+    // for any RTL languages (just 'ar'), and not any country
+    // specific RTL locale files like 'en-US'
+    lang = lang.substring(0, 2);
+    fetch(`_locales/${lang}/messages.json`).then(() => {
+      element.dir = browser.i18n.getMessage('@@bidi_dir');
+    }).catch(() => {
+      element.dir = 'ltr';
+    });
+  }
 };
 
 const isLangRTL = function (language) {
@@ -553,6 +541,19 @@ function debounced(delay, fn) {
   };
 }
 
+// mimics jQuery's functionality
+function extend(primaryArg, ...args) {
+  const obj = primaryArg;
+  for (let i = 0; i < args.length; i++) {
+    for (const key in args[i]) {
+      if (Object.prototype.hasOwnProperty.call(args[i], key)) {
+        obj[key] = args[i][key];
+      }
+    }
+  }
+  return obj;
+}
+
 // Return a copy of value that has been truncated with an ellipsis in
 // the middle if it is too long.
 // Inputs: valueToTruncate:string - value to truncate
@@ -577,6 +578,21 @@ const ellipsis = function ellipsis(valueToTruncate, maxSize) {
   return value;
 };
 
+// Creates the meta data to be saved with a users custom filter rules
+// Return a new object that the following structure:
+// created - a Integer representing the number of milliseconds elapsed
+//           since January 1, 1970 00:00:00 UTC.
+// origin - a String representing the method that user added the filter rule
+//
+// Inputs: origin? - optional value
+const createFilterMetaData = (origin) => {
+  const data = { created: Date.now() };
+  if (origin) {
+    data.origin = origin;
+  }
+  return data;
+};
+
 Object.assign(window, {
   sessionStorageSet,
   sessionStorageGet,
@@ -599,5 +615,13 @@ Object.assign(window, {
   getStorageCookie,
   THIRTY_MINUTES_IN_MILLISECONDS,
   debounced,
+  extend,
+  base64toBlob,
+  selectedOff,
+  isLangRTL,
+  setLangAndDirAttributes,
+  processReplacementChildrenInContent,
+  localizePage,
   ellipsis,
+  createFilterMetaData,
 });

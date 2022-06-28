@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global ClickWatcher, ElementChain, translate, browser, DOMPurify */
@@ -303,8 +303,10 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
           filter = cssHidingText;
         }
       }
-      browser.runtime.sendMessage({ command: 'addCustomFilter', filterTextToAdd: filter, addCustomFilterRandomName: that.addCustomFilterRandomName }).then((response) => {
-        if (!response.error) {
+      browser.runtime.sendMessage({
+        command: 'addCustomFilter', filterTextToAdd: filter, addCustomFilterRandomName: that.addCustomFilterRandomName, origin: 'wizard',
+      }).then((response) => {
+        if (!response) {
           // if it's an advance user, and they've edited the rule text, they could have changed
           // any / all of the rule text to some other rule type
           // (e.g. - a blocking rule on a different site), so don't attempt to add a hiding rule
@@ -318,8 +320,10 @@ BlacklistUi.prototype.buildPage2 = function buildPage2() {
           that.fire('block');
           that.blockedText = cssHidingText;
           that.buildPage3();
-        } else {
-          displayErrorMessage(translate('blacklistereditinvalid1', translate(response.error)));
+        } else if (response && response.reason) {
+          displayErrorMessage(translate('blacklistereditinvalid1', translate(response.reason)));
+        } else if (response) {
+          displayErrorMessage(translate('filter_invalid'));
         }
       });
     } else {
@@ -356,20 +360,24 @@ BlacklistUi.prototype.buildPage3 = function buildPage3() {
   // Reset and hide all wizard pages
   that.$dialog.children('.page').hide();
 
-  $pageThreeFindOutBtn.unbind();
-  $pageThreeFindOutBtn.on('click', () => {
+  const findOutBtnClickHandler = () => {
     browser.runtime.sendMessage({ command: 'openPremiumPayURL' });
     browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_clicked' });
     that.preview(null);
     that.onClose();
-  });
-  $pageThreeOptOutBtn.unbind();
-  $pageThreeOptOutBtn.on('click', () => {
+  };
+  $pageThreeFindOutBtn.off('click', findOutBtnClickHandler);
+  $pageThreeFindOutBtn.on('click', findOutBtnClickHandler);
+
+  const optOutBtnClickHandler = () => {
     browser.runtime.sendMessage({ command: 'setBlacklistCTAStatus', isEnabled: false });
     browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'blacklist_cta_closed' });
     that.preview(null);
     that.onClose();
-  });
+  };
+  $pageThreeOptOutBtn.off('click', optOutBtnClickHandler);
+  $pageThreeOptOutBtn.on('click', optOutBtnClickHandler);
+
   const closeBtnClickHandler = this.CloseBtnClickHandler.bind(this);
   $pageThreeCancelBtn.off('click', closeBtnClickHandler);
   $pageThreeCancelBtn.on('click', closeBtnClickHandler);

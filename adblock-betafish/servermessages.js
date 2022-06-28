@@ -1,7 +1,7 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global exports, browser, STATS, log, logging, determineUserLanguage */
+/* global browser, log, TELEMETRY, logging, determineUserLanguage */
 
 // Log an 'error' message on GAB log server.
 const ServerMessages = (function serverMessages() {
@@ -62,9 +62,9 @@ const ServerMessages = (function serverMessages() {
       return;
     }
     const payload = {
-      u: STATS.userId(),
-      f: STATS.flavor,
-      o: STATS.os,
+      u: TELEMETRY.userId(),
+      f: TELEMETRY.flavor,
+      o: TELEMETRY.os,
       l: determineUserLanguage(),
       t: queryType,
       v: browser.runtime.getManifest().version,
@@ -84,10 +84,9 @@ const ServerMessages = (function serverMessages() {
     if (!msg || !queryType) {
       return;
     }
-
     const payload = {
-      f: STATS.flavor,
-      o: STATS.os,
+      f: TELEMETRY.flavor,
+      o: TELEMETRY.os,
       l: determineUserLanguage(),
       t: queryType,
     };
@@ -106,10 +105,9 @@ const ServerMessages = (function serverMessages() {
     if (!msg) {
       return;
     }
-
     const payload = {
-      f: STATS.flavor,
-      o: STATS.os,
+      f: TELEMETRY.flavor,
+      o: TELEMETRY.os,
       l: determineUserLanguage(),
       t: 'error',
     };
@@ -159,4 +157,4 @@ const ServerMessages = (function serverMessages() {
   };
 }());
 
-exports.ServerMessages = ServerMessages;
+export default ServerMessages;

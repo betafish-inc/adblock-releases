@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global BG, License, localizePage, SyncService, translate, FIVE_SECONDS,

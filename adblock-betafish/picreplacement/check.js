@@ -1,23 +1,28 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global ext, browser, require, storageGet, storageSet, log, STATS, Channels, Prefs,
-   getSettings, setSetting, translate, reloadOptionsPageTabs, filterNotifier, openTab,
-   emitPageBroadcast, SyncService, Subscription, filterStorage, unsubscribe,
+/* global ext, browser, storageGet, storageSet, log,
+   translate, reloadOptionsPageTabs, openTab,
+   emitPageBroadcast, unsubscribe,
    isTrustedSenderDomain */
+
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
-const { EventEmitter } = require('events');
-const { checkAllowlisted } = require('../../adblockplusui/adblockpluschrome/lib/allowlisting');
-const { recordGeneralMessage } = require('./../servermessages').ServerMessages;
-const { loadAdBlockSnippets } = require('./../alias/contentFiltering');
-const { showIconBadgeCTA, NEW_BADGE_REASONS } = require('./../alias/icon.js');
+
+import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
+import { EventEmitter } from '../../vendor/adblockplusui/adblockpluschrome/lib/events';
+import { TELEMETRY } from '../telemetry';
+import { Channels } from './channels';
+import { getSettings, setSetting } from '../settings';
+import { loadAdBlockSnippets } from '../alias/contentFiltering';
+import { showIconBadgeCTA, NEW_BADGE_REASONS } from '../alias/icon';
+import { initialize } from '../alias/subscriptionInit';
+import ServerMessages from '../servermessages';
 
 const licenseNotifier = new EventEmitter();
-const newBadgeShownForDCKey = 'new_badge_shown_dc';
 
-const License = (function getLicense() {
+export const License = (function getLicense() {
   const isProd = true;
   const licenseStorageKey = 'license';
   const installTimestampStorageKey = 'install_timestamp';
@@ -55,7 +60,7 @@ const License = (function getLicense() {
       subscriptionURL: 'https://dev.getadblock.com/premium/manage-subscription/',
     },
   };
-  STATS.untilLoaded((userID) => {
+  TELEMETRY.untilLoaded((userID) => {
     mabConfig.prod.payURL = `${mabConfig.prod.payURL}?u=${userID}`;
     mabConfig.dev.payURL = `${mabConfig.dev.payURL}&u=${userID}`;
   });
@@ -107,16 +112,16 @@ const License = (function getLicense() {
   // see - https://bugs.chromium.org/p/chromium/issues/detail?id=471524
   browser.idle.onStateChanged.addListener((newState) => {
     if (newState === 'active') {
-      browser.alarms.get(licenseAlarmName, (alarm) => {
+      browser.alarms.get(licenseAlarmName).then((alarm) => {
         if (alarm && Date.now() > alarm.scheduledTime) {
-          browser.alarms.clear(licenseAlarmName, () => {
+          browser.alarms.clear(licenseAlarmName).then(() => {
             License.updatePeriodically();
           });
         } else if (alarm) {
           // if the alarm should fire in the future,
           // re-add the license so it fires at the correct time
           const originalTime = alarm.scheduledTime;
-          browser.alarms.clear(licenseAlarmName, (wasCleared) => {
+          browser.alarms.clear(licenseAlarmName).then((wasCleared) => {
             if (wasCleared) {
               browser.alarms.create(licenseAlarmName, { when: originalTime });
             }
@@ -131,9 +136,9 @@ const License = (function getLicense() {
   // check the 7 alarm when the browser starts
   // or is woken up
   const checkSevenDayAlarm = function () {
-    browser.alarms.get(License.sevenDayAlarmName, (alarm) => {
+    browser.alarms.get(License.sevenDayAlarmName).then((alarm) => {
       if (alarm && Date.now() > alarm.scheduledTime) {
-        browser.alarms.clear(License.sevenDayAlarmName, () => {
+        browser.alarms.clear(License.sevenDayAlarmName).then(() => {
           showIconBadgeCTA(true, NEW_BADGE_REASONS.SEVEN_DAY);
           removeSevenDayAlarmStateListener();
           browser.storage.local.remove(License.sevenDayAlarmName);
@@ -142,7 +147,7 @@ const License = (function getLicense() {
         // if the alarm should fire in the future,
         // re-add the license so it fires at the correct time
         const originalTime = alarm.scheduledTime;
-        browser.alarms.clear(License.sevenDayAlarmName, (wasCleared) => {
+        browser.alarms.clear(License.sevenDayAlarmName).then((wasCleared) => {
           if (wasCleared) {
             browser.alarms.create(License.sevenDayAlarmName, { when: originalTime });
             browser.storage.local.set({ [License.sevenDayAlarmName]: true });
@@ -270,7 +275,7 @@ const License = (function getLicense() {
     },
     // Get the latest license data from the server, and talk to the user if needed.
     update() {
-      STATS.untilLoaded((userID) => {
+      TELEMETRY.untilLoaded((userID) => {
         licenseNotifier.emit('license.updating');
         const postData = {};
         postData.u = userID;
@@ -315,7 +320,7 @@ const License = (function getLicense() {
               && updatedLicense.status === 'expired'
             ) {
               License.processExpiredLicense();
-              recordGeneralMessage('trial_license_expired');
+              ServerMessages.recordGeneralMessage('trial_license_expired');
             }
           },
           error(xhr, textStatus, errorThrown) {
@@ -341,7 +346,9 @@ const License = (function getLicense() {
       License.set(theLicense);
       setSetting('picreplacement', false);
       if (getSettings().sync_settings) {
-        SyncService.disableSync();
+        // We have to import the "sync-service" module on demand,
+        // as the "sync-service" module in turn requires this module.
+        (import('./sync-service')).disableSync();
       }
       setSetting('color_themes', { popup_menu: 'default_theme', options_page: 'default_theme' });
       unsubscribe({ id: 'distraction-control-push' });
@@ -500,7 +507,7 @@ const License = (function getLicense() {
     // data returned by the API and the fail handler receives any error information available.
     fetchLicenseAPI(command, requestBody, ok, requestFail) {
       const licenseCode = License.get().code;
-      const userID = STATS.userId();
+      const userID = TELEMETRY.userId();
       const body = requestBody;
       let fail = requestFail;
       body.cmd = command;
@@ -542,7 +549,7 @@ const replacedPerPage = new ext.PageMap();
 
 // Records how many ads have been replaced by AdBlock.  This is used
 // by the AdBlock to display statistics to the user.
-const replacedCounts = (function getReplacedCount() {
+export const replacedCounts = (function getReplacedCount() {
   const adReplacedNotifier = new EventEmitter();
   const key = 'replaced_stats';
   let data = storageGet(key);
@@ -591,13 +598,9 @@ const onInstalledPromise = new Promise(((resolve) => {
     resolve(details);
   });
 }));
-const onBehaviorPromise = new Promise(((resolve) => {
-  filterNotifier.on('filter.behaviorChanged', () => {
-    resolve();
-  });
-}));
+
 // the order of Promises below dictacts the order of the data in the detailsArray
-Promise.all([onInstalledPromise, License.ready(), onBehaviorPromise]).then((detailsArray) => {
+Promise.all([onInstalledPromise, License.ready(), initialize]).then((detailsArray) => {
   // Enroll existing users in Premium
   if (detailsArray.length > 0 && detailsArray[0].reason) {
     License.enrollUser(detailsArray[0].reason);
@@ -610,63 +613,30 @@ Promise.all([onInstalledPromise, License.ready(), onBehaviorPromise]).then((deta
   }
 });
 
-let channels = {};
 License.ready().then(() => {
   browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (!(request.message === 'load_my_adblock')) {
-      return;
-    }
-    if (
-      License.isActiveLicense()
-      && sender.url
-      && sender.url.startsWith('http')
-      && getSettings().picreplacement
-    ) {
-      const logError = function (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      };
-      browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement-image-sizes-map.js', frameId: sender.frameId, runAt: 'document_start' }).catch(logError);
-      browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement.js', frameId: sender.frameId, runAt: 'document_start' }).catch(logError);
-    }
-    const subscription = Subscription.fromURL('https://cdn.adblockcdn.com/filters/distraction-control-push.txt');
-    if (
-      License.isActiveLicense()
-      && sender.url
-      && sender.url.startsWith('http')
-      && filterStorage.hasSubscription(subscription)
-      && !checkAllowlisted(new ext.Page(sender.tab))
-    ) {
-      const logError = function (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      };
-      browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement-push-notification-wrapper-cs.js', runAt: 'document_start' }).catch(logError);
-    }
-    sendResponse({});
-  });
-
-  channels = new Channels();
-  Object.assign(window, {
-    channels,
-  });
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.message !== 'get_random_listing') {
-      return;
-    }
-
-    const myPage = ext.getPage(sender.tab.id);
-    if (checkAllowlisted(myPage) || !License.isActiveLicense()) {
-      sendResponse({ disabledOnPage: true });
-      return;
-    }
-    const result = channels.randomListing(request.opts);
-    if (result) {
-      sendResponse(result);
-    } else {
-      // if not found, and data collection enabled, send message to log server with domain,
-      // and request
-      sendResponse({ disabledOnPage: true });
+    if (request.message === 'load_my_adblock') {
+      if (sender.url && sender.url.startsWith('http') && License.isActiveLicense() && getSettings().picreplacement) {
+        const logError = function (e) {
+          // eslint-disable-next-line no-console
+          console.error(e);
+        };
+        browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement.js', frameId: sender.frameId, runAt: 'document_start' }).catch(logError);
+      }
+      if (
+        License.isActiveLicense()
+        && sender.url
+        && sender.url.startsWith('http')
+        && ewe.subscriptions.has('https://cdn.adblockcdn.com/filters/distraction-control-push.txt')
+        && ewe.filters.getAllowingFilters(sender.tab.id).length === 0
+      ) {
+        const logError = function (e) {
+          // eslint-disable-next-line no-console
+          console.error(e);
+        };
+        browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement-push-notification-wrapper-cs.js', runAt: 'document_start' }).catch(logError);
+      }
+      sendResponse({});
     }
   });
 
@@ -740,3 +710,5 @@ Object.assign(window, {
   License,
   replacedCounts,
 });
+
+export const channels = new Channels(License);

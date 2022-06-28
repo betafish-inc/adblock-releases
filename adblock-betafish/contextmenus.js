@@ -1,20 +1,20 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, ext, adblockIsPaused, adblockIsDomainPaused
-   recordGeneralMessage, log, License, reloadTab, getSettings */
+/* global browser, ext, adblockIsPaused, adblockIsDomainPaused
+   log, License, reloadTab, getSettings */
 
-const { filterNotifier } = require('filterNotifier');
-const { Prefs } = require('prefs');
-const { checkAllowlisted } = require('../adblockplusui/adblockpluschrome/lib/allowlisting');
-const browserAction = require('../adblockplusui/adblockpluschrome/lib/browserAction');
+import { Prefs } from 'prefs';
+import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
+import { setBadge } from '../vendor/adblockplusui/adblockpluschrome/lib/browserAction';
+import ServerMessages from './servermessages';
 
 const updateButtonUIAndContextMenus = function () {
   browser.tabs.query({}).then((tabs) => {
     for (const tab of tabs) {
       tab.url = tab.url ? tab.url : tab.pendingUrl;
       if (adblockIsPaused() || adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
-        browserAction.setBadge(tab.id, { number: '' });
+        setBadge(tab.id, { number: '' });
       }
       const page = new ext.Page(tab);
       // eslint-disable-next-line no-use-before-define
@@ -114,7 +114,7 @@ const contextMenuItem = (() => ({
       title: browser.i18n.getMessage('pause_adblock_everywhere'),
       contexts: ['all'],
       onclick: () => {
-        recordGeneralMessage('cm_pause_clicked');
+        ServerMessages.recordGeneralMessage('cm_pause_clicked');
         adblockIsPaused(true);
         updateButtonUIAndContextMenus();
       },
@@ -124,7 +124,7 @@ const contextMenuItem = (() => ({
       title: browser.i18n.getMessage('resume_blocking_ads'),
       contexts: ['all'],
       onclick: () => {
-        recordGeneralMessage('cm_unpause_clicked');
+        ServerMessages.recordGeneralMessage('cm_unpause_clicked');
         adblockIsPaused(false);
         updateButtonUIAndContextMenus();
       },
@@ -134,7 +134,7 @@ const contextMenuItem = (() => ({
       title: browser.i18n.getMessage('domain_pause_adblock'),
       contexts: ['all'],
       onclick: (info, tab) => {
-        recordGeneralMessage('cm_domain_pause_clicked');
+        ServerMessages.recordGeneralMessage('cm_domain_pause_clicked');
         adblockIsDomainPaused({ url: tab.url, id: tab.id }, true);
         updateButtonUIAndContextMenus();
       },
@@ -144,7 +144,7 @@ const contextMenuItem = (() => ({
       title: browser.i18n.getMessage('resume_blocking_ads'),
       contexts: ['all'],
       onclick: (info, tab) => {
-        recordGeneralMessage('cm_domain_unpause_clicked');
+        ServerMessages.recordGeneralMessage('cm_domain_unpause_clicked');
         adblockIsDomainPaused({ url: tab.url, id: tab.id }, false);
         updateButtonUIAndContextMenus();
       },
@@ -206,7 +206,7 @@ let updateContextMenuItems = function (page) {
     browser.contextMenus.create(contextMenuItem.unpauseAll);
   } else if (domainIsPaused) {
     browser.contextMenus.create(contextMenuItem.unpauseDomain);
-  } else if (checkAllowlisted(page)) {
+  } else if (ewe.filters.getAllowingFilters(page.id).length) {
     browser.contextMenus.create(contextMenuItem.pauseAll);
   } else {
     browser.contextMenus.create(contextMenuItem.blockThisAd);
@@ -312,8 +312,12 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Update browser actions and context menus when whitelisting might have
 // changed. That is now when initally loading the filters and later when
 // importing backups or saving filter changes.
-filterNotifier.on('load', updateButtonUIAndContextMenus);
-filterNotifier.on('save', updateButtonUIAndContextMenus);
+// Update browser actions and context menus when whitelisting might have
+// changed. That is now when initally loading the filters and later when
+// importing backups or saving filter changes.
+ewe.subscriptions.onAdded.addListener(updateButtonUIAndContextMenus);
+ewe.subscriptions.onChanged.addListener(updateButtonUIAndContextMenus);
+ewe.subscriptions.onRemoved.addListener(updateButtonUIAndContextMenus);
 
 Prefs.on(Prefs.shouldShowBlockElementMenu, () => {
   updateButtonUIAndContextMenus();

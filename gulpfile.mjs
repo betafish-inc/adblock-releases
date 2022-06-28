@@ -8,8 +8,8 @@ import del from 'del';
 import url from 'url';
 import * as tasks from './build/tasks/index.mjs';
 import * as config from './build/config/index.mjs';
-import * as configParser from './adblockplusui/adblockpluschrome/build/configParser.js';
-import * as gitUtils from './adblockplusui/adblockpluschrome/build/utils/git.js';
+import * as configParser from './build/configParser.mjs';
+import * as gitUtils from './build/utils/git.mjs';
 
 const argumentParser = new argparse.ArgumentParser({
   description: 'Build the extension',
@@ -37,9 +37,10 @@ async function getBuildSteps(options) {
   if (options.isDevenv) {
     buildSteps.push(
       tasks.addDevEnvVersion(),
-      await tasks.addUnitTestsPage({ scripts: options.unitTests.scripts, addonName }),
+      await tasks.addTestsPage({ scripts: options.unitTests.scripts, addonName }),
     );
   }
+
   buildSteps.push(
     tasks.mapping(options.mapping),
     tasks.webpack({
@@ -67,11 +68,10 @@ async function getBuildOptions(isDevenv, isSource) {
   };
 
   // eslint-disable-next-line no-nested-ternary
-  opts.sourceMapType = opts.target === 'chrome'
-    ? isDevenv === true
-      ? 'inline-cheap-source-maps'
-      : 'none'
-    : 'source-maps';
+  opts.sourceMapType = opts.target == "chrome" ?
+    isDevenv == true ?
+      "inline-source-map" : false :
+    "source-map";
 
   if (args.config) {
     configParser.setConfig(await import(url.pathToFileURL(args.config)));

@@ -1,7 +1,7 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, log, exports */
+/* global browser, log,  */
 
 // Schedules a function to be executed once when the computer is idle.
 // Call idleHandler.scheduleItem to schedule a function for exection upon idle
@@ -24,7 +24,7 @@ const idleHandler = {
     // Checks if the browser is idle. If so, it executes all waiting functions
     // Otherwise, it checks if an item has waited longer than allowed, and
     // executes the ones who should be executed
-    browser.idle.queryState(15, (state) => {
+    browser.idle.queryState(15).then((state) => {
       if (state === 'idle') {
         while (idleHandler.scheduledItems.length) {
           idleHandler.scheduledItems.shift().callback();
@@ -46,4 +46,4 @@ const idleHandler = {
   },
 };
 
-exports.idleHandler = idleHandler;
+export default idleHandler;

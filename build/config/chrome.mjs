@@ -6,7 +6,7 @@ export default {
       {
         dest: 'abp-background.js',
         src: [
-          'adblock-betafish/localFilesIndex.js',
+          'adblock-betafish/localcdn.js',
         ],
       },
     ],

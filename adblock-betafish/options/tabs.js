@@ -1,15 +1,9 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, License, localizePage, determineUserLanguage, getStorageCookie, setStorageCookie,
    THIRTY_MINUTES_IN_MILLISECONDS, checkForUnSyncError, addUnSyncErrorClickHandler, translate,
    splitMessageWithReplacementText, setLangAndDirAttributes, storageSet, storageGet, BG */
-
-function tabIsLocked(tabID) {
-  const $tabToActivate = $(`.tablink[href='${tabID}']`);
-  const $locked = $tabToActivate.parent('li.locked');
-  return !!$locked.length;
-}
 
 const userSeenNewDCPageKey = 'options_menu_dc_key';
 let userSeenNewDCPage = storageGet(userSeenNewDCPageKey);
@@ -286,9 +280,9 @@ $(() => {
   $('.tablink').on('click', function tabLinkClicked() {
     const tabID = $(this).attr('href');
     activateTab(tabID);
-    BG.recordGeneralMessage(`options_page_tab_clicked_${getFormattedTabName()}`);
+    BG.ServerMessages.recordGeneralMessage(`options_page_tab_clicked_${getFormattedTabName()}`);
   });
-  BG.recordGeneralMessage(`options_page_opened_tab_${getFormattedTabName()}`);
+  BG.ServerMessages.recordGeneralMessage(`options_page_opened_tab_${getFormattedTabName()}`);
 
   // 5. Display CTA - a future library update will support
   // automatically injecting the CTA HTML as well.

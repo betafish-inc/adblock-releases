@@ -1,9 +1,8 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global Chart, browser, License, localizePage, BG
-   DOMPurify,translate, filterNotifier, subscription, synchronizer,
-   filterStorage, Subscription, activateTab */
+   DOMPurify,translate, activateTab */
 
 Chart.defaults.global.defaultFontFamily = 'Lato';
 
@@ -14,7 +13,7 @@ const trackersBlockedColor = getComputedStyle(document.body).getPropertyValue('-
 const adsReplacedColor = getComputedStyle(document.body).getPropertyValue('--ads-replaced-color').trim();
 
 const { channels } = BG;
-let subs = BG.getSubscriptionsMinusText();
+let subs = BG.SubscriptionAdapter.getSubscriptionsMinusText();
 window.theChart = undefined; // needs to be in the global name space.
 let labelData = [];
 let adChartData = [];
@@ -179,18 +178,6 @@ function compareDomainCount(domainA, domainB) {
     comparison = 1;
   }
   return comparison;
-}
-
-// null values are not shown on the chart, where as zero values are
-// so we set all initial, default values to null
-function setZerosToNull(chartDataArray) {
-  const localChartDataArray = chartDataArray;
-  for (let j = 0; j < chartDataArray.length; j++) {
-    if (!localChartDataArray[j]) {
-      localChartDataArray[j] = null;
-    }
-  }
-  return localChartDataArray;
 }
 
 function sumChartData(chartDataArray) {
@@ -1111,7 +1098,7 @@ const resetPageToInitialState = function () {
   $('.active-stats-sub-menu-item').removeClass('active-stats-sub-menu-item');
   $('#timeBlocks [data-filter-function-name="today"]').parent().addClass('active-stats-sub-menu-item');
   // reset global vars
-  subs = BG.getSubscriptionsMinusText();
+  subs = BG.SubscriptionAdapter.getSubscriptionsMinusText();
   showAdsData = false;
   showTrackerData = false;
   showReplacedData = false;
@@ -1217,25 +1204,18 @@ $('#aTrackersEnable, #btnTrackersEnable').on('click', () => {
   const onStatsSubUpdated = function (item) {
     if (
       item
-        && item.url === easyPrivacyURL
-        && item._downloadStatus === 'synchronize_ok'
+      && item.url === easyPrivacyURL
+      && item.downloadStatus === 'synchronize_ok'
     ) {
-      filterNotifier.off('subscription.added', onStatsSubUpdated);
-      // eslint-disable-next-line no-use-before-define
-      filterNotifier.off('subscription.errors', onError);
+      BG.ewe.subscriptions.onAdded.removeListener(onStatsSubUpdated);
+      BG.ewe.subscriptions.onChanged.removeListener(onStatsSubUpdated);
       window.location.reload();
     }
   };
-  const onError = function () {
-    filterNotifier.off('subscription.added', onStatsSubUpdated);
-    filterNotifier.off('subscription.errors', onError);
-    window.location.reload();
-  };
-  filterNotifier.on('subscription.updated', onStatsSubUpdated);
-  filterNotifier.on('subscription.errors', onError);
-  const subscription = Subscription.fromURL(easyPrivacyURL);
-  filterStorage.addSubscription(subscription);
-  synchronizer.execute(subscription);
+  BG.ewe.subscriptions.onAdded.addListener(onStatsSubUpdated);
+  BG.ewe.subscriptions.onChanged.addListener(onStatsSubUpdated);
+  BG.ewe.subscriptions.add(easyPrivacyURL);
+  BG.ewe.subscriptions.sync(easyPrivacyURL);
 });
 
 $('#btnGetPremium').on('click', () => {

@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global selectedOff, selected, pageInfo, popupMenuHelpActionMap, browser,
@@ -9,6 +9,7 @@ let cleanSegueHTML;
 let cleanSectionHTML;
 let segueBreadCrumb = [];
 let popupMenuHelpMap = {};
+/* eslint-disable-next-line no-unused-vars */
 let filterUpdateError = false;
 let logSent = false;
 let closeKeydownHandler;
@@ -313,6 +314,7 @@ const postLoadInitialize = function () {
   $('#separator_help').show();
 };
 
+/* eslint-disable-next-line no-unused-vars */
 const showHelpSetupPage = function () {
   loadHTMLSegments().then(() => {
     postLoadInitialize();

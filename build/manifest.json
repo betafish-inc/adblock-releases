@@ -41,23 +41,12 @@
     {
       "all_frames": true,
       "js": [
+        "vendor/webext-sdk/content.js",
         "polyfill.js",
         "ext/common.js",
         "ext/content.js",
-        "include.preload.js",
-        "adblock-functions.js"
-      ],
-      "match_about_blank": true,
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "run_at": "document_start"
-    },
-    {
-      "all_frames": true,
-      "js": [
-        "adblock-uiscripts-rightclick_hook.js",
+        "adblock-functions.js",
+        "contentscript-loader.js",
         "adblock-onpage-icon-cs.js"
       ],
       "match_about_blank": true,
@@ -70,42 +59,13 @@
     {
       "all_frames": true,
       "js": [
-        "subscriptionLink.postload.js"
+        "adblock-uiscripts-rightclick_hook.js"
       ],
       "matches": [
-        "https://*.abpchina.org/*",
-        "https://*.abpindo.blogspot.com/*",
-        "https://*.abpvn.com/*",
-        "https://*.adblock.ee/*",
-        "https://*.adblock.gardar.net/*",
-        "https://*.adblockplus.me/*",
-        "https://*.adblockplus.org/*",
-        "https://*.commentcamarche.net/*",
-        "https://*.droit-finances.commentcamarche.com/*",
-        "https://*.easylist.to/*",
-        "https://*.eyeo.com/*",
-        "https://*.fanboy.co.nz/*",
-        "https://*.filterlists.com/*",
-        "https://*.forums.lanik.us/*",
-        "https://*.gitee.com/*",
-        "https://*.gitee.io/*",
-        "https://*.github.com/*",
-        "https://*.github.io/*",
-        "https://*.gitlab.com/*",
-        "https://*.gitlab.io/*",
-        "https://*.gurud.ee/*",
-        "https://*.hugolescargot.com/*",
-        "https://*.i-dont-care-about-cookies.eu/*",
-        "https://*.journaldesfemmes.fr/*",
-        "https://*.journaldunet.com/*",
-        "https://*.linternaute.com/*",
-        "https://*.spam404.com/*",
-        "https://*.stanev.org/*",
-        "https://*.void.gr/*",
-        "https://*.xfiles.noads.it/*",
-        "https://*.zoso.ro/*"
+        "http://*/*",
+        "https://*/*"
       ],
-      "run_at": "document_start"
+      "run_at": "document_idle"
     },
     {
       "all_frames": true,
@@ -140,12 +100,12 @@
       "run_at": "document_start"
     }
   ],
-  "content_security_policy": "default-src 'self'; img-src 'self' blob: https://cdn.adblockcdn.com; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://getadblock.com",
+  "content_security_policy": "default-src 'self'; img-src 'self' data: blob: https://cdn.adblockcdn.com; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://getadblock.com",
   "manifest_version": 2,
-  "minimum_chrome_version": "60.0",
-  "minimum_opera_version": "47.0",
+  "minimum_chrome_version": "77.0",
+  "minimum_opera_version": "64.0",
   "name": "__MSG_name__",
-  "short_name": "__MSG_name__",
+  "short_name": "__MSG_short_name__",
   "description": "__MSG_description__",
   "default_locale": "en_US",
   "devtools_page": "devtools.html",

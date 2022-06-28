@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, onReady, DOMPurify, translate */
@@ -425,7 +425,7 @@ const configureChildElements = function (parentNodeArg, adsAllowedArg) {
     this.getRootNode().host.classList.remove('openedABPanel');
     browser.runtime.sendMessage({ command: 'removeAllowlistFilterForYoutubeChannel', text: parentNode.dataset.filterText }).then(() => {
       browser.runtime.sendMessage({ command: 'getAllAdsAllowedUserFilters' }).then((response) => {
-        const ytRules = response.adsAllowedUserFilters;
+        const ytRules = response;
         const { parsedChannelName } = parentNode.dataset;
         parentNode.dataset.filterText = isAdsAllowed(ytRules, parsedChannelName);
         configureChildElements(parentNode, parentNode.dataset.filterText);
@@ -439,7 +439,7 @@ const configureChildElements = function (parentNodeArg, adsAllowedArg) {
     this.getRootNode().host.classList.remove('openedABPanel');
     browser.runtime.sendMessage({ command: 'createAllowlistFilterForYoutubeChannelName', channelName: parentNode.dataset.parsedChannelName }).then(() => {
       browser.runtime.sendMessage({ command: 'getAllAdsAllowedUserFilters' }).then((response) => {
-        const ytRules = response.adsAllowedUserFilters;
+        const ytRules = response;
         const { parsedChannelName } = parentNode.dataset;
         parentNode.dataset.filterText = isAdsAllowed(ytRules, parsedChannelName);
         configureChildElements(parentNode, parentNode.dataset.filterText);
@@ -519,7 +519,7 @@ const addInPageIcons = function (initialAdd) {
   }
   addInProgress = true;
   browser.runtime.sendMessage({ command: 'getAllAdsAllowedUserFilters' }).then((userFilters) => {
-    const youTubeFilters = userFilters.adsAllowedUserFilters;
+    const youTubeFilters = userFilters;
     const channelNameObs = getAllSubscribedChannelNames();
     let subdChannels = 0;
     let subdChannelsAllowlisted = 0;
@@ -606,6 +606,7 @@ const removeOnPageIcon = function () {
 const navigateFinished = function () {
   window.removeEventListener('yt-navigate-finish', navigateFinished);
   addInPageIcons(true);
+  addOnPageIcon();
 };
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -616,10 +617,11 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // then we need to wait until the data has finished loading.
     if (request.historyUpdated) {
       window.addEventListener('yt-navigate-finish', navigateFinished);
-      addOnPageIcon();
     } else {
-      addOnPageIcon();
-      addInPageIcons(true);
+      setTimeout(() => {
+        addOnPageIcon();
+        addInPageIcons(true);
+      }, 500);
     }
     sendResponse({});
   }

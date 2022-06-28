@@ -1,15 +1,12 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, ext, exports, chromeStorageSetHelper, getSettings, adblockIsPaused,
-   adblockIsDomainPaused, filterStorage, Filter, parseUri, settings, getAllSubscriptionsMinusText,
+/* global browser, ext, chromeStorageSetHelper, adblockIsPaused,
+   adblockIsDomainPaused, parseUri, settings,
    getUserFilters, Utils, replacedCounts, setSetting, storageGet, storageSet */
 
-const { extractHostFromFrame } = require('url');
-const { ElemHideFilter } = require('filterClasses');
-const { filterNotifier } = require('filterNotifier');
-const { port } = require('messaging');
-const info = require('info');
+import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
+import { getSettings } from './settings';
 
 const LocalDataCollection = (function getLocalDataCollection() {
   const easyPrivacyURL = 'https://easylist-downloads.adblockplus.org/easyprivacy.txt';
@@ -17,6 +14,10 @@ const LocalDataCollection = (function getLocalDataCollection() {
   let intervalFN;
   const EXT_STATS_KEY = 'ext_stats_key';
   const STORED_DATA_CLEAN = 'STORED_DATA_CLEAN';
+  const REPORTING_OPTIONS = {
+    filterType: 'all',
+    includeElementHiding: true,
+  };
 
   // Setup memory cache
   let dataCollectionCache = {};
@@ -31,44 +32,19 @@ const LocalDataCollection = (function getLocalDataCollection() {
     }
   };
 
-  const handleTabUpdated = function (tabId, changeInfo, tabInfo) {
-    if (browser.runtime.lastError) {
-      return;
-    }
-    if (!tabInfo || !tabInfo.url || !tabInfo.url.startsWith('http') || tabInfo.incognito) {
-      return;
-    }
-    if (
-      getSettings().local_data_collection
-      && !getSettings().data_collection_v2 // the content script will be injected from that module
-      && !adblockIsPaused()
-      && !adblockIsDomainPaused({ url: tabInfo.url, id: tabId })
-      && changeInfo.status === 'complete'
-    ) {
-      browser.tabs.executeScript(tabId, {
-        file: 'adblock-datacollection-contentscript.js',
-        allFrames: true,
-      });
-    }
-  };
-
-  const addFilterToCache = function (filter, page) {
+  const addFilterToCache = function (details, filter) {
     const validFilterText = filter && filter.text && (typeof filter.text === 'string');
-    const validFilterType = (filter.type === 'blocking'
-                             || filter.type === 'elemhide'
-                             || filter.type === 'elemhideemulation'
-                             || filter.type === 'snippet');
-    if (validFilterType && validFilterText && page && page.url) {
-      browser.tabs.get(page.id).then((tab) => {
+    if (details.tabId > 0 && validFilterText && validFilterText && details && details.url) {
+      browser.tabs.get(details.tabId).then((tab) => {
         if (tab.incognito) {
           return;
         }
-        const theURL = new URL(page.url);
+        const theURL = new URL(details.url);
         const domain = theURL.hostname;
         initializeDomainIfNeeded(domain);
         const { text } = filter;
         let isAd = true;
-        for (const sub of filterStorage.subscriptions(text)) {
+        for (const sub of ewe.subscriptions.getForFilter(text)) {
           if (!sub.disabled && sub.url && sub.url === easyPrivacyURL) {
             isAd = false;
           }
@@ -82,56 +58,9 @@ const LocalDataCollection = (function getLocalDataCollection() {
     }
   };
 
-  const addMessageListener = function () {
-    port.on('datacollection.elementHide', (message, sender) => {
-      const dataCollectionEnabled = getSettings().local_data_collection;
-      const domainInfo = { url: sender.page.url, id: sender.page.id };
-      if (dataCollectionEnabled && !adblockIsPaused() && !adblockIsDomainPaused(domainInfo)) {
-        const { selectors } = message;
-        const docDomain = extractHostFromFrame(sender.frame);
-        for (const subscription of filterStorage.subscriptions()) { // test if we double count hits
-          if (!subscription.disabled) {
-            for (const text of subscription.filterText()) {
-              const filter = Filter.fromText(text);
-              // We only know the exact filter in case of element hiding emulation.
-              // For regular element hiding filters, the content script only knows
-              // the selector, so we have to find a filter that has an identical
-              // selector and is active on the domain the match was reported from.
-              const isActiveElemHideFilter = filter instanceof ElemHideFilter
-                                           && selectors.includes(filter.selector)
-                                           && filter.isActiveOnDomain(docDomain);
-              if (isActiveElemHideFilter) {
-                addFilterToCache(filter, sender.page);
-              }
-            }
-          }
-        }
-      }
-    });
-    port.on('datacollection.exceptionElementHide', (message, sender) => {
-      const domainInfo = { url: sender.page.url, id: sender.page.id };
-      if (
-        getSettings().local_data_collection
-          && !adblockIsPaused()
-          && !adblockIsDomainPaused(domainInfo)) {
-        const selectors = message.exceptions;
-        for (const text of selectors) {
-          const filter = Filter.fromText(text);
-          addFilterToCache(filter, sender.page);
-        }
-      }
-    });
-  };
-
-  const filterListener = function (item, newValue, oldValue, tabIds) {
+  const filterListener = function ({ request, filter }) {
     if (getSettings().local_data_collection && !adblockIsPaused()) {
-      for (const tabId of tabIds) {
-        browser.tabs.get(tabId).then((tab) => {
-          if (tab && tab.url && !adblockIsDomainPaused({ url: tab.url.href, id: tab.id })) {
-            addFilterToCache(item, tab);
-          }
-        });
-      }
+      addFilterToCache(request, filter);
     } else if (!getSettings().local_data_collection) {
       LocalDataCollection.end();
     }
@@ -219,10 +148,8 @@ const LocalDataCollection = (function getLocalDataCollection() {
   settings.onload().then(() => {
     if (getSettings().local_data_collection) {
       startProcessInterval();
-      filterNotifier.on('filter.hitCount', filterListener);
+      ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
       replacedCounts.adReplacedNotifier.on('adReplaced', adReplacedListener);
-      browser.tabs.onUpdated.addListener(handleTabUpdated);
-      addMessageListener();
       cleanStoredData();
     }
   });// End of then
@@ -231,10 +158,8 @@ const LocalDataCollection = (function getLocalDataCollection() {
   returnObj.EXT_STATS_KEY = EXT_STATS_KEY;
   returnObj.start = function returnObjStart(callback) {
     dataCollectionCache.domains = {};
-    filterNotifier.on('filter.hitCount', filterListener);
+    ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
     replacedCounts.adReplacedNotifier.on('adReplaced', adReplacedListener);
-    browser.tabs.onUpdated.addListener(handleTabUpdated);
-    addMessageListener();
     startProcessInterval();
     setSetting('local_data_collection', true, callback);
   };
@@ -242,9 +167,8 @@ const LocalDataCollection = (function getLocalDataCollection() {
     clearInterval(intervalFN);
     clearCache();
     storageSet(STORED_DATA_CLEAN);
-    filterNotifier.off('filter.hitCount', filterListener);
+    ewe.reporting.onBlockableItem.removeListener(filterListener, REPORTING_OPTIONS);
     replacedCounts.adReplacedNotifier.off('adReplaced', adReplacedListener);
-    browser.tabs.onUpdated.removeListener(handleTabUpdated);
     setSetting('local_data_collection', false, callback);
   };
   returnObj.clearCache = clearCache;
@@ -337,4 +261,4 @@ const LocalDataCollection = (function getLocalDataCollection() {
   return returnObj;
 }());
 
-exports.LocalDataCollection = LocalDataCollection;
+export default LocalDataCollection;

@@ -1,11 +1,10 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, exports, STATS, log, getSettings, Prefs,
-   License, settings,
+/* global browser, log, openTab, License,
  */
 
-const { showIconBadgeCTA, NEW_BADGE_REASONS } = require('./alias/icon.js');
+import { showIconBadgeCTA, NEW_BADGE_REASONS } from './alias/icon';
 
 
 const CtaABManager = (function get() {
@@ -82,4 +81,4 @@ const CtaABManager = (function get() {
   };
 }());
 
-exports.CtaABManager = CtaABManager;
+export default CtaABManager;

@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global BG, parseUri, optionalSettings:true, abpPrefPropertyNames, settingsNotifier,
@@ -21,7 +21,7 @@ const initialize = function init() {
   if (typeof BG.LocalCDN === 'object') {
     $('#local_cdn_option').css('display', 'flex');
   }
-  const subs = BG.getSubscriptionsMinusText();
+  const subs = BG.SubscriptionAdapter.getSubscriptionsMinusText();
 
   // if the user is currently subscribed to AA
   // then 'check' the acceptable ads button.
@@ -52,36 +52,27 @@ const initialize = function init() {
   }
 
   const acceptableAdsPrivacyClicked = function (isEnabled) {
-    const acceptableAds = Subscription.fromURL(Prefs.subscriptions_exceptionsurl);
-    const acceptableAdsPrivacy = Subscription.fromURL(Prefs.subscriptions_exceptionsurl_privacy);
-
     if (isEnabled) {
-      if (acceptableAdsPrivacy instanceof DownloadableSubscription) {
-        synchronizer.execute(acceptableAdsPrivacy);
-      }
-      filterStorage.addSubscription(acceptableAdsPrivacy);
-      filterStorage.removeSubscription(acceptableAds);
+      BG.ewe.subscriptions.add(BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL);
+      BG.ewe.subscriptions.sync(BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL);
+      BG.ewe.subscriptions.remove(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
       updateAcceptableAdsUI(true, true);
     } else {
-      filterStorage.addSubscription(acceptableAds);
-      filterStorage.removeSubscription(acceptableAdsPrivacy);
+      BG.ewe.subscriptions.add(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
+      BG.ewe.subscriptions.sync(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
+      BG.ewe.subscriptions.remove(BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL);
       updateAcceptableAdsUI(true, false);
     }
   };
 
   const acceptableAdsClicked = function (isEnabled) {
-    const subscription = Subscription.fromURL(Prefs.subscriptions_exceptionsurl);
-    const acceptableAdsPrivacy = Subscription.fromURL(Prefs.subscriptions_exceptionsurl_privacy);
-
     if (isEnabled) {
-      filterStorage.addSubscription(subscription);
-      if (subscription instanceof DownloadableSubscription) {
-        synchronizer.execute(subscription);
-      }
+      BG.ewe.subscriptions.add(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
+      BG.ewe.subscriptions.sync(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
       updateAcceptableAdsUI(true, false);
     } else {
-      filterStorage.removeSubscription(subscription);
-      filterStorage.removeSubscription(acceptableAdsPrivacy);
+      BG.ewe.subscriptions.remove(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
+      BG.ewe.subscriptions.remove(BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL);
       updateAcceptableAdsUI(false, false);
     }
   };
@@ -270,8 +261,8 @@ port.onMessage.addListener((message) => {
 });
 
 const onSubAdded = function (item) {
-  const acceptableAds = BG.Prefs.subscriptions_exceptionsurl;
-  const acceptableAdsPrivacy = BG.Prefs.subscriptions_exceptionsurl_privacy;
+  const acceptableAds = BG.ewe.subscriptions.ACCEPTABLE_ADS_URL;
+  const acceptableAdsPrivacy = BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL;
 
   if (item && item.url === acceptableAds) {
     updateAcceptableAdsUI(true, false);
@@ -279,13 +270,13 @@ const onSubAdded = function (item) {
     updateAcceptableAdsUI(true, true);
   }
 };
-filterNotifier.on('subscription.added', onSubAdded);
+BG.ewe.subscriptions.onAdded.addListener(onSubAdded);
 
 const onSubRemoved = function (item) {
-  const aa = BG.Prefs.subscriptions_exceptionsurl;
-  const aaPrivacy = BG.Prefs.subscriptions_exceptionsurl_privacy;
-  const aaSubscribed = filterStorage.hasSubscription(aa);
-  const aaPrivacySubscribed = filterStorage.hasSubscription(aaPrivacy);
+  const aa = BG.ewe.subscriptions.ACCEPTABLE_ADS_URL;
+  const aaPrivacy = BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL;
+  const aaSubscribed = BG.ewe.subscriptions.has(aa);
+  const aaPrivacySubscribed = BG.ewe.subscriptions.has(aaPrivacy);
 
   if (item && item.url === aa && !aaPrivacySubscribed) {
     updateAcceptableAdsUI(false, false);
@@ -297,9 +288,9 @@ const onSubRemoved = function (item) {
     updateAcceptableAdsUI(true, false);
   }
 };
-filterNotifier.on('subscription.removed', onSubRemoved);
+BG.ewe.subscriptions.onRemoved.addListener(onSubRemoved);
 
 window.addEventListener('unload', () => {
-  filterNotifier.off('subscription.removed', onSubRemoved);
-  filterNotifier.off('subscription.added', onSubAdded);
+  BG.ewe.subscriptions.onAdded.removeListener(onSubAdded);
+  BG.ewe.subscriptions.onRemoved.removeListener(onSubRemoved);
 });

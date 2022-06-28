@@ -26,9 +26,9 @@
 
 /** @module options */
 
-import { checkAllowlisted } from "../../adblockplusui/adblockpluschrome/lib/allowlisting.js";
+
 import * as info from "info";
-import { port } from "messaging.js";
+import { port } from "../../vendor/adblockplusui/adblockpluschrome/lib/messaging";
 
 const optionsUrl = browser.runtime.getManifest().options_ui.page;
 
@@ -157,13 +157,18 @@ browser.browserAction.onClicked.addListener(async () => {
   let [, optionsPort] = await showOptions();
   if (!/^https?:$/.test(currentPage.url.protocol)) return;
 
+  const isAllowlisted = ewe.filters.isResourceAllowlisted(
+    currentPage.url,
+    "document",
+    currentPage.id
+  );
   optionsPort.postMessage({
     type: "app.respond",
     action: "showPageOptions",
     args: [
       {
         host: currentPage.url.hostname.replace(/^www\./, ""),
-        whitelisted: !!checkAllowlisted(currentPage)
+        allowlisted: isAllowlisted
       }
     ]
   });
@@ -176,7 +181,8 @@ browser.browserAction.onClicked.addListener(async () => {
  * @event "options.open"
  * @returns {object} optionsTab
  */
-port.on("options.open", async (message, sender) => {
-  let [optionsTab] = await showOptions();
+port.on("options.open", async(message, sender) =>
+{
+  const [optionsTab] = await showOptions();
   return optionsTab;
 });

@@ -1,13 +1,11 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, getSettings, settings, require, ext, setSetting,
-   addCustomFilter, checkAllowlisted, getUserFilters,
+/* global browser, getSettings, settings, ext, setSetting,
+   addCustomFilter, getUserFilters,
    isWhitelistFilter */
 
-const { Filter } = require('filterClasses');
-const { filterStorage } = require('filterStorage');
-const { filterNotifier } = require('filterNotifier');
+import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
 
 const ytChannelNamePages = new Map();
 
@@ -18,13 +16,15 @@ const webRequestFilter = {
   ],
 };
 
+let lastInjectedTimestamp = 10000;
+
 // Creates a custom filter entry that whitelists a YouTube channel
 // Inputs: channelName:string parsed channel name
 // Returns:  null if successful, otherwise an exception
-const createAllowlistFilterForYoutubeChannelName = function (channelName) {
+const createAllowlistFilterForYoutubeChannelName = function (channelName, origin) {
   if (channelName) {
     const filterText = `@@||www.youtube.com/*${channelName}|$document`;
-    return addCustomFilter(filterText);
+    return addCustomFilter(filterText, origin);
   }
   return undefined;
 };
@@ -32,7 +32,7 @@ const createAllowlistFilterForYoutubeChannelName = function (channelName) {
 // Creates a custom filter entry that whitelists a YouTube channel
 // Inputs: url:string url of the page
 // Returns: null if successful, otherwise an exception
-const createWhitelistFilterForYoutubeChannel = function (url) {
+const createWhitelistFilterForYoutubeChannel = function (url, origin) {
   let ytChannel;
   if (/ab_channel=/.test(url)) {
     [, ytChannel] = url.match(/ab_channel=([^]*)/);
@@ -40,39 +40,38 @@ const createWhitelistFilterForYoutubeChannel = function (url) {
     ytChannel = url.split('/').pop();
   }
   if (ytChannel) {
-    return createAllowlistFilterForYoutubeChannelName(ytChannel);
+    return createAllowlistFilterForYoutubeChannelName(ytChannel, origin);
   }
   return undefined;
 };
 
 const removeAllowlistFilterForYoutubeChannel = function (text) {
   if (isWhitelistFilter(text)) {
-    try {
-      const filter = Filter.fromText(text);
-      filterStorage.removeFilter(filter);
-    } catch (ex) {
-      // do nothing;
-    }
+    ewe.filters.remove([text]);
   }
 };
 
 // inject the manage YT subscription
 const injectManagedContentScript = function (details, historyUpdated) {
   const { tabId } = details;
-
   browser.tabs.sendMessage(tabId, { command: 'ping_yt_manage_cs' }).then((pingResponse) => {
+    // Since the onHistoryStateUpdated may get called more than once with the exact same data,
+    // check the timestamps, and only inject the content script once
+    const diff = details.timeStamp - lastInjectedTimestamp;
     if (pingResponse && pingResponse.status === 'yes') {
+      lastInjectedTimestamp = details.timeStamp;
       browser.tabs.sendMessage(tabId, { command: 'addYouTubeOnPageIcons', historyUpdated });
-    } else {
+    } else if (diff > 100) { // check if the timestamp difference is more than 100 ms
+      lastInjectedTimestamp = details.timeStamp;
       browser.tabs.executeScript(tabId, {
         file: 'purify.min.js',
         allFrames: false,
-        runAt: 'document_end',
+        runAt: 'document_start',
       }).then(() => {
         browser.tabs.executeScript(tabId, {
           file: 'adblock-yt-manage-cs.js',
           allFrames: false,
-          runAt: 'document_end',
+          runAt: 'document_start',
         }).then(() => {
           browser.tabs.sendMessage(tabId, { command: 'addYouTubeOnPageIcons', historyUpdated });
         });
@@ -81,43 +80,28 @@ const injectManagedContentScript = function (details, historyUpdated) {
   });
 };
 
+const managedSubPageCompleted = function (details) {
+  const theURL = new URL(details.url);
+  if (theURL.pathname === '/feed/channels') {
+    injectManagedContentScript(details);
+  }
+};
 
 // On single page sites, such as YouTube, that update the URL using the History API pushState(),
 // they don't actually load a new page, we need to get notified when this happens
 // and update the URLs in the Page and Frame objects
 const ytHistoryHandler = function (details) {
   if (details
-      && Object.prototype.hasOwnProperty.call(details, 'frameId')
       && Object.prototype.hasOwnProperty.call(details, 'tabId')
       && Object.prototype.hasOwnProperty.call(details, 'url')
       && details.transitionType === 'link') {
     const myURL = new URL(details.url);
-    if (myURL.hostname === 'www.youtube.com') {
-      const myFrame = ext.getFrame(details.tabId, details.frameId);
-      const myPage = ext.getPage(details.tabId);
-      myPage._url = myURL;
-      myFrame.url = myURL;
-      myFrame._url = myURL;
-      if (!/ab_channel/.test(details.url) && myURL.pathname === '/watch') {
-        browser.tabs.sendMessage(details.tabId, { command: 'updateURLWithYouTubeChannelName' });
-      } else if (/ab_channel/.test(details.url) && myURL.pathname !== '/watch') {
-        browser.tabs.sendMessage(details.tabId, { command: 'removeYouTubeChannelName' });
-      }
-      if (getSettings().youtube_manage_subscribed && myURL.pathname === '/feed/channels') {
-        // check if the user clicked the back / forward buttons, if so,
-        // the data on the page is already loaded,
-        // so the content script does not have to wait for it to load.
-        injectManagedContentScript(details, !(details.transitionQualifiers && details.transitionQualifiers.includes('forward_back')));
-      }
-      filterNotifier.emit('page.WhitelistingStateRevalidate', myPage, checkAllowlisted(myPage));
+    if (getSettings().youtube_manage_subscribed && myURL.pathname === '/feed/channels') {
+      // check if the user clicked the back / forward buttons, if so,
+      // the data on the page is already loaded,
+      // so the content script does not have to wait for it to load.
+      injectManagedContentScript(details, !(details.transitionQualifiers && details.transitionQualifiers.includes('forward_back')));
     }
-  }
-};
-
-const managedSubPageCompleted = function (details) {
-  const theURL = new URL(details.url);
-  if (theURL.pathname === '/feed/channels') {
-    injectManagedContentScript(details);
   }
 };
 
@@ -143,20 +127,19 @@ const openYTManagedSubPage = function () {
   browser.tabs.create({ url: 'https://www.youtube.com/feed/channels' });
 };
 
-const getAllAdsAllowedUserFilters = function () {
-  const userFilters = getUserFilters();
+const getAllAdsAllowedUserFilters = async function () {
+  const userFilters = await getUserFilters();
   const adsAllowedUserFilters = [];
   for (let inx = 0; inx < userFilters.length; inx++) {
-    const filterText = userFilters[inx];
-    if (isWhitelistFilter(filterText) && filterText.includes('youtube.com')) {
-      adsAllowedUserFilters.push(filterText);
+    const filter = userFilters[inx];
+    if (isWhitelistFilter(filter.text) && filter.text && filter.text.includes('youtube.com')) {
+      adsAllowedUserFilters.push(filter.text);
     }
   }
   return adsAllowedUserFilters;
 };
 
 let previousYTchannelId = '';
-const previousYTvideoId = '';
 let previousYTuserId = '';
 
 // Listen for the message from the content scripts
@@ -236,17 +219,18 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({});
   }
   if (message.command === 'getAllAdsAllowedUserFilters') {
-    sendResponse({ adsAllowedUserFilters: getAllAdsAllowedUserFilters() });
+    /* eslint-disable consistent-return */
+    return getAllAdsAllowedUserFilters();
   }
   if (message.command === 'removeAllowlistFilterForYoutubeChannel' && message.text) {
     removeAllowlistFilterForYoutubeChannel(message.text);
     sendResponse({});
   }
   if (message.command === 'createWhitelistFilterForYoutubeChannel' && message.url) {
-    sendResponse(createWhitelistFilterForYoutubeChannel(message.url));
+    sendResponse(createWhitelistFilterForYoutubeChannel(message.url, message.origin));
   }
   if (message.command === 'createAllowlistFilterForYoutubeChannelName' && message.channelName) {
-    sendResponse(createAllowlistFilterForYoutubeChannelName(message.channelName));
+    sendResponse(createAllowlistFilterForYoutubeChannelName(message.channelName, message.origin));
   }
   if (message.command === 'blockAllSubscribedChannel' && message.channelNames) {
     const { channelNames } = message;

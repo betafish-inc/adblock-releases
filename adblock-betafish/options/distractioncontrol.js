@@ -1,10 +1,9 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global BG, translate, License, MABPayment, filterNotifier, Subscription,
-   filterStorage, synchronizer, activateTab, browser, storageSet, storageGet  */
+/* global BG, translate, License, MABPayment, filterNotifier,
+   activateTab, browser, storageSet, storageGet  */
 
-const distractionControlIDs = ['distraction-control-newsletter', 'distraction-control-survey', 'distraction-control-video', 'distraction-control-push'];
 // the elements array below are in the order they appear on the page
 const distractionControlUIitems = [
   {
@@ -36,17 +35,9 @@ const distractionControlUIitems = [
     topLineClass: 'top-line',
   },
 ];
-let cachedSubscriptions = {};
 
 const dcWarningClosedKey = 'dc_warning_closed';
 let dcWarningClosed = storageGet(dcWarningClosedKey);
-
-function translateDistractionControlIDs(id) {
-  if (distractionControlIDs.includes(id)) {
-    return translate(`filter${id}`);
-  }
-  return '';
-}
 
 function getDefaultFilterUI(entry, filterList, checkboxID, isActiveLicense) {
   const isSelected = filterList.subscribed;
@@ -68,13 +59,11 @@ function getDefaultFilterUI(entry, filterList, checkboxID, isActiveLicense) {
   } else {
     $checkBox.on('click', function clickhandler() {
       const checked = $(this).is(':checked');
-      const subscription = Subscription.fromURL(filterListUrl);
       if (checked) {
-        filterStorage.addSubscription(subscription);
-        synchronizer.execute(subscription);
+        BG.ewe.subscriptions.add(filterListUrl);
       } else {
         setTimeout(() => {
-          filterStorage.removeSubscription(subscription);
+          BG.ewe.subscriptions.remove(filterListUrl);
         }, 1);
       }
     });
@@ -165,7 +154,6 @@ function getDefaultFilterUI(entry, filterList, checkboxID, isActiveLicense) {
 }
 
 const prepareDCSubscriptions = function prepareDCSubscriptions(subs, isActiveLicense) {
-  cachedSubscriptions = subs;
   let index = 0;
   for (const id in distractionControlUIitems) {
     const entry = distractionControlUIitems[id];
@@ -176,7 +164,7 @@ const prepareDCSubscriptions = function prepareDCSubscriptions(subs, isActiveLic
 
 const initializeDC = function initializeDC(isActiveLicense) {
   // Retrieves list of filter lists from the background.
-  const subs = BG.getAllSubscriptionsMinusText();
+  const subs = BG.SubscriptionAdapter.getAllSubscriptionsMinusText();
   // Initialize page using subscriptions from the background.
   // Copy from update subscription list + setsubscriptionlist
   prepareDCSubscriptions(subs, isActiveLicense);
@@ -228,14 +216,14 @@ const updateCheckbox = function (item, isChecked) {
 const onDCSubAdded = function (item) {
   updateCheckbox(item, true);
 };
-filterNotifier.on('subscription.added', onDCSubAdded);
+BG.ewe.subscriptions.onAdded.addListener(onDCSubAdded);
 
 const onDCSubRemoved = function (item) {
   updateCheckbox(item, false);
 };
-filterNotifier.on('subscription.removed', onDCSubRemoved);
+BG.ewe.subscriptions.onRemoved.addListener(onDCSubRemoved);
 
 window.addEventListener('unload', () => {
-  filterNotifier.off('subscription.removed', onDCSubRemoved);
-  filterNotifier.off('subscription.added', onDCSubAdded);
+  BG.ewe.subscriptions.onAdded.removeListener(onDCSubAdded);
+  BG.ewe.subscriptions.onRemoved.removeListener(onDCSubRemoved);
 });

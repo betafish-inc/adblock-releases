@@ -1,59 +1,33 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, chromeStorageSetHelper, log, License, translate,
+/* global browser, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
   blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
   storageGet, parseFilter, channels, twitchChannelNamePages, ytChannelNamePages,
-  determineUserLanguage */
+  determineUserLanguage, createFilterMetaData */
 
-const { Filter } = require('filterClasses');
-const { WhitelistFilter } = require('filterClasses');
-const { Subscription } = require('subscriptionClasses');
-const { DownloadableSubscription } = require('subscriptionClasses');
-const { SpecialSubscription } = require('subscriptionClasses');
-const { filterStorage } = require('filterStorage');
-const { filterNotifier } = require('filterNotifier');
-const { Prefs } = require('prefs');
-const { synchronizer } = require('synchronizer');
-const { getBlockedPerPage } = require('stats');
-const { RegExpFilter, InvalidFilter, URLFilter } = require('filterClasses');
-const info = require('info');
-const { checkAllowlisted } = require('../adblockplusui/adblockpluschrome/lib/allowlisting');
-const { URLRequest } = require('../adblockplusui/adblockpluschrome/adblockpluscore/lib/url.js');
-const { getNewBadgeTextReason } = require('./alias/icon.js');
+import { Prefs } from 'prefs';
+import * as info from 'info';
+import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
 
-// Object's used on the option, pop up, etc. pages...
-const { STATS } = require('./stats');
+import { TELEMETRY } from './telemetry';
+import { Stats, getBlockedPerPage } from '../vendor/adblockplusui/adblockpluschrome/lib/stats';
+import { initialize } from './alias/subscriptionInit';
+import SyncService from './picreplacement/sync-service';
 
-const { CtaABManager } = require('./ctaabmanager');
+import SubscriptionAdapter from './subscriptionadapter';
 
-const { SURVEY } = require('./survey');
-const { SyncService } = require('./picreplacement/sync-service');
-const { DataCollectionV2 } = require('./datacollection.v2');
-const { LocalDataCollection } = require('./localdatacollection');
-const { ServerMessages } = require('./servermessages');
-const { recommendations } = require('./alias/recommendations');
-const { setUninstallURL } = require('./alias/uninstall');
-const { ExcludeFilter } = require('./excludefilter');
-const {
-  recordGeneralMessage,
-  recordErrorMessage,
-  recordAdreportMessage,
-  recordAnonymousErrorMessage,
-  recordAnonymousMessage,
-} = require('./servermessages').ServerMessages;
-const {
-  getUrlFromId,
-  unsubscribe,
-  getSubscriptionsMinusText,
-  getAllSubscriptionsMinusText,
-  getSubscriptionsChecksum,
-  getDCSubscriptionsMinusText,
-  getIdFromURL,
-  getSubscriptionInfoFromURL,
-  isLanguageSpecific,
-} = require('./adpsubscriptionadapter').SubscriptionAdapter;
+import DataCollectionV2 from './datacollection.v2';
+import CtaABManager from './ctaabmanager';
+import ExcludeFilter from './excludefilter';
+import { getNewBadgeTextReason } from './alias/icon';
+import LocalDataCollection from './localdatacollection';
+import { License, channels } from './picreplacement/check';
+import { channelsNotifier } from './picreplacement/channels';
+import ServerMessages from './servermessages';
+import SURVEY from './survey';
+import { setUninstallURL } from './alias/uninstall';
 
 // Message verification
 const trustedBaseUrl = browser.runtime.getURL('');
@@ -76,42 +50,23 @@ const isTrustedSenderDomain = (sender) => {
 const addCustomFilterRandomName = '';
 
 Object.assign(window, {
-  filterStorage,
-  filterNotifier,
   Prefs,
-  synchronizer,
-  Subscription,
-  SpecialSubscription,
-  DownloadableSubscription,
-  Filter,
-  WhitelistFilter,
-  checkAllowlisted,
   info,
   getBlockedPerPage,
-  STATS,
   SURVEY,
   SyncService,
   DataCollectionV2,
   LocalDataCollection,
   ServerMessages,
-  recordGeneralMessage,
-  recordErrorMessage,
-  recordAdreportMessage,
-  recordAnonymousMessage,
-  recordAnonymousErrorMessage,
-  getUrlFromId,
-  unsubscribe,
-  recommendations,
-  getSubscriptionsMinusText,
-  getAllSubscriptionsMinusText,
-  getDCSubscriptionsMinusText,
-  getIdFromURL,
-  getSubscriptionInfoFromURL,
-  getSubscriptionsChecksum,
+  SubscriptionAdapter,
   ExcludeFilter,
-  URLFilter,
+  TELEMETRY,
   CtaABManager,
   getNewBadgeTextReason,
+  ewe,
+  License,
+  channels,
+  channelsNotifier,
   isTrustedSender,
   isTrustedSenderDomain,
   addCustomFilterRandomName,
@@ -189,19 +144,20 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Add a new custom filter entry.
-// Inputs: filter:string line of text to add to custom filters.
+// Inputs: filter:string - line of text to add to custom filters.
+//         origin:string - the source or trigger for the filter list entry
 // Returns: null if succesfull, otherwise an exception
-const addCustomFilter = function (filterText) {
+const addCustomFilter = async function (filterText, origin) {
   try {
-    const filter = Filter.fromText(filterText);
-    if (filter instanceof InvalidFilter) {
-      return { error: filter.reason };
+    const response = ewe.filters.validate(filterText);
+    if (response) {
+      return response;
     }
-    filterStorage.addFilter(filter);
+    await ewe.filters.add([filterText], createFilterMetaData(origin));
+    await ewe.filters.enable([filterText]);
     if (isSelectorFilter(filterText)) {
       countCache.addCustomFilterCount(filterText);
     }
-
     return null;
   } catch (ex) {
     // convert to a string so that Safari can pass
@@ -209,48 +165,39 @@ const addCustomFilter = function (filterText) {
     return ex.toString();
   }
 };
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+/* eslint-disable consistent-return */
+browser.runtime.onMessage.addListener((message) => {
   if (
-    message.command !== 'addCustomFilter'
-    || !message.filterTextToAdd
-    || message.addCustomFilterRandomName !== window.addCustomFilterRandomName
+    message.command === 'addCustomFilter'
+    && message.filterTextToAdd
+    && message.addCustomFilterRandomName === window.addCustomFilterRandomName
   ) {
-    return;
+    window.addCustomFilterRandomName = '';
+    return addCustomFilter(message.filterTextToAdd, message.origin).then(results => results);
   }
-  sendResponse({ response: addCustomFilter(message.filterTextToAdd) });
-  window.addCustomFilterRandomName = '';
 });
 
 // Creates a custom filter entry that allowlists a given domain
-// Inputs: pageUrl:string url of the page
+// Inputs: pageUrl:string - url of the page
+//         origin:string - the source or trigger for the filter list entry
 // Returns: null if successful, otherwise an exception
-const createDomainAllowlistFilter = function (pageUrl) {
+const createDomainAllowlistFilter = async function (pageUrl, origin) {
   const theURL = new URL(pageUrl);
   const host = theURL.hostname.replace(/^www\./, '');
   const filter = `@@||${host}/*^$document`;
-  return addCustomFilter(filter);
+  return addCustomFilter(filter, origin);
 };
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'createDomainAllowlistFilter' || !message.url) {
-    return;
+/* eslint-disable consistent-return */
+browser.runtime.onMessage.addListener((message) => {
+  if (message.command === 'createDomainAllowlistFilter' && message.url) {
+    return createDomainAllowlistFilter(message.url, message.origin).then(results => results);
   }
-  sendResponse({ response: createDomainAllowlistFilter(message.url) });
 });
 
 // UNWHITELISTING
 
-function getUserFilters() {
-  const filters = [];
-
-  for (const subscription of filterStorage.subscriptions()) {
-    if ((subscription instanceof SpecialSubscription)) {
-      for (let j = 0; j < subscription._filterText.length; j++) {
-        const filter = subscription._filterText[j];
-        filters.push(filter);
-      }
-    }
-  }
-  return filters;
+async function getUserFilters() {
+  return ewe.filters.getUserFilters();
 }
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -265,56 +212,47 @@ const isWhitelistFilter = function (text) {
 
 // Look for a custom filter that would whitelist the 'url' parameter
 // and if any exist, remove the first one.
-// Inputs: url:string - a URL that may be whitelisted by a custom filter
+// Inputs: url:string - a URL that may be allowlisted by a custom filter
+//         tabId: integer - tab id of the tab that may be allowlisted by a custom filter
 // Returns: true if a filter was found and removed; false otherwise.
-const tryToUnwhitelist = function (pageUrl) {
+const tryToUnwhitelist = async function (pageUrl, tabId) {
   const url = pageUrl.replace(/#.*$/, ''); // Whitelist ignores anchors
-  const customFilters = getUserFilters();
+  const customFilters = await getUserFilters();
   if (!customFilters || !customFilters.length === 0) {
     return false;
   }
 
+  /* eslint-disable no-await-in-loop */
   for (let i = 0; i < customFilters.length; i++) {
-    const text = customFilters[i];
+    const { text } = customFilters[i];
     const whitelist = text.search(/@@\*\$document,domain=~/);
-
     // Blacklist site, which is whitelisted by global @@*&document,domain=~
     // filter
     if (whitelist > -1) {
       // Remove protocols
       const [finalUrl] = url.replace(/((http|https):\/\/)?(www.)?/, '').split(/[/?#]/);
-      const oldFilter = Filter.fromText(text);
-      filterStorage.removeFilter(oldFilter);
-      const newFilter = Filter.fromText(`${text}|~${finalUrl}`);
-      filterStorage.addFilter(newFilter);
+      await ewe.filters.remove([text]);
+      await ewe.filters.remove([`${text}|~${finalUrl}`]);
       return true;
     }
-
-    if (isWhitelistFilter(text)) {
-      try {
-        const filter = Filter.fromText(text);
-        if (filter.matches(URLRequest.from(url), URLFilter.typeMap.DOCUMENT, false)) {
-          filterStorage.removeFilter(filter);
-          return true;
-        }
-      } catch (ex) {
-        // do nothing;
-      }
+    if (isWhitelistFilter(text) && ewe.filters.getAllowingFilters(tabId).includes(text)) {
+      await ewe.filters.remove([text]);
+      return true;
     }
   }
   return false;
 };
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'tryToUnwhitelist' || !message.url) {
-    return;
+/* eslint-disable consistent-return */
+browser.runtime.onMessage.addListener((message) => {
+  if (message.command === 'tryToUnwhitelist' && message.url) {
+    return tryToUnwhitelist(message.url, message.id).then(results => results);
   }
-  sendResponse({ unwhitelisted: tryToUnwhitelist(message.url) });
 });
 
 // Removes a custom filter entry.
 // Inputs: host:domain of the custom filters to be reset.
-const removeCustomFilter = function (host) {
-  const customFilters = getUserFilters();
+const removeCustomFilter = async function (host) {
+  const customFilters = await getUserFilters();
   if (!customFilters || !customFilters.length === 0) {
     return;
   }
@@ -323,12 +261,10 @@ const removeCustomFilter = function (host) {
 
   for (let i = 0; i < customFilters.length; i++) {
     const entry = customFilters[i];
-
     // If the identifier is at the start of the entry
     // then delete it.
-    if (entry.indexOf(identifier) === 0) {
-      const filter = Filter.fromText(entry);
-      filterStorage.removeFilter(filter);
+    if (entry.text.indexOf(identifier) === 0) {
+      ewe.filters.remove([entry.text]);
     }
   }
 };
@@ -405,7 +341,7 @@ const isSelectorExcludeFilter = function (text) {
 };
 
 const getAdblockUserId = function () {
-  return STATS.userId();
+  return TELEMETRY.userId();
 };
 
 // INFO ABOUT CURRENT PAGE
@@ -428,7 +364,7 @@ const pageIsUnblockable = function (url) {
 // Returns true if the page is whitelisted.
 // Called from a content script
 const pageIsWhitelisted = function (page) {
-  const whitelisted = checkAllowlisted(page);
+  const whitelisted = !!ewe.filters.getAllowingFilters(page.id).length;
   return (whitelisted !== undefined && whitelisted !== null);
 };
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -440,7 +376,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 const pausedKey = 'paused';
 // white-list all blocking requests regardless of frame / document, but still allows element hiding
-const pausedFilterText1 = '@@';
+const pausedFilterText1 = '@@*';
 // white-list all documents, which prevents element hiding
 const pausedFilterText2 = '@@*$document';
 
@@ -454,16 +390,14 @@ const adblockIsPaused = function (newValue) {
     return (sessionStorageGet(pausedKey) === true);
   }
 
-  // Add a filter to white list every page.
-  const result1 = parseFilter(pausedFilterText1);
-  const result2 = parseFilter(pausedFilterText2);
   if (newValue === true) {
-    filterStorage.addFilter(result1.filter);
-    filterStorage.addFilter(result2.filter);
-    chromeStorageSetHelper(pausedKey, true);
+    chromeStorageSetHelper(pausedKey, true, () => {
+      ewe.filters.add([pausedFilterText1]);
+      ewe.filters.add([pausedFilterText2]);
+    });
   } else {
-    filterStorage.removeFilter(result1.filter);
-    filterStorage.removeFilter(result2.filter);
+    ewe.filters.remove([pausedFilterText1]);
+    ewe.filters.remove([pausedFilterText2]);
     browser.storage.local.remove(pausedKey);
   }
   sessionStorageSet(pausedKey, newValue);
@@ -498,8 +432,7 @@ const domainPauseChangeHelper = function (tabId, newDomain) {
   for (const aDomain in storedDomainPauses) {
     if (storedDomainPauses[aDomain] === tabId && aDomain !== newDomain) {
       // Remove the filter that white-listed the domain
-      const result = parseFilter(`@@${aDomain}$document`);
-      filterStorage.removeFilter(result.filter);
+      ewe.filters.remove([`@@${aDomain}$document`]);
       delete storedDomainPauses[aDomain];
 
       // save updated domain pauses
@@ -569,10 +502,9 @@ const adblockIsDomainPaused = function (activeTab, newValue) {
   }
 
   // set or delete a domain pause
-  const result = parseFilter(`@@${activeDomain}$document`);
   if (newValue === true) {
     // add a domain pause
-    filterStorage.addFilter(result.filter);
+    ewe.filters.add([`@@${activeDomain}$document`]);
     storedDomainPauses[activeDomain] = activeTab.id;
     browser.tabs.onUpdated.removeListener(domainPauseNavigationHandler);
     browser.tabs.onRemoved.removeListener(domainPauseClosedTabHandler);
@@ -580,7 +512,7 @@ const adblockIsDomainPaused = function (activeTab, newValue) {
     browser.tabs.onRemoved.addListener(domainPauseClosedTabHandler);
   } else {
     // remove the domain pause
-    filterStorage.removeFilter(result.filter);
+    ewe.filters.remove([`@@${activeDomain}$document`]);
     delete storedDomainPauses[activeDomain];
   }
 
@@ -599,44 +531,33 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // unpause / remove the white-list all entry at startup.
 browser.storage.local.get(pausedKey).then((response) => {
   if (response[pausedKey]) {
-    const pauseHandler = function () {
-      filterNotifier.off('load', pauseHandler);
-      const result1 = parseFilter(pausedFilterText1);
-      const result2 = parseFilter(pausedFilterText2);
-      filterStorage.removeFilter(result1.filter);
-      filterStorage.removeFilter(result2.filter);
+    initialize.then(() => {
+      ewe.filters.remove([pausedFilterText1]);
+      ewe.filters.remove([pausedFilterText2]);
       browser.storage.local.remove(pausedKey);
-    };
-
-    filterNotifier.on('load', pauseHandler);
+    });
   }
 });
+
 
 // If AdBlock was domain paused on shutdown, then unpause / remove
 // all domain pause white-list entries at startup.
 browser.storage.local.get(domainPausedKey).then((response) => {
-  try {
-    const storedDomainPauses = response[domainPausedKey];
-    if (!jQuery.isEmptyObject(storedDomainPauses)) {
-      const domainPauseHandler = function () {
-        filterNotifier.off('load', domainPauseHandler);
-        for (const aDomain in storedDomainPauses) {
-          const result = parseFilter(`@@${aDomain}$document`);
-          filterStorage.removeFilter(result.filter);
-        }
-        browser.storage.local.remove(domainPausedKey);
-      };
-      filterNotifier.on('load', domainPauseHandler);
-    }
-  } catch (err) {
-    // do nothing
+  const storedDomainPauses = response[domainPausedKey];
+  if (!jQuery.isEmptyObject(storedDomainPauses)) {
+    initialize.then(() => {
+      for (const aDomain in storedDomainPauses) {
+        ewe.filters.remove([`@@${aDomain}$document`]);
+      }
+      browser.storage.local.remove(domainPausedKey);
+    });
   }
 });
 
 browser.commands.onCommand.addListener((command) => {
   if (command === 'toggle_pause') {
     adblockIsPaused(!adblockIsPaused());
-    recordGeneralMessage('pause_shortcut_used');
+    ServerMessages.recordGeneralMessage('pause_shortcut_used');
   }
 });
 
@@ -679,7 +600,6 @@ const getTab = function (tabId) {
 // domainPaused: bool - whether the current tab's URL is paused
 // blockCountPage: int - number of ads blocked on the current page
 // blockCountTotal: int - total number of ads blocked since install
-// showStatsInPopup: bool - whether to show stats in popup menu
 // customFilterCount: int - number of custom rules for the current tab's URL
 // showMABEnrollment: bool - whether to show MAB enrollment
 // popupMenuThemeCTA: string - name of current popup menu CTA theme
@@ -705,7 +625,7 @@ const getCurrentTabInfo = function (secondTime, tabId) {
       try {
         const page = new ext.Page(tab);
         const disabledSite = pageIsUnblockable(page.url.href);
-        const customFilterCheckUrl = info.disabledSite ? undefined : page.url.hostname;
+        const customFilterCheckUrl = disabledSite ? undefined : page.url.hostname;
 
         const result = {
           disabledSite,
@@ -715,8 +635,7 @@ const getCurrentTabInfo = function (secondTime, tabId) {
           paused: adblockIsPaused(),
           domainPaused: adblockIsDomainPaused({ url: page.url.href, id: page.id }),
           blockCountPage: getBlockedPerPage(tab),
-          blockCountTotal: Prefs.blocked_total,
-          showStatsInPopup: Prefs.show_statsinpopup,
+          blockCountTotal: Stats.blocked_total,
           customFilterCount: countCache.getCustomFilterCount(customFilterCheckUrl),
           showMABEnrollment: License.shouldShowMyAdBlockEnrollment(),
           popupMenuThemeCTA: License.getCurrentPopupMenuThemeCTA(),
@@ -726,13 +645,13 @@ const getCurrentTabInfo = function (secondTime, tabId) {
           lastPostStatusCode: SyncService.getLastPostStatusCode(),
           newBadgeTextReason: getNewBadgeTextReason(),
         };
-
         if (!disabledSite) {
-          result.whitelisted = checkAllowlisted(page);
+          result.whitelisted = !!ewe.filters.getAllowingFilters(page.id).length;
+          result.whitelistedText = ewe.filters.getAllowingFilters(page.id);
         }
         if (License && License.isActiveLicense()) {
           result.activeLicense = true;
-          result.subscriptions = getSubscriptionsMinusText();
+          result.subscriptions = SubscriptionAdapter.getSubscriptionsMinusText();
         }
         if (
           getSettings()
@@ -769,11 +688,12 @@ const getCurrentTabInfo = function (secondTime, tabId) {
     });
   });
 };
+
+/* eslint-disable consistent-return */
 browser.runtime.onMessage.addListener((message) => {
-  if (message.command !== 'getCurrentTabInfo') {
-    return undefined;
+  if (message.command === 'getCurrentTabInfo') {
+    return getCurrentTabInfo(false, message.tabId).then(results => results);
   }
-  return getCurrentTabInfo(false, message.tabId).then(results => results);
 });
 
 // BETA CODE
@@ -787,79 +707,11 @@ if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
 }
 
 const updateStorageKey = 'last_known_version';
-if (browser.runtime.id) {
-  let updateTabRetryCount = 0;
-  const getUpdatedURL = function () {
-    const encodedVersion = encodeURIComponent('4.46.0');
-    let updatedURL = `https://getadblock.com/update/${STATS.flavor.toLowerCase()}/${encodedVersion}/?u=${STATS.userId()}`;
-    if (License && License.isActiveLicense()) {
-      updatedURL = `https://getadblock.com/update/p/${encodedVersion}/?u=${STATS.userId()}`;
-    }
-    updatedURL = `${updatedURL}&bc=${Prefs.blocked_total}`;
-    updatedURL = `${updatedURL}&rt=${updateTabRetryCount}`;
-    return updatedURL;
-  };
-  const waitForUserAction = function () {
-    browser.tabs.onCreated.removeListener(waitForUserAction);
-    setTimeout(() => {
-      updateTabRetryCount += 1;
-      // eslint-disable-next-line no-use-before-define
-      openUpdatedPage();
-    }, 10000); // 10 seconds
-  };
-  const openUpdatedPage = function () {
-    const updatedURL = getUpdatedURL();
-    browser.tabs.create({ url: updatedURL });
-  };
-  const shouldShowUpdate = function () {
-    const checkQueryState = function () {
-      browser.idle.queryState(60, (state) => {
-        if (state === 'active') {
-          openUpdatedPage();
-        } else {
-          browser.tabs.onCreated.removeListener(waitForUserAction);
-          browser.tabs.onCreated.addListener(waitForUserAction);
-        }
-      });
-    };
-    if (browser.management && browser.management.getSelf) {
-      browser.management.getSelf().then((extensionInfo) => {
-        if (extensionInfo && extensionInfo.installType !== 'admin') {
-          License.ready().then(checkQueryState);
-        }
-      });
-    } else {
-      License.ready().then(checkQueryState);
-    }
-  };
-  const slashUpdateReleases = ['4.46.0', '4.46.1', '4.46.2'];
-  // Display updated page after each update
-  browser.runtime.onInstalled.addListener((details) => {
-    const lastKnownVersion = localStorage.getItem(updateStorageKey);
-    const currentVersion = browser.runtime.getManifest().version;
-    // don't open the /update page for Ukraine or Russian users.
-    const shouldShowUpdateForLocale = function () {
-      const language = determineUserLanguage();
-      return !(language && (language.startsWith('ru') || language.startsWith('uk')));
-    };
-    if (
-      details.reason === 'update'
-      && shouldShowUpdateForLocale()
-      && slashUpdateReleases.includes(currentVersion)
-      && !slashUpdateReleases.includes(lastKnownVersion)
-      && browser.runtime.id !== 'pljaalgmajnlogcgiohkhdmgpomjcihk'
-    ) {
-      settings.onload().then(() => {
-        if (!getSettings().suppress_update_page) {
-          STATS.untilLoaded(() => {
-            Prefs.untilLoaded.then(shouldShowUpdate);
-          });
-        }
-      });
-    }
-    localStorage.setItem(updateStorageKey, currentVersion);
-  });
-}
+browser.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'update' || details.reason === 'install') {
+    localStorage.setItem(updateStorageKey, browser.runtime.getManifest().version);
+  }
+});
 
 const openTab = function (url) {
   browser.tabs.create({ url });
@@ -875,8 +727,28 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // DEBUG INFO
 
+async function getCustomFilterMetaData() {
+  const currentUserFilters = await getUserFilters();
+  if (!currentUserFilters || currentUserFilters.length === 0) {
+    return {};
+  }
+  return Promise.all(
+    currentUserFilters.map(async (rule) => {
+      if (rule && rule.text) {
+        try {
+          const metaData = await ewe.filters.getMetadata(rule.text);
+          return { text: rule.text, metaData };
+        } catch {
+          return { text: rule.text };
+        }
+      }
+    }),
+  );
+}
+
+
 // Get debug info as a JSON object for bug reporting and ad reporting
-const getDebugInfo = function (callback) {
+const getDebugInfo = async function (callback) {
   const response = {};
   response.otherInfo = {};
 
@@ -897,22 +769,21 @@ const getDebugInfo = function (callback) {
 
   // Get subscribed filter lists
   const subscriptionInfo = {};
-  const subscriptions = getSubscriptionsMinusText();
+  const subscriptions = SubscriptionAdapter.getSubscriptionsMinusText();
   for (const id in subscriptions) {
     if (subscriptions[id].subscribed) {
       subscriptionInfo[id] = {};
       subscriptionInfo[id].lastSuccess = new Date(subscriptions[id].lastSuccess * 1000);
-      subscriptionInfo[id].lastDownload = new Date(subscriptions[id]._lastDownload * 1000);
-      subscriptionInfo[id].downloadCount = subscriptions[id].downloadCount;
+      subscriptionInfo[id].lastDownload = new Date(subscriptions[id].lastDownload * 1000);
       subscriptionInfo[id].downloadStatus = subscriptions[id].downloadStatus;
     }
   }
 
   response.subscriptions = subscriptionInfo;
 
-  const userFilters = getUserFilters();
+  const userFilters = await getUserFilters();
   if (userFilters && userFilters.length) {
-    response.customFilters = userFilters.join('\n');
+    response.customFilters = userFilters.map(filter => filter.text).join('\n');
   }
 
   // Get settings
@@ -924,10 +795,10 @@ const getDebugInfo = function (callback) {
 
   response.settings = adblockSettings;
   response.prefs = JSON.stringify(Prefs);
-  response.otherInfo.browser = STATS.browser;
-  response.otherInfo.browserVersion = STATS.browserVersion;
-  response.otherInfo.osVersion = STATS.osVersion;
-  response.otherInfo.os = STATS.os;
+  response.otherInfo.browser = TELEMETRY.browser;
+  response.otherInfo.browserVersion = TELEMETRY.browserVersion;
+  response.otherInfo.osVersion = TELEMETRY.osVersion;
+  response.otherInfo.os = TELEMETRY.os;
   if (window.blockCounts) {
     response.otherInfo.blockCounts = blockCounts.get();
   }
@@ -978,10 +849,20 @@ const getDebugInfo = function (callback) {
                 response.otherInfo[key] = messages[i];
               }
             }
+            const addMetaDataInfo = function () {
+              getCustomFilterMetaData()
+                .then((results) => {
+                  response.otherInfo.customRuleMetaData = results;
+                  if (typeof callback === 'function') {
+                    callback(response);
+                  }
+                });
+            };
+
             const getDebugLicenseInfo = function () {
               if (License.isActiveLicense()) {
                 response.otherInfo.licenseInfo = {};
-                response.otherInfo.licenseInfo.extensionGUID = STATS.userId();
+                response.otherInfo.licenseInfo.extensionGUID = TELEMETRY.userId();
                 response.otherInfo.licenseInfo.licenseId = License.get().licenseId;
                 if (getSettings().sync_settings) {
                   const syncInfo = {};
@@ -990,7 +871,7 @@ const getDebugInfo = function (callback) {
                   syncInfo.SyncCommitLog = SyncService.getSyncLog();
                   response.otherInfo.syncInfo = syncInfo;
                 }
-                browser.alarms.getAll((alarms) => {
+                browser.alarms.getAll().then((alarms) => {
                   if (alarms && alarms.length > 0) {
                     response.otherInfo['Alarm info'] = `length: ${alarms.length}`;
                     for (let i = 0; i < alarms.length; i++) {
@@ -1008,21 +889,19 @@ const getDebugInfo = function (callback) {
                       const customChannel = channels.channelGuide[customChannelId].channel;
                       customChannel.getTotalBytesInUse().then((result) => {
                         response.otherInfo['Custom Channel total bytes in use'] = result;
-                        if (typeof callback === 'function') {
-                          callback(response);
-                        }
+                        addMetaDataInfo();
                       });
-                    } else if (typeof callback === 'function') {
-                      callback(response);
+                    } else {
+                      addMetaDataInfo();
                     }
                   });
                 });
-              } else if (typeof callback === 'function') { // License is not active
-                callback(response);
+              } else { // License is not active
+                addMetaDataInfo();
               }
             };
             if (browser.permissions && browser.permissions.getAll) {
-              browser.permissions.getAll((allPermissions) => {
+              browser.permissions.getAll().then((allPermissions) => {
                 response.otherInfo.hostPermissions = allPermissions;
                 getDebugLicenseInfo();
               });
@@ -1039,10 +918,8 @@ const getDebugInfo = function (callback) {
 
 // Called when user explicitly requests filter list updates
 function updateFilterLists() {
-  for (const subscription of filterStorage.subscriptions()) {
-    if (subscription instanceof DownloadableSubscription) {
-      synchronizer.execute(subscription, true, true);
-    }
+  for (const subscription of ewe.subscriptions.getDownloadable()) {
+    ewe.subscriptions.sync(subscription.url);
   }
 }
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -1059,8 +936,8 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 function checkUpdateProgress() {
   let inProgress = false;
   let filterError = false;
-  for (const subscription of filterStorage.subscriptions()) {
-    if (synchronizer.isExecuting(subscription.url)) {
+  for (const subscription of ewe.subscriptions.getDownloadable()) {
+    if (subscription.downloading) {
       inProgress = true;
     } else if (subscription.downloadStatus && subscription.downloadStatus !== 'synchronize_ok') {
       filterError = true;
@@ -1075,8 +952,8 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse(checkUpdateProgress());
 });
 
-STATS.untilLoaded(() => {
-  STATS.startPinging();
+TELEMETRY.untilLoaded(() => {
+  TELEMETRY.startPinging();
   setUninstallURL();
 });
 
@@ -1140,11 +1017,11 @@ Object.assign(window, {
   isSelectorExcludeFilter,
   pausedFilterText1,
   pausedFilterText2,
-  isLanguageSpecific,
   isAcceptableAds,
   isAcceptableAdsPrivacy,
   rateUsCtaKey,
   mailCtaKey,
   vpnWaitlistCtaKey,
   updateStorageKey,
+  getCustomFilterMetaData,
 });

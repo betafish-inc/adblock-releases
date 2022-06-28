@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, translate, bindEnterClickToDefault, mayOpenDialogUi:true, i18nJoin,
@@ -17,6 +17,7 @@ if (typeof window.mayOpenDialogUi === 'undefined') {
 
 // topOpenWhitelistUI displays the whitelist wizard completion page if it's not already open.
 // See README for details.
+/* eslint-disable-next-line no-unused-vars */
 function topOpenWhitelistCompletionUI(options) {
   if (!mayOpenDialogUi) {
     return;

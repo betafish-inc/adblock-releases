@@ -1,8 +1,11 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, exports, require, log, getSettings
+/* global browser, log,
  */
+
+import { getSettings } from '../settings';
+
 const OnPageIconManager = (function initialize() {
   const MAX_MSG_TEXT_LENGTH = 280;
 
@@ -95,4 +98,4 @@ const OnPageIconManager = (function initialize() {
   };
 }());
 
-exports.OnPageIconManager = OnPageIconManager;
+export default OnPageIconManager;

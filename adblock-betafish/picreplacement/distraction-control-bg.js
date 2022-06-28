@@ -1,7 +1,10 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, STATS, getUILanguage, getSubscriptionsMinusText */
+/* global browser */
+
+import { TELEMETRY } from '../telemetry';
+import SubscriptionAdapter from '../subscriptionadapter';
 
 const sendDCReport = function (url, type, id) {
   if (!url || !type) {
@@ -10,14 +13,14 @@ const sendDCReport = function (url, type, id) {
   const reportData = {
     url,
     type,
-    platform: STATS && `browser:${STATS.browser}, browser version:${STATS.browserVersion}, OS:${STATS.os}, OS version:${STATS.osVersion}`,
-    locale: getUILanguage(),
+    platform: TELEMETRY && `browser:${TELEMETRY.browser}, browser version:${TELEMETRY.browserVersion}, OS:${TELEMETRY.os}, OS version:${TELEMETRY.osVersion}`,
+    locale: browser.i18n.getUILanguage(),
     version: browser.runtime.getManifest().version,
   };
   if (id) {
-    const subs = getSubscriptionsMinusText();
+    const subs = SubscriptionAdapter.getSubscriptionsMinusText();
     if (subs && subs[id]) {
-      const lastUpdate = subs[id].lastDownload || subs[id]._lastDownload || 0;
+      const lastUpdate = subs[id].lastDownload || 0;
       reportData.filterListLastUpdate = new Date(lastUpdate * 1000);
     }
   }

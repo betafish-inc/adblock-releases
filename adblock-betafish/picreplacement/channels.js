@@ -1,59 +1,79 @@
-'use strict';
+
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global require, getUrlFromId, getSettings, storageGet, storageSet */
+/* global settings, getSettings, setSetting, storageGet, storageSet, browser, ext */
 
-const { Subscription } = require('subscriptionClasses');
-const { filterStorage } = require('filterStorage');
-const { EventEmitter } = require('events');
-const {
-  imageSizesMap, WIDE, TALL, SKINNYWIDE, SKINNYTALL,
-} = require('./image-sizes-map');
+import { contentTypes } from 'adblockpluscore/lib/contentTypes';
+import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
+import { EventEmitter } from '../../vendor/adblockplusui/adblockpluschrome/lib/events';
+import {
+  WIDE, TALL, SKINNYWIDE, SKINNYTALL,
+} from './image-sizes-map';
+import SubscriptionAdapter from '../subscriptionadapter';
+import CustomChannel from './custom-channel';
+import CatsChannel from './cat-channel';
+import DogsChannel from './dog-channel';
+import LandscapesChannel from './landscape-channel';
+import BirdChannel from './birds-channel';
+import FoodChannel from './food-channel';
+import GoatsChannel from './goat-channel';
+import OceanChannel from './ocean-channel';
+import UnknownChannel from './unknown-channel';
 
-const minjQuery = require('../jquery/jquery-3.5.1.min.js');
 
-const channelsNotifier = new EventEmitter();
-
-const subscription1 = Subscription.fromURL(getUrlFromId('antisocial'));
-const subscription2 = Subscription.fromURL(getUrlFromId('annoyances'));
-
-// Inputs: width:int, height:int, url:url, title:string, attributionUrl:url
-function Listing(data) {
-  this.width = data.width;
-  this.height = data.height;
-  this.url = data.url;
-  this.title = data.title;
-  this.attributionUrl = data.attributionUrl;
-  this.channelName = data.channelName;
-  if (data.name) {
-    this.name = data.name;
-  }
-  if (data.thumbURL) {
-    this.thumbURL = data.thumbURL;
-  }
-  if (data.userLink) {
-    this.userLink = data.userLink;
-  }
-  if (data.anySize) {
-    this.anySize = data.anySize;
-  }
-  if (data.type) {
-    this.type = data.type;
-  }
-  if (data.ratio) {
-    this.ratio = data.ratio;
-  }
-  if (data.customImage) {
-    this.customImage = data.customImage;
-  }
+const resourceTypes = new Map();
+for (const type in contentTypes) {
+  resourceTypes.set(type.toLowerCase(), contentTypes[type]);
 }
+resourceTypes.set('sub_frame', contentTypes.SUBDOCUMENT);
+resourceTypes.set('beacon', contentTypes.PING);
+resourceTypes.set('imageset', contentTypes.IMAGE);
+resourceTypes.set('object_subrequest', contentTypes.OBJECT);
+resourceTypes.set('main_frame', contentTypes.DOCUMENT);
+
+const typeSelectors = new Map([
+  [contentTypes.IMAGE, 'img,input'],
+  [contentTypes.MEDIA, 'audio,video'],
+  [contentTypes.SUBDOCUMENT, 'frame,iframe,object,embed'],
+  [contentTypes.OBJECT, 'object,embed'],
+]);
+
+const REPORTING_OPTIONS = {
+  filterType: 'all',
+  includeElementHiding: true,
+};
+
+
+// const {
+//  getUrlFromId,
+//  getSubscriptionsMinusText,
+// } = SubscriptionAdapter;
+const subscription1 = SubscriptionAdapter.getUrlFromId('antisocial');
+const subscription2 = SubscriptionAdapter.getUrlFromId('annoyances');
+
+const channelObjects = {
+  CustomChannel,
+  CatsChannel,
+  DogsChannel,
+  LandscapesChannel,
+  BirdChannel,
+  FoodChannel,
+  GoatsChannel,
+  OceanChannel,
+  UnknownChannel,
+};
+
+export const channelsNotifier = new EventEmitter();
 
 // Contains and provides access to all the photo channels.
-function Channels() {
-  this.channelGuide = undefined; // maps channel ids to channels and metadata
-  this.loadFromStorage();
-}
-Channels.prototype = {
+export class Channels {
+  constructor(license) {
+    this.license = license;
+    this.channelGuide = undefined; // maps channel ids to channels and metadata
+    this.loadFromStorage();
+    this.initializeListeners();
+  }
+
   // Inputs:
   //   name:string - a Channel class name.
   //   param:object - the single ctor parameter to the Channel class.
@@ -61,9 +81,9 @@ Channels.prototype = {
   // Returns:
   //   id of newly created channel, or undefined if the channel already existed.
   add(data) {
-    let Klass = window[data.name];
+    let Klass = channelObjects[data.name];
     if (!Klass) {
-      Klass = window.UnknownChannel;
+      Klass = channelObjects.UnknownChannel;
     }
     const dataParam = JSON.stringify(data.param);
     for (const id in this.channelGuide) {
@@ -81,20 +101,14 @@ Channels.prototype = {
       channel,
     };
     this.saveToStorage();
-    const that = this;
-    minjQuery(channel).on('updated', () => {
-      if (that.channelGuide[id].enabled) {
-        that.channelGuide[id].channel.prefetch();
-      }
-    });
     channel.refresh();
     return id;
-  },
+  }
 
   remove(channelId) {
     delete this.channelGuide[channelId];
     this.saveToStorage();
-  },
+  }
 
   // Return read-only map from each channel ID to
   // { name, param, enabled }.
@@ -110,7 +124,7 @@ Channels.prototype = {
     }
 
     return results;
-  },
+  }
 
   // Return id for channel name
   getIdByName(name) {
@@ -120,19 +134,19 @@ Channels.prototype = {
       }
     }
     return undefined;
-  },
+  }
 
   isCustomChannel(id) {
     return (this.getIdByName('CustomChannel') === id);
-  },
+  }
 
   isCustomChannelEnabled() {
     return (this.channelGuide[this.getIdByName('CustomChannel')].enabled);
-  },
+  }
 
   getListings(id) {
     return this.channelGuide[id].channel.getListings();
-  },
+  }
 
   setEnabled(id, enabled) {
     const originalValue = this.channelGuide[id].enabled;
@@ -141,7 +155,7 @@ Channels.prototype = {
     if (originalValue !== enabled) {
       channelsNotifier.emit('channels.changed', id, enabled, originalValue);
     }
-  },
+  }
 
   refreshAllEnabled() {
     for (const id in this.channelGuide) {
@@ -150,7 +164,7 @@ Channels.prototype = {
         data.channel.refresh();
       }
     }
-  },
+  }
 
   isAnyEnabled() {
     for (const id in this.channelGuide) {
@@ -160,7 +174,7 @@ Channels.prototype = {
       }
     }
     return false;
-  },
+  }
 
   disableAllChannels() {
     for (const id in this.channelGuide) {
@@ -169,7 +183,7 @@ Channels.prototype = {
         channelsNotifier.emit('channels.changed', id, false, true);
       }
     }
-  },
+  }
 
   // Returns a random Listing from all enabled channels or from channel
   // |channelId| if specified, trying to match the ratio of |width| and
@@ -181,8 +195,8 @@ Channels.prototype = {
     // if the element to be replace is 'fixed' in position, it may make for bad pic
     // replacement element.
     if (opts.position === 'fixed') {
-      for (const sub of filterStorage.subscriptions()) {
-        if (sub.url === subscription1.url || sub.url === subscription2.url) {
+      for (const sub of SubscriptionAdapter.getSubscriptionsMinusText()) {
+        if (sub.url === subscription1 || sub.url === subscription2) {
           return undefined;
         }
       }
@@ -270,7 +284,7 @@ Channels.prototype = {
     }
 
     return undefined;
-  },
+  }
 
   // adds any new or missing channels (in a disabled state) to the users channel guide
   addNewChannels() {
@@ -284,7 +298,7 @@ Channels.prototype = {
         });
       }
     }
-  },
+  }
 
   loadFromStorage() {
     this.channelGuide = {};
@@ -295,7 +309,7 @@ Channels.prototype = {
       }
     }
     this.addNewChannels();
-  },
+  }
 
   saveToStorage() {
     const toStore = [];
@@ -304,88 +318,83 @@ Channels.prototype = {
       toStore.push(guide[id]);
     }
     storageSet('channels', toStore);
-  },
-};
+  }
 
+  static getContentType(details) {
+    return resourceTypes.get(details.type) || contentTypes.OTHER;
+  }
 
-// Base class representing a channel of photos.
-// Concrete constructors must accept a single argument, because Channels.add()
-// relies on that.
-function Channel() {
-  this.listings = [];
+  static getFrameId(details) {
+    return details.type === 'sub_frame' ? details.parentFrameId
+      : details.frameId;
+  }
+
+  // Ignore EasyPrivacy rules, since they can cause issue with odd image swaps
+  static shouldUseFilter(filter) {
+    if (!filter) {
+      return false;
+    }
+
+    for (const subscription of ewe.subscriptions.getForFilter(filter.text)) {
+      if (subscription.downloadable && subscription.title === 'EasyPrivacy') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  filterListener({ request, filter }) {
+    if (getSettings().picreplacement && this.license.isActiveLicense()) {
+      if (!Channels.shouldUseFilter(filter)) {
+        return;
+      }
+      if (request
+          && request.tabId
+          && filter
+          && filter.type === 'elemhide'
+          && filter.selector && filter.enabled) {
+        const msgDetail = { hidingSelector: filter.selector, command: 'addSelector' };
+        browser.tabs.sendMessage(request.tabId, msgDetail, { frameId: request.frameId });
+      } else if (request
+        && request.tabId
+        && filter
+        && filter.type === 'blocking'
+        && filter.enabled) {
+        const selector = typeSelectors.get(Channels.getContentType(request));
+        const frameId = Channels.getFrameId(request);
+        const msg = { selector, command: 'addBlockingSelector', url: request.url };
+        browser.tabs.sendMessage(request.tabId, msg, { frameId });
+      }
+    } else if (!getSettings().picreplacement) {
+      ewe.reporting.onBlockableItem.removeListener(this.filterListener, REPORTING_OPTIONS);
+    }
+  }
+
+  initializeListeners() {
+    this.license.ready().then(() => {
+      settings.onload().then(() => {
+        if (getSettings().picreplacement && this.license.isActiveLicense()) {
+          ewe.reporting.onBlockableItem.removeListener(this.filterListener, REPORTING_OPTIONS);
+          ewe.reporting.onBlockableItem.addListener(
+            this.filterListener.bind(this), REPORTING_OPTIONS,
+          );
+        }
+      });
+    });
+
+    browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.message !== 'get_random_listing') {
+        return;
+      }
+      const myPage = ext.getPage(sender.tab.id);
+      if (!!ewe.filters.getAllowingFilters(myPage.id).length || !this.license.isActiveLicense()) {
+        sendResponse({ disabledOnPage: true });
+      }
+      const result = this.randomListing(request.opts);
+      if (result) {
+        sendResponse(result);
+      }
+      sendResponse({ disabledOnPage: true });
+    });
+  }
 }
-Channel.prototype = {
-  getListings() {
-    return this.listings.slice(0); // shallow copy
-  },
-
-  listingFactory(widthParam, heightParam, url, title, channelName) {
-    let width = widthParam;
-    let height = heightParam;
-    const type = this.calculateType(width, height);
-
-    if (typeof width === 'number') {
-      width = `${width}`;
-    }
-    if (typeof height === 'number') {
-      height = `${height}`;
-    }
-    return new Listing({
-      width,
-      height,
-      url,
-      attributionUrl: url,
-      type,
-      ratio: Math.max(width, height) / Math.min(width, height),
-      title,
-      channelName, // message.json key for channel name
-    });
-  },
-
-  // Update the channel's listings and trigger an 'updated' event.
-  refresh() {
-    const that = this;
-    this.getLatestListings((listings) => {
-      that.listings = listings;
-      minjQuery(that).trigger('updated');
-    });
-  },
-
-  // Load all photos so that they're in the cache.
-  prefetch() {
-    // current - noop, since all of the URLs are hard coded.
-  },
-
-  getLatestListings() {
-    throw new Error('Implemented by subclass. Call callback with up-to-date listings.');
-  },
-
-  calculateType(w, h) {
-    let width = w;
-    let height = h;
-
-    if (typeof width === 'string') {
-      width = parseInt(width, 10);
-    }
-    if (typeof height === 'string') {
-      height = parseInt(height, 10);
-    }
-    let type = '';
-    const ratio = Math.max(width, height) / Math.min(width, height);
-    if (ratio >= 1.5 && ratio < 7) {
-      type = (width > height ? imageSizesMap.get('wide') : imageSizesMap.get('tall'));
-    } else if (ratio > 7) {
-      type = (width > height ? imageSizesMap.get('skinnywide') : imageSizesMap.get('skinnytall'));
-    } else {
-      type = ((width > 125 || height > 125) ? imageSizesMap.get('big') : imageSizesMap.get('small'));
-    }
-    return type;
-  },
-};
-
-Object.assign(window, {
-  Channel,
-  Channels,
-  Listing,
-  channelsNotifier,
-});
