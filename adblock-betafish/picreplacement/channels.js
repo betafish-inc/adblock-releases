@@ -39,8 +39,8 @@ const typeSelectors = new Map([
 ]);
 
 const REPORTING_OPTIONS = {
-  filterType: 'all',
-  includeElementHiding: true,
+  filterType: 'blocking',
+  includeElementHiding: false,
 };
 
 

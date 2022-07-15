@@ -15,8 +15,8 @@ const LocalDataCollection = (function getLocalDataCollection() {
   const EXT_STATS_KEY = 'ext_stats_key';
   const STORED_DATA_CLEAN = 'STORED_DATA_CLEAN';
   const REPORTING_OPTIONS = {
-    filterType: 'all',
-    includeElementHiding: true,
+    filterType: 'blocking',
+    includeElementHiding: false,
   };
 
   // Setup memory cache

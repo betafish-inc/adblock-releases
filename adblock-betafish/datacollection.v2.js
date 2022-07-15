@@ -18,7 +18,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   const TIME_LAST_PUSH_KEY = 'timeLastPush';
   const REPORTING_OPTIONS = {
     filterType: 'all',
-    includeElementHiding: true,
+    includeElementHiding: false,
   };
 
   // Setup memory cache
