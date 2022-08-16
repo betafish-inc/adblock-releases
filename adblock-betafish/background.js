@@ -952,9 +952,11 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse(checkUpdateProgress());
 });
 
-TELEMETRY.untilLoaded(() => {
-  TELEMETRY.startPinging();
-  setUninstallURL();
+initialize.then(() => {
+  TELEMETRY.untilLoaded(() => {
+    TELEMETRY.startPinging();
+    setUninstallURL();
+  });
 });
 
 // Create the "blockage stats" for the uninstall logic ...
