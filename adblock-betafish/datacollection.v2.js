@@ -57,13 +57,11 @@ const DataCollectionV2 = (function getDataCollectionV2() {
         }
         dataCollectionCache.filters[text].firstParty[domain].hits += 1;
       }
-      for (const sub of ewe.subscriptions.getDownloadable()) {
-        const dataCollectionSubscriptions = dataCollectionCache.filters[text].subscriptions;
-        if (!sub.disabled && sub.url && dataCollectionSubscriptions.indexOf(sub.url) === -1) {
-          if (sub.url.length > 256) {
-            dataCollectionCache.filters[text].subscriptions.push(sub.substring(0, 256));
-          } else {
-            dataCollectionCache.filters[text].subscriptions.push(sub.url);
+      for (const sub of ewe.subscriptions.getForFilter(filter.text)) {
+        if (sub.enabled && sub.url && sub.downloadable) {
+          const subURL = sub.url.substring(0, 256);
+          if (!dataCollectionCache.filters[text].subscriptions.includes(subURL)) {
+            dataCollectionCache.filters[text].subscriptions.push(subURL);
           }
         }
       }

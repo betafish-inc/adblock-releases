@@ -111,26 +111,58 @@ $(async () => {
     BG.updateCustomFilterCountMap(newCount);
   }
 
+  /**
+   * Checks if the given selector filter has a valid query string.
+   *
+   * @param {string} selectorFilter The selector filter to validate
+   * @returns {boolean} True if the given filters query is valid
+   */
+  function hasValidQueryString(selectorFilter) {
+    // Taken from ABP's Filter.contentRegExp property.
+    // Match groups are domains, separator, body
+    const contentRegExp = /^([^/|@"!]*?)#([@?$])?#(.+)$/;
+    const [,,, query] = contentRegExp.exec(selectorFilter);
+
+    // Validate query. QS will throw if query is invalid.
+    try {
+      document.querySelector(query);
+    } catch (_) {
+      return false;
+    }
+    return true;
+  }
+
   async function saveFilters() {
     const customFiltersText = $('#txtFiltersAdvanced').val();
     const customFiltersArray = customFiltersText.split('\n');
     let filterErrorMessage = '';
     $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
+
     /* eslint-disable no-await-in-loop */
     for (let i = 0; (!filterErrorMessage && i < customFiltersArray.length); i++) {
-      let filter = customFiltersArray[i];
-      filter = filter.trim();
-      if (filter.length > 0) {
-        const errors = await browser.runtime.sendMessage({
-          type: 'filters.validate',
-          text: filter,
-        });
-        if (errors && errors.length) {
-          filterErrorMessage = translate(
-            'customfilterserrormessage',
-            [filter, translate(errors[0].reason || errors[0].type) || translate('filter_invalid')],
-          );
-        }
+      const filter = customFiltersArray[i].trim();
+
+      if (filter.length === 0) {
+        // empty line, move on to next item
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const errors = await browser.runtime.sendMessage({
+        type: 'filters.validate',
+        text: filter,
+      });
+
+      if (errors && errors.length) {
+        filterErrorMessage = translate(
+          'customfilterserrormessage',
+          [filter, translate(errors[0].reason || errors[0].type) || translate('filter_invalid')],
+        );
+      } else if (isSelectorFilter(filter) && !hasValidQueryString(filter)) {
+        filterErrorMessage = translate(
+          'customfilterserrormessage',
+          [filter, translate('filter_invalid_css')],
+        );
       }
     }
 

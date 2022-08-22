@@ -220,6 +220,7 @@ const showNoLongerSyncError = function () {
   });
 };
 
+// eslint-disable-next-line no-unused-vars
 const addUnSyncErrorClickHandler = function () {
   $('span[i18n="sync_removed_error_msg_part_2"]').on('click', () => {
     $('.unsync-header').addClass('sync-message-hidden');
@@ -234,6 +235,7 @@ const addUnSyncErrorClickHandler = function () {
 };
 
 // this function is invoked from the tabs.js module
+// eslint-disable-next-line no-unused-vars
 const checkForUnSyncError = function () {
   if (
     optionalSettings
@@ -424,6 +426,7 @@ const updateAcceptableAdsUIFN = function (checkAA, checkAAprivacy) {
 };
 
 const debounceWaitTime = 1000; // time in ms before
+// eslint-disable-next-line no-unused-vars
 const updateAcceptableAdsUI = debounced(debounceWaitTime, updateAcceptableAdsUIFN);
 
 const shouldShowRateUsCTA = function () {
@@ -549,6 +552,25 @@ const shouldShowEmailCTA = function () {
   }
 };
 
+/**
+ * Updates the visibility of social icons based on subscribed filter lists.
+ *
+ * Will set an according class name to the `<body>` element.
+ */
+function updateSocialIconsVisibility() {
+  const socialIconsStateClassName = 'no-social-icons';
+  const antiSocialListIds = ['antisocial', 'annoyances', 'fb_notifications'];
+
+  const lists = BG.SubscriptionAdapter.getSubscriptionsMinusText();
+  const hasAntiSocialSubscriptions = Object.keys(lists)
+    .some(id => antiSocialListIds.includes(id));
+
+  document.body.classList.toggle(
+    socialIconsStateClassName,
+    hasAntiSocialSubscriptions,
+  );
+}
+
 $(() => {
   // delay opening of a second port due to a race condition in the ABP code
   // the delay allows the confirmation message to the user to function correctly
@@ -577,6 +599,7 @@ $(() => {
   localizePage();
   displayTranslationCredit();
   shouldShowEmailCTA();
+  updateSocialIconsVisibility();
 });
 
 storageSet(License.pageReloadedOnSettingChangeKey, false);

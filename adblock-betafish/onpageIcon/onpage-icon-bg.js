@@ -13,7 +13,7 @@ const OnPageIconManager = (function initialize() {
     if (!iconData) {
       return false;
     }
-    if (!iconData.msgText || !iconData.titleText) {
+    if (!iconData.msgText || !iconData.titleText || !iconData.titlePrefixText) {
       return false;
     }
     if (!iconData.buttonText && iconData.buttonURL) {
@@ -22,19 +22,25 @@ const OnPageIconManager = (function initialize() {
     if (iconData.buttonText && !iconData.buttonURL) {
       return false;
     }
-    if (iconData.buttonText && typeof iconData.buttonText !== 'string') {
+    if (typeof iconData.buttonText !== 'string') {
       return false;
     }
-    if (iconData.msgText && typeof iconData.msgText !== 'string') {
+    if (typeof iconData.msgText !== 'string') {
       return false;
     }
-    if (iconData.titleText && typeof iconData.titleText !== 'string') {
+    if (typeof iconData.titlePrefixText !== 'string') {
+      return false;
+    }
+    if (typeof iconData.titleText !== 'string') {
       return false;
     }
     if (iconData.buttonURL && typeof iconData.buttonURL !== 'string') {
       return false;
     }
     if (iconData.buttonURL && !iconData.buttonURL.startsWith('/')) {
+      return false;
+    }
+    if (iconData.ctaIconURL && typeof iconData.ctaIconURL !== 'string') {
       return false;
     }
     return true;
@@ -46,8 +52,11 @@ const OnPageIconManager = (function initialize() {
     // Inputs: tabId : integer - the id of the tab
     //         tabUrl : string - the top level URL of the tab, used for confirmation purposes
     //         iconData : object - with the following:
+    //             surveyId: string - unique survey id from ping server
     //             msgText : string - The text of the message (will truncate after 280 characters)
+    //             titlePrefixText : string - The prefix title text in the speech bubble
     //             titleText : string - The title text in the speech bubble
+    //             ctaIconURL : string (optional) - The hero image in SVG format
     //             buttonText : string (optional) - The text in the button
     //             buttonURL : string (optional) - only the path part of the URL,
     //                         required to start with a '/' character
@@ -58,13 +67,14 @@ const OnPageIconManager = (function initialize() {
         return;
       }
       if (!isIconDataValid(iconData)) {
-        log('OnPageIconManager:showOnPageIcon::isIconDataValid: false');
+        log('OnPageIconManager:showOnPageIcon::isIconDataValid: false', iconData);
         return;
       }
       let { msgText } = iconData;
       if (msgText && msgText.length > MAX_MSG_TEXT_LENGTH) {
         msgText = msgText.slice(0, MAX_MSG_TEXT_LENGTH);
       }
+      log('showOnPageIcon::iconData:', iconData);
       browser.tabs.insertCSS(tabId, {
         file: 'adblock-onpage-icon-user.css',
         allFrames: false,
@@ -78,10 +88,12 @@ const OnPageIconManager = (function initialize() {
             command: 'showonpageicon',
             tabURL: tabUrl,
             titleText: iconData.titleText,
+            titlePrefixText: iconData.titlePrefixText,
             msgText,
             surveyId: iconData.surveyId,
             buttonText: iconData.buttonText,
             buttonURL: iconData.buttonURL,
+            ctaIconURL: iconData.ctaIconURL,
           };
           browser.tabs.sendMessage(tabId, data).catch((error) => {
             log('error', error);

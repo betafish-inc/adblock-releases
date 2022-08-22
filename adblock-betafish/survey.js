@@ -60,6 +60,35 @@ const SURVEY = (function getSurvey() {
     return domains.get('');
   };
 
+  // Domains and paths that we don't want to show the On Page icon on
+  // hostname : required and is an exact match
+  // pathname : optional and is an startsWith match
+  const excludedSites = [
+    {
+      hostname: 'www.google.com',
+      pathname: '/maps',
+    },
+    {
+      hostname: 'meet.google.com',
+    },
+  ];
+
+  /**
+   * Checks whether the URL is restricted
+   *
+   * @param {URL} [theURL]
+   * @return {boolean}
+   */
+  const isRestricted = function (theURL) {
+    return excludedSites.some((element) => {
+      let response = !!(element.hostname && element.hostname === theURL.hostname);
+      if (response && element.pathname && theURL.pathname) {
+        response = response && theURL.pathname.startsWith(element.pathname);
+      }
+      return response;
+    });
+  };
+
   // functions below are used by both Tab Surveys
 
   // Double check that the survey should be shown
@@ -155,12 +184,16 @@ const SURVEY = (function getSurvey() {
           if (
             responseData.survey_id === surveyData.survey_id
             && responseData.should_survey === 'true'
+            && responseData.type === 'icon'
+            && responseData.icon_options
           ) {
             OnPageIconManager.showOnPageIcon(tab.id, tab.url, {
-              titleText: responseData.titleText,
-              msgText: responseData.msgText,
-              buttonText: responseData.buttonText,
-              buttonURL: responseData.buttonURL,
+              titlePrefixText: responseData.icon_options.title_prefix_text,
+              titleText: responseData.icon_options.title_text,
+              msgText: responseData.icon_options.msg_text,
+              buttonText: responseData.icon_options.button_text,
+              ctaIconURL: responseData.icon_options.cta_icon_url,
+              buttonURL: responseData.icon_options.button_url,
               surveyId: responseData.survey_id,
             });
           }
@@ -169,9 +202,10 @@ const SURVEY = (function getSurvey() {
 
       if (changeInfo.status === 'complete' && tab.status === 'complete' && validTab(tab)) {
         const myURL = new URL(tab.url);
-        const cleanDomain = myURL.hostname.replace(/^www\./, ''); // remove lead 'www.'
+        const cleanDomain = myURL.hostname;
         log('processIcon:: checking if isActiveOnDomain', cleanDomain, isActiveOnDomain(cleanDomain, parsedDomains));
-        if (isActiveOnDomain(cleanDomain, parsedDomains)) {
+        log('processIcon:: checking if isRestricted', isRestricted(myURL));
+        if (isActiveOnDomain(cleanDomain, parsedDomains) && !isRestricted(myURL)) {
           log('processIcon:: block count check', getBlockedPerPage(tab), surveyData.block_count);
           if (surveyData.block_count <= getBlockedPerPage(tab)) {
             shouldShowOnPageIcon();

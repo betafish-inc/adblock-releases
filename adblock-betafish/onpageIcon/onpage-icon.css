@@ -1,13 +1,12 @@
 :host {
   all: initial;
 
-  --icon-color: #dadada;
   --text-color: #333333;
   --button-color: white;
   --button-background: #2284f7;
   --button-background-hover: #e40d0d;
-  --icon-color: #999999;
-  --icon-color-hover: #666666;
+  --icon-color: #666666;
+  --icon-color-hover: #333333;
   --icon-border-color: #e6e6e6;
   --premium-accent: #ffca00;
   --link-color: #2284f7;
@@ -49,8 +48,8 @@
   font-feature-settings: "liga";
 }
 
-.material-icons:hover {
-  color: var(--icon-color-hover);
+.material-icons.md-20 {
+  font-size: 20px;
 }
 
 /* RTL language */
@@ -65,6 +64,7 @@
   width: 32px;
   float: right;
   cursor: pointer;
+  background-color: inherit;
 }
 
 #iconlogo {
@@ -72,21 +72,39 @@
   left: 5px;
   top: 32px;
   display: inline-block;
+  background-color: inherit;
+}
+
+.header-section {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  height: 20px;
+  width: auto;
+}
+
+.header-logo-text {
+  color: #999999;
+  font-size: 12px;
+  line-height: 140%;
+  padding-left: 6px;
 }
 
 #header-icons {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   border-bottom: 1px solid var(--icon-border-color);
   padding-bottom: 8px;
+  align-items: center;
 }
 
 #header-icons .material-icons {
   color: var(--icon-color);
-  opacity: 0.5;
 }
 #header-icons .material-icons:hover {
-  opacity: 1;
+  color: var(--icon-color-hover);
 }
 
 #header-icons .material-icons:focus {
@@ -100,9 +118,9 @@
 
 .hoverOverIcon {
   position: fixed;
-  bottom: 100px;
+  bottom: var(--icon-bottom-position);
   right: -300px;
-  animation: slideInFromRight 2s forwards;
+  animation: slideInFromRight 1s forwards;
   animation-delay: 1s;
 }
 
@@ -110,21 +128,30 @@
   display: none;
   opacity: 0;
   width: 288px;
-  height: 179px;
+  height: 205px;
   padding: 8px 16px 24px 16px;
 }
 
 .hoverOverIcon:hover .grow {
   display: block;
-  animation-duration: 750ms;
+  animation-duration: 300ms;
   animation-name: showMore;
   animation-timing-function: linear;
   animation-fill-mode: both;
 }
 
+.showMoreIcon {
+  display: block;
+  animation-duration: 1500ms;
+  animation-name: showMore;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-delay: 1s;
+}
+
 @keyframes slideInFromRight {
   100% {
-    right: 50px;
+    right: var(--icon-right-position);
   }
 }
 
@@ -132,19 +159,6 @@
   from {
     opacity: 0;
   }
-
-  25% {
-    opacity: 0.25;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-
-  75% {
-    opacity: 0.75;
-  }
-
   to {
     opacity: 1;
   }
@@ -180,52 +194,79 @@
   height: 143px;
 }
 
-#titleText {
+.titleRow {
+  display: flex;
   font-weight: bold;
-  line-height: 22px;
+  height: 22px;
   color: var(--text-color);
-  margin: 12px 0;
-  align-content: flex-start;
+  margin: 12px 0 8px 0;
+}
+
+#titlePrefixText {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--premium-accent);
+  border-radius: 2px;
+  font-size: 10px;
+  padding: 0px 4px;
+  margin-right: 5px;
+  height: 18px;
+}
+
+.msgBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #msgText {
-  font-size: 12px;
-  line-height: 17px;
+  font-size: 13px;
+  line-height: 140%;
   color: var(--text-color);
   width: 100%;
-  height: 48px;
-  margin-bottom: 17px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  min-height: 83px;
+  margin-right: 10px;
+  overflow: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--thumb-background-color) var(--scrollbarBG);
 }
+
 #msgText::-webkit-scrollbar {
   width: 8px;
 }
+
 #msgText::-webkit-scrollbar-track {
   background-color: var(--main-icon-background-color);
 }
+
 #msgText::-webkit-scrollbar-thumb {
   background-color: var(--thumb-background-color);
   border-radius: 6px;
 }
+
 #footer {
-  align-content: flex-end;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 21px;
+  margin-bottom: 30px;
 }
+
 #btnLearnMore {
-  float: right;
   font-weight: bold;
   font-size: 12px;
   line-height: 17px;
   height: 32px;
+  min-width: 100%;
   border-radius: 6px;
   border: none;
-  margin: 0px 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: var(--button-color);
   background-color: var(--button-background);
-  min-width: 176px;
+}
+
+#btnLearnMore:hover {
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
 }

@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '5.0.5',
+  version: '5.1.0',
   webpack: {
     bundles: [
       {
@@ -174,10 +174,6 @@ export default {
       {
         dest: 'adblock-onpage-icon-user.css',
         src: 'adblock-betafish/onpageIcon/onpage-icon-user.css',
-      },
-      {
-        dest: 'adblock-onpage-icon.svg',
-        src: 'adblock-betafish/onpageIcon/icon.svg',
       },
       {
         dest: 'adblock-options-tabs.css',

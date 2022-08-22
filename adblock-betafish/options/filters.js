@@ -4,7 +4,8 @@
 /* global BG, optionalSettings,
    translate, updateAcceptableAdsUI, port,
    delayedSubscriptionSelection, startSubscriptionSelection, selected, activateTab, License,
-   MABPayment, getStorageCookie, setStorageCookie, THIRTY_MINUTES_IN_MILLISECONDS */
+   MABPayment, getStorageCookie, setStorageCookie, THIRTY_MINUTES_IN_MILLISECONDS,
+   updateSocialIconsVisibility */
 
 // Contains all filter lists and their respective containers.
 const filterListSections = {
@@ -1000,11 +1001,13 @@ $(() => {
   CustomFilterListUploadUtil.bindControls();
 
   const onSubAdded = function (item) {
+    updateSocialIconsVisibility();
     onFilterChangeHandler('subscription.added', item);
   };
   BG.ewe.subscriptions.onAdded.addListener(onSubAdded);
 
   const onSubRemoved = function (item) {
+    updateSocialIconsVisibility();
     onFilterChangeHandler('subscription.removed', item);
   };
   BG.ewe.subscriptions.onRemoved.addListener(onSubRemoved);

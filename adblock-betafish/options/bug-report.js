@@ -9,13 +9,22 @@ let textDebugInfo = '';
 let extInfo = '';
 
 const bugReportLogic = function () {
-  const $name = $('#name');
-  const $email = $('#email');
-  const $title = $('#summary');
-  const $repro = $('#repro-steps');
-  const $expect = $('#expected-result');
-  const $actual = $('#actual-result');
-  const $comments = $('#other-comments');
+  const stepsPlaceholder = '1.\n2.\n3.';
+  const validatorKey = 'validators';
+  const errorClassName = 'input-error';
+
+  const validators = {
+    empty: value => value.trim().length > 0,
+    email: value => value.search(/^.+@.+\..+$/) !== -1,
+    steps: value => value.trim() !== stepsPlaceholder,
+  };
+
+  const $name = $('#name').data(validatorKey, [validators.empty]);
+  const $email = $('#email').data(validatorKey, [validators.empty, validators.email]);
+  const $title = $('#summary').data(validatorKey, [validators.empty]);
+  const $repro = $('#repro-steps').data(validatorKey, [validators.empty, validators.steps]).val(stepsPlaceholder);
+  const $expect = $('#expected-result').data(validatorKey, [validators.empty]);
+  const $actual = $('#actual-result').data(validatorKey, [validators.empty]);
 
   const continueProcessing = function () {
     $('#debug-info').val(textDebugInfo);
@@ -208,7 +217,6 @@ const bugReportLogic = function () {
       debug: debugInfo,
       name: $name.val(),
       email: $email.val(),
-      comments: $comments.val(),
     };
 
     if (extInfo) {
@@ -256,50 +264,17 @@ const bugReportLogic = function () {
   // Step 1: Name & Email
   $('#step1-next').on('click', () => {
     // Check for errors
-    let problems = 0;
-    if ($name.val() === '') {
-      problems += 1;
-      $name.addClass('input-error');
-    } else {
-      $name.removeClass('input-error');
+    let isFormValid = true;
+
+    for (const $field of [$name, $email, $title, $repro, $expect, $actual]) {
+      const value = $field.val();
+      const fieldValidators = $field.data(validatorKey);
+      const isFieldValid = fieldValidators.every(validator => validator(value));
+      $field.toggleClass(errorClassName, !isFieldValid);
+      isFormValid = isFormValid && isFieldValid;
     }
 
-    if ($email.val() === '' || $email.val().search(/^.+@.+\..+$/) === -1) {
-      problems += 1;
-      $email.addClass('input-error');
-    } else {
-      $email.removeClass('input-error');
-    }
-
-    if ($title.val() === '') {
-      problems += 1;
-      $title.addClass('input-error');
-    } else {
-      $title.removeClass('input-error');
-    }
-
-    if ($repro.val() === '1. \n2. \n3. ') {
-      problems += 1;
-      $repro.addClass('input-error');
-    } else {
-      $repro.removeClass('input-error');
-    }
-
-    if ($expect.val() === '') {
-      problems += 1;
-      $expect.addClass('input-error');
-    } else {
-      $expect.removeClass('input-error');
-    }
-
-    if ($actual.val() === '') {
-      problems += 1;
-      $actual.addClass('input-error');
-    } else {
-      $actual.removeClass('input-error');
-    }
-
-    if (problems === 0) {
+    if (isFormValid) {
       // Success - go to next step
       $(this).prop('disabled', true);
       $('#email, #name, #rememberDetails').prop('disabled', true);
