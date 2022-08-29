@@ -1,10 +1,16 @@
-/adblockpluschrome/
-/buildtools/
-/devenv/
+/node_modules/
+/devenv*/
 *.zip
 *.crx
-*.safariextz
-*.pyc
-*.pyo
+*.tar
+*.gz
 .DS_Store
-.project
+/.last_snippets_build
+tests/chromium-snapshots/
+tests/firefox-snapshots/
+/dist/
+
+# Editor/IDE
+.vscode/
+.idea
+node_modules
