@@ -1,0 +1,3746 @@
+{
+  "description": {
+    "message": "Youtube、Facebook、Twitch、お気に入りのウェブサイト等の広告やポップアップ広告をブロックしましょう。",
+    "description": "Extension description in manifest. Should not exceed 132 characters."
+  },
+  "description2": {
+    "message": "6000万人のユーザーを誇る一番人気のChrome拡張機能！ウェブ上のあらゆる広告をブロックしましょう！",
+    "description": "Extension description in manifest. Should not exceed 132 characters."
+  },
+  "name_devbuild": {
+    "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
+    "message": "AdBlock開発ビルド"
+  },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message": "AdBlock — 最高峰の広告ブロッカー"
+  },
+  "name": {
+    "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message": "AdBlock — 最高峰の広告ブロッカー"
+  },
+  "description_edge": {
+    "message": "AdBlockは2億回ダウンロードを誇るNo.1の広告ブロッカーです。ウェブ上のあらゆる広告をブロックしましょう。",
+    "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
+  },
+  "description_yt": {
+    "message": "世界で合計6千万人のユーザーが使う一番人気のChrome拡張機能のAdBlockにより開発されたYouTube用の広告ブロッカー",
+    "description": "Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
+  },
+  "name_adblock_on_youtube": {
+    "message": "YouTubeのAdBlock",
+    "description": "Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
+  },
+  "adblock_click_for_details": {
+    "message": "AdBlock - 詳細はこちら",
+    "description": "Tooltip on the AdBlock button, to help users understand that they can click the button to access more options."
+  },
+  "buttoncancel": {
+    "message": "キャンセル",
+    "description": "Cancel button"
+  },
+  "buttonok": {
+    "message": "OK!",
+    "description": "OK button"
+  },
+  "reportpubliclyavailable": {
+    "message": "注： あなたの報告は公開されるかもしれません。プライベートな情報が含まれていないことをしっかり確認して下さい。",
+    "description": "Ad report page string, when you're about to submit a report."
+  },
+  "buttonblockit": {
+    "message": "ブロックしましょう！",
+    "description": "Block button"
+  },
+  "buttonedit": {
+    "message": "編集",
+    "description": "Edit filter(s) manually button"
+  },
+  "optionstitle": {
+    "message": "AdBlock オプション",
+    "description": "Title for the Options page"
+  },
+  "optionstitle_yt": {
+    "message": "YouTubeオプションの AdBlock",
+    "description": "Title for the Options page for the 'AdBlock on YouTube' extension."
+  },
+  "chromebutton_how_to_hide2": {
+    "message": "AdBlock ボタンを右クリックして、「Chrome メニューに隠す」を選択します。表示させるにはChrome メニューをクリックし、AdBlock ボタンを右クリックしてから、[ツールバーに表示]を選択します。",
+    "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
+  },
+  "operabutton_how_to_hide2": {
+    "message": "ボタンを非表示にするには、opera：//extensionsにアクセスし、[ツールバーから非表示]のオプションにチェックを入れてください。 このチェックを外すと、再度表示することができます。",
+    "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2": {
+    "message": "ボタンを非表示にするには、Safariのツールバーを右クリックして[ツールバーのカスタマイズ]を選択し、ツールバーの外にAdBlockボタンをドラッグします。ツールバーに再度ドラッグして表示することができます。",
+    "description": "Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
+  },
+  "ff_button_how_to_hide": {
+    "message": "ボタンを非表示にするには、右クリックして[ツールバーから削除]を選択します。Firefoxのメニュー - >カスタマイズで再度表示することができます。",
+    "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
+  },
+  "isithidden": {
+    "message": "アイテムは非表示化されていますか？",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderexplanation": {
+    "message": "そうでない場合は、スライダーを使用して、このページアイテムをさらに非表示にしてください：",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "sliderwarning": {
+    "message": "ページ上の要素を非表示化しすぎると、一部の機能が使えなくなるのでご注意ください。",
+    "description": "'Block an ad' wizard usage explanation"
+  },
+  "slidertitle": {
+    "message": "手順 1： ブロックする広告の特定",
+    "description": "'Block an ad' wizard title"
+  },
+  "blacklisteroptions1": {
+    "message": "このアイテムを非表示化し続けますか？",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "blacklisternotsure_part_I": {
+    "message": "ご利用の設定にルールが追加され、サイトにアクセスするたびにこのアイテムが非表示になります。",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "blacklisternotsure_part_II": {
+    "message": "この設定は、AdBlockメニューから「このページの非表示アイテムを元に戻す」を選択することで、いつでも元に戻すことができます。",
+    "description": "'Block an ad' wizard attribute choice page"
+  },
+  "hiddenelementmessagecount": {
+    "message": "このページ上の別の $count$個のアイテムも一時的に非表示化されています",
+    "description": "The total number of ads or 'things' hidden on a page by the new rule.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "blacklisternofilter": {
+    "message": "フィルタが指定されていません！",
+    "description": "Warning if the user hasn't specified a filter"
+  },
+  "blacklistereditfilter": {
+    "message": "下に正しいフィルタを入力してOKを押してください",
+    "description": "Text if the user wants to manually edit a filter. 'OK' is the standard JavaScript popup button text."
+  },
+  "blacklistereditinvalid1": {
+    "message": "フィルタは無効です： $exception$",
+    "description": "Alert if the manually edited filter is invalid. Error messages are not translated.",
+    "placeholders": {
+      "exception": {
+        "content": "$1",
+        "example": "This filter is not supported"
+      }
+    }
+  },
+  "blacklisterblockedelement": {
+    "message": "ブロックされた要素：",
+    "description": "Tells the user what the blocked element is on the 'Block an ad' wizard."
+  },
+  "blacklisterwarningnofilter": {
+    "message": "警告： フィルタが指定されていません！",
+    "description": "Warns the user that nothing will be blocked."
+  },
+  "blacklisterblocksalloftype": {
+    "message": "ご注意ください： このフィルタは、ページ上のすべての $elementtype$要素をブロックします！",
+    "description": "Warns the user that all elements of type X will be blocked.",
+    "placeholders": {
+      "elementtype": {
+        "content": "$1",
+        "example": "DIV"
+      }
+    }
+  },
+  "warning": {
+    "message": "警告",
+    "description": "Warns the user about an error."
+  },
+  "blacklistersinglematch": {
+    "message": "このページ上の1つのアイテムに一致します。",
+    "description": "Tells the user only one match was found"
+  },
+  "blacklistermatches": {
+    "message": "このページ上の$matchcount$に一致します。",
+    "description": "Tells the user multiple matches were found",
+    "placeholders": {
+      "matchcount": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "blacklisterattrwillbe": {
+    "message": "$attribute$が$value$になります",
+    "description": "Checkbox label for attributes in 'Block an ad' wizard.",
+    "placeholders": {
+      "attribute": {
+        "content": "$1",
+        "example": "class"
+      },
+      "value": {
+        "content": "$2",
+        "example": "AdBanner"
+      }
+    }
+  },
+  "blacklistertype": {
+    "message": "種類",
+    "description": "node name is called 'Type' (HTML tag)"
+  },
+  "buttonlooksgood": {
+    "message": "いい感じですね",
+    "description": "Confirmation button after user chose what to block on the page"
+  },
+  "back": {
+    "message": "戻る",
+    "description": "Back to previous page button"
+  },
+  "add_info": {
+    "message": "追加詳細",
+    "description": "section title on hidding wizard, shown when advance user option enabled"
+  },
+  "confirm_msg": {
+    "message": "このアイテムの属性が正しいことを確認してください：",
+    "description": "text on hidding wizard, shown when advance user option enabled"
+  },
+  "findingads": {
+    "message": "広告を探しています...",
+    "description": "'Block an ad' wizard loading message"
+  },
+  "blockanadtitle": {
+    "message": "AdBlock非表示ウィザード",
+    "description": "Title of the first two dialogs of the 'Block an ad' wizard"
+  },
+  "clickthead": {
+    "message": "非表示化したいこのページ上のアイテムをクリックしてください。",
+    "description": "User has to click the ad they want to block."
+  },
+  "adblock_wont_run_on_pages_matching": {
+    "message": "AdBlockは一致するいずれのページで実行されません：",
+    "description": "Message displayed when the allowlist wizard will allowlist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
+  },
+  "you_can_slide_to_change": {
+    "message": "下でスライドさせて、AdBlockが実行されないページを正確に変更することができます。",
+    "description": "allowlist slider usage instructions. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
+  },
+  "whitelistertitle2": {
+    "message": "AdBlockを実行させないページ...",
+    "description": "The title of the allowlist wizard (Don't run on this page/pages on this domain)"
+  },
+  "buttonexclude": {
+    "message": "除外",
+    "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "buttonconfirm": {
+    "message": "確定",
+    "description": "Button for confirming a new rule in the hiding wizard"
+  },
+  "reloadpageafterwhitelist": {
+    "message": "ページを再読込みして下さい。",
+    "description": "Checkbox in the allowlist wizard"
+  },
+  "wizardcantrunonframesets": {
+    "message": "このAdBlock機能は古い技術を使用しているため、このサイトでは機能しません。手動でオプションページの[カスタマイズ]タブから広告表示の許可・ブロックを選択できます。",
+    "description": "Alert shown when the user tries to use a blocklist/allowlist wizard on an old website"
+  },
+  "subscribeconfirm": {
+    "message": "$title$フィルタリストを登録してよろしいですか？",
+    "description": "Prompt question before subscribing to a filter list",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Prebake"
+      }
+    }
+  },
+  "subscribingtitle": {
+    "message": "フィルタリストを登録しています...",
+    "description": "abp: link subscriber title"
+  },
+  "subscribingfinished": {
+    "message": "完了！",
+    "description": "abp: link subscriber successful result"
+  },
+  "subscribingfailed": {
+    "message": "失敗しました！",
+    "description": "abp: link subscriber unsuccessful result"
+  },
+  "optionsversion": {
+    "message": "$version$バージョン",
+    "description": "Version number",
+    "placeholders": {
+      "version": {
+        "content": "$1",
+        "example": "3.9.2"
+      }
+    }
+  },
+  "tabgeneral": {
+    "message": "全般",
+    "description": "A tab on the Options page"
+  },
+  "tabfilterlists": {
+    "message": "フィルタリスト",
+    "description": "A tab on the Options page"
+  },
+  "tabcustomize": {
+    "message": "カスタマイズ",
+    "description": "A tab on the Options page"
+  },
+  "generaloptions": {
+    "message": "全般オプション",
+    "description": "Title of the first Options page tab"
+  },
+  "mac_app_message_options": {
+    "message": "Safari版AdBlockがMacアプリとして登場！",
+    "description": "Message to users on the Options page"
+  },
+  "betalabel": {
+    "message": "ベータ",
+    "description": "Label for experimental features in AdBlock Options"
+  },
+  "showcontextmenus2": {
+    "message": "右クリックメニューにアイテムを追加します",
+    "description": "Checkbox on the 'General' tab of the Options page."
+  },
+  "safaricontentblocking": {
+    "message": "Safari Content Blockingを有効にする",
+    "description": "Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
+  },
+  "debuginlogoption": {
+    "message": "コンソールログ (拡張機能を遅くします)にデバッグステートメントを表示します",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption": {
+    "message": "匿名フィルタリスト使用状況データとフィルタリストによってブロックされたコンテンツに関する情報の収集をAdBlockに許可します。",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "updatedrightnow": {
+    "message": "今アップデートされました",
+    "description": "Label for filter list subscription"
+  },
+  "updatedsecondsago": {
+    "message": "$seconds$秒前アップデートされました",
+    "description": "Label for filter list subscription",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "updatedminutesago": {
+    "message": "$minutes$分前アップデートされました",
+    "description": "Label for filter list subscription",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "updatedhoursago": {
+    "message": "$hours$時間前アップデートされました",
+    "description": "Label for filter list subscription",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "updateddaysago": {
+    "message": "$days$日前アップデートされました",
+    "description": "Label for filter list subscription",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "updatedtimestamp": {
+    "message": "更新日： $ts$",
+    "description": "Label for filter list subscription last updated timestamp",
+    "placeholders": {
+      "ts": {
+        "content": "$1",
+        "example": "8/26/2019 10:23:44 PM"
+      }
+    }
+  },
+  "updatedminuteago": {
+    "message": "1分前アップデートされました",
+    "description": "Label for filter list subscription"
+  },
+  "updatedhourago": {
+    "message": "1時間前アップデートされました",
+    "description": "Label for filter list subscription"
+  },
+  "updateddayago": {
+    "message": "1日前アップデートされました",
+    "description": "Label for filter list subscription"
+  },
+  "unsubscribedlabel": {
+    "message": "登録されていません。",
+    "description": "Status label when unselecting a filter list"
+  },
+  "fetchinglabel": {
+    "message": "取得中です... 少しお待ち下さい。",
+    "description": "Status label when selecting a new filter list"
+  },
+  "ab_filters_subscription_lastDownload_invalidURL": {
+    "message": "失敗しました。無効なアドレスです",
+    "description": "Filter lists tab of the Options page: Message when you subscribe to a non-list URL."
+  },
+  "ab_filters_subscription_lastDownload_connectionError": {
+    "message": "ダウンロードに失敗しました",
+    "description": "Filter lists tab of the Options page: Generic filter list download error message."
+  },
+  "ab_filters_subscription_lastDownload_invalidData": {
+    "message": "失敗しました。無効なフィルタリストです",
+    "description": "Filter lists tab of the Options page: Invalid filter list file."
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch": {
+    "message": "失敗です。チェックサムが一致しません。",
+    "description": "Filter lists tab of the Options page: Corrupted filter list file."
+  },
+  "invalidListUrl": {
+    "message": "無効なURLリストです。削除されます。",
+    "description": "Message when you subscribe to a non-list URL"
+  },
+  "failedtofetchfilter": {
+    "message": "このフィルタを取得できませんでした！",
+    "description": "Error alert when subscribing to a filter list"
+  },
+  "removefromlist": {
+    "message": "リストから削除します",
+    "description": "Label to remove a custom filter list"
+  },
+  "you_know_thats_a_bad_idea_right": {
+    "message": "リストを使うほどAdBlockを実行するのが遅くなります。リストを使いすぎると、一部のウェブサイトでブラウザがクラッシュする原因になります。それでも登録する場合は、OKを押して下さい。",
+    "description": "Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
+  },
+  "unsubscribe_from_all_confirmation": {
+    "message": "すべてのフィルタリストを無効にすると、AdBlockは広告をブロックできません。 代わりにAdBlockを一時停止することをおすすめします。 それでもこのリストの登録を解除しますか？",
+    "description": "Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
+  "filterstabtitle": {
+    "message": "フィルタリストを登録する",
+    "description": "Title of the Filter lists tab of the Options page"
+  },
+  "filterlistlink": {
+    "message": "必要以上に登録をしないで下さい。それぞれが少しづつ動作を遅くします！クレジットやその他のリストは[[こちら]]で見つけて下さい。",
+    "description": "Filter lists tab explanation and link to filter list credits."
+  },
+  "filterviewsource": {
+    "message": "フィルターリストを見る",
+    "description": "Title for links to view filter lists on website"
+  },
+  "updatenowmessage2": {
+    "message": "自動的にアップデート情報を取得します。[[今すぐアップデート]]を行えます。",
+    "description": "Update filters text and button"
+  },
+  "orenteraurl": {
+    "message": "またはURLを入力して下さい：",
+    "description": "Text box to enter a link to a custom filter list"
+  },
+  "subscribebutton": {
+    "message": "登録",
+    "description": "Subscribe to a filter list button"
+  },
+  "showlinkstolists2": {
+    "message": "フィルタリストへのリンクを表示します",
+    "description": "Label to display filter list links"
+  },
+  "filterantisocial": {
+    "message": "反ソーシャルフィルタリスト (SNSボタンを排除します)",
+    "description": "A filter list"
+  },
+  "filterannoyances": {
+    "message": "オタクの厄介な問題 (ページ内広告、SNS関連ウィジェット、他の迷惑な広告)",
+    "description": "A filter list"
+  },
+  "filterfb_notifications": {
+    "message": "オタクの通知 (ページ内広告、SNS関連ウィジェット、他の迷惑な広告)",
+    "description": "A filter list"
+  },
+  "filterwarning_removal": {
+    "message": "Adblock Warning Removalリスト (広告ブロッカーの使用についての警告を排除します)",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filteracceptable_ads": {
+    "message": "控えめな広告",
+    "description": "A filter list"
+  },
+  "filteradblock_custom": {
+    "message": "AdBlockカスタムフィルタ",
+    "description": "A filter list"
+  },
+  "filtereasylist": {
+    "message": "EasyList",
+    "description": "A filter list"
+  },
+  "filtereasylist_lite": {
+    "message": "EasyList Lite",
+    "description": "A filter list"
+  },
+  "filterrussian": {
+    "message": "ロシア語とウクライナ語",
+    "description": "Language names for a filter list"
+  },
+  "filter_russian": {
+    "message": "ロシア語・ ウクライナ語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterczech": {
+    "message": "チェコ語とスロバキア語",
+    "description": "A filter list"
+  },
+  "filter_czech": {
+    "message": "チェコ ・ スロバキア語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filteridcac": {
+    "message": "クッキーは気にしない",
+    "description": "A filter list"
+  },
+  "filtereasyprivacy": {
+    "message": "EasyPrivacy (プライバシーの保護)",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_indonesian": {
+    "message": "インドネシア語",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_indonesian": {
+    "message": "インドネシア語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterbitcoin_mining_protection": {
+    "message": "仮想通貨 (ビットコイン) マイニング保護リスト",
+    "description": "A filter list"
+  },
+  "filterlatvian": {
+    "message": "ラトビア語",
+    "description": "A filter list"
+  },
+  "filter_latvian": {
+    "message": "ラトビア語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterswedish": {
+    "message": "スウェーデン語",
+    "description": "A filter list"
+  },
+  "filterturkish": {
+    "message": "トルコ語",
+    "description": "A filter list"
+  },
+  "filteranticircumvent": {
+    "message": "迂回防止フィルタ",
+    "description": "A filter list"
+  },
+  "filternordic": {
+    "message": "Nordicフィルター + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "blacklistclickmessage": {
+    "message": "ページを右クリックして広告をブロックしましょう -- それかここから手動でブロックしましょう。",
+    "description": "'Hide a section of a webpage' part on the Customize tab of the Options page."
+  },
+  "tabcustomizetitle": {
+    "message": "AdBlock をカスタマイズする",
+    "description": "Title of the Customize tab of the Options page"
+  },
+  "filterlistsrock": {
+    "message": "フィルタリストはウェブ上のほとんどの広告をブロクします。他にも：",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads": {
+    "message": "もっと広告をブロックする：",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads": {
+    "message": "広告ブロックを停止する：",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "linkblockadbyurl": {
+    "message": "URLで広告をブロックする",
+    "description": "Link label on the 'Customize' tab"
+  },
+  "linkhidesection": {
+    "message": "ウェブページの項目を非表示にする",
+    "description": "Link label on the 'Customize' tab"
+  },
+  "linkunblock": {
+    "message": "ウェブページまたはドメイン上の広告を表示する",
+    "description": "Link label on the 'Customize' tab"
+  },
+  "blockurlwithtext": {
+    "message": "この文を含むURLをブロックする",
+    "description": "Message of the URL-blocking section (Block an ad by its URL) on the Customize tab"
+  },
+  "csstomatch": {
+    "message": "一致するCSS",
+    "description": "Message of the CSS-hiding section (Hide a section of a webpage) on the Customize tab"
+  },
+  "excludedomainorurl": {
+    "message": "AdBlockが何もブロックしないドメインまたはURL",
+    "description": "Message of the exclude section (Show ads on a webpage or domain) on the Customize tab"
+  },
+  "blockdomain": {
+    "message": "適用するページのドメイン",
+    "description": "Message of the URL and CSS blocking sections"
+  },
+  "manualfilteredit": {
+    "message": "あなたのフィルタを手動で編集：",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit_yt": {
+    "message": "あなたのフィルタを手動で編集：",
+    "description": "Subtitle on the 'General' tab of AdBlock on YouTube"
+  },
+  "manualexcludefilteredit": {
+    "message": "無効のフィルタの編集：",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "migration_error_message": {
+    "message": "カスタムフィルタにいくつかのエラーが見つかりました。メッセージは以下から参照ください。",
+    "description": "Error when adding custom filters manually"
+  },
+  "delete_migration_error_messages": {
+    "message": "メッセージを削除",
+    "description": "Button to delete error messages when adding custom filters manually"
+  },
+  "savebutton": {
+    "message": "保存",
+    "description": "Save button"
+  },
+  "savereminder": {
+    "message": "保存するのをお忘れなく！",
+    "description": "Reminder to click 'Save'"
+  },
+  "adblockreportinganad": {
+    "message": "AdBlock - 広告の報告",
+    "description": "Title of the ad report page"
+  },
+  "adreportintro": {
+    "message": "ウェブページで広告が表示されましたか？報告の仕方をお教えします。",
+    "description": "Introduction of the ad reporting page"
+  },
+  "adreportvoluntary": {
+    "message": "広告の報告は任意です。フィルタリストの管理者が誰のためにも広告をブロックできるようにし、他のユーザーにも役立ちます。あなたが他のユーザーを助ける必要などないと感じても、問題ありません。 このページを閉じ、自身のためだけに[[広告をブロック]]して下さい。",
+    "description": "Introduction of the ad reporting page"
+  },
+  "disableaa": {
+    "message": "控えめな広告用フィルタをチェックして下さい：",
+    "description": "Section header on the ad report page"
+  },
+  "clickdisableaa": {
+    "message": "次をクリックして下さい： [[控えめな広告を無効]]",
+    "description": "Instruction on ad report page"
+  },
+  "aamessageadreport": {
+    "message": "このような広告が表示されないようにするには、控えめな広告フィルタリストをオフのままにしましょう。",
+    "description": "Acceptable Ads message on ad report page"
+  },
+  "aalinkadreport": {
+    "message": "控えめな広告プログラムについての詳細を確認しましょう。",
+    "description": "Acceptable Ads link message on ad report page"
+  },
+  "adreportthanks": {
+    "message": "ありがとうございます！",
+    "description": "Message to the user thanking them for sharing the URL with us."
+  },
+  "updateyourlists": {
+    "message": "フィルタリストが最新のものかどうか確認して下さい：",
+    "description": "Section header on the ad report page"
+  },
+  "clickupdatefilters": {
+    "message": "次をクリックして下さい： [[フィルタをアップデートする！]]",
+    "description": "Instruction on ad report page"
+  },
+  "reloadadpage": {
+    "message": "広告とページを再読込みします。",
+    "description": "Instruction on ad report page"
+  },
+  "adstillappear": {
+    "message": "まだ広告が表示されますか？",
+    "description": "Question on ad report page"
+  },
+  "yes": {
+    "message": "はい",
+    "description": "A positive response to a question"
+  },
+  "no": {
+    "message": "いいえ",
+    "description": "A negative response to a question"
+  },
+  "adalreadyblocked": {
+    "message": "すばらしい！準備万端です。",
+    "description": "On the ad report page, telling the user there is nothing to do as the ad they were seeing is now blocked."
+  },
+  "disableallextensions": {
+    "message": "AdBlock を除くすべての拡張子を無効にします：",
+    "description": "Instruction on ad report page"
+  },
+  "disableforchromestepone": {
+    "message": "[[拡張機能ページ]]を開きましょう。",
+    "description": "Step 1 for disabling Chrome extensions"
+  },
+  "clickdisableotherextensions": {
+    "message": "または、上記のすべてを行うには、次のボタンをクリックして下さい： [他の拡張機能をすべて無効化]",
+    "description": "On the ad report page, an alternative way to disable other extensions"
+  },
+  "disableotherextensionscomplete": {
+    "message": "すべての他の拡張機能を無効にしました。広告を含むページを再読込みします。少しお待ち下さい。",
+    "description": "On the ad report page, alert notifying users that we've disabled all other extensions"
+  },
+  "enableotherextensionscomplete": {
+    "message": "以前無効にした拡張機能を再度有効にします。",
+    "description": "On the ad report page, alert notifying users that we've re-enabled extensions that were previously disabled"
+  },
+  "manuallyenableotherextensions": {
+    "message": "以前無効にした拡張機能を有効にする拡張機能ページを開きます。",
+    "description": "On the ad report page, alert notifying users that they will need to manually reenable the extensions"
+  },
+  "tabreloadcomplete": {
+    "message": "完了です！広告を含んだページを再読み込みします。広告がなくなっているかどうかを確認してからこのページに戻って下記の質問にお答え下さい。",
+    "description": "On the ad report page, alert notifying users that we've disabled all other extensions"
+  },
+  "disableforchromeandsafaristeptwo": {
+    "message": "AdBlock を除くすべての拡張機能の横にある「有効」チェック ボックスを外して下さい。AdBlock のみ有効を残して下さい。",
+    "description": "Step 2 for disabling Chrome and Safari extensions"
+  },
+  "disableforsafaristepone": {
+    "message": "Safari メニュー > 設定 > 拡張機能の順にクリックして下さい。",
+    "description": "Step 1 for disabling Safari extensions"
+  },
+  "disableforedgestepone": {
+    "message": "他のメニュー ([...]) をクリックし、拡張機能を選択します。",
+    "description": "Step 1 for disabling Edge extensions"
+  },
+  "disableforedgesteptwo": {
+    "message": "AdBlockを除く拡張機能には、歯車アイコンをクリックして、切り替えボタンをクリックしオフにします。",
+    "description": "Step 2 for disabling Edge extensions"
+  },
+  "reenableadsonebyone": {
+    "message": "すばらしい！では、どの拡張機能が原因なのか探りましょう。拡張機能を一つずつ有効にしていきます。広告が表示されるようになった拡張機能をアンインストールし、広告を排除しましょう。",
+    "description": "Tells the user to re-enable the extensions one by one"
+  },
+  "correctfilters": {
+    "message": "適切な言語フィルターを使用していることを確認します：",
+    "description": "On the ad report page, label describing having the right filter lists enabled"
+  },
+  "pagelanguagecheck": {
+    "message": "そのページはどの言語が使われていますか？",
+    "description": "Question on ad report page"
+  },
+  "lang_english": {
+    "message": "英語",
+    "description": "Language name"
+  },
+  "lang_czech": {
+    "message": "チェコ語",
+    "description": "Language name"
+  },
+  "lang_spanish": {
+    "message": "スペイン語",
+    "description": "Language name"
+  },
+  "lang_russian": {
+    "message": "ロシア語",
+    "description": "Language name"
+  },
+  "lang_slovak": {
+    "message": "スロバキア語",
+    "description": "Language name"
+  },
+  "lang_ukranian": {
+    "message": "ウクライナ語",
+    "description": "Language name"
+  },
+  "lang_arabic": {
+    "message": "アラビア語",
+    "description": "Language name"
+  },
+  "lang_bulgarian": {
+    "message": "ブルガリア語",
+    "description": "Language name"
+  },
+  "lang_chinese": {
+    "message": "中国語",
+    "description": "Language name"
+  },
+  "lang_danish": {
+    "message": "デンマーク語",
+    "description": "Language name"
+  },
+  "lang_dutch": {
+    "message": "オランダ語",
+    "description": "Language name"
+  },
+  "lang_estonian": {
+    "message": "エストニア語",
+    "description": "Language name"
+  },
+  "lang_finnish": {
+    "message": "フィンランド語",
+    "description": "Language name"
+  },
+  "lang_french": {
+    "message": "フランス語",
+    "description": "Language name"
+  },
+  "lang_german": {
+    "message": "ドイツ語",
+    "description": "Language name"
+  },
+  "lang_greek": {
+    "message": "ギリシャ語",
+    "description": "Language name"
+  },
+  "lang_hungarian": {
+    "message": "ハンガリー語",
+    "description": "Language name"
+  },
+  "lang_indonesian": {
+    "message": "インドネシア語",
+    "description": "Language name"
+  },
+  "lang_icelandic": {
+    "message": "アイスランド語",
+    "description": "Language name"
+  },
+  "lang_israeli": {
+    "message": "ヘブライ語",
+    "description": "Language name"
+  },
+  "lang_italian": {
+    "message": "イタリア語",
+    "description": "Language name"
+  },
+  "lang_japanese": {
+    "message": "日本語",
+    "description": "Language name"
+  },
+  "lang_korean": {
+    "message": "韓国語",
+    "description": "Language name"
+  },
+  "lang_lithuania": {
+    "message": "リトアニア語",
+    "description": "Language name"
+  },
+  "lang_polish": {
+    "message": "ポーランド語",
+    "description": "Language name"
+  },
+  "lang_romanian": {
+    "message": "ルーマニア語",
+    "description": "Language name"
+  },
+  "lang_latvian": {
+    "message": "ラトビア語",
+    "description": "Language name"
+  },
+  "lang_swedish": {
+    "message": "スウェーデン語",
+    "description": "Language name"
+  },
+  "lang_turkish": {
+    "message": "トルコ語",
+    "description": "Language name"
+  },
+  "lang_catalan": {
+    "message": "カタルーニャ語",
+    "description": "Language name"
+  },
+  "lang_chinese_simplified": {
+    "message": "簡体字中国語",
+    "description": "Language name"
+  },
+  "lang_chinese_traditional": {
+    "message": "繁体字中国語",
+    "description": "Language name"
+  },
+  "lang_croatian": {
+    "message": "クロアチア語",
+    "description": "Language name"
+  },
+  "lang_norwegian": {
+    "message": "ノルウェー語",
+    "description": "Language name"
+  },
+  "lang_serbian": {
+    "message": "セルビア語",
+    "description": "Language name"
+  },
+  "lang_slovenian": {
+    "message": "スロベニア語",
+    "description": "Language name"
+  },
+  "lang_vietnamese": {
+    "message": "ベトナム語",
+    "description": "Language name"
+  },
+  "lang_portuguese_brazil": {
+    "message": "ポルトガル語 (ブラジル)",
+    "description": "Language name"
+  },
+  "lang_portuguese_portugal": {
+    "message": "ポルトガル語 (ポルトガル)",
+    "description": "Language name"
+  },
+  "filtereasylist_plus_bulgarian": {
+    "message": "ブルガリア語",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_bulgarian": {
+    "message": "ブルガリア語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterchinese": {
+    "message": "中国語",
+    "description": "A filter list"
+  },
+  "filter_chinese": {
+    "message": "中国語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterdanish": {
+    "message": "デンマーク語",
+    "description": "A filter list"
+  },
+  "filterdutch": {
+    "message": "オランダ語",
+    "description": "A filter list"
+  },
+  "filter_dutch": {
+    "message": "オランダ語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_finnish": {
+    "message": "フィンランド語",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_french": {
+    "message": "フランス語",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_french": {
+    "message": "フランス語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_german": {
+    "message": "ドイツ語",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_german": {
+    "message": "ドイツ語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_greek": {
+    "message": "ギリシャ語",
+    "description": "A filter list"
+  },
+  "filterhungarian": {
+    "message": "ハンガリー語",
+    "description": "A filter list"
+  },
+  "filterisraeli": {
+    "message": "ヘブライ語",
+    "description": "A filter list"
+  },
+  "filter_israeli": {
+    "message": "ヘブライ語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filteritalian": {
+    "message": "イタリア語",
+    "description": "A filter list"
+  },
+  "filter_italian": {
+    "message": "イタリア語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterjapanese": {
+    "message": "日本語",
+    "description": "A filter list"
+  },
+  "filternorwegian": {
+    "message": "ノルウェー語",
+    "description": "A filter lsit"
+  },
+  "filtereasylist_plun_korean": {
+    "message": "韓国語",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_polish": {
+    "message": "ポーランド語",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_romanian": {
+    "message": "ルーマニア語",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_romanian": {
+    "message": "ルーマニア語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_spanish": {
+    "message": "スペイン語",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_arabic": {
+    "message": "アラビア語",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_arabic_plus_french": {
+    "message": "EasyList + フランス語アラビア語",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_estonian": {
+    "message": "エストニア語",
+    "description": "A filter list"
+  },
+  "filtericelandic": {
+    "message": "アイスランド語",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_lithuania": {
+    "message": "リトアニア語",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_lithuania": {
+    "message": "リトアニア語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_vietnamese": {
+    "message": "ベトナム語",
+    "description": "A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_vietnamese": {
+    "message": "ベトナム語 + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterbrazilian_portuguese": {
+    "message": "ポルトガル語 (ブラジル )",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_portuguese": {
+    "message": "ポルトガル語 + EasyList",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_indian": {
+    "message": "インド語 + EasyList",
+    "description": "A filter list"
+  },
+  "other": {
+    "message": "その他",
+    "description": "Multiple choice option"
+  },
+  "nodefaultfilter1": {
+    "message": "その言語のための既定のフィルタリストがありません。\n[[この言語をサポートするのに適したリストを見つける]]、またはAdBlockメニューからご自分で広告をブロックして下さい。",
+    "description": "Instructions on ad report page pointing users to EasyList subscriptions list."
+  },
+  "retryaftersubscribe": {
+    "message": "このフィルタリストを登録してから再度お試し下さい： $list_title$",
+    "description": "Instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
+    "placeholders": {
+      "list_title": {
+        "content": "$1",
+        "example": "French"
+      }
+    }
+  },
+  "checkinfirefoxtitle": {
+    "message": "Firefoxで確認",
+    "description": "Tell a user to see if a reported ad also appears in Firefox"
+  },
+  "checkinfirefoxorchrometitle": {
+    "message": "FirefoxまたはChromeで確認",
+    "description": "Tell a user to see if a reported ad also appears in Firefox/Chrome"
+  },
+  "checkinfirefox_1": {
+    "message": "お持ちでない場合、Firefoxをインストールして下さい。",
+    "description": "instruction for how to check Firefox for a reported ad"
+  },
+  "checkinfirefoxorchrome_1": {
+    "message": "お持ちでない場合、FirefoxまたはChromeをインストールして下さい。",
+    "description": "instruction for how to check Firefox or Chrome for a reported ad"
+  },
+  "checkinfirefox_2": {
+    "message": "お持ちでない場合、Adblock Plus for Firefoxをインストールして下さい。",
+    "description": "Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefoxorchrome_2": {
+    "message": "お持ちでない場合、Adblock Plus for FirefoxまたはChrome用のAdBlockをインストールして下さい。",
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefox_3": {
+    "message": "このブラウザで、こちらと同様に同じフィルタリストに登録して下さい。",
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
+  },
+  "checkinfirefox_4": {
+    "message": "このブラウザで、広告を含んだページを読み込みます。",
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
+  },
+  "checkinfirefox_5": {
+    "message": "そのブラウザでも広告が表示されますか？",
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
+  },
+  "ff_checkinchrometitle": {
+    "message": "Chromeでチェック",
+    "description": "Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_1": {
+    "message": "お持ちでない場合、Chromeをインストールして下さい。",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_2": {
+    "message": "お持ちでない場合、Chrome用AdBlockをインストールして下さい。",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_3": {
+    "message": "Chrome上で、こちらと同様に同じフィルタリストに登録して下さい。",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_4": {
+    "message": "Chrome上で、広告を含んだページを読み込みます。",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_5": {
+    "message": "Chrome上でも広告が表示されますか？",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "refusetocheck": {
+    "message": "これをチェックしたくない",
+    "description": "User is telling us they don't wish to investigate something for us"
+  },
+  "reportfilterlistproblem": {
+    "message": "フィルタリストの問題です。こちらから報告下さい： $link$",
+    "description": "Telling the user to report an ad to a filter list maintainer",
+    "placeholders": {
+      "link": {
+        "content": "[[]]",
+        "example": "The link could point to a filter list's forum, or to the email address of a filter list maintainer. For example, forums.lanik.us or someguy@list.com."
+      }
+    }
+  },
+  "fixityourself": {
+    "message": "ご自分でまだこの広告をオプションページからブロックできます。ありがとうございます！",
+    "description": "Telling users who won't report an ad to us how to handle it for themselves"
+  },
+  "popup_menu_title": {
+    "message": "AdBlockポップアップメニュー",
+    "description": "Title for the popup menu."
+  },
+  "block_an_ad_on_this_page": {
+    "message": "このページのコンテンツを非表示化",
+    "description": "Toolbar button menu entry and context menu entry"
+  },
+  "block_this_ad": {
+    "message": "この広告をブロック",
+    "description": "Toolbar button menu entry and context menu entry"
+  },
+  "typehiding": {
+    "message": "非表示",
+    "description": "A resource type"
+  },
+  "typescript": {
+    "message": "スクリプト",
+    "description": "A resource type"
+  },
+  "typeimage": {
+    "message": "画像",
+    "description": "A resource type"
+  },
+  "typestylesheet": {
+    "message": "スタイル定義",
+    "description": "A resource type"
+  },
+  "typeobject": {
+    "message": "インタラクティブなオブジェクト",
+    "description": "A resource type"
+  },
+  "typesubdocument": {
+    "message": "フレーム",
+    "description": "A resource type"
+  },
+  "typeobject_subrequest": {
+    "message": "object_subrequest",
+    "description": "A resource type"
+  },
+  "typexmlhttprequest": {
+    "message": "xmlhttprequest",
+    "description": "A resource type"
+  },
+  "typeother": {
+    "message": "その他",
+    "description": "A resource type"
+  },
+  "typepopup": {
+    "message": "ポップアップ",
+    "description": "A resource type"
+  },
+  "typemedia": {
+    "message": "音声/動画",
+    "description": "A resource type"
+  },
+  "typepage": {
+    "message": "ページ",
+    "description": "A resource type"
+  },
+  "typewebsocket": {
+    "message": "ウェブソケット",
+    "description": "A resource type"
+  },
+  "typeunknown": {
+    "message": "不明",
+    "description": "A resource type"
+  },
+  "close": {
+    "message": "閉じる",
+    "description": "Generic message for buttons that close a view or window"
+  },
+  "loading": {
+    "message": "読み込んでいます...",
+    "description": "Generic message displayed during processes that take some time"
+  },
+  "flashads": {
+    "message": "動画とフラッシュ",
+    "description": "Title of the final ad report question if the ad didn't appear in Firefox"
+  },
+  "cantblockflashwarning": {
+    "message": "映画やFlashゲーム等のプラグインで広告が表示されますか？",
+    "description": "Text of the final ad report question"
+  },
+  "cantblockflash": {
+    "message": "Flashや他のプラグイン内の広告はブロックできません。ブラウザ及びWebKitからのサポートを待っている状態です。",
+    "description": "Result of the final ad report question"
+  },
+  "cleanuplist2": {
+    "message": "このリストをクリーンアップします",
+    "description": "Label at the bottom of the 'Customize' tab of the Options page"
+  },
+  "disabled_by_filter_lists": {
+    "message": "AdBlockがあなたのフィルタリストのいずれかのフィルタにより無効になっています。",
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list."
+  },
+  "disabled_by_filter_lists_yt": {
+    "message": "YouTubeのAdBlockがあなたのフィルタリストのいずれかのフィルタにより無効になっています。",
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+  },
+  "dont_run_on_pages_on_domain": {
+    "message": "このドメイン内のページ上で実行しないでください",
+    "description": "Menu entry to open the allowlist wizard"
+  },
+  "open_allowlist_wizard": {
+    "message": "さらなる停止オプション",
+    "description": "Menu entry to open the allowlist wizard"
+  },
+  "disabled_site_title": {
+    "message": "ブロックできる広告はありません！",
+    "description": "header title on the menu when a user is on tab that extensions are disabled on (Chrome settings, etc)"
+  },
+  "allowlisted_channel": {
+    "message": "AdBlockがこのチャンネルにアクセスするたびに一時停止するように設定されています。",
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
+  },
+  "disabled": {
+    "message": "AdBlockは一時停止中です",
+    "description": "Title shown in menu when AdBlock is paused on all sites"
+  },
+  "disabled_on_all_sites": {
+    "message": "すべてのサイトでAdBlockが一時停止したままになるように設定しました。",
+    "description": "Message shown in menu when AdBlock is paused on all sites"
+  },
+  "disabled_on_this_page": {
+    "message": "AdBlockはこのページで無効になっています。",
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
+  },
+  "disabled_on_this_channel": {
+    "message": "このチャンネルでの広告を許可しました。",
+    "description": "Message shown in the toolbar button menu on YouTube channel pages and videos that have been allowlisted."
+  },
+  "enable_adblock": {
+    "message": "このページでAdBlockを有効にします。",
+    "description": "Link text to un-allowlist a page, displayed immediately after 'AdBlock is disabled on this page'"
+  },
+  "enable_adblock_on_this_channel": {
+    "message": "このチャンネルの広告をブロックする",
+    "description": "Menu entry to un-allowlist a YouTube channel, displayed under 'You allowed ads on this channel.'"
+  },
+  "status_paused": {
+    "message": "AdBlockが一時停止しています。",
+    "description": "Message shown in toolbar button when AdBlock is not running"
+  },
+  "status_universal_paused": {
+    "message": "AdBlockはすべてのサイトで一時停止されています。",
+    "description": "Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused": {
+    "message": "AdBlockは一時停止されています。変更が適用されるには、ページを更新する必要があります。",
+    "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "status_allowlisted": {
+    "message": "AdBlockがこのサイトにアクセスするたびに一時停止するように設定されています。",
+    "description": "Message shown in toolbar button when AdBlock is not running on a page or website"
+  },
+  "resume_blocking_ads": {
+    "message": "広告ブロックを再開する",
+    "description": "Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
+  "premium_status_msg": {
+    "message": "$date$ からのサポーターです",
+    "description": "Message shown on the premium tab of the options page when the user is a licensed premium user",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "January 2020"
+      }
+    }
+  },
+  "premium_status_short_msg": {
+    "message": "有効",
+    "description": "Message shown on the premium tab of the option page when user is a licensed premium user"
+  },
+  "unpause_adblock": {
+    "message": "AdBlockを再開する",
+    "description": "Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
+  },
+  "domain_unpause_adblock": {
+    "message": "このサイトでAdBlockを再開する",
+    "description": "Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
+  "pause_adblock": {
+    "message": "AdBlockを一時停止する",
+    "description": "Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere": {
+    "message": "全サイトで一時停止する",
+    "description": "Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock": {
+    "message": "このサイトで一時停止する",
+    "description": "Menu entry to pause AdBlock on this domain (stop blocking ads)"
+  },
+  "unpause_adblocking": {
+    "message": "広告ブロックを再開する",
+    "description": "Menu entry to unpause the extension (start blocking ads again)"
+  },
+  "pause_adblocking": {
+    "message": "広告ブロックを一時停止する",
+    "description": "Menu entry to pause the extension (stop blocking ads)"
+  },
+  "safaricontentblockingpausemessage": {
+    "message": "Content Blockingが有効なときAdBlockを一時停止するのには、Safari (メニューバーから) > 設定 > 拡張機能 > AdBlock の順に選択して、「AdBlockを有効にする」のチェックを外して下さい。",
+    "description": "Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled."
+  },
+  "safaricontentblockinglimitexceeded": {
+    "message": "フィルタリストルールの数が50,000個を超えたので、自動的に減少されました。いくつかのフィルタリストの登録を解除する、またはSafari Content Blockingを無効にして下さい。",
+    "description": "Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled."
+  },
+  "browserestartrequired": {
+    "message": "コンテンツのブロックをオフにするには、Safariを再起動して下さい。",
+    "description": "Displayed after disabling Safari Content Blocking, which requres a browser relaunch."
+  },
+  "safarinotificationtitle": {
+    "message": "Content Blockingのルールの制限を超えました",
+    "description": "Title of a notification shown to Safari Content Blocking users with too many filter list rules."
+  },
+  "safarinotificationbody": {
+    "message": "いくつかのフィルタリストを無効にして下さい。AdBlockのオプションで詳細を確認して下さい。",
+    "description": "Body of a notification shown to Safari Content Blocking users with too many filter list rules."
+  },
+  "undo_last_block": {
+    "message": "このドメインでのブロックを元に戻す",
+    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
+  },
+  "undo_last_block_site": {
+    "message": "隠しアイテムを元に戻す",
+    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
+  },
+  "dont_run_on_this_page": {
+    "message": "このページ上で実行しない",
+    "description": "Menu entry to allowlist the current page"
+  },
+  "options": {
+    "message": "オプション",
+    "description": "The text of the link on chrome://chrome/extensions that takes you to the Options page"
+  },
+  "hide_this_button": {
+    "message": "このボタンを非表示にする",
+    "description": "Toolbar button menu entry to hide the AdBlock button"
+  },
+  "donate_to_adblock": {
+    "message": "AdBlockを気に入って頂けていますか？寄付をご検討下さい！",
+    "description": "Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback": {
+    "message": "ヘルプとフィードバック",
+    "description": "Text of a help link in the toolbar button menu"
+  },
+  "donate_to_youtube_adblock": {
+    "message": "気に入って頂けてますか？寄付をご検討ください！",
+    "description": "Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
+  },
+  "pwyw": {
+    "message": "お好きな金額をお願いします！",
+    "description": "Text of a payment request link"
+  },
+  "privacy_policy": {
+    "message": "プライバシーポリシー",
+    "description": "Link to AdBlock's privacy policy"
+  },
+  "translator_credit": {
+    "message": "翻訳クレジットの表示場所：",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "tabsupport": {
+    "message": "サポート",
+    "description": "A tab on the Options page"
+  },
+  "tabtranslations": {
+    "message": "翻訳",
+    "description": "A tab on the Options page"
+  },
+  "translators": {
+    "message": "AdBlockの翻訳に関する詳細は[[こちら]]で確認して下さい",
+    "description": "A link on the Options page / translators tab to a KB article about how to help translate AdBlock"
+  },
+  "report_ad_on_page": {
+    "message": "このページの広告を報告する",
+    "description": "Entry in the AdBlock button menu"
+  },
+  "troubleshoot_an_ad": {
+    "message": "広告をトラブルシューティングする",
+    "description": "Entry in the AdBlock button menu"
+  },
+  "acceptableadsoption": {
+    "message": "一部の非侵入型広告を許可する",
+    "description": "Checkbox on the 'General' tab of the Options page to enable the Acceptable Ads filter list"
+  },
+  "advanced_options2": {
+    "message": "上級ユーザーなので、さらなるオプションを表示する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "onpage_messages": {
+    "message": "関連性がある場合、ウェブサイト上にAdBlockによるメッセージ表示を許可する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "work_around_hulu_problems": {
+    "message": "Hulu.comの動画を再生させない (ブラウザを再起動する必要があります)",
+    "description": "Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."
+  },
+  "modifydomain": {
+    "message": "サイト：",
+    "description": "Caption for the allowlist wizard slider that modifies the domain part of a URL"
+  },
+  "modifypath": {
+    "message": "ページ：",
+    "description": "Caption for the allowlist wizard slider that modifies the path part of a URL"
+  },
+  "show_ads_except_for": {
+    "message": "このドメインを除いてどこでも広告を表示...",
+    "description": "Section title for the allowlisting section of Customize tab"
+  },
+  "only_block_ads_on_these_sites": {
+    "message": "このサイトのみで広告をブロック：",
+    "description": "Label for textbox where user enters a list of sites on Customize tab"
+  },
+  "format": {
+    "message": "形式：",
+    "description": "Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
+  },
+  "warning_overrules_filters": {
+    "message": "警告： すべての他のサイトで広告が表示されます！\nこれらのサイトの他の全フィルタより優先されます。",
+    "description": "Message on the 'Customize' tab of the options page, explaining the danger of adding a allowlist filter for all websites with only some exceptions."
+  },
+  "storage_quota_exceeded": {
+    "message": "AdBlockが利用できる容量の限界を超えています。フィルタリストから登録を解除して下さい！",
+    "description": "Message shown when the user uses more storage than allowed by the browser."
+  },
+  "firefox_explanation": {
+    "message": "この質問の目的はあなたの報告を誰が受信するべきか特定する為です。間違って回答すると、あなたの報告は正しくない相手に送信されます。",
+    "description": "Explanation of the 'Check in Firefox or Chrome' step on the ad report page"
+  },
+  "mac_app_message_menu_part_one": {
+    "message": "New!",
+    "description": "part one of the message to safari users on the popup menu"
+  },
+  "mac_app_message_menu_part_two": {
+    "message": "AdBlockのMacアプリをお試しください",
+    "description": "part two of the message to safari users on the popup menu"
+  },
+  "blocked_ads": {
+    "message": "ブロックされた広告：",
+    "description": "Title for toolbar icon menu section showing number of ads blocked"
+  },
+  "blocked_n_on_this_page": {
+    "message": "このページに$count$",
+    "description": "Shown below the 'Blocked ads:' message. Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
+    "placeholders": {
+      "count": {
+        "content": "[[123]]",
+        "example": "123"
+      }
+    }
+  },
+  "blocked_n_in_total": {
+    "message": "合計$count$",
+    "description": "Shown below the 'Blocked ads:' message. Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
+    "placeholders": {
+      "count": {
+        "content": "[[123,456]]",
+        "example": "123,456"
+      }
+    }
+  },
+  "show_on_adblock_button": {
+    "message": "AdBlockボタンでブロックされた広告の数を表示する",
+    "description": "Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_adblock_menu": {
+    "message": "AdBlockメニューでブロックされた広告の数を表示する",
+    "description": "Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "show_on_button": {
+    "message": "ボタンでブロックされた広告の数を表示する",
+    "description": "Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_menu": {
+    "message": "メニューでブロックされた広告の数を表示する",
+    "description": "Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "block_ads_on_youtube": {
+    "message": "YouTubeの広告を排除する",
+    "description": "Label for checkbox letting user choose whether to block ads on youtube.com"
+  },
+  "block_privacy_on_youtube": {
+    "message": "YouTubeでのプライバシーを保護する",
+    "description": "Checkbox letting user choose whether to block privacy-related requests on youtube.com"
+  },
+  "block_annonyances_on_youtube": {
+    "message": "YouTubeの迷惑な広告を排除する",
+    "description": "Checkbox letting user choose whether to block annoyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
+  },
+  "show_devtools_panel": {
+    "message": "開発者ツールで「AdBlock」パネルを表示する",
+    "description": "Checkbox letting user choose whether the AdBlock tab should be displayed in the developer tools window"
+  },
+  "adblockinglist": {
+    "message": "広告ブロックフィルタリスト",
+    "description": "Subtitle on the Filter lists tab: List of filter lists to block ads."
+  },
+  "otherfilters": {
+    "message": "他のフィルタリスト",
+    "description": "Subtitle on the Filter lists tab: List of filter lists to block other elements that are not ads."
+  },
+  "customfilters": {
+    "message": "カスタムフィルタリスト",
+    "description": "Subtitle on the Filter lists tab: Section for adding your own filter lists."
+  },
+  "customfilterserrormessage": {
+    "message": "次のフィルタで：\n$filter$ \n以下のエラーが発生しました： \n$message$",
+    "description": "Error message when there is an issue with a custom filter on the 'Customize' tab of the Options page",
+    "placeholders": {
+      "filter": {
+        "content": "$1",
+        "example": "@@.ad"
+      },
+      "message": {
+        "content": "$2",
+        "example": "invalid filter"
+      }
+    }
+  },
+  "languagedropdowndescription": {
+    "message": "他の言語のフィルタを追加する：",
+    "description": "Dropdown list for language-specific filter lists"
+  },
+  "how": {
+    "message": "どうやって？",
+    "description": "Text of a link pointing to instructions on how to do something"
+  },
+  "whats_this": {
+    "message": "これはなに？",
+    "description": "Text of a link pointing to the explanation of a new feature"
+  },
+  "selectlanguage": {
+    "message": " -- 言語を選択 -- ",
+    "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
+  },
+  "allowlist_channel": {
+    "message": "このチャンネルの広告を許可する",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
+  },
+  "manage_subscribed_channel": {
+    "message": "登録チャンネルの広告の管理",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel allow listing option"
+  },
+  "whitelist_youtube_channel_v2": {
+    "message": "広告表示を許可するYouTubeチャンネル：",
+    "description": "Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
+  },
+  "confirm_undo_custom_filters": {
+    "message": "本当に$host$で作成した$count$のブロックを削除しますか？",
+    "description": "Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "12"
+      },
+      "host": {
+        "content": "$2",
+        "example": "stackoverflow.com"
+      }
+    }
+  },
+  "adblocksupport": {
+    "message": "AdBlockサポート",
+    "description": "Title of the Support tab of the Options page"
+  },
+  "whatsnew": {
+    "message": "アップデート内容は [[変更ログ]] で確認できます。",
+    "description": "Link to display the changelog on the Support tab"
+  },
+  "englishonly": {
+    "message": "英語のみ",
+    "description": "Lets the user know that a link/page is only available in English."
+  },
+  "needhelp": {
+    "message": "お困りですか？",
+    "description": "Subtitle on the Support tab"
+  },
+  "adblockupdates": {
+    "message": "AdBlockアップデート",
+    "description": "Subtitle on the Support tab"
+  },
+  "ytadblockupdates": {
+    "message": "YouTubeアップデートでのAdBlock",
+    "description": "Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
+  },
+  "whatmakesadblocktick": {
+    "message": "AdBlockの原動力は何なのか？",
+    "description": "Subtitle on the Support tab. This section contains links to the AdBlock source code and contributors. In this context, 'tick' can be replaced with the word 'work'."
+  },
+  "aboutadblock": {
+    "message": "AdBlockについて",
+    "description": "Subtitle on the Support tab"
+  },
+  "sourcecode": {
+    "message": "[[ソースコード]] をご確認ください",
+    "description": "Link to the source code of AdBlock on the Support tab"
+  },
+  "contributors": {
+    "message": "[[私たちのチーム]] をご紹介します",
+    "description": "Link to the contributors page on the Support tab"
+  },
+  "debuginfo": {
+    "message": "私たちのチームからデバッグ情報の提供を求められましたか？",
+    "description": "Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport": {
+    "message": "[[バグの報告]] を送信しますか",
+    "description": "Link to send a bug report on the Support tab"
+  },
+  "supportsite": {
+    "message": "[[サポートサイト]]からお問い合わせ下さい！",
+    "description": "Link to the support site on the Support tab"
+  },
+  "helpcenter": {
+    "message": "私たちの [[ヘルプセンター]] をご覧ください",
+    "description": "Link to AdBlock's help site. This is found on the Support tab of the options."
+  },
+  "copydebugdata": {
+    "message": "デバッグ情報をコピー",
+    "description": "Button text on the Support tab of the options."
+  },
+  "copieddebugdata": {
+    "message": "コピーしました",
+    "description": "Button text on the Support tab of the options."
+  },
+  "resourceblocktitle": {
+    "message": "すべてのリソース",
+    "description": "Resource list page name"
+  },
+  "headerresource": {
+    "message": "リソース",
+    "description": "Resource list page: title of a column"
+  },
+  "headertype": {
+    "message": "種類",
+    "description": "Resource list page: title of a column"
+  },
+  "headerfilter": {
+    "message": "一致したフィルタ",
+    "description": "Resource list page: title of a column"
+  },
+  "show_resourcelist": {
+    "message": "すべての要求を表示",
+    "description": "Menu entry to open the resource list page"
+  },
+  "new_resourcelist_explanation_win": {
+    "message": "すべてのリソースを表示させるには、ページ上で右クリックし「検証」(Ctrl+Shift+I)を選択してから、「AdBlock」のタブを選んで下さい。",
+    "description": "Message explaining how to access the resource list page on AdBlock 3.0+ (Windows)"
+  },
+  "new_resourcelist_explanation_osx": {
+    "message": "すべてのリソースを表示させるには、ページ上で右クリックし「検証」(Option+Cmd+I)を選択してから、「AdBlock」のタブを選んで下さい。",
+    "description": "Message explaining how to access the resource list page on AdBlock 3.0+ (Mac)"
+  },
+  "noresourcessend2": {
+    "message": "なにかが正常に動作しませんでした。リソースは送信されていません。このページは閉じられます。ウェブサイトを再読み込みして下さい。",
+    "description": "Resource list page: error message"
+  },
+  "resourcedomain": {
+    "message": "次のドメインのページが読み込まれました：\n$domain$",
+    "description": "Resource list page: text shown when hovering over an item in the third-party column",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "filterorigin": {
+    "message": "元のフィルタ：\n$list$",
+    "description": "Resource list page: tooltip of matching filter, telling which filter list contains the filter",
+    "placeholders": {
+      "list": {
+        "content": "$1",
+        "example": "A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
+  },
+  "typeselector": {
+    "message": "セレクター",
+    "description": "A resource type"
+  },
+  "typesub_frame": {
+    "message": "フレーム",
+    "description": "A resource type"
+  },
+  "typemain_frame": {
+    "message": "ページ",
+    "description": "A resource type"
+  },
+  "topframe": {
+    "message": "トップフレーム",
+    "description": "Resource list page: frame type"
+  },
+  "subframe": {
+    "message": "サブフレーム",
+    "description": "Resource list page: frame type"
+  },
+  "frametype": {
+    "message": "フレームの種類： ",
+    "description": "Resource list page: followed by frame type (top frame, subframe)"
+  },
+  "framedomain": {
+    "message": "フレームドメイン： ",
+    "description": "Resource list page: domain name of the frame"
+  },
+  "frameurl": {
+    "message": "フレームのURL： ",
+    "description": "Resource list page: full URL of the frame"
+  },
+  "legend": {
+    "message": "凡例： ",
+    "description": "Resource list page: followed by color codes for various resource statuses (blocked, allowlisted, hidden)"
+  },
+  "blockedresource": {
+    "message": "ブロックリソース",
+    "description": "Resource list page: resource status"
+  },
+  "hiddenelement": {
+    "message": "非表示要素",
+    "description": "Resource list page: resource status"
+  },
+  "thirdparty": {
+    "message": "サードパーティ",
+    "description": "Resource list page: column title telling if the resource originates from a different domain"
+  },
+  "acceptableadsdisable_done": {
+    "message": "もう控えめな広告フィルタリストを登録していません。",
+    "description": "Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "acceptableadsdisable_how_to_reenable": {
+    "message": "下記の「一部の非侵入型広告を許可する」を選択することで、元の状態に戻してお気に入りのウェブサイトを支援することができます。",
+    "description": "Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_lite_or_easylist": {
+    "message": "「EasyList Lite」または「EasyList」のいずれかを登録することをお勧めしますが、両方への登録はお勧めしません。",
+    "description": "Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_done": {
+    "message": "AdBlockは、EasyListを使ってほとんどのウェブサイトでの広告をブロックします。",
+    "description": "Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable": {
+    "message": "このまま保持することをお勧めします。間違って登録を解除した場合、もっと広告をブロックするために「EasyList」を選択して下さい。",
+    "description": "Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done": {
+    "message": "AdBlockは広告ブロックのために、ほとんどのウェブサイトでEasyList LiteまたはEasyListを使用します。",
+    "description": "Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable": {
+    "message": "このまま取っておくことをお勧めします。間違って登録を解除した場合、「EasyList Lite」または「EasyList」を選択して、より多くの広告をブロックして下さい。",
+    "description": "Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "acceptable_ads_content_blocking_disbled_message": {
+    "message": "Safari Content Blockingを有効にしたため、控えめな広告の登録を取り消しました。どちらか一つしか同時に選択できません。([[どうして？]])",
+    "description": "Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message": {
+    "message": "非侵入型の広告を許可することを選んだため、Safari Content Blockingを無効にしました。同時にどちらか一つしか選択できません。([[どうして？]])",
+    "description": "Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
+  },
+  "adreport_laststep": {
+    "message": "最後の手順： 私たちに問題を報告して下さい。",
+    "description": "Subtitle on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
+  },
+  "adreport_name": {
+    "message": "お名前は何ですか？",
+    "description": "Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email": {
+    "message": "メールアドレスは何ですか？",
+    "description": "Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
+  "adreport_email_privacy": {
+    "message": "さらなる情報が必要でご連絡を差し上げる場合のみ使用します。",
+    "description": "Let the user know that their email address won't be used for reasons other than contacting them about their bug or ad report."
+  },
+  "adreport_location": {
+    "message": "広告がページ上に表示される正確な位置はどこですか？どういう風に見えますか？",
+    "description": "Question on the ad report page asking the user to describe the ad and its location on a webpage."
+  },
+  "adreport_screen_cap_upload": {
+    "message": "スクリーンショットを添付する：",
+    "description": "Label next to a file upload button."
+  },
+  "adreport_filter": {
+    "message": "「広告をブロックする」ウィザードを使用して動作中のフィルタを作成した場合、次のボックスに貼り付けてください：",
+    "description": "Optional question on the ad report page when the ad needs to be reported to AdBlock."
+  },
+  "buttonsubmit": {
+    "message": "送信",
+    "description": "Button to send a form."
+  },
+  "adreport_missing_info": {
+    "message": "必要な情報が足りない、もしくは無効です。 赤い枠線の質問を記入してください。",
+    "description": "Error message shown when the user doesn't enter anything in some of the text fields."
+  },
+  "adreport_missing_screenshot": {
+    "message": "スクリーンショットの添付をお忘れのようです。報告している広告を見ないとあなたを助けることができません。",
+    "description": "Error message shown when the user doesn't attach a screenshot to an ad report."
+  },
+  "adreport_response_success": {
+    "message": "完了です！できる限り早急にご連絡いたします。その間AdBlockからのメールをお待ち下さい。ヘルプページでチケットへのリンクをご確認頂けます。",
+    "description": "Shown when a ticket has been sumbitted to AdBlock's support site successfully."
+  },
+  "adreport_response_invalid_file": {
+    "message": "画像ファイルを選択して下さい。.png、.gif、.jpg形式のファイルをアップロードして下さい。",
+    "description": "Error message shown when the user uploads an invalid file type."
+  },
+  "adreport_response_large_file": {
+    "message": "ファイルが大きすぎます。ファイルサイズが10 MB以下であることを確認して下さい。",
+    "description": "Error message shown when the user tries to upload a large image file."
+  },
+  "adreport_response_save_error": {
+    "message": "アップロードされたファイルの保存中にエラー発生。",
+    "description": "Error message shown when the server could not save an attached file."
+  },
+  "adreport_response_file_name": {
+    "message": "そのファイル名は長すぎます。ファイル名を短くして下さい。",
+    "description": "Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
+  },
+  "adreport_all_debug_info": {
+    "message": "次の情報が広告に関する報告に含まれます。",
+    "description": "Shows the user the debug information that will be sent along with their report."
+  },
+  "adreport_server_response_error_msg": {
+    "message": "要求の処理中にエラーが発生しました。",
+    "description": "Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
+  },
+  "adreport_server_response_error__manual_msg_step1": {
+    "message": "[[サポートページ]]をご覧ください。",
+    "description": "Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "adreport_server_response_error__manual_msg_step2": {
+    "message": "手動でチケットを作成し、下の「Fill in any details you think will help us understand your issue」の項目に情報をコピー&ペーストして下さい。",
+    "description": "Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "custom_filters_migration_error_message_part1": {
+    "message": "カスタムフィルタエラー数： ",
+    "description": "Part one of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part2": {
+    "message": "以下のメッセージはカスタムフィルタ移行中に生成されました (ライン番号は無視して下さい)： ",
+    "description": "Part two of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3": {
+    "message": "元のエントリ： ",
+    "description": "Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options": {
+    "message": "AdBlockの表示言語を選択する",
+    "description": "Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector": {
+    "message": "AdBlockを次の言語で表示",
+    "description": "Text shown before language selector drop-down."
+  },
+  "local_cdn_option": {
+    "message": "人気のあるウェブサイトライブラリのローカルコンテンツキャッシングを有効にする",
+    "description": "Option to let the user enable Local CDN feature."
+  },
+  "myadblockoptions": {
+    "message": "MyAdBlock",
+    "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Options page"
+  },
+  "newmyadblockenrollment": {
+    "message": "NEW",
+    "description": "The text of the 'Enable MyAdBlock' menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockenrollment": {
+    "message": "MyAdBlockを有効にする",
+    "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockoptionspageheader": {
+    "message": "MyAdBlockオプション",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblockoptionscategoryheader": {
+    "message": "カテゴリー",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblockpicreplacementswitchlabel": {
+    "message": "以下のカテゴリーの高画質の画像とブロックした広告を置き換える",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "catchannelswitchlabel": {
+    "message": "猫",
+    "description": "The label text for the cat switch on the MyAdBlock Options page"
+  },
+  "dogchannelswitchlabel": {
+    "message": "犬",
+    "description": "The label text for the dog switch on the MyAdBlock Options page"
+  },
+  "landscapechannelswitchlabel": {
+    "message": "風景",
+    "description": "The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "goatchannelswitchlabel": {
+    "message": "ヤギ",
+    "description": "The label text for the Goats switch on the MyAdBlock Options page"
+  },
+  "oceanchannelswitchlabel": {
+    "message": "オーシャン",
+    "description": "The label text for the Ocean switch on the MyAdBlock Options page"
+  },
+  "foodchannelswitchlabel": {
+    "message": "食べ物",
+    "description": "The label text for the Food switch on the MyAdBlock Options page"
+  },
+  "birdchannelswitchlabel": {
+    "message": "鳥",
+    "description": "The label text for the Birds switch on the MyAdBlock Options page"
+  },
+  "customchannelswitchlabel": {
+    "message": "カスタム",
+    "description": "The label text for the Custom Image switch on the MyAdBlock Options page"
+  },
+  "urgent_safari_changes": {
+    "message": "緊急： アップルはSafariの拡張機能を変更しています。",
+    "description": "Title for Options page message letting users know of settings change."
+  },
+  "settings_changed": {
+    "message": "それに備えて、AdBlockの動作が変わり、ご利用の設定の一部が変更される可能性があります。",
+    "description": "Part of Options page message letting users know of settings change."
+  },
+  "learn_more": {
+    "message": "詳しくはこちら。",
+    "description": "Link to Knowledge Base article with more information about the settings change"
+  },
+  "download_mac_app": {
+    "message": "AdBlockのMacでの最高のユーザー体験を提供するために、[[AdBlock for Safari Mac App!]]をダウンロードしてください",
+    "description": "Link to download our Mac App. [[ and ]] will be replaced with HTML to link to the Mac App Store"
+  },
+  "note": {
+    "message": "注意：",
+    "description": "Indicates that the user should take note of the message that follows."
+  },
+  "changes_to_adblock": {
+    "message": "AdBlockに変更を加えました！",
+    "description": "Link to Options page with more information about the changes."
+  },
+  "new_myadblock_feature_available": {
+    "message": "ここをクリックして新機能のロックを解除しましょう！",
+    "description": "The text in the popup menu item saying there is a new MyAdBlock feature and takes you to the MyAdBlock tab in the option page."
+  },
+  "images_coming_soon": {
+    "message": "追加画像が近日登場！",
+    "description": "The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
+  "myadblock_pic_replacemenet_description": {
+    "message": "お好きな画像で広告を置き換えましょう",
+    "description": "The text briefly describing what the feature does in the MyAdBlock tab in the option page."
+  },
+  "myadblock_payment_not_available_title": {
+    "message": "残念です！サーバーに接続できませんでした",
+    "description": "The title of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_payment_not_available_text": {
+    "message": "MyAdBlockに興味を持って頂き誠にありがとうございます！残念ながら、現在お支払い処理を行う事ができません。時間をおいてから再度お試し下さい。",
+    "description": "The text of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_options_page_header": {
+    "message": "MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_picreplacement_exlained": {
+    "message": "以下のカテゴリから選択してください。AdBlockは時々ユーザーの気分を和らげるために高品質の画像で広告を置き換えます。",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "feedback_title": {
+    "message": "フィードバック",
+    "description": "Title for feedback call to action."
+  },
+  "feedback_info": {
+    "message": "ご意見・ご要望はありませんか？ぜひお聞かせください。",
+    "description": "Text describing the MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_title": {
+    "message": "あなたのご意見をお聞かせ下さい！",
+    "description": "Title for MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_info": {
+    "message": "フィードバックや新機能のリクエストなどがありましたら、フィードバックページからご送信下さい。",
+    "description": "Text describing the MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_button": {
+    "message": "フィードバックを送信",
+    "description": "Text on the MyAdBlock feedback button"
+  },
+  "error_msg_header": {
+    "message": "おっと！",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+  },
+  "error_msg_partI": {
+    "message": "We're sorry, the AdBlock menu had trouble loading.",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us_partI": {
+    "message": "この問題の解決にご協力ください",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_us_partII": {
+    "message": " by sending us some debug data.",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_thank_you": {
+    "message": "ありがとうございます",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_reload_partI": {
+    "message": "Next, try reloading the extension by ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_reload_partII": {
+    "message": "clicking here.",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_partI": {
+    "message": "If that doesn't work, ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_partII": {
+    "message": "check here for more help.",
+    "description": "DO NOT TRANSLATE"
+  },
+  "generaloptions2": {
+    "message": "全般オプション",
+    "description": "Title of one of the Options page tabs"
+  },
+  "debuginlogoption2": {
+    "message": "コンソールログにデバッグステートメントを表示する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "slows_down_extension": {
+    "message": "拡張機能が重くなります",
+    "description": "Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url": {
+    "message": "URLの入力URL",
+    "description": "Placeholder text in the Custom Filter list URL bar"
+  },
+  "filterantisocial2": {
+    "message": "反社会フィルタリスト",
+    "description": "A filter list"
+  },
+  "filter_antisocial_explained": {
+    "message": "ソーシャルメディアボタンを排除します",
+    "description": "A filter list explaination"
+  },
+  "filterannoyances2": {
+    "message": "ファンボーイの迷惑な広告",
+    "description": "A filter list"
+  },
+  "filter_annoyances_explained": {
+    "message": "ページ内ポップアップ、ソーシャルメディア、関連ウィジェット、その他の迷惑な広告",
+    "description": "A filter list explanation"
+  },
+  "filterwarning_removal2": {
+    "message": "広告ブロック警告排除リスト",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filter_warning_removal_explained": {
+    "message": "広告ブロッカーの使用に関する警告を排除します",
+    "description": "A filter list explanation"
+  },
+  "filter_idcac_explained": {
+    "message": "クッキーの通知をブロックします。これは、あなたが訪問するウェブサイトでのクッキーの使用について通知を受ける権利を放棄することを意味します。",
+    "description": "A filter list explanation"
+  },
+  "filterlistsrock2": {
+    "message": "フィルタリストは、Web上のほとんどの広告をブロックします。",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads2": {
+    "message": "もっと広告をブロックする",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2": {
+    "message": "広告ブロックを停止する",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2": {
+    "message": "あなたのフィルタを手動で編集",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2": {
+    "message": "無効のフィルタの編集",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1": {
+    "message": "ご注意下さい： ここで間違うと、公式のフィルタを含む他の多くのフィルタも破損する恐れがあります。",
+    "description": "Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2": {
+    "message": "高度なブロックリストと許可リストフィルタを追加する方法を学ぶためには、[[フィルタ文のチュートリアル]]をお読み下さい。",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2": {
+    "message": "お好きなだけお支払い下さい！",
+    "description": "Text of a payment request link"
+  },
+  "translator_credit2": {
+    "message": "翻訳クレジットの表示場所...",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2": {
+    "message": "言語の選択",
+    "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "特定のYouTubeチャンネルの広告表示を許可する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "youtube_manage_subscribed": {
+    "message": "YouTubeの登録ページからAdBlockの設定を管理する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "allowlisting_twitch_channels": {
+    "message": "特定のTwitchチャンネルの広告表示を許可する",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser": {
+    "message": "ブラウザを再起動する必要があります",
+    "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
+  },
+  "themes": {
+    "message": "テーマ",
+    "description": "Title of the Themes tab of the Options page"
+  },
+  "popup_menu_theme": {
+    "message": "ポップアップメニュー テーマ",
+    "description": "Section title of the Themes tab of the Options page"
+  },
+  "options_page_theme": {
+    "message": "オプションページ テーマ",
+    "description": "Section title of the Themes tab of the Options page"
+  },
+  "more_themes_coming_soon": {
+    "message": "新しいテーマが続々追加されていくので小まめにチェックしましょう！",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
+  },
+  "more_themes_on_the_way": {
+    "message": "さらなるテーマが続々登場！",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
+  },
+  "myadblock_themes_description": {
+    "message": "フォントサイズや配色など、AdBlockの外観を変更します",
+    "description": "Text briefly describing what themes do on the MyAdBlock tab of the Options page"
+  },
+  "stay_tuned": {
+    "message": "乞うご期待",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 30 characters)"
+  },
+  "support_to_unlock": {
+    "message": "支援してアンロック",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 30 characters)"
+  },
+  "header": {
+    "message": "ヘッダー",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 10 characters)"
+  },
+  "text_body": {
+    "message": "本文",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 22 characters)"
+  },
+  "default_theme": {
+    "message": "デフォルト",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "dark_theme": {
+    "message": "ダーク",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "watermelon_theme": {
+    "message": "スイカ",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "solarized_theme": {
+    "message": "ソラリゼーション",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "ocean_theme": {
+    "message": "オーシャン",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "sunshine_theme": {
+    "message": "サンシャイン",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "rebecca_purple_theme": {
+    "message": "レベッカパープル",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "solarized_light_theme": {
+    "message": "ソラリゼーションライト",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "apply_theme": {
+    "message": "テーマを適用",
+    "description": "Text of clickable element that applies the theme of a theme box in the Themes tab of the Options page"
+  },
+  "adblock_twitter": {
+    "message": "AdBlock Twitter",
+    "description": "Title for link to AdBlock's Twitter account"
+  },
+  "adblock_facebook": {
+    "message": "AdBlock Facebook",
+    "description": "Title for link to AdBlock's Facebook account"
+  },
+  "adblock_website": {
+    "message": "AdBlock ホームページ",
+    "description": "Title for link to AdBlock's website"
+  },
+  "callout_new_feature": {
+    "message": "NEW!",
+    "description": "Text to callout a new feature"
+  },
+  "myadblock_short_description": {
+    "message": "楽しい新機能を備えた拡張AdBlockを体感してください",
+    "description": "Text substitle of myAdBlock page in the options page"
+  },
+  "image_swap": {
+    "message": "画像の交換",
+    "description": "Title of the Image Swap sub-tab of the Options page"
+  },
+  "myadblock_subscribe_invite": {
+    "message": "MyAdBlockに登録してアンロック",
+    "description": "Text on hover of a locked MyAdBlock feature in the MyAdBlock tab of the Options page"
+  },
+  "myadblock_more_coming_soon": {
+    "message": "さらなる機能も導入予定！",
+    "description": "Title of the teaser MyAdBlock feature box in the MyAdBlock tab of the Options page"
+  },
+  "myadblock_benefits_explained": {
+    "message": "MyAdBlockを有効にして私たちを支援して頂けると、最新のツールや機能がリリースされるとすぐにアクセス可能になります。",
+    "description": "Main text of the teaser MyAdBlock feature in the MyAdBlock tab of the Options page"
+  },
+  "myadblock_payment_not_available_callout": {
+    "message": "おっと!",
+    "description": "The text notifying something is wrong in the payment iframe in the Options page."
+  },
+  "myadblock_payment_not_available_subtitle": {
+    "message": "サーバーに接続できませんでした",
+    "description": "The sub-title of an error message box in payment iframe in the Options page."
+  },
+  "sync_tab_item": {
+    "message": "バックアップと同期",
+    "description": "Title of the Sync sub-tab of the Options page"
+  },
+  "sync_turn_on_invalid_name_text": {
+    "message": "この拡張機能に名前を付けて続行して下さい",
+    "description": "error message text on the Sync sub-tab of the Options page"
+  },
+  "sync_turn_on_duplicate_name_text": {
+    "message": "この拡張機能の名前は既に使用されています",
+    "description": "error message text on the Sync sub-tab of the Options page"
+  },
+  "sync_extension_section_title": {
+    "message": "拡張機能",
+    "description": "section title text on the Sync sub-tab of the Options page"
+  },
+  "sync_header_message_no_license": {
+    "message": "同期が完了するまで少々お待ち下さい。",
+    "description": "message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
+  },
+  "sync_header_message_getting_license": {
+    "message": "確認中...",
+    "description": "message to users on the sync page when the extension is getting the license"
+  },
+  "sync_header_message_in_progress": {
+    "message": "同期の進行中...",
+    "description": "message to users on the options pages when syncing with the server is in progress"
+  },
+  "sync_header_message_sync_complete": {
+    "message": "同期完了",
+    "description": "message to users on the option pages when syncing with the server server is complete"
+  },
+  "sync_extension_no_extension_msg": {
+    "message": "同期されていない拡張機能があります。",
+    "description": "message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
+  },
+  "sync_header_message_setup_fail_prefix": {
+    "message": "同期エラー：",
+    "description": "start of error message to users on the sync page when sync fails."
+  },
+  "sync_header_message_setup_fail_part_2": {
+    "message": "数分後にこの拡張機能の追加を再度お試し下さい。",
+    "description": "message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_error_prefix": {
+    "message": "この拡張機能は同期されていません。",
+    "description": "Start of an sync error message to users on the Options page or AdBlock popup menu."
+  },
+  "sync_header_message_old_commit_version_part_2": {
+    "message": "この拡張機能を同期し、変更を元に戻しました。",
+    "description": "part 2 of a message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_part_3": {
+    "message": "ページを再読み込みしてから変更を再度適用して下さい。",
+    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_error_save_message_part_2": {
+    "message": "この拡張機能は同期されてません。",
+    "description": "part 2 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
+  },
+  "sync_header_error_save_message_part_3": {
+    "message": "後ほど手動での同期をお試し下さい。",
+    "description": "part 3 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_customize_tab_part_2": {
+    "message": "この拡張機能を同期しました。変更を元に戻します。",
+    "description": "part 2 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_customize_tab_part_3": {
+    "message": "カスタムルールをクリップボードにコピーし、ページをリロードして、再度変更して下さい。",
+    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_device_name_list_updated_at_msg": {
+    "message": "最終更新日： $timestamp$",
+    "description": "message to users on when the sync page was last updated with the name of the extensions / devices (displayed in locale specific format)",
+    "placeholders": {
+      "timestamp": {
+        "content": "$1",
+        "example": "April 30, 2019 6:25 pm for US/English locale"
+      }
+    }
+  },
+  "sync_extension_name_placeholder": {
+    "message": "他と区別するためにこの拡張機能に名前を付けて下さい",
+    "description": "placeholder text in the extension / device name field on the sync page"
+  },
+  "sync_verify_turn_on_text": {
+    "message": "「バックアップと同期」をオンにすると、この拡張機能の既存の設定情報が消去されます。",
+    "description": "message text in the extension / device name field on the sync page"
+  },
+  "sync_now_btn_text": {
+    "message": "今すぐ同期",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_message_old_version_part_1": {
+    "message": "古いバージョンのAdBlockを使用しています。",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_message_old_version_part_2": {
+    "message": "あなたの設定を同期するために、[[AdBlockをアップデート]]して下さい。",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_removed_error_msg_part_1": {
+    "message": "この拡張機能は同期されてません",
+    "description": "sync error message text on the popup menu"
+  },
+  "sync_removed_error_msg_part_2": {
+    "message": "ここをクリックし、設定を更新してください",
+    "description": "sync error message text on the popup menu and options page"
+  },
+  "unsync_error_msg_part_1": {
+    "message": "同期エラー",
+    "description": "sync error message text on the options menu"
+  },
+  "unsync_error_msg_part_2": {
+    "message": "この拡張機能は今後同期されません。",
+    "description": "sync error message text on the popup menu"
+  },
+  "unsync_error_msg_part_3": {
+    "message": "ここをクリックしてこのページを更新し、「この拡張機能を追加する」をクリックしてこのデバイスを同期してください",
+    "description": "sync error message text on the Sync tab of the options page"
+  },
+  "sync_premium_cta": {
+    "message": "同期等のPremium機能を導入して広告ブロックのプロになりましょう。",
+    "description": "AdBlock Premium CTA on the Sync tab"
+  },
+  "backup_sync_settings": {
+    "message": "ご利用の全端末でAdBlockの設定を自動的にバックアップ及び同期します。",
+    "description": "Description of Sync on Sync tab"
+  },
+  "set_preferences_once": {
+    "message": "設定を一度行うだけで、データの損失や、複数の拡張機能における同様の変更をを行う手間が省けます。",
+    "description": "Description of Sync on Sync tab"
+  },
+  "get_sync": {
+    "message": "同期を行う",
+    "description": "Link to pay for Sync (part of AdBlock Premium)"
+  },
+  "check_sync_status": {
+    "message": "同期状況の確認",
+    "description": "Button on Sync tab that checks the status of the Sync feature"
+  },
+  "show_details": {
+    "message": "詳細を表示",
+    "description": "Toggle that shows the details section"
+  },
+  "hide_details": {
+    "message": "詳細を非表示",
+    "description": "Toggle that hides the details section"
+  },
+  "add_this_extension": {
+    "message": "この拡張機能を追加する",
+    "description": "Button on Sync tab that adds this extension to the Sync process"
+  },
+  "add": {
+    "message": "追加",
+    "description": "Button on Sync tab that adds an entered name for this extension to the list of synced extensions"
+  },
+  "this_extension": {
+    "message": "（当拡張機能）",
+    "description": "description for name of the current extension"
+  },
+  "sync_delete_panel_title": {
+    "message": "同期済み拡張機能の削除",
+    "description": "Panel title text on the delete device overlay"
+  },
+  "confirm_delete_extension": {
+    "message": "本当にこの拡張機能を削除しますか？",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
+  },
+  "cannot_be_undone": {
+    "message": "この操作は元に戻すことができません。",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
+  },
+  "delete": {
+    "message": "削除",
+    "description": "Text on a delete button"
+  },
+  "filteracceptable_ads_privacy": {
+    "message": "控えめな広告プライバリー",
+    "description": "A filter list"
+  },
+  "acceptable_ads_privacy": {
+    "message": "サードパーティのトラッキング無しの広告のみを許可する",
+    "description": "The text of an Acceptable Ads sub-option in the General tab"
+  },
+  "enable_do_not_track_advice": {
+    "message": "この機能を適切に動作させるには、ブラウザの設定で追跡禁止（DNT）を有効にして下さい。",
+    "description": "The text advicing to enable DNT if Acceptable Ads is enabled in the General tab"
+  },
+  "devtools_action_block": {
+    "description": "Button text on the dev tools panel.",
+    "message": "アイテムをブロック"
+  },
+  "devtools_action_remove": {
+    "description": "Button text on the dev tools panel.",
+    "message": "ルールの削除"
+  },
+  "devtools_action_unblock": {
+    "description": "Button text on the dev tools panel.",
+    "message": "例外の追加"
+  },
+  "devtools_filter_origin_custom": {
+    "description": "sub-title text of the rule showing the source of the rule as custom rules",
+    "message": "ユーザー定義"
+  },
+  "devtools_filter_origin_none": {
+    "description": "sub-title text of the rule showing the source of the rule as a unamed filter list",
+    "message": "無名のサブスクリプション"
+  },
+  "devtools_filter_subtitle": {
+    "description": "sub-title text of the rule showing the source of the rule a named filter list",
+    "message": "原点"
+  },
+  "devtools_filter_title": {
+    "description": "Text of the filter that was applied to the list item.",
+    "message": "フィルター"
+  },
+  "devtools_footer": {
+    "description": "message on the bottom of the panel",
+    "message": "フィルター変更の効果を確認するにはページを<a0>リロード</a0>して下さい"
+  },
+  "devtools_header": {
+    "description": "Text on the top of the dev tools panel to show all items of any type; slot0 and slot1 are two seperate drop down lists",
+    "message": "<slot1></slot1>タイプの<slot0></slot0>アイテムを表示させる"
+  },
+  "devtools_header_state_all": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "すべて"
+  },
+  "devtools_header_state_blocked": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "ブロック済"
+  },
+  "devtools_header_state_allowlisted": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "許可済み"
+  },
+  "devtools_header_type_any": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "指定なし"
+  },
+  "devtools_request_subtitle": {
+    "description": "sub title text for the request-column header of the dev tools panel",
+    "message": "ドキュメントドメイン"
+  },
+  "devtools_request_title": {
+    "description": "title text for the request-column header of the dev tools panel",
+    "message": "リクエスト"
+  },
+  "devtools_request_url": {
+    "description": "A request URL in the AdBlock DevTools panel",
+    "message": "<a0>$original$</a0>が<a1>$rewritten$</a1>に書き換えられました",
+    "placeholders": {
+      "original": {
+        "content": "$1",
+        "example": "http://example.com/foo"
+      },
+      "rewritten": {
+        "content": "$2",
+        "example": "http://example.com/bar"
+      }
+    }
+  },
+  "devtools_type_title": {
+    "description": "Type column header text",
+    "message": "種類"
+  },
+  "new_badge": {
+    "message": "New",
+    "description": "Max 4 characters. If it's not possible to translate in four characters or less, please don't translate. Text in the badge of our extension toolbar icon."
+  },
+  "vpn_cta_msg": {
+    "message": "AdBlock VPN のご紹介",
+    "description": "Text of a VPN call-to-action item in the popup menu."
+  },
+  "vpn_cta_msg_hover": {
+    "message": "安心してネットをご利用ください",
+    "description": "on hover text of a call-to-action item in the popup menu."
+  },
+  "new_cta_default_text": {
+    "message": "AdBlockをアップグレードしよう",
+    "description": "Text of a temporary call-to-action item in the popup menu."
+  },
+  "new_cta_hovered_text": {
+    "message": "さらに快適なブラウジングを体験しよう",
+    "description": "Text of a temporary call-to-action hovered item in the popup menu."
+  },
+  "myadblock_page_title": {
+    "message": "MyAdBlock： インターネットをより快適にブラウズする方法。",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_short_description_to_pay": {
+    "message": "簡単に利用可能なアドオンで広告ブロックを極めよう。",
+    "description": "The text next to the 'Get It Now' button on top of the MyAdBlock Options page"
+  },
+  "get_it_now": {
+    "message": "今すぐ入手",
+    "description": "The text in a button visible to locked users in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_title": {
+    "message": "AdBlockをあなたのものに",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_description": {
+    "message": "AdBlockの見た目、快適性、フォントサイズをお手軽な操作で変更できます。",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_title": {
+    "message": "広告じゃなく写真を見よう",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_description": {
+    "message": "ブロックした広告の場所に可愛い猫や犬、綺麗な自然の写真を表示させます。",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_title": {
+    "message": "設定を同期させよう",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_description": {
+    "message": "どのPCからでも、広告ブロックルールの設定や許可リストなどを編集することができます。",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "how_can_we_help": {
+    "message": "お困り事がございますか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "see_ad": {
+    "message": "広告が表示される",
+    "description": "Message for help flow in popup menu."
+  },
+  "website_broken": {
+    "message": "ウェブサイトが乱れる",
+    "description": "Message for help flow in popup menu."
+  },
+  "dont_know_help_me": {
+    "message": "理解できません。助けて！",
+    "description": "Message for help flow in popup menu."
+  },
+  "first_time_seeing_ad": {
+    "message": "この広告が表示されたのは初めて",
+    "description": "Message for help flow in popup menu."
+  },
+  "see_ad_everywhere": {
+    "message": "この広告はどこにでも表示される",
+    "description": "Message for help flow in popup menu."
+  },
+  "ad_everywhere_malware": {
+    "message": "この広告がどこにでも表示される場合、マルウェアに感染した恐れがあります。",
+    "description": "Message for help flow in popup menu."
+  },
+  "learn_more_to_resolve": {
+    "message": "この問題を解決するには、 [[こちらを参照]]してください。",
+    "description": "Message for help flow in popup menu."
+  },
+  "got_it": {
+    "message": "分かりました。",
+    "description": "Message for help flow in popup menu."
+  },
+  "check_whitelist": {
+    "message": "問題がないか許可リストを確認します。",
+    "description": "Message for help flow in popup menu."
+  },
+  "ok": {
+    "message": "OK",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_is_whitelisted": {
+    "message": "このページはあなたの許可リストに含まれているため、広告が表示されています。",
+    "description": "Message for help flow in popup menu."
+  },
+  "want_to_remove": {
+    "message": "削除しますか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "wont_change_anything": {
+    "message": "こちら側で変更は行われないため、広告は引き続き表示されます。",
+    "description": "Message for help flow in popup menu."
+  },
+  "removed_url": {
+    "message": "あなたの許可リストからURLを削除しました。",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_not_see_ad": {
+    "message": "ページを再読み込みすれば今後広告は表示されません！",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_the_page": {
+    "message": "ページを再読み込みする",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_not_whitelisted": {
+    "message": "このページはあなたの許可リストに含まれていません。",
+    "description": "Message for help flow in popup menu."
+  },
+  "updating_filter_lists": {
+    "message": "AdBlockはフィルターリストをアップデートし、問題がないか確認しています。",
+    "description": "Message for help flow in popup menu."
+  },
+  "checked_basics": {
+    "message": "基本的な要素を確認し、フィルターリストを更新しました。",
+    "description": "Message for help flow in popup menu."
+  },
+  "still_see_ad": {
+    "message": "まだ広告が表示されますか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "problem_solved": {
+    "message": "素晴らしい！問題解決です。",
+    "description": "Message for help flow in popup menu."
+  },
+  "done": {
+    "message": "完了",
+    "description": "Message for help flow in popup menu."
+  },
+  "something_not_working": {
+    "message": "どうやら何かが上手く機能していないようです。",
+    "description": "Message for help flow in popup menu."
+  },
+  "try_manual_update": {
+    "message": "[[手動でフィルターリストのアップデート]]を行ってください。",
+    "description": "Message for help flow in popup menu."
+  },
+  "additional_help": {
+    "message": "他になにかお手伝いできますか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "contact_support": {
+    "message": "[[私たちのサポートチームにお問い合わせ下さい！]]",
+    "description": "Message for help flow in popup menu."
+  },
+  "english_site": {
+    "message": "英語圏のウェブサイトを閲覧していますか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "edit_filter_lists": {
+    "message": "[[フィルターリストを編集]]する必要がある場合があります。",
+    "description": "Message for help flow in popup menu."
+  },
+  "learn_more_filter_lists": {
+    "message": "[[フィルターリストについて]]の詳細をご覧ください。",
+    "description": "Message for help flow in popup menu."
+  },
+  "visit_help_center": {
+    "message": "その他のトラブルシューティングオプションについては、[[ヘルプセンター]]をご覧ください。",
+    "description": "Message for help flow in popup menu."
+  },
+  "try_pausing": {
+    "message": "AdBlockを一時停止してみましょう。",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_when_ready": {
+    "message": "準備ができ次第、ページを再読み込みするために下をクリックして下さい。",
+    "description": "Message for help flow in popup menu."
+  },
+  "website_still_broken": {
+    "message": "ウェブサイトはまだ乱れていますか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "issue_unrelated_adblock": {
+    "message": "AdBlockと無関係のページで発生している問題のようです。",
+    "description": "Message for help flow in popup menu."
+  },
+  "contact_the_site": {
+    "message": "サイトに問い合わせることをお勧め致します。",
+    "description": "Message for help flow in popup menu."
+  },
+  "something_else_going_on": {
+    "message": "なにか問題が発生しているようです。",
+    "description": "Message for help flow in popup menu."
+  },
+  "additional_troubleshooting": {
+    "message": "この問題を解決するための[[トラブルシューティングの追加手順]]をお試し下さい。",
+    "description": "Message for help flow in popup menu."
+  },
+  "paused_site_issue": {
+    "message": "AdBlockは現在一時停止されているため、AdBlockとは無関係のサイトに問題があるようです。",
+    "description": "Message for help flow in popup menu."
+  },
+  "paused_not_blocking": {
+    "message": "AdBlockは現在一時停止中のため、広告をブロックしていません。",
+    "description": "Message for help flow in popup menu."
+  },
+  "resume_reload": {
+    "message": "広告のブロックを再開し、ページをリロードしますか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "no_changes_see_ad": {
+    "message": "こちら側で変更は行われないため、広告は引き続き表示されます。",
+    "description": "Message for help flow in popup menu."
+  },
+  "unpaused_reload": {
+    "message": "AdBlockの一時停止を解除し、ページをリロードしました。",
+    "description": "Message for help flow in popup menu."
+  },
+  "thanks": {
+    "message": "ありがとうございます",
+    "description": "Message for help flow in popup menu."
+  },
+  "got_it_no_period": {
+    "message": "了解",
+    "description": "Button text on the DC options page."
+  },
+  "seeing_distractions": {
+    "message": "このサイトは気が散る要素が含まれている",
+    "description": "Message for help flow in popup menu."
+  },
+  "seeing_distractions_title": {
+    "message": "気が散る要素が見える",
+    "description": "panel title on the help flow in popup menu."
+  },
+  "update_preferences": {
+    "message": "設定を更新しました。",
+    "description": "message text on the help flow in popup menu."
+  },
+  "still_see_distractions": {
+    "message": "まだ気が散る要素が見えますか？",
+    "description": "message text on the help flow in popup menu."
+  },
+  "awesome_problem_solved": {
+    "message": "素晴らしい！問題解決",
+    "description": "message text on the help flow in popup menu."
+  },
+  "which_distractions": {
+    "message": "どれですか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_details": {
+    "message": "AdBlock Premiumによってブロックされた気が散る要素について詳しくは[[こちら]]をご覧ください。",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_options": {
+    "message": "ディストラクション管理機能の設定を変更したい場合は、[[こちら]]をクリックしてください。",
+    "description": "Message for help flow in popup menu."
+  },
+  "distractions_control_help": {
+    "message": "サポートチームに連絡するには、私たちの[[ヘルプセンター]]に連絡してください。",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_is_whitelisted_distraction": {
+    "message": "このページはあなたの許可リストに含まれているため、気が散るものが表示されています。",
+    "description": "Message for help flow in popup menu."
+  },
+  "wont_change_anything_distraction": {
+    "message": "こちら側で変更は行われないため、気が散るものは引き続き表示されます。",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_not_see_distraction": {
+    "message": "ページを再読み込みすれば今後気が散るものは表示されません！",
+    "description": "Message for help flow in popup menu."
+  },
+  "still_see_distraction": {
+    "message": "まだ気が散る要素が見えますか？",
+    "description": "Message for help flow in popup menu."
+  },
+  "paused_not_blocking_distraction": {
+    "message": "AdBlockは現在一時停止中のため、気が散るものをブロックしていません。",
+    "description": "panel text on the help flow in popup menu."
+  },
+  "resume_reload_distraction": {
+    "message": "AdBlockを有効にし、ページをリロードしますか？",
+    "description": "panel text on the help flow in popup menu."
+  },
+  "newsletter_popups": {
+    "message": "ニュースレターのポップアップ",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "autoplay_videos": {
+    "message": "フローティング動画広告",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "surveys": {
+    "message": "アンケート",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "allow_notification_requests": {
+    "message": "「通知を許可」のリクエスト",
+    "description": "Checbox label text for help flow in popup menu."
+  },
+  "next": {
+    "message": "次へ",
+    "description": "Button label text for help flow in popup menu."
+  },
+  "report_recieved": {
+    "message": "報告を受信しました",
+    "description": "title text for help flow in popup menu."
+  },
+  "report_recieved_partI": {
+    "message": "この問題を報告していただきありがとうございます！",
+    "description": "Text for help flow in popup menu."
+  },
+  "report_recieved_partII": {
+    "message": "お問い合わせをいただきありがとうございます。早急に対応いたします。",
+    "description": "Text for help flow in popup menu."
+  },
+  "adblock_logo": {
+    "message": "AdBlockロゴ",
+    "description": "Text in the alt attribute of an AdBlock logo image."
+  },
+  "example_themes": {
+    "message": "テーマの例",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the themes feature."
+  },
+  "image_swap_example": {
+    "message": "画像交換の例",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Image Swap feature."
+  },
+  "sync_example": {
+    "message": "同期の例",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Sync feature."
+  },
+  "adblock_home": {
+    "message": "AdBlockホーム",
+    "description": "Text in the alt attribute of an AdBlock logo / icon that links to getadblock.com."
+  },
+  "preview_channel_image": {
+    "message": "$image_category$のプレビュー画像",
+    "description": "Text in the alt attribute of an image previewed as part of the Image Swap feature.",
+    "placeholders": {
+      "image_category": {
+        "content": "$1",
+        "example": "Cats"
+      }
+    }
+  },
+  "image_of_channel": {
+    "message": "$image_category$の画像",
+    "description": "Text in the alt attribute of an image injected into a page as part of the Image Swap feature.",
+    "placeholders": {
+      "image_category": {
+        "content": "$1",
+        "example": "Dogs"
+      }
+    }
+  },
+  "a_theme_preview": {
+    "message": "$extension_page$用の$theme_name$テーマのプレビュー",
+    "description": "Text in the alt attribute of the image previewing a theme on an extension page.",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dark"
+      },
+      "extension_page": {
+        "content": "$2",
+        "example": "pop-up menu"
+      }
+    }
+  },
+  "preview_a_theme": {
+    "message": "$extension_page$用の$theme_name$テーマをプレビューする",
+    "description": "Text in the aria-label attribute of an icon indicating that clicking will show the preview image of a theme on an extension page.",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dark"
+      },
+      "extension_page": {
+        "content": "$2",
+        "example": "options page"
+      }
+    }
+  },
+  "help": {
+    "message": "ヘルプ",
+    "description": "Text in the aria-label attribute of the support icon on the pop-up menu."
+  },
+  "settings": {
+    "message": "設定",
+    "description": "Text in the aria-label attribute of the gear icon on the pop-up menu."
+  },
+  "success": {
+    "message": "成功",
+    "description": "Text in the aria-label attribute of an icon indicating successful results."
+  },
+  "error": {
+    "message": "エラー",
+    "description": "Text in the aria-label attribute of an icon indicating an error occurred."
+  },
+  "locked": {
+    "message": "ロック",
+    "description": "Text in the aria-label attribute of an icon showing a feature/option is locked."
+  },
+  "selected": {
+    "message": "選択済み",
+    "description": "Text in the aria-label attribute of an icon showing an option is selected."
+  },
+  "learn_more_without_period": {
+    "message": "詳しくはこちら",
+    "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
+  },
+  "find_out_more": {
+    "message": "詳細はこちら",
+    "description": "Text in the button on the Premium CTA on the hiding wizard."
+  },
+  "update_filter_lists_now": {
+    "message": "今フィルタリストを更新する",
+    "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
+  },
+  "popup_menu": {
+    "message": "ポップアップメニュー",
+    "description": "General text used to define the pop-up menu."
+  },
+  "options_page": {
+    "message": "オプションページ",
+    "description": "General text used to define the extension options page."
+  },
+  "pause_on_this_site": {
+    "message": "このサイトで一時停止する：",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site. This will be followed by the options 'Once' and 'Always'"
+  },
+  "adblock_will_pause_on_this_site": {
+    "message": "クリックすると、AdBlockはこのサイトでの広告ブロックを停止します。",
+    "description": "Second sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+  },
+  "pause_on_all_sites": {
+    "message": "全サイトで一時停止する",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_pause_on_all_sites": {
+    "message": "クリックすると、AdBlockは全サイトでの広告ブロックを停止します。",
+    "description": "Second sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_block_ads_again": {
+    "message": "クリックすると、AdBlockは広告ブロックを再開します。",
+    "description": "Second sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "resume_blocking_ads_period": {
+    "message": "広告ブロックを再開する",
+    "description": "First sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "do_not_swap_ads": {
+    "message": "広告を置き換えない",
+    "description": "Text of a clickable option to stop swapping ads with images in the Options page Image Swap tab."
+  },
+  "premium": {
+    "message": "Premium",
+    "description": "Abbreviated name of the AdBlock upgrade."
+  },
+  "adblock_premium": {
+    "message": "AdBlock Premium",
+    "description": "Full name of the AdBlock upgrade."
+  },
+  "premium_page_title": {
+    "message": "AdBlock Premium： インターネットをより快適にブラウズする方法。",
+    "description": "The text of the header the AdBlock Premium Options page"
+  },
+  "premium_benefits_explained": {
+    "message": "AdBlock Premiumを有効にして私たちを支援して頂けると、最新のツールや機能がリリースされるとすぐにアクセス可能になります。",
+    "description": "Main text of the teaser AdBlock Premium feature in the AdBlock Premium tab of the Options page"
+  },
+  "manage_subscription": {
+    "message": "サブスクリプションの管理",
+    "description": "Text of link to manage the user's Premium subscription on the Premium tab of the Options page"
+  },
+  "save_custom_settings_cta": {
+    "message": "カスタム広告ブロック設定を保存して、すべてのブラウザで使用したいですか？",
+    "description": "Part 1 of a Premium call-to-action on the Options page"
+  },
+  "try_backup_sync": {
+    "message": "そうであれば、「バックアップと同期」の機能をお試し下さい。",
+    "description": "Part 2 of a Premium call-to-action on the Options page"
+  },
+  "wont_show_again": {
+    "message": "今後このメッセージを表示しません。",
+    "description": "Message shown when user opts out of call-to-action"
+  },
+  "check_out_premium": {
+    "message": "詳細を知りたい場合は、[[Premium]]を確認してください。",
+    "description": "Part 2 of message shown when user opts out of call-to-action"
+  },
+  "successfully_whitelisted": {
+    "message": "このURLが許可リストに追加されました。",
+    "description": "Part of a message on the allowlist wizard"
+  },
+  "future_show_ads": {
+    "message": "今後、これらのページには引き続き広告が表示されます。",
+    "description": "Part of a message on the allowlist wizard"
+  },
+  "change_behavior_settings": {
+    "message": "この動作は[[設定]]で変更できます。",
+    "description": "Part of a message on the allowlist and blocklist wizards"
+  },
+  "whitelisted_a_site": {
+    "message": "サイトを許可リストに追加しました！",
+    "description": "Part 1 of a call-to-action on the allowlist wizard"
+  },
+  "dont_show_me_again": {
+    "message": "このメッセージを今後表示しない",
+    "description": "opt out option on all-to-action on the blocklist / hiding wizard"
+  },
+  "never_lose_settings": {
+    "message": "この設定をすべての端末に適用して、「バックアップと同期」を利用してAdBlock設定が失われないようにしましょう。",
+    "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
+  },
+  "wizard_premium_cta_title": {
+    "message": "AdBlock Premiumをご利用になってはいかがでしょうか",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "wizard_premium_cta_part_I": {
+    "message": "このサイトで何かをブロックしました。",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "wizard_premium_cta_part_II": {
+    "message": "この設定をすべての端末に適用して、「バックアップと同期」を利用してAdBlock設定が失われないようにしましょう。",
+    "description": "Part of a message on the blocklist wizard"
+  },
+  "blocked_something": {
+    "message": "このサイトで何かをブロックしました！",
+    "description": "Part 1 of a call-to-action on the blocklist wizard"
+  },
+  "adblock_looked_like_this": {
+    "message": "AdBlockがもしこうだったら？",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_themes": {
+    "message": "テーマをチェック！",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "new_premium_feature": {
+    "message": "新プレミアム機能が登場！",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_dc": {
+    "message": "ディストラクション管理でさらにブロック",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "block_floating_videos": {
+    "message": "フローティング動画をブロック",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "get_distractioncontrol": {
+    "message": "ディストラクション管理を入手",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "notification_antiadblock_message": {
+    "message": "このサイトは、AdBlockユーザーにターゲットを絞ったメッセージを表示します。AdBlockでターゲットメッセージを非表示にしたいですか？"
+  },
+  "notification_antiadblock_title": {
+    "message": "ターゲットメッセージを非表示にしますか？"
+  },
+  "overlay_notification_button_no": {
+    "message": "いいえ"
+  },
+  "overlay_notification_button_yes": {
+    "message": "はい"
+  },
+  "filter_elemhideemulation_nodomain": {
+    "message": "拡張要素非表示フィルターに有効なドメインが指定されていません"
+  },
+  "filter_invalid_csp": {
+    "message": "無効なコンテンツセキュリティポリシーです"
+  },
+  "filter_invalid_domain": {
+    "message": "無効な(または空の)ドメインが指定されました"
+  },
+  "filter_invalid_regexp": {
+    "message": "無効な正規表現です"
+  },
+  "filter_snippet_nodomain": {
+    "message": "スニペットフィルターに有効なドメインが指定されていません"
+  },
+  "filter_unknown_option": {
+    "message": "不明なフィルターオプションです"
+  },
+  "unexpected_filter_list_header": {
+    "description": "Error message shown when the user attempts to add a custom filter that has the format of a header (e.g. \"[Adblock Plus 2.0]\") which are only allowed in filter lists",
+    "message": "ここではフィルターリストヘッダーは使用できません"
+  },
+  "filter_invalid": {
+    "message": "無効なフィルターです",
+    "description": "Generic error shown when the user tries to add an invalid filter rule to their custom filters"
+  },
+  "love_adblock": {
+    "message": "AdBlockを気に入ってもらえていますか？",
+    "description": "Text in a button that asks users to rate us."
+  },
+  "show_some_love": {
+    "message": "AdBlockへの愛を示しましょう！",
+    "description": "Title of the tooltip of the rate us button CTA in the Options page."
+  },
+  "support_with_a_review": {
+    "message": "レビューを投稿し、私たちのチームをご支援下さい。",
+    "description": "Text of the tooltip of the rate us button CTA in the Options page."
+  },
+  "leave_a_review": {
+    "message": "レビューを投稿して下さい！",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "rate_us": {
+    "message": "評価して下さい",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "vpn_coming_soon": {
+    "message": "AdBlockによる最新情報をチェックしましょう",
+    "description": "Text of the tooltip of the rate us button CTA in the Options page."
+  },
+  "join_vpn_waitlist": {
+    "message": "ベータに登録して早期アクセスに参加！",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "adblock_vpn": {
+    "message": "AdBlock VPN",
+    "description": "Text of a Options page lower menu button"
+  },
+  "adblock_newsletter": {
+    "message": "AdBlockニュースレター",
+    "description": "Text of a Options page lower menu button"
+  },
+  "keep_touch": {
+    "message": "最新情報をお見逃しなく！",
+    "description": "Text of a Options page lower menu button"
+  },
+  "all_set": {
+    "message": "完了！",
+    "description": "Text of a Options page lower menu button"
+  },
+  "youre_awesome": {
+    "message": "ご登録ありがとうございます！",
+    "description": "Text of a Options page lower menu button"
+  },
+  "added_mailing_list": {
+    "message": "AdBlockのメーリングリストに登録ました。",
+    "description": "Text of a Options page lower menu button"
+  },
+  "sign_up_mailing": {
+    "message": "メーリングリストに登録すると、AdBlockの最新情報が入手できます。",
+    "description": "Text of a Options page lower menu button"
+  },
+  "email_address_placeholder": {
+    "message": "メールアドレスを入力してください",
+    "description": "Text of a Options page lower menu button"
+  },
+  "please_click_confirm": {
+    "message": "ここをクリックして、私たちからの最新情報を受け取ることを承認してください。",
+    "description": "Text of a Options page lower menu button"
+  },
+  "never_share_email": {
+    "message": "お客様のメールアドレスを第三者と共有することはありません。",
+    "description": "Text of a Options page lower menu button"
+  },
+  "join_mailing_list": {
+    "message": "メーリングリストに参加しましょう",
+    "description": "Text of a Options page lower menu button"
+  },
+  "valid_email_address": {
+    "message": "有効なメールアドレスを入力してください",
+    "description": "Text of a Options page lower menu button"
+  },
+  "please_confirm": {
+    "message": "続行する前に承認してください",
+    "description": "Text of a Options page lower menu button"
+  },
+  "youve_blocked_num_ads": {
+    "message": "$numBlocked$個の広告をブロックしました！",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review. The $numBlocked$ will be replaced with the number of ads the users has blocked, starting at 10,000.",
+    "placeholders": {
+      "numBlocked": {
+        "content": "$1",
+        "example": "10,000"
+      }
+    }
+  },
+  "enjoying_adblock": {
+    "message": "AdBlockを快適に使用できていますか？",
+    "description": "Text of a footer in the popup menu help flow asking users to leave us a review."
+  },
+  "back_help_flow": {
+    "message": "ヘルプまで1回戻って下さい。",
+    "description": "Aria label for back button in help flow (in popup menu)"
+  },
+  "close_help_flow": {
+    "message": "ヘルプを閉じてポップアップメニューに戻って下さい。",
+    "description": "Aria label for close button in help flow (in popup menu)"
+  },
+  "stats": {
+    "message": "統計",
+    "description": "Title of the statistics (metrics) tab of the Options page"
+  },
+  "statstitle": {
+    "message": "統計ダッシュボード",
+    "description": "On page title of the statistics page of the Options page"
+  },
+  "stats_opt_in_header": {
+    "message": "AdBlockの統計情報を確認しますか？",
+    "description": "On page text of the statistics page of the Options page"
+  },
+  "stats_opt_in_msg": {
+    "message": "ローカル統計データの収集に登録すると、どのサイトで最も多くの広告やトラッカーをブロックしているか、時間の経過とともにブロックされた合計ブロック数、プレミアムユーザーのために交換された画像など、AdBlockの統計データを確認することができます。",
+    "description": "On page text of the statistics page of the Options page"
+  },
+  "stats_opt_in_local_msg": {
+    "message": "ローカル統計データの収集にも登録すると、どのサイトで最も多くの広告やトラッカーをブロックしているか、時間の経過とともにブロックされた合計ブロック数、プレミアムユーザーのために交換された画像など、AdBlockのすべての統計データにアクセスできます。",
+    "description": "On page text of the statistics page of the Options page"
+  },
+  "stats_already_opted": {
+    "message": "既に匿名の利用データを共有することを選択済みです。",
+    "description": "On page text of the statistics page of the Options page"
+  },
+  "stats_opt_in_text_button": {
+    "message": "登録する",
+    "description": "Text in the Opt In button on the statistics page of the Options page"
+  },
+  "stats_opt_in_local_text_button": {
+    "message": "ローカル統計データ収集に登録する",
+    "description": "Text in the Opt In button on the statistics page of the Options page"
+  },
+  "stats_opt_in_data_collect": {
+    "message": " [[匿名の利用データ]]を共有することで、AdBlockの改善に貢献してください。",
+    "description": "Text in the Opt In button on the statistics page of the Options page"
+  },
+  "stats_ads_blocked": {
+    "message": "ブロックした広告",
+    "description": "Text on the statistics page of the Options page within the ads blocked panel"
+  },
+  "stats_hide_data": {
+    "message": "統計データ非表示",
+    "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
+  },
+  "stats_show_data": {
+    "message": "統計データ表示",
+    "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
+  },
+  "stats_trackers_blocked": {
+    "message": "ブロックしたトラッカー",
+    "description": "Text on the statistics page of the Options page within the ads blocked panel"
+  },
+  "stats_replaced_blocked": {
+    "message": "交換した画像",
+    "description": "Text on the statistics page of the Options page within the ads blocked panel"
+  },
+  "trackers_cta_header": {
+    "message": "トラッカー",
+    "description": "Header text on the statistics page of the Options page in the trackers panel"
+  },
+  "trackers_cta_msg": {
+    "message": " [[Easy Privacyフィルタリスト]]を有効にしてトラッカーをブロックしましょう",
+    "description": "message body text on the statistics page of the Options page in the trackers panel"
+  },
+  "trackers_button_text": {
+    "message": "有効化",
+    "description": "button text on the statistics page of the Options page in the trackers panel"
+  },
+  "premium_cta_msg_not_enabled": {
+    "message": "画像交換機能を有効化していません。",
+    "description": "message body text on the statistics page of the Options page in the image swap panel for premium users that haven't enabled image swap"
+  },
+  "premium_cta_msg": {
+    "message": "プレミアムで画像交換のトラッキング機能をアンロックしましょう。",
+    "description": "message body text on the statistics page of the Options page in the image swap panel"
+  },
+  "premium_cta_button_text_not_enabled": {
+    "message": "オンにする",
+    "description": "button text on the statistics page of the Options page in the image swap panel for premium users that haven't enabled image swap"
+  },
+  "premium_cta_button_text": {
+    "message": "Premiumを入手",
+    "description": "button text on the statistics page of the Options page in the image swap panel"
+  },
+  "parent_menu_item_time": {
+    "message": "これまでのブロック数",
+    "description": "menu item text on the statistics page of the Options page"
+  },
+  "parent_menu_item_site": {
+    "message": "サイトごとのブロック",
+    "description": "menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_today": {
+    "message": "今日",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_week": {
+    "message": "今週",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_month": {
+    "message": "今月",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_year": {
+    "message": "今年",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_all": {
+    "message": "これまで",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "delete_panel_title": {
+    "message": "ブロック統計データの削除",
+    "description": "title text on the delete overlay on the statistics page of the Options page"
+  },
+  "delete_detail_msg_part_I": {
+    "message": "ローカルに保存されたブロック統計データを削除できます。",
+    "description": "text on the delete overlay on the statistics page of the Options page"
+  },
+  "delete_detail_msg_part_II": {
+    "message": "これにより、ブロックされたトップサイトを含む統計ページに現在表示されているすべてのデータが削除されます。",
+    "description": "text on the delete overlay on the statistics page of the Options page"
+  },
+  "delete_detail_msg_part_III": {
+    "message": "統計データはデバイスにのみ保存され、削除した統計データは復元できません。",
+    "description": "text on the delete overlay on the statistics page of the Options page"
+  },
+  "delete_all_stats_data": {
+    "message": "現在保存されているブロック統計データを削除する",
+    "description": "text related to the delete all data checkbox on the statistics page of the Options page"
+  },
+  "opt_out_stats_data": {
+    "message": "今後、ブロック統計データを収集しない。",
+    "description": "text related to the opt out data collection checkbox on the statistics page of the Options page"
+  },
+  "delete_detail_page_2_msg_part_I": {
+    "message": "続けますか？",
+    "description": "text on page 2 of the delete modal box on the statistics page of the Options page"
+  },
+  "stats_go_back_text_button": {
+    "message": "戻る",
+    "description": "button text on page 2 of the delete modal box on the statistics page of the Options page"
+  },
+  "stats_im_sure_text_button": {
+    "message": "続ける",
+    "description": "button text on page 2 of delete modal box on the statistics page of the Options page"
+  },
+  "no_data_title": {
+    "message": "統計データなし",
+    "description": "title text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "no_data_msg_part_I": {
+    "message": "現在、表示できるブロック統計データはありません。",
+    "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "no_data_msg_part_II": {
+    "message": "ウェブ・ブラウジング後にこのページを更新すると、ブロック統計データが表示されるようになります。",
+    "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "loading_in_progress": {
+    "message": "読み込み中",
+    "description": "Text in the aria-label attribute of an icon indicating that page is currently loading"
+  },
+  "stats_ads_blocked_aria_label": {
+    "message": "ブロックした広告数",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_trackers_blocked_aria_label": {
+    "message": "ブロックしたトラッカー数",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_replaced_blocked_aria_label": {
+    "message": "交換した画像数",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "edit_image_msg_partI": {
+    "message": "一般的な広告のサイズを以下に3つ挙げました。",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image_msg_partII": {
+    "message": "画像のサイズを選択し、スライダーで調整し、完了したら保存をクリックします。",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image": {
+    "message": "画像の編集",
+    "description": "header text in the on custom image swap modal dialog"
+  },
+  "custom_images": {
+    "message": "画像カスタマイズ",
+    "description": "text on the image swap tab"
+  },
+  "custom_image_description": {
+    "message": "AdBlockで広告を置き換えるために使用する画像を最大9枚まで選択します",
+    "description": "text on the image swap tab"
+  },
+  "remove_image": {
+    "message": "画像の削除",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "remove_image_msg": {
+    "message": "本当にこの画像を削除しますか？",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonremove": {
+    "message": "削除",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonkeep": {
+    "message": "保持",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "custom_image_error": {
+    "message": "エラーが発生しました",
+    "description": "header / title text on the error message on the image swap tab"
+  },
+  "custom_image_error_msg_partI": {
+    "message": "画像が追加できませんでした。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partII": {
+    "message": "時間をおいてからお試し下さい。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partIII": {
+    "message": "また、[[匿名デバッグデータ]]を共有してもらえるとエラーの原因を解明するために役立ちます。",
+    "description": "error message text error message on the image swap tab"
+  },
+  "dontsend": {
+    "message": "送信しない",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "senddebugdata": {
+    "message": "デバッグデータを送信する",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "custom_image_unsupported_title": {
+    "message": "非対応の画像ファイル形式です",
+    "description": "header / title on error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partI": {
+    "message": "カスタマイズ画像交換能に非対応の画像を追加しようとしています。",
+    "description": "First sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partII": {
+    "message": "画像のファイル形式は以下の中からお選びください。",
+    "description": "second sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_supported_file_types": {
+    "message": "*.bmp, *.gif, *.jpeg, *.png, *.svg, *.tiff, *.webp",
+    "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
+  },
+  "youtube_onpage_icon_msg": {
+    "message": "登録チャンネルの広告表示を管理しよう：",
+    "description": "The message text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allow_all_btn_text": {
+    "message": "広告表示を全て許可",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_block_all_btn_text": {
+    "message": "広告表示を全てブロック",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_one_moment_text": {
+    "message": "少々お待ち下さい...",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowed_complete_text": {
+    "message": "全ての登録チャンネルの広告表示を許可しました",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocked_complete_text": {
+    "message": "全ての登録チャンネルの広告表示をブロックしました",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowing_ads_on_channel": {
+    "message": "このチャンネルの広告表示を許可する",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocking_ads_on_channel": {
+    "message": "このチャンネルの広告をブロックする",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_sign_in_text": {
+    "message": "YouTubeアカウントにログインし、登録チャンネルの広告表示を管理しましょう。",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_no_channels_text": {
+    "message": "少なくとも1つのYouTubeチャンネルに登録して、登録チャンネルの広告表示を管理しましょう。",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "once": {
+    "message": "一度だけ",
+    "description": "The button text on the popup menu"
+  },
+  "always": {
+    "message": "今後も",
+    "description": "The button text on the popup menu"
+  },
+  "enable_on_this_site": {
+    "message": "このサイトでAdBlockを有効にしよう",
+    "description": "GFC messaging on the popup menu"
+  },
+  "premium_access_without_disabling": {
+    "message": "AdBlock Premiumの新機能により、AdBlockを無効にすることなく、お気に入りのコンテンツに簡単にアクセスできます。",
+    "description": "GFC messaging on the popup menu"
+  },
+  "dont_show_reminder": {
+    "message": "この通知を今後表示しない",
+    "description": "GFC messaging on the popup menu"
+  },
+  "want_stop_seeing": {
+    "message": "今後一切表示させたくないですか？",
+    "description": "GFC messaging on the popup menu"
+  },
+  "access_without_disabling": {
+    "message": "AdBlockを無効にすることなく、お気に入りのコンテンツに簡単にアクセスしましょう！",
+    "description": "GFC messaging on the popup menu"
+  },
+  "learn_more_lower": {
+    "message": "詳細はこちら",
+    "description": "GFC messaging on the popup menu"
+  },
+  "distraction_control": {
+    "message": "ディストラクション管理",
+    "description": "Name of a Premium option"
+  },
+  "take_control": {
+    "message": "自分のブラウザを制御して、思い通りのブラウジングを実現しましょう。",
+    "description": "Description of the distraction control option"
+  },
+  "goodbye_distractions": {
+    "message": "ニュースレターのポップアップやフローティング広告など、気が散るようなものは「ディストラクション管理」で解決しましょう。",
+    "description": "Description of the distraction control option"
+  },
+  "please_note": {
+    "message": "ご検討ください:",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_new": {
+    "message": "ディストラクション管理は新しい機能であり、現在も改良中です。",
+    "description": "Description of the distraction control option"
+  },
+  "your_participation": {
+    "message": "皆様から頂くご意見とご協力が、より便利で快適なサービスの提供につながります。",
+    "description": "Description of the distraction control option"
+  },
+  "dc_more_information": {
+    "message": "さらなる詳細は[[こちら]]でご確認ください。",
+    "description": "Description of the distraction control option"
+  },
+  "distraction_control_example": {
+    "message": "ディストラクション管理の例",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Distraction Control feature."
+  },
+  "block_site_notifications": {
+    "message": "サイト通知をブロック",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "decline_allow_notifications": {
+    "message": "ユーザーが訪問するウェブサイトからの「通知の許可」リクエストを自動的に拒否します。",
+    "description": "Description of 'block site notifications' on the distraction control options page"
+  },
+  "stop_autoplay_videos": {
+    "message": "フローティング広告を停止",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "prevent_videos": {
+    "message": "動画が自動的に再生されないようにしたり、ブラウズ中にほとんどのフローティング広告が出現しないようにします。",
+    "description": "Description of 'stop autoplay videos' on the distraction control options page"
+  },
+  "hide_newsletter_popups": {
+    "message": "ニュースレターのポップアップを非表示化",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "block_newsletter_popups": {
+    "message": "ウェブサイトのニュースレターへの登録を促す迷惑なポップアップをブロックします。",
+    "description": "Description of 'hide newsletter pop-ups' on the distraction control options page"
+  },
+  "ignore_survey_requests": {
+    "message": "アンケート依頼を無視",
+    "description": "Sub-header on the distraction control options page"
+  },
+  "dismiss_invitations": {
+    "message": "ウェブサイトからのアンケートへの勧誘を即座に断ります。",
+    "description": "Description of 'ignore survey requests' on the distraction control options page"
+  },
+  "request_submission_permission": {
+    "message": "URLを送信",
+    "description": "Title of panel in the help flow"
+  },
+  "request_submission_url": {
+    "message": "不具合が発生した場合は、このURLを共有していただけると助かります。",
+    "description": "text on panel in the help flow"
+  },
+  "feature_disabled": {
+    "message": "機能停止",
+    "description": "Title text on panel in the help flow"
+  },
+  "feature_disabled_text": {
+    "message": "この機能が無効になっているようです。この機能を有効にすることで問題が解決されるかどうか確認してみましょう。",
+    "description": "text on panel in the help flow"
+  },
+  "updating_preferences": {
+    "message": "AdBlockは現在、お客様の設定を更新中です。",
+    "description": "text on panel in the help flow"
+  },
+  "done_reload_page": {
+    "message": "完了したらすぐにページを再読み込みしてください。",
+    "description": "text on panel in the help flow"
+  },
+  "no_thanks": {
+    "message": "要らない",
+    "description": "button text in the help flow"
+  },
+  "where_to_enable_dc": {
+    "message": "気が変われば、[[こちら]]からディストラクション管理の機能を追加で有効にすることができます。",
+    "description": "text in the help flow"
+  },
+  "swap_ads_for_images": {
+    "message": "広告の画像切り替え",
+    "description": "Sub-header describing Image Swap on the main Premium options page"
+  },
+  "personalize_experience": {
+    "message": "ブラウジング体験をカスタマイズし、$browser$用AdBlockをさらに活用しましょう。",
+    "description": "Description of Image Swap on the main Premium options page",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
+  },
+  "block_and_replace": {
+    "message": "画像切り替え機能では、ブロックした広告の場所にあなたが好きな写真を表示させます。",
+    "description": "Description of Image Swap on the main Premium options page"
+  },
+  "customize_your_adblock": {
+    "message": "AdBlockをカスタマイズ",
+    "description": "Sub-header describing Themes on the main Premium options page"
+  },
+  "fun_way_customize": {
+    "message": "テーマは、ブラウザ上でAdBlockをカスタマイズできる楽しい機能です。",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "take_control_easy": {
+    "message": "AdBlockの見た目、快適性、フォントサイズをお手軽操作で変更できます。AdBlockを自分色に染めましょう！",
+    "description": "Description of Themes on the main Premium options page"
+  },
+  "save_settings_multiple": {
+    "message": "複数のデバイスのAdBlockの設定を保存しましょう",
+    "description": "Sub-header describing Backup & Sync on the main Premium options page"
+  },
+  "take_custom_with_you": {
+    "message": "Chromeの全てのアカウントで広告ブロックルールの設定やホワイトリストなどを共有することができます。",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "set_up_once": {
+    "message": "AdBlockを一度設定すれば、その設定を持ち歩くことができます。",
+    "description": "Description of Backup & Sync on the main Premium options page"
+  },
+  "annoyance_free_browsing": {
+    "message": "煩わしさのないブラウジングを実現",
+    "description": "Description of Distraction Control on the main Premium options page"
+  },
+  "bypass_mode": {
+    "message": "バイパスモード",
+    "description": "Header on the main Premium options page"
+  },
+  "see_fewer_walls": {
+    "message": "アンチAdBlockウォールを減らしましょう",
+    "description": "Sub-header describing Bypass Mode on the main Premium options page"
+  },
+  "popups_disable_adblock": {
+    "message": "AdBlockの無効化を要求するポップアップが表示されるウェブサイトがますます多くなっています。",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  },
+  "get_around_popups": {
+    "message": "バイパスモードを使えば、AdBlockを無効にすることなく、ポップアップを回避することができます。",
+    "description": "Description of Bypass Mode on the main Premium options page"
+  }
+}

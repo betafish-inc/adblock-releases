@@ -1,0 +1,20 @@
+{
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "assert": true,
+    "loadScript": false
+  },
+  "parserOptions": {
+    "sourceType": "script"
+  },
+  "overrides": [
+    {
+      "files": ["*.mjs"],
+      "parserOptions": {
+        "sourceType": "module"
+      }
+    }
+  ]
+}

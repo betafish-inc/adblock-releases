@@ -1,0 +1,3306 @@
+{
+  "description": {
+    "message": "Blokir iklan dan popup di Youtube, Facebook, Twitch, dan situs favorit anda.",
+    "description": "Extension description in manifest. Should not exceed 132 characters."
+  },
+  "description2": {
+    "message": "Ekstensi Chrome paling populer, dengan lebih dari 60 juta pengguna! Blokir iklan di seluruh situs.",
+    "description": "Extension description in manifest. Should not exceed 132 characters."
+  },
+  "name_devbuild": {
+    "description": "Extension name to be shown for development builds. Note: this cannot be longer than 45 characters. Should not be translated",
+    "message": "Pembangunan pengembangan AdBlock"
+  },
+  "name_releasebuild": {
+    "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message": "AdBlock — pemblokir iklan terbaik"
+  },
+  "name": {
+    "description": "Extension name to be shown for release / published builds.  The extension name 'AdBlock' should NOT be translated, but the text after the dash should be translated",
+    "message": "AdBlock — pemblokir iklan terbaik"
+  },
+  "description_edge": {
+    "message": "AdBlock. Pemblokir iklan nomor 1 dengan lebih dari 200 juta unduhan. Blok iklan di seluruh web.",
+    "description": "Description for the AdBlock for Edge extension. Should not exceed 132 characters."
+  },
+  "description_yt": {
+    "message": "Satu-satunya pemblokir iklan Youtube dibangun oleh AdBlock, ekstensi Chrome paling populer dengan 60 juta pengguna di seluruh dunia",
+    "description": "Description for the AdBlock on YouTube extension. Should not exceed 132 characters."
+  },
+  "name_adblock_on_youtube": {
+    "message": "AdBlock di Youtube",
+    "description": "Name of version of the AdBlock extension that only blocks ads on YouTube. Other strings that refer to the 'AdBlock on YouTube' extension should use this name."
+  },
+  "adblock_click_for_details": {
+    "message": "AdBlock - Klik untuk melihat detilnya",
+    "description": "Tooltip on the AdBlock button, to help users understand that they can click the button to access more options."
+  },
+  "buttoncancel": {
+    "message": "Batal",
+    "description": "Cancel button"
+  },
+  "buttonok": {
+    "message": "OK!",
+    "description": "OK button"
+  },
+  "reportpubliclyavailable": {
+    "message": "Catatan: laporan anda mungkin akan tersedia untuk umum. Ingatlah itu sebelum anda menyertakan apapun yang bersifat pribadi.",
+    "description": "Ad report page string, when you're about to submit a report."
+  },
+  "buttonblockit": {
+    "message": "Tutup!",
+    "description": "Block button"
+  },
+  "buttonedit": {
+    "message": "Edit",
+    "description": "Edit filter(s) manually button"
+  },
+  "optionstitle": {
+    "message": "Pengaturan AdBlock",
+    "description": "Title for the Options page"
+  },
+  "optionstitle_yt": {
+    "message": "AdBlock di Opsi Youtube",
+    "description": "Title for the Options page for the 'AdBlock on YouTube' extension."
+  },
+  "chromebutton_how_to_hide2": {
+    "message": "Klik kanan tombol AdBlock dan pilih 'Sembunyikan di menu chrome'. Untuk menunjukkan itu, klik menu chrome, klik kanan tombol AdBlock, dan pilih 'Tetap di toolbar'.",
+    "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
+  },
+  "operabutton_how_to_hide2": {
+    "message": "Untuk menyembunyikan tombol, pergi ke opera://extensions dan centang opsi 'Hide from toolbar'. Anda dapat menampilkannya lagi dengan tidak mencentang opsi tersebut.",
+    "description": "Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2": {
+    "message": "Untuk menyembunyikan tombol, klik kanan toolbar Safari dan pilih Customize Toolbar, kemudian tarik tombol AdBlock dari toolbar. Anda dapat menampilkannya lagi dengan menariknya kembali ke toolbar.",
+    "description": "Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
+  },
+  "ff_button_how_to_hide": {
+    "message": "Untuk menyembunyikan tombol, klik kanan dan pilih Hapus dari Toolbar.  Anda dapat menunjukkan ini lagi di bawah menu Firefox-> Customize.",
+    "description": "Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
+  },
+  "slidertitle": {
+    "message": "Langkah 1: Tentukan apa yang akan diblokir",
+    "description": "'Block an ad' wizard title"
+  },
+  "blacklisternofilter": {
+    "message": "Tidak ada filter yang ditentukan!",
+    "description": "Warning if the user hasn't specified a filter"
+  },
+  "blacklistereditfilter": {
+    "message": "Silahkan ketik filter yang benar di bawah ini dan tekan OK",
+    "description": "Text if the user wants to manually edit a filter. 'OK' is the standard JavaScript popup button text."
+  },
+  "blacklistereditinvalid1": {
+    "message": "Filter ini tidak sah: $exception$",
+    "description": "Alert if the manually edited filter is invalid. Error messages are not translated.",
+    "placeholders": {
+      "exception": {
+        "content": "$1",
+        "example": "This filter is not supported"
+      }
+    }
+  },
+  "blacklisterblockedelement": {
+    "message": "Elemen terblokir:",
+    "description": "Tells the user what the blocked element is on the 'Block an ad' wizard."
+  },
+  "blacklisterwarningnofilter": {
+    "message": "Perhatian: tidak ada filter yang ditentukan!",
+    "description": "Warns the user that nothing will be blocked."
+  },
+  "blacklisterblocksalloftype": {
+    "message": "Hati hati: Filter ini memblokir semua $elementtype$ elemen yang ada di halaman!",
+    "description": "Warns the user that all elements of type X will be blocked.",
+    "placeholders": {
+      "elementtype": {
+        "content": "$1",
+        "example": "DIV"
+      }
+    }
+  },
+  "blacklistersinglematch": {
+    "message": "1 item yang sama pada halaman ini.",
+    "description": "Tells the user only one match was found"
+  },
+  "blacklistermatches": {
+    "message": "$matchcount$ item yang sama pada halaman ini.",
+    "description": "Tells the user multiple matches were found",
+    "placeholders": {
+      "matchcount": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "blacklisterattrwillbe": {
+    "message": "$attribute$ adalah $value$",
+    "description": "Checkbox label for attributes in 'Block an ad' wizard.",
+    "placeholders": {
+      "attribute": {
+        "content": "$1",
+        "example": "class"
+      },
+      "value": {
+        "content": "$2",
+        "example": "AdBanner"
+      }
+    }
+  },
+  "blacklistertype": {
+    "message": "Tipe",
+    "description": "node name is called 'Type' (HTML tag)"
+  },
+  "buttonlooksgood": {
+    "message": "Terlihat bagus",
+    "description": "Confirmation button after user chose what to block on the page"
+  },
+  "findingads": {
+    "message": "Mencari iklan...\n\nhanya sebentar saja.",
+    "description": "'Block an ad' wizard loading message"
+  },
+  "adblock_wont_run_on_pages_matching": {
+    "message": "AdBlock tidak akan berjalan pada halaman yang sama dengan:",
+    "description": "Message displayed when the allowlist wizard will allowlist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
+  },
+  "you_can_slide_to_change": {
+    "message": "Anda dapat menggeser yang dibawah ini untuk mengganti secara tepat pada halaman apa AdBlock tidak akan berjalan.",
+    "description": "allowlist slider usage instructions. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
+  },
+  "whitelistertitle2": {
+    "message": "Jangan jalankan AdBlock pada...",
+    "description": "The title of the allowlist wizard (Don't run on this page/pages on this domain)"
+  },
+  "buttonexclude": {
+    "message": "Jangan sertakan",
+    "description": "Button for excluding a domain in the allowlist wizard"
+  },
+  "reloadpageafterwhitelist": {
+    "message": "Muat ulang laman.",
+    "description": "Checkbox in the allowlist wizard"
+  },
+  "wizardcantrunonframesets": {
+    "message": "Fitur AdBlock ini tidak dapat bekerja di situs ini karena menggunakan teknologi usang. Anda dapat mengizinkan atau memblokir iklan secara manual di tab 'Sesuaikan' dalam laman opsi.",
+    "description": "Alert shown when the user tries to use a blocklist/allowlist wizard on an old website"
+  },
+  "subscribeconfirm": {
+    "message": "Apakah Anda yakin bahwa Anda ingin berlangganan ke daftar filter $title$?",
+    "description": "Prompt question before subscribing to a filter list",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Prebake"
+      }
+    }
+  },
+  "subscribingtitle": {
+    "message": "Berlangganan daftar filter...",
+    "description": "abp: link subscriber title"
+  },
+  "subscribingfinished": {
+    "message": "Selesai!",
+    "description": "abp: link subscriber successful result"
+  },
+  "subscribingfailed": {
+    "message": "Gagal!",
+    "description": "abp: link subscriber unsuccessful result"
+  },
+  "optionsversion": {
+    "message": "Versi $version$",
+    "description": "Version number",
+    "placeholders": {
+      "version": {
+        "content": "$1",
+        "example": "3.9.2"
+      }
+    }
+  },
+  "tabgeneral": {
+    "message": "Umum",
+    "description": "A tab on the Options page"
+  },
+  "tabfilterlists": {
+    "message": "Daftar Filter",
+    "description": "A tab on the Options page"
+  },
+  "tabcustomize": {
+    "message": "Penyesuaian",
+    "description": "A tab on the Options page"
+  },
+  "generaloptions": {
+    "message": "Pengaturan Umum",
+    "description": "Title of the first Options page tab"
+  },
+  "mac_app_message_options": {
+    "message": "AdBlock untuk Safari sekarang tersedia sebagai aplikasi Mac!",
+    "description": "Message to users on the Options page"
+  },
+  "betalabel": {
+    "message": "Beta",
+    "description": "Label for experimental features in AdBlock Options"
+  },
+  "showcontextmenus2": {
+    "message": "Tambahkan barang ke menu klik kanan",
+    "description": "Checkbox on the 'General' tab of the Options page."
+  },
+  "safaricontentblocking": {
+    "message": "Aktifkan blokir isi Safari",
+    "description": "Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
+  },
+  "debuginlogoption": {
+    "message": "Perlihatkan pernyataan debug pada log console (yang mana memperlambat ekstensi)",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption": {
+    "message": "Memungkinkan AdBlock untuk mengumpulkan data penggunaan daftar saringan anonim, dan informasi tentang konten yang diblokir oleh penyaring daftar",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "updatedrightnow": {
+    "message": "diperbaharui sekarang",
+    "description": "Label for filter list subscription"
+  },
+  "updatedsecondsago": {
+    "message": "diperbaharui $seconds$ detik yang lalu",
+    "description": "Label for filter list subscription",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "updatedminutesago": {
+    "message": "diperbaharui $minutes$ menit lalu",
+    "description": "Label for filter list subscription",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "updatedhoursago": {
+    "message": "diperbaharui $hours$ jam lalu",
+    "description": "Label for filter list subscription",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "updateddaysago": {
+    "message": "diperbaharui $days$ hari lalu",
+    "description": "Label for filter list subscription",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "updatedtimestamp": {
+    "message": "diperbarui pada $ts$",
+    "description": "Label for filter list subscription last updated timestamp",
+    "placeholders": {
+      "ts": {
+        "content": "$1",
+        "example": "8/26/2019 10:23:44 PM"
+      }
+    }
+  },
+  "updatedminuteago": {
+    "message": "diperbaharui 1 menit lalu",
+    "description": "Label for filter list subscription"
+  },
+  "updatedhourago": {
+    "message": "diperbaharui 1 jam lalu",
+    "description": "Label for filter list subscription"
+  },
+  "updateddayago": {
+    "message": "diperbaharui 1 hari lalu",
+    "description": "Label for filter list subscription"
+  },
+  "unsubscribedlabel": {
+    "message": "Tidak berlangganan.",
+    "description": "Status label when unselecting a filter list"
+  },
+  "fetchinglabel": {
+    "message": "Mengambil... Silahkan tunggu.",
+    "description": "Status label when selecting a new filter list"
+  },
+  "ab_filters_subscription_lastDownload_invalidURL": {
+    "message": "Gagal, alamat tidak sah",
+    "description": "Filter lists tab of the Options page: Message when you subscribe to a non-list URL."
+  },
+  "ab_filters_subscription_lastDownload_connectionError": {
+    "message": "Gagal, kegagalan download",
+    "description": "Filter lists tab of the Options page: Generic filter list download error message."
+  },
+  "ab_filters_subscription_lastDownload_invalidData": {
+    "message": "Gagal, daftar filter tidak valid",
+    "description": "Filter lists tab of the Options page: Invalid filter list file."
+  },
+  "ab_filters_subscription_lastDownload_checksumMismatch": {
+    "message": "Galgal, checksum tidak cocok",
+    "description": "Filter lists tab of the Options page: Corrupted filter list file."
+  },
+  "invalidListUrl": {
+    "message": "Daftar URL yang tidak sah. Daftar ini akan dihapus.",
+    "description": "Message when you subscribe to a non-list URL"
+  },
+  "failedtofetchfilter": {
+    "message": "Gagal mengambil filter ini!",
+    "description": "Error alert when subscribing to a filter list"
+  },
+  "removefromlist": {
+    "message": "Dihapus dari daftar",
+    "description": "Label to remove a custom filter list"
+  },
+  "you_know_thats_a_bad_idea_right": {
+    "message": "Semakin banyak daftar filter yang anda gunakan, semakinlambat AdBlock bekerja. Menggunakan terlalu banyak daftar bahkan dapat membuat browser anda berhenti bekerja pada beberapa situs. Tekan OK untuk tetap berlangganan pada daftar ini.",
+    "description": "Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
+  },
+  "unsubscribe_from_all_confirmation": {
+    "message": "AdBlock tidak bisa memblokir iklan jika anda menonaktifkan semua daftar saringan. Kami merekomendasikan sebaiknya menghentikan AdBlock sebagai gantinya. berhenti dari daftar ini bagaimanapun?",
+    "description": "Confirmation message shown to user if they try to unsubscribe from all filter lists. The user will have two options: OK and Cancel."
+  },
+  "filterstabtitle": {
+    "message": "Berlangganan pada daftar filter",
+    "description": "Title of the Filter lists tab of the Options page"
+  },
+  "filterlistlink": {
+    "message": "Jangan berangganan lebih dari yang anda butuhkan -- setiap satunya akan sedikit memperlambat anda! Kredit dan lebih banyak daftar dapat ditemukan [[Disini]].",
+    "description": "Filter lists tab explanation and link to filter list credits."
+  },
+  "filterviewsource": {
+    "message": "Lihat daftar filter",
+    "description": "Title for links to view filter lists on website"
+  },
+  "updatenowmessage2": {
+    "message": "Saya akan mengambil pembaharuan secara otomatis; Anda juga dapat melakukan [[pembaharuan sekarang]]",
+    "description": "Update filters text and button"
+  },
+  "orenteraurl": {
+    "message": "Atau masukan sebuah URL:",
+    "description": "Text box to enter a link to a custom filter list"
+  },
+  "subscribebutton": {
+    "message": "Berlangganan",
+    "description": "Subscribe to a filter list button"
+  },
+  "showlinkstolists2": {
+    "message": "Tunjukkan alamat ke daftar filter",
+    "description": "Label to display filter list links"
+  },
+  "filterantisocial": {
+    "message": "Daftar Antisocial filter (hapus tombol social media)",
+    "description": "A filter list"
+  },
+  "filterannoyances": {
+    "message": "Fanboy itu Gangguan (blok-halaman pop-up, sosial media dan terkait widget, dan gangguan lainnya)",
+    "description": "A filter list"
+  },
+  "filterwarning_removal": {
+    "message": "Daftar penghapusan peringatan Adblock (menghapus peringatan tentang menggunakan iklan blocker)",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filteracceptable_ads": {
+    "message": "Iklan Yang Diperbolehkan",
+    "description": "A filter list"
+  },
+  "filteradblock_custom": {
+    "message": "Kostum penyaring AdBlock",
+    "description": "A filter list"
+  },
+  "filtereasylist": {
+    "message": "EasyList",
+    "description": "A filter list"
+  },
+  "filtereasylist_lite": {
+    "message": "EasyList Lite",
+    "description": "A filter list"
+  },
+  "filterrussian": {
+    "message": "Rusia dan Ukraina",
+    "description": "Language names for a filter list"
+  },
+  "filter_russian": {
+    "message": "Rusia & Ukraina + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterczech": {
+    "message": "Ceko dan Slowakia",
+    "description": "A filter list"
+  },
+  "filter_czech": {
+    "message": "Ceko & Slovakia + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filteridcac": {
+    "message": "Saya tidak peduli tentang Kuki",
+    "description": "A filter list"
+  },
+  "filtereasyprivacy": {
+    "message": "EasyPrivacy (perlindungan privasi)",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_indonesian": {
+    "message": "Indonesia",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_indonesian": {
+    "message": "Indonesia + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterbitcoin_mining_protection": {
+    "message": "Cryptocurrency (Bitcoin) daftar perlindungan pertambangan",
+    "description": "A filter list"
+  },
+  "filterlatvian": {
+    "message": "Latvia",
+    "description": "A filter list"
+  },
+  "filter_latvian": {
+    "message": "Latvia + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterswedish": {
+    "message": "Swedia",
+    "description": "A filter list"
+  },
+  "filterturkish": {
+    "message": "Turki",
+    "description": "A filter list"
+  },
+  "filteranticircumvent": {
+    "message": "Filter Anti-Pengelakan",
+    "description": "A filter list"
+  },
+  "blacklistclickmessage": {
+    "message": "Klik kanan sebuah iklan pada halaman untuk memblokirnya -- atau blokir secara manual disini.",
+    "description": "'Hide a section of a webpage' part on the Customize tab of the Options page."
+  },
+  "tabcustomizetitle": {
+    "message": "Sesuaikan AdBlock",
+    "description": "Title of the Customize tab of the Options page"
+  },
+  "filterlistsrock": {
+    "message": "Daftar filter memblokir banyak iklan di web. Anda juga bisa:",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads": {
+    "message": "Blokir lebih banyak iklan:",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads": {
+    "message": "Berhenti memblokir iklan:",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "linkblockadbyurl": {
+    "message": "Blok sebuah iklan oleh URLnya",
+    "description": "Link label on the 'Customize' tab"
+  },
+  "linkhidesection": {
+    "message": "Sembunyikan sebagian dari halaman Web",
+    "description": "Link label on the 'Customize' tab"
+  },
+  "linkunblock": {
+    "message": "Perlihatkan iklan pada sebuah halama atau domain",
+    "description": "Link label on the 'Customize' tab"
+  },
+  "blockurlwithtext": {
+    "message": "Blok URL yang mengandung teks ini",
+    "description": "Message of the URL-blocking section (Block an ad by its URL) on the Customize tab"
+  },
+  "csstomatch": {
+    "message": "CSS untuk dicari",
+    "description": "Message of the CSS-hiding section (Hide a section of a webpage) on the Customize tab"
+  },
+  "excludedomainorurl": {
+    "message": "Domain atau URL dimana AdBlock tidak boleh memblokir apapun",
+    "description": "Message of the exclude section (Show ads on a webpage or domain) on the Customize tab"
+  },
+  "blockdomain": {
+    "message": "Domain dari halaman untuk diterapkan",
+    "description": "Message of the URL and CSS blocking sections"
+  },
+  "manualfilteredit": {
+    "message": "Edit secara Manual filter anda:",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit_yt": {
+    "message": "Edit secara Manual filter anda:",
+    "description": "Subtitle on the 'General' tab of AdBlock on YouTube"
+  },
+  "manualexcludefilteredit": {
+    "message": "Edit filter nonaktif:",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "migration_error_message": {
+    "message": "Kami telah menemukan beberapa kesalahan dalam penyaring khusus anda, lihat dibawah untuk pesannya.",
+    "description": "Error when adding custom filters manually"
+  },
+  "delete_migration_error_messages": {
+    "message": "Hapus pesan",
+    "description": "Button to delete error messages when adding custom filters manually"
+  },
+  "savebutton": {
+    "message": "Simpan",
+    "description": "Save button"
+  },
+  "savereminder": {
+    "message": "Jangan lupa untuk menyimpan!",
+    "description": "Reminder to click 'Save'"
+  },
+  "adblockreportinganad": {
+    "message": "AdBlock - Laporkan sebuah iklan",
+    "description": "Title of the ad report page"
+  },
+  "adreportintro": {
+    "message": "Menemukan sebuah iklan pada halaman web? Kami akan membantu Anda menemukan tempat yang tepat untuk melaporkannya!",
+    "description": "Introduction of the ad reporting page"
+  },
+  "adreportvoluntary": {
+    "message": "Melaporkan iklan bersifat sukarela. Hal ini membantu orang lain dengan mengaktifkan pengelola daftar filter untuk memblokir iklan untuk semua orang. Jika Anda tidak merasa altruistik sekarang ini, tidak apa-apa. Tutup halaman ini dan [[blok iklan]] hanya untuk diri sendiri.",
+    "description": "Introduction of the ad reporting page"
+  },
+  "disableaa": {
+    "message": "Cek filter iklan yang dapat diterima:",
+    "description": "Section header on the ad report page"
+  },
+  "clickdisableaa": {
+    "message": "Klik ini: [[Nonaktifkan Iklan Yang Dapat Diterima]]",
+    "description": "Instruction on ad report page"
+  },
+  "aamessageadreport": {
+    "message": "Jika Anda lebih tidak suka melihat iklan seperti ini, Anda dapat mematikan daftar filter iklan yang dapat diterima.",
+    "description": "Acceptable Ads message on ad report page"
+  },
+  "aalinkadreport": {
+    "message": "Ketahui lebih lanjut mengenai program iklan yang dapat diterima.",
+    "description": "Acceptable Ads link message on ad report page"
+  },
+  "adreportthanks": {
+    "message": "Terimah kasih!",
+    "description": "Message to the user thanking them for sharing the URL with us."
+  },
+  "updateyourlists": {
+    "message": "Pastikan daftar filter Anda telah diperbaharui:",
+    "description": "Section header on the ad report page"
+  },
+  "clickupdatefilters": {
+    "message": "Klik ini: [[Perbaharui filter saya!]]",
+    "description": "Instruction on ad report page"
+  },
+  "reloadadpage": {
+    "message": "Muat ulang halaman yang ada iklannya.",
+    "description": "Instruction on ad report page"
+  },
+  "adstillappear": {
+    "message": "Apa iklannya masih muncul?",
+    "description": "Question on ad report page"
+  },
+  "yes": {
+    "message": "Ya",
+    "description": "A positive response to a question"
+  },
+  "no": {
+    "message": "Tidak",
+    "description": "A negative response to a question"
+  },
+  "adalreadyblocked": {
+    "message": "Hebat! Anda sudah siap.",
+    "description": "On the ad report page, telling the user there is nothing to do as the ad they were seeing is now blocked."
+  },
+  "disableallextensions": {
+    "message": "Nonaktifkan semua ekstensi kecuali AdBlock:",
+    "description": "Instruction on ad report page"
+  },
+  "disableforchromestepone": {
+    "message": "Membuka [[halaman ekstensi]].",
+    "description": "Step 1 for disabling Chrome extensions"
+  },
+  "clickdisableotherextensions": {
+    "message": "ATAU, cukup klik tombol ini untuk kita untuk melakukan semua hal di atas: [[Nonaktifkan semua ekstensi lainnya]]",
+    "description": "On the ad report page, an alternative way to disable other extensions"
+  },
+  "disableotherextensionscomplete": {
+    "message": "Kami telah dinonaktifkan semua ekstensi lainnya. Sekarang kita akan memuat ulang halaman dengan iklan. Harap tunggu sebentar.",
+    "description": "On the ad report page, alert notifying users that we've disabled all other extensions"
+  },
+  "enableotherextensionscomplete": {
+    "message": "Ekstensi yang telah dinonaktifkan sebelumnya telah diaktifkan kembali.",
+    "description": "On the ad report page, alert notifying users that we've re-enabled extensions that were previously disabled"
+  },
+  "manuallyenableotherextensions": {
+    "message": "Buka laman ekstensi untuk mngaktifkan ekstensi yang telah dinonaktifkan sebelumnya.",
+    "description": "On the ad report page, alert notifying users that they will need to manually reenable the extensions"
+  },
+  "tabreloadcomplete": {
+    "message": "Selesai! Kami memuat ulang halaman dengan iklan. Silakan periksa halaman tersebut untuk melihat apakah iklan hilang. Kemudian kembali ke halaman ini dan menjawab pertanyaan di bawah ini.",
+    "description": "On the ad report page, alert notifying users that we've disabled all other extensions"
+  },
+  "disableforchromeandsafaristeptwo": {
+    "message": "Hilangkan centang 'Enabled' dipinggir setiap ekstensi kecuali untuk AdBlock. Biarkan AdBlock berjalan.",
+    "description": "Step 2 for disabling Chrome and Safari extensions"
+  },
+  "disableforsafaristepone": {
+    "message": "Klik pada menu Safari > Preferences > Extension.",
+    "description": "Step 1 for disabling Safari extensions"
+  },
+  "disableforedgestepone": {
+    "message": "Klik menu lainnya (...) dan pilih ekstensi.",
+    "description": "Step 1 for disabling Edge extensions"
+  },
+  "disableforedgesteptwo": {
+    "message": "Untuk setiap ekstensi kecuali AdBlock, klik ikon gigi dan klik tombol pada toggle untuk mengubahnya ke off.",
+    "description": "Step 2 for disabling Edge extensions"
+  },
+  "reenableadsonebyone": {
+    "message": "Hebat! Sekarang mari kita menemukan ekstensi yang adalah penyebab. Pergi dan aktifkan ekstensi setiap satu per satu. Ekstensi yang membawa kembali iklan adalah yang Anda butuhkan untuk dihapus untuk menyingkirkan iklan.",
+    "description": "Tells the user to re-enable the extensions one by one"
+  },
+  "correctfilters": {
+    "message": "Pastikan Anda menggunakan filter bahasa yang tepat:",
+    "description": "On the ad report page, label describing having the right filter lists enabled"
+  },
+  "pagelanguagecheck": {
+    "message": "Ditulis dalam bahasa apa halaman itu?",
+    "description": "Question on ad report page"
+  },
+  "lang_english": {
+    "message": "Inggris",
+    "description": "Language name"
+  },
+  "lang_czech": {
+    "message": "Ceko",
+    "description": "Language name"
+  },
+  "lang_spanish": {
+    "message": "Spanyol",
+    "description": "Language name"
+  },
+  "lang_russian": {
+    "message": "Rusia",
+    "description": "Language name"
+  },
+  "lang_slovak": {
+    "message": "Bahasa Slowakia",
+    "description": "Language name"
+  },
+  "lang_ukranian": {
+    "message": "Ukrania",
+    "description": "Language name"
+  },
+  "lang_arabic": {
+    "message": "Bahasa Arab",
+    "description": "Language name"
+  },
+  "lang_bulgarian": {
+    "message": "Bulgaria",
+    "description": "Language name"
+  },
+  "lang_chinese": {
+    "message": "China",
+    "description": "Language name"
+  },
+  "lang_danish": {
+    "message": "Denmark",
+    "description": "Language name"
+  },
+  "lang_dutch": {
+    "message": "Belanda",
+    "description": "Language name"
+  },
+  "lang_estonian": {
+    "message": "Bahasa Estonia",
+    "description": "Language name"
+  },
+  "lang_finnish": {
+    "message": "Finlandia",
+    "description": "Language name"
+  },
+  "lang_french": {
+    "message": "Prancis",
+    "description": "Language name"
+  },
+  "lang_german": {
+    "message": "Jerman",
+    "description": "Language name"
+  },
+  "lang_greek": {
+    "message": "Bahasa Yunani",
+    "description": "Language name"
+  },
+  "lang_hungarian": {
+    "message": "Hungaria",
+    "description": "Language name"
+  },
+  "lang_indonesian": {
+    "message": "Indonesia",
+    "description": "Language name"
+  },
+  "lang_icelandic": {
+    "message": "Bahasa Islandia",
+    "description": "Language name"
+  },
+  "lang_israeli": {
+    "message": "Ibrani",
+    "description": "Language name"
+  },
+  "lang_italian": {
+    "message": "Italia",
+    "description": "Language name"
+  },
+  "lang_japanese": {
+    "message": "Jepang",
+    "description": "Language name"
+  },
+  "lang_korean": {
+    "message": "Korea",
+    "description": "Language name"
+  },
+  "lang_lithuania": {
+    "message": "Bahasa Lithuania",
+    "description": "Language name"
+  },
+  "lang_polish": {
+    "message": "Polandia",
+    "description": "Language name"
+  },
+  "lang_romanian": {
+    "message": "Romania",
+    "description": "Language name"
+  },
+  "lang_latvian": {
+    "message": "Latvia",
+    "description": "Language name"
+  },
+  "lang_swedish": {
+    "message": "Swedia",
+    "description": "Language name"
+  },
+  "lang_turkish": {
+    "message": "Turki",
+    "description": "Language name"
+  },
+  "lang_catalan": {
+    "message": "Katalan",
+    "description": "Language name"
+  },
+  "lang_chinese_simplified": {
+    "message": "Bahasa cina yang sederhana",
+    "description": "Language name"
+  },
+  "lang_chinese_traditional": {
+    "message": "Cina tradisional",
+    "description": "Language name"
+  },
+  "lang_croatian": {
+    "message": "Kroasia",
+    "description": "Language name"
+  },
+  "lang_norwegian": {
+    "message": "Norwegia",
+    "description": "Language name"
+  },
+  "lang_serbian": {
+    "message": "Serbia",
+    "description": "Language name"
+  },
+  "lang_slovenian": {
+    "message": "Slovenia",
+    "description": "Language name"
+  },
+  "lang_vietnamese": {
+    "message": "Vietnam",
+    "description": "Language name"
+  },
+  "lang_portuguese_brazil": {
+    "message": "Portugis (Brasil)",
+    "description": "Language name"
+  },
+  "lang_portuguese_portugal": {
+    "message": "Portugis (Portugal)",
+    "description": "Language name"
+  },
+  "filtereasylist_plus_bulgarian": {
+    "message": "Bulgaria",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_bulgarian": {
+    "message": "Bulgaria + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterchinese": {
+    "message": "China",
+    "description": "A filter list"
+  },
+  "filter_chinese": {
+    "message": "Cina + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterdanish": {
+    "message": "Denmark",
+    "description": "A filter list"
+  },
+  "filterdutch": {
+    "message": "Belanda",
+    "description": "A filter list"
+  },
+  "filter_dutch": {
+    "message": "Belanda + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_finnish": {
+    "message": "Finlandia",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_french": {
+    "message": "Prancis",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_french": {
+    "message": "Petancis + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_german": {
+    "message": "Jerman",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_german": {
+    "message": "Jerman + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_greek": {
+    "message": "Bahasa Yunani",
+    "description": "A filter list"
+  },
+  "filterhungarian": {
+    "message": "Hungaria",
+    "description": "A filter list"
+  },
+  "filterisraeli": {
+    "message": "Ibrani",
+    "description": "A filter list"
+  },
+  "filter_israeli": {
+    "message": "Ibrani + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filteritalian": {
+    "message": "Italia",
+    "description": "A filter list"
+  },
+  "filter_italian": {
+    "message": "Italia + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterjapanese": {
+    "message": "Jepang",
+    "description": "A filter list"
+  },
+  "filternorwegian": {
+    "message": "Norwegia",
+    "description": "A filter lsit"
+  },
+  "filtereasylist_plun_korean": {
+    "message": "Korea",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_polish": {
+    "message": "Polandia",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_romanian": {
+    "message": "Romania",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_romanian": {
+    "message": "Romania + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_spanish": {
+    "message": "Spanyol",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_arabic": {
+    "message": "Bahasa Arab",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_arabic_plus_french": {
+    "message": "Arab + Perancis + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_estonian": {
+    "message": "Bahasa Estonia",
+    "description": "A filter list"
+  },
+  "filtericelandic": {
+    "message": "Bahasa Islandia",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_lithuania": {
+    "message": "Bahasa Lithuania",
+    "description": "A filter list"
+  },
+  "filter_easylist_plus_lithuania": {
+    "message": "Lituania +  EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filtereasylist_plus_vietnamese": {
+    "message": "Vietnam",
+    "description": "A filter list combined with EasyList"
+  },
+  "filter_easylist_plus_vietnamese": {
+    "message": "Vietnamese + EasyList",
+    "description": "A filter list combined with EasyList"
+  },
+  "filterbrazilian_portuguese": {
+    "message": "Brazil Portugis",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_portuguese": {
+    "message": "Portugis + EasyList",
+    "description": "A filter list"
+  },
+  "filtereasylist_plus_indian": {
+    "message": "IndianList + EasyList",
+    "description": "A filter list"
+  },
+  "other": {
+    "message": "Yang lain",
+    "description": "Multiple choice option"
+  },
+  "nodefaultfilter1": {
+    "message": "Kami tidak memiliki daftar filter default untuk bahasa tersebut. harap [[coba untuk menemukan daftar yang sesuai yang mendukung bahasa ini]] atau memblokir iklan ini untuk diri sendiri melalui menu AdBlock.",
+    "description": "Instructions on ad report page pointing users to EasyList subscriptions list."
+  },
+  "retryaftersubscribe": {
+    "message": "Berlangganan pada daftar filter ini, lalu coba lagi: $list_title$",
+    "description": "Instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
+    "placeholders": {
+      "list_title": {
+        "content": "$1",
+        "example": "French"
+      }
+    }
+  },
+  "checkinfirefoxtitle": {
+    "message": "Periksa di Firefox",
+    "description": "Tell a user to see if a reported ad also appears in Firefox"
+  },
+  "checkinfirefoxorchrometitle": {
+    "message": "Periksa Firefox atau Chrome",
+    "description": "Tell a user to see if a reported ad also appears in Firefox/Chrome"
+  },
+  "checkinfirefox_1": {
+    "message": "Pasang Firefox jika anda tidak memilikinya.",
+    "description": "instruction for how to check Firefox for a reported ad"
+  },
+  "checkinfirefoxorchrome_1": {
+    "message": "Memasang Firefox atau Chrome jika anda tidak memilikinya.",
+    "description": "instruction for how to check Firefox or Chrome for a reported ad"
+  },
+  "checkinfirefox_2": {
+    "message": "Pasang AdBlock Plus untuk Firefox jika Anda tidak memilikinya.",
+    "description": "Instruction for how to check Firefox for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefoxorchrome_2": {
+    "message": "Memasang Adblock Plus untuk Firefox atau Adblock untuk Chrome jika anda tidak memilikinya.",
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad. Don't translate the name 'Adblock Plus'."
+  },
+  "checkinfirefox_3": {
+    "message": "Di peramban itu, berlangganan ke daftar filter yang sama seperti yang Anda miliki di sini.",
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
+  },
+  "checkinfirefox_4": {
+    "message": "Pada browser tersebut, muatlah halaman yang ada iklannya.",
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
+  },
+  "checkinfirefox_5": {
+    "message": "Apakah iklannya muncul juga pada browser itu?",
+    "description": "Instruction for how to check Firefox/Chrome for a reported ad"
+  },
+  "ff_checkinchrometitle": {
+    "message": "Periksa di Chrome",
+    "description": "Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_1": {
+    "message": "Pasang Chrome, jika Anda tidak memilikinya.",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_2": {
+    "message": "Pasang AdBlock untuk Chrome, jika Anda tidak memilikinya.",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_3": {
+    "message": "Di Chrome, berlangganan ke daftar filter yang sama seperti yang Anda miliki di sini.",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_4": {
+    "message": "Di Chrome, muat halaman dengan iklan.",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_5": {
+    "message": "Apakah iklan muncul di Chrome juga?",
+    "description": "Instruction for how to check Chrome for a reported ad"
+  },
+  "refusetocheck": {
+    "message": "Saya tidak ingin memeriksa hal ini",
+    "description": "User is telling us they don't wish to investigate something for us"
+  },
+  "reportfilterlistproblem": {
+    "message": "Ini adalah sebuah masalah daftar filter. Laporkan disini: $link$",
+    "description": "Telling the user to report an ad to a filter list maintainer",
+    "placeholders": {
+      "link": {
+        "content": "[[]]",
+        "example": "The link could point to a filter list's forum, or to the email address of a filter list maintainer. For example, forums.lanik.us or someguy@list.com."
+      }
+    }
+  },
+  "fixityourself": {
+    "message": "OK, anda tetap bisa memblokir iklan ini untuk anda sendiri pada halaman pengaturan, Terima kasih!",
+    "description": "Telling users who won't report an ad to us how to handle it for themselves"
+  },
+  "popup_menu_title": {
+    "message": "Menu Popup AdBlock",
+    "description": "Title for the popup menu."
+  },
+  "block_an_ad_on_this_page": {
+    "message": "Sembunyikan sesuatu pada halaman ini",
+    "description": "Toolbar button menu entry and context menu entry"
+  },
+  "block_this_ad": {
+    "message": "Blokir iklan ini",
+    "description": "Toolbar button menu entry and context menu entry"
+  },
+  "typehiding": {
+    "message": "sembunyikan",
+    "description": "A resource type"
+  },
+  "typescript": {
+    "message": "skrip",
+    "description": "A resource type"
+  },
+  "typeimage": {
+    "message": "gambar",
+    "description": "A resource type"
+  },
+  "typestylesheet": {
+    "message": "definisi style",
+    "description": "A resource type"
+  },
+  "typeobject": {
+    "message": "objek interaktif",
+    "description": "A resource type"
+  },
+  "typesubdocument": {
+    "message": "frame",
+    "description": "A resource type"
+  },
+  "typeobject_subrequest": {
+    "message": "object_subrequest",
+    "description": "A resource type"
+  },
+  "typexmlhttprequest": {
+    "message": "xmlhttprequest",
+    "description": "A resource type"
+  },
+  "typeother": {
+    "message": "lainnya",
+    "description": "A resource type"
+  },
+  "typepopup": {
+    "message": "popup",
+    "description": "A resource type"
+  },
+  "typemedia": {
+    "message": "audio/video",
+    "description": "A resource type"
+  },
+  "typepage": {
+    "message": "halaman",
+    "description": "A resource type"
+  },
+  "typewebsocket": {
+    "message": "websocket",
+    "description": "A resource type"
+  },
+  "typeunknown": {
+    "message": "tidak diketahui",
+    "description": "A resource type"
+  },
+  "close": {
+    "message": "Tutup",
+    "description": "Generic message for buttons that close a view or window"
+  },
+  "loading": {
+    "message": "MEMUAT...",
+    "description": "Generic message displayed during processes that take some time"
+  },
+  "flashads": {
+    "message": "Video dan Flash",
+    "description": "Title of the final ad report question if the ad didn't appear in Firefox"
+  },
+  "cantblockflashwarning": {
+    "message": "Apakah iklannya muncul didalam atau sebelum film atau plugin lainnya seperti game Flash?",
+    "description": "Text of the final ad report question"
+  },
+  "cantblockflash": {
+    "message": "Kami belum bisa memblokir iklan iklan didalam Flash dan plugin lainnya. Kami menunggu dukungan dari browser dan WebKit.",
+    "description": "Result of the final ad report question"
+  },
+  "cleanuplist2": {
+    "message": "Bersihkan daftar ini",
+    "description": "Label at the bottom of the 'Customize' tab of the Options page"
+  },
+  "disabled_by_filter_lists": {
+    "message": "Maaf, AdBlock dimatikan pada halaman ini oleh salah satu daftar filter anda.",
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list."
+  },
+  "disabled_by_filter_lists_yt": {
+    "message": "Maaf, AdBlock pada Youtube dinonaktifkan pada halaman ini oleh salah satu pilihan anda.",
+    "description": "Message shown when a user tries to un-allowlist a web page that has been allowlisted by a rule in a subscribed filter list. Specific to the 'AdBlock on YouTube' extension."
+  },
+  "dont_run_on_pages_on_domain": {
+    "message": "Jangan jalankan pada halaman-halaman di domain ini",
+    "description": "Menu entry to open the allowlist wizard"
+  },
+  "open_allowlist_wizard": {
+    "message": "Opsi jeda lainnya",
+    "description": "Menu entry to open the allowlist wizard"
+  },
+  "disabled_site_title": {
+    "message": "Tidak ada yang diblokir disini!",
+    "description": "header title on the menu when a user is on tab that extensions are disabled on (Chrome settings, etc)"
+  },
+  "allowlisted_channel": {
+    "message": "Anda telah mengkonfigurasi AdBlock untuk dijeda di saluran ini untuk setiap kunjungan.",
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
+  },
+  "disabled": {
+    "message": "AdBlock Dijeda",
+    "description": "Title shown in menu when AdBlock is paused on all sites"
+  },
+  "disabled_on_all_sites": {
+    "message": "Anda telah mengkonfigurasi AdBlock untuk tetap dijeda pada semua situs.",
+    "description": "Message shown in menu when AdBlock is paused on all sites"
+  },
+  "disabled_on_this_page": {
+    "message": "AdBlock dimatikan pada halaman ini.",
+    "description": "Message shown in toolbar button on web pages that have been allowlisted"
+  },
+  "disabled_on_this_channel": {
+    "message": "Anda mengizinkan iklan di saluran ini.",
+    "description": "Message shown in the toolbar button menu on YouTube channel pages and videos that have been allowlisted."
+  },
+  "enable_adblock": {
+    "message": "Mengaktifkan AdBlock pada Halaman ini",
+    "description": "Link text to un-allowlist a page, displayed immediately after 'AdBlock is disabled on this page'"
+  },
+  "enable_adblock_on_this_channel": {
+    "message": "Blokir iklan di saluran ini",
+    "description": "Menu entry to un-allowlist a YouTube channel, displayed under 'You allowed ads on this channel.'"
+  },
+  "status_paused": {
+    "message": "AdBlock sedang dibekukan.",
+    "description": "Message shown in toolbar button when AdBlock is not running"
+  },
+  "status_universal_paused": {
+    "message": "AdBlock dijeda pada semua situs.",
+    "description": "Message shown in toolbar button when AdBlock is not running on all domains"
+  },
+  "status_domain_paused": {
+    "message": "AdBlock dijeda untuk kunjungan ini. Anda mungkin perlu memuat ulang laman untuk melihat perubahan anda.",
+    "description": "Message shown in toolbar button when AdBlock is not running on a specific domain"
+  },
+  "status_allowlisted": {
+    "message": "Anda telah mengkonfigurasi AdBlock untuk tetap dijeda pada situs ini untuk setiap kunjungan.",
+    "description": "Message shown in toolbar button when AdBlock is not running on a page or website"
+  },
+  "resume_blocking_ads": {
+    "message": "Lanjut blokir iklan",
+    "description": "Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site' or 'AdBlock is paused on all sites'"
+  },
+  "premium_status_msg": {
+    "message": "Didukung Sejak $date$",
+    "description": "Message shown on the premium tab of the options page when the user is a licensed premium user",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "January 2020"
+      }
+    }
+  },
+  "premium_status_short_msg": {
+    "message": "Aktif",
+    "description": "Message shown on the premium tab of the option page when user is a licensed premium user"
+  },
+  "unpause_adblock": {
+    "message": "Lanjutkan AdBlock",
+    "description": "Link text to start blocking ads again, displayed immediately after 'AdBlock is paused'"
+  },
+  "domain_unpause_adblock": {
+    "message": "Batalkan jeda AdBlock pada situs ini",
+    "description": "Link text to start blocking ads again, displayed immediately after 'AdBlock is paused on this site'"
+  },
+  "pause_adblock": {
+    "message": "Bekukan AdBlock",
+    "description": "Menu entry to pause AdBlock (stop blocking ads)"
+  },
+  "pause_adblock_everywhere": {
+    "message": "Jeda pada semua situs",
+    "description": "Menu entry to pause AdBlock everywhere (stop blocking ads)"
+  },
+  "domain_pause_adblock": {
+    "message": "Jeda pada situs ini",
+    "description": "Menu entry to pause AdBlock on this domain (stop blocking ads)"
+  },
+  "unpause_adblocking": {
+    "message": "Menjeda pemblokiran iklan",
+    "description": "Menu entry to unpause the extension (start blocking ads again)"
+  },
+  "pause_adblocking": {
+    "message": "Jeda pemblokiran iklan",
+    "description": "Menu entry to pause the extension (stop blocking ads)"
+  },
+  "safaricontentblockingpausemessage": {
+    "message": "Untuk menjeda AdBlock dengan pemblokiran konten diaktifkan, pilih Safari (di menu bar)> Preferences> Extensions> AdBlock, dan hapus centang 'Enable AdBlock'.",
+    "description": "Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled."
+  },
+  "safaricontentblockinglimitexceeded": {
+    "message": "Jumlah aturan daftar filter melebihi batas 50.000, dan telah otomatis dikurangi. Harap berhenti berlangganan dari beberapa daftar filter atau nonaktifkan pemblokiran konten safari!",
+    "description": "Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled."
+  },
+  "browserestartrequired": {
+    "message": "Silakan restart safari untuk menyelesaikan mematikan pemblokiran konten.",
+    "description": "Displayed after disabling Safari Content Blocking, which requres a browser relaunch."
+  },
+  "safarinotificationtitle": {
+    "message": "Batas aturan pemblokiran konten melebihi batas",
+    "description": "Title of a notification shown to Safari Content Blocking users with too many filter list rules."
+  },
+  "safarinotificationbody": {
+    "message": "Harap nonaktifkan beberapa daftar filter. Informasi lebih lanjut di pilihan AdBlock.",
+    "description": "Body of a notification shown to Safari Content Blocking users with too many filter list rules."
+  },
+  "undo_last_block": {
+    "message": "Batalkan blok saya pada domain ini",
+    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
+  },
+  "undo_last_block_site": {
+    "message": "Batalkan item tersembunyi saya",
+    "description": "Menu entry to let the user cancel the result of running the blocklist wizard."
+  },
+  "dont_run_on_this_page": {
+    "message": "Jangan jalankan pada halama ini",
+    "description": "Menu entry to allowlist the current page"
+  },
+  "options": {
+    "message": "Pilihan",
+    "description": "The text of the link on chrome://chrome/extensions that takes you to the Options page"
+  },
+  "hide_this_button": {
+    "message": "Sembunyikan tombol ini",
+    "description": "Toolbar button menu entry to hide the AdBlock button"
+  },
+  "donate_to_adblock": {
+    "message": "Cinta AdBlock? Pertimbangkan untuk menyumbang!",
+    "description": "Text of a donate link in the toolbar button menu"
+  },
+  "help_and_feedback": {
+    "message": "Bantuan dan Tanggapan",
+    "description": "Text of a help link in the toolbar button menu"
+  },
+  "donate_to_youtube_adblock": {
+    "message": "Suka ini? Pertimbangkan untuk menyumbang!",
+    "description": "Text of a donate link in the toolbar button menu. 'This' refers to the 'AdBlock on YouTube' extension."
+  },
+  "pwyw": {
+    "message": "Membayar apa yang Anda inginkan!",
+    "description": "Text of a payment request link"
+  },
+  "privacy_policy": {
+    "message": "Kebijakan pribadi",
+    "description": "Link to AdBlock's privacy policy"
+  },
+  "translator_credit": {
+    "message": "Diterjemahkan oleh:",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "tabsupport": {
+    "message": "Dukungan",
+    "description": "A tab on the Options page"
+  },
+  "tabtranslations": {
+    "message": "Terjemahan",
+    "description": "A tab on the Options page"
+  },
+  "translators": {
+    "message": "Pelajari lebih lanjut tentang bagaimana untuk membantu menerjemahkan AdBlock [[here]]",
+    "description": "A link on the Options page / translators tab to a KB article about how to help translate AdBlock"
+  },
+  "report_ad_on_page": {
+    "message": "Laporkan sebuah iklan pada halaman ini",
+    "description": "Entry in the AdBlock button menu"
+  },
+  "troubleshoot_an_ad": {
+    "message": "Penyelesaian masalah iklan",
+    "description": "Entry in the AdBlock button menu"
+  },
+  "acceptableadsoption": {
+    "message": "Izinkan beberapa iklan yang tidak mengganggu",
+    "description": "Checkbox on the 'General' tab of the Options page to enable the Acceptable Ads filter list"
+  },
+  "advanced_options2": {
+    "message": "Saya pengguna tingkat lanjut, perlihatkan pilihan tingkat lanjut",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "onpage_messages": {
+    "message": "Izinkan AdBlock untuk menampilkan pesan di laman situs jika relevan",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "work_around_hulu_problems": {
+    "message": "Membetulkan video Hulu.com yang tidak bisa dimainkan (harus muat ulang browser anda)",
+    "description": "Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."
+  },
+  "modifydomain": {
+    "message": "Situs:",
+    "description": "Caption for the allowlist wizard slider that modifies the domain part of a URL"
+  },
+  "modifypath": {
+    "message": "Halaman:",
+    "description": "Caption for the allowlist wizard slider that modifies the path part of a URL"
+  },
+  "show_ads_except_for": {
+    "message": "Perlihatkan iklan dimanapun kecuali pada domain-domain ini...",
+    "description": "Section title for the allowlisting section of Customize tab"
+  },
+  "only_block_ads_on_these_sites": {
+    "message": "Hanya blokir iklan di situs-situs ini:",
+    "description": "Label for textbox where user enters a list of sites on Customize tab"
+  },
+  "warning_overrules_filters": {
+    "message": "Peringatan: pada semua situs lain anda akan melihat iklan!\nHal ini mengesampingkan semua filter lain untuk situs-situs tersebut.",
+    "description": "Message on the 'Customize' tab of the options page, explaining the danger of adding a allowlist filter for all websites with only some exceptions."
+  },
+  "storage_quota_exceeded": {
+    "message": "Anda melebihi jumlah penyimpanan yang bisa dipakai oleh AdBlock. Batalkanlah langganan anda dari beberapa daftar filter!",
+    "description": "Message shown when the user uses more storage than allowed by the browser."
+  },
+  "firefox_explanation": {
+    "message": "Tujuan dari pertanyaan ini adalah untuk menentukan siapa yang harus menerima laporan anda. Jika anda menjawab pertanyaan dengan salah, laporannya akan terkirim kepada orang yang salah, jadi mungkin laporan anda akan diabaikan.",
+    "description": "Explanation of the 'Check in Firefox or Chrome' step on the ad report page"
+  },
+  "mac_app_message_menu_part_one": {
+    "message": "Baru!",
+    "description": "part one of the message to safari users on the popup menu"
+  },
+  "mac_app_message_menu_part_two": {
+    "message": "Coba aplikasi AdBlock Mac",
+    "description": "part two of the message to safari users on the popup menu"
+  },
+  "blocked_ads": {
+    "message": "Iklan yang terblokir:",
+    "description": "Title for toolbar icon menu section showing number of ads blocked"
+  },
+  "blocked_n_on_this_page": {
+    "message": "$count$ di halaman ini",
+    "description": "Shown below the 'Blocked ads:' message. Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
+    "placeholders": {
+      "count": {
+        "content": "[[123]]",
+        "example": "123"
+      }
+    }
+  },
+  "blocked_n_in_total": {
+    "message": "Total $count$",
+    "description": "Shown below the 'Blocked ads:' message. Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
+    "placeholders": {
+      "count": {
+        "content": "[[123,456]]",
+        "example": "123,456"
+      }
+    }
+  },
+  "show_on_adblock_button": {
+    "message": "Tampilkan jumlah iklan yang diblokir di tombol AdBlock",
+    "description": "Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_adblock_menu": {
+    "message": "Tampilkan jumlah iklan yang diblokir di menu AdBlock",
+    "description": "Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "show_on_button": {
+    "message": "Tampilkan jumlah iklan yang diblokir pada tombol",
+    "description": "Checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_menu": {
+    "message": "Tampilkan jumlah iklan yang diblokir pada menu",
+    "description": "Checkbox letting user choose whether the AdBlock menu should show the number of ads blocked"
+  },
+  "block_ads_on_youtube": {
+    "message": "Hapus iklan di Youtube",
+    "description": "Label for checkbox letting user choose whether to block ads on youtube.com"
+  },
+  "block_privacy_on_youtube": {
+    "message": "Lindungi privasi saya di Youtube",
+    "description": "Checkbox letting user choose whether to block privacy-related requests on youtube.com"
+  },
+  "block_annonyances_on_youtube": {
+    "message": "Hapus gangguan di Youtube",
+    "description": "Checkbox letting user choose whether to block annoyances on youtube.com (such as comments, suggested videos, annotations, and recommended channels)"
+  },
+  "show_devtools_panel": {
+    "message": "Tampilkan panel 'AdBlock' di alat pengembang",
+    "description": "Checkbox letting user choose whether the AdBlock tab should be displayed in the developer tools window"
+  },
+  "adblockinglist": {
+    "message": "Daftar filter pemblokiran iklan",
+    "description": "Subtitle on the Filter lists tab: List of filter lists to block ads."
+  },
+  "otherfilters": {
+    "message": "Daftar filter lainnya",
+    "description": "Subtitle on the Filter lists tab: List of filter lists to block other elements that are not ads."
+  },
+  "customfilters": {
+    "message": "Daftar Filter sendiri",
+    "description": "Subtitle on the Filter lists tab: Section for adding your own filter lists."
+  },
+  "customfilterserrormessage": {
+    "message": "Filter berikut: \n $filter$ \n memiliki kesalahan: \n $message$",
+    "description": "Error message when there is an issue with a custom filter on the 'Customize' tab of the Options page",
+    "placeholders": {
+      "filter": {
+        "content": "$1",
+        "example": "@@.ad"
+      },
+      "message": {
+        "content": "$2",
+        "example": "invalid filter"
+      }
+    }
+  },
+  "languagedropdowndescription": {
+    "message": "Tambahkan filter untuk bahasa lain: ",
+    "description": "Dropdown list for language-specific filter lists"
+  },
+  "how": {
+    "message": "Bagaimana?",
+    "description": "Text of a link pointing to instructions on how to do something"
+  },
+  "whats_this": {
+    "message": "Apa ini?",
+    "description": "Text of a link pointing to the explanation of a new feature"
+  },
+  "selectlanguage": {
+    "message": " --Pilih bahasa-- ",
+    "description": "First option in the language dropdown menu on the Filter lists tab. Include the ' -- ' on either side of your translation."
+  },
+  "allowlist_channel": {
+    "message": "Izinkan iklan di saluran ini",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube or Twitch and has enabled the YouTube or Twitch channel allow listing option"
+  },
+  "manage_subscribed_channel": {
+    "message": "Kelola iklan di saluran langganan",
+    "description": "Entry in the AdBlock menu, only displayed when a user is browsing YouTube and has enabled the YouTube channel allow listing option"
+  },
+  "whitelist_youtube_channel_v2": {
+    "message": "Izinkan iklan di saluran Youtube:",
+    "description": "Menu entry to whitelist the channel of the current YouTube video or page. The channel name will appear on a line below this menu item."
+  },
+  "confirm_undo_custom_filters": {
+    "message": "Apakah Anda yakin ingin menghapus blok $count$ yang telah Anda buat pada $host$?",
+    "description": "Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "12"
+      },
+      "host": {
+        "content": "$2",
+        "example": "stackoverflow.com"
+      }
+    }
+  },
+  "adblocksupport": {
+    "message": "Dukungan AdBlock",
+    "description": "Title of the Support tab of the Options page"
+  },
+  "whatsnew": {
+    "message": "Lihat pembaruan terakhir di [[changelog]] kami",
+    "description": "Link to display the changelog on the Support tab"
+  },
+  "englishonly": {
+    "message": "Hanya Inggris",
+    "description": "Lets the user know that a link/page is only available in English."
+  },
+  "needhelp": {
+    "message": "Butuh Bantuan?",
+    "description": "Subtitle on the Support tab"
+  },
+  "adblockupdates": {
+    "message": "Perbarui AdBlock",
+    "description": "Subtitle on the Support tab"
+  },
+  "ytadblockupdates": {
+    "message": "AdBlock di pembaruan Youtube",
+    "description": "Subtitle on the Support tab. Specific to the 'AdBlock on YouTube' extension."
+  },
+  "whatmakesadblocktick": {
+    "message": "Ingin melihat bagaimana AdBlock bekerja?",
+    "description": "Subtitle on the Support tab. This section contains links to the AdBlock source code and contributors. In this context, 'tick' can be replaced with the word 'work'."
+  },
+  "aboutadblock": {
+    "message": "Tentang AdBlock",
+    "description": "Subtitle on the Support tab"
+  },
+  "sourcecode": {
+    "message": "Tinjau [[kode sumber]] kami",
+    "description": "Link to the source code of AdBlock on the Support tab"
+  },
+  "contributors": {
+    "message": "Pelajari selengkapnya tentang [[tim kami]]",
+    "description": "Link to the contributors page on the Support tab"
+  },
+  "debuginfo": {
+    "message": "Sudahkan tim kami meminta beberapa info debug?",
+    "description": "Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport": {
+    "message": "Kirimkan kami [[laporan bug]]",
+    "description": "Link to send a bug report on the Support tab"
+  },
+  "supportsite": {
+    "message": "Beritahukan kami di [[situs dukungan]] ini!",
+    "description": "Link to the support site on the Support tab"
+  },
+  "helpcenter": {
+    "message": "Kunjungi [[Pusat Bantuan]] kami",
+    "description": "Link to AdBlock's help site. This is found on the Support tab of the options."
+  },
+  "copydebugdata": {
+    "message": "Salin data debug",
+    "description": "Button text on the Support tab of the options."
+  },
+  "copieddebugdata": {
+    "message": "Tersalin!",
+    "description": "Button text on the Support tab of the options."
+  },
+  "resourceblocktitle": {
+    "message": "Semua sumber daya",
+    "description": "Resource list page name"
+  },
+  "headerresource": {
+    "message": "Sumber daya",
+    "description": "Resource list page: title of a column"
+  },
+  "headertype": {
+    "message": "Tipe",
+    "description": "Resource list page: title of a column"
+  },
+  "headerfilter": {
+    "message": "Filter yang sesuai",
+    "description": "Resource list page: title of a column"
+  },
+  "show_resourcelist": {
+    "message": "Tampilkan semua permintaan",
+    "description": "Menu entry to open the resource list page"
+  },
+  "new_resourcelist_explanation_win": {
+    "message": "Untuk menampilkan semua permintaan, klik kanan halaman, pilih 'Inspect' (Ctrl + Shift + I), kemudian pilih tab 'AdBlock'.",
+    "description": "Message explaining how to access the resource list page on AdBlock 3.0+ (Windows)"
+  },
+  "new_resourcelist_explanation_osx": {
+    "message": "Untuk menampilkan semua permintaan, klik kanan halaman, pilih 'Inspect' (Option + Cmd + I), lalu pilih tab 'AdBlock'.",
+    "description": "Message explaining how to access the resource list page on AdBlock 3.0+ (Mac)"
+  },
+  "noresourcessend2": {
+    "message": "Ada yang salah. Tidak ada sumber yang dikirim. Halaman ini sekarang akan ditutup. Coba muat ulang situs web.",
+    "description": "Resource list page: error message"
+  },
+  "resourcedomain": {
+    "message": "Dimuat pada halaman dengan domain:$domain$",
+    "description": "Resource list page: text shown when hovering over an item in the third-party column",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "filterorigin": {
+    "message": "Filter asal:$list$",
+    "description": "Resource list page: tooltip of matching filter, telling which filter list contains the filter",
+    "placeholders": {
+      "list": {
+        "content": "$1",
+        "example": "A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
+  },
+  "typeselector": {
+    "message": "pemilih",
+    "description": "A resource type"
+  },
+  "typesub_frame": {
+    "message": "frame",
+    "description": "A resource type"
+  },
+  "typemain_frame": {
+    "message": "halaman",
+    "description": "A resource type"
+  },
+  "topframe": {
+    "message": "Bingkai atas",
+    "description": "Resource list page: frame type"
+  },
+  "subframe": {
+    "message": "Subframe",
+    "description": "Resource list page: frame type"
+  },
+  "frametype": {
+    "message": "Jenis bingkai: ",
+    "description": "Resource list page: followed by frame type (top frame, subframe)"
+  },
+  "framedomain": {
+    "message": "Domain bingkai: ",
+    "description": "Resource list page: domain name of the frame"
+  },
+  "frameurl": {
+    "message": "URL bingkai: ",
+    "description": "Resource list page: full URL of the frame"
+  },
+  "legend": {
+    "message": "Legenda: ",
+    "description": "Resource list page: followed by color codes for various resource statuses (blocked, allowlisted, hidden)"
+  },
+  "blockedresource": {
+    "message": "Blokir sumber daya",
+    "description": "Resource list page: resource status"
+  },
+  "hiddenelement": {
+    "message": "Elemen tersembunyi",
+    "description": "Resource list page: resource status"
+  },
+  "thirdparty": {
+    "message": "Pihak ketiga",
+    "description": "Resource list page: column title telling if the resource originates from a different domain"
+  },
+  "acceptableadsdisable_done": {
+    "message": "Anda tidak lagi berlangganan daftar filter Acceptable Ads.",
+    "description": "Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "acceptableadsdisable_how_to_reenable": {
+    "message": "Anda bisa mengubahnya kembali dan mendukung situs web yang anda suka dengan memilih \"Izinkan beberapa iklan yang tidak mengganggu \"di bawah ini.",
+    "description": "Message shown to users after disabling Acceptable Ads via the Options page."
+  },
+  "easylist_lite_or_easylist": {
+    "message": "Kami merekomendasikan sebaiknya berlangganan juga \"EasyList Lite\" atau \"EasyList\" tatapi tidak keduanya.",
+    "description": "Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_done": {
+    "message": "AdBlock menggunakan EasyList untuk memblokir iklan pada kebanyakn situs web.",
+    "description": "Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_disable_how_to_reenable": {
+    "message": "Kami merekomdesikan mayimpannya di. Jika Anda berhenti berlangganan secara tidak sengaja, harap pilih \"EasyList\" sekarang untuk memblokir lebih banyak iklan.",
+    "description": "Message shown to users after disabling EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_done": {
+    "message": "AdBlock menggunakan EasyList Lite atau EasyList untuk memblokir iklan pada kebanyakan situs web.",
+    "description": "Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "easylist_lite_disable_how_to_reenable": {
+    "message": "Kami merekomdesikan mayimpannya di. Jika Anda berhenti berlangganan secara tidak sengaja, harap pilih \"EasyList Lite\" atau \"EasyList \" sekarang untuk memblokir lebih banyak iklan.",
+    "description": "Message shown to users after disabling both EasyList Lite and EasyList via the Filter lists tab on the Options page."
+  },
+  "acceptable_ads_content_blocking_disbled_message": {
+    "message": "Kami menghentikan langganan anda dari Acceptable Ads karena anda mengaktifkan pemblokiran konten safari. Anda hanya bisa memilih satu per satu. ([[Mengapa?]])",
+    "description": "Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message": {
+    "message": "Kami menonaktifkan pemblokiran konten safari karena anda memilih untuk mengizinkan iklan yang tidak mengganggu. Anda hanya bisa memilih satu per satu. ([[Mengapa?]])",
+    "description": "Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
+  },
+  "adreport_laststep": {
+    "message": "Lanhkah terakhir: Melaporkan masalah kita.",
+    "description": "Subtitle on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
+  },
+  "adreport_name": {
+    "message": "Siapa nama anda?",
+    "description": "Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email": {
+    "message": "Apa alamat email anda?",
+    "description": "Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
+  "adreport_email_privacy": {
+    "message": "Kami hanya akan menggunkan ini untuk menghubungi anda jika kami membutuhkan informasi lebih lanjut.",
+    "description": "Let the user know that their email address won't be used for reasons other than contacting them about their bug or ad report."
+  },
+  "adreport_location": {
+    "message": "Persis di mana pada halaman tersebut iklannya? Seperti apa terlihat?",
+    "description": "Question on the ad report page asking the user to describe the ad and its location on a webpage."
+  },
+  "adreport_screen_cap_upload": {
+    "message": "Tampilkan tangkapan layar:",
+    "description": "Label next to a file upload button."
+  },
+  "adreport_filter": {
+    "message": "Jika anda telah membuat filter kerja menggunakan wizard \"blok iklan\", tempelkan di kotak di bawah ini:",
+    "description": "Optional question on the ad report page when the ad needs to be reported to AdBlock."
+  },
+  "buttonsubmit": {
+    "message": "Masukkan",
+    "description": "Button to send a form."
+  },
+  "adreport_missing_info": {
+    "message": "Informasi yang diperlukan tidak ada atau tidak sah. Silahkan isi pertanyaan-pertanyaan yang memiliki batas merah.",
+    "description": "Error message shown when the user doesn't enter anything in some of the text fields."
+  },
+  "adreport_missing_screenshot": {
+    "message": "Anda lupa untuk melampirkan tangkapan layar! Kami tidak dapat menolong anda tanpa melihat iklan(s) yang anda laporkan.",
+    "description": "Error message shown when the user doesn't attach a screenshot to an ad report."
+  },
+  "adreport_response_success": {
+    "message": "Siap! Kami akan menghubungi secepat kami bisa. Sementara itu, cari email dari AdBlock. Anda akan menemukan tautan ke tiket anda di situs bantuan kami, bersama dengan beberapa saran bantuan self-help jika kami tidak segera menghubungi anda.",
+    "description": "Shown when a ticket has been sumbitted to AdBlock's support site successfully."
+  },
+  "adreport_response_invalid_file": {
+    "message": "Itu bukan file gambar. Silahkan upload file .png, .gif, atau .jpg.",
+    "description": "Error message shown when the user uploads an invalid file type."
+  },
+  "adreport_response_large_file": {
+    "message": "File itu terlalu besar. Harap pastikan file anda kurang dari 10 MB.",
+    "description": "Error message shown when the user tries to upload a large image file."
+  },
+  "adreport_response_save_error": {
+    "message": "Kesalahan menyimpan file yang diunggah.",
+    "description": "Error message shown when the server could not save an attached file."
+  },
+  "adreport_response_file_name": {
+    "message": "Nama file itu terlalu panjang. Tolong beri nama file anda yang lebih pendek.",
+    "description": "Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
+  },
+  "adreport_all_debug_info": {
+    "message": "Informasi berikut juga akan dimasukan dalam laporan iklan.",
+    "description": "Shows the user the debug information that will be sent along with their report."
+  },
+  "adreport_server_response_error_msg": {
+    "message": "Terdapat kesalahan saat memproses permintaan anda.",
+    "description": "Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
+  },
+  "adreport_server_response_error__manual_msg_step1": {
+    "message": "Silakan pergi ke [[situs web pendukung kami]].",
+    "description": "Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "adreport_server_response_error__manual_msg_step2": {
+    "message": "Dan buatlah tiket secara manual, dan copy dan paste informasi di bawah ini ke dalam bagian \"Fill in any details you think will help us understand your issue\".",
+    "description": "Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "custom_filters_migration_error_message_part1": {
+    "message": "Menghitung kesalahan filter khusus: ",
+    "description": "Part one of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part2": {
+    "message": "Pesan berikut yang dihasilkan selama migrasi filter khusus (abaikan nomor barisnya): ",
+    "description": "Part two of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "custom_filters_migration_error_message_part3": {
+    "message": "Entri asli: ",
+    "description": "Part three of a message shown to users on the Customize tab of the Options page after invalid custom filters have been migrated"
+  },
+  "show_language_options": {
+    "message": "Biarkan saya memilih bahasa tampilan AdBlock",
+    "description": "Option to let the user choose AdBlock's display language."
+  },
+  "display_language_selector": {
+    "message": "Menampilkan AdBlock di",
+    "description": "Text shown before language selector drop-down."
+  },
+  "local_cdn_option": {
+    "message": "Aktifkan cache konten lokal untuk perpustakaan situs populer",
+    "description": "Option to let the user enable Local CDN feature."
+  },
+  "myadblockoptions": {
+    "message": "MyAdBlock",
+    "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Options page"
+  },
+  "newmyadblockenrollment": {
+    "message": "BARU",
+    "description": "The text of the 'Enable MyAdBlock' menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockenrollment": {
+    "message": "Aktifkan MyAdBlock",
+    "description": "The text of the menu item in the popup menu that takes you to the MyAdBlock Enrollment page"
+  },
+  "myadblockoptionspageheader": {
+    "message": "Opsi MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblockoptionscategoryheader": {
+    "message": "Kategori",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblockpicreplacementswitchlabel": {
+    "message": "Ganti beberapa iklan yang diblokir dengan gambar kualitas tinggi dari kategori di bawah ini",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "catchannelswitchlabel": {
+    "message": "Kucing",
+    "description": "The label text for the cat switch on the MyAdBlock Options page"
+  },
+  "dogchannelswitchlabel": {
+    "message": "Anjing",
+    "description": "The label text for the dog switch on the MyAdBlock Options page"
+  },
+  "landscapechannelswitchlabel": {
+    "message": "Lanskap",
+    "description": "The label text for the Landscape switch on the MyAdBlock Options page"
+  },
+  "goatchannelswitchlabel": {
+    "message": "Kambing",
+    "description": "The label text for the Goats switch on the MyAdBlock Options page"
+  },
+  "oceanchannelswitchlabel": {
+    "message": "Lautan",
+    "description": "The label text for the Ocean switch on the MyAdBlock Options page"
+  },
+  "foodchannelswitchlabel": {
+    "message": "Makanan",
+    "description": "The label text for the Food switch on the MyAdBlock Options page"
+  },
+  "birdchannelswitchlabel": {
+    "message": "Burung",
+    "description": "The label text for the Birds switch on the MyAdBlock Options page"
+  },
+  "customchannelswitchlabel": {
+    "message": "Sesuai",
+    "description": "The label text for the Custom Image switch on the MyAdBlock Options page"
+  },
+  "urgent_safari_changes": {
+    "message": "PENTING: Apple merubah ekstensi Safari.",
+    "description": "Title for Options page message letting users know of settings change."
+  },
+  "settings_changed": {
+    "message": "Dalam persiapan, AdBlock sekarang bekerja secara berbeda dan beberapa pengaturan anda mungkin telah berubah.",
+    "description": "Part of Options page message letting users know of settings change."
+  },
+  "learn_more": {
+    "message": "Baca selengkapnya.",
+    "description": "Link to Knowledge Base article with more information about the settings change"
+  },
+  "download_mac_app": {
+    "message": "Untuk mendapatkan pengalaman AdBlock terbaik pada Mac anda, silakan unduh [[AdBlock untuk Aplikasi Safari Mac!]] kami",
+    "description": "Link to download our Mac App. [[ and ]] will be replaced with HTML to link to the Mac App Store"
+  },
+  "note": {
+    "message": "CATATAN:",
+    "description": "Indicates that the user should take note of the message that follows."
+  },
+  "changes_to_adblock": {
+    "message": "Kami telah membuat perubahan untuk AdBlock!",
+    "description": "Link to Options page with more information about the changes."
+  },
+  "new_myadblock_feature_available": {
+    "message": "Klik disini untuk membuka fitur terbaru!",
+    "description": "The text in the popup menu item saying there is a new MyAdBlock feature and takes you to the MyAdBlock tab in the option page."
+  },
+  "images_coming_soon": {
+    "message": "Foto lainnya akan segera hadir!",
+    "description": "The text telling MyAdBlock active users that there will be more photos for MyAdBlock."
+  },
+  "myadblock_pic_replacemenet_description": {
+    "message": "Ganti iklan dengan gambar yang anda suka",
+    "description": "The text briefly describing what the feature does in the MyAdBlock tab in the option page."
+  },
+  "myadblock_payment_not_available_title": {
+    "message": "OH TIDAK! Kami tidak dapat terhubung ke server kami",
+    "description": "The title of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_payment_not_available_text": {
+    "message": "Kami sangat senang anda tertarik dengan AdBlock! Sayangnya, kami tidak dapat memproses pembayaran saat ini. Silakan ulangi kembali.",
+    "description": "The text of an error message box in the MyAdBlock tab in option page when we cannot load iframe."
+  },
+  "myadblock_options_page_header": {
+    "message": "MyAdBlock",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_picreplacement_exlained": {
+    "message": "Pilih dari kategori di bawah dan AdBlock sesekali akan mengganti iklan anda dengan gambar berkualitas tinggi untuk mencerahkan hari anda.",
+    "description": "The label text for the switch on the MyAdBlock Options page"
+  },
+  "feedback_title": {
+    "message": "Saran",
+    "description": "Title for feedback call to action."
+  },
+  "feedback_info": {
+    "message": "Punya komentar atau meminta fitur ke kami? Kami ingin sekali mendengar dari anda!",
+    "description": "Text describing the MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_title": {
+    "message": "Kami ingin sekali mendengar dari anda!",
+    "description": "Title for MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_info": {
+    "message": "Jika anda memiliki saran atau permintaan fitur kepada kami, silakan gunakan laman saran kami.",
+    "description": "Text describing the MyAdBlock feedback call to action."
+  },
+  "myadblock_feedback_button": {
+    "message": "Kirim Saran",
+    "description": "Text on the MyAdBlock feedback button"
+  },
+  "error_msg_header": {
+    "message": "Ups!",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+  },
+  "error_msg_partI": {
+    "message": "Mohon maaf, menu AdBlock terjadi kesalahan memuat.",
+    "description": "DO NOT TRANSLATE The text on the popup menu when an error has occurred"
+  },
+  "error_msg_help_us_partI": {
+    "message": "Bantu kami mengatasi masalah ini  ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_us_partII": {
+    "message": " dengan mengirimkan beberapa data debug.",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_thank_you": {
+    "message": "Terima kasih",
+    "description": "The text on the popup menu when an error has occurred"
+  },
+  "error_msg_reload_partI": {
+    "message": "Selanjutnya, coba muat ulang ekstensi berdasarkan ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_reload_partII": {
+    "message": "klik disini.",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_partI": {
+    "message": "Jika tidak berhasil, ",
+    "description": "DO NOT TRANSLATE"
+  },
+  "error_msg_help_partII": {
+    "message": "klik disini untuk bantuan lebih lanjut",
+    "description": "DO NOT TRANSLATE"
+  },
+  "generaloptions2": {
+    "message": "Pengaturan Umum",
+    "description": "Title of one of the Options page tabs"
+  },
+  "debuginlogoption2": {
+    "message": "Lihat pernyataan debug di Konsol Log",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "slows_down_extension": {
+    "message": "memperlambat ekstensi",
+    "description": "Text of an option telling users that the option slows down the extension"
+  },
+  "enter_url": {
+    "message": "Masukkan URL",
+    "description": "Placeholder text in the Custom Filter list URL bar"
+  },
+  "filterantisocial2": {
+    "message": "Daftar filter Antisocial",
+    "description": "A filter list"
+  },
+  "filter_antisocial_explained": {
+    "message": "menghapus tombol sosial media",
+    "description": "A filter list explaination"
+  },
+  "filterannoyances2": {
+    "message": "Fanboy Mengganggu",
+    "description": "A filter list"
+  },
+  "filter_annoyances_explained": {
+    "message": "Blokir halaman popup, media sosial dan widget terkait, dan gangguan lainnya",
+    "description": "A filter list explanation"
+  },
+  "filterwarning_removal2": {
+    "message": "Daftar Penghapus Peringatan AdBlock",
+    "description": "A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
+  },
+  "filter_warning_removal_explained": {
+    "message": "hapus peringatan tentang menggunakan pemblokir iklan",
+    "description": "A filter list explanation"
+  },
+  "filter_idcac_explained": {
+    "message": "blokir notifikasi kuki, yang berarti anda melepaskan hak anda untuk diberi tahu tentang penggunaan kuki di situs yang anda kunjungi",
+    "description": "A filter list explanation"
+  },
+  "filterlistsrock2": {
+    "message": "Daftar filter memblokir banyak iklan di web. Anda juga bisa...",
+    "description": "Header text on the Customize tab"
+  },
+  "blockmoreads2": {
+    "message": "Blokir lebih banyak iklan",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "stop_blocking_ads2": {
+    "message": "Berhenti blokir iklan",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualfilteredit2": {
+    "message": "Edit secara manual filter anda",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "manualexcludefilteredit2": {
+    "message": "Edit filter nonaktif",
+    "description": "Subtitle on the 'Customize' tab"
+  },
+  "filtersavewarning_part1": {
+    "message": "Hati-hati: jika anda melakukan kesalahan disini banyak filter lain, termasuk filter resmi, juga bisa rusak!",
+    "description": "Warning when manually editing filters -- first part not clickable."
+  },
+  "filtersavewarning_part2": {
+    "message": "Baca [[tutorial filter sintak]] untuk mepelajari bagaimana menambahkan filter daftar blokir dan daftar diizinkan lanjutan.",
+    "description": "Warning when manually editing filters -- second part clickable."
+  },
+  "pwyw2": {
+    "message": "Membayar Apa yang Anda Inginkan!",
+    "description": "Text of a payment request link"
+  },
+  "translator_credit2": {
+    "message": "Kredit untuk penerjemah diberikan ke...",
+    "description": "This message will be followed by a list of names of the translators who contributed to the language AdBlock is currently displayed in. Do not add any names to this string."
+  },
+  "selectlanguage2": {
+    "message": "pilih bahasa",
+    "description": "First option in the language dropdown menu on the Filter lists tab."
+  },
+  "allow_whitelisting_youtube_channels2": {
+    "message": "Izinkan iklan pada saluran Youtube tertentu",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "youtube_manage_subscribed": {
+    "message": "Kelola pengaturan AdBlock dari laman langganan Youtube saya",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "allowlisting_twitch_channels": {
+    "message": "Izinkan iklan pada saluran Twitch tertentu",
+    "description": "Checkbox on the 'General' tab of the Options page"
+  },
+  "require_restart_browser": {
+    "message": "membutuhkan memulai ulang browser anda",
+    "description": "Text displayed within an option to notify users to restart the browser to fully enable the option"
+  },
+  "themes": {
+    "message": "Tema",
+    "description": "Title of the Themes tab of the Options page"
+  },
+  "popup_menu_theme": {
+    "message": "Tema Popup Menu",
+    "description": "Section title of the Themes tab of the Options page"
+  },
+  "options_page_theme": {
+    "message": "Tema Opsi Laman",
+    "description": "Section title of the Themes tab of the Options page"
+  },
+  "more_themes_coming_soon": {
+    "message": "Periksa lagi nanti, tema lainnya sedang diproses!",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
+  },
+  "more_themes_on_the_way": {
+    "message": "Tema lainnya sedang diproses!",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 60 characters)"
+  },
+  "myadblock_themes_description": {
+    "message": "Ubah tampilan AdBlock, termasuk ukuran ukuran teks dan skema warna",
+    "description": "Text briefly describing what themes do on the MyAdBlock tab of the Options page"
+  },
+  "stay_tuned": {
+    "message": "Segera hadir",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 30 characters)"
+  },
+  "support_to_unlock": {
+    "message": "Dukung untuk membuka",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 30 characters)"
+  },
+  "header": {
+    "message": "Bagian Atas",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 10 characters)"
+  },
+  "text_body": {
+    "message": "isi konten",
+    "description": "Text in theme box of the Themes tab of the Options page (no more than 22 characters)"
+  },
+  "default_theme": {
+    "message": "Bawaan",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "dark_theme": {
+    "message": "Gelap",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "watermelon_theme": {
+    "message": "Semangka",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "solarized_theme": {
+    "message": "Solarized",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "ocean_theme": {
+    "message": "Lautan",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "sunshine_theme": {
+    "message": "Sinar Mentari",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "rebecca_purple_theme": {
+    "message": "Ungu Rebecca",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "solarized_light_theme": {
+    "message": "Solarized Terang",
+    "description": "Name of a theme in the Themes tab of the Options page"
+  },
+  "apply_theme": {
+    "message": "Terapkan Tema",
+    "description": "Text of clickable element that applies the theme of a theme box in the Themes tab of the Options page"
+  },
+  "adblock_twitter": {
+    "message": "Twitter AdBlock",
+    "description": "Title for link to AdBlock's Twitter account"
+  },
+  "adblock_facebook": {
+    "message": "Facebook AdBlock",
+    "description": "Title for link to AdBlock's Facebook account"
+  },
+  "adblock_website": {
+    "message": "Beranda AdBlock",
+    "description": "Title for link to AdBlock's website"
+  },
+  "callout_new_feature": {
+    "message": "BARU!",
+    "description": "Text to callout a new feature"
+  },
+  "myadblock_short_description": {
+    "message": "Rasakan AdBlock yang disempurnakan dengan fitur-fitur yang menyenangkan khusus untuk donatur",
+    "description": "Text substitle of myAdBlock page in the options page"
+  },
+  "image_swap": {
+    "message": "Tukar Gambar",
+    "description": "Title of the Image Swap sub-tab of the Options page"
+  },
+  "myadblock_subscribe_invite": {
+    "message": "Langganan MyAdBlock untuk membuka kunci",
+    "description": "Text on hover of a locked MyAdBlock feature in the MyAdBlock tab of the Options page"
+  },
+  "myadblock_more_coming_soon": {
+    "message": "Fitur lainnya akan segera hadir!",
+    "description": "Title of the teaser MyAdBlock feature box in the MyAdBlock tab of the Options page"
+  },
+  "myadblock_benefits_explained": {
+    "message": "Sebagai imbalan untuk mendukung kami dengan mengaktifkan MyAdBlock, anda akan mendapatkan alat dan fitur terbaru segera setelah dirilis.",
+    "description": "Main text of the teaser MyAdBlock feature in the MyAdBlock tab of the Options page"
+  },
+  "myadblock_payment_not_available_callout": {
+    "message": "Oh Tidak!",
+    "description": "The text notifying something is wrong in the payment iframe in the Options page."
+  },
+  "myadblock_payment_not_available_subtitle": {
+    "message": "Kami tidak dapat terhubung ke server kami",
+    "description": "The sub-title of an error message box in payment iframe in the Options page."
+  },
+  "sync_tab_item": {
+    "message": "Percadangan & Sinkronisasi",
+    "description": "Title of the Sync sub-tab of the Options page"
+  },
+  "sync_turn_on_invalid_name_text": {
+    "message": "Silakan beri nama ekstensi ini untuk melanjutkan",
+    "description": "error message text on the Sync sub-tab of the Options page"
+  },
+  "sync_turn_on_duplicate_name_text": {
+    "message": "Nama ekstensi ini sudah digunakan",
+    "description": "error message text on the Sync sub-tab of the Options page"
+  },
+  "sync_extension_section_title": {
+    "message": "Ekstensi",
+    "description": "section title text on the Sync sub-tab of the Options page"
+  },
+  "sync_header_message_no_license": {
+    "message": "Beri kami waktu beberapa saat agar Sinkronisasi siap untuk anda.",
+    "description": "message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
+  },
+  "sync_header_message_getting_license": {
+    "message": "memeriksa ...",
+    "description": "message to users on the sync page when the extension is getting the license"
+  },
+  "sync_header_message_in_progress": {
+    "message": "Sinkronisasi dalam proses...",
+    "description": "message to users on the options pages when syncing with the server is in progress"
+  },
+  "sync_header_message_sync_complete": {
+    "message": "Sinkron selesai",
+    "description": "message to users on the option pages when syncing with the server server is complete"
+  },
+  "sync_extension_no_extension_msg": {
+    "message": "Anda tidak memiliki ekstensi yang disinkronkan.",
+    "description": "message to users on the sync page when the license is unavailable, inactive or a license ID hasn't been returned yet"
+  },
+  "sync_header_message_setup_fail_prefix": {
+    "message": "Kesalahan sinkron:",
+    "description": "start of error message to users on the sync page when sync fails."
+  },
+  "sync_header_message_setup_fail_part_2": {
+    "message": "Silakan coba tambahkan ekstensi ini lagi dalam beberapa menit.",
+    "description": "message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_error_prefix": {
+    "message": "Ekstensi ini tidak sinkron.",
+    "description": "Start of an sync error message to users on the Options page or AdBlock popup menu."
+  },
+  "sync_header_message_old_commit_version_part_2": {
+    "message": "Kami telah menyinkron ekstensi ini dan mengembalikan perubahan anda.",
+    "description": "part 2 of a message to users on the sync page and popup menu when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_part_3": {
+    "message": "Silakan muat ulang laman dan buat perubahan anda lagi.",
+    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_error_save_message_part_2": {
+    "message": "Ekstensi ini tidak sinkron.",
+    "description": "part 2 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
+  },
+  "sync_header_error_save_message_part_3": {
+    "message": "Silakan coba sinkron secara manual nanti.",
+    "description": "part 3 of a message to users on the Options pages when sending the sync data fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_customize_tab_part_2": {
+    "message": "Kami telah menyinkronkan ekstensi ini dan akan mengembalikan perubahan anda.",
+    "description": "part 2 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_header_message_old_commit_version_customize_tab_part_3": {
+    "message": "Silakan salin aturan tersesuai anda, muat ulang laman, dan buat perubahan anda lagi.",
+    "description": "part 3 of a message to users on the sync page when initial setup of sync fails for some unknown reason."
+  },
+  "sync_device_name_list_updated_at_msg": {
+    "message": "diperbarui terakhir pada $timestamp$",
+    "description": "message to users on when the sync page was last updated with the name of the extensions / devices (displayed in locale specific format)",
+    "placeholders": {
+      "timestamp": {
+        "content": "$1",
+        "example": "April 30, 2019 6:25 pm for US/English locale"
+      }
+    }
+  },
+  "sync_extension_name_placeholder": {
+    "message": "Beri nama ekstensi ini sehingga anda dapat membedakannya dari yang lain...",
+    "description": "placeholder text in the extension / device name field on the sync page"
+  },
+  "sync_verify_turn_on_text": {
+    "message": "Nyalakan Cadangkan & Sinkron akan menghapus informasi pengaturan yang anda dari ekstensi ini.",
+    "description": "message text in the extension / device name field on the sync page"
+  },
+  "sync_now_btn_text": {
+    "message": "Sinkronkan sekarang",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_message_old_version_part_1": {
+    "message": "Anda menggunakan AdBlock versi lama.",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_message_old_version_part_2": {
+    "message": "Silakan [[perbarui AdBlock]] sehingga kami dapat menyinkron pengaturan anda.",
+    "description": "button text on the Sync sub-tab of the Options page"
+  },
+  "sync_removed_error_msg_part_1": {
+    "message": "Ekstensi ini tidak sinkron",
+    "description": "sync error message text on the popup menu"
+  },
+  "sync_removed_error_msg_part_2": {
+    "message": "Klik disini untuk memperbarui pengaturan anda",
+    "description": "sync error message text on the popup menu and options page"
+  },
+  "unsync_error_msg_part_1": {
+    "message": "Kesalahan Sinkron",
+    "description": "sync error message text on the options menu"
+  },
+  "unsync_error_msg_part_2": {
+    "message": "Ekstensi ini tidak akan disinkronkan.",
+    "description": "sync error message text on the popup menu"
+  },
+  "unsync_error_msg_part_3": {
+    "message": "Klik disini untuk memuat ulang laman ini, kemudian klik \"Tambah Ekstensi Ini\" untuk mensinkron perangkat ini",
+    "description": "sync error message text on the Sync tab of the options page"
+  },
+  "sync_premium_cta": {
+    "message": "Anda akan menjadi ahli pemblokir iklan dengan fitur Premium seperti Sinkron",
+    "description": "AdBlock Premium CTA on the Sync tab"
+  },
+  "backup_sync_settings": {
+    "message": "Otomatis cadangan dan sinkron pengaturan AdBlock anda di semua perangkat anda.",
+    "description": "Description of Sync on Sync tab"
+  },
+  "set_preferences_once": {
+    "message": "Tetapkan preferensi anda sekali, dan jangan pernah khawatir tentang kehilangan data atau membuat perubahan yang sama pada beberapa ekstensi lagi. ",
+    "description": "Description of Sync on Sync tab"
+  },
+  "get_sync": {
+    "message": "Sinkronkan",
+    "description": "Link to pay for Sync (part of AdBlock Premium)"
+  },
+  "check_sync_status": {
+    "message": "Periksa Status Sinkron",
+    "description": "Button on Sync tab that checks the status of the Sync feature"
+  },
+  "show_details": {
+    "message": "Lihat Detil",
+    "description": "Toggle that shows the details section"
+  },
+  "hide_details": {
+    "message": "Tutup Detil",
+    "description": "Toggle that hides the details section"
+  },
+  "add_this_extension": {
+    "message": "Tambahkan Ekstensi ini",
+    "description": "Button on Sync tab that adds this extension to the Sync process"
+  },
+  "add": {
+    "message": "Tambah",
+    "description": "Button on Sync tab that adds an entered name for this extension to the list of synced extensions"
+  },
+  "this_extension": {
+    "message": "(ekstensi ini)",
+    "description": "description for name of the current extension"
+  },
+  "sync_delete_panel_title": {
+    "message": "Hapus Ekstensi Tersinkron",
+    "description": "Panel title text on the delete device overlay"
+  },
+  "confirm_delete_extension": {
+    "message": "Apakah anda yakin ingin menghapus ekstensi ini?",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
+  },
+  "cannot_be_undone": {
+    "message": "Tindakan ini tidak bisa dibatalkan.",
+    "description": "Warning/confirmation message shown when the user clicks on the delete icon for a device"
+  },
+  "delete": {
+    "message": "Hapus",
+    "description": "Text on a delete button"
+  },
+  "filteracceptable_ads_privacy": {
+    "message": "Privasi Iklan yang Diperbolehkan",
+    "description": "A filter list"
+  },
+  "acceptable_ads_privacy": {
+    "message": "Hanya izinkan iklan tanpa pelacak pihak ketiga",
+    "description": "The text of an Acceptable Ads sub-option in the General tab"
+  },
+  "enable_do_not_track_advice": {
+    "message": "Agar fitur ini berjalan dengan baik, harap aktifkan Do Not Track (DNT) di preferensi browser anda.",
+    "description": "The text advicing to enable DNT if Acceptable Ads is enabled in the General tab"
+  },
+  "devtools_action_block": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Blok item"
+  },
+  "devtools_action_remove": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Hapus aturan"
+  },
+  "devtools_action_unblock": {
+    "description": "Button text on the dev tools panel.",
+    "message": "Tambah pengecualian"
+  },
+  "devtools_filter_origin_custom": {
+    "description": "sub-title text of the rule showing the source of the rule as custom rules",
+    "message": "ditetapkan-pengguna"
+  },
+  "devtools_filter_origin_none": {
+    "description": "sub-title text of the rule showing the source of the rule as a unamed filter list",
+    "message": "langganan tanpa nama"
+  },
+  "devtools_filter_subtitle": {
+    "description": "sub-title text of the rule showing the source of the rule a named filter list",
+    "message": "Asal"
+  },
+  "devtools_filter_title": {
+    "description": "Text of the filter that was applied to the list item.",
+    "message": "Filter"
+  },
+  "devtools_footer": {
+    "description": "message on the bottom of the panel",
+    "message": "<a0>Muat ulang</a0> laman untuk melihat efek perubahan filter"
+  },
+  "devtools_header": {
+    "description": "Text on the top of the dev tools panel to show all items of any type; slot0 and slot1 are two seperate drop down lists",
+    "message": "Tampilkan <slot0></slot0> item dari <slot1></slot1> tipe"
+  },
+  "devtools_header_state_all": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "semua"
+  },
+  "devtools_header_state_blocked": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "diblokir"
+  },
+  "devtools_header_state_allowlisted": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "diizinkan"
+  },
+  "devtools_header_type_any": {
+    "description": "one of the items in the drop down list in the header of the dev tools panel",
+    "message": "semua"
+  },
+  "devtools_request_subtitle": {
+    "description": "sub title text for the request-column header of the dev tools panel",
+    "message": "Dokumen domain"
+  },
+  "devtools_request_title": {
+    "description": "title text for the request-column header of the dev tools panel",
+    "message": "Permintaan"
+  },
+  "devtools_request_url": {
+    "description": "A request URL in the AdBlock DevTools panel",
+    "message": "<a0>$original$</a0> ditulis ulang ke <a1>$rewritten$</a1>",
+    "placeholders": {
+      "original": {
+        "content": "$1",
+        "example": "http://example.com/foo"
+      },
+      "rewritten": {
+        "content": "$2",
+        "example": "http://example.com/bar"
+      }
+    }
+  },
+  "devtools_type_title": {
+    "description": "Type column header text",
+    "message": "Tipe"
+  },
+  "new_badge": {
+    "message": "Baru",
+    "description": "Max 4 characters. If it's not possible to translate in four characters or less, please don't translate. Text in the badge of our extension toolbar icon."
+  },
+  "new_cta_default_text": {
+    "message": "Tingkatkan AdBlock anda",
+    "description": "Text of a temporary call-to-action item in the popup menu."
+  },
+  "new_cta_hovered_text": {
+    "message": "Nikmati menjelajah yang lebih baik",
+    "description": "Text of a temporary call-to-action hovered item in the popup menu."
+  },
+  "myadblock_page_title": {
+    "message": "MyAdBlock: Cara yang lebih baik menjelajahi internet.",
+    "description": "The text of the header the MyAdBlock Options page"
+  },
+  "myadblock_short_description_to_pay": {
+    "message": "Anda akan menjadi ahli pemblokir iklan dengan add-on yang mudah digunakan ini.",
+    "description": "The text next to the 'Get It Now' button on top of the MyAdBlock Options page"
+  },
+  "get_it_now": {
+    "message": "Dapatkan Sekarang",
+    "description": "The text in a button visible to locked users in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_title": {
+    "message": "Jadikan AdBlock Milik Anda",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "make_adblock_yours_description": {
+    "message": "Anda mengendalikan tampilan, suasana, dan ukuran teks AdBlock dengan kontrol yang mudah digunakan.",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_title": {
+    "message": "Lihat Foto, Bukan Iklan",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "see_photos_no_ads_description": {
+    "message": "Kami masih akan memblokir iklan, tetapi kami akan mengganti beberapa dengan gambar kucing, anjing, dan pemandangan yang menarik.",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_title": {
+    "message": "Sinkron Pengaturan Anda",
+    "description": "The title of a feature box in the MyAdBlock Options page"
+  },
+  "sync_your_settings_description": {
+    "message": "Gunakan aturan pemblokiran iklan yang sesuai di komputer apapun yang anda gunakan.",
+    "description": "The main text of a feature box in the MyAdBlock Options page"
+  },
+  "how_can_we_help": {
+    "message": "Bagaimana kami bisa membantu?",
+    "description": "Message for help flow in popup menu."
+  },
+  "see_ad": {
+    "message": "Saya melihat iklan",
+    "description": "Message for help flow in popup menu."
+  },
+  "website_broken": {
+    "message": "Situs rusak",
+    "description": "Message for help flow in popup menu."
+  },
+  "dont_know_help_me": {
+    "message": "Saya tidak tahu. Bantu saya!",
+    "description": "Message for help flow in popup menu."
+  },
+  "first_time_seeing_ad": {
+    "message": "Ini pertama kali saya melihat iklan ini",
+    "description": "Message for help flow in popup menu."
+  },
+  "see_ad_everywhere": {
+    "message": "Saya melihat iklan ini dimana-mana",
+    "description": "Message for help flow in popup menu."
+  },
+  "ad_everywhere_malware": {
+    "message": "Jika anda melihat iklan ini dimana-mana, anda mungkin terinfeksi dengan malware.",
+    "description": "Message for help flow in popup menu."
+  },
+  "learn_more_to_resolve": {
+    "message": "Anda dapat [[baca selengkapnya disini]] untuk membantu menyelesaikannya.",
+    "description": "Message for help flow in popup menu."
+  },
+  "got_it": {
+    "message": "Dimengerti.",
+    "description": "Message for help flow in popup menu."
+  },
+  "check_whitelist": {
+    "message": "Ayo periksa pengaturan izin anda untuk melihat apakah itu masalahnya.",
+    "description": "Message for help flow in popup menu."
+  },
+  "ok": {
+    "message": "Ok",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_is_whitelisted": {
+    "message": "Laman ini di daftar putih anda, itulah kenapa anda melihat iklan.",
+    "description": "Message for help flow in popup menu."
+  },
+  "want_to_remove": {
+    "message": "Apakah anda ingin menghapusnya?",
+    "description": "Message for help flow in popup menu."
+  },
+  "wont_change_anything": {
+    "message": "Kami tidak akan merubah apapun sehingga anda akan melanjutkan melihat iklan.",
+    "description": "Message for help flow in popup menu."
+  },
+  "removed_url": {
+    "message": "Oke! Kami telah menghapus URL dari daftar izin anda.",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_not_see_ad": {
+    "message": "Muat ulang laman sehingga anda tidak melihat iklan itu lagi!",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_the_page": {
+    "message": "Muat ulang laman",
+    "description": "Message for help flow in popup menu."
+  },
+  "page_not_whitelisted": {
+    "message": "Laman ini tidak ada pada daftar izin anda.",
+    "description": "Message for help flow in popup menu."
+  },
+  "updating_filter_lists": {
+    "message": "AdBlock memperbarui daftar filter anda sekarang untuk melihat apakah itu masalahnya.",
+    "description": "Message for help flow in popup menu."
+  },
+  "checked_basics": {
+    "message": "Kami telah memeriksa dasarnya, dan memperbarui daftar filter anda.",
+    "description": "Message for help flow in popup menu."
+  },
+  "still_see_ad": {
+    "message": "Apakah anda masih melihat iklan?",
+    "description": "Message for help flow in popup menu."
+  },
+  "problem_solved": {
+    "message": "Keren! Masalah terselesaikan.",
+    "description": "Message for help flow in popup menu."
+  },
+  "done": {
+    "message": "Selesai",
+    "description": "Message for help flow in popup menu."
+  },
+  "something_not_working": {
+    "message": "Hmm, ada yang tidak berfungsi.",
+    "description": "Message for help flow in popup menu."
+  },
+  "try_manual_update": {
+    "message": "Silakan coba [[memperbarui manual daftar filter anda]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "additional_help": {
+    "message": "Butuh bantuan tambahan?",
+    "description": "Message for help flow in popup menu."
+  },
+  "contact_support": {
+    "message": "[[Hubungi tim pendukung kami!]]",
+    "description": "Message for help flow in popup menu."
+  },
+  "english_site": {
+    "message": "Apakah anda di situs berbahasa Inggris?",
+    "description": "Message for help flow in popup menu."
+  },
+  "edit_filter_lists": {
+    "message": "Anda mungkin perlu [[mengedit daftar filter anda]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "learn_more_filter_lists": {
+    "message": "Anda mungkin juga ingin [[mempelajari lebih lanjut tentang daftar filter]].",
+    "description": "Message for help flow in popup menu."
+  },
+  "visit_help_center": {
+    "message": "Anda mungkin ingin [[mengunjungi Pusat Bantuan kami]] untuk opsi penyelesaian masalah lainnya.",
+    "description": "Message for help flow in popup menu."
+  },
+  "try_pausing": {
+    "message": "Oke, mari coba jeda AdBlock.",
+    "description": "Message for help flow in popup menu."
+  },
+  "reload_when_ready": {
+    "message": "Silakan klik di bawah ini untuk muat ulang laman ketika anda siap.",
+    "description": "Message for help flow in popup menu."
+  },
+  "website_still_broken": {
+    "message": "Apakah situs masih rusak?",
+    "description": "Message for help flow in popup menu."
+  },
+  "issue_unrelated_adblock": {
+    "message": "Tampaknya ada masalah dengan situs yang tidak terkait dengan AdBlock.",
+    "description": "Message for help flow in popup menu."
+  },
+  "contact_the_site": {
+    "message": "Kami merekomendasikan untuk menghubungi situs ini.",
+    "description": "Message for help flow in popup menu."
+  },
+  "something_else_going_on": {
+    "message": "Hmm, sesuatu yang lain sedang terjadi.",
+    "description": "Message for help flow in popup menu."
+  },
+  "additional_troubleshooting": {
+    "message": "Berikut adalah beberapa [[langkah penyelesaian masalah tambahan]] yang dapat anda lakukan untuk mengatasi masalah ini.",
+    "description": "Message for help flow in popup menu."
+  },
+  "paused_site_issue": {
+    "message": "AdBlock saat ini sedang dijeda, jadi nampaknya ada masalah dengan situs yang tidak terkait dengan AdBlock.",
+    "description": "Message for help flow in popup menu."
+  },
+  "paused_not_blocking": {
+    "message": "AdBlock saat ini sedang dijeda, jadi kami tidak memblokir iklan apapun.",
+    "description": "Message for help flow in popup menu."
+  },
+  "resume_reload": {
+    "message": "Apakah anda ingin melajutkan pemblokiran iklan dan memuat ulang laman?",
+    "description": "Message for help flow in popup menu."
+  },
+  "no_changes_see_ad": {
+    "message": "Kami tidak mengubah apapun jadi anda terus melihat iklan.",
+    "description": "Message for help flow in popup menu."
+  },
+  "unpaused_reload": {
+    "message": "Kami baru saja batal menjeda AdBlock dan muat ulang laman.",
+    "description": "Message for help flow in popup menu."
+  },
+  "thanks": {
+    "message": "Terima kasih",
+    "description": "Message for help flow in popup menu."
+  },
+  "adblock_logo": {
+    "message": "logo AdBlock",
+    "description": "Text in the alt attribute of an AdBlock logo image."
+  },
+  "example_themes": {
+    "message": "Tema contoh",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the themes feature."
+  },
+  "image_swap_example": {
+    "message": "contoh gambar tertukar",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Image Swap feature."
+  },
+  "sync_example": {
+    "message": "Contoh sinkron",
+    "description": "Text in the alt attribute of an image in the Options page mab that visualizes the Sync feature."
+  },
+  "adblock_home": {
+    "message": "Beranda AdBlock",
+    "description": "Text in the alt attribute of an AdBlock logo / icon that links to getadblock.com."
+  },
+  "preview_channel_image": {
+    "message": "Pratinjau tema dari $image_category$",
+    "description": "Text in the alt attribute of an image previewed as part of the Image Swap feature.",
+    "placeholders": {
+      "image_category": {
+        "content": "$1",
+        "example": "Cats"
+      }
+    }
+  },
+  "image_of_channel": {
+    "message": "Gambar dari $image_category$",
+    "description": "Text in the alt attribute of an image injected into a page as part of the Image Swap feature.",
+    "placeholders": {
+      "image_category": {
+        "content": "$1",
+        "example": "Dogs"
+      }
+    }
+  },
+  "a_theme_preview": {
+    "message": "$theme_name$ pratinjau tema dari $extension_page$",
+    "description": "Text in the alt attribute of the image previewing a theme on an extension page.",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dark"
+      },
+      "extension_page": {
+        "content": "$2",
+        "example": "pop-up menu"
+      }
+    }
+  },
+  "preview_a_theme": {
+    "message": "Pratinjau tema $theme_name$ untuk $extension_page$",
+    "description": "Text in the aria-label attribute of an icon indicating that clicking will show the preview image of a theme on an extension page.",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dark"
+      },
+      "extension_page": {
+        "content": "$2",
+        "example": "options page"
+      }
+    }
+  },
+  "help": {
+    "message": "Bantuan",
+    "description": "Text in the aria-label attribute of the support icon on the pop-up menu."
+  },
+  "settings": {
+    "message": "Pengaturan",
+    "description": "Text in the aria-label attribute of the gear icon on the pop-up menu."
+  },
+  "success": {
+    "message": "Berhasil",
+    "description": "Text in the aria-label attribute of an icon indicating successful results."
+  },
+  "error": {
+    "message": "Salah",
+    "description": "Text in the aria-label attribute of an icon indicating an error occurred."
+  },
+  "locked": {
+    "message": "Terkunci",
+    "description": "Text in the aria-label attribute of an icon showing a feature/option is locked."
+  },
+  "selected": {
+    "message": "Dipilih",
+    "description": "Text in the aria-label attribute of an icon showing an option is selected."
+  },
+  "learn_more_without_period": {
+    "message": "Baca Selengkapnya",
+    "description": "Text in the aria-label attribute of an icon linking to extra information about an option."
+  },
+  "update_filter_lists_now": {
+    "message": "Perbarui Daftar Filter Sekarang",
+    "description": "Text in the aria-label attribute of the 'update now' button on the Options page in the Filter Lists tab."
+  },
+  "popup_menu": {
+    "message": "menu popup",
+    "description": "General text used to define the pop-up menu."
+  },
+  "options_page": {
+    "message": "opsi laman",
+    "description": "General text used to define the extension options page."
+  },
+  "pause_on_this_site": {
+    "message": "Jeda di situs ini:",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on this site. This will be followed by the options 'Once' and 'Always'"
+  },
+  "adblock_will_pause_on_this_site": {
+    "message": "Jika diklik, AdBlock akan berhenti memblokir iklan di situs ini.",
+    "description": "Second sentence in the aria-label of the pop-up menu action to pause blocking ads on this site."
+  },
+  "pause_on_all_sites": {
+    "message": "Jeda di semua situs.",
+    "description": "First sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_pause_on_all_sites": {
+    "message": "Jika diklik, AdBlock akan berhenti memblokir iklan di semua situs.",
+    "description": "Second sentence in the aria-label of the pop-up menu action to pause blocking ads on all sites."
+  },
+  "adblock_will_block_ads_again": {
+    "message": "Jika diklik, AdBlock akan blokir iklan lagi.",
+    "description": "Second sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "resume_blocking_ads_period": {
+    "message": "Lanjut blokir iklan.",
+    "description": "First sentence in the aria-label of the pop-up menu action to resume blocking ads."
+  },
+  "do_not_swap_ads": {
+    "message": "Jangan tukar iklan",
+    "description": "Text of a clickable option to stop swapping ads with images in the Options page Image Swap tab."
+  },
+  "premium": {
+    "message": "Premium",
+    "description": "Abbreviated name of the AdBlock upgrade."
+  },
+  "adblock_premium": {
+    "message": "AdBlock Premium",
+    "description": "Full name of the AdBlock upgrade."
+  },
+  "premium_page_title": {
+    "message": "AdBlock Premium: Cara yang lebih baik menjelajahi internet.",
+    "description": "The text of the header the AdBlock Premium Options page"
+  },
+  "premium_benefits_explained": {
+    "message": "Sebagai imbalan untuk mendukung kami dengan megaktifkan AdBlock Premium, anda kan mendapatkan alat dan fitur terbaru segera setelah dirilis.",
+    "description": "Main text of the teaser AdBlock Premium feature in the AdBlock Premium tab of the Options page"
+  },
+  "manage_subscription": {
+    "message": "Kelola langganan anda",
+    "description": "Text of link to manage the user's Premium subscription on the Premium tab of the Options page"
+  },
+  "save_custom_settings_cta": {
+    "message": "Apakan anda ingin menyimpan pengaturan iklan khusus dan menggunakannya di setiap browser?",
+    "description": "Part 1 of a Premium call-to-action on the Options page"
+  },
+  "try_backup_sync": {
+    "message": "Jika demikian, coba fitur Pencadangan & Sinkronisasi kami.",
+    "description": "Part 2 of a Premium call-to-action on the Options page"
+  },
+  "wont_show_again": {
+    "message": "Oke, kami tidak akan menampilkan pesan ini lagi.",
+    "description": "Message shown when user opts out of call-to-action"
+  },
+  "check_out_premium": {
+    "message": "Jika anda ingin mengetahui lebih lanjut, lihat [[Premium]].",
+    "description": "Part 2 of message shown when user opts out of call-to-action"
+  },
+  "successfully_whitelisted": {
+    "message": "Anda berhasil menambahkan URL ini ke daftar anda yang diizinkan.",
+    "description": "Part of a message on the allowlist wizard"
+  },
+  "future_show_ads": {
+    "message": "Nantinya, laman ini akan terus menampilkan iklan.",
+    "description": "Part of a message on the allowlist wizard"
+  },
+  "change_behavior_settings": {
+    "message": "Anda dapat mengubah tindakan ini di [[settings]] anda.",
+    "description": "Part of a message on the allowlist and blocklist wizards"
+  },
+  "whitelisted_a_site": {
+    "message": "Anda baru saja menambahkan situs ke daftar yang diizinkan!",
+    "description": "Part 1 of a call-to-action on the allowlist wizard"
+  },
+  "never_lose_settings": {
+    "message": "Terapkan semua pengaturan ke semua perangkat anda dan pastikan anda tidak pernah kehilangan pengaturan AdBlock dengan Cadangkan & Sinkron",
+    "description": "Part 2 of a call-to-action on the allowlist and blocklist wizards"
+  },
+  "blocked_something": {
+    "message": "Anda baru saja memblokir sesuatu di situs ini!",
+    "description": "Part 1 of a call-to-action on the blocklist wizard"
+  },
+  "adblock_looked_like_this": {
+    "message": "Bagaimana jika AdBlock terlihat seperti ini?",
+    "description": "Part 1 of a call-to-action on the Popup menu"
+  },
+  "check_out_themes": {
+    "message": "Lihat tema!",
+    "description": "Part 2 of a call-to-action on the Popup menu"
+  },
+  "notification_antiadblock_message": {
+    "message": "Situs ini dikenal untuk menampilkan pesan yang ditargetkan ke pengguna AdBlock. Apakah anda ingin AdBlock menyembuikan pesan yang ditargetkan?"
+  },
+  "notification_antiadblock_title": {
+    "message": "Sembunyikan pesan yang ditargetkan?"
+  },
+  "overlay_notification_button_no": {
+    "message": "Tidak"
+  },
+  "overlay_notification_button_yes": {
+    "message": "Ya"
+  },
+  "filter_elemhideemulation_nodomain": {
+    "message": "Tidak ada domain yang ditentukan untuk filter penyembunyian elemen diperpanjang"
+  },
+  "filter_invalid_csp": {
+    "message": "Kebijakan Keamanan Konten Tidak Valid"
+  },
+  "filter_invalid_domain": {
+    "message": "Domain yang ditentukan tidak valid (atau kosong)"
+  },
+  "filter_invalid_regexp": {
+    "message": "Ekspresi reguler tidak valid"
+  },
+  "filter_snippet_nodomain": {
+    "message": "Tidak ada domain aktif tertentu untuk filter cuplikan"
+  },
+  "filter_unknown_option": {
+    "message": "Opsi filter tidak diketahui"
+  },
+  "unexpected_filter_list_header": {
+    "description": "Error message shown when the user attempts to add a custom filter that has the format of a header (e.g. \"[Adblock Plus 2.0]\") which are only allowed in filter lists",
+    "message": "Daftar filter bagian atas tidak diizinkan disini"
+  },
+  "filter_invalid": {
+    "message": "Filter tidak valid",
+    "description": "Generic error shown when the user tries to add an invalid filter rule to their custom filters"
+  },
+  "love_adblock": {
+    "message": "Suka AdBlock?",
+    "description": "Text in a button that asks users to rate us."
+  },
+  "show_some_love": {
+    "message": "Tampilkan AdBlock beberapa cinta!",
+    "description": "Title of the tooltip of the rate us button CTA in the Options page."
+  },
+  "support_with_a_review": {
+    "message": "Dukung tim kami dengan meninggakan kami sebuah ulasan",
+    "description": "Text of the tooltip of the rate us button CTA in the Options page."
+  },
+  "leave_a_review": {
+    "message": "Berikan kami ulasan!",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "rate_us": {
+    "message": "Beri Kami Nilai",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "vpn_coming_soon": {
+    "message": "Lihat apa yang segera hadir dari AdBlock",
+    "description": "Text of the tooltip of the rate us button CTA in the Options page."
+  },
+  "join_vpn_waitlist": {
+    "message": "Gabung daftar beta untuk akses awal!",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review."
+  },
+  "adblock_vpn": {
+    "message": "AdBlock VPN",
+    "description": "Text of a Options page lower menu button"
+  },
+  "youve_blocked_num_ads": {
+    "message": "Anda telah memblokir $numBlocked$ iklan!",
+    "description": "Text of a menu item in the popup menu asking users to leave us a review. The $numBlocked$ will be replaced with the number of ads the users has blocked, starting at 10,000.",
+    "placeholders": {
+      "numBlocked": {
+        "content": "$1",
+        "example": "10,000"
+      }
+    }
+  },
+  "enjoying_adblock": {
+    "message": "Menikmati AdBlock?",
+    "description": "Text of a footer in the popup menu help flow asking users to leave us a review."
+  },
+  "back_help_flow": {
+    "message": "Kembali satu langkah di aliran bantuan",
+    "description": "Aria label for back button in help flow (in popup menu)"
+  },
+  "close_help_flow": {
+    "message": "Tutup aliran bantuan dan kembali ke menu popup.",
+    "description": "Aria label for close button in help flow (in popup menu)"
+  },
+  "stats": {
+    "message": "Statistik",
+    "description": "Title of the statistics (metrics) tab of the Options page"
+  },
+  "statstitle": {
+    "message": "Statstik Dasbor",
+    "description": "On page title of the statistics page of the Options page"
+  },
+  "stats_opt_in_header": {
+    "message": "Ingin melihat statistik AdBlock anda? ",
+    "description": "On page text of the statistics page of the Options page"
+  },
+  "stats_opt_in_msg": {
+    "message": "Ikut serta ke pengumpulan statistik lokal untuk melihat statistik AdBlock Anda, seperti situs mana yang paling banyak anda blokir iklan dan pelacaknya, jumlah blokir dari waktu ke waktu, dan gambar bertukar untuk pengguna Premium.",
+    "description": "On page text of the statistics page of the Options page"
+  },
+  "stats_opt_in_local_msg": {
+    "message": "Ikut serta ke pengumpulan statistik lokal untuk mengakses semua statistik AdBlock anda, seperti situs mana yang paling banyak anda blokir dan pelacaknya, jumlah blokir dari waktu ke waktu, dan gambar bertukar untuk pengguna Premium.",
+    "description": "On page text of the statistics page of the Options page"
+  },
+  "stats_already_opted": {
+    "message": "Anda telah memilih untuk membagikan penggunaan data anonim dengan kami.",
+    "description": "On page text of the statistics page of the Options page"
+  },
+  "stats_opt_in_text_button": {
+    "message": "Ikut Serta",
+    "description": "Text in the Opt In button on the statistics page of the Options page"
+  },
+  "stats_opt_in_local_text_button": {
+    "message": "Ikut serta mengumpulkan statistik lokal",
+    "description": "Text in the Opt In button on the statistics page of the Options page"
+  },
+  "stats_opt_in_data_collect": {
+    "message": "Bantu tingkatkan AdBlock dengan membagikan [[data penggunaan anonim]]",
+    "description": "Text in the Opt In button on the statistics page of the Options page"
+  },
+  "stats_ads_blocked": {
+    "message": "Iklan Diblokir",
+    "description": "Text on the statistics page of the Options page within the ads blocked panel"
+  },
+  "stats_hide_data": {
+    "message": "Tutup Statistik",
+    "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
+  },
+  "stats_show_data": {
+    "message": "Buka Statistik",
+    "description": "text shown on panels during mouse over on the statistics page of the Options page within the ads blocked panel"
+  },
+  "stats_trackers_blocked": {
+    "message": "Pelacak Diblokir",
+    "description": "Text on the statistics page of the Options page within the ads blocked panel"
+  },
+  "stats_replaced_blocked": {
+    "message": "Gambar Tertukar",
+    "description": "Text on the statistics page of the Options page within the ads blocked panel"
+  },
+  "trackers_cta_header": {
+    "message": "Pelacak",
+    "description": "Header text on the statistics page of the Options page in the trackers panel"
+  },
+  "trackers_cta_msg": {
+    "message": "Aktifkan [[Daftar filter Privasi Mudah]] untuk memulai pelacak pemblokiran.",
+    "description": "message body text on the statistics page of the Options page in the trackers panel"
+  },
+  "trackers_button_text": {
+    "message": "Aktifkan",
+    "description": "button text on the statistics page of the Options page in the trackers panel"
+  },
+  "premium_cta_msg_not_enabled": {
+    "message": "Tampaknya anda tidak memiliki gambar tertukar yang aktif.",
+    "description": "message body text on the statistics page of the Options page in the image swap panel for premium users that haven't enabled image swap"
+  },
+  "premium_cta_msg": {
+    "message": "Buka pelacak gambar tertukar dan lainnya dengan Premium",
+    "description": "message body text on the statistics page of the Options page in the image swap panel"
+  },
+  "premium_cta_button_text_not_enabled": {
+    "message": "Aktifkan",
+    "description": "button text on the statistics page of the Options page in the image swap panel for premium users that haven't enabled image swap"
+  },
+  "premium_cta_button_text": {
+    "message": "Dapatkan Premium",
+    "description": "button text on the statistics page of the Options page in the image swap panel"
+  },
+  "parent_menu_item_time": {
+    "message": "Blokir dari waktu ke waktu",
+    "description": "menu item text on the statistics page of the Options page"
+  },
+  "parent_menu_item_site": {
+    "message": "Blokir berdasarkan situs",
+    "description": "menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_today": {
+    "message": "Hari ini",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_week": {
+    "message": "Minggu Ini",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_month": {
+    "message": "Bulan Ini",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_year": {
+    "message": "Tahun ini",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "sub_menu_item_all": {
+    "message": "Semua Waktu",
+    "description": "sub menu item text on the statistics page of the Options page"
+  },
+  "delete_panel_title": {
+    "message": "Hapus Statistik Pemblokiran",
+    "description": "title text on the delete overlay on the statistics page of the Options page"
+  },
+  "delete_detail_msg_part_I": {
+    "message": "Anda dapat menghapus statistik pemblokiran yang disimpan secara lokal disini.",
+    "description": "text on the delete overlay on the statistics page of the Options page"
+  },
+  "delete_detail_msg_part_II": {
+    "message": "Ini akan menghapus semua data yang saat ini ditampilkan di laman statistik anda, termasuk situs teratas yang diblokir.",
+    "description": "text on the delete overlay on the statistics page of the Options page"
+  },
+  "delete_detail_msg_part_III": {
+    "message": "Statistik anda hanya disimpan di perangkat anda, dan statistik apapun TIDAK DAPAT anda pulihkan.",
+    "description": "text on the delete overlay on the statistics page of the Options page"
+  },
+  "delete_all_stats_data": {
+    "message": "Hapus statistik pemblokiran saya yang saat ini tersimpan",
+    "description": "text related to the delete all data checkbox on the statistics page of the Options page"
+  },
+  "opt_out_stats_data": {
+    "message": "Jangan mengumpulkan statstik pemblokiran saya di masa mendatang",
+    "description": "text related to the opt out data collection checkbox on the statistics page of the Options page"
+  },
+  "delete_detail_page_2_msg_part_I": {
+    "message": "Apakah anda yakin?",
+    "description": "text on page 2 of the delete modal box on the statistics page of the Options page"
+  },
+  "stats_go_back_text_button": {
+    "message": "Kembali",
+    "description": "button text on page 2 of the delete modal box on the statistics page of the Options page"
+  },
+  "stats_im_sure_text_button": {
+    "message": "Saya yakin",
+    "description": "button text on page 2 of delete modal box on the statistics page of the Options page"
+  },
+  "no_data_title": {
+    "message": "Tidak ada Statistik",
+    "description": "title text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "no_data_msg_part_I": {
+    "message": "Saat ini anda tidak memiliki statistik pemblokiran untuk ditampilkan.",
+    "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "no_data_msg_part_II": {
+    "message": "Muat ulang laman ini setelah menjelajahi situs untuk mulai melihat statistik pemblokiran.",
+    "description": "text on warning message when there's no user data to show on the statistics page of the Options page"
+  },
+  "loading_in_progress": {
+    "message": "sedang memuat",
+    "description": "Text in the aria-label attribute of an icon indicating that page is currently loading"
+  },
+  "stats_ads_blocked_aria_label": {
+    "message": "Jumlah Iklan Diblokir",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_trackers_blocked_aria_label": {
+    "message": "Jumlah Pelacak Diblokir",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "stats_replaced_blocked_aria_label": {
+    "message": "Jumlah Gambar Bertukar",
+    "description": "Text in the aria-label attribute of an icon for the Blocks by site column heading"
+  },
+  "edit_image_msg_partI": {
+    "message": "Kami telah mencantumkan 3 dari ukuran iklan yang paling umum di bawah ini.",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image_msg_partII": {
+    "message": "Pilih ukuran terdekat dengan gambar anda, sesuai dengan penggeser dan klik Simpan setelah selesai.",
+    "description": "Text in the on custom image swap modal dialog"
+  },
+  "edit_image": {
+    "message": "Ubah Gambar",
+    "description": "header text in the on custom image swap modal dialog"
+  },
+  "custom_images": {
+    "message": "Gambar Khusus",
+    "description": "text on the image swap tab"
+  },
+  "custom_image_description": {
+    "message": "Pilih hingga 9 gambar yang anda ingin AdBlock gunakan untuk menggantikan iklan",
+    "description": "text on the image swap tab"
+  },
+  "remove_image": {
+    "message": "Hapus Gambar",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "remove_image_msg": {
+    "message": "Apakah anda yakin ingin menghapus gambar ini?",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonremove": {
+    "message": "Hapus",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "buttonkeep": {
+    "message": "Simpan",
+    "description": "text on the remove / delete image modal on the image swap tab"
+  },
+  "custom_image_error": {
+    "message": "Ups! Terjadi kesalahan",
+    "description": "header / title text on the error message on the image swap tab"
+  },
+  "custom_image_error_msg_partI": {
+    "message": "Kami tidak dapat menambahkan gambar anda.",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partII": {
+    "message": "Silakan tunggu sebentar dan coba lagi.",
+    "description": "error message text error message on the image swap tab"
+  },
+  "custom_image_error_msg_partIII": {
+    "message": "Anda dapat juga membagikan [[data debug anonim]] untuk membantu kami mengetahui apa yang salah.",
+    "description": "error message text error message on the image swap tab"
+  },
+  "dontsend": {
+    "message": "Jangan Kirim",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "senddebugdata": {
+    "message": "Kirim Data Debug",
+    "description": "button text on the error message on the image swap tab"
+  },
+  "custom_image_unsupported_title": {
+    "message": "Jenis gambar tidak didukung",
+    "description": "header / title on error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partI": {
+    "message": "Ups! Sepertinya anda mencoba menambahkan gambar yang tidak didukung Custom Image Swap",
+    "description": "First sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_unsupported_msg_partII": {
+    "message": "Silakan pilih salah satu jenis gambar berikut:",
+    "description": "second sentence, on the error message dialog box when a user selects a unsupported file type"
+  },
+  "custom_image_supported_file_types": {
+    "message": "*.bmp, *.gif, *.jpeg, *.png, *.svg, *.tiff, *.webp",
+    "description": "supported file types, shown on the error message dialog box when a user selects a unsupported file type"
+  },
+  "youtube_onpage_icon_msg": {
+    "message": "Kelola iklan di saluran langganan anda:",
+    "description": "The message text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allow_all_btn_text": {
+    "message": "Izikan Iklan Di Semua",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_block_all_btn_text": {
+    "message": "Blokir Iklan Di Semua",
+    "description": "The button text on the YouTube on page icon; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_one_moment_text": {
+    "message": "Tunggu sebentar...",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowed_complete_text": {
+    "message": "Iklan diizinkan di semua saluran langganan",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocked_complete_text": {
+    "message": "Iklan diblokir di semua saluran langganan",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_allowing_ads_on_channel": {
+    "message": "Izinkan iklan di saluran ini",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_blocking_ads_on_channel": {
+    "message": "Blokir iklan di saluran ini",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_sign_in_text": {
+    "message": "Masuk ke akun Youtube anda untuk mengelola iklan di saluran langganan anda.",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "youtube_onpage_icon_no_channels_text": {
+    "message": "Berlangganan setidaknya satu saluran Youtube untuk mengelola iklan di saluran langganan anda.",
+    "description": "The message text on the YouTube on page panel; shown on https://www.youtube.com/feed/channels"
+  },
+  "once": {
+    "message": "Sekali",
+    "description": "The button text on the popup menu"
+  },
+  "always": {
+    "message": "Selalu",
+    "description": "The button text on the popup menu"
+  },
+  "done_reload_page": {
+    "message": "Setelah kami selesai, silakan muat ulang laman.",
+    "description": "text on panel in the help flow"
+  }
+}
