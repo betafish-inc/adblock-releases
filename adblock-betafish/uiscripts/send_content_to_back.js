@@ -1,5 +1,4 @@
 
-
 // eslint-disable-next-line no-unused-vars
 function sendContentToBack() {
   // Objects and embeds can catch our clicks unless we lay a div over

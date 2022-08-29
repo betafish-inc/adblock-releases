@@ -19,9 +19,9 @@
 
 "use strict";
 
-const jsonArtifacts = require("../../../vendor/abp-snippets/dist/webext/snippets.json");
+const jsonArtifacts = require("@eyeo/snippets/webext/snippets.json");
 const jsonArtifactsAdBlock = require('../../../dist/adblock-snippets.json');
-const {compileScript} = require("../../../vendor/abp-snippets/lib/utils.js");
+const {compileScript} = require("./utils.js");
 
 async function runSnippetScript(script)
 {

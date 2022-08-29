@@ -10,7 +10,7 @@
     <script src="purify.min.js"></script>
     <script src="adblock-functions.js"></script>
   </head>
-  <body style="overflow:hidden;">
+  <body style="overflow: hidden">
     <div id="wrapper">
       <div id="menu-items">
         <div id="titletext" dir="ltr">
@@ -42,27 +42,33 @@
 
         <div
           id="div_status_error"
-          style="display:none; font-size: 14px; margin: 8px; padding: 5px 10px 0px 10px; background-color: white;"
+          style="
+            display: none;
+            font-size: 14px;
+            margin: 8px;
+            padding: 5px 10px 0px 10px;
+            background-color: white;
+          "
         >
-          <h2 i18n_error="error_msg_header" style="display:flex; justify-content: center;"></h2>
+          <h2 i18n_error="error_msg_header" style="display: flex; justify-content: center"></h2>
           <div class="separator"></div>
           <p i18n_error="error_msg_partI"></p>
           <div id="first_msg">
             <span i18n_error="error_msg_help_us_partI"></span>
             <a
               id="errorreport"
-              style="cursor: pointer; color: blue;"
+              style="cursor: pointer; color: blue"
               i18n_error="error_msg_help_us_partII"
             ></a>
             <br />
             <br />
           </div>
-          <p id="second_msg" i18n_error="error_msg_thank_you" style="display:none;"></p>
+          <p id="second_msg" i18n_error="error_msg_thank_you" style="display: none"></p>
           <span id="reload_msg" i18n_error="error_msg_reload_partI"> </span>
           <a
             tabindex="0"
             id="reload"
-            style="cursor: pointer; color: blue;"
+            style="cursor: pointer; color: blue"
             i18n_error="error_msg_reload_partII"
           ></a>
           <br /><br />
@@ -70,7 +76,7 @@
           <a
             tabindex="0"
             i18n_error="error_msg_help_partII"
-            style="cursor: pointer; color: blue;"
+            style="cursor: pointer; color: blue"
             href="https://help.getadblock.com/support/solutions/articles/6000137757-the-adblock-menu-doesn-t-open-or-contains-only-a-donation-request-or-icons-in-chrome"
             target="_blank"
           ></a>
@@ -311,7 +317,7 @@
           <div id="separatorA" class="separator"></div>
           <div id="block_counts">
             <div i18n="blocked_ads"></div>
-            <div style="padding:2px 0px 0px 2px;">
+            <div style="padding: 2px 0px 0px 2px">
               <span i18n="blocked_n_on_this_page" i18n_replacement_el="page_blocked_count">
                 <span class="block_count_number" id="page_blocked_count"> </span>
               </span>

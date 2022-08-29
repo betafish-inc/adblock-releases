@@ -4,7 +4,7 @@ import gulp from 'gulp';
 import argparse from 'argparse';
 import merge from 'merge-stream';
 import zip from 'gulp-vinyl-zip';
-import del from 'del';
+import { deleteAsync } from 'del';
 import url from 'url';
 import * as tasks from './build/tasks/index.mjs';
 import * as config from './build/config/index.mjs';
@@ -140,12 +140,12 @@ async function buildPacked() {
 }
 
 function cleanDir() {
-  return del(targetDir);
+  return deleteAsync(targetDir);
 }
 
-export const devenv = gulp.series(cleanDir, tasks.buildAdBlockSnippets, tasks.buildSnippets, buildDevenv);
+export const devenv = gulp.series(cleanDir, tasks.buildAdBlockSnippets, buildDevenv);
 
-export const build = gulp.series(tasks.buildAdBlockSnippets, tasks.buildSnippets, buildPacked);
+export const build = gulp.series(tasks.buildAdBlockSnippets, buildPacked);
 
 export async function source() {
   const options = await getBuildOptions(false, true);

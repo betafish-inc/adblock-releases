@@ -348,6 +348,7 @@ export const License = (function getLicense() {
       if (getSettings().sync_settings) {
         // We have to import the "sync-service" module on demand,
         // as the "sync-service" module in turn requires this module.
+        // eslint-disable-next-line import/no-cycle
         (import('./sync-service')).disableSync();
       }
       setSetting('color_themes', { popup_menu: 'default_theme', options_page: 'default_theme' });

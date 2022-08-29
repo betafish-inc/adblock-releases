@@ -7,8 +7,9 @@ Edge and Firefox.
 
 ## Requirements
 
-- Node >= 16.10.0
-- npm >= 7
+This project requires [node.js](https://nodejs.org) and `npm` (which comes bundled with `node.js`).
+
+The exact version requirements can be found in the [package descriptor file](package.json) under the `engines` field.
 
 ## Usage
 Building
@@ -25,13 +26,7 @@ In order to build the extension, you need to run the
 
 `npm run submodules:update`
 
-script. This build won't include the snippets library.
-
-In order to create a build which includes the snippets library, you should run the
-
-`npm run submodules:update-with-snippets`
-
-script instead. This will work only if you have access to the [abp-snippets repository](https://gitlab.com/eyeo/adblockplus/abp-snippets).
+script.
 
 _Note: when building from a source archive, the above step must be skipped._
 
@@ -120,7 +115,7 @@ The `./tests/snippets/browser` folder contains the unit tests files.
 
 Since Snippets can have a 'debug' flag set. Calling debug before a snippet turns on the debug flag. If the other snippets support it, they'll enable their debug mode.
 
-To see the output from the debug for a Snippet, or the console.log statements in the Mocha test script, run the `npm run test-snippets-with-debug` command.  Currently, this command will only work in the Chromium remote browser.
+To see the output from the debug for a Snippet, or the console.log statements in the Mocha test script, run the `npm run test-snippets-debug` command.  Currently, this command will only work in the Chromium remote browser.
 
 ### Running the browser tests in a real browser
 
@@ -144,13 +139,13 @@ BROWSER_TEST_HEADLESS environment to 0.
 
 ### Running the unit tests on Windows
 
-On Windows, you'll need to run the tests under [Linux environment running on WSL](https://docs.microsoft.com/windows/wsl/install-win10).  Also, the Firefox tests will fail to run on Windows.  
+On Windows, you'll need to run the tests under [Linux environment running on WSL](https://docs.microsoft.com/windows/wsl/install-win10).  Also, the Firefox tests will fail to run on Windows.
 
 
 Note:  If you see the following error:
 `chromium-linux-467222/chrome-linux/chrome: error while loading shared libraries: libgconf-2.so.4: cannot open shared object file: No such file or directory`
 
-run the following command in WSL: `sudo apt install libgconf-2-4` 
+run the following command in WSL: `sudo apt install libgconf-2-4`
 This command will install the necessary library.
 
 ### Icons and Graphics

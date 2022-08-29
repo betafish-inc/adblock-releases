@@ -14,6 +14,4 @@ export {
 export {
   default as sourceDistribution,
 } from './sourceDistribution.mjs';
-export { buildSnippets } from "./snippets-dependency.mjs";
 export { buildAdBlockSnippets } from "./ab-snippets-dependency.mjs";
-

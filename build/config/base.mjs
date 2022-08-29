@@ -1,7 +1,7 @@
 
 export default {
   basename: 'adblock',
-  version: '5.1.0',
+  version: '5.1.1',
   webpack: {
     bundles: [
       {
@@ -96,8 +96,7 @@ export default {
       {
         dest: "data/hideIfGraphMatches",
         src: [
-          // marked as optional using wildcard
-          "vendor/abp-snippets/dist/ml/hideIfGraphMatches/*"
+          "./node_modules/@eyeo/snippets/ml/hideIfGraphMatches/*"
         ]
       },
       {
@@ -118,7 +117,7 @@ export default {
           'adblock-betafish/lib/*',
           'adblock-betafish/adblock.css',
           'adblock-betafish/picreplacement/contentscript-loader.js',
-          'vendor/abp-snippets/dist/webext/snippets*.json',
+          './node_modules/@eyeo/snippets/webext/snippets.json',
           'vendor/adblockplusui/adblockpluschrome/devtools.html',
           'adblock-betafish/alias/devtools-panel.js',
           'adblock-betafish/alias/i18n.js',

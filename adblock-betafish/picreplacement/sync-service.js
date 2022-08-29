@@ -12,6 +12,8 @@
 import { TELEMETRY } from '../telemetry';
 import { EventEmitter } from '../../vendor/adblockplusui/adblockpluschrome/lib/events';
 import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
+// check.js imports disableSync from here
+// eslint-disable-next-line import/no-cycle
 import { License } from './check';
 import { channelsNotifier } from './channels';
 import SubscriptionAdapter from '../subscriptionadapter';
