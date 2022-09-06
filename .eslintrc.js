@@ -35,6 +35,7 @@ module.exports = {
           "adblock_userid",
           "adblock_version",
           "adblock_ext_id",
+          "adblock_block_count",
           "blockage_stats",
           "bug_report",
           "synchronize_invalid_url",
