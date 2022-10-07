@@ -3163,6 +3163,10 @@
     "description": "Error message shown when the user attempts to add a custom filter that has the format of a header (e.g. \"[Adblock Plus 2.0]\") which are only allowed in filter lists",
     "message": "Filter list headers aren't allowed here"
   },
+  "too_many_filters": {
+    "description": "Error message shown when the attempts to add more custom rules than is allowed under manifest V3",
+    "message": "Reached maximum amount of filters. Please remove other filters of the same type before adding new ones."
+  },
   "filter_invalid": {
     "message": "Invalid filter",
     "description": "Generic error shown when the user tries to add an invalid filter rule to their custom filters"
