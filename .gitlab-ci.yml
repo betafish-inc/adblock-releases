@@ -1,0 +1,115 @@
+default:
+  image: node:16.15.0
+
+cache:
+  paths:
+  - node_modules/
+
+stages:
+  - unit_test
+  - build
+  - testpages
+
+################################################################################
+# Unit tests
+################################################################################
+
+unit_tests:
+  stage: unit_test
+  before_script:
+    - apt-get update
+    - apt-get install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
+    - npm run submodules:update
+    - npm install
+  script:
+    - npm run test-snippets
+
+# ################################################################################
+# # Build
+# ################################################################################
+
+build:
+  stage: build
+  before_script:
+    - apt-get install git
+    - npm run submodules:update
+    - npm install
+  script:
+    # Create extension builds
+    - npx gulp build -t chrome --unhandled-rejections=strict
+    - npx gulp build -t firefox --unhandled-rejections=strict
+    - npx gulp source
+    # Attach commit hash to build files
+    - mv adblockchrome-*.zip adblockchrome-${CI_COMMIT_SHA:0:8}.zip
+    - mv adblockfirefox-*.xpi adblockfirefox-${CI_COMMIT_SHA:0:8}.xpi
+    - mv adblock-*.tar.gz adblock-${CI_COMMIT_SHA:0:8}.tar.gz
+  artifacts:
+    name: "adblock-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHA:0:8}"
+    paths:
+      - adblock-${CI_COMMIT_SHA:0:8}.tar.gz
+      - adblockchrome-${CI_COMMIT_SHA:0:8}.zip
+      - adblockfirefox-${CI_COMMIT_SHA:0:8}.xpi
+
+################################################################################
+# Ad filtering tests
+################################################################################
+
+.testpages:
+  stage: testpages
+  image: docker:19.03.5
+  services:
+    - docker:19.03.5-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  interruptible: true
+  before_script:
+    - apk add git
+    # Clone the latest master branch of the testpages project
+    - git clone https://gitlab.com/eyeo/adblockplus/abc/testpages.adblockplus.org.git
+    - cp $EXTENSION testpages.adblockplus.org
+  script:
+    - cd testpages.adblockplus.org &&
+      docker build -t testpages --build-arg EXTENSION_FILE=$EXTENSION . &&
+      docker run --shm-size=256m -e SKIP_EXTENSION_DOWNLOAD="true" -e TESTS_EXCLUDE="Subscriptions" -e BROWSER="$BROWSER" testpages
+  after_script:
+    - docker cp $(docker ps -aqf ancestor=testpages):/testpages.adblockplus.org/test/screenshots .
+      2> /dev/null
+  artifacts:
+    paths:
+      - screenshots/
+    when: always
+    expire_in: 1 month
+  rules:
+    # Do not trigger a merge request pipeline
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    # Run automatically on release and main branches
+    - if: $CI_COMMIT_BRANCH =~ /^release/ || $CI_COMMIT_BRANCH == "main"
+      allow_failure: true
+    # Run manually on all other branches
+    - when: manual
+      allow_failure: true
+
+testpages:chrome:latest:
+  extends: .testpages
+  variables:
+    BROWSER: chromium latest
+    EXTENSION: adblockchrome-${CI_COMMIT_SHORT_SHA}.zip
+
+testpages:chrome:oldest:
+  extends: .testpages
+  variables:
+    BROWSER: chromium 77.0.3865.0
+    EXTENSION: adblockchrome-${CI_COMMIT_SHORT_SHA}.zip
+
+testpages:firefox:latest:
+  extends: .testpages
+  variables:
+    BROWSER: firefox latest
+    EXTENSION: adblockfirefox-${CI_COMMIT_SHORT_SHA}.xpi
+
+testpages:firefox:oldest:
+  extends: .testpages
+  variables:
+    BROWSER: firefox 68.0
+    EXTENSION: adblockfirefox-${CI_COMMIT_SHORT_SHA}.xpi

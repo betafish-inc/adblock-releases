@@ -1,61 +1,12 @@
 
-
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, adblock_installed, adblock_userid, adblock_version, adblock_ext_id */
+/* global browser, adblock_installed, adblock_userid, adblock_version,
+   adblock_ext_id, adblock_block_count */
 
 const invalidGUIDChars = /[^a-z0-9]/g;
 
 const gabHostnames = ['getadblock.com', 'dev.getadblock.com', 'dev1.getadblock.com', 'dev2.getadblock.com', 'getadblockpremium.com'];
 const gabHostnamesWithProtocal = ['https://getadblock.com', 'https://dev.getadblock.com', 'https://dev1.getadblock.com', 'https://dev2.getadblock.com'];
-
-let abort = (function shouldAbort() {
-  if (document instanceof HTMLDocument === false) {
-    if (document instanceof XMLDocument === false
-      || document.createElement('div') instanceof HTMLDivElement === false) {
-      return true;
-    }
-  }
-  if ((document.contentType || '').lastIndexOf('image/', 0) === 0) {
-    return true;
-  }
-  return false;
-}());
-
-
-if (!abort) {
-  let { hostname } = window.location;
-
-  if (hostname === '') {
-    hostname = (function getHostname() {
-      let win = window;
-      let hn = '';
-      let max = 10;
-      try {
-        for (; ;) {
-          hn = win.location.hostname;
-          if (hn !== '') {
-            return hn;
-          }
-          if (win.parent === win) {
-            break;
-          }
-          win = win.parent;
-          if (!win) {
-            break;
-          }
-          if ((max -= 1) === 0) {
-            break;
-          }
-        }
-      } catch (ex) {
-        // emtpy
-      }
-      return hn;
-    }());
-  }
-  // Don't inject if document is from local network.
-  abort = /^192\.168\.\d+\.\d+$/.test(hostname);
-}
 
 const getAdblockDomain = function () {
   // eslint-disable-next-line no-global-assign
@@ -75,6 +26,11 @@ const getAdblockVersion = function (version) {
 const getAdblockExtId = function (extId) {
   // eslint-disable-next-line no-global-assign
   adblock_ext_id = extId;
+};
+
+const getAdblockBlockCount = function (blockCount) {
+  // eslint-disable-next-line no-global-assign
+  adblock_block_count = blockCount;
 };
 
 // listen to messages from the background page
@@ -101,22 +57,7 @@ function receiveMessage(event) {
   }
 }
 
-(function onLoad() {
-  if (abort) {
-    return;
-  }
-
-  // Only for dynamically created frames and http/https documents.
-  if (/^(https?:|about:)/.test(window.location.protocol) !== true) {
-    return;
-  }
-
-  const doc = document;
-  const parent = doc.head || doc.documentElement;
-  if (parent === null) {
-    return;
-  }
-
+(async function onLoad() {
   // Have the script tag remove itself once executed (leave a clean
   // DOM behind).
   const cleanup = function () {
@@ -129,25 +70,26 @@ function receiveMessage(event) {
 
   if (gabHostnames.includes(document.location.hostname) && window.top === window.self) {
     window.addEventListener('message', receiveMessage, false);
-    browser.storage.local.get('userid').then((response) => {
-      let adblockUserId = response.userid;
-      if (adblockUserId.match(invalidGUIDChars)) {
-        adblockUserId = 'invalid';
-      }
-      const adblockVersion = browser.runtime.getManifest().version;
-      const elem = document.createElement('script');
-      const scriptToInject = `(${getAdblockDomain.toString()})();`
-        + `(${cleanup.toString()})();`
-        + `(${getAdblockDomainWithUserID.toString()})('${adblockUserId}');`
-        + `(${getAdblockExtId.toString()})('${browser.runtime.id}');`
-        + `(${getAdblockVersion.toString()})('${adblockVersion}');`;
-      elem.appendChild(document.createTextNode(scriptToInject));
-      try {
-        (document.head || document.documentElement).appendChild(elem);
-      } catch (ex) {
-        // empty
-      }
-    });
+    const response = await browser.storage.local.get('userid');
+    let adblockUserId = response.userid;
+    if (adblockUserId.match(invalidGUIDChars)) {
+      adblockUserId = 'invalid';
+    }
+    const blockedTotal = await browser.runtime.sendMessage({ command: 'getBlockedTotal' });
+    const adblockVersion = browser.runtime.getManifest().version;
+    const elem = document.createElement('script');
+    const scriptToInject = `(${getAdblockDomain.toString()})();`
+      + `(${cleanup.toString()})();`
+      + `(${getAdblockDomainWithUserID.toString()})('${adblockUserId}');`
+      + `(${getAdblockExtId.toString()})('${browser.runtime.id}');`
+      + `(${getAdblockBlockCount.toString()})('${blockedTotal}');`
+      + `(${getAdblockVersion.toString()})('${adblockVersion}');`;
+    elem.appendChild(document.createTextNode(scriptToInject));
+    try {
+      (document.head || document.documentElement).appendChild(elem);
+    } catch (ex) {
+      // empty
+    }
   }
 }());
 
@@ -156,26 +98,11 @@ const runBandaids = function () {
   const { hostname } = window.location;
   // Tests to determine whether a particular bandaid should be applied
   let applyBandaidFor = '';
-  if (/mail\.live\.com/.test(hostname)) {
-    applyBandaidFor = 'hotmail';
-  } else if (gabHostnames.includes(hostname) && window.top === window.self) {
+  if (gabHostnames.includes(hostname) && window.top === window.self) {
     applyBandaidFor = 'getadblock';
   }
 
   const bandaids = {
-    hotmail() {
-      // removing the space remaining in Hotmail/WLMail
-      const cssChunk = document.createElement('style');
-      cssChunk.type = 'text/css';
-      (document.head || document.documentElement).insertBefore(cssChunk, null);
-      cssChunk.sheet.insertRule('.WithRightRail { right:0px !important; }', 0);
-      cssChunk.sheet.insertRule(`#RightRailContainer
-      {
-        display: none !important;
-        visibility: none !important;
-        orphans: 4321 !important;
-      }`, 0);
-    },
     getadblock() {
       browser.storage.local.get('userid').then((response) => {
         if (response.userid) {
@@ -226,7 +153,6 @@ const runBandaids = function () {
           };
         }
       }
-
 
       // add click handler for adblock subscribe clicks
       // similiar to the code here:
