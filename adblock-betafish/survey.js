@@ -12,6 +12,7 @@ import { domainSuffixes, parseDomains } from 'adblockpluscore/lib/url';
 import { getSettings } from './settings';
 import { getBlockedPerPage } from '../vendor/adblockplusui/adblockpluschrome/lib/stats';
 import OnPageIconManager from './onpageIcon/onpage-icon-bg';
+import postData from './fetch-util';
 
 
 const SURVEY = (function getSurvey() {
@@ -100,25 +101,29 @@ const SURVEY = (function getSurvey() {
     // based on surveyAllowed.
     log('shouldShowSurvey::surveyAllowed: ', surveyAllowed);
     if (surveyAllowed) {
-      let data = { cmd: 'survey', u: TELEMETRY.userId(), sid: surveyData.survey_id };
+      const data = { cmd: 'survey', u: TELEMETRY.userId(), sid: surveyData.survey_id };
       if (TELEMETRY.flavor === 'E' && Prefs.blocked_total) {
         data.b = Prefs.blocked_total;
       }
-      $.post(TELEMETRY.statsUrl, data, (responseData) => {
-        try {
-          data = JSON.parse(responseData);
-        } catch (e) {
-          log('Error parsing JSON: ', responseData, ' Error: ', e);
-        }
-        if (data && data.should_survey === 'true' && surveyAllowed) {
-          // for icon surveys, the surveyAllowed is set to false when
-          // the user engages / mouse's over the icon
-          if (surveyData.type !== 'icon') {
-            surveyAllowed = false;
+
+      postData(TELEMETRY.statsUrl, data).then(async (response) => {
+        if (response.ok) {
+          const dataObj = await response.json();
+          if (dataObj && dataObj.should_survey === 'true' && surveyAllowed) {
+            // for icon surveys, the surveyAllowed is set to false when
+            // the user engages / mouse's over the icon
+            if (surveyData.type !== 'icon') {
+              surveyAllowed = false;
+            }
+            callback(dataObj);
           }
-          callback(data);
+          return;
         }
-      });
+        log('bad response from ping', response);
+      })
+        .catch((error) => {
+          log('ping server returned error: ', error);
+        });
     }
   };
 

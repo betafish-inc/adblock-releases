@@ -1,10 +1,10 @@
 
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global ext, browser, storageGet, storageSet, log,
+/* global ext, browser, chromeStorageSetHelper, migrateData,
+   chromeStorageGetHelper, log, storageSet,
    translate, reloadOptionsPageTabs, openTab,
-   emitPageBroadcast, unsubscribe,
-   isTrustedSenderDomain */
+   emitPageBroadcast, isTrustedSenderDomain */
 
 
 // Yes, you could hack my code to not check the license.  But please don't.
@@ -19,6 +19,8 @@ import { loadAdBlockSnippets } from '../alias/contentFiltering';
 import { showIconBadgeCTA, NEW_BADGE_REASONS } from '../alias/icon';
 import { initialize } from '../alias/subscriptionInit';
 import ServerMessages from '../servermessages';
+import SubscriptionAdapter from '../subscriptionadapter';
+import postData from '../fetch-util';
 
 const licenseNotifier = new EventEmitter();
 
@@ -186,8 +188,7 @@ export const License = (function getLicense() {
   // Should only be called during startup / initialization
   const loadFromStorage = function (callback) {
     browser.storage.local.get(licenseStorageKey).then((response) => {
-      const localLicense = storageGet(licenseStorageKey);
-      theLicense = response[licenseStorageKey] || localLicense || {};
+      theLicense = response[licenseStorageKey] || {};
       if (typeof callback === 'function') {
         callback();
       }
@@ -216,6 +217,11 @@ export const License = (function getLicense() {
       }
     }));
   };
+
+  // Clean up / remove old, unused data in localStorage
+  function cleanUpLocalStorage() {
+    storageSet(licenseStorageKey);
+  }
 
   return {
     licenseStorageKey,
@@ -252,9 +258,7 @@ export const License = (function getLicense() {
     set(newLicense) {
       if (newLicense) {
         theLicense = newLicense;
-        // store in redudant locations
         browser.storage.local.set({ license: theLicense });
-        storageSet('license', theLicense);
       }
     },
     initialize(callback) {
@@ -263,6 +267,7 @@ export const License = (function getLicense() {
           if (typeof callback === 'function') {
             callback();
           }
+          cleanUpLocalStorage();
           readyComplete();
         });
       });
@@ -277,40 +282,23 @@ export const License = (function getLicense() {
     update() {
       TELEMETRY.untilLoaded((userID) => {
         licenseNotifier.emit('license.updating');
-        const postData = {};
-        postData.u = userID;
-        postData.cmd = 'license_check';
+        const postDataObj = {};
+        postDataObj.u = userID;
+        postDataObj.cmd = 'license_check';
         const licsenseStatusBefore = License.get().status;
         // license version
-        postData.v = '1';
-        $.ajax({
-          jsonp: false,
-          url: License.MAB_CONFIG.licenseURL,
-          type: 'post',
-          success(text) {
+        postDataObj.v = '1';
+        postData(License.MAB_CONFIG.licenseURL, postDataObj).then(async (response) => {
+          if (response.ok) {
+            const responseObj = await response.json();
             ajaxRetryCount = 0;
-            let updatedLicense = {};
-            if (typeof text === 'object') {
-              updatedLicense = text;
-            } else if (typeof text === 'string') {
-              try {
-                updatedLicense = JSON.parse(text);
-              } catch (e) {
-                // eslint-disable-next-line no-console
-                console.log('Something went wrong with parsing license data.');
-                // eslint-disable-next-line no-console
-                console.log('error', e);
-                // eslint-disable-next-line no-console
-                console.log(text);
-                return;
-              }
-            }
+            const updatedLicense = responseObj;
             licenseNotifier.emit('license.updated', updatedLicense);
             if (!updatedLicense) {
               return;
             }
             // merge the updated license
-            theLicense = $.extend(theLicense, updatedLicense);
+            theLicense = { ...theLicense, ...updatedLicense };
             theLicense.licenseId = theLicense.code;
             License.set(theLicense);
             // now check to see if we need to do anything because of a status change
@@ -322,9 +310,8 @@ export const License = (function getLicense() {
               License.processExpiredLicense();
               ServerMessages.recordGeneralMessage('trial_license_expired');
             }
-          },
-          error(xhr, textStatus, errorThrown) {
-            log('license server error response', xhr, textStatus, errorThrown, ajaxRetryCount);
+          } else {
+            log('license server error response', response.status, ajaxRetryCount);
             licenseNotifier.emit('license.updated.error', ajaxRetryCount);
             ajaxRetryCount += 1;
             if (ajaxRetryCount > 3) {
@@ -335,9 +322,11 @@ export const License = (function getLicense() {
             setTimeout(() => {
               License.updatePeriodically(`error${ajaxRetryCount}`);
             }, oneMinute);
-          },
-          data: postData,
-        });
+          }
+        })
+          .catch((error) => {
+            log('license server returned error: ', error);
+          });
       });
     },
     processExpiredLicense() {
@@ -345,17 +334,17 @@ export const License = (function getLicense() {
       theLicense.myadblock_enrollment = true;
       License.set(theLicense);
       setSetting('picreplacement', false);
+      licenseNotifier.emit('license.expired');
       if (getSettings().sync_settings) {
         // We have to import the "sync-service" module on demand,
         // as the "sync-service" module in turn requires this module.
-        // eslint-disable-next-line import/no-cycle
         (import('./sync-service')).disableSync();
       }
       setSetting('color_themes', { popup_menu: 'default_theme', options_page: 'default_theme' });
-      unsubscribe({ id: 'distraction-control-push' });
-      unsubscribe({ id: 'distraction-control-newsletter' });
-      unsubscribe({ id: 'distraction-control-survey' });
-      unsubscribe({ id: 'distraction-control-video' });
+      SubscriptionAdapter.unsubscribe({ id: 'distraction-control-push' });
+      SubscriptionAdapter.unsubscribe({ id: 'distraction-control-newsletter' });
+      SubscriptionAdapter.unsubscribe({ id: 'distraction-control-survey' });
+      SubscriptionAdapter.unsubscribe({ id: 'distraction-control-video' });
       browser.alarms.clear(licenseAlarmName);
     },
     ready() {
@@ -368,13 +357,11 @@ export const License = (function getLicense() {
       License.update();
       browser.storage.local.get(installTimestampStorageKey).then((response) => {
         let installTimestamp = response[installTimestampStorageKey];
-        const localTimestamp = storageGet(installTimestampStorageKey);
-        const originalInstallTimestamp = installTimestamp || localTimestamp || Date.now();
-        // If the installation timestamp is missing from both storage locations,
+        const originalInstallTimestamp = installTimestamp || Date.now();
+        // If the installation timestamp is missing from storage,
         // save an updated version
-        if (!(response[installTimestampStorageKey] || localTimestamp)) {
+        if (!(response[installTimestampStorageKey])) {
           installTimestamp = Date.now();
-          storageSet(installTimestampStorageKey, installTimestamp);
           browser.storage.local.set({ install_timestamp: installTimestamp });
         }
         const originalInstallDate = new Date(originalInstallTimestamp);
@@ -394,8 +381,7 @@ export const License = (function getLicense() {
         return;
       }
       browser.storage.local.get(installTimestampStorageKey).then((response) => {
-        const localTimestamp = storageGet(installTimestampStorageKey);
-        const originalInstallTimestamp = response[installTimestampStorageKey] || localTimestamp;
+        const originalInstallTimestamp = response[installTimestampStorageKey];
         if (originalInstallTimestamp) {
           callback(new Date(originalInstallTimestamp));
         } else {
@@ -416,7 +402,7 @@ export const License = (function getLicense() {
         delay = 0; // 0 minutes
       }
       if (!this.licenseTimer) {
-        this.licenseTimer = window.setTimeout(() => {
+        this.licenseTimer = setTimeout(() => {
           License.updatePeriodically();
         }, delay);
       }
@@ -553,39 +539,46 @@ const replacedPerPage = new ext.PageMap();
 export const replacedCounts = (function getReplacedCount() {
   const adReplacedNotifier = new EventEmitter();
   const key = 'replaced_stats';
-  let data = storageGet(key);
-  if (!data) {
-    data = {};
-  }
-  if (data.start === undefined) {
-    data.start = Date.now();
-  }
-  if (data.total === undefined) {
-    data.total = 0;
-  }
-  data.version = 1;
-  storageSet(key, data);
+  migrateData(key, true).then(() => {
+    chromeStorageGetHelper(key).then((data) => {
+      let replacedCountData = data;
+      if (!data) {
+        replacedCountData = {};
+      }
+      if (replacedCountData.start === undefined) {
+        replacedCountData.start = Date.now();
+      }
+      if (replacedCountData.total === undefined) {
+        replacedCountData.total = 0;
+      }
+      replacedCountData.version = 1;
+      chromeStorageSetHelper(key, replacedCountData);
+      storageSet(key);
+    });
+  });
 
   return {
     recordOneAdReplaced(tabId) {
-      data = storageGet(key);
-      data.total += 1;
-      storageSet(key, data);
-      browser.tabs.get(tabId).then((tab) => {
-        const myPage = new ext.Page(tab);
-        let replaced = replacedPerPage.get(myPage) || 0;
-        replacedPerPage.set(myPage, replaced += 1);
-        adReplacedNotifier.emit('adReplaced', tabId, tab.url);
+      chromeStorageGetHelper(key).then((replacedCountData) => {
+        const data = replacedCountData;
+        data.total += 1;
+        chromeStorageSetHelper(key, data);
+        browser.tabs.get(tabId).then((tab) => {
+          const myPage = new ext.Page(tab);
+          let replaced = replacedPerPage.get(myPage) || 0;
+          replacedPerPage.set(myPage, replaced += 1);
+          adReplacedNotifier.emit('adReplaced', tabId, tab.url);
+        });
       });
     },
     get() {
-      return storageGet(key);
+      return chromeStorageGetHelper(key);
     },
     getTotalAdsReplaced(tabId) {
       if (tabId) {
         return replacedPerPage.get(ext.getPage(tabId));
       }
-      return this.get().total;
+      return this.get().then(data => data.total);
     },
     adReplacedNotifier,
   };
@@ -698,6 +691,7 @@ License.ready().then(() => {
 
   if (License.isActiveLicense()) {
     loadAdBlockSnippets();
+    License.updatePeriodically();
   }
 });
 

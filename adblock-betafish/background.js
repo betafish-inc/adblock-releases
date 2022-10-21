@@ -3,9 +3,10 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, chromeStorageSetHelper, log, License, translate,
    gabQuestion, ext, getSettings, parseUri, sessionStorageGet, setSetting,
-  blockCounts, sessionStorageSet, updateButtonUIAndContextMenus, settings,
-  storageGet, parseFilter, channels, twitchChannelNamePages, ytChannelNamePages,
-  determineUserLanguage, createFilterMetaData */
+   storageGet, parseFilter, channels, twitchChannelNamePages, ytChannelNamePages,
+   sessionStorageSet, updateButtonUIAndContextMenus, settings,
+   determineUserLanguage, createFilterMetaData, migrateData, isEmptyObject */
+
 
 import { Prefs } from 'prefs';
 import * as info from 'info';
@@ -86,13 +87,13 @@ const isSelectorFilter = function (text) {
 const countCache = (function countCache() {
   let cache;
 
-  // Update custom filter count stored in localStorage
+  // Update custom filter count stored in storage
   const updateCustomFilterCount = function () {
     chromeStorageSetHelper('custom_filter_count', cache);
   };
 
   return {
-    // Update custom filter count cache and value stored in localStorage.
+    // Update custom filter count cache and value stored in storage.
     // Inputs: new_count_map:count map - count map to replace existing count
     // cache
     updateCustomFilterCountMap(newCountMap) {
@@ -554,7 +555,7 @@ browser.storage.local.get(pausedKey).then((response) => {
 // all domain pause white-list entries at startup.
 browser.storage.local.get(domainPausedKey).then((response) => {
   const storedDomainPauses = response[domainPausedKey];
-  if (!jQuery.isEmptyObject(storedDomainPauses)) {
+  if (!isEmptyObject(storedDomainPauses)) {
     initialize.then(() => {
       for (const aDomain in storedDomainPauses) {
         ewe.filters.remove([`@@${aDomain}$document`]);
@@ -626,7 +627,7 @@ const getCurrentTabInfo = function (secondTime, tabId) {
         // Issue 6877: tab URL is not set directly after you opened a window
         // using window.open()
         if (!secondTime) {
-          window.setTimeout(() => {
+          setTimeout(() => {
             getCurrentTabInfo(true);
           }, 250);
         }
@@ -761,7 +762,7 @@ if (browser.runtime.id) {
       License.ready().then(checkQueryState);
     }
   };
-  const slashUpdateReleases = ['5.2.0'];
+  const slashUpdateReleases = ['5.2.0', '5.3.0'];
   // Display updated page after each update
   browser.runtime.onInstalled.addListener(async (details) => {
     let { last_known_version: lastKnownVersion } = await browser.storage.local.get(updateStorageKey);
@@ -796,6 +797,7 @@ if (browser.runtime.id) {
     browser.storage.local.set({ [updateStorageKey]: browser.runtime.getManifest().version });
   });
 }
+
 
 
 const openTab = function (url) {
@@ -836,21 +838,22 @@ async function getCustomFilterMetaData() {
 const getDebugInfo = async function (callback) {
   const response = {};
   response.otherInfo = {};
+  const { otherInfo } = response;
 
   // Is this installed build of AdBlock the official one?
-  if (browser.runtime.id === adblocBetaID) {
-    response.otherInfo.buildtype = ' Beta';
+  if (browser.runtime.id === 'pljaalgmajnlogcgiohkhdmgpomjcihk') {
+    otherInfo.buildtype = ' Beta';
   } else if (browser.runtime.id === 'gighmmpiobklfepjocnamgkkbiglidom'
     || browser.runtime.id === 'aobdicepooefnbaeokijohmhjlleamfj'
     || browser.runtime.id === 'ndcileolkflehcjpmjnfbnaibdcgglog'
     || browser.runtime.id === 'jid1-NIfFY2CA8fy1tg@jetpack') {
-    response.otherInfo.buildtype = ' Stable';
+    otherInfo.buildtype = ' Stable';
   } else {
-    response.otherInfo.buildtype = ' Unofficial';
+    otherInfo.buildtype = ' Unofficial';
   }
 
   // Get AdBlock version
-  response.otherInfo.version = browser.runtime.getManifest().version;
+  otherInfo.version = browser.runtime.getManifest().version;
 
   // Get subscribed filter lists
   const subscriptionInfo = {};
@@ -880,37 +883,30 @@ const getDebugInfo = async function (callback) {
 
   response.settings = adblockSettings;
   response.prefs = JSON.stringify(Prefs);
-  response.otherInfo.browser = TELEMETRY.browser;
-  response.otherInfo.browserVersion = TELEMETRY.browserVersion;
-  response.otherInfo.osVersion = TELEMETRY.osVersion;
-  response.otherInfo.os = TELEMETRY.os;
-  if (window.blockCounts) {
-    response.otherInfo.blockCounts = blockCounts.get();
-  }
+  otherInfo.browser = TELEMETRY.browser;
+  otherInfo.browserVersion = TELEMETRY.browserVersion;
+  otherInfo.osVersion = TELEMETRY.osVersion;
+  otherInfo.os = TELEMETRY.os;
+
   if (localStorage && localStorage.length) {
-    response.otherInfo.localStorageInfo = {};
-    response.otherInfo.localStorageInfo.length = localStorage.length;
+    otherInfo.localStorageInfo = {};
+    otherInfo.localStorageInfo.length = localStorage.length;
     let inx = 1;
     for (const key in localStorage) {
-      response.otherInfo.localStorageInfo[`key${inx}`] = key;
+      otherInfo.localStorageInfo[`key${inx}`] = key;
       inx += 1;
     }
-    // Temporarly add Edge migration logs to debug data
-    const edgeMigrationLogs = storageGet('migrateLogMessageKey') || [];
-    if (edgeMigrationLogs || edgeMigrationLogs.length) {
-      response.otherInfo.edgeMigrationLogs = Object.assign({}, edgeMigrationLogs);
-    }
   } else {
-    response.otherInfo.localStorageInfo = 'no data';
+    otherInfo.localStorageInfo = 'no data';
   }
-  response.otherInfo.isAdblockPaused = adblockIsPaused();
-  response.otherInfo.licenseState = License.get().status;
-  response.otherInfo.licenseVersion = License.get().lv;
+  otherInfo.isAdblockPaused = adblockIsPaused();
+  otherInfo.licenseState = License.get().status;
+  otherInfo.licenseVersion = License.get().lv;
   LocalDataCollection.getRawStatsSize((rawStatsSize) => {
-    response.otherInfo.rawStatsSize = rawStatsSize;
+    otherInfo.rawStatsSize = rawStatsSize;
     // Get total pings
     browser.storage.local.get('total_pings').then((storageResponse) => {
-      response.otherInfo.totalPings = storageResponse.totalPings || 0;
+      otherInfo.totalPings = storageResponse.totalPings || 0;
 
       // Now, add exclude filters (if there are any)
       const excludeFiltersKey = 'exclude_filters';
@@ -922,7 +918,7 @@ const getDebugInfo = async function (callback) {
         const errorKey = 'errorkey';
         browser.storage.local.get(errorKey).then((errorResponse) => {
           if (errorResponse && errorResponse[errorKey]) {
-            response.otherInfo[errorKey] = errorResponse[errorKey];
+            otherInfo[errorKey] = errorResponse[errorKey];
           }
           // Now, add the migration messages (if there are any)
           const migrateLogMessageKey = 'migrateLogMessageKey';
@@ -931,55 +927,57 @@ const getDebugInfo = async function (callback) {
               const messages = migrateLogMessageResponse[migrateLogMessageKey].split('\n');
               for (let i = 0; i < messages.length; i++) {
                 const key = `migration_message_${i}`;
-                response.otherInfo[key] = messages[i];
+                otherInfo[key] = messages[i];
               }
             }
+            const getDebugAlarmInfo = async function () {
+              const alarms = await browser.alarms.getAll();
+              if (alarms && alarms.length > 0) {
+                otherInfo['Alarm info'] = `length: ${alarms.length}`;
+                for (let i = 0; i < alarms.length; i++) {
+                  const alarm = alarms[i];
+                  otherInfo[`${i} Alarm Name`] = alarm.name;
+                  otherInfo[`${i} Alarm Scheduled Time`] = new Date(alarm.scheduledTime);
+                }
+              } else {
+                otherInfo['No alarm info'] = 'No alarm info';
+              }
+              if (typeof callback === 'function') {
+                callback(response);
+              }
+            };
             const addMetaDataInfo = function () {
               getCustomFilterMetaData()
                 .then((results) => {
-                  response.otherInfo.customRuleMetaData = results;
-                  if (typeof callback === 'function') {
-                    callback(response);
-                  }
+                  otherInfo.customRuleMetaData = results;
+                  getDebugAlarmInfo();
                 });
             };
 
             const getDebugLicenseInfo = function () {
               if (License.isActiveLicense()) {
-                response.otherInfo.licenseInfo = {};
-                response.otherInfo.licenseInfo.extensionGUID = TELEMETRY.userId();
-                response.otherInfo.licenseInfo.licenseId = License.get().licenseId;
+                otherInfo.licenseInfo = {};
+                otherInfo.licenseInfo.extensionGUID = TELEMETRY.userId();
+                otherInfo.licenseInfo.licenseId = License.get().licenseId;
                 if (getSettings().sync_settings) {
                   const syncInfo = {};
                   syncInfo.SyncCommitVersion = SyncService.getCommitVersion();
                   syncInfo.SyncCommitName = SyncService.getCurrentExtensionName();
                   syncInfo.SyncCommitLog = SyncService.getSyncLog();
-                  response.otherInfo.syncInfo = syncInfo;
+                  otherInfo.syncInfo = syncInfo;
                 }
-                browser.alarms.getAll().then((alarms) => {
-                  if (alarms && alarms.length > 0) {
-                    response.otherInfo['Alarm info'] = `length: ${alarms.length}`;
-                    for (let i = 0; i < alarms.length; i++) {
-                      const alarm = alarms[i];
-                      response.otherInfo[`${i} Alarm Name`] = alarm.name;
-                      response.otherInfo[`${i} Alarm Scheduled Time`] = new Date(alarm.scheduledTime);
-                    }
-                  } else {
-                    response.otherInfo['No alarm info'] = 'No alarm info';
-                  }
-                  License.getLicenseInstallationDate((installdate) => {
-                    response.otherInfo['License Installation Date'] = installdate;
-                    const customChannelId = channels.getIdByName('CustomChannel');
-                    if (channels.getGuide()[customChannelId].enabled) {
-                      const customChannel = channels.channelGuide[customChannelId].channel;
-                      customChannel.getTotalBytesInUse().then((result) => {
-                        response.otherInfo['Custom Channel total bytes in use'] = result;
-                        addMetaDataInfo();
-                      });
-                    } else {
+                License.getLicenseInstallationDate((installdate) => {
+                  otherInfo['License Installation Date'] = installdate;
+                  const customChannelId = channels.getIdByName('CustomChannel');
+                  if (channels.getGuide()[customChannelId].enabled) {
+                    const customChannel = channels.channelGuide[customChannelId].channel;
+                    customChannel.getTotalBytesInUse().then((result) => {
+                      otherInfo['Custom Channel total bytes in use'] = result;
                       addMetaDataInfo();
-                    }
-                  });
+                    });
+                  } else {
+                    addMetaDataInfo();
+                  }
                 });
               } else { // License is not active
                 addMetaDataInfo();
@@ -987,11 +985,11 @@ const getDebugInfo = async function (callback) {
             };
             if (browser.permissions && browser.permissions.getAll) {
               browser.permissions.getAll().then((allPermissions) => {
-                response.otherInfo.hostPermissions = allPermissions;
+                otherInfo.hostPermissions = allPermissions;
                 getDebugLicenseInfo();
               });
             } else {
-              response.otherInfo.hostPermissions = 'no data';
+              otherInfo.hostPermissions = 'no data';
               getDebugLicenseInfo();
             }
           });

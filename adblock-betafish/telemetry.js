@@ -5,7 +5,7 @@
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, require, log, determineUserLanguage, channels,
    replacedCounts, chromeStorageSetHelper, recordAnonymousErrorMessage,
-   BigInt, LocalCDN */
+   BigInt, LocalCDN, storageSet */
 
 import { Prefs } from 'prefs';
 import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
@@ -15,6 +15,7 @@ import CtaABManager from './ctaabmanager';
 import SubscriptionAdapter from './subscriptionadapter';
 import { getSettings } from './settings';
 import ServerMessages from './servermessages';
+import postData from './fetch-util';
 import SURVEY from './survey';
 
 
@@ -24,6 +25,7 @@ export const TELEMETRY = (function exportStats() {
   const userIDStorageKey = 'userid';
   const totalPingStorageKey = 'total_pings';
   const nextPingTimeStorageKey = 'next_ping_time';
+  const pingAlarmName = 'pingalarm';
   const statsUrl = 'https://ping.getadblock.com/stats/';
   const FiftyFiveMinutes = 3300000;
   let dataCorrupt = false;
@@ -50,57 +52,12 @@ export const TELEMETRY = (function exportStats() {
 
   let userID;
 
-  // Inputs: key:string.
-  // Returns value if key exists, else undefined.
-  // Note: "_alt" is appended to the key to make it the key different
-  // from the previous items stored in localstorage
-  const storageGet = function (key) {
-    const storageKey = `${key}_alt`;
-    const store = localStorage;
-    if (store === undefined) {
-      return undefined;
-    }
-    const json = store.getItem(storageKey);
-    if (json == null) {
-      return undefined;
-    }
-    try {
-      return JSON.parse(json);
-    } catch (ex) {
-      if (ex && ex.message) {
-        ServerMessages.recordErrorMessage('storage_get_error ', undefined, { errorMessage: ex.message });
-      }
-      return undefined;
-    }
-  };
-
-  // Inputs: key:string, value:object.
-  // Note: "_alt" is appended to the key to make it the key different
-  // from the previous items stored in localstorage
-  // If value === undefined, removes key from storage.
-  // Returns undefined.
-  const storageSet = function (key, value) {
-    const storageKey = `${key}_alt`;
-    const store = localStorage;
-
-    if (value === undefined) {
-      store.removeItem(storageKey);
-      return;
-    }
-    try {
-      store.setItem(storageKey, JSON.stringify(value));
-    } catch (ex) {
-      dataCorrupt = true;
-    }
-  };
-
   // Give the user a userid if they don't have one yet.
   function readUserIDPromisified() {
     return new Promise(
       ((resolve) => {
         browser.storage.local.get(TELEMETRY.userIDStorageKey).then((response) => {
-          const localuserid = storageGet(TELEMETRY.userIDStorageKey);
-          if (!response[TELEMETRY.userIDStorageKey] && !localuserid) {
+          if (!response[TELEMETRY.userIDStorageKey]) {
             TELEMETRY.firstRun = true;
             const timeSuffix = (Date.now()) % 1e8; // 8 digits from end of
             // timestamp
@@ -111,22 +68,21 @@ export const TELEMETRY = (function exportStats() {
               result.push(alphabet[choice]);
             }
             userID = result.join('') + timeSuffix;
-            // store in redundant locations
             chromeStorageSetHelper(TELEMETRY.userIDStorageKey, userID);
-            storageSet(TELEMETRY.userIDStorageKey, userID);
           } else {
-            userID = response[TELEMETRY.userIDStorageKey] || localuserid;
-            if (!response[TELEMETRY.userIDStorageKey] && localuserid) {
-              chromeStorageSetHelper(TELEMETRY.userIDStorageKey, userID);
-            }
-            if (response[TELEMETRY.userIDStorageKey] && !localuserid) {
-              storageSet(TELEMETRY.userIDStorageKey, userID);
-            }
+            userID = response[TELEMETRY.userIDStorageKey];
           }
           resolve(userID);
         });
       }),
     );
+  }
+
+  // Clean up / remove old, unused data in localStorage
+  function cleanUpLocalStorage() {
+    storageSet(TELEMETRY.userIDStorageKey);
+    storageSet(TELEMETRY.totalPingStorageKey);
+    storageSet(TELEMETRY.nextPingTimeStorageKey);
   }
 
   const getPingData = function (callbackFN) {
@@ -140,8 +96,7 @@ export const TELEMETRY = (function exportStats() {
       // ping data.
       try {
         const settingsObj = getSettings();
-        const localTotalPings = storageGet(TELEMETRY.totalPingStorageKey);
-        const totalPings = response[TELEMETRY.totalPingStorageKey] || localTotalPings || 0;
+        const totalPings = response[TELEMETRY.totalPingStorageKey] || 0;
         const themeOptionsPage = settingsObj.color_themes.options_page.replace('_theme', '');
         const themePopupMenu = settingsObj.color_themes.popup_menu.replace('_theme', '');
         let subsStr = '-1';
@@ -163,7 +118,7 @@ export const TELEMETRY = (function exportStats() {
           dcv2: settingsObj.data_collection_v2 ? '1' : '0',
           ldc: settingsObj.local_data_collection ? '1' : '0',
           cdn: settingsObj.local_cdn ? '1' : '0',
-          rc: replacedCounts.getTotalAdsReplaced(),
+          rc: await replacedCounts.getTotalAdsReplaced(),
           to: themeOptionsPage,
           tm: themePopupMenu,
           sy: settingsObj.sync_settings ? '1' : '0',
@@ -178,8 +133,8 @@ export const TELEMETRY = (function exportStats() {
         };
 
         if (typeof LocalCDN !== 'undefined') {
-          data.cdnr = LocalCDN.getRedirectCount();
-          data.cdnd = LocalCDN.getDataCount();
+          data.cdnr = await LocalCDN.getRedirectCount();
+          data.cdnd = await LocalCDN.getDataCount();
         } else {
           data.cdnr = 0;
           data.cdnd = 0;
@@ -251,7 +206,7 @@ export const TELEMETRY = (function exportStats() {
   // Tell the server we exist.
   const pingNow = function () {
     let pingData = {};
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const handlePingResponse = function (responseData) {
         SURVEY.maybeSurvey(responseData);
         CtaABManager.maybeCtaAB(responseData);
@@ -277,36 +232,43 @@ export const TELEMETRY = (function exportStats() {
           }
         }
         pingData.cmd = 'ping';
-        const ajaxOptions = {
-          type: 'POST',
-          url: statsUrl,
-          data: pingData,
-          success: handlePingResponse, // TODO: Remove when we no longer do a/b
-          // tests
-          error(e) {
-            // eslint-disable-next-line no-console
-            console.log('Ping returned error: ', e.status);
-            reject(e);
-          },
+        const sendPingData = function () {
+          postData(statsUrl, pingData).then(async (response) => {
+            if (response.ok) {
+              telemetryNotifier.emit('ping.complete');
+              const text = await response.text();
+              handlePingResponse(text);
+            } else {
+              ServerMessages.sendMessageToBackupLogServer('fetch_error', response.statusText);
+              log('ping server returned error: ', response.statusText);
+            }
+          })
+          // Send any network errors during the ping fetch to a dedicated log server
+          // to help us determine why there's been a drop in ping requests
+          // See https://gitlab.com/adblockinc/ext/adblock/adblock/-/issues/136
+            .catch((error) => {
+              ServerMessages.sendMessageToBackupLogServer('fetch_error', error.toString());
+              log('ping server returned error: ', error);
+            });
         };
-
         if (browser.management && browser.management.getSelf) {
           browser.management.getSelf().then((info) => {
             pingData.it = info.installType.charAt(0);
-            $.ajax(ajaxOptions);
+            sendPingData();
             telemetryNotifier.emit('ping.complete');
           });
         } else {
-          $.ajax(ajaxOptions);
+          sendPingData();
           telemetryNotifier.emit('ping.complete');
         }
 
 
         if (typeof LocalCDN !== 'undefined') {
-          const missedVersions = LocalCDN.getMissedVersions();
-          if (missedVersions) {
-            ServerMessages.recordGeneralMessage('cdn_miss_stats', undefined, { cdnm: missedVersions });
-          }
+          LocalCDN.getMissedVersions().then((missedVersions) => {
+            if (missedVersions) {
+              ServerMessages.recordGeneralMessage('cdn_miss_stats', undefined, { cdnm: missedVersions });
+            }
+          });
         }
       });
     });
@@ -314,42 +276,35 @@ export const TELEMETRY = (function exportStats() {
 
   // Called just after we ping the server, to schedule our next ping.
   const scheduleNextPing = function () {
-    browser.storage.local.get(TELEMETRY.totalPingStorageKey).then((response) => {
-      let localTotalPings = storageGet(totalPingStorageKey);
-      if (typeof localTotalPings !== 'number' || Number.isNaN(localTotalPings)) {
-        localTotalPings = 0;
-      }
-      let totalPings = response[TELEMETRY.totalPingStorageKey];
-      if (typeof totalPings !== 'number' || Number.isNaN(totalPings)) {
-        totalPings = 0;
-      }
-      totalPings = Math.max(localTotalPings, totalPings);
-      totalPings += 1;
-      // store in redundant locations
-      chromeStorageSetHelper(TELEMETRY.totalPingStorageKey, totalPings);
-      storageSet(TELEMETRY.totalPingStorageKey, totalPings);
-
-      let delayHours;
-      if (totalPings === 1) { // Ping one hour after install
-        delayHours = 1;
-      } else if (totalPings < 9) { // Then every day for a week
-        delayHours = 24;
-      } else { // Then weekly forever
-        delayHours = 24 * 7;
-      }
-
-      const millis = 1000 * 60 * 60 * delayHours;
-      const nextPingTime = Date.now() + millis;
-
-      // store in redundant location
-      chromeStorageSetHelper(TELEMETRY.nextPingTimeStorageKey, nextPingTime, (error) => {
-        if (error) {
-          dataCorrupt = true;
-        } else {
-          dataCorrupt = false;
+    return new Promise((resolve) => {
+      browser.storage.local.get(TELEMETRY.totalPingStorageKey).then((response) => {
+        let totalPings = response[TELEMETRY.totalPingStorageKey];
+        if (typeof totalPings !== 'number' || Number.isNaN(totalPings)) {
+          totalPings = 0;
         }
+        totalPings += 1;
+        // store in redundant locations
+        chromeStorageSetHelper(TELEMETRY.totalPingStorageKey, totalPings);
+
+        let delayHours;
+        if (totalPings === 1) { // Ping one hour after install
+          delayHours = 1;
+        } else if (totalPings < 9) { // Then every day for a week
+          delayHours = 24;
+        } else { // Then weekly forever
+          delayHours = 24 * 7;
+        }
+        const millis = 1000 * 60 * 60 * delayHours;
+        const nextPingTime = Date.now() + millis;
+        chromeStorageSetHelper(TELEMETRY.nextPingTimeStorageKey, nextPingTime, (error) => {
+          if (error) {
+            dataCorrupt = true;
+          } else {
+            dataCorrupt = false;
+          }
+          resolve();
+        });
       });
-      storageSet(TELEMETRY.nextPingTimeStorageKey, nextPingTime);
     });
   };
 
@@ -364,64 +319,27 @@ export const TELEMETRY = (function exportStats() {
       callbackFN(FiftyFiveMinutes);
       return;
     }
-    // Wait 10 seconds to allow the previous 'set' to finish
-    window.setTimeout(() => {
-      browser.storage.local.get(TELEMETRY.nextPingTimeStorageKey).then((response) => {
-        let localNextPingTime = storageGet(TELEMETRY.nextPingTimeStorageKey);
-        if (typeof localNextPingTime !== 'number' || Number.isNaN(localNextPingTime)) {
-          localNextPingTime = 0;
-        }
-        let nextPingTimeStored = response[TELEMETRY.nextPingTimeStorageKey];
-        if (typeof nextPingTimeStored !== 'number' || Number.isNaN(nextPingTimeStored)) {
-          nextPingTimeStored = 0;
-        }
-        const nextPingTime = Math.max(localNextPingTime, nextPingTimeStored);
-        // if this is the first time we've run (just installed), millisTillNextPing is 0
-        if (nextPingTime === 0 && TELEMETRY.firstRun) {
-          callbackFN(0);
-          return;
-        }
-        // if we don't have a 'next ping time', or it's not a valid number,
-        // default to 55 minute ping interval
-        if (
-          typeof nextPingTime !== 'number'
-          || nextPingTime === 0
-          || Number.isNaN(nextPingTime)
-        ) {
-          callbackFN(FiftyFiveMinutes);
-          return;
-        }
-        callbackFN(nextPingTime - Date.now());
-      }); // end of get
-    }, 10000);
-  };
-
-  // Used to rate limit .message()s. Rate limits reset at startup.
-  const throttle = {
-    // A small initial amount in case the server is bogged down.
-    // The server will tell us the correct amount.
-    maxEventsPerHour: 3, // null if no limit
-    // Called when attempting an event. If not rate limited, returns
-    // true and records the event.
-    attempt() {
-      const now = Date.now();
-      const oneHour = 1000 * 60 * 60;
-      const times = this.eventTimes;
-      const mph = this.maxEventsPerHour;
-      // Discard old or irrelevant events
-      while (times[0] && (times[0] + oneHour < now || mph === null)) {
-        times.shift();
+    browser.storage.local.get(TELEMETRY.nextPingTimeStorageKey).then((response) => {
+      let nextPingTime = response[TELEMETRY.nextPingTimeStorageKey];
+      if (typeof nextPingTime !== 'number' || Number.isNaN(nextPingTime)) {
+        nextPingTime = 0;
       }
-      if (mph === null) {
-        return true;
-      } // no limit
-      if (times.length >= mph) {
-        return false;
-      } // used our quota this hour
-      times.push(now);
-      return true;
-    },
-    eventTimes: [],
+      if (nextPingTime === 0 && TELEMETRY.firstRun) {
+        callbackFN(1000 * 60);
+        return;
+      }
+      // if we don't have a 'next ping time', or it's not a valid number,
+      // default to 55 minute ping interval
+      if (
+        typeof nextPingTime !== 'number'
+        || nextPingTime === 0
+        || Number.isNaN(nextPingTime)
+      ) {
+        callbackFN(FiftyFiveMinutes);
+        return;
+      }
+      callbackFN(nextPingTime - Date.now());
+    }); // end of get
   };
 
   return {
@@ -455,13 +373,35 @@ export const TELEMETRY = (function exportStats() {
     startPinging() {
       function sleepThenPing() {
         millisTillNextPing((delay) => {
-          window.setTimeout(() => {
-            pingNow();
-            scheduleNextPing();
-            sleepThenPing();
-          }, delay);
+          browser.alarms.create(pingAlarmName, { delayInMinutes: (delay / 1000 / 60) });
         });
       }
+      browser.alarms.onAlarm.addListener((alarm) => {
+        if (alarm && alarm.name === pingAlarmName) {
+          pingNow().then(scheduleNextPing().then(sleepThenPing()));
+        }
+      });
+      // Check if the computer was woken up, and if there was a pending alarm
+      // that should fired during the sleep, then
+      // remove it, and fire the update ourselves.
+      // see - https://bugs.chromium.org/p/chromium/issues/detail?id=471524
+      browser.idle.onStateChanged.addListener(async (newState) => {
+        if (newState === 'active') {
+          const alarm = await browser.alarms.get(pingAlarmName);
+          if (alarm && Date.now() > alarm.scheduledTime) {
+            await browser.alarms.clear(pingAlarmName);
+            pingNow().then(scheduleNextPing().then(sleepThenPing()));
+          } else if (alarm) {
+            // if the alarm should fire in the future,
+            // re-add the alarm so it fires at the correct time
+            const originalTime = alarm.scheduledTime;
+            const wasCleared = await browser.alarms.clear(pingAlarmName);
+            if (wasCleared) {
+              browser.alarms.create(pingAlarmName, { when: originalTime });
+            }
+          }
+        }
+      });
 
       readUserIDPromisified().then(() => {
         // Do 'stuff' when we're first installed...
@@ -485,42 +425,7 @@ export const TELEMETRY = (function exportStats() {
       // This will sleep, then ping, then schedule a new ping, then
       // call itself to start the process over again.
       sleepThenPing();
-    },
-
-    // Record some data, if we are not rate limited.
-    msg(message) {
-      if (!throttle.attempt()) {
-        log('Rate limited:', message);
-        return;
-      }
-      const data = {
-        cmd: 'msg2',
-        m: message,
-        u: userID,
-        v: version,
-        fr: firstRun,
-        f: flavor,
-        bv: browserVersion,
-        o: os,
-        ov: osVersion,
-      };
-      if (browser.runtime.id) {
-        data.extid = browser.runtime.id;
-      }
-      $.ajax(statsUrl, {
-        type: 'POST',
-        data,
-        complete(xhr) {
-          let mph = parseInt(xhr.getResponseHeader('X-RateLimit-MPH'), 10);
-          if (typeof mph !== 'number' || Number.isNaN(mph) || mph < -1) { // Server is sick
-            mph = 1;
-          }
-          if (mph === -1) {
-            mph = null;
-          } // no rate limit
-          throttle.maxEventsPerHour = mph;
-        },
-      });
+      cleanUpLocalStorage();
     },
   };
 }());

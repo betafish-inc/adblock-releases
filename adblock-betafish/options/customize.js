@@ -138,7 +138,7 @@ $(async () => {
     let filterErrorMessage = '';
     $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
 
-    /* eslint-disable no-await-in-loop */
+    /* eslint-disable-next-line no-await-in-loop */
     for (let i = 0; (!filterErrorMessage && i < customFiltersArray.length); i++) {
       const filter = customFiltersArray[i].trim();
 
@@ -182,18 +182,29 @@ $(async () => {
       // remove duplicates
       /* eslint-disable-next-line max-len  */
       const uniqCustomFilters = customFiltersArray.filter((item, inx) => customFiltersArray.indexOf(item) === inx);
-      /* eslint-disable no-await-in-loop */
-      for (let i = 0; (i < uniqCustomFilters.length); i++) {
-        let filter = uniqCustomFilters[i];
-        filter = filter.trim();
-        if (!originalCustomFilters.includes(filter) && filter) {
-          await BG.ewe.filters.add([filter], createFilterMetaData('customize'));
+      let filterToAdd;
+      try {
+        /* eslint-disable-next-line no-await-in-loop */
+        for (let i = 0; (i < uniqCustomFilters.length); i++) {
+          filterToAdd = uniqCustomFilters[i];
+          filterToAdd = filterToAdd.trim();
+          if (!originalCustomFilters.includes(filterToAdd) && filterToAdd) {
+            await BG.ewe.filters.add([filterToAdd], createFilterMetaData('customize'));
+          }
         }
+      } catch (error) {
+        filterErrorMessage = translate(
+          'customfilterserrormessage',
+          [filterToAdd, translate(error.reason || error.type) || translate('filter_invalid')],
+        );
+        $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
+        $('#messagecustom').removeClass('do-not-display');
+        return;
       }
 
       // Delete / remove filters the user removed...
       if (originalCustomFilters) {
-        /* eslint-disable no-await-in-loop */
+        /* eslint-disable-next-line no-await-in-loop */
         for (let i = 0; (i < originalCustomFilters.length); i++) {
           const filter = originalCustomFilters[i];
           if (!customFiltersArray.includes(filter) && filter) {

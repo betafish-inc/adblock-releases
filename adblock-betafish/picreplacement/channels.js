@@ -1,7 +1,8 @@
 
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global settings, getSettings, setSetting, storageGet, storageSet, browser, ext */
+/* global settings, getSettings, setSetting, chromeStorageGetHelper,
+   browser, migrateData, chromeStorageSetHelper, ext */
 
 import { contentTypes } from 'adblockpluscore/lib/contentTypes';
 import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
@@ -43,11 +44,8 @@ const REPORTING_OPTIONS = {
   includeElementHiding: false,
 };
 
+const channelsKey = 'channels';
 
-// const {
-//  getUrlFromId,
-//  getSubscriptionsMinusText,
-// } = SubscriptionAdapter;
 const subscription1 = SubscriptionAdapter.getUrlFromId('antisocial');
 const subscription2 = SubscriptionAdapter.getUrlFromId('annoyances');
 
@@ -301,14 +299,16 @@ export class Channels {
   }
 
   loadFromStorage() {
-    this.channelGuide = {};
-    const entries = storageGet('channels');
-    if (entries) {
-      for (let i = 0; i < entries.length; i++) {
-        this.add(entries[i]);
-      }
-    }
-    this.addNewChannels();
+    migrateData(channelsKey, true).then(() => {
+      chromeStorageGetHelper(channelsKey).then((response) => {
+        this.channelGuide = {};
+        const savedData = response || [];
+        for (let i = 0; i < savedData.length; i++) {
+          this.add(savedData[i]);
+        }
+        this.addNewChannels();
+      });
+    });
   }
 
   saveToStorage() {
@@ -317,7 +317,7 @@ export class Channels {
     for (const id in guide) {
       toStore.push(guide[id]);
     }
-    storageSet('channels', toStore);
+    chromeStorageSetHelper(channelsKey, toStore);
   }
 
   static getContentType(details) {

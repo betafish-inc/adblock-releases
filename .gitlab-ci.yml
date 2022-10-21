@@ -70,7 +70,7 @@ build:
   script:
     - cd testpages.adblockplus.org &&
       docker build -t testpages --build-arg EXTENSION_FILE=$EXTENSION . &&
-      docker run --shm-size=256m -e SKIP_EXTENSION_DOWNLOAD="true" -e TESTS_EXCLUDE="Subscriptions" -e BROWSER="$BROWSER" testpages
+      docker run --shm-size=256m -e SKIP_EXTENSION_DOWNLOAD="true" -e GREP="^.*$BROWSER((?!Subscriptions).)*\$" testpages
   after_script:
     - docker cp $(docker ps -aqf ancestor=testpages):/testpages.adblockplus.org/test/screenshots .
       2> /dev/null

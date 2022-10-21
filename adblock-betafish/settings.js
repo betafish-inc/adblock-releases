@@ -6,10 +6,6 @@
 
 import { EventEmitter } from '../vendor/adblockplusui/adblockpluschrome/lib/events';
 
-import * as $ from './jquery/jquery-3.5.1.min';
-// export for others scripts to use
-const jQuery = $;
-
 export const settingsNotifier = new EventEmitter();
 const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_devtools_panel'];
 const validThemes = ['default_theme', 'dark_theme', 'watermelon_theme', 'solarized_theme', 'solarized_light_theme', 'rebecca_purple_theme', 'ocean_theme', 'sunshine_theme'];
@@ -144,6 +140,4 @@ Object.assign(window, {
   settingsNotifier,
   isValidTheme,
   abpPrefPropertyNames,
-  $,
-  jQuery,
 });

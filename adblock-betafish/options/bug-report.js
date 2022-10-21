@@ -160,11 +160,7 @@ const bugReportLogic = function () {
     $email.val(response.userEmail);
   });
 
-  const handleResponseError = function (respObj) {
-    if (respObj && Object.prototype.hasOwnProperty.call(respObj, 'error_msg')) {
-      $('#step_response_error_msg').text(translate(respObj.error_msg));
-    }
-
+  const handleResponseError = function () {
     $('#manual_report_DIV').show();
     $('#step_response_error').fadeIn();
     $('html, body').animate({
@@ -173,7 +169,7 @@ const bugReportLogic = function () {
   };
 
   // Preparation for manual report in case of error.
-  const prepareManualReport = function (data, status, HTTPerror, respObj) {
+  const prepareManualReport = function (data, statusText) {
     const body = [];
     body.push('This bug report failed to send.');
     body.push('');
@@ -193,22 +189,13 @@ const bugReportLogic = function () {
     body.push('');
     body.push('===== Debug Info =====');
     body.push(textDebugInfo);
-    if (status) {
-      body.push(`Status: ${status}`);
+    if (statusText) {
+      body.push(`statusText: ${statusText}`);
     }
-
-    if (HTTPerror) {
-      body.push(`HTTP error code: ${HTTPerror}`);
-    }
-
-    if (respObj) {
-      body.push(`Server error information: ${JSON.stringify(respObj)}`);
-    }
-
     $('#manual_submission').val(body.join('\n'));
   };
 
-  const sendReport = function () {
+  const sendReport = async function () {
     const reportData = {
       title: $title.val(),
       repro: $repro.val(),
@@ -222,43 +209,30 @@ const bugReportLogic = function () {
     if (extInfo) {
       reportData.debug.extensions = extInfo;
     }
-
-    $.ajax({
-      url: 'https://getadblock.com/freshdesk/bugReportV2.php',
-      data: {
-        bug_report: JSON.stringify(reportData),
-      },
-      success(text) {
-        // if a ticket was created, the response should contain a ticket id #
-        if (text) {
-          try {
-            const respObj = JSON.parse(text);
-            if (respObj && Object.prototype.hasOwnProperty.call(respObj, 'id')) {
-              $('#step_response_success').fadeIn();
-              $('html, body').animate({
-                scrollTop: $('#step_response_success').offset().top,
-              }, 2000);
-            } else {
-              prepareManualReport(reportData, null, null, respObj);
-              handleResponseError(respObj);
-            }
-          } catch (e) {
-            prepareManualReport(reportData);
-            handleResponseError();
-          }
+    const formData = new FormData();
+    formData.append('bug_report', JSON.stringify(reportData));
+    try {
+      const response = await fetch('https://getadblock.com/freshdesk/bugReportV2.php', {
+        method: 'POST',
+        cache: 'no-cache',
+        body: formData,
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data && Object.prototype.hasOwnProperty.call(data, 'id')) {
+          $('#step_response_success').fadeIn();
+          $('html, body').animate({
+            scrollTop: $('#step_response_success').offset().top,
+          }, 2000);
         } else {
-          prepareManualReport(reportData);
+          prepareManualReport(reportData, response.statusText);
           handleResponseError();
         }
-      },
-
-      error(xhrInfo, status, HTTPerror) {
-        prepareManualReport(reportData, status, HTTPerror);
-        handleResponseError();
-      },
-
-      type: 'POST',
-    });
+      }
+    } catch {
+      prepareManualReport(reportData);
+      handleResponseError();
+    }
   };
 
   // Step 1: Name & Email
@@ -300,9 +274,9 @@ const bugReportLogic = function () {
   });
 
   $('#submit').on('click', () => {
-    sendReport();
     $('#submit').prop('disabled', true);
     $('#step2-back').prop('disabled', true);
+    sendReport();
   });
 };
 

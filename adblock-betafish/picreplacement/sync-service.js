@@ -1,7 +1,8 @@
 
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, channels, createFilterMetaData,
+/* global browser, channels, createFilterMetaData, log,
+   chromeStorageDeleteHelper, chromeStorageGetHelper, createFilterMetaData,
    chromeStorageSetHelper, getUserFilters, Prefs, abpPrefPropertyNames,
    adblockIsDomainPaused, PubNub, adblockIsPaused,
    pausedFilterText1, pausedFilterText2,
@@ -21,6 +22,7 @@ import {
   getSettings, setSetting, settingsNotifier, settings,
 } from '../settings';
 import ServerMessages from '../servermessages';
+import postData from '../fetch-util';
 
 const SyncService = (function getSyncService() {
   let storedSyncDomainPauses = [];
@@ -97,15 +99,38 @@ const SyncService = (function getSyncService() {
   };
 
   const getSyncLog = function () {
-    const storedLog = JSON.parse(localStorage.getItem(syncLogMessageKey) || '[]');
-    const theReturnObj = {};
-    Object.assign(theReturnObj, storedLog);
-    return theReturnObj;
+    return new Promise((resolve) => {
+      chromeStorageGetHelper(syncLogMessageKey).then((logMsgs) => {
+        const storedLog = JSON.parse(logMsgs || '[]');
+        const theReturnObj = {};
+        Object.assign(theReturnObj, storedLog);
+        resolve(theReturnObj);
+      });
+    });
   };
 
   // TODO - when should we delete the log file???
   const deleteSyncLog = function () {
-    localStorage.removeItem(syncLogMessageKey);
+    chromeStorageDeleteHelper(syncLogMessageKey);
+  };
+
+  const migrateSyncLog = function () {
+    if (typeof window.localStorage === 'undefined') {
+      return;
+    }
+    let storedMsgs = localStorage.getItem(syncLogMessageKey);
+    if (!storedMsgs) {
+      return;
+    }
+    storedMsgs = JSON.parse(storedMsgs);
+    while (storedMsgs.length > 500) { // only keep the last 500 log entries
+      storedMsgs.shift();
+    }
+    chromeStorageSetHelper(syncLogMessageKey, JSON.stringify(storedMsgs), (error) => {
+      if (!error) {
+        localStorage.removeItem(syncLogMessageKey);
+      }
+    });
   };
 
   function debounced(delay, fn) {
@@ -262,12 +287,14 @@ const SyncService = (function getSyncService() {
   // Sync log message processing
 
   const addSyncLogText = function (msg) {
-    const storedLog = JSON.parse(localStorage.getItem(syncLogMessageKey) || '[]');
-    storedLog.push(`${new Date().toUTCString()} , ${msg}`);
-    while (storedLog.length > 500) { // only keep the last 500 log entries
-      storedLog.shift();
-    }
-    localStorage.setItem(syncLogMessageKey, JSON.stringify(storedLog));
+    chromeStorageGetHelper(syncLogMessageKey).then((logMsgs) => {
+      const storedLog = JSON.parse(logMsgs || '[]');
+      storedLog.push(`${new Date().toUTCString()} , ${msg}`);
+      while (storedLog.length > 500) { // only keep the last 500 log entries
+        storedLog.shift();
+      }
+      chromeStorageSetHelper(syncLogMessageKey, JSON.stringify(storedLog));
+    });
   };
 
   const onExtensionNamesDownloadingAddLogEntry = function () {
@@ -410,9 +437,13 @@ const SyncService = (function getSyncService() {
       // capture, then remove all current custom filters, account for pause filters in
       // current processing
       let currentUserFilters = await getUserFilters();
+      const onlyUserFilters = currentUserFilters.map(filter => filter.text);
       let results = [];
       for (const inx in payload.customFilterRules) {
-        if (!ewe.filters.validate(payload.customFilterRules[inx])) {
+        if (
+          !ewe.filters.validate(payload.customFilterRules[inx])
+          && !onlyUserFilters.includes(payload.customFilterRules[inx])
+        ) {
           results.push(ewe.filters.add([payload.customFilterRules[inx]]));
         }
       }
@@ -528,7 +559,7 @@ const SyncService = (function getSyncService() {
       }
     };
 
-    const getFailure = function (statusCode, textStatus, errorThrown, responseJSON) {
+    const getFailure = function (statusCode, textStatus, responseJSON) {
       lastGetStatusCode = statusCode;
       lastGetErrorResponse = responseJSON;
       if (initialGet && statusCode === 404) {
@@ -564,9 +595,9 @@ const SyncService = (function getSyncService() {
 
   const getAllExtensionNames = function (callback) {
     syncNotifier.emit('extension.names.downloading');
-    $.ajax({
-      jsonp: false,
-      cache: false,
+    fetch(`${License.MAB_CONFIG.syncURL}/devices/list`, {
+      method: 'GET',
+      cache: 'no-cache',
       headers: {
         'X-GABSYNC-PARAMS': JSON.stringify({
           extensionGUID: TELEMETRY.userId(),
@@ -574,37 +605,30 @@ const SyncService = (function getSyncService() {
           extInfo: getExtensionInfo(),
         }),
       },
-      url: `${License.MAB_CONFIG.syncURL}/devices/list`,
-      type: 'GET',
-      success(text) {
-        let responseObj = {};
-        if (typeof text === 'object') {
-          responseObj = text;
-        } else if (typeof text === 'string') {
-          try {
-            responseObj = JSON.parse(text);
-          } catch (e) {
-            // eslint-disable-next-line no-console
-            console.log('Something went wrong with parsing license data.');
-            // eslint-disable-next-line no-console
-            console.log('error', e);
-            // eslint-disable-next-line no-console
-            console.log(text);
-            return;
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          const responseObj = await response.json();
+          syncNotifier.emit('extension.names.downloaded', responseObj);
+          if (typeof callback === 'function') {
+            callback(responseObj);
           }
+          return;
         }
-        syncNotifier.emit('extension.names.downloaded', responseObj);
-        if (typeof callback === 'function') {
-          callback(responseObj);
+        if (response.status === 404) {
+          syncNotifier.emit('extension.names.downloading.error', response.status);
+          if (typeof callback === 'function') {
+            const text = await response.text();
+            callback(text);
+          }
+          return;
         }
-      },
-      error(xhr) {
-        if (xhr.status === 404 && typeof callback === 'function' && xhr.responseText) {
-          callback(xhr.responseText);
-        }
-        syncNotifier.emit('extension.names.downloading.error', xhr.status);
-      },
-    });
+        log('sync server error: ', response);
+      })
+      .catch((error) => {
+        syncNotifier.emit('extension.names.downloading.error');
+        log('sync server returned error: ', error);
+      });
   };
 
   const setCurrentExtensionName = function (newName) {
@@ -618,18 +642,18 @@ const SyncService = (function getSyncService() {
         extInfo: getExtensionInfo(),
       };
       syncNotifier.emit('extension.name.updating');
-      $.ajax({
-        jsonp: false,
-        url: `${License.MAB_CONFIG.syncURL}/devices/add`,
-        type: 'post',
-        success() {
-          syncNotifier.emit('extension.name.updated');
-        },
-        error(xhr) {
-          syncNotifier.emit('extension.name.updated.error', xhr.status);
-        },
-        data: thedata,
-      });
+      postData(`${License.MAB_CONFIG.syncURL}/devices/add`, thedata)
+        .then((response) => {
+          if (response.ok) {
+            syncNotifier.emit('extension.name.updated');
+          } else {
+            syncNotifier.emit('extension.name.updated.error', response.status);
+          }
+        })
+        .catch((error) => {
+          syncNotifier.emit('extension.name.updated.error');
+          log('message server returned error: ', error);
+        });
     }
   };
   const removeExtensionName = function (extensionName, extensionGUID) {
@@ -640,22 +664,22 @@ const SyncService = (function getSyncService() {
       extInfo: getExtensionInfo(),
     };
     syncNotifier.emit('extension.name.remove');
-    $.ajax({
-      jsonp: false,
-      url: `${License.MAB_CONFIG.syncURL}/devices/remove`,
-      type: 'post',
-      success() {
-        if (extensionName === currentExtensionName) {
-          currentExtensionName = '';
-          chromeStorageSetHelper(syncExtensionNameKey, currentExtensionName);
+    postData(`${License.MAB_CONFIG.syncURL}/devices/remove`, thedata)
+      .then((response) => {
+        if (response.ok) {
+          if (extensionName === currentExtensionName) {
+            currentExtensionName = '';
+            chromeStorageSetHelper(syncExtensionNameKey, currentExtensionName);
+          }
+          syncNotifier.emit('extension.name.removed');
+        } else {
+          syncNotifier.emit('extension.name.remove.error', response.status);
         }
-        syncNotifier.emit('extension.name.removed');
-      },
-      error(xhr) {
-        syncNotifier.emit('extension.name.remove.error', xhr.status);
-      },
-      data: thedata,
-    });
+      })
+      .catch((error) => {
+        syncNotifier.emit('extension.name.remove.error');
+        log('message server returned error: ', error);
+      });
   };
 
 
@@ -734,42 +758,24 @@ const SyncService = (function getSyncService() {
       lastPostStatusCode = 200;
       pendingPostData = false;
       chromeStorageSetHelper(syncPendingPostDataKey, pendingPostData);
-      $.ajax({
-        jsonp: false,
-        url: License.MAB_CONFIG.syncURL,
-        type: 'post',
-        success(text, status, xhr) {
-          lastPostStatusCode = xhr.status;
-          let responseObj = {};
-          if (typeof text === 'object') {
-            responseObj = text;
-          } else if (typeof text === 'string') {
-            try {
-              responseObj = JSON.parse(text);
-            } catch (e) {
-              // eslint-disable-next-line no-console
-              console.log('Something went wrong with parsing license data.');
-              // eslint-disable-next-line no-console
-              console.log('error', e);
-              // eslint-disable-next-line no-console
-              console.log(text);
-              return;
+      postData(License.MAB_CONFIG.syncURL, thedata).then((postResponse) => {
+        lastPostStatusCode = postResponse.status;
+        if (postResponse.ok) {
+          postResponse.json().then((responseObj) => {
+            if (responseObj && responseObj.commitVersion > syncCommitVersion) {
+              syncCommitVersion = responseObj.commitVersion;
+              chromeStorageSetHelper(syncCommitVersionKey, responseObj.commitVersion);
             }
-          }
-          if (responseObj && responseObj.commitVersion > syncCommitVersion) {
-            syncCommitVersion = text.commitVersion;
-            chromeStorageSetHelper(syncCommitVersionKey, responseObj.commitVersion);
-          }
-          chromeStorageSetHelper(syncPreviousDataKey, thedata.data);
-          if (typeof callback === 'function') {
-            callback();
-          }
-          syncNotifier.emit('post.data.sent');
-        },
-        error(xhr) {
-          syncNotifier.emit('post.data.sent.error', xhr.status, initialGet);
-          lastPostStatusCode = xhr.status;
-          if (xhr.status === 409) {
+            chromeStorageSetHelper(syncPreviousDataKey, responseObj.data);
+            if (typeof callback === 'function') {
+              callback();
+            }
+            syncNotifier.emit('post.data.sent');
+          });
+        } else {
+          syncNotifier.emit('post.data.sent.error', postResponse.status, initialGet);
+          lastPostStatusCode = postResponse.status;
+          if (postResponse.status === 409) {
             // this extension probably had an version of the sync data
             // aka - the sync commit version was behind the sync server
             // so, undo / revert all of the user changes that were just posted
@@ -779,15 +785,19 @@ const SyncService = (function getSyncService() {
             getSyncData(false, true);
             return;
           }
-          if (xhr.status === 403) {
+          if (postResponse.status === 403) {
             process403ErrorCode();
           }
           // all other currently known errors (0, 401, 404, 500).
           pendingPostData = true;
           chromeStorageSetHelper(syncPendingPostDataKey, pendingPostData);
-        },
-        data: thedata,
-      });
+        }
+      })
+        .catch((error) => {
+          syncNotifier.emit('extension.name.updated.error');
+          // eslint-disable-next-line no-console
+          console.log('message server returned error: ', error);
+        });
     });
   };
 
@@ -967,7 +977,7 @@ const SyncService = (function getSyncService() {
       syncNotifier.on('extension.names.downloading.error', onExtensionNamesDownloadingErrorAddLogEntry);
 
       // eslint-disable-next-line no-use-before-define
-      License.licenseNotifier.on('license.expired', disableSync);
+      License.licenseNotifier.on('license.expired', processDisableSync);
 
       ewe.subscriptions.onAdded.addListener(onFilterListsSubAdded);
       ewe.subscriptions.onRemoved.addListener(onFilterListsSubRemoved);
@@ -1056,9 +1066,14 @@ const SyncService = (function getSyncService() {
     syncNotifier.off('extension.names.downloaded', onExtensionNamesDownloadedAddLogEntry);
     syncNotifier.off('extension.names.downloading.error', onExtensionNamesDownloadingErrorAddLogEntry);
 
-    License.licenseNotifier.off('license.expired', disableSync);
+    // eslint-disable-next-line no-use-before-define
+    License.licenseNotifier.off('license.expired', processDisableSync);
     window.removeEventListener('online', updateNetworkStatus);
     window.removeEventListener('offline', updateNetworkStatus);
+  };
+
+  const processDisableSync = function () {
+    disableSync(true);
   };
 
   // Retreive the sync data from the sync server
@@ -1079,9 +1094,9 @@ const SyncService = (function getSyncService() {
     }
     const forceParam = shouldForce || false;
 
-    $.ajax({
-      jsonp: false,
-      cache: false,
+    fetch(License.MAB_CONFIG.syncURL, {
+      method: 'GET',
+      cache: 'no-cache',
       headers: {
         'X-GABSYNC-PARAMS': JSON.stringify({
           extensionGUID: TELEMETRY.userId(),
@@ -1091,24 +1106,28 @@ const SyncService = (function getSyncService() {
           extInfo: getExtensionInfo(),
         }),
       },
-      url: License.MAB_CONFIG.syncURL,
-      type: 'GET',
-      success(text, textStatus, xhr) {
-        if (typeof successCallback === 'function') {
-          successCallback(text, xhr.status);
-        }
-      },
-      error(xhr, textStatus, errorThrown) {
-        if ((xhr.status !== 404 || xhr.status !== 403) && attemptCount < 3) {
+    })
+    .then(async (response) => {
+      if (response.ok && typeof successCallback === 'function') {
+        const text = await response.text();
+        successCallback(text, response.status);
+      }
+      if (!response.ok) {
+        if ((response.status !== 404 || response.status !== 403) && attemptCount < 3) {
           setTimeout(() => {
             requestSyncData(successCallback, errorCallback, attemptCount, shouldForce);
           }, 1000); // wait 1 second for retry
           return;
         }
         if (typeof errorCallback === 'function') {
-          errorCallback(xhr.status, textStatus, errorThrown, xhr.responseJSON);
+          const responseObj = await response.json();
+          errorCallback(response.status, response.status, responseObj);
         }
-      },
+      }
+    })
+    .catch((error) => {
+      log('message server returned error: ', error);
+      errorCallback(error.message);
     });
   };
 
@@ -1121,6 +1140,7 @@ const SyncService = (function getSyncService() {
             pendingPostData = postDataResponse[syncPendingPostDataKey] || false;
             processEventChangeRequest();
             enableSync();
+            migrateSyncLog();
           });
         });
       }
@@ -1186,6 +1206,7 @@ const SyncService = (function getSyncService() {
     deleteSyncLog,
     processUserSyncRequest,
     processEventChangeRequest,
+    addSyncLogText,
   };
 }());
 

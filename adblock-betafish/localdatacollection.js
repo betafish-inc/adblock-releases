@@ -2,7 +2,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, ext, chromeStorageSetHelper, adblockIsPaused,
-   adblockIsDomainPaused, parseUri, settings,
+   adblockIsDomainPaused, parseUri, settings, isEmptyObject,
    getUserFilters, Utils, replacedCounts, setSetting, storageGet, storageSet */
 
 import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
@@ -10,10 +10,9 @@ import { getSettings } from './settings';
 
 const LocalDataCollection = (function getLocalDataCollection() {
   const easyPrivacyURL = 'https://easylist-downloads.adblockplus.org/easyprivacy.txt';
-  const FIFTEEN_MINS = 1000 * 60 * 15;
-  let intervalFN;
+  const FIFTEEN_MINS = 15;
   const EXT_STATS_KEY = 'ext_stats_key';
-  const STORED_DATA_CLEAN = 'STORED_DATA_CLEAN';
+  const STATS_ALARM_NAME = 'statsalarm';
   const REPORTING_OPTIONS = {
     filterType: 'blocking',
     includeElementHiding: false,
@@ -76,39 +75,6 @@ const LocalDataCollection = (function getLocalDataCollection() {
     }
   };
 
-  // 'clean' the stored data
-  // there was a bug that allowed blank domains ("") to be saved in the data
-  // the following code removes the blank domain
-  // this function only needs to run once
-  const cleanStoredData = function () {
-    if (storageGet(STORED_DATA_CLEAN)) {
-      return;
-    }
-    browser.storage.local.get(LocalDataCollection.EXT_STATS_KEY).then((hourlyResponse) => {
-      const savedData = hourlyResponse[LocalDataCollection.EXT_STATS_KEY] || {};
-      const parsedData = {};
-      for (const timestamp in savedData) {
-        if (!Number.isNaN(timestamp)) {
-          for (const domain in savedData[timestamp].doms) {
-            if (domain && domain.length > 1) { // check if domain is not blank
-              const domData = savedData[timestamp].doms[domain];
-              if (!parsedData[timestamp]) {
-                parsedData[timestamp] = {};
-                parsedData[timestamp].v = '1';
-                parsedData[timestamp].doms = {};
-              }
-              parsedData[timestamp].doms[domain] = {};
-              parsedData[timestamp].doms[domain].ads = domData.ads;
-              parsedData[timestamp].doms[domain].trackers = domData.trackers;
-              parsedData[timestamp].doms[domain].adsReplaced = domData.adsReplaced;
-            }
-          }
-        }
-      }
-      chromeStorageSetHelper(LocalDataCollection.EXT_STATS_KEY, parsedData);
-      storageSet(STORED_DATA_CLEAN, true);
-    });
-  };
 
   const clearCache = function () {
     dataCollectionCache = {};
@@ -116,7 +82,7 @@ const LocalDataCollection = (function getLocalDataCollection() {
   };
 
   const saveCacheData = function (callback) {
-    if (getSettings().local_data_collection && !$.isEmptyObject(dataCollectionCache.domains)) {
+    if (getSettings().local_data_collection && !isEmptyObject(dataCollectionCache.domains)) {
       const hourSnapShot = JSON.parse(JSON.stringify({
         v: '1',
         doms: dataCollectionCache.domains,
@@ -129,7 +95,7 @@ const LocalDataCollection = (function getLocalDataCollection() {
       });
     } else {
       if (!getSettings().local_data_collection) {
-        clearInterval(intervalFN);
+        browser.alarms.clear(STATS_ALARM_NAME);
       }
       if (typeof callback === 'function') {
         callback();
@@ -137,20 +103,22 @@ const LocalDataCollection = (function getLocalDataCollection() {
     }
   };
 
-  const startProcessInterval = function () {
-    intervalFN = window.setInterval(() => {
-      saveCacheData();
-    }, FIFTEEN_MINS);
+  const initializeAlarm = function () {
+    browser.alarms.onAlarm.addListener((alarm) => {
+      if (alarm && alarm.name === STATS_ALARM_NAME) {
+        saveCacheData();
+      }
+    });
+    browser.alarms.create(STATS_ALARM_NAME, { periodInMinutes: FIFTEEN_MINS });
   };
 
   // If enabled at startup periodic saving of memory cache &
   // sending of data to the log server
   settings.onload().then(() => {
     if (getSettings().local_data_collection) {
-      startProcessInterval();
+      initializeAlarm();
       ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
       replacedCounts.adReplacedNotifier.on('adReplaced', adReplacedListener);
-      cleanStoredData();
     }
   });// End of then
 
@@ -160,13 +128,12 @@ const LocalDataCollection = (function getLocalDataCollection() {
     dataCollectionCache.domains = {};
     ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
     replacedCounts.adReplacedNotifier.on('adReplaced', adReplacedListener);
-    startProcessInterval();
+    initializeAlarm();
     setSetting('local_data_collection', true, callback);
   };
   returnObj.end = function returnObjEnd(callback) {
-    clearInterval(intervalFN);
+    browser.alarms.clear(STATS_ALARM_NAME);
     clearCache();
-    storageSet(STORED_DATA_CLEAN);
     ewe.reporting.onBlockableItem.removeListener(filterListener, REPORTING_OPTIONS);
     replacedCounts.adReplacedNotifier.off('adReplaced', adReplacedListener);
     setSetting('local_data_collection', false, callback);

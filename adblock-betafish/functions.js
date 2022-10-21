@@ -272,45 +272,35 @@ parseUri.secondLevelDomainOnly = function stripThirdPlusLevelDomain(domain, keep
   return domain;
 };
 
+const sessionStorageMap = new Map();
 // Inputs: key:string.
 // Returns value if key exists, else undefined.
 const sessionStorageGet = function (key) {
-  const json = sessionStorage.getItem(key);
-  if (json == null) {
-    return undefined;
-  }
-  try {
-    return JSON.parse(json);
-  } catch (e) {
-    log(`Couldn't parse json for ${key}`);
-    return undefined;
-  }
+  return sessionStorageMap.get(key);
 };
 
-// Inputs: key:string.
-// Returns value if key exists, else undefined.
+// Inputs: key:string, value:object.
+// If value === undefined, removes key from storage.
+// Returns undefined.
 const sessionStorageSet = function (key, value) {
   if (value === undefined) {
-    sessionStorage.removeItem(key);
+    sessionStorageMap.delete(key);
     return;
   }
-  try {
-    sessionStorage.setItem(key, JSON.stringify(value));
-  } catch (ex) {
-    if (ex.name === 'QUOTA_EXCEEDED_ERR') {
-      // eslint-disable-next-line no-alert
-      alert(translate('storage_quota_exceeded'));
-      openTab('options/index.html#ui-tabs-2');
-    }
-  }
+  sessionStorageMap.set(key, value);
 };
+
 
 // Inputs: key:string.
 // Returns object from localStorage.
 // The following two functions should only be used when
 // multiple 'sets' & 'gets' may occur in immediately preceding each other
 // browser.storage.local.get & set instead
+// deprecated on background / service worker pages
 const storageGet = function (key) {
+  if (typeof localStorage === 'undefined') {
+    return undefined;
+  }
   const store = localStorage;
   const json = store.getItem(key);
   if (json == null) {
@@ -327,7 +317,11 @@ const storageGet = function (key) {
 // Inputs: key:string, value:object.
 // If value === undefined, removes key from storage.
 // Returns undefined.
+// deprecated on background / service worker pages
 const storageSet = function (key, value) {
+  if (typeof localStorage === 'undefined') {
+    return;
+  }
   const store = localStorage;
   if (value === undefined) {
     store.removeItem(key);
@@ -377,6 +371,45 @@ const chromeLocalStorageOnChangedHelper = function (storageKey, callback) {
         return;
       }
       callback();
+    }
+  });
+};
+
+const chromeStorageDeleteHelper = function (key) {
+  return browser.storage.local.remove(key);
+};
+
+// Migrate any stored data from localStorage to
+// chrome.storage.local
+// if the data is successfully migrated to chrome.storage,
+// then the original data in localStorage is removed
+// Inputs:
+//   key: string - the data storage key
+//   parseData: Boolean - indicates if the stored data should be parse prior to being saved
+//                        in chrome.storage
+const migrateData = function (key, parseData) {
+  return new Promise((resolve, reject) => {
+    if (typeof window.localStorage === 'undefined') {
+      resolve();
+    }
+    let data = localStorage.getItem(key);
+    if (data) {
+      if (parseData) {
+        data = JSON.parse(data);
+      }
+
+      chromeStorageSetHelper(key, data, (error) => {
+        if (!error) {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.removeItem(key);
+          }
+          resolve();
+        } else {
+          reject(error);
+        }
+      });
+    } else {
+      resolve();
     }
   });
 };
@@ -462,7 +495,7 @@ const i18nJoin = function (...args) {
   return joined;
 };
 
-const isEmptyObject = obj => !!(Object.keys(obj).length === 0 && obj.constructor === Object);
+const isEmptyObject = obj => !!(obj && Object.keys(obj).length === 0 && obj.constructor === Object);
 
 // Sets expirable object in storage to be used in place of a cookie
 // Inputs:
@@ -598,6 +631,8 @@ Object.assign(window, {
   sessionStorageGet,
   storageGet,
   storageSet,
+  chromeStorageDeleteHelper,
+  migrateData,
   parseUri,
   determineUserLanguage,
   chromeStorageSetHelper,

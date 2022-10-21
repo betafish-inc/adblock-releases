@@ -2,20 +2,19 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, chromeStorageSetHelper, adblockIsPaused,
-   adblockIsDomainPaused, parseUri,
+   adblockIsDomainPaused, parseUri, log,
    getUserFilters, */
 
 import * as info from 'info';
 import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
 import SubscriptionAdapter from './subscriptionadapter';
-import ServerMessages from './servermessages';
+import postData from './fetch-util';
 import { getSettings, settings, setSetting } from './settings';
 
-import idleHandler from './idlehandler';
-
 const DataCollectionV2 = (function getDataCollectionV2() {
-  const HOUR_IN_MS = 1000 * 60 * 60;
+  const HOUR_IN_MIN = 60;
   const TIME_LAST_PUSH_KEY = 'timeLastPush';
+  const DATA_COLLECTION_ALARM_NAME = 'datacollectionalarm';
   const REPORTING_OPTIONS = {
     filterType: 'all',
     includeElementHiding: false,
@@ -84,7 +83,100 @@ const DataCollectionV2 = (function getDataCollectionV2() {
       addFilterToCache(request, filter);
     } else if (!getSettings().data_collection_v2) {
       ewe.reporting.onBlockableItem.removeListener(filterListener, REPORTING_OPTIONS);
+      browser.alarms.clear(DATA_COLLECTION_ALARM_NAME);
     }
+  };
+
+  const sendToServer = async function () {
+    const dataCollectionSetting = getSettings().data_collection_v2;
+    if (!dataCollectionSetting) {
+      browser.alarms.clear(DATA_COLLECTION_ALARM_NAME);
+    }
+    if (dataCollectionSetting && Object.keys(dataCollectionCache.filters).length > 0) {
+      const subscribedSubs = [];
+      const subs = SubscriptionAdapter.getSubscriptionsMinusText();
+      for (const subscription of Object.values(subs)) {
+        if (subscription && subscription.url) {
+          subscribedSubs.push(subscription.url.substring(0, 256));
+        }
+      }
+      if (await getUserFilters().length) {
+        subscribedSubs.push('customlist');
+      }
+      const data = {
+        version: '5',
+        addonName: info.addonName,
+        addonVersion: info.addonVersion,
+        application: info.application,
+        applicationVersion: info.applicationVersion,
+        platform: info.platform,
+        platformVersion: info.platformVersion,
+        appLocale: browser.i18n.getUILanguage(),
+        filterListSubscriptions: subscribedSubs,
+        domains: dataCollectionCache.domains,
+        filters: dataCollectionCache.filters,
+      };
+      browser.storage.local.get(TIME_LAST_PUSH_KEY).then((response) => {
+        let timeLastPush = 'n/a';
+        if (response[TIME_LAST_PUSH_KEY]) {
+          const serverTimestamp = new Date(response[TIME_LAST_PUSH_KEY]);
+          // Format the timeLastPush
+          const yearStr = `${serverTimestamp.getUTCFullYear()}`;
+          let monthStr = `${serverTimestamp.getUTCMonth() + 1}`;
+          let dateStr = `${serverTimestamp.getUTCDate()}`;
+          let hourStr = `${serverTimestamp.getUTCHours()}`;
+          // round the minutes up to the nearest 10
+          let minStr = `${Math.floor(serverTimestamp.getUTCMinutes() / 10) * 10}`;
+
+          if (monthStr.length === 1) {
+            monthStr = `0${monthStr}`;
+          }
+          if (dateStr.length === 1) {
+            dateStr = `0${dateStr}`;
+          }
+          if (hourStr.length === 1) {
+            hourStr = `0${hourStr}`;
+          }
+          if (minStr.length === 1) {
+            minStr = `0${minStr}`;
+          }
+          if (minStr === '60') {
+            minStr = '00';
+          }
+          timeLastPush = `${yearStr}-${monthStr}-${dateStr} ${hourStr}:${minStr}:00`;
+        }
+        data.timeOfLastPush = timeLastPush;
+        postData('https://log.getadblock.com/v2/record_log.php', data)
+          .then((postResponse) => {
+            if (postResponse.ok) {
+              let nowTimestamp = (new Date()).toGMTString();
+              try {
+                if (postResponse.headers.has('date')) {
+                  nowTimestamp = postResponse.headers.get('date');
+                }
+              } catch (e) {
+                nowTimestamp = (new Date()).toGMTString();
+              }
+              chromeStorageSetHelper(TIME_LAST_PUSH_KEY, nowTimestamp);
+              // Reset memory cache
+              dataCollectionCache = {};
+              dataCollectionCache.filters = {};
+              dataCollectionCache.domains = {};
+              return;
+            }
+            log('bad response from log server', postResponse);
+          });
+      }); // end of TIME_LAST_PUSH_KEY
+    }
+  };
+
+  const initializeAlarm = function () {
+    browser.alarms.onAlarm.addListener((alarm) => {
+      if (alarm && alarm.name === DATA_COLLECTION_ALARM_NAME) {
+        sendToServer();
+      }
+    });
+    browser.alarms.create(DATA_COLLECTION_ALARM_NAME, { periodInMinutes: HOUR_IN_MIN });
   };
 
   // If enabled at startup periodic saving of memory cache &
@@ -92,87 +184,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   settings.onload().then(() => {
     const dataCollectionEnabled = getSettings().data_collection_v2;
     if (dataCollectionEnabled) {
-      window.setInterval(() => {
-        idleHandler.scheduleItemOnce(async () => {
-          if (dataCollectionEnabled && Object.keys(dataCollectionCache.filters).length > 0) {
-            const subscribedSubs = [];
-            const subs = SubscriptionAdapter.getAllSubscriptionsMinusText();
-            for (const id in subs) {
-              if (subs[id].subscribed) {
-                if (subs[id].url && subs[id].url.length > 256) {
-                  subscribedSubs.push(subs[id].url.substring(0, 256));
-                } else {
-                  subscribedSubs.push(subs[id].url);
-                }
-              }
-            }
-            if (await getUserFilters().length) {
-              subscribedSubs.push('customlist');
-            }
-            const data = {
-              version: '5',
-              addonName: info.addonName,
-              addonVersion: info.addonVersion,
-              application: info.application,
-              applicationVersion: info.applicationVersion,
-              platform: info.platform,
-              platformVersion: info.platformVersion,
-              appLocale: browser.i18n.getUILanguage(),
-              filterListSubscriptions: subscribedSubs,
-              domains: dataCollectionCache.domains,
-              filters: dataCollectionCache.filters,
-            };
-            browser.storage.local.get(TIME_LAST_PUSH_KEY).then((response) => {
-              let timeLastPush = 'n/a';
-              if (response[TIME_LAST_PUSH_KEY]) {
-                const serverTimestamp = new Date(response[TIME_LAST_PUSH_KEY]);
-                // Format the timeLastPush
-                const yearStr = `${serverTimestamp.getUTCFullYear()}`;
-                let monthStr = `${serverTimestamp.getUTCMonth() + 1}`;
-                let dateStr = `${serverTimestamp.getUTCDate()}`;
-                let hourStr = `${serverTimestamp.getUTCHours()}`;
-                // round the minutes up to the nearest 10
-                let minStr = `${Math.floor(serverTimestamp.getUTCMinutes() / 10) * 10}`;
-
-                if (monthStr.length === 1) {
-                  monthStr = `0${monthStr}`;
-                }
-                if (dateStr.length === 1) {
-                  dateStr = `0${dateStr}`;
-                }
-                if (hourStr.length === 1) {
-                  hourStr = `0${hourStr}`;
-                }
-                if (minStr.length === 1) {
-                  minStr = `0${minStr}`;
-                }
-                if (minStr === '60') {
-                  minStr = '00';
-                }
-                timeLastPush = `${yearStr}-${monthStr}-${dateStr} ${hourStr}:${minStr}:00`;
-              }
-              data.timeOfLastPush = timeLastPush;
-              ServerMessages.postFilterStatsToLogServer(data, (text, status, xhr) => {
-                let nowTimestamp = (new Date()).toGMTString();
-                if (xhr && typeof xhr.getResponseHeader === 'function') {
-                  try {
-                    if (xhr.getResponseHeader('Date')) {
-                      nowTimestamp = xhr.getResponseHeader('Date');
-                    }
-                  } catch (e) {
-                    nowTimestamp = (new Date()).toGMTString();
-                  }
-                }
-                chromeStorageSetHelper(TIME_LAST_PUSH_KEY, nowTimestamp);
-                // Reset memory cache
-                dataCollectionCache = {};
-                dataCollectionCache.filters = {};
-                dataCollectionCache.domains = {};
-              });
-            }); // end of TIME_LAST_PUSH_KEY
-          }
-        });
-      }, HOUR_IN_MS);
+      initializeAlarm();
       ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
       browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
         urls: ['http://*/*', 'https://*/*'],
@@ -190,6 +202,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
       urls: ['http://*/*', 'https://*/*'],
       types: ['main_frame'],
     });
+    initializeAlarm();
     setSetting('data_collection_v2', true, callback);
   };
   returnObj.end = function returnObjEnd(callback) {
@@ -197,6 +210,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     ewe.reporting.onBlockableItem.removeListener(filterListener, REPORTING_OPTIONS);
     browser.webRequest.onBeforeRequest.removeListener(webRequestListener);
     browser.storage.local.remove(TIME_LAST_PUSH_KEY);
+    browser.alarms.clear(DATA_COLLECTION_ALARM_NAME);
     setSetting('data_collection_v2', false, callback);
   };
   returnObj.getCache = function returnObjGetCache() {

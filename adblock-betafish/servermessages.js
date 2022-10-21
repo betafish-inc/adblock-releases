@@ -5,53 +5,24 @@
 
 // Log an 'error' message on GAB log server.
 const ServerMessages = (function serverMessages() {
-  const postFilterStatsToLogServer = function (data, callback) {
-    if (!data) {
-      return;
-    }
-    const payload = { event: 'filter_stats', payload: data };
-    $.ajax({
-      jsonp: false,
-      type: 'POST',
-      url: 'https://log.getadblock.com/v2/record_log.php',
-      data: JSON.stringify(payload),
-      success(text, status, xhr) {
-        if (typeof callback === 'function') {
-          callback(text, status, xhr);
-        }
-      },
-      error(xhr, textStatus, errorThrown) {
-        log('message server returned error: ', textStatus, errorThrown);
-        if (callback) {
-          callback(errorThrown, textStatus, xhr);
-        }
-      },
-    });
-  };
-
   // Log a message on GAB log server. The user's userid will be prepended to the
   // message.
   // If callback() is specified, call callback() after logging has completed
   const sendMessageToLogServer = function (payload, callback) {
-    $.ajax({
-      jsonp: false,
-      type: 'POST',
-      url: 'https://log.getadblock.com/v2/record_log.php',
-      data: JSON.stringify(payload),
-      success() {
+    fetch('https://log.getadblock.com/v2/record_log.php', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then(() => {
         if (typeof callback === 'function') {
           callback();
         }
-      },
-
-      error(e) {
-        log('message server returned error: ', e.status);
-        // Remove following if statement when Edge migration is no longer needed
-        if (payload.event === 'cm_migration_finished' && typeof callback === 'function') {
-          callback();
-        }
-      },
-    });
+      })
+      .catch((error) => {
+        log('message server returned error: ', error);
+      });
   };
 
   // Log a message on GAB log server. The user's userid will be prepended to the
@@ -139,6 +110,27 @@ const ServerMessages = (function serverMessages() {
     recordMessageWithUserID(msg, 'adreport', callback, additionalParams);
   };
 
+  // Send an error message to the backup log server. This is to be used when
+  // there's fetch failure.  It may fail as well depending on the failure,
+  // and state of the local computer & network
+  const sendMessageToBackupLogServer = function (msg, error) {
+    const payload = {
+      u: TELEMETRY.userId(),
+      f: TELEMETRY.flavor,
+      o: TELEMETRY.os,
+      l: determineUserLanguage(),
+      t: msg,
+      v: browser.runtime.getManifest().version,
+      error,
+    };
+    fetch('https://192.241.161.10/v2/record_log.php', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  };
+
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.command === 'recordGeneralMessage' && message.msg) {
       recordGeneralMessage(message.msg, undefined, message.additionalParams);
@@ -150,10 +142,10 @@ const ServerMessages = (function serverMessages() {
     recordErrorMessage,
     recordAnonymousMessage,
     recordAnonymousErrorMessage,
-    postFilterStatsToLogServer,
     recordStatusMessage,
     recordGeneralMessage,
     recordAdreportMessage,
+    sendMessageToBackupLogServer,
   };
 }());
 

@@ -1,7 +1,8 @@
 
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, parseUri, adblockIsPaused */
+/* global browser, parseUri, adblockIsPaused, chromeStorageGetHelper,
+   chromeStorageSetHelper, migrateData */
 
 // This module is conditional imported only into a Chrome build via the
 // build config file in ..build\config\chrome.mjs
@@ -24,24 +25,28 @@ const LocalCDN = (function getLocalCDN() {
   let libraries = [];
   let versionArray = {};
 
-  // Gets a stored value from localStorage if available, and parses it. Otherwise,
+  // Gets a stored value from chrome.storage if available, and parses it. Otherwise,
   // if the value isn't currently stored or if the parse fails, returns a default
   // value.
   // Param: keyName: the key under which the value is stored
   //        defaultValue: the value to be returned if the stored value cannot be
   //                      retrieved
   const getStoredValue = function (keyName, defaultValue) {
-    let storedValue = localStorage.getItem(keyName);
-    try {
-      storedValue = JSON.parse(storedValue);
-    } catch (err) {
-      storedValue = defaultValue;
-    } finally {
-      if (!storedValue) {
-        storedValue = defaultValue;
-      }
-    }
-    return storedValue;
+    return new Promise((resolve) => {
+      chromeStorageGetHelper(keyName).then((response) => {
+        let storedValue = null;
+        try {
+          storedValue = JSON.parse(response);
+        } catch (err) {
+          storedValue = defaultValue;
+        } finally {
+          if (!storedValue) {
+            storedValue = defaultValue;
+          }
+        }
+        resolve(storedValue);
+      });
+    });
   };
 
   // Populates the version array based on the files available locally
@@ -77,55 +82,55 @@ const LocalCDN = (function getLocalCDN() {
   };
 
   // Increments the redirect count by one.
-  // The redirect count is loaded from and saved to localStorage.
+  // The redirect count is loaded from and saved to storage.
   const incrementRedirectCount = function () {
-    // get stored redirect count
-    let storedRedirectCount = getStoredValue(redirectCountKey, 0);
+    getStoredValue(redirectCountKey, 0).then((count) => {
+      // increment
+      let storedRedirectCount = count;
+      storedRedirectCount += 1;
 
-    // increment
-    storedRedirectCount += 1;
-
-    // store updated count
-    localStorage.setItem(redirectCountKey, JSON.stringify(storedRedirectCount));
+      // store updated count
+      chromeStorageSetHelper(redirectCountKey, JSON.stringify(storedRedirectCount));
+    });
   };
 
   // Adds the size of the specified file to the data count for that library.
-  // The data count is loaded from and saved to localStorage.
+  // The data count is loaded from and saved to storage.
   // Param: targetLibrary: the library that the file belongs to
   //        fileName: the file to be added to the data count
   const addToDataCount = function (targetLibrary, fileName) {
-    // get stored redirect count
-    let storedDataCount = getStoredValue(dataCountKey, 0);
+    getStoredValue(dataCountKey, 0).then((count) => {
+      // add file size to data count
+      let storedDataCount = count;
+      storedDataCount += localFiles[targetLibrary][fileName];
 
-    // add file size to data count
-    storedDataCount += localFiles[targetLibrary][fileName];
-
-    // store updated count
-    localStorage.setItem(dataCountKey, JSON.stringify(storedDataCount));
+      // store updated count
+      chromeStorageSetHelper(dataCountKey, JSON.stringify(storedDataCount));
+    });
   };
 
   // Adds the specified version of the specified library to the missed versions
   // object, if it hasn't already been added. Otherwise increments the count for
   // that version.
-  // The missed versions object is loaded from and saved to localStorage.
+  // The missed versions object is loaded from and saved to storage.
   // Param: targetLibrary: the library that the missing version belongs to
   //        version: the missing version to be added
   const addMissedVersion = function (targetLibrary, version) {
-    // get stored missed versions
-    const storedMissedVersions = getStoredValue(missedVersionsKey, {});
+    getStoredValue(missedVersionsKey, {}).then((storedMissedVersions) => {
+      // add new missed version
+      const missedVersions = storedMissedVersions;
+      if (!missedVersions[targetLibrary]) {
+        missedVersions[targetLibrary] = {};
+      }
+      if (missedVersions[targetLibrary][version] > 0) {
+        missedVersions[targetLibrary][version] += 1;
+      } else {
+        missedVersions[targetLibrary][version] = 1;
+      }
 
-    // add new missed version
-    if (!storedMissedVersions[targetLibrary]) {
-      storedMissedVersions[targetLibrary] = {};
-    }
-    if (storedMissedVersions[targetLibrary][version] > 0) {
-      storedMissedVersions[targetLibrary][version] += 1;
-    } else {
-      storedMissedVersions[targetLibrary][version] = 1;
-    }
-
-    // store updated missed versions
-    localStorage.setItem(missedVersionsKey, JSON.stringify(storedMissedVersions));
+      // store updated missed versions
+      chromeStorageSetHelper(missedVersionsKey, JSON.stringify(missedVersions));
+    });
   };
 
   // Handles a webRequest.onBeforeRequest event.
@@ -210,12 +215,17 @@ const LocalCDN = (function getLocalCDN() {
   // (0 for redirect count and data count, and an empty object for missed
   // versions)
   const resetCollectedData = function () {
-    localStorage.setItem(redirectCountKey, '0');
-    localStorage.setItem(dataCountKey, '0');
-    localStorage.setItem(missedVersionsKey, '{}');
+    chromeStorageSetHelper(redirectCountKey, '0');
+    chromeStorageSetHelper(dataCountKey, '0');
+    chromeStorageSetHelper(missedVersionsKey, '{}');
   };
 
   return {
+    migrateStoredData() {
+      return Promise.all([migrateData(redirectCountKey),
+        migrateData(dataCountKey),
+        migrateData(missedVersionsKey)]);
+    },
     setUp,
     // Starts the LocalCDN listeners
     start() {
@@ -253,6 +263,8 @@ Object.assign(window, {
 
 settings.onload().then(() => {
   if (getSettings().local_cdn) {
-    LocalCDN.start();
+    LocalCDN.migrateStoredData().then(() => {
+      LocalCDN.start();
+    });
   }
 });

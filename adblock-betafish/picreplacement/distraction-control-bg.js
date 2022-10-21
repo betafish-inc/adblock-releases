@@ -1,7 +1,7 @@
 
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser */
+/* global browser, log */
 
 import { TELEMETRY } from '../telemetry';
 import SubscriptionAdapter from '../subscriptionadapter';
@@ -24,19 +24,13 @@ const sendDCReport = function (url, type, id) {
       reportData.filterListLastUpdate = new Date(lastUpdate * 1000);
     }
   }
-  $.ajax({
-    url: 'https://getadblock.com/freshdesk/bugReportDistractionControl.php',
-    data: {
-      bug_report: JSON.stringify(reportData),
-    },
-    success() {
-      // Do nothing
-    },
-    error(e) {
-      // eslint-disable-next-line no-console
-      console.log('error: ', e.status);
-    },
-    type: 'POST',
+  const formData = new FormData();
+  formData.append('bug_report', JSON.stringify(reportData));
+  fetch('https://getadblock.com/freshdesk/bugReportDistractionControl.php', {
+    body: formData,
+    method: 'post',
+  }).catch((error) => {
+    log('freshdesk returned error: ', error);
   });
 };
 
