@@ -1,17 +1,17 @@
 {
-  "name": "adblock-next-gen",
-  "version": "1.0.0",
-  "description": "AdBlock for Chrome",
+  "name": "AdBlock",
+  "version": "5.3.0",
+  "description": "AdBlock",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/betafish-inc/adblock-next-gen.git"
+    "url": "https://gitlab.com/adblockinc/ext/adblock/adblock.git"
   },
-  "author": "AdBlock Team",
+  "author": "Adblock, Inc. Team",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/betafish-inc/adblock-next-gen/issues"
+    "url": "https://gitlab.com/adblockinc/ext/adblock/adblock/issues"
   },
-  "homepage": "https://github.com/betafish-inc/adblock-next-gen/blob/master/README.md",
+  "homepage": "https://gitlab.com/adblockinc/ext/adblock/adblock/-/blob/main/README.md",
   "scripts": {
     "prepare": "husky install",
     "ab-snippet-build": "npm run ab-snippet-rollup && npm run json-bundle",
@@ -64,7 +64,7 @@
     "webpack-stream": "7.0.0"
   },
   "engines": {
-    "node": ">=16.10.0",
+    "node": ">=16.10.0 <17.0.0",
     "npm": ">=7"
   },
   "dependencies": {
@@ -72,9 +72,9 @@
     "adblockpluscore": "0.5.1",
     "argparse": "1.0.10",
     "del": "7.0.0",
+    "got": "12.3.1",
     "gulp": "4.0.2",
     "gulp-vinyl-zip": "2.5.0",
-    "got": "12.3.1",
     "merge-stream": "2.0.0",
     "webextension-polyfill": "0.8.0"
   }

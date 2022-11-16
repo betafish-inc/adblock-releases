@@ -1,4 +1,19 @@
-
+/*
+ * This file is part of AdBlock  <https://getadblock.com/>,
+ * Copyright (C) 2013-present  Adblock, Inc.
+ *
+ * AdBlock is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * AdBlock is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with AdBlock.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global browser, log, TELEMETRY, logging, determineUserLanguage */
@@ -113,24 +128,24 @@ const ServerMessages = (function serverMessages() {
   // Send an error message to the backup log server. This is to be used when
   // there's fetch failure.  It may fail as well depending on the failure,
   // and state of the local computer & network
-  const sendMessageToBackupLogServer = function (msg, error) {
+  const sendMessageToBackupLogServer = function (msg, errorMsg, queryType = 'error') {
     const payload = {
       u: TELEMETRY.userId(),
       f: TELEMETRY.flavor,
       o: TELEMETRY.os,
       l: determineUserLanguage(),
-      t: msg,
+      t: queryType,
       v: browser.runtime.getManifest().version,
-      error,
+      error: errorMsg,
     };
+    const eventWithPayload = { event: msg, payload };
     fetch('https://192.241.161.10/v2/record_log.php', {
       method: 'POST',
       cache: 'no-cache',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(eventWithPayload),
     });
   };
-
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.command === 'recordGeneralMessage' && message.msg) {
       recordGeneralMessage(message.msg, undefined, message.additionalParams);

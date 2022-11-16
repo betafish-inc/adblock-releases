@@ -40,15 +40,15 @@ build:
     - npx gulp build -t firefox --unhandled-rejections=strict
     - npx gulp source
     # Attach commit hash to build files
-    - mv adblockchrome-*.zip adblockchrome-${CI_COMMIT_SHA:0:8}.zip
-    - mv adblockfirefox-*.xpi adblockfirefox-${CI_COMMIT_SHA:0:8}.xpi
-    - mv adblock-*.tar.gz adblock-${CI_COMMIT_SHA:0:8}.tar.gz
+    - mv adblockchrome-*.zip adblockchrome-${CI_COMMIT_SHORT_SHA}.zip
+    - mv adblockfirefox-*.xpi adblockfirefox-${CI_COMMIT_SHORT_SHA}.xpi
+    - mv adblock-*.tar.gz adblock-${CI_COMMIT_SHORT_SHA}.tar.gz
   artifacts:
-    name: "adblock-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHA:0:8}"
+    name: "adblock-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
     paths:
-      - adblock-${CI_COMMIT_SHA:0:8}.tar.gz
-      - adblockchrome-${CI_COMMIT_SHA:0:8}.zip
-      - adblockfirefox-${CI_COMMIT_SHA:0:8}.xpi
+      - adblock-${CI_COMMIT_SHORT_SHA}.tar.gz
+      - adblockchrome-${CI_COMMIT_SHORT_SHA}.zip
+      - adblockfirefox-${CI_COMMIT_SHORT_SHA}.xpi
 
 ################################################################################
 # Ad filtering tests
