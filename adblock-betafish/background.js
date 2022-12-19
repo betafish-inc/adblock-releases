@@ -733,87 +733,18 @@ if (browser.runtime.id === adblocBetaID) {
 }
 
 const updateStorageKey = 'last_known_version';
-if (browser.runtime.id) {
-  let updateTabRetryCount = 0;
-  const getUpdatedURL = function () {
-    const encodedVersion = encodeURIComponent('5.3.2');
-    let updatedURL = `https://getadblock.com/update/${TELEMETRY.flavor.toLowerCase()}/${encodedVersion}/?u=${TELEMETRY.userId()}`;
-    updatedURL = `${updatedURL}&rt=${updateTabRetryCount}`;
-    return updatedURL;
-  };
-  const waitForUserAction = function () {
-    browser.tabs.onCreated.removeListener(waitForUserAction);
-    setTimeout(() => {
-      updateTabRetryCount += 1;
-      // eslint-disable-next-line no-use-before-define
-      openUpdatedPage();
-    }, 10000); // 10 seconds
-  };
-  const openUpdatedPage = function () {
-    const updatedURL = getUpdatedURL();
-    browser.tabs.create({ url: updatedURL });
-  };
-  const shouldShowUpdate = function () {
-    const checkQueryState = function () {
-      browser.idle.queryState(30).then((state) => {
-        if (state === 'active') {
-          openUpdatedPage();
-        } else {
-          browser.tabs.onCreated.removeListener(waitForUserAction);
-          browser.tabs.onCreated.addListener(waitForUserAction);
-        }
-      });
-    };
-    const checkLicense = function () {
-      if (!License.isActiveLicense()) {
-        checkQueryState();
-      }
-    };
-    if (browser.management && browser.management.getSelf) {
-      browser.management.getSelf().then((extensionInfo) => {
-        if (extensionInfo && extensionInfo.installType !== 'admin') {
-          License.ready().then(checkLicense);
-        }
-      });
-    } else {
-      License.ready().then(checkLicense);
-    }
-  };
-  const slashUpdateReleases = ['5.3.2'];
-  // Display updated page after each update
-  browser.runtime.onInstalled.addListener(async (details) => {
-    let { last_known_version: lastKnownVersion } = await browser.storage.local.get(updateStorageKey);
-    if (!lastKnownVersion) {
-      lastKnownVersion = localStorage.getItem(updateStorageKey);
-    }
-    const currentVersion = browser.runtime.getManifest().version;
-    // don't open the /update page for Ukraine or Russian users.
-    const shouldShowUpdateForLocale = function () {
-      const language = determineUserLanguage();
-      return !(language && (language.startsWith('ru') || language.startsWith('uk')));
-    };
-    if (
-      details.reason === 'update'
-      && shouldShowUpdateForLocale()
-      && slashUpdateReleases.includes(currentVersion)
-      && !slashUpdateReleases.includes(lastKnownVersion)
-      && browser.runtime.id !== adblocBetaID
-    ) {
-      settings.onload().then(() => {
-        if (!getSettings().suppress_update_page) {
-          TELEMETRY.untilLoaded(() => {
-            Prefs.untilLoaded.then(shouldShowUpdate);
-          });
-        }
-      });
-    }
-    // We want to move away from localStorage, so remove item if it exists.
-    localStorage.removeItem(updateStorageKey);
-    // Update version in browser.storage.local. We intentionally ignore the
-    // returned promise.
+browser.runtime.onInstalled.addListener(async (details) => {
+  // Update version in browser.storage.local.
+  // We intentionally ignore the returned promise.
+  if (details.reason === 'update' || details.reason === 'install') {
     browser.storage.local.set({ [updateStorageKey]: browser.runtime.getManifest().version });
-  });
-}
+  }
+  // We want to move away from localStorage, so remove item if it exists.
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem(updateStorageKey);
+  }
+});
+
 
 const openTab = function (url) {
   browser.tabs.create({ url });
