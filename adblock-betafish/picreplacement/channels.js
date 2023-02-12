@@ -16,14 +16,17 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global settings, getSettings, setSetting, chromeStorageGetHelper,
-   browser, migrateData, chromeStorageSetHelper, ext */
+/* global settings, getSettings, setSetting, ,
+   browser, , , ext */
 
 import { contentTypes } from 'adblockpluscore/lib/contentTypes';
 import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
 import { EventEmitter } from '../../vendor/adblockplusui/adblockpluschrome/lib/events';
 import {
-  WIDE, TALL, SKINNYWIDE, SKINNYTALL,
+  SKINNYTALL,
+  SKINNYWIDE,
+  TALL,
+  WIDE,
 } from './image-sizes-map';
 import SubscriptionAdapter from '../subscriptionadapter';
 import CustomChannel from './custom-channel';
@@ -35,7 +38,11 @@ import FoodChannel from './food-channel';
 import GoatsChannel from './goat-channel';
 import OceanChannel from './ocean-channel';
 import UnknownChannel from './unknown-channel';
-
+import {
+  chromeStorageGetHelper,
+  chromeStorageSetHelper,
+  migrateData,
+} from '../utilities/background/bg-functions';
 
 const resourceTypes = new Map();
 for (const type in contentTypes) {
@@ -345,22 +352,19 @@ export class Channels {
   }
 
   // Ignore EasyPrivacy rules, since they can cause issue with odd image swaps
-  static shouldUseFilter(filter) {
+  static async shouldUseFilter(filter) {
     if (!filter) {
       return false;
     }
-
-    for (const subscription of ewe.subscriptions.getForFilter(filter.text)) {
-      if (subscription.downloadable && subscription.title === 'EasyPrivacy') {
-        return false;
-      }
-    }
-    return true;
+    const subscriptions = await ewe.subscriptions.getForFilter(filter);
+    const isEasyPrivacy = subscriptions.filter(subscription => subscription.title === 'EasyPrivacy');
+    return (isEasyPrivacy && isEasyPrivacy.length === 0);
   }
 
-  filterListener({ request, filter }) {
+  async filterListener({ request, filter }) {
     if (getSettings().picreplacement && this.license.isActiveLicense()) {
-      if (!Channels.shouldUseFilter(filter)) {
+      const shouldUseFilter = await Channels.shouldUseFilter(filter);
+      if (!shouldUseFilter) {
         return;
       }
       if (request
@@ -385,6 +389,7 @@ export class Channels {
     }
   }
 
+
   initializeListeners() {
     this.license.ready().then(() => {
       settings.onload().then(() => {
@@ -395,21 +400,6 @@ export class Channels {
           );
         }
       });
-    });
-
-    browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      if (request.message !== 'get_random_listing') {
-        return;
-      }
-      const myPage = ext.getPage(sender.tab.id);
-      if (!!ewe.filters.getAllowingFilters(myPage.id).length || !this.license.isActiveLicense()) {
-        sendResponse({ disabledOnPage: true });
-      }
-      const result = this.randomListing(request.opts);
-      if (result) {
-        sendResponse(result);
-      }
-      sendResponse({ disabledOnPage: true });
     });
   }
 }

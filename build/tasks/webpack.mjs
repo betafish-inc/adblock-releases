@@ -23,7 +23,7 @@ import webpackMain from 'webpack';
 
 export default function webpack({
   webpackInfo, addonName, addonVersion,
-  sourceMapType,
+  sourceMapType, skipTypeChecks,
 }) {
   return merge(webpackInfo.bundles.map(bundle => gulp.src(bundle.src)
     .pipe(webpackStream(
@@ -37,6 +37,7 @@ export default function webpack({
               filename: bundle.dest,
             },
             resolve: {
+              extensions: [".ts", ".js", ".json", ".wasm"],
               alias: webpackInfo.alias,
               symlinks: false,
             },
@@ -49,6 +50,15 @@ export default function webpack({
                     data: { addonName, addonVersion },
                   },
                 },
+                {
+                  test: /\.ts$/,
+                  use: [
+                    {
+                      loader: "ts-loader",
+                      options: {transpileOnly: skipTypeChecks}
+                    }
+                  ]
+                }
               ],
             },
             externals: {

@@ -16,8 +16,7 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, parseUri, adblockIsPaused, chromeStorageGetHelper,
-   chromeStorageSetHelper, migrateData */
+/* global browser, adblockIsPaused */
 
 // This module is conditional imported only into a Chrome build via the
 // build config file in ..build\config\chrome.mjs
@@ -25,7 +24,13 @@
 import getAvailableFiles from './localFilesIndex';
 import {
   getSettings, settings,
-} from './settings';
+} from './prefs/settings';
+import {
+  parseUri,
+  chromeStorageGetHelper,
+  chromeStorageSetHelper,
+  migrateData,
+} from './utilities/background/bg-functions';
 
 const LocalCDN = (function getLocalCDN() {
   const urlsMatchPattern = ['http://*/*', 'https://*/*'];
@@ -272,7 +277,8 @@ const LocalCDN = (function getLocalCDN() {
 
 export default LocalCDN;
 
-Object.assign(window, {
+// eslint-disable-next-line no-restricted-globals
+Object.assign(self, {
   LocalCDN,
 });
 

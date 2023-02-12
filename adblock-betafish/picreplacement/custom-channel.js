@@ -139,44 +139,20 @@ class CustomChannel extends Channel {
     });
   }
 
-  addCustomImage(imageInfo) {
-    const that = this;
-    return new Promise((resolve, reject) => {
-      const randomKey = `file:///${new Date().getTime()}`;
-      const persistedImageObj = {};
-      persistedImageObj[randomKey] = {
-        name: imageInfo.name,
-        width: imageInfo.width,
-        height: imageInfo.height,
-        src: imageInfo.imageAsBase64,
-      };
-      browser.storage.local.set(persistedImageObj).then(() => {
-        if (browser.runtime.lastError) {
-          reject(browser.runtime.lastError);
-        }
-        const theNewListing = CustomChannel.createListing(imageInfo.width,
-          imageInfo.height, randomKey, imageInfo.name);
-        that.listings.push(theNewListing);
-        that.saveListings()
-          .then((response) => {
-            if (response) {
-              resolve(randomKey);
-            } else {
-              reject(response);
-            }
-          })
-          .catch((response) => {
-            reject(response);
-          });
-      });
-    });
+  async addCustomImage(imageInfo) {
+    const theNewListing = CustomChannel.createListing(imageInfo.width,
+      imageInfo.height, imageInfo.listingURL, imageInfo.name);
+    this.listings.push(theNewListing);
+    const response = await this.saveListings().catch(() => Promise.reject());
+    if (response) {
+      return Promise.resolve(imageInfo.listingURL);
+    }
+    return Promise.reject();
   }
 
   getBytesInUseForEachImage() {
     if (typeof browser.storage.local.getBytesInUse !== 'function') {
-      return new Promise((resolve) => {
-        resolve([0]);
-      });
+      return Promise.resolve(0);
     }
     const customImagesArray = this.getListings();
     const promises = [];
@@ -195,9 +171,7 @@ class CustomChannel extends Channel {
 
   getTotalBytesInUse() {
     if (typeof browser.storage.local.getBytesInUse !== 'function') {
-      return new Promise((resolve) => {
-        resolve(0);
-      });
+      return Promise.resolve(0);
     }
     return new Promise((resolve) => {
       this.getBytesInUseForEachImage().then((results) => {

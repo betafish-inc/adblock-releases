@@ -17,7 +17,7 @@
 
 /* For ESLint: List any global identifiers used in this file below */
 /* global pageInfo, transitionTo, logHelpFlowResults, filterUpdateError:true,
-  browser, savedData, translate */
+  browser, savedData, translate, connectUIPort */
 
 // Help flow button actions -- called when the associated buttons are clicked
 /* eslint-disable-next-line no-unused-vars */
@@ -241,19 +241,19 @@ const popupMenuHelpActionMap = {
   },
   subscribeToFilterList() {
     transitionTo('waitToRefreshPage', false);
-    const port = browser.runtime.connect({ name: 'ui' });
-    port.onMessage.addListener((message) => {
-      if (message && message.type === 'subscriptions.respond' && message.action) {
-        setTimeout(() => { // wait at least 2 seconds for the user to see the button / icon change
-          port.disconnect();
-          $('#help_content button.button[disabled]').text(translate('reload_the_page')).attr('disabled', false);
-        }, 2000);
-      }
-    });
-
-    port.postMessage({
-      type: 'subscriptions.listen',
-      filter: ['added', 'changed'],
+    connectUIPort(({ addUIListener, postUIMessage, disconnectUI }) => {
+      addUIListener((message) => {
+        if (message && message.type === 'subscriptions.respond' && message.action) {
+          setTimeout(() => { // wait at least 2 seconds for the user to see the button / icon change
+            disconnectUI();
+            $('#help_content button.button[disabled]').text(translate('reload_the_page')).attr('disabled', false);
+          }, 2000);
+        }
+      });
+      postUIMessage({
+        type: 'subscriptions.listen',
+        filter: ['added', 'changed'],
+      });
     });
     browser.runtime.sendMessage({ type: 'subscriptions.add', url: savedData.subURL });
   },

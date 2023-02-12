@@ -7,14 +7,11 @@
 import { Prefs } from 'prefs';
 import * as info from 'info';
 import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
-
-import { port } from "../../vendor/adblockplusui/adblockpluschrome/lib/messaging";
-
+import rulesIndex from "@adblockinc/rules/adblock";
+import { port } from "../../vendor/adblockplusui/adblockpluschrome/lib/messaging/port.js";
 import { TELEMETRY } from '../telemetry';
 
 let firstRun;
-let subscriptionsCallback = null;
-let userNotificationCallback = null;
 let reinitialized = false;
 let dataCorrupted = false;
 
@@ -61,11 +58,11 @@ function removeSubscriptions() {
   return new Promise(function (resolve, reject) {
     if ("managed" in browser.storage) {
       browser.storage.managed.get(null).then(
-        items => {
+        async (items) => {
           for (let key in items) {
             if (key === "remove_subscriptions" && Array.isArray(items[key]) && items[key].length) {
               for (let inx = 0; inx < items[key].length; inx++) {
-                ewe.subscriptions.remove(items[key][inx]);
+                await ewe.subscriptions.remove(items[key][inx]);
               }
             }
           }
@@ -84,6 +81,7 @@ function removeSubscriptions() {
   });
 }
 
+
 function openInstalled() {
   TELEMETRY.untilLoaded(function (userID) {
     browser.tabs.create({
@@ -98,14 +96,16 @@ function openInstalled() {
   });
 }
 
-function addSubscriptions() {
+
+async function addSubscriptions() {
+  if (firstRun || reinitialized) {
+    await ewe.subscriptions.addDefaults();
+  }
   // Remove "acceptable ads" if Gecko
-  // Add "AdBlock Custom" subscriptions
   if (firstRun) {
     for (let url of Prefs.additional_subscriptions) {
       try {
-        ewe.subscriptions.add(url);
-        ewe.subscriptions.sync(url);
+        await ewe.subscriptions.add(url);
       }
       catch (ex) {
         console.error(`Failed to add additional subscription: ${url}`);
@@ -113,20 +113,11 @@ function addSubscriptions() {
     }
     if (info.platform === "gecko") {
       try {
-        ewe.subscriptions.remove(ewe.subscriptions.ACCEPTABLE_ADS_URL);
+        await ewe.subscriptions.remove(ewe.subscriptions.ACCEPTABLE_ADS_URL);
       }
       catch (ex) {
         console.error(`Failed to remove AA subscription`);
       }
-    }
-
-    try {
-      ewe.subscriptions.add("https://cdn.adblockcdn.com/filters/adblock_custom.txt");
-      ewe.subscriptions.sync("https://cdn.adblockcdn.com/filters/adblock_custom.txt");
-    }
-    catch (ex) {
-      console.error(`Failed to add additional subscription`);
-
     }
   }
 
@@ -163,22 +154,24 @@ async function testStorage() {
   }
 }
 
-const initialize = async function () {
-  const [eweFirstRun] = await Promise.all([
-    ewe.start({ name: info.addonName, version: info.addonVersion }),
-    Prefs.untilLoaded.catch(() => { setDataCorrupted(true); }),
-    testStorage().catch(() => { setDataCorrupted(true); })
-  ]);
-
+const initialize = ewe.start({
+  bundledSubscriptions: rulesIndex,
+  name: info.addonName,
+  version: info.addonVersion,
+  bundledSubscriptionsPath: "/data/rules/abp",
+}).then(async (eweFirstRun) => {
+  eweFirstRun.warnings.forEach(console.warn);
+  await Prefs.untilLoaded.catch(() => { setDataCorrupted(true); });
+  await testStorage().catch(() => { setDataCorrupted(true); })
   await detectFirstRun(
     eweFirstRun.foundSubscriptions,
     eweFirstRun.foundStorage
-  );
+    );
   // adding default filter lists
-  addSubscriptions();
+  await addSubscriptions();
   await removeSubscriptions();
-  return Promise.resolve();
-}();
+});
+
 
 /**
  * Gets a value indicating whether a data corruption was detected.

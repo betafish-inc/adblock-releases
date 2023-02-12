@@ -24,6 +24,9 @@ import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
 import { setBadge } from '../vendor/adblockplusui/adblockpluschrome/lib/browserAction';
 import ServerMessages from './servermessages';
 
+import messageValidator from './messaging/messagevalidator';
+
+
 const updateButtonUIAndContextMenus = function () {
   browser.tabs.query({}).then((tabs) => {
     for (const tab of tabs) {
@@ -37,12 +40,6 @@ const updateButtonUIAndContextMenus = function () {
     }
   });
 };
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.command === 'updateButtonUIAndContextMenus') {
-    updateButtonUIAndContextMenus();
-    sendResponse({});
-  }
-});
 
 // Bounce messages back to content scripts.
 const emitPageBroadcast = (function emitBroadcast() {
@@ -127,6 +124,7 @@ const contextMenuItem = (() => ({
   pauseAll:
     {
       title: browser.i18n.getMessage('pause_adblock_everywhere'),
+      id: 'pause_adblock_everywhere',
       contexts: ['all'],
       onclick: () => {
         ServerMessages.recordGeneralMessage('cm_pause_clicked');
@@ -137,6 +135,7 @@ const contextMenuItem = (() => ({
   unpauseAll:
     {
       title: browser.i18n.getMessage('resume_blocking_ads'),
+      id: 'resume_blocking_ads',
       contexts: ['all'],
       onclick: () => {
         ServerMessages.recordGeneralMessage('cm_unpause_clicked');
@@ -147,6 +146,7 @@ const contextMenuItem = (() => ({
   pauseDomain:
     {
       title: browser.i18n.getMessage('domain_pause_adblock'),
+      id: 'domain_pause_adblock',
       contexts: ['all'],
       onclick: (info, tab) => {
         ServerMessages.recordGeneralMessage('cm_domain_pause_clicked');
@@ -157,6 +157,7 @@ const contextMenuItem = (() => ({
   unpauseDomain:
     {
       title: browser.i18n.getMessage('resume_blocking_ads'),
+      id: 'resume_blocking_ads_unpause',
       contexts: ['all'],
       onclick: (info, tab) => {
         ServerMessages.recordGeneralMessage('cm_domain_unpause_clicked');
@@ -167,9 +168,9 @@ const contextMenuItem = (() => ({
   blockThisAd:
     {
       title: browser.i18n.getMessage('block_this_ad'),
+      id: 'block_this_ad',
       contexts: ['all'],
       onclick(info, tab) {
-        window.addCustomFilterRandomName = `ab-${Math.random().toString(36).substr(2)}`;
         emitPageBroadcast({
           fn: 'topOpenBlacklistUI',
           options: {
@@ -177,7 +178,7 @@ const contextMenuItem = (() => ({
             showBlacklistCTA: License.shouldShowBlacklistCTA(),
             isActiveLicense: License.isActiveLicense(),
             settings: getSettings(),
-            addCustomFilterRandomName: window.addCustomFilterRandomName,
+            addCustomFilterRandomName: messageValidator.generateNewRandomText(),
           },
         }, {
           tab,
@@ -187,9 +188,9 @@ const contextMenuItem = (() => ({
   blockAnAd:
     {
       title: browser.i18n.getMessage('block_an_ad_on_this_page'),
+      id: 'block_an_ad_on_this_page',
       contexts: ['all'],
       onclick(info, tab) {
-        window.addCustomFilterRandomName = `ab-${Math.random().toString(36).substr(2)}`;
         emitPageBroadcast({
           fn: 'topOpenBlacklistUI',
           options: {
@@ -197,7 +198,7 @@ const contextMenuItem = (() => ({
             showBlacklistCTA: License.shouldShowBlacklistCTA(),
             isActiveLicense: License.isActiveLicense(),
             settings: getSettings(),
-            addCustomFilterRandomName: window.addCustomFilterRandomName,
+            addCustomFilterRandomName: messageValidator.generateNewRandomText(),
           },
         }, {
           tab,
@@ -206,28 +207,34 @@ const contextMenuItem = (() => ({
     },
 }))();
 
-let updateContextMenuItems = function (page) {
+
+const checkLastError = function () {
+  if (browser.runtime.lastError) {
+    // do nothing
+  }
+};
+
+let updateContextMenuItems = async function (page) {
   // Remove the AdBlock context menu items
-  browser.contextMenus.removeAll();
+  await browser.contextMenus.removeAll();
 
   // Check if the context menu items should be added
   if (!Prefs.shouldShowBlockElementMenu) {
     return;
   }
+  const domainIsPaused = adblockIsDomainPaused({ url: page.url.href, id: page.id });
 
-  const adblockIsPaused = window.adblockIsPaused();
-  const domainIsPaused = window.adblockIsDomainPaused({ url: page.url.href, id: page.id });
-  if (adblockIsPaused) {
-    browser.contextMenus.create(contextMenuItem.unpauseAll);
+  if (adblockIsPaused()) {
+    browser.contextMenus.create(contextMenuItem.unpauseAll, checkLastError);
   } else if (domainIsPaused) {
-    browser.contextMenus.create(contextMenuItem.unpauseDomain);
-  } else if (ewe.filters.getAllowingFilters(page.id).length) {
-    browser.contextMenus.create(contextMenuItem.pauseAll);
+    browser.contextMenus.create(contextMenuItem.unpauseDomain, checkLastError);
+  } else if (await ewe.filters.getAllowingFilters(page.id).length) {
+    browser.contextMenus.create(contextMenuItem.pauseAll, checkLastError);
   } else {
-    browser.contextMenus.create(contextMenuItem.blockThisAd);
-    browser.contextMenus.create(contextMenuItem.blockAnAd);
-    browser.contextMenus.create(contextMenuItem.pauseDomain);
-    browser.contextMenus.create(contextMenuItem.pauseAll);
+    browser.contextMenus.create(contextMenuItem.blockThisAd, checkLastError);
+    browser.contextMenus.create(contextMenuItem.blockAnAd, checkLastError);
+    browser.contextMenus.create(contextMenuItem.pauseDomain, checkLastError);
+    browser.contextMenus.create(contextMenuItem.pauseAll, checkLastError);
   }
 };
 
@@ -239,8 +246,8 @@ const updateContextMenuItemsNoOp = function () {
 // the `create` function is invoked twice, because it's the second
 // and all subsequent calls that fail.
 try {
-  browser.contextMenus.create(contextMenuItem.blockThisAd);
-  browser.contextMenus.create(contextMenuItem.blockThisAd);
+  browser.contextMenus.create(contextMenuItem.blockThisAd, checkLastError);
+  browser.contextMenus.create(contextMenuItem.blockThisAd, checkLastError);
 } catch (e) {
   updateContextMenuItems = updateContextMenuItemsNoOp;
 }
@@ -294,7 +301,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'showBlacklist' && typeof request.nothingClicked === 'boolean') {
-    window.addCustomFilterRandomName = `ab-${Math.random().toString(36).substr(2)}`;
     emitPageBroadcast({
       fn: 'topOpenBlacklistUI',
       options: {
@@ -302,7 +308,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         isActiveLicense: License.isActiveLicense(),
         showBlacklistCTA: License.shouldShowBlacklistCTA(),
         settings: getSettings(),
-        addCustomFilterRandomName: window.addCustomFilterRandomName,
+        addCustomFilterRandomName: messageValidator.generateNewRandomText(),
       },
       tabID: request.tabId,
     });
@@ -312,11 +318,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'showWhitelist') {
-    window.addCustomFilterRandomName = `ab-${Math.random().toString(36).substr(2)}`;
     emitPageBroadcast({
       fn: 'topOpenWhitelistUI',
       options: {
-        addCustomFilterRandomName: window.addCustomFilterRandomName,
+        addCustomFilterRandomName: messageValidator.generateNewRandomText(),
       },
       tabID: request.tabId,
     });
@@ -340,7 +345,8 @@ Prefs.on(Prefs.shouldShowBlockElementMenu, () => {
 
 updateButtonUIAndContextMenus();
 
-Object.assign(window, {
+// eslint-disable-next-line no-restricted-globals
+Object.assign(self, {
   emitPageBroadcast,
   updateButtonUIAndContextMenus,
 });

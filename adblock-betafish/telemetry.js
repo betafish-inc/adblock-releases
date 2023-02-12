@@ -20,9 +20,8 @@
 
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, require, log, determineUserLanguage, channels,
-   replacedCounts, chromeStorageSetHelper, recordAnonymousErrorMessage,
-   BigInt, LocalCDN, storageSet */
+/* global browser, require, channels, replacedCounts,
+   recordAnonymousErrorMessage, BigInt, LocalCDN,  */
 
 import { Prefs } from 'prefs';
 import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
@@ -30,11 +29,16 @@ import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
 import { EventEmitter } from '../vendor/adblockplusui/adblockpluschrome/lib/events';
 import CtaABManager from './ctaabmanager';
 import SubscriptionAdapter from './subscriptionadapter';
-import { getSettings } from './settings';
+import { getSettings } from './prefs/settings';
 import ServerMessages from './servermessages';
 import postData from './fetch-util';
 import SURVEY from './survey';
-
+import {
+  log,
+  determineUserLanguage,
+  chromeStorageSetHelper,
+  storageSet,
+} from './utilities/background/bg-functions';
 
 export const telemetryNotifier = new EventEmitter();
 
@@ -102,7 +106,7 @@ export const TELEMETRY = (function exportStats() {
     storageSet(TELEMETRY.nextPingTimeStorageKey);
   }
 
-  const getPingData = function (callbackFN) {
+  const getPingData = async function (callbackFN) {
     if (!callbackFN && (typeof callbackFN !== 'function')) {
       return;
     }
@@ -118,7 +122,7 @@ export const TELEMETRY = (function exportStats() {
         const themePopupMenu = settingsObj.color_themes.popup_menu.replace('_theme', '');
         let subsStr = '-1';
         if (typeof BigInt === 'function') {
-          subsStr = BigInt(`0b${SubscriptionAdapter.getSubscriptionsChecksum()}`).toString();
+          subsStr = BigInt(`0b${await SubscriptionAdapter.getSubscriptionsChecksum()}`).toString();
         }
 
         data = {
@@ -164,7 +168,7 @@ export const TELEMETRY = (function exportStats() {
         if (browser.runtime.id) {
           data.extid = browser.runtime.id;
         }
-        const subs = SubscriptionAdapter.getAllSubscriptionsMinusText();
+        const subs = await SubscriptionAdapter.getAllSubscriptionsMinusText();
         if (subs) {
           const aa = subs.acceptable_ads;
           const aaPrivacy = subs.acceptable_ads_privacy;
@@ -203,7 +207,8 @@ export const TELEMETRY = (function exportStats() {
 
         data.dc = dataCorrupt ? '1' : '0';
       } catch (err) {
-        recordAnonymousErrorMessage('ping_error', null, { error: JSON.stringify(err, Object.getOwnPropertyNames(err)) });
+        ServerMessages.recordAnonymousErrorMessage('ping_error', null, { error: JSON.stringify(err, Object.getOwnPropertyNames(err)) });
+        return;
       }
       SURVEY.types((res) => {
         data.st = res + CtaABManager.types();
@@ -360,6 +365,50 @@ export const TELEMETRY = (function exportStats() {
     }); // end of get
   };
 
+  const sleepThenPing = () => {
+    millisTillNextPing((delay) => {
+      browser.alarms.create(pingAlarmName, { delayInMinutes: (delay / 1000 / 60) });
+    });
+  };
+
+  // Check if the computer was woken up, and if there was a pending alarm
+  // that should fired during the sleep, then
+  // remove it, and fire the update ourselves.
+  // see - https://bugs.chromium.org/p/chromium/issues/detail?id=471524
+  const checkIdleState = () => {
+    browser.idle.onStateChanged.addListener(async (newState) => {
+      if (newState === 'active') {
+        const alarm = await browser.alarms.get(pingAlarmName);
+        if (alarm && Date.now() > alarm.scheduledTime) {
+          await browser.alarms.clear(pingAlarmName);
+          pingNow()
+            .then(() => scheduleNextPing())
+            .then(() => sleepThenPing());
+        } else if (alarm) {
+          // if the alarm should fire in the future,
+          // re-add the alarm so it fires at the correct time
+          const originalTime = alarm.scheduledTime;
+          const wasCleared = await browser.alarms.clear(pingAlarmName);
+          if (wasCleared) {
+            browser.alarms.create(pingAlarmName, { when: originalTime });
+          }
+        }
+      }
+    });
+  };
+  checkIdleState();
+
+  const addAlarmListener = () => {
+    browser.alarms.onAlarm.addListener((alarm) => {
+      if (alarm && alarm.name === pingAlarmName) {
+        pingNow()
+          .then(() => scheduleNextPing())
+          .then(() => sleepThenPing());
+      }
+    });
+  };
+  addAlarmListener();
+
   return {
     userIDStorageKey,
     totalPingStorageKey,
@@ -389,42 +438,6 @@ export const TELEMETRY = (function exportStats() {
     },
     // Ping the server when necessary.
     startPinging() {
-      function sleepThenPing() {
-        millisTillNextPing((delay) => {
-          browser.alarms.create(pingAlarmName, { delayInMinutes: (delay / 1000 / 60) });
-        });
-      }
-      browser.alarms.onAlarm.addListener((alarm) => {
-        if (alarm && alarm.name === pingAlarmName) {
-          pingNow()
-          .then(() => scheduleNextPing())
-          .then(() => sleepThenPing());
-        }
-      });
-      // Check if the computer was woken up, and if there was a pending alarm
-      // that should fired during the sleep, then
-      // remove it, and fire the update ourselves.
-      // see - https://bugs.chromium.org/p/chromium/issues/detail?id=471524
-      browser.idle.onStateChanged.addListener(async (newState) => {
-        if (newState === 'active') {
-          const alarm = await browser.alarms.get(pingAlarmName);
-          if (alarm && Date.now() > alarm.scheduledTime) {
-            await browser.alarms.clear(pingAlarmName);
-            pingNow()
-            .then(() => scheduleNextPing())
-            .then(() => sleepThenPing());
-          } else if (alarm) {
-            // if the alarm should fire in the future,
-            // re-add the alarm so it fires at the correct time
-            const originalTime = alarm.scheduledTime;
-            const wasCleared = await browser.alarms.clear(pingAlarmName);
-            if (wasCleared) {
-              browser.alarms.create(pingAlarmName, { when: originalTime });
-            }
-          }
-        }
-      });
-
       readUserIDPromisified().then(() => {
         // Do 'stuff' when we're first installed...
         // - send a message

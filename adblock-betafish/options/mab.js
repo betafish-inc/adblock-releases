@@ -16,9 +16,11 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global License, MABPayment, localizePage, activateTab, translate, BG */
+/* global License, MABPayment, localizePage, activateTab, translate,
+   initializeProxies, settings */
 
-$(() => {
+$(async () => {
+  await initializeProxies();
   localizePage();
 
   if (!License || $.isEmptyObject(License) || !MABPayment) {
@@ -43,18 +45,18 @@ $(() => {
     }
     $('.status_msg').css('display', 'inline-flex');
 
-    if (License.isLicenseCodeValid()) {
-      manageSubscriptionURL = `${manageSubscriptionURL}?lic=${License.get().code}`;
+    if (License.isLicenseCodeValid() && License.code) {
+      manageSubscriptionURL = `${manageSubscriptionURL}?lic=${License.code}`;
+      $('a#manage-subscription').attr('href', manageSubscriptionURL).show();
     }
-    $('a#manage-subscription').attr('href', manageSubscriptionURL).show();
   }
 
   $('.mab-feature:not(.locked) a').on('click', function goToTab() {
     activateTab($(this).attr('href'));
   });
 
-  if (BG && BG.getSettings()) {
-    const optionsTheme = BG.getSettings().color_themes.options_page;
+  if (settings) {
+    const optionsTheme = settings.color_themes.options_page;
     if (optionsTheme === 'dark_theme') {
       $('#themes-preview').attr('src', 'icons/themes_lighttext.svg');
     } else {

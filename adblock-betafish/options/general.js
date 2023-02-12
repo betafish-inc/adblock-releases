@@ -16,10 +16,11 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global BG, parseUri, optionalSettings:true, abpPrefPropertyNames, settingsNotifier,
+/* global parseUri, settings:true, abpPrefPropertyNames, settingsNotifier, SubscriptionAdapter,
    DownloadableSubscription, Subscription, Prefs, synchronizer, filterStorage, filterNotifier,
-   port, updateAcceptableAdsUI, activateTab, MABPayment, License, autoReloadingPage:true,
-   updateAcceptableAdsUIFN */
+   updateAcceptableAdsUI, activateTab, MABPayment, License, autoReloadingPage:true,
+   updateAcceptableAdsUIFN, initializeProxies, prefsNotifier,
+   SubscriptionsProxy, DataCollectionV2, browser, LocalCDN, send */
 
 // Handle incoming clicks from bandaids.js & '/installed'
 try {
@@ -32,11 +33,12 @@ try {
 
 // Check or uncheck each loaded DOM option checkbox according to the
 // user's saved settings.
-const initialize = function init() {
-  if (typeof BG.LocalCDN === 'object') {
+const initialize = async function init() {
+  let isLocalCDNAvailable = await send('LocalCDN.isAvailable');
+  if (isLocalCDNAvailable) {
     $('#local_cdn_option').css('display', 'flex');
   }
-  const subs = BG.SubscriptionAdapter.getSubscriptionsMinusText();
+  const subs = await SubscriptionAdapter.getSubscriptionsMinusText();
 
   // if the user is currently subscribed to AA
   // then 'check' the acceptable ads button.
@@ -48,51 +50,58 @@ const initialize = function init() {
     updateAcceptableAdsUIFN(true, true);
   }
 
-  for (const name in optionalSettings) {
-    $(`#enable_${name}`).prop('checked', optionalSettings[name]);
+  for (const name in settings) {
+    $(`#enable_${name}`).prop('checked', settings[name]);
   }
-  if (optionalSettings && !optionalSettings.show_advanced_options) {
+  if (!settings.show_advanced_options) {
     $('.advanced').hide();
   }
-  if (optionalSettings && !optionalSettings.youtube_manage_subscribed) {
+  if (!settings.youtube_manage_subscribed) {
     $('#youtube_manage_subscribed_link').removeClass('link-text-color');
     $('#youtube_manage_subscribed_link').removeClass('pointer');
     $('#youtube_manage_subscribed_link').addClass('disabled-link-text-color');
   }
 
-
   for (const inx in abpPrefPropertyNames) {
     const name = abpPrefPropertyNames[inx];
-    $(`#prefs__${name}`).prop('checked', BG.Prefs[name]);
+    $(`#prefs__${name}`).prop('checked', Prefs[name]);
   }
 
-  const acceptableAdsPrivacyClicked = function (isEnabled) {
+  const acceptableAdsPrivacyClicked = async function (isEnabled) {
     if (isEnabled) {
-      BG.ewe.subscriptions.add(BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL);
-      BG.ewe.subscriptions.sync(BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL);
-      BG.ewe.subscriptions.remove(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
+      await SubscriptionsProxy.add(SubscriptionsProxy.ACCEPTABLE_ADS_PRIVACY_URL);
+      await SubscriptionsProxy.sync(SubscriptionsProxy.ACCEPTABLE_ADS_PRIVACY_URL);
+      if (await SubscriptionsProxy.has(SubscriptionsProxy.ACCEPTABLE_ADS_URL)) {
+        SubscriptionsProxy.remove(SubscriptionsProxy.ACCEPTABLE_ADS_URL);
+      }
       updateAcceptableAdsUI(true, true);
     } else {
-      BG.ewe.subscriptions.add(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
-      BG.ewe.subscriptions.sync(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
-      BG.ewe.subscriptions.remove(BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL);
+      await SubscriptionsProxy.add(SubscriptionsProxy.ACCEPTABLE_ADS_URL);
+      await SubscriptionsProxy.sync(SubscriptionsProxy.ACCEPTABLE_ADS_URL);
+      if (await SubscriptionsProxy.has(SubscriptionsProxy.ACCEPTABLE_ADS_PRIVACY_URL)) {
+        SubscriptionsProxy.remove(SubscriptionsProxy.ACCEPTABLE_ADS_PRIVACY_URL);
+      }
       updateAcceptableAdsUI(true, false);
     }
   };
 
-  const acceptableAdsClicked = function (isEnabled) {
+  const acceptableAdsClicked = async function (isEnabled) {
     if (isEnabled) {
-      BG.ewe.subscriptions.add(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
-      BG.ewe.subscriptions.sync(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
+      await SubscriptionsProxy.add(SubscriptionsProxy.ACCEPTABLE_ADS_URL);
+      await SubscriptionsProxy.sync(SubscriptionsProxy.ACCEPTABLE_ADS_URL);
       updateAcceptableAdsUI(true, false);
     } else {
-      BG.ewe.subscriptions.remove(BG.ewe.subscriptions.ACCEPTABLE_ADS_URL);
-      BG.ewe.subscriptions.remove(BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL);
+      if (await SubscriptionsProxy.has(SubscriptionsProxy.ACCEPTABLE_ADS_URL)) {
+        SubscriptionsProxy.remove(SubscriptionsProxy.ACCEPTABLE_ADS_URL);
+      }
+      if (await SubscriptionsProxy.has(SubscriptionsProxy.ACCEPTABLE_ADS_PRIVACY_URL)) {
+        SubscriptionsProxy.remove(SubscriptionsProxy.ACCEPTABLE_ADS_PRIVACY_URL);
+      }
       updateAcceptableAdsUI(false, false);
     }
   };
 
-  $('input.feature[type=\'checkbox\']').on('change', function onOptionSelectionChange() {
+  $('input.feature[type=\'checkbox\']').on('change', async function onOptionSelectionChange() {
     const isEnabled = $(this).is(':checked');
 
     // This change of settings causes the Options page to be automatically reloaded
@@ -115,46 +124,46 @@ const initialize = function init() {
     // if the user enables/disables the context menu
     // update the pages
     if (name === 'shouldShowBlockElementMenu') {
-      BG.updateButtonUIAndContextMenus();
+      send('updateButtonUIAndContextMenus');
     }
     if (abpPrefPropertyNames.indexOf(name) >= 0) {
-      BG.Prefs[name] = isEnabled;
+      Prefs[name] = isEnabled;
       return;
     }
-
-    BG.setSetting(name, isEnabled, true);
+    settings[name] = isEnabled;
 
     // if the user enables/disable data collection
     // start or end the data collection process
     if (name === 'data_collection_v2') {
       if (isEnabled) {
-        BG.DataCollectionV2.start();
+        DataCollectionV2.start();
       } else {
-        BG.DataCollectionV2.end();
+        DataCollectionV2.end();
       }
     }
     // if the user enables/disable Local CDN
     // start or end the Local CDN
-    if (typeof BG.LocalCDN === 'object' && name === 'local_cdn') {
+    isLocalCDNAvailable = await send('LocalCDN.isAvailable');
+    if (isLocalCDNAvailable && name === 'local_cdn') {
       if (isEnabled) {
-        BG.LocalCDN.start();
+        LocalCDN.start();
       } else {
-        BG.LocalCDN.end();
+        LocalCDN.end();
       }
     }
     // if the user enables/disable YouTube Channel allowlisting
     // add or remove history state listners
     if (name === 'youtube_channel_whitelist') {
       if (isEnabled) {
-        BG.addYTChannelListeners();
+        send('addYTChannelListeners');
       } else {
         window.setTimeout(() => {
-          BG.setSetting('youtube_manage_subscribed', isEnabled, true);
+          settings.youtube_manage_subscribed = isEnabled;
           $('#youtube_manage_subscribed_link').removeClass('link-text-color');
           $('#youtube_manage_subscribed_link').removeClass('pointer');
           $('#youtube_manage_subscribed_link').addClass('disabled-link-text-color');
         }, 250);
-        BG.removeYTChannelListeners();
+        send('removeYTChannelListeners');
       }
     }
 
@@ -162,10 +171,10 @@ const initialize = function init() {
     // also, wait a moment to allow the current 'set' to save,
     // then enable YouTube Channel allowlisting
     if (name === 'youtube_manage_subscribed') {
-      if (isEnabled && !optionalSettings.youtube_channel_whitelist) {
+      if (isEnabled && !settings.youtube_channel_whitelist) {
         window.setTimeout(() => {
-          BG.setSetting('youtube_channel_whitelist', isEnabled, true);
-          BG.addYTChannelListeners();
+          settings.youtube_manage_subscribed = isEnabled;
+          send('addYTChannelListeners');
         }, 250);
       }
       if (!isEnabled) {
@@ -183,18 +192,16 @@ const initialize = function init() {
     // add or remove listners
     if (name === 'twitch_channel_allowlist') {
       if (isEnabled) {
-        BG.addTwitchAllowlistListeners();
+        send('addTwitchAllowlistListeners');
       } else {
-        BG.removeTwitchAllowlistListeners();
+        send('removeTwitchAllowlistListeners');
       }
     }
-
-    optionalSettings = BG.getSettings();
   });
 
   $('#youtube_manage_subscribed_link').on('click', () => {
-    if (optionalSettings && optionalSettings.youtube_manage_subscribed) {
-      BG.openYTManagedSubPage();
+    if (settings.youtube_manage_subscribed) {
+      send('openYTManagedSubPage');
     }
   });
 };
@@ -213,7 +220,7 @@ $('#enable_show_advanced_options').on('change', function onAdvancedOptionsChange
   // not end up with debug/beta/test options enabled.
   if (!this.checked) {
     $('.advanced input[type=\'checkbox\']:checked').each(function forEachAdvancedOption() {
-      BG.setSetting(this.id.substr(7), false);
+      settings[this.id.substr(7)] = false;
     });
   }
 
@@ -223,7 +230,8 @@ $('#enable_show_advanced_options').on('change', function onAdvancedOptionsChange
   }, 50);
 });
 
-$(() => {
+$(async () => {
+  await initializeProxies();
   initialize();
   showSeparators();
 
@@ -257,27 +265,19 @@ const onSettingsChanged = function (name, currentValue, previousValue) {
 
 settingsNotifier.on('settings.changed', onSettingsChanged);
 
-window.addEventListener('unload', () => {
-  settingsNotifier.off('settings.changed', onSettingsChanged);
-});
+const onPrefsChannged = function (name, currentValue) {
+  $(`#prefs__${name}`).prop('checked', currentValue);
+};
 
-port.postMessage({
-  type: 'prefs.listen',
-  filter: abpPrefPropertyNames,
-});
+prefsNotifier.on('prefs.changed', onPrefsChannged);
 
-port.onMessage.addListener((message) => {
-  if (message.type === 'prefs.respond') {
-    for (const inx in abpPrefPropertyNames) {
-      const name = abpPrefPropertyNames[inx];
-      $(`#prefs__${name}`).prop('checked', BG.Prefs[name]);
-    }
+const onSubAdded = function (items) {
+  let item = items;
+  if (Array.isArray(items)) {
+    [item] = items;
   }
-});
-
-const onSubAdded = function (item) {
-  const acceptableAds = BG.ewe.subscriptions.ACCEPTABLE_ADS_URL;
-  const acceptableAdsPrivacy = BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL;
+  const acceptableAds = SubscriptionsProxy.ACCEPTABLE_ADS_URL;
+  const acceptableAdsPrivacy = SubscriptionsProxy.ACCEPTABLE_ADS_PRIVACY_URL;
 
   if (item && item.url === acceptableAds) {
     updateAcceptableAdsUI(true, false);
@@ -285,13 +285,17 @@ const onSubAdded = function (item) {
     updateAcceptableAdsUI(true, true);
   }
 };
-BG.ewe.subscriptions.onAdded.addListener(onSubAdded);
+SubscriptionsProxy.onAdded.addListener(onSubAdded);
 
-const onSubRemoved = function (item) {
-  const aa = BG.ewe.subscriptions.ACCEPTABLE_ADS_URL;
-  const aaPrivacy = BG.ewe.subscriptions.ACCEPTABLE_ADS_PRIVACY_URL;
-  const aaSubscribed = BG.ewe.subscriptions.has(aa);
-  const aaPrivacySubscribed = BG.ewe.subscriptions.has(aaPrivacy);
+const onSubRemoved = async function (items) {
+  let item = items;
+  if (Array.isArray(items)) {
+    [item] = items;
+  }
+  const aa = SubscriptionsProxy.ACCEPTABLE_ADS_URL;
+  const aaPrivacy = SubscriptionsProxy.ACCEPTABLE_ADS_PRIVACY_URL;
+  const aaSubscribed = await SubscriptionsProxy.has(aa);
+  const aaPrivacySubscribed = await SubscriptionsProxy.has(aaPrivacy);
 
   if (item && item.url === aa && !aaPrivacySubscribed) {
     updateAcceptableAdsUI(false, false);
@@ -303,9 +307,4 @@ const onSubRemoved = function (item) {
     updateAcceptableAdsUI(true, false);
   }
 };
-BG.ewe.subscriptions.onRemoved.addListener(onSubRemoved);
-
-window.addEventListener('unload', () => {
-  BG.ewe.subscriptions.onAdded.removeListener(onSubAdded);
-  BG.ewe.subscriptions.onRemoved.removeListener(onSubRemoved);
-});
+SubscriptionsProxy.onRemoved.addListener(onSubRemoved);

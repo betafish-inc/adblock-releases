@@ -16,8 +16,10 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global BG, channelsNotifier, License, localizePage, MABPayment,
-   browser, DOMPurify, base64toBlob, info, customImageSwapMimeType
+/* global channelsNotifier, License, localizePage, MABPayment,
+   browser, DOMPurify, base64toBlob, info, customImageSwapMimeType,
+   initializeProxies, settings, ServerMessages, customChannel, channels,
+   send,
  */
 
 // Althought 'webp' is a preferred for Custom Image Swap
@@ -28,9 +30,8 @@ if (info.application === 'gecko') {
   customImageSwapImageFormat = 'png';
 }
 
-(function onImageSwapLoaded() {
-  const { channels, setSetting } = BG;
-  const customChannel = channels.channelGuide[channels.getIdByName('CustomChannel')].channel;
+(async function onImageSwapLoaded() {
+  await initializeProxies();
   let deleteFileURL = '';
   let errorData = {};
 
@@ -117,8 +118,8 @@ if (info.application === 'gecko') {
     tempImageClone.src = dataURL;
   }
 
-  const updateAddImageIcon = function () {
-    if (customChannel.isMaximumAllowedImages()) {
+  const updateAddImageIcon = async function () {
+    if (await customChannel.isMaximumAllowedImages()) {
       $('#custom-images').prop('disabled', true);
       $('#custom-channel-options li:first-child').removeClass('custom-channel-upload-enabled');
       $('#custom-channel-options li:first-child').addClass('custom-channel-upload-disabled');
@@ -137,8 +138,8 @@ if (info.application === 'gecko') {
     }
   };
 
-  const updateCustomChannelBox = function () {
-    if (channels.isCustomChannelEnabled()) {
+  const updateCustomChannelBox = async function () {
+    if (await channels.isCustomChannelEnabled()) {
       $('#custom-image-upload-section').fadeIn();
       $('#favorite_icon').text('favorite');
       $('#custom-channel-box').removeClass('custom-channel-disable');
@@ -182,8 +183,8 @@ if (info.application === 'gecko') {
     updateCustomChannelBox();
   };
 
-  const loadCurrentSettingsIntoPage = function () {
-    const guide = channels.getGuide();
+  const loadCurrentSettingsIntoPage = async function () {
+    const guide = await channels.getGuide();
     const $stopFeatureInput = $('input#no-channel');
     let atLeastOneSelected = false;
 
@@ -201,19 +202,19 @@ if (info.application === 'gecko') {
     }
 
     if (atLeastOneSelected) {
-      setSetting('picreplacement', true);
+      settings.picreplacement = true;
       channels.initializeListeners();
       $stopFeatureInput.prop('checked', false);
       $stopFeatureInput.parent('.channel-box').removeClass('selected');
     } else {
-      setSetting('picreplacement', false);
+      settings.picreplacement = false;
       $stopFeatureInput.prop('checked', true);
       $stopFeatureInput.parent('.channel-box').addClass('selected');
     }
     updateChannelBoxes();
   };
 
-  const updateChannelSelection = function (event) {
+  const updateChannelSelection = async function (event) {
     const $eventTarget = $(event.target);
     const channelId = $eventTarget.data('channel-id');
     const enabled = $eventTarget.is(':checked');
@@ -223,9 +224,9 @@ if (info.application === 'gecko') {
     }
 
     if (channelId === 'none') {
-      channels.disableAllChannels();
+      await channels.disableAllChannels();
     } else {
-      channels.setEnabled(channelId, enabled);
+      await channels.setEnabled(channelId, enabled);
     }
     loadCurrentSettingsIntoPage();
   };
@@ -275,8 +276,8 @@ if (info.application === 'gecko') {
     $('#image-swap-custom-image-upload').append(DOMPurify.sanitize('<img id="image-swap-custom-image-upload" />', { SAFE_FOR_JQUERY: true }));
   };
 
-  const customImagesSelected = () => {
-    if (customChannel.isMaximumAllowedImages()) {
+  const customImagesSelected = async () => {
+    if (await customChannel.isMaximumAllowedImages()) {
       return;
     }
 
@@ -320,29 +321,47 @@ if (info.application === 'gecko') {
     $('input.invisible-overlay').on('change', updateChannelSelection);
   };
 
-  const initCustomThumbnails = function () {
+  const initCustomThumbnails = async function () {
     // show any current custom images as thumbnails
-    const metaData = customChannel.getListings();
+    const metaData = await customChannel.getListings();
     for (let inx = 0; inx < metaData.length; inx++) {
       const listing = metaData[inx];
       if (listing && listing.url) {
-        browser.storage.local.get(listing.url).then((savedImage) => {
+        browser.storage.local.get(listing.url).then(async (savedImage) => {
           if (
             savedImage[listing.url]
             && savedImage[listing.url].src
           ) {
             generatePreviewThumbnail(savedImage[listing.url].src, listing.url);
           } else {
-            customChannel.removeListingByURL(listing.url);
+            await customChannel.removeListingByURL(listing.url);
           }
         });
       }
     }
   };
 
-  $(() => {
-    localizePage();
+  const saveCustomImage = function (imageInfo) {
+    return new Promise((resolve, reject) => {
+      const randomKey = `file:///${new Date().getTime()}`;
+      const persistedImageObj = {};
+      persistedImageObj[randomKey] = {
+        name: imageInfo.name,
+        width: imageInfo.width,
+        height: imageInfo.height,
+        src: imageInfo.imageAsBase64,
+      };
+      browser.storage.local.set(persistedImageObj).then(() => {
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError);
+        }
+        resolve(randomKey);
+      });
+    });
+  };
 
+  $(async () => {
+    localizePage();
     if (!License || $.isEmptyObject(License)) {
       return;
     }
@@ -358,17 +377,13 @@ if (info.application === 'gecko') {
       initCustomThumbnails();
     }
 
-    const onChannelsChanged = function (id, currentValue, previousValue) {
-      const guide = BG.channels.getGuide();
+    const onChannelsChanged = async function (id, currentValue, previousValue) {
+      const guide = await channels.getGuide();
       const $channelInput = $(`#${guide[id].name}`);
       if ($channelInput.is(':checked') === previousValue) {
         $channelInput.trigger('click');
       }
     };
-
-    window.addEventListener('unload', () => {
-      channelsNotifier.off('channels.changed', onChannelsChanged);
-    });
 
     channelsNotifier.on('channels.changed', onChannelsChanged);
   });
@@ -399,7 +414,6 @@ if (info.application === 'gecko') {
     URL.revokeObjectURL(crImage.src);
   });
 
-
   $('#btnDoneEditAdd').on('click', () => {
     $('#btnDoneEditAdd').prop('disabled', true);
     const width = $('.image-swap-sample-selected').data('image-width');
@@ -413,12 +427,15 @@ if (info.application === 'gecko') {
     }).then((base64Str) => {
       const imageFileName = $('#image-swap-custom-image-upload').data('file-name');
       $('#image-swap-custom-image-upload').removeData('file-name');
-      customChannel.addCustomImage({
+      const imageInfo = {
         width,
         height,
         name: imageFileName,
         imageAsBase64: base64Str,
-      }).then((listingURL) => {
+      };
+      saveCustomImage(imageInfo).then(async (listingURL) => {
+        imageInfo.listingURL = listingURL;
+        await customChannel.addCustomImage(imageInfo);
         generatePreviewThumbnail(base64Str, listingURL);
         $('#swap-edit-overlay-page').fadeOut(() => {
           $('#swap-edit-overlay').css({
@@ -446,9 +463,9 @@ if (info.application === 'gecko') {
     });
   });
 
-  $('#btnSwapDelete').on('click', () => {
+  $('#btnSwapDelete').on('click', async () => {
     if (deleteFileURL) {
-      customChannel.removeListingByURL(deleteFileURL).then(() => {
+      await customChannel.removeListingByURL(deleteFileURL).then(() => {
         $(`li[data-listingURL="${deleteFileURL}"]`).remove();
         deleteFileURL = '';
         $('#swap-edit-overlay').css({
@@ -475,14 +492,10 @@ if (info.application === 'gecko') {
     $('#swap-error-overlay-page').addClass('inactive');
   });
 
-  $('#btnSendDebug').on('click', () => {
-    if (errorData
-      && BG
-      && typeof BG.getDebugInfo === 'function'
-      && typeof BG.recordAnonymousErrorMessage === 'function') {
-      BG.getDebugInfo((debugData) => {
-        BG.recordAnonymousErrorMessage('custom_image_swap_error', null, JSON.stringify({ debugData, errorData }));
-      });
+  $('#btnSendDebug').on('click', async () => {
+    if (errorData) {
+      const debugData = await send('getDebugInfo');
+      ServerMessages.recordAnonymousErrorMessage('custom_image_swap_error', null, JSON.stringify({ debugData, errorData }));
     }
     $('#swap-edit-overlay').css({
       display: 'none',

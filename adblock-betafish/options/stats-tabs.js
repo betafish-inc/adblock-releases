@@ -16,8 +16,10 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global Chart, browser, License, localizePage, BG
-   DOMPurify,translate, activateTab */
+/* global Chart, browser, License, localizePage, settings,
+   DOMPurify,translate, activateTab, initializeProxies,
+   SubscriptionsProxy, channels, SubscriptionAdapter, LocalDataCollection,
+   DataCollectionV2, send */
 
 Chart.defaults.global.defaultFontFamily = 'Lato';
 
@@ -27,8 +29,7 @@ const adsBlockedColor = getComputedStyle(document.body).getPropertyValue('--ads-
 const trackersBlockedColor = getComputedStyle(document.body).getPropertyValue('--trackers-blocked-color').trim();
 const adsReplacedColor = getComputedStyle(document.body).getPropertyValue('--ads-replaced-color').trim();
 
-const { channels } = BG;
-let subs = BG.SubscriptionAdapter.getSubscriptionsMinusText();
+let subs = {};
 window.theChart = undefined; // needs to be in the global name space.
 let labelData = [];
 let adChartData = [];
@@ -42,7 +43,7 @@ let showAdsData = true;
 let showTrackerData = true;
 let showReplacedData = true;
 
-const { EXT_STATS_KEY } = BG.LocalDataCollection;
+const { EXT_STATS_KEY } = LocalDataCollection;
 
 const addResizeHandler = function () {
   if (window.resizeHandler) {
@@ -62,7 +63,7 @@ const addResizeHandler = function () {
 };
 
 const showOrHideNoDataMsgIfNeeded = function () {
-  if (BG.getSettings().local_data_collection) {
+  if (settings.local_data_collection) {
     if ($.isEmptyObject(rawData)) {
       $('#no-data-overlay').show();
     } else {
@@ -73,14 +74,14 @@ const showOrHideNoDataMsgIfNeeded = function () {
 };
 
 const showOrHideAdPanelCountNeeded = function () {
-  if (BG.getSettings().local_data_collection && showAdsData) {
+  if (settings.local_data_collection && showAdsData) {
     showAdsData = false;
     $('#adsblocked_value').hide();
     $('#adsblocked_panel').css({ background: '#dadada' });
     $('#adblocked_off_icon').show();
     $('#adsblocked_header span[i18n="stats_hide_data"]').text(translate('stats_show_data'));
     $('#adsblocked_header i').text('remove_red_eye');
-  } else if (BG.getSettings().local_data_collection && !showAdsData) {
+  } else if (settings.local_data_collection && !showAdsData) {
     showAdsData = true;
     $('#adsblocked_panel').css({ background: '#ffffff' });
     $('#adblocked_off_icon').hide();
@@ -92,7 +93,7 @@ const showOrHideAdPanelCountNeeded = function () {
 
 const showOrHideTrackerPanelCountNeeded = function () {
   if (
-    BG.getSettings().local_data_collection
+    settings.local_data_collection
     && subs.easyprivacy
     && subs.easyprivacy.subscribed
   ) {
@@ -114,12 +115,12 @@ const showOrHideTrackerPanelCountNeeded = function () {
   }
 };
 
-const showOrHideReplacedPanelCountNeeded = function () {
+const showOrHideReplacedPanelCountNeeded = async function () {
   if (
-    BG.getSettings().local_data_collection
+    settings.local_data_collection
         && License.isActiveLicense()
         && channels
-        && channels.isAnyEnabled()
+        && await channels.isAnyEnabled()
   ) {
     if (showReplacedData) {
       showReplacedData = false;
@@ -649,7 +650,7 @@ const loadUserDataFromStorage = function () {
   });
 };
 
-const getLineChartConfig = function (chartType, filterName, labelName) {
+const getLineChartConfig = async function (chartType, filterName, labelName) {
   let filterFunction = filterTodaysData;
   let createLabelFunction = createDailyLabelData;
   if (filterName === 'week') {
@@ -713,7 +714,7 @@ const getLineChartConfig = function (chartType, filterName, labelName) {
     showReplacedData
       && License.isActiveLicense()
       && channels
-      && channels.isAnyEnabled()
+      && await channels.isAnyEnabled()
   ) {
     const theReplacedChartData = filterFunction(replacedChartData);
     totalReplaced = sumChartData(theReplacedChartData);
@@ -822,12 +823,13 @@ const getLineChartConfig = function (chartType, filterName, labelName) {
   };
 };
 
-const filterBarChartDataForDateRange = function (startTime, endTime) {
+const filterBarChartDataForDateRange = async function (startTime, endTime) {
   const domainData = {};
   for (const timestamp in rawData) {
     if (!Number.isNaN(timestamp)) {
       const theDate = new Date(Number(timestamp));
       if (theDate > startTime && theDate < endTime) {
+        /* eslint-disable no-await-in-loop */
         for (const domain in rawData[timestamp].doms) {
           const cleanDomain = domain.replace(/^www\./, ''); // remove lead 'www.'
           if (cleanDomain && cleanDomain.length > 1) { // check if domain is not blank
@@ -842,7 +844,7 @@ const filterBarChartDataForDateRange = function (startTime, endTime) {
             if (subs && subs.easyprivacy && subs.easyprivacy.subscribed) {
               domainData[cleanDomain].trackers += rawData[timestamp].doms[domain].trackers;
             }
-            if (License.isActiveLicense() && channels && channels.isAnyEnabled()) {
+            if (License.isActiveLicense() && channels && await channels.isAnyEnabled()) {
               domainData[cleanDomain].adsReplaced
                 += rawData[timestamp].doms[domain].adsReplaced;
             }
@@ -857,7 +859,7 @@ const filterBarChartDataForDateRange = function (startTime, endTime) {
   return domainData;
 };
 
-const getBarChartConfig = function (chartType, filterName) {
+const getBarChartConfig = async function (chartType, filterName) {
   if (chartType !== 'bar') {
     return {};
   }
@@ -873,7 +875,7 @@ const getBarChartConfig = function (chartType, filterName) {
     startTime = earliestDate;
   }
   startTime.setHours(0, 0, 0, 0);
-  const filteredDomainData = filterBarChartDataForDateRange(startTime, endTime);
+  const filteredDomainData = await filterBarChartDataForDateRange(startTime, endTime);
   const topNineDomainArray = [];
   const barChartAdsDS = [];
   const barChartTrackersDS = [];
@@ -990,16 +992,16 @@ const getBarChartConfig = function (chartType, filterName) {
 
 // process or reprocess the raw chart data for initial display
 // or after the user clicks a menu item
-const updateChart = function (chartType = 'line', filterName, labelName) {
+const updateChart = async function (chartType = 'line', filterName, labelName) {
   showOrHideNoDataMsgIfNeeded();
   let theChartConfig = {};
   let filteredDomainData = {};
   let processedDoms = [];
   if (chartType === 'line') {
-    theChartConfig = getLineChartConfig(chartType, filterName, labelName);
+    theChartConfig = await getLineChartConfig(chartType, filterName, labelName);
   } else if (chartType === 'bar') {
     // eslint-disable-next-line max-len
-    ({ theChartConfig, filteredDomainData, processedDoms } = getBarChartConfig(chartType, filterName, labelName));
+    ({ theChartConfig, filteredDomainData, processedDoms } = await getBarChartConfig(chartType, filterName, labelName));
   } else {
     $('#adsblocked_progress_div').fadeOut(500, () => {
       $('#adsblocked_value').fadeIn(500);
@@ -1051,19 +1053,19 @@ const updateChart = function (chartType = 'line', filterName, labelName) {
   });
 };
 
-const initializeStatsTabContent = function () {
-  if (!BG.getSettings().local_data_collection) {
+const initializeStatsTabContent = async function () {
+  if (!settings.local_data_collection) {
     $('#opt-in-panel').css('display', 'flex').hide().fadeIn();
     $('li a').css({ cursor: 'default' });
     $('#stats_enable_data_collection').prop('checked', false);
     const myChartCTX = document.getElementById('myChart').getContext('2d');
     window.theChart = new Chart(myChartCTX, sampleChartConfig);
-    if (BG.getSettings().data_collection_v2) {
+    if (settings.data_collection_v2) {
       $('#opt_in_data_collection').hide();
       $('#stats_opt_in_msg').hide();
       $('#already_opt_in_msg').show();
       $('#btnStatsOptIn').html(DOMPurify.sanitize(translate('stats_opt_in_local_text_button')));
-    } else if (!BG.getSettings().data_collection_v2) {
+    } else if (!settings.data_collection_v2) {
       $('#opt_in_data_collection').css('display', 'inline');
       $('#stats_opt_in_msg').show();
       $('#already_opt_in_msg').hide();
@@ -1084,7 +1086,7 @@ const initializeStatsTabContent = function () {
       $('#trackers_cta_panel').fadeIn();
     }
     if (License.isActiveLicense()) {
-      if (channels && channels.isAnyEnabled()) {
+      if (channels && await channels.isAnyEnabled()) {
         $('#premium_cta_panel').hide();
         $('#ads_replaced_panel').css('display', 'flex').hide().fadeIn();
       } else {
@@ -1099,44 +1101,47 @@ const initializeStatsTabContent = function () {
       $('#ads_replaced_panel').hide();
     }
 
-    loadUserDataFromStorage().then(() => {
-      updateChart();
+    loadUserDataFromStorage().then(async () => {
+      await updateChart();
       $('#stats-menu-parent-panel').fadeIn();
     });
   }
 };
 
-const resetPageToInitialState = function () {
+const resetPageToInitialState = async function () {
   // reset menu selections to initial state
   $('.active-stats-menu-item').removeClass('active-stats-menu-item');
   $('#stats-menu-level1 [data-chart-type="line"]').parent().addClass('active-stats-menu-item');
   $('.active-stats-sub-menu-item').removeClass('active-stats-sub-menu-item');
   $('#timeBlocks [data-filter-function-name="today"]').parent().addClass('active-stats-sub-menu-item');
   // reset global vars
-  subs = BG.SubscriptionAdapter.getSubscriptionsMinusText();
+  subs = await SubscriptionAdapter.getSubscriptionsMinusText();
   showAdsData = false;
   showTrackerData = false;
   showReplacedData = false;
   // reset UI elements
   showOrHideAdPanelCountNeeded(true);
   showOrHideTrackerPanelCountNeeded(true);
-  showOrHideReplacedPanelCountNeeded(true);
+  await showOrHideReplacedPanelCountNeeded(true);
   // show the chart
-  initializeStatsTabContent();
+  await initializeStatsTabContent();
 };
 
-$(() => {
-  BG.LocalDataCollection.saveCacheData(() => {
-    initializeStatsTabContent();
-  });
+$(async () => {
+  await initializeProxies();
+  subs = await SubscriptionAdapter.getSubscriptionsMinusText();
+  await LocalDataCollection.saveCacheData();
+  initializeStatsTabContent();
+
   localizePage();
   // use a MutationObserver to watch if the stats tab is redisplayed.
   // the settings may have changed on another tab, which may require
   // the page to be updated.
-  const observer = new MutationObserver(((mutations) => {
+  const observer = new MutationObserver((async (mutations) => {
+    /* eslint-disable no-await-in-loop */
     for (const mutation of mutations) {
       if ($('#stats-tabs').is(':visible') && mutation.attributeName === 'style') {
-        resetPageToInitialState();
+        await resetPageToInitialState();
       }
     }
   }));
@@ -1148,21 +1153,21 @@ $(() => {
 
 // button click handlers
 
-$('#btnStatsOptIn').on('click', () => {
-  BG.LocalDataCollection.start(() => {
-    // this check is nested in a callback to prevent data loss when
-    // the setSetting function is called quickly in succession
-    if ($('#stats_enable_data_collection').is(':checked')) {
-      BG.setSetting('data_collection_v2', true);
-    }
-    window.location.reload();
-  });
+$('#btnStatsOptIn').on('click', async () => {
+  await LocalDataCollection.start();
+  // this check is nested in a callback to prevent data loss when
+  // the set setting function is called quickly in succession
+  if ($('#stats_enable_data_collection').is(':checked')) {
+    // eslint-disable-next-line camelcase
+    settings.data_collection_v2 = true;
+  }
+  window.location.reload();
 });
 
 // menu item click handlers
 
-$('#stats-menu-level2 a').on('click', function statsOptionLinkClicked() {
-  if (!BG.getSettings().local_data_collection) {
+$('#stats-menu-level2 a').on('click', async function statsOptionLinkClicked() {
+  if (!settings.local_data_collection) {
     return;
   }
   $('#no-click-overlay').show();
@@ -1179,12 +1184,12 @@ $('#stats-menu-level2 a').on('click', function statsOptionLinkClicked() {
     $('#siteBlocks-stats').css({ 'border-top-left-radius': '6px' });
   }
 
-  updateChart($('.active-stats-menu-item a').data('chart-type'),
+  await updateChart($('.active-stats-menu-item a').data('chart-type'),
     $(this).data('filter-function-name'), $(this).data('label-function-name'));
 });
 
-$('.chart-parent-tab-link').on('click', function statsOptionLinkClicked() {
-  if (!BG.getSettings().local_data_collection) {
+$('.chart-parent-tab-link').on('click', async function statsOptionLinkClicked() {
+  if (!settings.local_data_collection) {
     return;
   }
   $('#no-click-overlay').show();
@@ -1198,15 +1203,15 @@ $('.chart-parent-tab-link').on('click', function statsOptionLinkClicked() {
   }
 
   $(this).addClass('active-stats-menu-item');
-  updateChart(chartType,
+  await updateChart(chartType,
     $('.active-stats-sub-menu-item a').data('filter-function-name'),
     $('.active-stats-sub-menu-item a').data('label-function-name'));
 });
 
 // buttons on CTA panels click handlers
 
-$('#aTrackersEnable, #btnTrackersEnable').on('click', () => {
-  if (!BG.getSettings().local_data_collection) {
+$('#aTrackersEnable, #btnTrackersEnable').on('click', async () => {
+  if (!settings.local_data_collection) {
     return;
   }
   $('#no-click-overlay').show();
@@ -1215,26 +1220,30 @@ $('#aTrackersEnable, #btnTrackersEnable').on('click', () => {
   $('#trackers_cta_msg_link').parent().parent().fadeOut(100, () => {
     $('#trackers_cta_progress_div').css('display', 'flex').hide().fadeIn();
   });
-  const { easyPrivacyURL } = BG.LocalDataCollection;
-  const onStatsSubUpdated = function (item) {
+  const { easyPrivacyURL } = LocalDataCollection;
+  const onStatsSubUpdated = function (items) {
+    let item = items;
+    if (Array.isArray(items)) {
+      [item] = items;
+    }
     if (
       item
       && item.url === easyPrivacyURL
       && item.downloadStatus === 'synchronize_ok'
     ) {
-      BG.ewe.subscriptions.onAdded.removeListener(onStatsSubUpdated);
-      BG.ewe.subscriptions.onChanged.removeListener(onStatsSubUpdated);
+      SubscriptionsProxy.onAdded.removeListener(onStatsSubUpdated);
+      SubscriptionsProxy.onChanged.removeListener(onStatsSubUpdated);
       window.location.reload();
     }
   };
-  BG.ewe.subscriptions.onAdded.addListener(onStatsSubUpdated);
-  BG.ewe.subscriptions.onChanged.addListener(onStatsSubUpdated);
-  BG.ewe.subscriptions.add(easyPrivacyURL);
-  BG.ewe.subscriptions.sync(easyPrivacyURL);
+  SubscriptionsProxy.onAdded.addListener(onStatsSubUpdated);
+  SubscriptionsProxy.onChanged.addListener(onStatsSubUpdated);
+  await SubscriptionsProxy.add(easyPrivacyURL);
+  await SubscriptionsProxy.sync(easyPrivacyURL);
 });
 
 $('#btnGetPremium').on('click', () => {
-  BG.openTab(License.MAB_CONFIG.payURL);
+  send('openTab', { urlToOpen: License.MAB_CONFIG.payURL });
 });
 
 $('#btnImageSwapEnable').on('click', () => {
@@ -1243,29 +1252,29 @@ $('#btnImageSwapEnable').on('click', () => {
 
 // click handlers for the panels on the "Blocks over Time"
 
-$('#adsblocked_panel').on('click', () => {
+$('#adsblocked_panel').on('click', async () => {
   $('#no-click-overlay').show();
   $('#loadingDiv').show();
   showOrHideAdPanelCountNeeded();
-  updateChart($('.active-stats-menu-item a').data('chart-type'),
+  await updateChart($('.active-stats-menu-item a').data('chart-type'),
     $('.active-stats-sub-menu-item a').data('filter-function-name'),
     $('.active-stats-sub-menu-item a').data('label-function-name'));
 });
 
-$('#trackers_blocked_panel').on('click', () => {
+$('#trackers_blocked_panel').on('click', async () => {
   $('#no-click-overlay').show();
   $('#loadingDiv').show();
   showOrHideTrackerPanelCountNeeded();
-  updateChart($('.active-stats-menu-item a').data('chart-type'),
+  await updateChart($('.active-stats-menu-item a').data('chart-type'),
     $('.active-stats-sub-menu-item a').data('filter-function-name'),
     $('.active-stats-sub-menu-item a').data('label-function-name'));
 });
 
-$('#ads_replaced_panel').on('click', () => {
+$('#ads_replaced_panel').on('click', async () => {
   $('#no-click-overlay').show();
   $('#loadingDiv').show();
-  showOrHideReplacedPanelCountNeeded();
-  updateChart($('.active-stats-menu-item a').data('chart-type'),
+  await showOrHideReplacedPanelCountNeeded();
+  await updateChart($('.active-stats-menu-item a').data('chart-type'),
     $('.active-stats-sub-menu-item a').data('filter-function-name'),
     $('.active-stats-sub-menu-item a').data('label-function-name'));
 });
@@ -1320,24 +1329,21 @@ $('#delete_all_stats_data, #local_data_collection_opt_out').on('change', () => {
 });
 
 
-$('#btnSureDelete').on('click', () => {
-  const checkOtherCheckBox = function () {
+$('#btnSureDelete').on('click', async () => {
+  const checkOtherCheckBox = async function () {
     if ($('#local_data_collection_opt_out').is(':checked')) {
-      BG.LocalDataCollection.end(() => {
-        BG.DataCollectionV2.end(() => {
-          window.location.reload();
-        });
-      });
+      await LocalDataCollection.end();
+      await DataCollectionV2.end();
+      window.location.reload();
     } else {
       window.location.reload();
     }
   };
   if ($('#delete_all_stats_data').is(':checked')) {
-    browser.storage.local.remove(EXT_STATS_KEY).then(() => {
-      BG.LocalDataCollection.clearCache();
-      checkOtherCheckBox();
-    });
+    await browser.storage.local.remove(EXT_STATS_KEY);
+    LocalDataCollection.clearCache();
+    await checkOtherCheckBox();
   } else {
-    checkOtherCheckBox();
+    await checkOtherCheckBox();
   }
 });

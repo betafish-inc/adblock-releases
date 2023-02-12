@@ -18,7 +18,7 @@
 
 export default {
   basename: 'adblock',
-  version: '5.3.3',
+  version: '5.4.1',
   webpack: {
     bundles: [
       {
@@ -30,8 +30,7 @@ export default {
       {
         dest: 'abp-background.js',
         src: [
-          'adblock-betafish/functions.js',
-          'adblock-betafish/settings.js',
+          'adblock-betafish/prefs/settings.js',
           'vendor/adblockplusui/adblockpluschrome/lib/devtools.js',
           'vendor/adblockplusui/adblockpluschrome/lib/debug.js',
           'adblock-betafish/alias/subscriptionInit.js',
@@ -49,8 +48,10 @@ export default {
           'adblock-betafish/twitchSettings.js',
           'adblock-betafish/youtube/yt-bg.js',
           'adblock-betafish/picreplacement/distraction-control-bg.js',
+          'adblock-betafish/messaging/premium-message-responder.js',
+          'adblock-betafish/messaging/message-responder.js',
         ],
-      }
+      },
     ],
   },
   mapping: {
@@ -111,12 +112,6 @@ export default {
         src: 'adblock-betafish/fonts/font-face.css',
       },
       {
-        dest: "data/hideIfGraphMatches",
-        src: [
-          "./node_modules/@eyeo/snippets/ml/hideIfGraphMatches/*"
-        ]
-      },
-      {
         dest: 'ext',
         src: [
           'vendor/adblockplusui/adblockpluschrome/ext/**',
@@ -134,9 +129,8 @@ export default {
           'adblock-betafish/lib/*',
           'adblock-betafish/adblock.css',
           'adblock-betafish/picreplacement/contentscript-loader.js',
-          './node_modules/@eyeo/snippets/webext/snippets.json',
           'vendor/adblockplusui/adblockpluschrome/devtools.html',
-          'adblock-betafish/alias/devtools-panel.js',
+          'vendor/adblockplusui/devtools-panel.js',
           'adblock-betafish/alias/i18n.js',
           'vendor/adblockplusui/proxy.html'
         ],
@@ -190,6 +184,54 @@ export default {
       {
         dest: 'adblock-onpage-icon-user.css',
         src: 'adblock-betafish/onpageIcon/onpage-icon-user.css',
+      },
+      {
+        dest: 'adblock-options-events.js',
+        src: 'adblock-betafish/options/events.js',
+      },
+      {
+        dest: 'adblock-options-settingsproxy.js',
+        src: 'adblock-betafish/messaging/settingsproxy.js',
+      },
+      {
+        dest: 'adblock-options-prefsproxy.js',
+        src: 'adblock-betafish/messaging/prefsproxy.js',
+      },
+      {
+        dest: 'adblock-options-servermessagesproxy.js',
+        src: 'adblock-betafish/messaging/servermessagesproxy.js',
+      },
+      {
+        dest: 'adblock-options-filtersproxy.js',
+        src: 'adblock-betafish/messaging/filtersproxy.js',
+      },
+      {
+        dest: 'adblock-options-subscriptionsproxy.js',
+        src: 'adblock-betafish/messaging/subscriptionsproxy.js',
+      },
+      {
+        dest: 'adblock-options-subscriptionadapterproxy.js',
+        src: 'adblock-betafish/messaging/subscriptionadapterproxy.js',
+      },
+      {
+        dest: 'adblock-options-localdatacollectionproxy.js',
+        src: 'adblock-betafish/messaging/localdatacollectionproxy.js',
+      },
+      {
+        dest: 'adblock-options-datacollectionproxy.js',
+        src: 'adblock-betafish/messaging/datacollectionproxy.js',
+      },
+      {
+        dest: 'adblock-options-listenersupport.js',
+        src: 'adblock-betafish/messaging/listenersupport.js',
+      },
+      {
+        dest: 'adblock-options-premiumproxy.js',
+        src: 'adblock-betafish/messaging/premiumproxy.js',
+      },
+      {
+        dest: 'adblock-options-localcdnproxy.js',
+        src: 'adblock-betafish/messaging/localcdnproxy.js',
       },
       {
         dest: 'adblock-options-tabs.css',
@@ -429,19 +471,19 @@ export default {
       },
       {
         dest: 'devtools-panel.html',
-        src: 'adblock-betafish/alias/devtools-panel.html',
+        src: 'adblock-betafish/alias/devtools/devtools-panel.html',
       },
       {
         dest: 'devtools.js',
-        src: 'adblock-betafish/alias/devtools.js',
+        src: 'adblock-betafish/alias/devtools/devtools.js',
       },
       {
         dest: 'skin/devtools-panel.css',
-        src: 'adblock-betafish/alias/devtools-panel.css',
+        src: 'adblock-betafish/alias/devtools/devtools-panel.css',
       },
       {
-        dest: 'adblock-snippets.json',
-        src: './dist/adblock-snippets.json',
+        dest: 'ext/devtools.js',
+        src: 'adblock-betafish/alias/devtools/ext/devtools.js',
       },
       {
         dest: 'icons/ab-16.png',

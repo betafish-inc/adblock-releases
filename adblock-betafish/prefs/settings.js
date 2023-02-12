@@ -16,10 +16,16 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, chromeStorageSetHelper, log, logging, extend,
-  isTrustedSender */
+/* global browser */
 
-import { EventEmitter } from '../vendor/adblockplusui/adblockpluschrome/lib/events';
+import { EventEmitter } from '../../vendor/adblockplusui/adblockpluschrome/lib/events';
+
+import {
+  chromeStorageSetHelper,
+  extend,
+  log,
+  logging,
+} from '../utilities/background/bg-functions';
 
 export const settingsNotifier = new EventEmitter();
 const abpPrefPropertyNames = ['show_statsinicon', 'shouldShowBlockElementMenu', 'show_devtools_panel'];
@@ -118,13 +124,6 @@ export const getSettings = function () {
   return settings.getAll();
 };
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command !== 'getSettings') {
-    return;
-  } // not for us
-  sendResponse(getSettings());
-});
-
 export const setSetting = function (name, isEnabled, callback) {
   settings.set(name, isEnabled, callback);
 
@@ -133,26 +132,20 @@ export const setSetting = function (name, isEnabled, callback) {
   }
 };
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command === 'setSetting' && message.name && message.isEnabled && isTrustedSender(sender)) {
-    setSetting(message.name, message.isEnabled);
-    sendResponse({});
-  }
-});
-
 const disableSetting = function (name) {
   settings.set(name, false);
 };
 
-const isValidTheme = themeName => validThemes.includes(themeName);
+export const isValidTheme = themeName => validThemes.includes(themeName);
 
 // Attach methods to window
-Object.assign(window, {
+// eslint-disable-next-line no-restricted-globals
+Object.assign(self, {
   disableSetting,
   getSettings,
   setSetting,
   settings,
   settingsNotifier,
-  isValidTheme,
   abpPrefPropertyNames,
+  isValidTheme,
 });

@@ -16,9 +16,8 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, channels, createFilterMetaData, log,
-   chromeStorageDeleteHelper, chromeStorageGetHelper, createFilterMetaData,
-   chromeStorageSetHelper, getUserFilters, Prefs, abpPrefPropertyNames,
+/* global browser, channels,
+   getUserFilters, Prefs, abpPrefPropertyNames,
    adblockIsDomainPaused, PubNub, adblockIsPaused,
    pausedFilterText1, pausedFilterText2,
    isWhitelistFilter, getCustomFilterMetaData */
@@ -35,9 +34,15 @@ import { channelsNotifier } from './channels';
 import SubscriptionAdapter from '../subscriptionadapter';
 import {
   getSettings, setSetting, settingsNotifier, settings,
-} from '../settings';
+} from '../prefs/settings';
 import ServerMessages from '../servermessages';
 import postData from '../fetch-util';
+import {
+  chromeStorageDeleteHelper,
+  chromeStorageGetHelper,
+  log,
+  chromeStorageSetHelper,
+} from '../utilities/background/bg-functions';
 
 const SyncService = (function getSyncService() {
   let storedSyncDomainPauses = [];
@@ -130,7 +135,8 @@ const SyncService = (function getSyncService() {
   };
 
   const migrateSyncLog = function () {
-    if (typeof window.localStorage === 'undefined') {
+    /* eslint-disable no-restricted-globals */
+    if (typeof self.localStorage === 'undefined') {
       return;
     }
     let storedMsgs = localStorage.getItem(syncLogMessageKey);
@@ -401,6 +407,7 @@ const SyncService = (function getSyncService() {
   }
 
   const processSyncUpdate = async function (payload) {
+    log('processing sync update', payload);
     // do we need a check or comparison of payload.version vs. syncSchemaVersion ?
     if (payload.settings) {
       const keywords = Object.keys(payload.settings);
@@ -428,10 +435,11 @@ const SyncService = (function getSyncService() {
       }
     }
     if (payload.subscriptions) {
-      const currentSubs = SubscriptionAdapter.getSubscriptionsMinusText();
+      const currentSubs = await SubscriptionAdapter.getSubscriptionsMinusText();
       for (const id in currentSubs) {
         if (!payload.subscriptions[id] && currentSubs[id].subscribed) {
-          ewe.subscriptions.remove(currentSubs[id].url);
+          // eslint-disable-next-line no-await-in-loop
+          await ewe.subscriptions.remove(currentSubs[id].url);
         }
       }
       for (const id in payload.subscriptions) {
@@ -441,7 +449,8 @@ const SyncService = (function getSyncService() {
             url = id.slice(4);
           }
           if (url) {
-            ewe.subscriptions.add(url);
+            // eslint-disable-next-line no-await-in-loop
+            await ewe.subscriptions.add(url);
             ewe.subscriptions.sync(url);
           }
         }
@@ -608,42 +617,40 @@ const SyncService = (function getSyncService() {
     requestSyncData(getSuccess, getFailure, undefined, shouldForce);
   };
 
-  const getAllExtensionNames = function (callback) {
-    syncNotifier.emit('extension.names.downloading');
-    fetch(`${License.MAB_CONFIG.syncURL}/devices/list`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'X-GABSYNC-PARAMS': JSON.stringify({
-          extensionGUID: TELEMETRY.userId(),
-          licenseId: License.get().licenseId,
-          extInfo: getExtensionInfo(),
-        }),
-      },
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          const responseObj = await response.json();
-          syncNotifier.emit('extension.names.downloaded', responseObj);
-          if (typeof callback === 'function') {
-            callback(responseObj);
-          }
-          return;
-        }
-        if (response.status === 404) {
-          syncNotifier.emit('extension.names.downloading.error', response.status);
-          if (typeof callback === 'function') {
-            const text = await response.text();
-            callback(text);
-          }
-          return;
-        }
-        log('sync server error: ', response);
+  const getAllExtensionNames = function () {
+    return new Promise((resolve) => {
+      syncNotifier.emit('extension.names.downloading');
+      fetch(`${License.MAB_CONFIG.syncURL}/devices/list`, {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'X-GABSYNC-PARAMS': JSON.stringify({
+            extensionGUID: TELEMETRY.userId(),
+            licenseId: License.get().licenseId,
+            extInfo: getExtensionInfo(),
+          }),
+        },
       })
-      .catch((error) => {
-        syncNotifier.emit('extension.names.downloading.error');
-        log('sync server returned error: ', error);
-      });
+        .then(async (response) => {
+          if (response.ok) {
+            const responseObj = await response.json();
+            syncNotifier.emit('extension.names.downloaded', responseObj);
+            resolve(responseObj);
+            return;
+          }
+          if (response.status === 404) {
+            syncNotifier.emit('extension.names.downloading.error', response.status);
+            const text = await response.text();
+            resolve(text);
+            return;
+          }
+          log('sync server error: ', response);
+        })
+        .catch((error) => {
+          syncNotifier.emit('extension.names.downloading.error');
+          log('sync server returned error: ', error);
+        });
+    });
   };
 
   const setCurrentExtensionName = function (newName) {
@@ -710,14 +717,19 @@ const SyncService = (function getSyncService() {
     const payload = {};
     payload.settings = getSettings();
     payload.subscriptions = {};
-    const subscriptions = SubscriptionAdapter.getSubscriptionsMinusText();
+    const subscriptions = await SubscriptionAdapter.getSubscriptionsMinusText();
 
     for (const id in subscriptions) {
-      if (subscriptions[id].subscribed && subscriptions[id].url) {
-        if (sendFilterListByURL.includes(id)) {
-          payload.subscriptions[`url:${subscriptions[id].url}`] = subscriptions[id].url;
+      if (subscriptions[id].subscribed) {
+        const { adblockId } = subscriptions[id];
+        let { mv2URL: url } = subscriptions[id];
+        if (!url) {
+          ({ url } = subscriptions[id]);
+        }
+        if (sendFilterListByURL.includes(adblockId)) {
+          payload.subscriptions[`url:${url}`] = url;
         } else {
-          payload.subscriptions[id] = subscriptions[id].url;
+          payload.subscriptions[adblockId] = url;
         }
       }
     }
@@ -773,6 +785,8 @@ const SyncService = (function getSyncService() {
       lastPostStatusCode = 200;
       pendingPostData = false;
       chromeStorageSetHelper(syncPendingPostDataKey, pendingPostData);
+      log('sending sync \'payload\' to server', thedata);
+      log('sending sync \'thedata\' to server', payload);
       postData(License.MAB_CONFIG.syncURL, thedata).then((postResponse) => {
         lastPostStatusCode = postResponse.status;
         if (postResponse.ok) {
@@ -869,6 +883,7 @@ const SyncService = (function getSyncService() {
   // a delay is added to allow the domain pause filters time to be saved to storage
   // otherwise the domain pause filter check below would always fail
   const onFilterListsSubAdded = function (sub, calledPreviously) {
+    log('onFilterListsSubAdded', sub);
     if (calledPreviously === undefined) {
       setTimeout(() => {
         onFilterListsSubAdded(sub, true);
@@ -1122,28 +1137,28 @@ const SyncService = (function getSyncService() {
         }),
       },
     })
-    .then(async (response) => {
-      if (response.ok && typeof successCallback === 'function') {
-        const text = await response.text();
-        successCallback(text, response.status);
-      }
-      if (!response.ok) {
-        if ((response.status !== 404 || response.status !== 403) && attemptCount < 3) {
-          setTimeout(() => {
-            requestSyncData(successCallback, errorCallback, attemptCount, shouldForce);
-          }, 1000); // wait 1 second for retry
-          return;
+      .then(async (response) => {
+        if (response.ok && typeof successCallback === 'function') {
+          const text = await response.text();
+          successCallback(text, response.status);
         }
-        if (typeof errorCallback === 'function') {
-          const responseObj = await response.json();
-          errorCallback(response.status, response.status, responseObj);
+        if (!response.ok) {
+          if ((response.status !== 404 || response.status !== 403) && attemptCount < 3) {
+            setTimeout(() => {
+              requestSyncData(successCallback, errorCallback, attemptCount, shouldForce);
+            }, 1000); // wait 1 second for retry
+            return;
+          }
+          if (typeof errorCallback === 'function') {
+            const responseObj = await response.json();
+            errorCallback(response.status, response.status, responseObj);
+          }
         }
-      }
-    })
-    .catch((error) => {
-      log('message server returned error: ', error);
-      errorCallback(error.message);
-    });
+      })
+      .catch((error) => {
+        log('message server returned error: ', error);
+        errorCallback(error.message);
+      });
   };
 
   settings.onload().then(() => {
@@ -1162,34 +1177,6 @@ const SyncService = (function getSyncService() {
 
       browser.storage.local.get(syncExtensionNameKey).then((response) => {
         currentExtensionName = response[syncExtensionNameKey] || '';
-      });
-
-      browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.command === 'resetLastGetStatusCode') {
-          resetLastGetStatusCode();
-          sendResponse({});
-        }
-      });
-
-      browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.command === 'resetLastGetErrorResponse') {
-          resetLastGetErrorResponse();
-          sendResponse({});
-        }
-      });
-
-      browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.command === 'resetLastPostStatusCode') {
-          resetLastPostStatusCode();
-          sendResponse({});
-        }
-      });
-
-      browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.command === 'resetAllSyncErrors') {
-          resetAllErrors();
-          sendResponse({});
-        }
       });
     });
   });

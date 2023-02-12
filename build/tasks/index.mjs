@@ -31,4 +31,3 @@ export {
 export {
   default as sourceDistribution,
 } from './sourceDistribution.mjs';
-export { buildAdBlockSnippets } from "./ab-snippets-dependency.mjs";

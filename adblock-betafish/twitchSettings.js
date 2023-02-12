@@ -20,15 +20,15 @@
    addCustomFilter, */
 
 import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
-import setBadge from '../vendor/adblockplusui/adblockpluschrome/lib/browserAction';
-import { getSettings, settings } from './settings';
+import { setBadge } from '../vendor/adblockplusui/adblockpluschrome/lib/browserAction';
+import { getSettings, settings } from './prefs/settings';
 
 const twitchChannelNamePages = new Map();
 
 // On single page sites, such as Twitch, that update the URL using the History API pushState(),
 // they don't actually load a new page, we need to get notified when this happens
 // and update the URLs in the Page and Frame objects
-const twitchHistoryStateUpdateHandler = function (details) {
+const twitchHistoryStateUpdateHandler = async function (details) {
   if (details
       && Object.prototype.hasOwnProperty.call(details, 'frameId')
       && Object.prototype.hasOwnProperty.call(details, 'tabId')
@@ -41,7 +41,7 @@ const twitchHistoryStateUpdateHandler = function (details) {
       myPage._url = myURL;
       myFrame.url = myURL;
       myFrame._url = myURL;
-      if (ewe.filters.getAllowingFilters(myPage.id).length) {
+      if (await ewe.filters.getAllowingFilters(myPage.id).length) {
         setBadge(details.tabId, { number: '' });
       }
     }
@@ -94,7 +94,8 @@ settings.onload().then(() => {
   }
 });
 
-Object.assign(window, {
+// eslint-disable-next-line no-restricted-globals
+Object.assign(self, {
   addTwitchAllowlistListeners,
   removeTwitchAllowlistListeners,
   twitchChannelNamePages,

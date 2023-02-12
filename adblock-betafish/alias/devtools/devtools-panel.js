@@ -352,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () =>
   document.querySelector("[data-i18n='devtools_footer'] > a")
     .addEventListener("click", () =>
     {
-      ext.devtools.inspectedWindow.reload();
+      browser.devtools.inspectedWindow.reload();
     }, false);
 
   document.getElementById("filter-state").addEventListener("change", (event) =>
@@ -410,6 +410,6 @@ document.addEventListener("DOMContentLoaded", () =>
   // Since Chrome 54 the themeName is accessible, for earlier versions we must
   // assume the default theme is being used.
   // https://bugs.chromium.org/p/chromium/issues/detail?id=608869
-  const theme = ext.devtools.panels.themeName || "default";
+  const theme = browser.devtools.panels.themeName || "default";
   document.body.classList.add(theme);
 }, false);

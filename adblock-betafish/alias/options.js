@@ -1,12 +1,3 @@
-/** @module adblock-betafish/alias/options */
-/*
- * Same as the original source adblockpluschrome/lib/options.js
- * except:
- *  - the 'findOptionsPage' function will correctly find the AdBlock Options page
- *    when a hash is present in the URL.
- * /
-
-
 /*
  * This file is part of Adblock Plus <https://adblockplus.org/>,
  * Copyright (C) 2006-present eyeo GmbH
@@ -23,117 +14,120 @@
  * You should have received a copy of the GNU General Public License
  * along with Adblock Plus.  If not, see <http://www.gnu.org/licenses/>.
  */
+/*
+ * Same as the original source vendor\adblockplusui\lib\pages\options.js
+ * except:
+ *  - updated the paths to imported modules
+ *  - the 'findOptionsPage' function will correctly find the AdBlock Options page
+ *    when a hash is present in the URL.
+ *  - use import / export instead of require
+ * /
 
 /** @module options */
 
+"use strict";
 
-import * as info from "info";
-import { port } from "../../vendor/adblockplusui/adblockpluschrome/lib/messaging";
+import * as ewe from "../../vendor/webext-sdk/dist/ewe-api";
+import { port as messagingPort } from "../../vendor/adblockplusui/adblockpluschrome/lib/messaging/port";
+import { SessionStorage } from "../../vendor/adblockplusui/adblockpluschrome/lib/storage/session";
 
-const optionsUrl = browser.runtime.getManifest().options_ui.page;
+/**
+ * Key to store/retrieve an optional message to send to the options page after
+ * it opens.
+ */
+const optionsMessageKey = "optionsMessage";
 
-const openOptionsPageAPISupported =
-  // Some versions of Firefox for Android before version 57 do have a
-  // runtime.openOptionsPage but it doesn't do anything.
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1364945
-  info.application != "fennec" || parseInt(info.applicationVersion, 10) >= 57;
+let optionsPort = null;
 
-async function findOptionsPage() {
-  let tabs = await browser.tabs.query({});
-  // Firefox won't let us query for moz-extension:// pages, though
-  // starting with Firefox 56 an extension can query for its own URLs:
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1271354
-  let fullOptionsUrl = browser.runtime.getURL(optionsUrl);
-  let optionsTab = tabs.find(tab => {
-    return tab.url && tab.url.startsWith(fullOptionsUrl);
-  });
+// Firefox won't let us query for moz-extension:// pages, though
+// starting with Firefox 56 an extension can query for its own URLs:
+// https://bugzilla.mozilla.org/show_bug.cgi?id=1271354
+const optionsUrl = browser.runtime.getURL(
+  browser.runtime.getManifest().options_ui.page
+);
 
-  if (optionsTab) return optionsTab;
+const session = new SessionStorage("options");
 
-  // Newly created tabs might have about:blank as their URL in Firefox or
-  // an empty string on Chrome (80) rather than the final options page URL,
-  // we need to wait for those to finish loading.
-  let potentialOptionTabIds = new Set(
-    tabs
-      .filter(tab => (tab.url == "about:blank" || !tab.url) && tab.status == "loading")
-      .map(tab => tab.id)
-  );
-  if (potentialOptionTabIds.size == 0) return;
+async function onMessage(message, port)
+{
+  if (message.type != "app.listen")
+    return;
 
-  let removeListener;
-  let updateListener = (tabId, changeInfo, tab) => {
-    if (potentialOptionTabIds.has(tabId) && changeInfo.status == "complete") {
-      potentialOptionTabIds.delete(tabId);
-      let urlMatch = tab.url == fullOptionsUrl;
-      if (urlMatch || potentialOptionTabIds.size == 0) {
-        browser.tabs.onUpdated.removeListener(updateListener);
-        browser.tabs.onRemoved.removeListener(removeListener);
-        return urlMatch ? tab : null;
-      }
-    }
-  };
-  browser.tabs.onUpdated.addListener(updateListener);
-  removeListener = removedTabId => {
-    potentialOptionTabIds.delete(removedTabId);
-    if (potentialOptionTabIds.size == 0) {
-      browser.tabs.onUpdated.removeListener(updateListener);
-      browser.tabs.onRemoved.removeListener(removeListener);
-    }
-  };
-  browser.tabs.onRemoved.addListener(removeListener);
+  const optionsMessage = await session.get(optionsMessageKey);
+
+  if (!optionsMessage)
+    return;
+
+  await session.delete(optionsMessageKey);
+
+  port.postMessage(optionsMessage);
 }
 
-async function openOptionsPage() {
-  let opened = new Promise(resolve => {
-    function onMessage(message, optionsPort) {
-      if (message.type != "app.listen") return;
-      optionsPort.onMessage.removeListener(onMessage);
-      resolve([optionsPort.sender.tab, optionsPort]);
-    }
-
-    function onConnect(optionsPort) {
-      if (optionsPort.name != "ui") return;
-      browser.runtime.onConnect.removeListener(onConnect);
-      optionsPort.onMessage.addListener(onMessage);
-    }
-
-    browser.runtime.onConnect.addListener(onConnect);
-  });
-
-  if (openOptionsPageAPISupported) await browser.runtime.openOptionsPage();
-  else await browser.tabs.create({ url: optionsUrl });
-
-  return opened;
-}
-
-async function focusOptionsPage(tab) {
-  if (openOptionsPageAPISupported) return browser.runtime.openOptionsPage();
-
-  let focusTab = () => browser.tabs.update(tab.id, { active: true });
-
-  if ("windows" in browser) {
-    await browser.windows.update(tab.windowId, { focused: true });
-    return focusTab();
+async function onConnect(port)
+{
+  if (!ext.isTrustedSender(port.sender)){
+    return;
   }
 
-  // Firefox for Android before version 57 does not support
-  // runtime.openOptionsPage, nor does it support the windows API.
-  // Since there is effectively only one window on the mobile browser,
-  // we can just bring the tab to focus instead.
-  return focusTab();
+  if (port.name != "ui"){
+    return;
+  }
+
+  if (!port.sender.tab || !port.sender.tab.url.startsWith(optionsUrl)) {
+    return;
+  }
+
+  optionsPort = port;
+  optionsPort.onDisconnect.addListener(() =>
+  {
+    optionsPort = null;
+  });
+  optionsPort.onMessage.addListener(onMessage);
 }
+browser.runtime.onConnect.addListener(onConnect);
 
 /**
  * Opens the options page, or switches to its existing tab.
- * @returns {Promise.<Array>}
- *   Promise resolving to an Array containg the tab Object of the options page
- *   and sometimes (when the page was just opened) a messaging port.
+ * @param {Object} [message] - Message to send to options page
  */
-export async function showOptions() {
-  let existingTab = await findOptionsPage();
-  if (existingTab) return focusOptionsPage(existingTab);
-  return openOptionsPage();
+async function showOptions(message)
+{
+  await session.delete(optionsMessageKey);
+
+  // If the options page is already open, focus its tab manually to avoid
+  // potentially opening it again, due to browser.runtime.openOptionsPage()
+  // behaving differently across browsers
+  if (optionsPort)
+  {
+    // Firefox for Android doesn't support browser.windows
+    if ("windows" in browser)
+    {
+      await browser.windows.update(
+        optionsPort.sender.tab.windowId,
+        {focused: true}
+      );
+    }
+
+    await browser.tabs.update(optionsPort.sender.tab.id, {active: true});
+
+    // Send message after focusing options page
+    if (message)
+    {
+      optionsPort.postMessage(message);
+    }
+  }
+  else
+  {
+    // Send message after initializing options page
+    if (message)
+    {
+      await session.set(optionsMessageKey, message);
+    }
+
+    await browser.runtime.openOptionsPage();
+  }
 }
+export { showOptions };
 
 // We need to clear the popup URL on Firefox for Android in order for the
 // options page to open instead of the bubble. Unfortunately there's a bug[1]
@@ -141,37 +135,43 @@ export async function showOptions() {
 // Firefox from the manifest at all, instead setting it here only for
 // non-mobile.
 // [1] - https://bugzilla.mozilla.org/show_bug.cgi?id=1414613
-Promise.all([browser.browserAction.getPopup({}), browser.runtime.getPlatformInfo()]).then(
-  ([popup, platformInfo]) => {
+Promise.all([browser.action.getPopup({}),
+             browser.runtime.getPlatformInfo()]).then(
+  ([popup, platformInfo]) =>
+  {
     if (!popup && platformInfo.os != "android")
-      browser.browserAction.setPopup({ popup: "popup.html" });
+      browser.action.setPopup({popup: "popup.html"});
   }
 );
 
 // On Firefox for Android, open the options page directly when the browser
 // action is clicked.
-browser.browserAction.onClicked.addListener(async () => {
-  let [tab] = await browser.tabs.query({ active: true });
-  let currentPage = new ext.Page(tab);
+browser.action.onClicked.addListener(async() =>
+{
+  const [tab] = await browser.tabs.query({active: true});
+  const currentPage = new ext.Page(tab);
 
-  let [, optionsPort] = await showOptions();
-  if (!/^https?:$/.test(currentPage.url.protocol)) return;
+  let message = null;
+  if (/^https?:$/.test(currentPage.url.protocol))
+  {
+    const isAllowlisted = await ewe.filters.isResourceAllowlisted(
+      currentPage.url,
+      "document",
+      currentPage.id
+    );
+    message = {
+      type: "app.respond",
+      action: "showPageOptions",
+      args: [
+        {
+          host: currentPage.url.hostname.replace(/^www\./, ""),
+          allowlisted: isAllowlisted
+        }
+      ]
+    };
+  }
 
-  const isAllowlisted = ewe.filters.isResourceAllowlisted(
-    currentPage.url,
-    "document",
-    currentPage.id
-  );
-  optionsPort.postMessage({
-    type: "app.respond",
-    action: "showPageOptions",
-    args: [
-      {
-        host: currentPage.url.hostname.replace(/^www\./, ""),
-        allowlisted: isAllowlisted
-      }
-    ]
-  });
+  await showOptions(message);
 });
 
 /**
@@ -179,10 +179,8 @@ browser.browserAction.onClicked.addListener(async () => {
  * the existing tab if the options page is already open.
  *
  * @event "options.open"
- * @returns {object} optionsTab
  */
-port.on("options.open", async(message, sender) =>
+messagingPort.on("options.open", async(message, sender) =>
 {
-  const [optionsTab] = await showOptions();
-  return optionsTab;
+  await showOptions();
 });

@@ -16,11 +16,11 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global createFilterMetaData */
+/* global */
 
-import { initialize } from './alias/subscriptionInit';
 import ServerMessages from './servermessages';
 import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
+import { createFilterMetaData } from './utilities/background/bg-functions';
 
 const authorizedKeys = [
   `MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAuePfbm865kumeftXjlbt
@@ -37,17 +37,15 @@ ZLfyePid/4N3Q7obmQ9a6trOBIF5ONyg16CK61RjacnG76AMKrVOoq9lzF2UufL8
 Myzw9X8Wsw3VrjJyYbWhUtkCAwEAAQ==`,
 ];
 
-initialize.then(() => {
-  ewe.allowlisting.setAuthorizedKeys(authorizedKeys);
+ewe.allowlisting.setAuthorizedKeys(authorizedKeys);
 
-  async function onAllowlisting(domain) {
-    await ewe.filters.add([`@@||${domain}^$document`], createFilterMetaData('web'));
-  }
-  ewe.allowlisting.setAllowlistingCallback(onAllowlisting);
+async function onAllowlisting(domain) {
+  await ewe.filters.add([`@@||${domain}^$document`], createFilterMetaData('web'));
+}
+ewe.allowlisting.setAllowlistingCallback(onAllowlisting);
 
-  ewe.allowlisting.onUnauthorized.addListener((error) => {
-    ServerMessages.recordErrorMessage('one_click_allowlisting_error ', undefined, { errorMessage: error.toString() });
-    // eslint-disable-next-line no-console
-    console.error(error);
-  });
+ewe.allowlisting.onUnauthorized.addListener((error) => {
+  ServerMessages.recordErrorMessage('one_click_allowlisting_error ', undefined, { errorMessage: error.toString() });
+  // eslint-disable-next-line no-console
+  console.error(error);
 });

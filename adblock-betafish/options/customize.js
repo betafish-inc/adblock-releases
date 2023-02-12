@@ -16,21 +16,23 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, BG, optionalSettings, createFilterMetaData,
-syncErrorCode, translate, checkForSyncError, isSelectorFilter, activateTab, License,
-MABPayment, DOMPurify */
+/* global browser, createFilterMetaData, Prefs, settings,
+   syncErrorCode, translate, checkForSyncError, isSelectorFilter, activateTab, License,
+   MABPayment, DOMPurify, initializeProxies, FiltersProxy, send, sendTypeMessage  */
 
 let originalCustomFilters = [];
 
-function cleanCustomFilter(filtersArg) {
+async function cleanCustomFilter(filtersArg) {
   let filters = filtersArg;
   // Remove the global pause white-list item if adblock is paused
-  if (BG.adblockIsPaused()) {
-    filters = filters.filter(element => !(element.text === BG.pausedFilterText1
-               || element.text === BG.pausedFilterText2));
+  const isPaused = await send('adblockIsPaused');
+  if (isPaused) {
+    const pausedFilterText = await send('getPausedFilterText');
+    filters = filters.filter(element => !(element.text === pausedFilterText.pausedFilterText1
+               || element.text === pausedFilterText.pausedFilterText2));
   }
   // Remove the domain pause white-list items
-  const domainPauses = BG.adblockIsDomainPaused();
+  const domainPauses = await send('adblockIsDomainPaused');
   for (const aDomain in domainPauses) {
     filters = filters.filter(element => (element.text !== `@@${aDomain}$document`));
   }
@@ -38,9 +40,9 @@ function cleanCustomFilter(filtersArg) {
 }
 
 async function showCustomRules() {
-  const userFilters = await BG.getUserFilters();
+  const userFilters = await FiltersProxy.getUserFilters();
   if (userFilters && userFilters.length) {
-    originalCustomFilters = cleanCustomFilter(userFilters);
+    originalCustomFilters = await cleanCustomFilter(userFilters);
     originalCustomFilters = originalCustomFilters.map(filter => filter.text);
     $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));
   }
@@ -59,9 +61,9 @@ async function onFilterChange() {
     newStyle.sheet.insertRule('.btn:hover { font-weight: normal !important; cursor: unset !important; box-shadow: none !important; }', 0);
     return;
   }
-  const userFilters = await BG.getUserFilters();
+  const userFilters = await FiltersProxy.getUserFilters();
   if (userFilters && userFilters.length) {
-    originalCustomFilters = cleanCustomFilter(userFilters);
+    originalCustomFilters = await cleanCustomFilter(userFilters);
     originalCustomFilters = originalCustomFilters.map(filter => filter.text);
     $('#txtFiltersAdvanced').val(originalCustomFilters.join('\n'));
   } else {
@@ -73,7 +75,10 @@ async function onFilterChange() {
 const excludeFiltersKey = 'exclude_filters';
 
 $(async () => {
-  $('#tutorlink').attr('href', BG.Prefs.getDocLink('filterdoc'));
+  await initializeProxies();
+
+  const doclinks = await sendTypeMessage('app.get', { what: 'doclink', link: 'filterdoc' });
+  $('#tutorlink').attr('href', doclinks);
 
   const getExcludeFilters = function () {
     browser.storage.local.get(excludeFiltersKey).then((response) => {
@@ -122,8 +127,7 @@ $(async () => {
         newCount[host] = (newCount[host] || 0) + 1;
       }
     }
-
-    BG.updateCustomFilterCountMap(newCount);
+    send('updateCustomFilterCountMap', { countMap: newCount });
   }
 
   /**
@@ -147,101 +151,103 @@ $(async () => {
     return true;
   }
 
+  /**
+   * Shows the error message to the users
+   *
+   * @param {string} filterErrorMessage The error message to the user
+   */
+  function showErrorMessage(filterErrorMessage) {
+    $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
+    $('#messagecustom').removeClass('do-not-display');
+  }
+
   async function saveFilters() {
     const customFiltersText = $('#txtFiltersAdvanced').val();
     const customFiltersArray = customFiltersText.split('\n');
     let filterErrorMessage = '';
     $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
 
-    /* eslint-disable-next-line no-await-in-loop */
-    for (let i = 0; (!filterErrorMessage && i < customFiltersArray.length); i++) {
-      const filter = customFiltersArray[i].trim();
-
-      if (filter.length === 0) {
-        // empty line, move on to next item
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-
-      const errors = await browser.runtime.sendMessage({
-        type: 'filters.validate',
-        text: filter,
-      });
-
-      if (errors && errors.length) {
-        filterErrorMessage = translate(
-          'customfilterserrormessage',
-          [filter, translate(errors[0].reason || errors[0].type) || translate('filter_invalid')],
-        );
-      } else if (isSelectorFilter(filter) && !hasValidQueryString(filter)) {
-        filterErrorMessage = translate(
-          'customfilterserrormessage',
-          [filter, translate('filter_invalid_css')],
-        );
+    // Since we might be processing a large number of changes at once,
+    // remove the filter change handler, so we don't cause a race condition
+    FiltersProxy.onAdded.removeListener(onFilterChange);
+    FiltersProxy.onChanged.removeListener(onFilterChange);
+    FiltersProxy.onRemoved.removeListener(onFilterChange);
+    const isPaused = await send('adblockIsPaused');
+    if (isPaused) {
+      customFiltersArray.push('@@');
+      customFiltersArray.push('@@^$document');
+    }
+    // remove duplicates
+    /* eslint-disable-next-line max-len  */
+    const uniqCustomFilters = customFiltersArray.filter((item, inx) => customFiltersArray.indexOf(item) === inx);
+    const newFiltersToAdd = [];
+    // only add 'new' filters
+    for (let i = 0; (i < uniqCustomFilters.length && !filterErrorMessage); i++) {
+      let filterToAdd = uniqCustomFilters[i];
+      filterToAdd = filterToAdd.trim();
+      if (!originalCustomFilters.includes(filterToAdd) && filterToAdd) {
+        if (filterToAdd
+          && isSelectorFilter(filterToAdd)
+          && !hasValidQueryString(filterToAdd)
+        ) {
+          filterErrorMessage = translate(
+            'customfilterserrormessage',
+            [filterToAdd, translate('filter_invalid_css')],
+          );
+        }
+        newFiltersToAdd.push(filterToAdd);
       }
     }
-
     if (filterErrorMessage) {
-      $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
-      $('#messagecustom').removeClass('do-not-display');
-    } else {
-      // Since we might be processing a large number of changes at once,
-      // remove the filter change handler, so we don't cause a race condition
-      BG.ewe.filters.onAdded.removeListener(onFilterChange);
-      BG.ewe.filters.onChanged.removeListener(onFilterChange);
-      BG.ewe.filters.onRemoved.removeListener(onFilterChange);
-      if (BG.adblockIsPaused()) {
-        customFiltersArray.push('@@');
-        customFiltersArray.push('@@^$document');
-      }
-      // remove duplicates
-      /* eslint-disable-next-line max-len  */
-      const uniqCustomFilters = customFiltersArray.filter((item, inx) => customFiltersArray.indexOf(item) === inx);
-      let filterToAdd;
-      try {
-        /* eslint-disable-next-line no-await-in-loop */
-        for (let i = 0; (i < uniqCustomFilters.length); i++) {
-          filterToAdd = uniqCustomFilters[i];
-          filterToAdd = filterToAdd.trim();
-          if (!originalCustomFilters.includes(filterToAdd) && filterToAdd) {
-            await BG.ewe.filters.add([filterToAdd], createFilterMetaData('customize'));
-          }
+      showErrorMessage(filterErrorMessage);
+      return;
+    }
+
+    if (newFiltersToAdd.length) {
+      const errors = await FiltersProxy.add(newFiltersToAdd.join('\n'), 'customize');
+      if (errors) {
+        const { filter, reason, type } = errors;
+        // if multiple errors are returned, only show the first one.
+        if (filter) {
+          filterErrorMessage = translate(
+            'customfilterserrormessage',
+            [filter, translate(reason || type) || translate('filter_invalid')],
+          );
+        } else {
+          filterErrorMessage = translate(reason || type) || translate('filter_invalid');
         }
-      } catch (error) {
-        filterErrorMessage = translate(
-          'customfilterserrormessage',
-          [filterToAdd, translate(error.reason || error.type) || translate('filter_invalid')],
-        );
-        $('#messagecustom').html(DOMPurify.sanitize(filterErrorMessage, { SAFE_FOR_JQUERY: true }));
-        $('#messagecustom').removeClass('do-not-display');
+        showErrorMessage(filterErrorMessage);
         return;
       }
+    }
 
-      // Delete / remove filters the user removed...
-      if (originalCustomFilters) {
-        /* eslint-disable-next-line no-await-in-loop */
-        for (let i = 0; (i < originalCustomFilters.length); i++) {
-          const filter = originalCustomFilters[i];
-          if (!customFiltersArray.includes(filter) && filter) {
-            const filterText = filter.trim();
-            if (filterText.length > 0) {
-              await BG.ewe.filters.remove([filterText]);
-            }
+    // Delete / remove filters the user removed...
+    if (originalCustomFilters) {
+      const filtersToDelete = [];
+      for (let i = 0; (i < originalCustomFilters.length); i++) {
+        const filter = originalCustomFilters[i];
+        if (!customFiltersArray.includes(filter) && filter) {
+          const filterText = filter.trim();
+          if (filterText.length > 0) {
+            filtersToDelete.push(filterText);
           }
         }
       }
-
-      originalCustomFilters = customFiltersArray || [];
-      updateCustomFiltersCount(customFiltersText);
-      await showCustomRules();
-      $('#divAddNewFilter').slideDown();
-      $('#txtFiltersAdvanced').prop('disabled', true);
-      $('#spanSaveButton').hide();
-      $('#btnEditAdvancedFilters').show();
-      BG.ewe.filters.onAdded.addListener(onFilterChange);
-      BG.ewe.filters.onChanged.addListener(onFilterChange);
-      BG.ewe.filters.onRemoved.addListener(onFilterChange);
+      if (filtersToDelete.length) {
+        await FiltersProxy.remove(filtersToDelete);
+      }
     }
+
+    originalCustomFilters = customFiltersArray || [];
+    updateCustomFiltersCount(customFiltersText);
+    await showCustomRules();
+    $('#divAddNewFilter').slideDown();
+    $('#txtFiltersAdvanced').prop('disabled', true);
+    $('#spanSaveButton').hide();
+    $('#btnEditAdvancedFilters').show();
+    FiltersProxy.onAdded.addListener(onFilterChange);
+    FiltersProxy.onChanged.addListener(onFilterChange);
+    FiltersProxy.onRemoved.addListener(onFilterChange);
   }
 
   // Add a custom filter to the list
@@ -342,7 +348,7 @@ $(async () => {
   }));
 
   // The validation functions
-  $('#txtBlacklist').on('input', checkForSyncError(() => {
+  $('#txtBlacklist').on('input', checkForSyncError(async () => {
     let blacklist = toTildePipeFormat($('#txtBlacklist').val());
 
     if (blacklist) {
@@ -352,9 +358,9 @@ $(async () => {
     let filterErrorMessage = '';
     $('#messageBlacklist').text(filterErrorMessage);
     $('#messageBlacklist').hide();
-    const result = BG.ewe.filters.validate(blacklist);
+    const result = await FiltersProxy.validate(blacklist);
 
-    if (result) {
+    if (result && result.length > 0) {
       $('#btnAddBlacklist').prop('disabled', true);
       filterErrorMessage = translate('customfilterserrormessage', [$('#txtBlacklist').val(), translate(result.type || result.reason)]);
       $('#messageBlacklist').text(filterErrorMessage);
@@ -365,7 +371,7 @@ $(async () => {
     $('#btnAddBlacklist').prop('disabled', false);
   }));
 
-  $('#divUrlBlock input[type=\'text\']').on('input', checkForSyncError(() => {
+  $('#divUrlBlock input[type=\'text\']').on('input', checkForSyncError(async () => {
     const blockUrl = $('#txtBlockUrl').val().trim();
     let blockDomain = $('#txtBlockUrlDomain').val().trim();
     if (blockDomain === '*') {
@@ -375,29 +381,29 @@ $(async () => {
     if (blockDomain) {
       blockDomain = `$domain=${blockDomain}`;
     }
-    const result = BG.ewe.filters.validate(blockUrl + blockDomain);
-    $('#btnAddUrlBlock').prop('disabled', (result) ? true : null);
+    const result = await FiltersProxy.validate(blockUrl + blockDomain);
+    $('#btnAddUrlBlock').prop('disabled', (result && result.length === 0) ? null : true);
   }));
 
-  $('#divCssBlock input[type=\'text\']').on('input', checkForSyncError(() => {
+  $('#divCssBlock input[type=\'text\']').on('input', checkForSyncError(async () => {
     const blockCss = $('#txtUserFilterCss').val().trim();
     let blockDomain = $('#txtUserFilterDomain').val().trim();
     if (blockDomain === '*') {
       blockDomain = '';
     }
 
-    const result = BG.ewe.filters.validate(`${blockDomain}##${blockCss}`);
-    $('#btnAddUserFilter').prop('disabled', (result) ? true : null);
+    const result = await FiltersProxy.validate(`${blockDomain}##${blockCss}`);
+    $('#btnAddUserFilter').prop('disabled', (result && result.length === 0) ? null : true);
   }));
 
-  $('#divExcludeBlock input[type=\'text\']').on('input', checkForSyncError(() => {
+  $('#divExcludeBlock input[type=\'text\']').on('input', checkForSyncError(async () => {
     const unblockUrl = $('#txtUnblock').val().trim();
-    let result = BG.ewe.filters.validate(`@@${unblockUrl}$document`);
+    let result = await FiltersProxy.validate(`@@${unblockUrl}$document`);
     if (!unblockUrl || isSelectorFilter(unblockUrl)) {
       result = true;
     }
 
-    $('#btnAddExcludeFilter').prop('disabled', (result) ? true : null);
+    $('#btnAddExcludeFilter').prop('disabled', (result && result.length === 0) ? null : true);
   }));
 
   // When one presses 'Enter', pretend it was a click on the 'add' button
@@ -458,7 +464,7 @@ $(async () => {
 
   $('#btnSaveExcludeAdvancedFilters').on('click', checkForSyncError(() => {
     const excludeFiltersText = $('#txtExcludeFiltersAdvanced').val();
-    BG.ExcludeFilter.setExcludeFilters(excludeFiltersText);
+    send('ExcludeFilter.setExcludeFilters', { filters: excludeFiltersText });
     $('#divAddNewFilter').slideDown();
     $('#txtExcludeFiltersAdvanced').attr('disabled', 'disabled');
     $('#spanSaveExcludeButton').hide();
@@ -468,18 +474,13 @@ $(async () => {
 
   showCustomRules();
 
-  if (optionalSettings && optionalSettings.show_advanced_options) {
+  if (settings && settings.show_advanced_options) {
     $('#divExcludeFilters').show();
   }
 
-  BG.ewe.filters.onAdded.addListener(onFilterChange);
-  BG.ewe.filters.onChanged.addListener(onFilterChange);
-  BG.ewe.filters.onRemoved.addListener(onFilterChange);
-  window.addEventListener('unload', () => {
-    BG.ewe.filters.onAdded.removeListener(onFilterChange);
-    BG.ewe.filters.onChanged.removeListener(onFilterChange);
-    BG.ewe.filters.onRemoved.removeListener(onFilterChange);
-  });
+  FiltersProxy.onAdded.addListener(onFilterChange);
+  FiltersProxy.onChanged.addListener(onFilterChange);
+  FiltersProxy.onRemoved.addListener(onFilterChange);
 
   if (!License || $.isEmptyObject(License) || !MABPayment) {
     return;

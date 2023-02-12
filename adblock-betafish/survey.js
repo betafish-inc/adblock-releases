@@ -24,16 +24,18 @@
 
 import { Prefs } from 'prefs';
 import { domainSuffixes, parseDomains } from 'adblockpluscore/lib/url';
-import { getSettings } from './settings';
+import { getSettings } from './prefs/settings';
 import { getBlockedPerPage } from '../vendor/adblockplusui/adblockpluschrome/lib/stats';
 import OnPageIconManager from './onpageIcon/onpage-icon-bg';
 import postData from './fetch-util';
+import { chromeStorageGetHelper, log, chromeStorageSetHelper } from './utilities/background/bg-functions';
 
 
 const SURVEY = (function getSurvey() {
   // Only allow one survey per browser startup, to make sure users don't get
   // spammed due to bugs in AdBlock / the ping server / the browser.
   let surveyAllowed = true;
+  const SURVEY_DATA_KEY = 'ab.survey.data';
 
   // True if we are willing to show an overlay on this tab.
   const validTab = function (tab) {
@@ -111,34 +113,140 @@ const SURVEY = (function getSurvey() {
   // Inputs:
   //   surveyData: JSON survey information from ping server
   //   callback(): called with no arguments if the survey should be shown
-  const shouldShowSurvey = function (surveyData, callback) {
+  const shouldShowSurvey = async function (surveyData) {
     // Check if we should show survey only if it can actually be shown
     // based on surveyAllowed.
     log('shouldShowSurvey::surveyAllowed: ', surveyAllowed);
-    if (surveyAllowed) {
-      const data = { cmd: 'survey', u: TELEMETRY.userId(), sid: surveyData.survey_id };
-      if (TELEMETRY.flavor === 'E' && Prefs.blocked_total) {
-        data.b = Prefs.blocked_total;
-      }
-
-      postData(TELEMETRY.statsUrl, data).then(async (response) => {
-        if (response.ok) {
-          const dataObj = await response.json();
-          if (dataObj && dataObj.should_survey === 'true' && surveyAllowed) {
-            // for icon surveys, the surveyAllowed is set to false when
-            // the user engages / mouse's over the icon
-            if (surveyData.type !== 'icon') {
-              surveyAllowed = false;
-            }
-            callback(dataObj);
-          }
-          return;
+    if (!surveyAllowed) {
+      return null;
+    }
+    const data = { cmd: 'survey', u: TELEMETRY.userId(), sid: surveyData.survey_id };
+    if (TELEMETRY.flavor === 'E' && Prefs.blocked_total) {
+      data.b = Prefs.blocked_total;
+    }
+    const response = await postData(TELEMETRY.statsUrl, data);
+    if (response.ok) {
+      const dataObj = await response.json();
+      if (dataObj && dataObj.should_survey === 'true' && surveyAllowed) {
+        // for icon surveys, the surveyAllowed is set to false when
+        // the user engages / mouse's over the icon
+        if (surveyData.type !== 'icon') {
+          surveyAllowed = false;
         }
-        log('bad response from ping', response);
-      })
-        .catch((error) => {
-          log('ping server returned error: ', error);
+        return dataObj;
+      }
+    }
+    log('bad response from ping', response);
+    return null;
+  };
+
+  const validateIconSurveyData = function (surveyData) {
+    if (!surveyData) {
+      return false;
+    }
+    if (surveyData.type !== 'icon') {
+      return false;
+    }
+    if (!surveyData.survey_id) {
+      return false;
+    }
+    if (!surveyData.domains || typeof surveyData.domains !== 'string') {
+      return false;
+    }
+    if (surveyData.block_count && typeof surveyData.block_count !== 'number') {
+      return false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(surveyData, 'block_count')) {
+      return false;
+    }
+    if (!surveyData.user_state || typeof surveyData.user_state !== 'string') {
+      return false;
+    }
+    return true;
+  };
+
+  const doesLicenseMatch = function (surveyData) {
+    if (surveyData.user_state === 'all') {
+      return true;
+    }
+    const license = License && License.get();
+    if (license && license.status === 'active' && surveyData.user_state === 'active') {
+      return true;
+    }
+    if (license && !license.status && surveyData.user_state === 'free') {
+      return true;
+    }
+    return false;
+  };
+
+  const tabListener = async function (updatedTabId, changeInfo, tab) {
+    const shouldShowOnPageIcon = async function (surveyData) {
+      const responseData = await shouldShowSurvey(surveyData);
+      log('shouldShowSurvey:: responseData', responseData);
+      if (
+        responseData
+        && responseData.survey_id === surveyData.survey_id
+        && responseData.should_survey === 'true'
+        && responseData.type === 'icon'
+        && responseData.icon_options
+      ) {
+        OnPageIconManager.showOnPageIcon(tab.id, tab.url, {
+          titlePrefixText: responseData.icon_options.title_prefix_text,
+          titleText: responseData.icon_options.title_text,
+          msgText: responseData.icon_options.msg_text,
+          buttonText: responseData.icon_options.button_text,
+          ctaIconURL: responseData.icon_options.cta_icon_url,
+          buttonURL: responseData.icon_options.button_url,
+          surveyId: responseData.survey_id,
         });
+      } else {
+        // clean up, if we were told to not show the survey
+        browser.storage.local.remove(SURVEY_DATA_KEY);
+      }
+    };
+
+    const surveyData = await chromeStorageGetHelper(SURVEY_DATA_KEY);
+    if (!surveyData || !validateIconSurveyData(surveyData)) {
+      browser.tabs.onUpdated.removeListener(tabListener);
+      return;
+    }
+    const parsedDomains = parseDomains(surveyData.domains, ',');
+    if (changeInfo.status === 'complete' && tab.status === 'complete' && validTab(tab)) {
+      const myURL = new URL(tab.url);
+      const cleanDomain = myURL.hostname;
+      log('processIcon:: surveyData', surveyData);
+      log('processIcon:: parsedDomains', parsedDomains);
+      log('processIcon:: checking if isActiveOnDomain', cleanDomain, isActiveOnDomain(cleanDomain, parsedDomains));
+      log('processIcon:: checking if isRestricted', isRestricted(myURL));
+      if (isActiveOnDomain(cleanDomain, parsedDomains) && !isRestricted(myURL)) {
+        log('processIcon:: block count check', await getBlockedPerPage(tab), surveyData.block_count);
+        if (surveyData.block_count <= await getBlockedPerPage(tab)) {
+          shouldShowOnPageIcon(surveyData);
+        }
+      }
+    }
+  };
+
+  const surveyMsgListener = async function (message, sender, sendResponse) {
+    const surveyData = await chromeStorageGetHelper(SURVEY_DATA_KEY);
+    if (!surveyData || !validateIconSurveyData(surveyData)) {
+      browser.runtime.onMessage.removeListener(surveyMsgListener);
+      return;
+    }
+    if (message.onpageiconevent === 'mouseenter') {
+      surveyAllowed = false;
+      browser.runtime.onMessage.removeListener(surveyMsgListener);
+      browser.tabs.onUpdated.removeListener(tabListener);
+      browser.storage.local.remove(SURVEY_DATA_KEY);
+      const tabs = await browser.tabs.query({ url: '*://*/*' });
+      for (const theTab of tabs) {
+        if (theTab.id !== sender.tab.id && theTab.url && theTab.url.startsWith('http')) {
+          browser.tabs.sendMessage(theTab.id, { command: 'removeIcon' }).catch(() => {
+            // ignore error
+          });
+        }
+      }
+      sendResponse({});
     }
   };
 
@@ -160,104 +268,19 @@ const SURVEY = (function getSurvey() {
   // step 9 show the adblock icon on the tab
   // step 10 when the user interacts with the icon, remove tab listener
   const processIcon = function (surveyData) {
-    const validateIconSurveyData = function () {
-      if (!surveyData) {
-        return false;
-      }
-      if (!surveyData.survey_id) {
-        return false;
-      }
-      if (!surveyData.domains || typeof surveyData.domains !== 'string') {
-        return false;
-      }
-      if (surveyData.block_count && typeof surveyData.block_count !== 'number') {
-        return false;
-      }
-      if (!Object.prototype.hasOwnProperty.call(surveyData, 'block_count')) {
-        return false;
-      }
-      if (!surveyData.user_state || typeof surveyData.user_state !== 'string') {
-        return false;
-      }
-      return true;
-    };
-
-    const doesLicenseMatch = function () {
-      if (surveyData.user_state === 'all') {
-        return true;
-      }
-      if (License && License.get() && License.get().status === 'active' && surveyData.user_state === 'active') {
-        return true;
-      }
-      if (License && License.get() && !License.get().status && surveyData.user_state === 'free') {
-        return true;
-      }
-      return false;
-    };
-
-    const parsedDomains = parseDomains(surveyData.domains, ',');
-
-    const tabListener = function (updatedTabId, changeInfo, tab) {
-      const shouldShowOnPageIcon = function () {
-        shouldShowSurvey(surveyData, (responseData) => {
-          log('shouldShowSurvey::responseData:', responseData);
-          if (
-            responseData.survey_id === surveyData.survey_id
-            && responseData.should_survey === 'true'
-            && responseData.type === 'icon'
-            && responseData.icon_options
-          ) {
-            OnPageIconManager.showOnPageIcon(tab.id, tab.url, {
-              titlePrefixText: responseData.icon_options.title_prefix_text,
-              titleText: responseData.icon_options.title_text,
-              msgText: responseData.icon_options.msg_text,
-              buttonText: responseData.icon_options.button_text,
-              ctaIconURL: responseData.icon_options.cta_icon_url,
-              buttonURL: responseData.icon_options.button_url,
-              surveyId: responseData.survey_id,
-            });
-          }
-        });
-      };
-
-      if (changeInfo.status === 'complete' && tab.status === 'complete' && validTab(tab)) {
-        const myURL = new URL(tab.url);
-        const cleanDomain = myURL.hostname;
-        log('processIcon:: checking if isActiveOnDomain', cleanDomain, isActiveOnDomain(cleanDomain, parsedDomains));
-        log('processIcon:: checking if isRestricted', isRestricted(myURL));
-        if (isActiveOnDomain(cleanDomain, parsedDomains) && !isRestricted(myURL)) {
-          log('processIcon:: block count check', getBlockedPerPage(tab), surveyData.block_count);
-          if (surveyData.block_count <= getBlockedPerPage(tab)) {
-            shouldShowOnPageIcon();
-          }
-        }
-      }
-    };
-
-    const surveyMsgListener = function (message, sender, sendResponse) {
-      if (message.onpageiconevent === 'mouseenter') {
-        surveyAllowed = false;
-        browser.runtime.onMessage.removeListener(surveyMsgListener);
-        browser.tabs.onUpdated.removeListener(tabListener);
-        browser.tabs.query({ url: '*://*/*' }).then((tabs) => {
-          for (const theTab of tabs) {
-            if (theTab.id !== sender.tab.id && theTab.url && theTab.url.startsWith('http')) {
-              browser.tabs.sendMessage(theTab.id, { command: 'removeIcon' }).catch(() => {
-                // ignore error
-              });
-            }
-          }
-        });
-        sendResponse({});
-      }
-    };
-
-    log('processIcon:: is survey data valid? ', validateIconSurveyData());
-    log('processIcon:: is license status match? ', doesLicenseMatch());
+    log('processIcon:: surveyData', surveyData);
+    log('processIcon:: is survey data valid? ', validateIconSurveyData(surveyData));
+    log('processIcon:: is license status match? ', doesLicenseMatch(surveyData));
     log('processIcon:: is settting enabled? ', getSettings().onpageMessages);
-    if (getSettings().onpageMessages && validateIconSurveyData() && doesLicenseMatch()) {
+    if (
+      getSettings().onpageMessages
+      && validateIconSurveyData(surveyData)
+      && doesLicenseMatch(surveyData)
+    ) {
+      chromeStorageSetHelper(SURVEY_DATA_KEY, surveyData);
       browser.runtime.onMessage.removeListener(surveyMsgListener);
       browser.runtime.onMessage.addListener(surveyMsgListener);
+      browser.tabs.onUpdated.removeListener(tabListener);
       browser.tabs.onUpdated.addListener(tabListener);
     }
   };
@@ -290,37 +313,53 @@ const SURVEY = (function getSurvey() {
     return surveyData;
   };
 
-  // open a Tab for a full page survey
-  const processTab = function (surveyData) {
-    const openTabIfAllowed = function () {
-      setTimeout(() => {
-        shouldShowSurvey(surveyData, (responseData) => {
-          browser.tabs.create({ url: `https://getadblock.com/${responseData.open_this_url}` });
-        });
-      }, 10000); // 10 seconds
-    };
+  const openTabIfAllowed = async function (surveyData) {
+    if (surveyData && surveyData.type === 'tab') {
+      const responseData = await shouldShowSurvey(surveyData);
+      browser.storage.local.remove(SURVEY_DATA_KEY);
+      if (responseData && responseData.open_this_url) {
+        browser.tabs.create({ url: `https://getadblock.com/${responseData.open_this_url}` });
+      }
+    }
+  };
 
-    const waitForUserAction = function () {
+  const waitForUserAction = async function () {
+    const surveyData = await chromeStorageGetHelper(SURVEY_DATA_KEY);
+    if (!surveyData) {
       browser.tabs.onCreated.removeListener(waitForUserAction);
-      openTabIfAllowed();
-    };
+      return;
+    }
+    openTabIfAllowed(surveyData);
+  };
 
-    browser.idle.queryState(60).then((state) => {
+  // open a Tab for a full page survey
+  const processTab = async function (surveyData) {
+    if (getSettings().onpageMessages) {
+      chromeStorageSetHelper(SURVEY_DATA_KEY, surveyData);
+      const state = await browser.idle.queryState(60);
       if (state === 'active') {
-        openTabIfAllowed();
+        openTabIfAllowed(surveyData);
       } else {
         browser.tabs.onCreated.removeListener(waitForUserAction);
         browser.tabs.onCreated.addListener(waitForUserAction);
       }
-    });
+    }
   }; // end of processTab()
+
+  browser.runtime.onMessage.removeListener(surveyMsgListener);
+  browser.runtime.onMessage.addListener(surveyMsgListener);
+  browser.tabs.onUpdated.addListener(tabListener);
+  browser.tabs.onCreated.removeListener(waitForUserAction);
+  browser.tabs.onCreated.addListener(waitForUserAction);
 
   return {
     maybeSurvey(responseData) {
       if (getSettings().show_survey === false) {
+        log('maybeSurvey::show_survey === false, returning');
         return;
       }
       if (getSettings().suppress_surveys) {
+        log('maybeSurvey::suppress_surveys === true, returning');
         return;
       }
 

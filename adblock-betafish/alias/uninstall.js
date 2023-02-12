@@ -15,30 +15,28 @@ export function setUninstallURL() {
       // AdBlock installed
       if (Prefs && Prefs.blocked_total !== undefined) {
         let twoMinutes = 2 * 60 * 1000;
-        let getABCLastUpdateTime = function () {
-          const userSubs = SubscriptionAdapter.getAllSubscriptionsMinusText();
-          if (userSubs["adblock_custom"] && userSubs["adblock_custom"].lastDownload) {
-            return userSubs["adblock_custom"].lastDownload;
+        let getLastUpdateTime = async function () {
+          const userSubs = await SubscriptionAdapter.getSubscriptionsMinusText();
+          let maxLastDownload = -1;
+          for (const sub in userSubs) {
+              if (userSubs[sub].lastSuccess > maxLastDownload) {
+                  maxLastDownload = userSubs[sub].lastSuccess;
+              }
           }
-          return null;
+          return maxLastDownload;
         };
-        let updateUninstallURL = function () {
-          browser.storage.local.get("blockage_stats").then(data => {
-            let url = uninstallURL;
-            if (data && data.blockage_stats && data.blockage_stats.start) {
-              let installedDuration = Date.now() - data.blockage_stats.start;
-              url = url + "&t=" + installedDuration;
-            }
-            let bc = Prefs.blocked_total;
-            url = url + "&bc=" + bc;
-            let lastUpdateTime = getABCLastUpdateTime();
-            if (lastUpdateTime !== null) {
-              url = url + "&abc-lt=" + lastUpdateTime;
-            } else {
-              url = url + "&abc-lt=-1";
-            }
-            browser.runtime.setUninstallURL(url);
-          });
+        let updateUninstallURL = async function () {
+          const data = await browser.storage.local.get("blockage_stats");
+          let url = uninstallURL;
+          if (data && data.blockage_stats && data.blockage_stats.start) {
+            let installedDuration = Date.now() - data.blockage_stats.start;
+            url = url + "&t=" + installedDuration;
+          }
+          let bc = Prefs.blocked_total;
+          url = url + "&bc=" + bc;
+          let lastUpdateTime = await getLastUpdateTime();
+          url = url + "&lt=" + lastUpdateTime;
+          browser.runtime.setUninstallURL(url);
         };
         // start an interval timer that will update the Uninstall URL every 2
         // minutes
@@ -50,4 +48,3 @@ export function setUninstallURL() {
     }); // end of TELEMETRY.untilLoaded
   }
 };
-

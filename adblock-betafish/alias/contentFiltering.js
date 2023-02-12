@@ -24,63 +24,12 @@
 /** @module contentFiltering */
 
 import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
+import * as snippets from "@eyeo/snippets";
 
-let snippetsSource = {};
-
-function loadSnippets() {  
-  return new Promise(async (resolve) => {
-    try {
-      let response = await fetch(
-        browser.runtime.getURL("/snippets.json"),
-        {cache: "no-cache"}
-      );
-      if (!response.ok) {
-        return;
-      }
-
-      snippetsSource = await response.json();
-      ewe.snippets.setLibrary(snippetsSource);
-      resolve();
-    }
-    catch (e) {
-      // If the request fails, the snippets library is not
-      // bundled with the extension, so we silently ignore this error.
-      resolve();
-    }
+function loadSnippets() {
+  ewe.snippets.setLibrary({
+    injectedCode: snippets.injected,
+    isolatedCode: snippets.isolated
   });
 };
-const snippetPromise = loadSnippets();
-
-export const loadAdBlockSnippets = function () {
-  snippetPromise.then(async () => {
-    try {
-      let response =
-        await fetch(browser.runtime.getURL("/adblock-snippets.json"),
-          { cache: "no-cache" });
-      
-      if (!response.ok) {
-          return;      
-      }
-      
-      let ABsnippetsSource = await response.json();
-  
-      if (ABsnippetsSource.injectedCode) {
-        snippetsSource.injectedCode = snippetsSource.injectedCode + ABsnippetsSource.injectedCode;
-      }
-      if (ABsnippetsSource.injectedList) {
-        snippetsSource.injectedList = snippetsSource.injectedList.concat(ABsnippetsSource.injectedList);
-      }
-      if (ABsnippetsSource.isolatedCode) {
-        snippetsSource.isolatedCode = snippetsSource.isolatedCode + ABsnippetsSource.isolatedCode;
-      }
-      ewe.snippets.setLibrary(snippetsSource);
-    }
-    catch (e) {
-      // If the request fails, the snippets library is not
-      // bundled with the extension, so we silently ignore this error.
-    }
-  });
-};
-
-
-
+loadSnippets();

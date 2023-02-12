@@ -16,26 +16,32 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global ext, browser, chromeStorageSetHelper, migrateData,
-   chromeStorageGetHelper, log, storageSet,
-   translate, reloadOptionsPageTabs, openTab,
+/* global ext, browser, translate, openTab,
    emitPageBroadcast, isTrustedSenderDomain */
 
 
 // Yes, you could hack my code to not check the license.  But please don't.
 // Paying for this extension supports the work on AdBlock.  Thanks very much.
 
-import * as ewe from '../../vendor/webext-sdk/dist/ewe-api';
 import { EventEmitter } from '../../vendor/adblockplusui/adblockpluschrome/lib/events';
+import { TabSessionStorage } from '../../vendor/adblockplusui/adblockpluschrome/lib/storage/tab-session';
+
 import { TELEMETRY } from '../telemetry';
 import { Channels } from './channels';
-import { getSettings, setSetting } from '../settings';
-import { loadAdBlockSnippets } from '../alias/contentFiltering';
+import { getSettings, setSetting } from '../prefs/settings';
 import { showIconBadgeCTA, NEW_BADGE_REASONS } from '../alias/icon';
 import { initialize } from '../alias/subscriptionInit';
 import ServerMessages from '../servermessages';
 import SubscriptionAdapter from '../subscriptionadapter';
 import postData from '../fetch-util';
+import {
+  chromeStorageSetHelper,
+  chromeStorageGetHelper,
+  migrateData,
+  log,
+  storageSet,
+  reloadOptionsPageTabs,
+} from '../utilities/background/bg-functions';
 
 const licenseNotifier = new EventEmitter();
 
@@ -353,13 +359,14 @@ export const License = (function getLicense() {
       if (getSettings().sync_settings) {
         // We have to import the "sync-service" module on demand,
         // as the "sync-service" module in turn requires this module.
+        /* eslint-disable import/no-cycle */
         (import('./sync-service')).disableSync();
       }
       setSetting('color_themes', { popup_menu: 'default_theme', options_page: 'default_theme' });
-      SubscriptionAdapter.unsubscribe({ id: 'distraction-control-push' });
-      SubscriptionAdapter.unsubscribe({ id: 'distraction-control-newsletter' });
-      SubscriptionAdapter.unsubscribe({ id: 'distraction-control-survey' });
-      SubscriptionAdapter.unsubscribe({ id: 'distraction-control-video' });
+      SubscriptionAdapter.unsubscribe({ adblockId: 'distraction-control-push' });
+      SubscriptionAdapter.unsubscribe({ adblockId: 'distraction-control-newsletter' });
+      SubscriptionAdapter.unsubscribe({ adblockId: 'distraction-control-survey' });
+      SubscriptionAdapter.unsubscribe({ adblockId: 'distraction-control-video' });
       browser.alarms.clear(licenseAlarmName);
     },
     ready() {
@@ -391,18 +398,13 @@ export const License = (function getLicense() {
         browser.alarms.create(licenseAlarmName, { when: nextLicenseCheck.getTime() });
       });
     },
-    getLicenseInstallationDate(callback) {
-      if (typeof callback !== 'function') {
-        return;
+    async getLicenseInstallationDate() {
+      const response = await browser.storage.local.get(installTimestampStorageKey);
+      const originalInstallTimestamp = response[installTimestampStorageKey];
+      if (originalInstallTimestamp) {
+        return (new Date(originalInstallTimestamp));
       }
-      browser.storage.local.get(installTimestampStorageKey).then((response) => {
-        const originalInstallTimestamp = response[installTimestampStorageKey];
-        if (originalInstallTimestamp) {
-          callback(new Date(originalInstallTimestamp));
-        } else {
-          callback(undefined);
-        }
-      });
+      return undefined;
     },
     // activate the current license and configure the extension in licensed mode.
     // Call with an optional delay parameter (in milliseconds) if the first license
@@ -422,7 +424,6 @@ export const License = (function getLicense() {
         }, delay);
       }
       setSetting('picreplacement', false);
-      loadAdBlockSnippets();
     },
     getFormattedActiveSinceDate() {
       if (
@@ -540,14 +541,7 @@ export const License = (function getLicense() {
   };
 }());
 
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.command === 'payment_success' && request.version === 1 && isTrustedSenderDomain(sender)) {
-    License.activate();
-    sendResponse({ ack: true });
-  }
-});
-
-const replacedPerPage = new ext.PageMap();
+const replacedPerPage = new TabSessionStorage('ab:premium:replacedPerPage');
 
 // Records how many ads have been replaced by AdBlock.  This is used
 // by the AdBlock to display statistics to the user.
@@ -578,10 +572,9 @@ export const replacedCounts = (function getReplacedCount() {
         const data = replacedCountData;
         data.total += 1;
         chromeStorageSetHelper(key, data);
-        browser.tabs.get(tabId).then((tab) => {
-          const myPage = new ext.Page(tab);
-          let replaced = replacedPerPage.get(myPage) || 0;
-          replacedPerPage.set(myPage, replaced += 1);
+        browser.tabs.get(tabId).then(async (tab) => {
+          let replaced = await replacedPerPage.get(tabId) || 0;
+          await replacedPerPage.set(tabId, replaced += 1);
           adReplacedNotifier.emit('adReplaced', tabId, tab.url);
         });
       });
@@ -589,9 +582,9 @@ export const replacedCounts = (function getReplacedCount() {
     get() {
       return chromeStorageGetHelper(key);
     },
-    getTotalAdsReplaced(tabId) {
+    async getTotalAdsReplaced(tabId) {
       if (tabId) {
-        return replacedPerPage.get(ext.getPage(tabId));
+        return replacedPerPage.get(tabId);
       }
       return this.get().then(data => data.total);
     },
@@ -623,89 +616,9 @@ Promise.all([onInstalledPromise, License.ready(), initialize]).then((detailsArra
 });
 
 License.ready().then(() => {
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.message === 'load_my_adblock') {
-      if (sender.url && sender.url.startsWith('http') && License.isActiveLicense() && getSettings().picreplacement) {
-        const logError = function (e) {
-          // eslint-disable-next-line no-console
-          console.error(e);
-        };
-        browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement.js', frameId: sender.frameId, runAt: 'document_start' }).catch(logError);
-      }
-      if (
-        License.isActiveLicense()
-        && sender.url
-        && sender.url.startsWith('http')
-        && ewe.subscriptions.has('https://cdn.adblockcdn.com/filters/distraction-control-push.txt')
-        && ewe.filters.getAllowingFilters(sender.tab.id).length === 0
-      ) {
-        const logError = function (e) {
-          // eslint-disable-next-line no-console
-          console.error(e);
-        };
-        browser.tabs.executeScript(sender.tab.id, { file: 'adblock-picreplacement-push-notification-wrapper-cs.js', runAt: 'document_start' }).catch(logError);
-      }
-      sendResponse({});
-    }
-  });
-
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.message === 'recordOneAdReplaced') {
-      sendResponse({});
-      if (License.isActiveLicense()) {
-        replacedCounts.recordOneAdReplaced(sender.tab.id);
-      }
-    }
-  });
-
   License.checkSevenDayAlarm();
 
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.command === 'setBlacklistCTAStatus') {
-      if (typeof request.isEnabled === 'boolean') {
-        License.shouldShowBlacklistCTA(request.isEnabled);
-      }
-      sendResponse({});
-    }
-  });
-
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.command === 'setWhitelistCTAStatus') {
-      if (typeof request.isEnabled === 'boolean') {
-        License.shouldShowWhitelistCTA(request.isEnabled);
-      }
-      sendResponse({});
-    }
-  });
-
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.command === 'openPremiumPayURL') {
-      openTab(License.MAB_CONFIG.payURL);
-      sendResponse({});
-    }
-  });
-
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.command === 'cleanUpSevenDayAlarm') {
-      License.cleanUpSevenDayAlarm();
-      sendResponse({});
-    }
-  });
-
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.command === 'License.MAB_CONFIG' && typeof request.url === 'string') {
-      sendResponse({ url: License.MAB_CONFIG[request.url] });
-    }
-  });
-
-  browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.command === 'isActiveLicense') {
-      sendResponse(License.isActiveLicense());
-    }
-  });
-
   if (License.isActiveLicense()) {
-    loadAdBlockSnippets();
     License.updatePeriodically();
   }
 });
@@ -716,7 +629,8 @@ License.initialize(() => {
   }
 });
 
-Object.assign(window, {
+// eslint-disable-next-line no-restricted-globals
+Object.assign(self, {
   License,
   replacedCounts,
 });

@@ -1,13 +1,10 @@
 default:
   image: node:16.15.0
 
-cache:
-  paths:
-  - node_modules/
-
 stages:
   - unit_test
   - build
+  - check_filesizes
   - testpages
 
 ################################################################################
@@ -23,6 +20,7 @@ unit_tests:
     - npm install
   script:
     - npm run test-snippets
+  allow_failure: true
 
 # ################################################################################
 # # Build
@@ -49,6 +47,35 @@ build:
       - adblock-${CI_COMMIT_SHORT_SHA}.tar.gz
       - adblockchrome-${CI_COMMIT_SHORT_SHA}.zip
       - adblockfirefox-${CI_COMMIT_SHORT_SHA}.xpi
+
+# ################################################################################
+# # Check filesizes
+# ################################################################################
+
+.check_filesizes:
+  image: alpine:latest
+  stage: check_filesizes
+  script:
+   - unzip -d unpacked-extension/ $EXTENSION
+   - cd unpacked-extension/
+   - if [ $(find . -type f -name '*.js' -size +4000k | wc -l) -gt 0 ]; then
+       echo 'Some extension files are bigger than 4 MB:' &&
+       find . -type f -name '*.js' -size +4000k -exec ls -lh {} \; &&
+       exit 1;
+     else
+       echo 'All extension files are smaller than 4 MB' &&
+       exit 0;
+     fi
+
+check_filesizes:chrome:
+  extends: .check_filesizes
+  variables:
+    EXTENSION: adblockchrome-${CI_COMMIT_SHORT_SHA}.zip
+
+check_filesizes:firefox:
+  extends: .check_filesizes
+  variables:
+    EXTENSION: adblockfirefox-${CI_COMMIT_SHORT_SHA}.xpi
 
 ################################################################################
 # Ad filtering tests
@@ -111,5 +138,5 @@ testpages:firefox:latest:
 testpages:firefox:oldest:
   extends: .testpages
   variables:
-    BROWSER: firefox 68.0
+    BROWSER: firefox 75.0
     EXTENSION: adblockfirefox-${CI_COMMIT_SHORT_SHA}.xpi

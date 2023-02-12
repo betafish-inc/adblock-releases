@@ -16,17 +16,24 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global License, parseUri, BG, storageSet, storageGet, getFormattedTabName */
+/* global License, parseUri, ServerMessages, storageSet, storageGet, getFormattedTabName */
 
 // MABPayment can be used in all the Options page tabs and should be used to display
 // the CTAs to pay for Premium.
 
+let userClosedSyncCTA;
+let userSawSyncCTA;
+let pageReloadedOnSettingChange;
+
+/* eslint-disable-next-line no-unused-vars */
+function initializeMABPayment() {
+  userClosedSyncCTA = storageGet(License.userClosedSyncCTAKey);
+  userSawSyncCTA = storageGet(License.userSawSyncCTAKey);
+  pageReloadedOnSettingChange = storageGet(License.pageReloadedOnSettingChangeKey);
+}
+
 /* eslint-disable-next-line no-unused-vars */
 const MABPayment = (function mabPayment() {
-  const userClosedSyncCTA = storageGet(License.userClosedSyncCTAKey);
-  const userSawSyncCTA = storageGet(License.userSawSyncCTAKey);
-  const pageReloadedOnSettingChange = storageGet(License.pageReloadedOnSettingChangeKey);
-
   return {
     // Called to generate the correct info necessary to display/hide/use the CTA in the template
     // Input:
@@ -74,7 +81,7 @@ const MABPayment = (function mabPayment() {
       }
       if (!alreadyShowingCTAs && (userChangedSettings || !userSawSyncCTA)) {
         $('.sync-cta').fadeIn(1000);
-        BG.ServerMessages.recordGeneralMessage('options_page_sync_cta_seen');
+        ServerMessages.recordGeneralMessage('options_page_sync_cta_seen');
       }
     },
     userClosedSyncCTA: () => {
@@ -91,13 +98,13 @@ const MABPayment = (function mabPayment() {
         });
       });
       storageSet(License.userClosedSyncCTAKey, true);
-      BG.ServerMessages.recordGeneralMessage('options_page_sync_cta_closed');
+      ServerMessages.recordGeneralMessage('options_page_sync_cta_closed');
     },
     userClickedSyncCTA: () => {
-      BG.ServerMessages.recordGeneralMessage('options_page_sync_cta_clicked');
+      ServerMessages.recordGeneralMessage('options_page_sync_cta_clicked');
     },
     userClickedPremiumCTA: () => {
-      BG.ServerMessages.recordGeneralMessage(`options_page_premium_cta_clicked_${getFormattedTabName()}`);
+      ServerMessages.recordGeneralMessage(`options_page_premium_cta_clicked_${getFormattedTabName()}`);
     },
   };
 }());

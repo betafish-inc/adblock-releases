@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "typeRoots": ["node_modules/@types", "node_modules/web-ext-types"],
+    "module": "es2020",
+    "allowUnreachableCode":false,
+    "allowJs": true,
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include":[
+    "js/**/*",
+    "lib/**/*",
+    "ext/**/*",
+    "build/**/*",
+    "mocks/**/*",
+    "src/**/*",
+    "rollup.config.ts"
+ ],
+ "compileOnSave":false
+}

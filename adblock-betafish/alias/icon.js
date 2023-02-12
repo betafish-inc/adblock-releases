@@ -27,9 +27,13 @@
  */
 
 /** @module icon */
+import * as info from "info";
 
+import { TabSessionStorage } from "../../vendor/adblockplusui/adblockpluschrome/lib/storage/tab-session.js";
 import { allowlistingState } from "../../vendor/adblockplusui/adblockpluschrome/lib/allowlisting";
 import { setIconPath, setIconImageData, toggleBadge, setBadge } from "../../vendor/adblockplusui/adblockpluschrome/lib/browserAction";
+
+import { chromeStorageSetHelper,  chromeStorageGetHelper } from '../utilities/background/bg-functions.js'
 
 const ANIMATION_LOOPS = 3;
 const FRAME_IN_MS = 100;
@@ -42,17 +46,19 @@ let frameOpacitiesCritical = calculateFrameOpacities(5, 3);
 let stopRequested = false;
 let canUpdateIcon = true;
 let notRunning = Promise.resolve();
-let allowlistedState = new ext.PageMap();
+let allowlistedState = new TabSessionStorage("icon:allowlistedState");
 
 let icons = [null, null];
 
-function easeOut(progress) {
+function easeOut(progress)
+{
   // This is merely an approximation to the built-in ease-out timing function
   // https://css-tricks.com/emulating-css-timing-functions-javascript/
   return 1 - Math.pow(1 - progress, 1.675);
 }
 
-function calculateFrameOpacities(keyframeFrames, transitionFrames) {
+function calculateFrameOpacities(keyframeFrames, transitionFrames)
+{
   let opacities = [];
 
   // Show second half of first keyframe
@@ -76,13 +82,15 @@ function calculateFrameOpacities(keyframeFrames, transitionFrames) {
   return opacities;
 }
 
-async function loadImage(url) {
+async function loadImage(url)
+{
   let response = await fetch(url);
   let blob = await response.blob();
   return createImageBitmap(blob);
 }
 
-async function renderIcons() {
+async function renderIcons()
+{
   let paths = [
     "icons/ab-16.png", "icons/ab-16-whitelisted.png",
     "icons/ab-32.png", "icons/ab-32-whitelisted.png"
@@ -104,39 +112,46 @@ async function renderIcons() {
   }
 }
 
-function setIcon(page, opacity, frames) {
+async function setIcon(page, opacity, frames)
+{
   opacity = opacity || 0;
-  let allowlisted = !!allowlistedState.get(page);
+  let allowlisted = !!(await allowlistedState.get(page.id));
 
-  if (!frames) {
-    if (opacity > 0.5) {
+  if (!frames)
+  {
+    if (opacity > 0.5)
+    {
       setIconPath(
         page.id,
         "/icons/ab-$size-notification.png"
       );
     }
-    else if (icons[allowlisted | 0]) {
+    else if (icons[allowlisted | 0])
+    {
       setIconImageData(page.id, icons[allowlisted | 0]);
     }
-    else {
+    else
+    {
       setIconPath(
         page.id,
         "/icons/ab-$size" + (allowlisted ? "-allowlisted" : "") + ".png"
       );
     }
   }
-  else {
-    browser.browserAction.setIcon({
+  else
+  {
+    browser.action.setIcon({
       tabId: page.id,
       imageData: frames["" + opacity + allowlisted]
     });
   }
 }
 
-allowlistingState.addListener("changed", (page, isAllowlisted) => {
-  allowlistedState.set(page, isAllowlisted);
+allowlistingState.addListener("changed", async(page, isAllowlisted) =>
+{
+  await allowlistedState.set(page.id, isAllowlisted);
   if (canUpdateIcon)
-    setIcon(page);
+    await setIcon(page);
 });
 
 async function renderFrames(opacities) {
@@ -166,11 +181,14 @@ async function renderFrames(opacities) {
   let canvas = new OffscreenCanvas(0, 0);
   let context = canvas.getContext("2d");
 
-  for (let allowlisted of [false, true]) {
-    for (let opacity of opacities) {
+  for (let allowlisted of [false, true])
+  {
+    for (let opacity of opacities)
+    {
       let imageData = {};
       let sizes = [16, 20, 32, 40];
-      for (let size of sizes) {
+      for (let size of sizes)
+      {
         canvas.width = size;
         canvas.height = size;
         context.globalAlpha = 1;
@@ -186,8 +204,9 @@ async function renderFrames(opacities) {
   return frames;
 }
 
-async function animateIcon(opacities, frames) {
-  let tabs = await browser.tabs.query({ active: true });
+async function animateIcon(opacities, frames)
+{
+  let tabs = await browser.tabs.query({active: true});
   let pages = tabs.map(tab => new ext.Page(tab));
 
   let animationLoop = 0;
@@ -195,9 +214,10 @@ async function animateIcon(opacities, frames) {
   let numberOfFrames = opacities.length;
   let opacity = 0;
 
-  let onActivated = page => {
+  let onActivated = async page =>
+  {
     pages.push(page);
-    setIcon(page, opacity, frames);
+    await setIcon(page, opacity, frames);
     toggleBadge(page.id, true);
   };
   ext.pages.onActivated.addListener(onActivated);
@@ -205,20 +225,26 @@ async function animateIcon(opacities, frames) {
   canUpdateIcon = false;
   for (let page of pages)
     toggleBadge(page.id, true);
-  return new Promise((resolve, reject) => {
-    let interval = setInterval(() => {
+  return new Promise((resolve, reject) =>
+  {
+    let interval = setInterval(async() =>
+    {
       let oldOpacity = opacity;
       opacity = opacities[animationStep++];
 
-      if (opacity != oldOpacity) {
-        for (let page of pages) {
-          if (allowlistedState.has(page))
-            setIcon(page, opacity, frames);
+      if (opacity != oldOpacity)
+      {
+        for (let page of pages)
+        {
+          if (await allowlistedState.has(page.id))
+            await setIcon(page, opacity, frames);
         }
       }
 
-      if (animationStep > numberOfFrames) {
-        if (++animationLoop > ANIMATION_LOOPS - 1 || stopRequested) {
+      if (animationStep > numberOfFrames)
+      {
+        if (++animationLoop > ANIMATION_LOOPS - 1 || stopRequested)
+        {
           clearInterval(interval);
           ext.pages.onActivated.removeListener(onActivated);
           for (let page of pages)
@@ -226,7 +252,8 @@ async function animateIcon(opacities, frames) {
           canUpdateIcon = true;
           resolve();
         }
-        else {
+        else
+        {
           animationStep = 0;
         }
       }
@@ -241,7 +268,8 @@ async function animateIcon(opacities, frames) {
  * @return {Promise} A promise that is fullfilled when
  *                   the icon animation has been stopped.
  */
-export async function stopIconAnimation() {
+export async function stopIconAnimation()
+{
   stopRequested = true;
   await notRunning;
   stopRequested = false;
@@ -255,13 +283,15 @@ export async function stopIconAnimation() {
  * @param {string} type  The notification type (i.e: "information" or
  *                       "critical".)
  */
-export function startIconAnimation(type) {
+export function startIconAnimation(type)
+{
   let opacities = frameOpacities;
   if (type == "critical")
     opacities = frameOpacitiesCritical;
 
   notRunning = Promise.all([renderFrames(opacities), stopIconAnimation()])
-    .then(results => {
+    .then(results =>
+    {
       if (stopRequested)
         return;
 
@@ -290,18 +320,18 @@ export const NEW_BADGE_REASONS = {
 
 let newBadgeTextReason = "";
 
-export function showIconBadgeCTA(showBadge, reason) {
+export async function showIconBadgeCTA(showBadge, reason) {
   if (!License.shouldShowPremiumCTA()) {
     return;
   }
   if (showBadge) {
-    let newBadgeText = translate('new_badge');
+    let newBadgeText = browser.i18n.getMessage('new_badge');
     // Text that exceeds 4 characters is truncated on the toolbar badge,
     // so we default to English
     if (!newBadgeText || newBadgeText.length >= 5) {
       newBadgeText = 'New';
     }
-    storageSet(statsInIconKey, Prefs.show_statsinicon);
+    chromeStorageSetHelper(statsInIconKey, Prefs.show_statsinicon);
     Prefs.show_statsinicon = false;
     // wait 10 seconds to allow any other ABP setup tasks to finish
     setTimeout(() => {
@@ -317,10 +347,10 @@ export function showIconBadgeCTA(showBadge, reason) {
     }, 10000); // 10 seconds
   } else {
     // Restore show_statsinicon if we previously stored its value
-    const storedValue = storageGet(statsInIconKey);
+    const storedValue = await chromeStorageGetHelper(statsInIconKey);
     if (typeof storedValue === 'boolean') {
       Prefs.show_statsinicon = storedValue;
-      storageSet(statsInIconKey); // remove the data, since we no longer need it
+      chromeStorageSetHelper(statsInIconKey); // remove the data, since we no longer need it
       browser.tabs.query({}).then((tabs) => {
         for (const tab of tabs) {
           browser.browserAction.setBadgeText({
@@ -341,17 +371,3 @@ export function showIconBadgeCTA(showBadge, reason) {
 export function getNewBadgeTextReason() {
   return newBadgeTextReason;
 };
-
-
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.command === 'showIconBadgeCTA' && typeof request.value === 'boolean') {
-    showIconBadgeCTA(request.value);
-    sendResponse({});
-  }
-});
-
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.command === 'getNewBadgeTextReason') {
-    sendResponse({ reason: getNewBadgeTextReason() });
-  }
-});

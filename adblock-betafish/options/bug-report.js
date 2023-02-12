@@ -16,14 +16,14 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, browser, getSettings, translate, determineUserLanguage */
+/* global browser, translate, determineUserLanguage, initializeSettings, settings, send,
+*/
 
-const BG = browser.extension.getBackgroundPage();
 let debugInfo;
 let textDebugInfo = '';
 let extInfo = '';
 
-const bugReportLogic = function () {
+const bugReportLogic = async function () {
   const stepsPlaceholder = '1.\n2.\n3.';
   const validatorKey = 'validators';
   const errorClassName = 'input-error';
@@ -116,55 +116,54 @@ const bugReportLogic = function () {
   };
 
   // Get debug info
-  BG.getDebugInfo((theDebugInfo) => {
-    debugInfo = {};
-    debugInfo.filterLists = JSON.stringify(theDebugInfo.subscriptions, null, '\t');
-    debugInfo.otherInfo = JSON.stringify(theDebugInfo.otherInfo, null, '\t');
-    debugInfo.customFilters = theDebugInfo.customFilters;
-    debugInfo.settings = JSON.stringify(theDebugInfo.settings, null, '\t');
-    debugInfo.language = determineUserLanguage();
+  const theDebugInfo = await send('getDebugInfo');
+  debugInfo = {};
+  debugInfo.filterLists = JSON.stringify(theDebugInfo.subscriptions, null, '\t');
+  debugInfo.otherInfo = JSON.stringify(theDebugInfo.otherInfo, null, '\t');
+  debugInfo.customFilters = theDebugInfo.customFilters;
+  debugInfo.settings = JSON.stringify(theDebugInfo.settings, null, '\t');
+  debugInfo.language = determineUserLanguage();
 
-    const content = [];
-    if (theDebugInfo.subscriptions) {
-      content.push('=== Filter Lists ===');
-      for (const sub in theDebugInfo.subscriptions) {
-        content.push(`Id: ${sub}`);
-        content.push(`  Download Count: ${theDebugInfo.subscriptions[sub].downloadCount}`);
-        content.push(`  Download Status: ${theDebugInfo.subscriptions[sub].downloadStatus}`);
-        content.push(`  Last Download: ${theDebugInfo.subscriptions[sub].lastDownload}`);
-        content.push(`  Last Success: ${theDebugInfo.subscriptions[sub].lastSuccess}`);
-      }
+  const content = [];
+  if (theDebugInfo.subscriptions) {
+    content.push('=== Filter Lists ===');
+    for (const sub in theDebugInfo.subscriptions) {
+      content.push(`Id: ${sub}`);
+      content.push(`  Download Count: ${theDebugInfo.subscriptions[sub].downloadCount}`);
+      content.push(`  Download Status: ${theDebugInfo.subscriptions[sub].downloadStatus}`);
+      content.push(`  Last Download: ${theDebugInfo.subscriptions[sub].lastDownload}`);
+      content.push(`  Last Success: ${theDebugInfo.subscriptions[sub].lastSuccess}`);
+    }
+  }
+
+  content.push('');
+
+  // Custom & Excluded filters might not always be in the object
+  if (theDebugInfo.customFilters) {
+    content.push('=== Custom Filters ===');
+    for (const filter in theDebugInfo.customFilters) {
+      content.push(theDebugInfo.customFilters[filter]);
     }
 
     content.push('');
+  }
 
-    // Custom & Excluded filters might not always be in the object
-    if (theDebugInfo.customFilters) {
-      content.push('=== Custom Filters ===');
-      for (const filter in theDebugInfo.customFilters) {
-        content.push(theDebugInfo.customFilters[filter]);
-      }
+  if (theDebugInfo.exclude_filters) {
+    content.push('=== Exclude Filters ===');
+    content.push(JSON.stringify(theDebugInfo.exclude_filters));
+  }
 
-      content.push('');
-    }
+  content.push('=== Settings ===');
+  for (const setting in theDebugInfo.settings) {
+    content.push(`${setting} : ${theDebugInfo.settings[setting]}`);
+  }
 
-    if (theDebugInfo.exclude_filters) {
-      content.push('=== Exclude Filters ===');
-      content.push(JSON.stringify(theDebugInfo.exclude_filters));
-    }
+  content.push('');
+  content.push('=== Other Info ===');
+  content.push(JSON.stringify(theDebugInfo.otherInfo, null, '\t'));
 
-    content.push('=== Settings ===');
-    for (const setting in theDebugInfo.settings) {
-      content.push(`${setting} : ${theDebugInfo.settings[setting]}`);
-    }
-
-    content.push('');
-    content.push('=== Other Info ===');
-    content.push(JSON.stringify(theDebugInfo.otherInfo, null, '\t'));
-
-    // Put it together to put into the textbox
-    textDebugInfo = content.join('\n');
-  });
+  // Put it together to put into the textbox
+  textDebugInfo = content.join('\n');
 
   // Cache access to input boxes
   browser.storage.local.get('userName').then((response) => {
@@ -295,10 +294,10 @@ const bugReportLogic = function () {
   });
 };
 
-$(() => {
+$(async () => {
   let optionsTheme = 'default_theme';
-  if (BG && BG.getSettings()) {
-    const settings = BG.getSettings();
+  await initializeSettings();
+  if (settings) {
     optionsTheme = settings.color_themes.options_page;
   }
   $('body').attr('id', optionsTheme).data('theme', optionsTheme);

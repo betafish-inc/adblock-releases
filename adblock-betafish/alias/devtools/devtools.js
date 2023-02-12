@@ -17,6 +17,7 @@ let panelWindow = null;
     let enabled = await browser.runtime.sendMessage(
       {type: "prefs.get", key: "show_devtools_panel"}
     );
+
     if (enabled)
     {
       let panel = await browser.devtools.panels.create(
@@ -36,6 +37,7 @@ let panelWindow = null;
         panel.onSearch.addListener((eventName, queryString) => {
           if (panelWindow) {
             panelWindow.postMessage({ type: eventName, queryString }, "*");
+
           }
         });
       }

@@ -146,7 +146,7 @@ const runBandaids = function () {
               return;
             }
             event.preventDefault();
-            browser.runtime.sendMessage({ command: 'unsubscribe', id: 'acceptable_ads' }).then(() => {
+            browser.runtime.sendMessage({ command: 'unsubscribe', adblockId: 'acceptable_ads' }).then(() => {
               browser.runtime.sendMessage({ command: 'recordGeneralMessage', msg: 'disableacceptableads_clicked' }).then(() => {
                 browser.runtime.sendMessage({ command: 'openTab', urlToOpen: browser.runtime.getURL('options.html?aadisabled=true#general') });
               });

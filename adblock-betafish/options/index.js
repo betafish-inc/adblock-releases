@@ -19,28 +19,60 @@
 /* global browser, getSettings, translate, FilterListUtil, activateTab,
    CustomFilterListUploadUtil, localizePage, storageSet, chromeStorageSetHelper,
    chromeStorageGetHelper, debounced, determineUserLanguage, setStorageCookie
-   THIRTY_MINUTES_IN_MILLISECONDS, setLangAndDirAttributes */
+   THIRTY_MINUTES_IN_MILLISECONDS, setLangAndDirAttributes, License,
+   settingsNotifier, initializeMABPayment, initializeSettings, initializeLicense,
+   initializeChannels, settings, initializePrefs, ServerMessages, SubscriptionAdapter,
+   initializeLocalDataCollection, SyncService, initializeSyncService, initializePremiumPort,
+   initializeSubscriptionsProxy, initializeFiltersProxy, send, sendTypeMessage,
+   connectUIPort, initializeSubscriptionsProxy, initializeFiltersProxy
 
-const BG = browser.extension.getBackgroundPage();
-const { settingsNotifier } = BG;
+    */
+
+const DISTRACTION_CONTROL_URL_LIST = [
+  'https://easylist-downloads.adblockplus.org/v3/full/distraction-control-newsletter.txt',
+  'https://cdn.adblockcdn.com/filters/distraction-control-newsletter.txt',
+  'https://easylist-downloads.adblockplus.org/v3/full/distraction-control-push.txt',
+  'https://cdn.adblockcdn.com/filters/distraction-control-push.txt',
+  'https://easylist-downloads.adblockplus.org/v3/full/distraction-control-survey.txt',
+  'https://cdn.adblockcdn.com/filters/distraction-control-survey.txt',
+  'https://easylist-downloads.adblockplus.org/v3/full/distraction-control-video.txt',
+  'https://cdn.adblockcdn.com/filters/distraction-control-video.txt',
+  'https://easylist-downloads.adblockplus.org/v3/full/distraction-control.txt',
+  'https://cdn.adblockcdn.com/filters/distraction-control.txt',
+];
+
 /* eslint-disable-next-line no-unused-vars */
-const { channelsNotifier } = BG;
+function isDistractionControlURL(url) {
+  return DISTRACTION_CONTROL_URL_LIST.includes(url);
+}
+
 /* eslint-disable-next-line no-unused-vars */
-const { Prefs } = BG;
+function send(command, args) {
+  const updatedArgs = Object.assign({}, { command }, args);
+  return browser.runtime.sendMessage(updatedArgs);
+}
+
+function sendTypeMessage(type, args) {
+  const updatedArgs = Object.assign({}, { type }, args);
+  return browser.runtime.sendMessage(updatedArgs);
+}
+
 /* eslint-disable-next-line no-unused-vars */
-const { isSelectorFilter } = BG;
+const isSelectorFilter = function (text) {
+  // This returns true for both hiding rules as hiding allowlist rules
+  // This means that you'll first have to check if something is an excluded rule
+  // before checking this, if the difference matters.
+  return /#@?#./.test(text);
+};
+
 /* eslint-disable-next-line no-unused-vars */
-const { isWhitelistFilter } = BG;
+const rateUsCtaKey = 'rate-us-cta-clicked';
 /* eslint-disable-next-line no-unused-vars */
-const { isSelectorExcludeFilter } = BG;
-const { License } = BG;
-const { SyncService } = BG;
+const vpnWaitlistCtaKey = 'vpn-waitlist-cta-clicked';
 /* eslint-disable-next-line no-unused-vars */
-const { isValidTheme } = BG;
-/* eslint-disable-next-line no-unused-vars */
-const { abpPrefPropertyNames } = BG;
-const { info } = BG;
-const { rateUsCtaKey, vpnWaitlistCtaKey, mailCtaKey } = BG;
+const mailCtaKey = 'mail-cta-clicked';
+
+const info = {};
 const FIVE_SECONDS = 5000;
 const TWENTY_SECONDS = FIVE_SECONDS * 4;
 /* eslint-disable-next-line no-unused-vars */
@@ -49,10 +81,10 @@ let autoReloadingPage;
 let timeoutID;
 
 const language = determineUserLanguage();
-let optionalSettings = {};
+
 /* eslint-disable-next-line no-unused-vars */
 let delayedSubscriptionSelection = null;
-const port = browser.runtime.connect({ name: 'ui' });
+
 let syncErrorCode = 0;
 
 // Function to check the last known Sync Error Code,
@@ -67,6 +99,32 @@ function checkForSyncError(handler) {
     handler(event);
   };
 }
+
+let initializedProxies;
+const initializeProxies = () => {
+  if (initializedProxies) {
+    return initializedProxies;
+  }
+  const getApp = new Promise((resolve) => {
+    sendTypeMessage('app.get', { what: 'application' }).then((application) => {
+      info.application = application;
+      resolve();
+    });
+  });
+  initializedProxies = Promise.all([
+    getApp,
+    initializeSettings(),
+    initializeLicense(),
+    initializeChannels(),
+    initializePrefs(),
+    initializeLocalDataCollection(),
+    initializeSubscriptionsProxy(),
+    initializeFiltersProxy(),
+    initializePremiumPort(),
+  ]);
+  return initializedProxies;
+};
+
 
 function displayVersionNumber() {
   const currentVersion = browser.runtime.getManifest().version;
@@ -163,8 +221,7 @@ function startSubscriptionSelection(title, url) {
     // show the link icon for the new filter list, if the advance setting is set and the
     // show links button has been clicked (not visible)
     if (
-      optionalSettings
-      && optionalSettings.show_advanced_options
+      settings.show_advanced_options
       && $('#btnShowLinks').is(':visible') === false
     ) {
       $('.filter-list-link').fadeIn('slow');
@@ -172,24 +229,9 @@ function startSubscriptionSelection(title, url) {
   }
 }
 
-port.onMessage.addListener((message) => {
-  if (message.type === 'app.respond' && message.action === 'addSubscription') {
-    const subscription = message.args[0];
-    startSubscriptionSelection(subscription.title, subscription.url);
-  }
-});
-
-port.postMessage({
-  type: 'app.listen',
-  filter: ['addSubscription'],
-});
-
-window.addEventListener('unload', () => port.disconnect());
-
 function setSelectedThemeColor() {
   let optionsTheme = 'default_theme';
-  if (BG && BG.getSettings()) {
-    const settings = BG.getSettings();
+  if (settings && settings.color_themes) {
     optionsTheme = settings.color_themes.options_page;
   }
   $('body').attr('id', optionsTheme).data('theme', optionsTheme);
@@ -253,8 +295,7 @@ const addUnSyncErrorClickHandler = function () {
 // eslint-disable-next-line no-unused-vars
 const checkForUnSyncError = function () {
   if (
-    optionalSettings
-    && !optionalSettings.sync_settings
+    !settings.sync_settings
     && (SyncService.getLastGetStatusCode() === 403
       || SyncService.getLastPostStatusCode() === 403)
   ) {
@@ -390,21 +431,8 @@ const addSyncListeners = function () {
 };
 
 function loadOptionalSettings() {
-  if (BG && typeof BG.getSettings !== 'function') {
-    // if the backgroudPage isn't available, wait 50 ms, and reload page
-    window.setTimeout(() => {
-      window.location.reload();
-    }, 50);
-  }
-  if (BG && typeof BG.getSettings === 'function') {
-    // Check or uncheck each option.
-    optionalSettings = BG.getSettings();
-  }
-  if (optionalSettings && optionalSettings.sync_settings) {
+  if (settings && settings.sync_settings) {
     addSyncListeners();
-    window.addEventListener('unload', () => {
-      removeSyncListeners();
-    });
   }
 }
 
@@ -484,7 +512,7 @@ const shouldShowEmailCTA = function () {
   if (!mql.matches) {
     chromeStorageGetHelper(mailCtaKey).then((alreadyClickedMailCTA) => {
       if (!alreadyClickedMailCTA) {
-        BG.ServerMessages.recordGeneralMessage('mail_option_cta_seen');
+        ServerMessages.recordGeneralMessage('mail_option_cta_seen');
         const mailCTA$ = $('#mail-cta');
         mailCTA$.show();
         const checkBox$ = $('#mail-cta-confirm-checkbox');
@@ -504,7 +532,7 @@ const shouldShowEmailCTA = function () {
           placePanel();
           $('#mail-dialog').fadeToggle(() => {
             if ($('#mail-dialog').is(':visible')) {
-              BG.ServerMessages.recordGeneralMessage('mail_option_cta_clicked');
+              ServerMessages.recordGeneralMessage('mail_option_cta_clicked');
             }
           });
         });
@@ -515,7 +543,7 @@ const shouldShowEmailCTA = function () {
             && event.target.dataset
             && event.target.dataset.sendCloseEvent
           ) {
-            BG.ServerMessages.recordGeneralMessage('mail_option_cta_closed');
+            ServerMessages.recordGeneralMessage('mail_option_cta_closed');
           }
           $('#mail-dialog-err-message').text('');
           $('#mail-dialog').fadeOut();
@@ -556,7 +584,7 @@ const shouldShowEmailCTA = function () {
             $('#mail-dialog-content').fadeOut(() => {
               $('#mail-dialog-done-content').fadeIn();
             });
-            BG.ServerMessages.recordGeneralMessage('newsletter_optin', undefined, { emailAddress: emailAddressTxt });
+            ServerMessages.recordGeneralMessage('newsletter_optin', undefined, { emailAddress: emailAddressTxt });
             chromeStorageSetHelper(mailCtaKey, true);
           }
         });
@@ -572,11 +600,11 @@ const shouldShowEmailCTA = function () {
  *
  * Will set an according class name to the `<body>` element.
  */
-function updateSocialIconsVisibility() {
+async function updateSocialIconsVisibility() {
   const socialIconsStateClassName = 'no-social-icons';
   const antiSocialListIds = ['antisocial', 'annoyances', 'fb_notifications'];
 
-  const lists = BG.SubscriptionAdapter.getSubscriptionsMinusText();
+  const lists = await SubscriptionAdapter.getSubscriptionsMinusText();
   const hasAntiSocialSubscriptions = Object.keys(lists)
     .some(id => antiSocialListIds.includes(id));
 
@@ -586,16 +614,11 @@ function updateSocialIconsVisibility() {
   );
 }
 
-$(() => {
-  // delay opening of a second port due to a race condition in the ABP code
-  // the delay allows the confirmation message to the user to function correctly
-  window.setTimeout(() => {
-    const port2 = browser.runtime.connect({ name: 'ui' });
-    port2.postMessage({
-      type: 'app.listen',
-      filter: ['addSubscription'],
-    });
-  }, 500);
+$(async () => {
+  await initializeProxies();
+  await initializeMABPayment();
+
+  storageSet(License.pageReloadedOnSettingChangeKey, false);
 
   const onSettingsChanged = function (name, currentValue) {
     if (name === 'color_themes') {
@@ -603,10 +626,8 @@ $(() => {
       $('#sidebar-adblock-logo').attr('src', `icons/${currentValue.options_page}/logo.svg`);
     }
   };
+
   settingsNotifier.on('settings.changed', onSettingsChanged);
-  window.addEventListener('unload', () => {
-    settingsNotifier.off('settings.changed', onSettingsChanged);
-  });
 
   setSelectedThemeColor();
   loadOptionalSettings();
@@ -617,12 +638,13 @@ $(() => {
   updateSocialIconsVisibility();
 });
 
-storageSet(License.pageReloadedOnSettingChangeKey, false);
+
 window.onbeforeunload = function leavingOptionsPage() {
   if (autoReloadingPage) {
     storageSet(License.pageReloadedOnSettingChangeKey, true);
   }
   storageSet(License.userSawSyncCTAKey, true);
+  removeSyncListeners();
 };
 
 document.addEventListener('readystatechange', () => {
@@ -630,3 +652,21 @@ document.addEventListener('readystatechange', () => {
     setLangAndDirAttributes();
   }
 });
+
+// delay opening of the port due to a race condition
+// the delay allows the confirmation message to the user to function correctly
+// when the options page is already open
+window.setTimeout(() => {
+  connectUIPort(({ addUIListener, postUIMessage }) => {
+    addUIListener((message) => {
+      if (message.type === 'app.respond' && message.action === 'addSubscription') {
+        const subscription = message.args[0];
+        startSubscriptionSelection(subscription.title, subscription.url);
+      }
+    });
+    postUIMessage({
+      type: 'app.listen',
+      filter: ['addSubscription'],
+    });
+  });
+}, 250);

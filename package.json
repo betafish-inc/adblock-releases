@@ -14,8 +14,6 @@
   "homepage": "https://gitlab.com/adblockinc/ext/adblock/adblock/-/blob/main/README.md",
   "scripts": {
     "prepare": "husky install",
-    "ab-snippet-build": "npm run ab-snippet-rollup && npm run json-bundle",
-    "ab-snippet-rollup": "rollup --config build/config/rollup.config.js",
     "json-bundle": "node build/jsonBundle.cjs",
     "lint": "eslint --ext .js,.mjs adblock-betafish",
     "lint-fix": "eslint --fix --ext .js,.mjs adblock-betafish",
@@ -23,16 +21,23 @@
     "prettier-fix": "prettier --write adblock-betafish/**/*.{css,json,html}",
     "html-hint": "htmlhint adblock-betafish/ -R ./rules/",
     "submodules:update": "git submodule update --init --recursive",
-    "postinstall": "npm run install-webext-sdk && npm run merge-webext-sdk-sub && npm run build-webext-sdk",
+    "postinstall": "npm run install-webext-sdk && npm run merge-webext-sdk-sub && npm run install-abp && npm run build-webext-sdk && npm run build-abp-devtools && npm run build-rule-index",
     "install-webext-sdk": "npm install --loglevel=error --no-audit --no-fund --no-optional --prefix ./vendor/webext-sdk || echo 'Skipping SDK installation'",
-    "merge-webext-sdk-sub": "npm run --loglevel=error --prefix ./vendor/webext-sdk/node_modules/adblockpluscore merge-subscriptions -- --add_default --input=./../../../../adblock-betafish/data/subscriptions.json --output=$(pwd)/vendor/webext-sdk/custom-subscriptions.json",
-    "build-webext-sdk": "npm run build --loglevel=error --no-audit --no-fund --no-optional --prefix ./vendor/webext-sdk || echo 'Skipping SDK build'",
-    "test-snippets": "npm run ab-snippet-build && node ./tests/snippet_test_runner.mjs",
-    "test-snippets-debug": "npm run ab-snippet-build && node ./tests/snippet_test_runner.mjs --debugPrint"
+    "merge-webext-sdk-sub": "mkdirp $(pwd)/vendor/webext-sdk/scriptsOutput && npm run --loglevel=error --prefix ./vendor/webext-sdk/ subs-merge -- --add_default --input=./../../adblock-betafish/data/subscriptions.json --output=$(pwd)/vendor/webext-sdk/scriptsOutput/custom-subscriptions.json",
+    "build-webext-sdk": "npm run --prefix ./vendor/webext-sdk build -- --config-name sdk --no-devtool || echo 'Skipping SDK build'",
+    "install-abp": "npm install --loglevel=error --no-audit --no-fund --no-optional --prefix ./vendor/adblockplusui || echo 'Skipping ABP installation'",
+    "build-abp-devtools": "npm run $ bundle.devtools-panel --loglevel=error --no-audit --no-fund --no-optional --prefix ./vendor/adblockplusui || echo 'Skipping ABP dev tools build'",
+    "build-rule-index": "npm explore @adblockinc/rules -- npm run build adblock"
   },
   "devDependencies": {
+    "@babel/core": "7.18.9",
+    "@babel/preset-env": "7.18.9",
+    "@babel/preset-typescript": "7.18.6",
     "@rollup/plugin-commonjs": "22.0.2",
     "@rollup/plugin-node-resolve": "13.3.0",
+    "@types/jest": "28.1.6",
+    "@typescript-eslint/eslint-plugin": "5.27.1",
+    "@typescript-eslint/parser": "5.27.1",
     "chai": "4.3.6",
     "chrome-remote-interface": "0.31.3",
     "chromedriver": "104.0.0",
@@ -49,6 +54,7 @@
     "htmlhint": "1.1.4",
     "husky": "8.0.1",
     "lint-staged": "13.0.3",
+    "mkdirp": "^1.0.4",
     "mocha": "9.2.2",
     "ncp": "2.0.0",
     "prettier": "2.7.1",
@@ -59,16 +65,18 @@
     "script-loader": "0.7.2",
     "selenium-webdriver": "4.3.1",
     "source-map-loader": "4.0.0",
-    "webpack": "4.46.0",
-    "webpack-merge": "5.8.0",
-    "webpack-stream": "7.0.0"
+    "ts-loader": "9.3.1",
+    "webpack": "5.74.0",
+    "webpack-merge": "5.1.4",
+    "webpack-stream": "6.1.1"
   },
   "engines": {
     "node": ">=16.10.0 <17.0.0",
     "npm": ">=7"
   },
   "dependencies": {
-    "@eyeo/snippets": "0.5.2",
+    "@adblockinc/rules": "git+https://gitlab.com/adblockinc/ext/rules.git#5a6b284a4c25ecc33485ab5e6b3882fb0f65dc94",
+    "@eyeo/snippets": "0.6.0",
     "adblockpluscore": "0.5.1",
     "argparse": "1.0.10",
     "del": "7.0.0",
@@ -76,6 +84,7 @@
     "gulp": "4.0.2",
     "gulp-vinyl-zip": "2.5.0",
     "merge-stream": "2.0.0",
+    "typescript": "4.7.3",
     "webextension-polyfill": "0.8.0"
   }
 }

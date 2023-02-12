@@ -16,14 +16,16 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global BG, License, localizePage, SyncService, translate, FIVE_SECONDS,
+/* global License, localizePage, SyncService, translate, FIVE_SECONDS,
    settingsNotifier, processReplacementChildren, MABPayment, storageSet, storageGet,
-   determineUserLanguage */
+   determineUserLanguage, initializeProxies, licenseNotifier, browser, settings,
+   send,
+    */
 
-const onSyncDataInitialGetError = function () {
+const onSyncDataInitialGetError = async function () {
   $('#show-name-div').hide();
   $('#last-sync-now').hide();
-  SyncService.disableSync(true);
+  await SyncService.disableSync(true);
   SyncService.syncNotifier.off('sync.data.getting.error.initial.fail', onSyncDataInitialGetError);
 };
 
@@ -39,133 +41,132 @@ const onSyncDataInitialGetError = function () {
     showSyncDetails = storedShowSyncDetails;
   }
 
-  const getAllExtensionNames = function () {
+  const getAllExtensionNames = async function () {
     $('#sync-no-click-overlay').show();
     $('#sync-loadingDiv').show();
     $('#sync-extension-list-div').empty();
-    SyncService.getAllExtensionNames((extensionNameResponse) => {
-      $('#sync-no-click-overlay').hide();
-      $('#sync-loadingDiv').fadeOut();
-      if (extensionNameResponse && extensionNameResponse.hasData && extensionNameResponse.data) {
-        $('#sync_extension_no_extension_msg').hide();
-        $('.extension-name-item').remove();
-        deviceNameArray = [];
-        const currentExtensionName = SyncService.getCurrentExtensionName();
-        const sortedData = [...extensionNameResponse.data];
-        sortedData.sort((a, b) => {
-          let returnVal = 0;
-          if (a.deviceName && b.deviceName) {
-            if (a.deviceName.toLowerCase() > b.deviceName.toLowerCase()) {
-              returnVal = 1;
-            }
-            if (b.deviceName.toLowerCase() > a.deviceName.toLowerCase()) {
-              returnVal = -1;
-            }
-          } else if (!a.deviceName && b.deviceName) {
-            returnVal = -1;
-          } else if (a.deviceName && !b.deviceName) {
+    const extensionNameResponse = await SyncService.getAllExtensionNames();
+    $('#sync-no-click-overlay').hide();
+    $('#sync-loadingDiv').fadeOut();
+    if (extensionNameResponse && extensionNameResponse.hasData && extensionNameResponse.data) {
+      $('#sync_extension_no_extension_msg').hide();
+      $('.extension-name-item').remove();
+      deviceNameArray = [];
+      const currentExtensionName = await SyncService.getCurrentExtensionName();
+      const sortedData = [...extensionNameResponse.data];
+      sortedData.sort((a, b) => {
+        let returnVal = 0;
+        if (a.deviceName && b.deviceName) {
+          if (a.deviceName.toLowerCase() > b.deviceName.toLowerCase()) {
             returnVal = 1;
-          } else if (!a.deviceName && !b.deviceName) {
-            returnVal = 0;
           }
-          return returnVal;
-        });
-        for (let inx = 0; inx < sortedData.length; inx++) {
-          const deviceInfo = sortedData[inx];
-          if (
-            deviceInfo
-            && deviceInfo.deviceName
-            && deviceInfo.extensionGUID
-          ) {
-            deviceNameArray.push(deviceInfo.deviceName);
-            let { deviceName } = deviceInfo;
-            if (deviceName === currentExtensionName) {
-              deviceName = `${currentExtensionName} ${translate('this_extension')}`;
-            }
-            let classText = 'extension-name-item content-block bottom-line';
-            if (inx === (sortedData.length - 1)) {
-              classText = 'extension-name-item content-block';
-            }
-            $('#sync-extension-list-div')
-              .append($('<p></p>')
-                .append($('<span></span>')
-                  .text(deviceName))
-                .addClass(classText)
-                .attr('data-deviceName', deviceInfo.deviceName)
-                .attr('data-extensionGUID', deviceInfo.extensionGUID)
-                .append($('<i></i>')
-                  .attr('id', `extension-delete-icon-${inx}`)
-                  .addClass('material-icons md-24 delete-icon')
-                  .attr('role', 'img')
-                  .attr('aria-hidden', 'true')
-                  .text('delete')));
+          if (b.deviceName.toLowerCase() > a.deviceName.toLowerCase()) {
+            returnVal = -1;
           }
+        } else if (!a.deviceName && b.deviceName) {
+          returnVal = -1;
+        } else if (a.deviceName && !b.deviceName) {
+          returnVal = 1;
+        } else if (!a.deviceName && !b.deviceName) {
+          returnVal = 0;
         }
-        const now = new Date();
-        const timestampMsg = translate(
-          'sync_device_name_list_updated_at_msg',
-          now.toLocaleString(determineUserLanguage(), dateFormatOptions),
-        );
-        $('#last-updated-on').text(timestampMsg);
-        if (!deviceNameArray.length && !currentExtensionName) {
-          $('#sync_extension_no_extension_msg').show();
+        return returnVal;
+      });
+      for (let inx = 0; inx < sortedData.length; inx++) {
+        const deviceInfo = sortedData[inx];
+        if (
+          deviceInfo
+          && deviceInfo.deviceName
+          && deviceInfo.extensionGUID
+        ) {
+          deviceNameArray.push(deviceInfo.deviceName);
+          let { deviceName } = deviceInfo;
+          if (deviceName === currentExtensionName) {
+            deviceName = `${currentExtensionName} ${translate('this_extension')}`;
+          }
+          let classText = 'extension-name-item content-block bottom-line';
+          if (inx === (sortedData.length - 1)) {
+            classText = 'extension-name-item content-block';
+          }
+          $('#sync-extension-list-div')
+            .append($('<p></p>')
+              .append($('<span></span>')
+                .text(deviceName))
+              .addClass(classText)
+              .attr('data-deviceName', deviceInfo.deviceName)
+              .attr('data-extensionGUID', deviceInfo.extensionGUID)
+              .append($('<i></i>')
+                .attr('id', `extension-delete-icon-${inx}`)
+                .addClass('material-icons md-24 delete-icon')
+                .attr('role', 'img')
+                .attr('aria-hidden', 'true')
+                .text('delete')));
         }
-        $('.extension-name-item > i').on('click', function clickHandler() {
-          $('#sync-no-click-overlay').show();
-          const theParent = $(this).parent();
-          theParent.addClass('extension-name-item-hovered');
-          const theTrashCan = $(this);
-          theTrashCan.addClass('delete-icon-hovered');
-          const dataDeviceName = $(this).parent().attr('data-deviceName');
-          const dataExtensionGUID = $(this).parent().attr('data-extensionGUID');
-          const cancelClickHandler = function () {
-            $('#btnSyncCancelDeleteDevice').off('click', cancelClickHandler);
-            // eslint-disable-next-line no-use-before-define
-            $('#btnSyncDeleteDevice').off('click', deleteClickHandler);
-            $('#sync-no-click-overlay').hide();
-            $('#sync-delete-overlay').hide();
-            $('.delete-icon-hovered').removeClass('delete-icon-hovered');
-            $('.extension-name-item-hovered').removeClass('extension-name-item-hovered');
-          };
-          const deleteClickHandler = function () {
-            SyncService.removeExtensionName(dataDeviceName, dataExtensionGUID);
-            $('#btnSyncCancelDeleteDevice').off('click', cancelClickHandler);
-            $('#btnSyncDeleteDevice').off('click', deleteClickHandler);
-            $('#sync-no-click-overlay').show();
-            $('#sync-loadingDiv').show();
-            $('#sync-delete-overlay').hide();
-            $('.delete-icon-hovered').removeClass('delete-icon-hovered');
-            $('.extension-name-item-hovered').removeClass('extension-name-item-hovered');
-            if (currentExtensionName === dataDeviceName) {
-              $('#last-sync-now').hide();
-              SyncService.disableSync(true);
-              // eslint-disable-next-line no-use-before-define
-              removeSyncListeners();
-              $('#btnAddThisExtension').fadeIn('slow');
-            }
-            setTimeout(() => {
-              $('#sync-no-click-overlay').hide();
-              getAllExtensionNames();
-            }, FIVE_SECONDS); // wait 5 seconds to allow the above remove to complete
-          };
-          $('#btnSyncCancelDeleteDevice').on('click', cancelClickHandler);
-          $('#btnSyncDeleteDevice').on('click', deleteClickHandler);
-          const pos = $(this).position();
-          $('#sync-delete-overlay').css({
-            position: 'absolute',
-            top: `${pos.top}px`,
-            left: `${pos.left - 315}px`,
-          }).show()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
       }
-    });
+      const now = new Date();
+      const timestampMsg = translate(
+        'sync_device_name_list_updated_at_msg',
+        now.toLocaleString(determineUserLanguage(), dateFormatOptions),
+      );
+      $('#last-updated-on').text(timestampMsg);
+      if (!deviceNameArray.length && !currentExtensionName) {
+        $('#sync_extension_no_extension_msg').show();
+      }
+      $('.extension-name-item > i').on('click', function clickHandler() {
+        $('#sync-no-click-overlay').show();
+        const theParent = $(this).parent();
+        theParent.addClass('extension-name-item-hovered');
+        const theTrashCan = $(this);
+        theTrashCan.addClass('delete-icon-hovered');
+        const dataDeviceName = $(this).parent().attr('data-deviceName');
+        const dataExtensionGUID = $(this).parent().attr('data-extensionGUID');
+        const cancelClickHandler = function () {
+          $('#btnSyncCancelDeleteDevice').off('click', cancelClickHandler);
+          // eslint-disable-next-line no-use-before-define
+          $('#btnSyncDeleteDevice').off('click', deleteClickHandler);
+          $('#sync-no-click-overlay').hide();
+          $('#sync-delete-overlay').hide();
+          $('.delete-icon-hovered').removeClass('delete-icon-hovered');
+          $('.extension-name-item-hovered').removeClass('extension-name-item-hovered');
+        };
+        const deleteClickHandler = async function () {
+          SyncService.removeExtensionName(dataDeviceName, dataExtensionGUID);
+          $('#btnSyncCancelDeleteDevice').off('click', cancelClickHandler);
+          $('#btnSyncDeleteDevice').off('click', deleteClickHandler);
+          $('#sync-no-click-overlay').show();
+          $('#sync-loadingDiv').show();
+          $('#sync-delete-overlay').hide();
+          $('.delete-icon-hovered').removeClass('delete-icon-hovered');
+          $('.extension-name-item-hovered').removeClass('extension-name-item-hovered');
+          if (currentExtensionName === dataDeviceName) {
+            $('#last-sync-now').hide();
+            await SyncService.disableSync(true);
+            // eslint-disable-next-line no-use-before-define
+            removeSyncListeners();
+            $('#btnAddThisExtension').fadeIn('slow');
+          }
+          setTimeout(() => {
+            $('#sync-no-click-overlay').hide();
+            getAllExtensionNames();
+          }, FIVE_SECONDS); // wait 5 seconds to allow the above remove to complete
+        };
+        $('#btnSyncCancelDeleteDevice').on('click', cancelClickHandler);
+        $('#btnSyncDeleteDevice').on('click', deleteClickHandler);
+        const pos = $(this).position();
+        $('#sync-delete-overlay').css({
+          position: 'absolute',
+          top: `${pos.top}px`,
+          left: `${pos.left - 315}px`,
+        }).show()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
   };
 
-  const initialize = function () {
+  const initialize = async function () {
     $('.unsync-header').addClass('sync-message-hidden');
     if (License.isActiveLicense() && License.get()) {
       $('#toggle-sync-details').show();
-      if (!License.get().licenseId) {
+      if (!License.licenseId) {
         $('#sync-tab-no-license-message').text(translate('sync_header_message_no_license'));
         $('#sync-tab-message')
           .removeClass('sync-message-hidden')
@@ -173,9 +174,9 @@ const onSyncDataInitialGetError = function () {
         $('#btnCheckStatus').show();
       } else {
         getAllExtensionNames();
-        const currentExtensionName = SyncService.getCurrentExtensionName();
+        const currentExtensionName = await SyncService.getCurrentExtensionName();
         $('#sync-info-block').show();
-        if (currentExtensionName && BG.getSettings().sync_settings) {
+        if (currentExtensionName && settings.sync_settings) {
           $('#last-sync-now').show();
           $('#btnAddThisExtension').hide();
         } else {
@@ -213,9 +214,9 @@ const onSyncDataInitialGetError = function () {
   const removeSyncListeners = function () {
     // eslint-disable-next-line no-use-before-define
     settingsNotifier.off('settings.changed', onSettingsChanged);
-    License.licenseNotifier.off('license.updating', onLicenseUpdating);
-    License.licenseNotifier.off('license.updated', onLicenseUpdated);
-    License.licenseNotifier.off('license.updated.error', onLicenseUpdatedError);
+    licenseNotifier.off('license.updating', onLicenseUpdating);
+    licenseNotifier.off('license.updated', onLicenseUpdated);
+    licenseNotifier.off('license.updated.error', onLicenseUpdatedError);
     SyncService.syncNotifier.off(
       'sync.data.getting.error.initial.fail',
       onSyncDataInitialGetError,
@@ -257,10 +258,10 @@ const onSyncDataInitialGetError = function () {
     $('#btnCheckStatus').on('click', () => {
       $('#btnCheckStatus').addClass('grey');
       $('#btnCheckStatus').attr('disabled', true);
-      License.licenseNotifier.on('license.updating', onLicenseUpdating);
-      License.licenseNotifier.on('license.updated', onLicenseUpdated);
-      License.licenseNotifier.on('license.updated.error', onLicenseUpdatedError);
-      License.updatePeriodically();
+      licenseNotifier.on('license.updating', onLicenseUpdating);
+      licenseNotifier.on('license.updated', onLicenseUpdated);
+      licenseNotifier.on('license.updated.error', onLicenseUpdatedError);
+      send('updatePeriodically');
     });
 
     $('#toggle-sync-details').on('click', () => {
@@ -291,11 +292,12 @@ const onSyncDataInitialGetError = function () {
     });
 
     $('#btnVerifyOK').on('click', () => {
-      $('#verify-overwrite-div').fadeOut('slow', () => {
+      $('#verify-overwrite-div').fadeOut('slow', async () => {
         $('#show-verify-message').hide();
         $('#sync_extension_section_list_title').show();
-        if (SyncService.getCurrentExtensionName()) {
-          $('#extension-name').val(SyncService.getCurrentExtensionName());
+        const extensionName = await SyncService.getCurrentExtensionName();
+        if (extensionName) {
+          $('#extension-name').val(extensionName);
         }
         $('#enter-name-div').show()[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
         $('#btnCancelSyncName').show();
@@ -314,7 +316,7 @@ const onSyncDataInitialGetError = function () {
       });
     });
 
-    $('#btnSaveSyncName').on('click', () => {
+    $('#btnSaveSyncName').on('click', async () => {
       $('#error-message').text('');
       let extensionName = $('#extension-name').val().trim();
       if (!extensionName) {
@@ -331,8 +333,8 @@ const onSyncDataInitialGetError = function () {
         return;
       }
       $('#extension-name').addClass('accent-text').removeClass('input-error');
-      SyncService.setCurrentExtensionName(extensionName);
-      SyncService.enableSync(true);
+      await SyncService.setCurrentExtensionName(extensionName);
+      await SyncService.enableSync(true);
       $('#enter-name-div').fadeOut('slow', () => {
         $('#current-extension-name').text(extensionName);
         $('#current-extension-name-block').show();
@@ -359,7 +361,8 @@ const onSyncDataInitialGetError = function () {
     });
   };
 
-  $(() => {
+  $(async () => {
+    await initializeProxies();
     if (!License || $.isEmptyObject(License) || !MABPayment) {
       return;
     }
@@ -395,8 +398,4 @@ const onSyncDataInitialGetError = function () {
   };
 
   settingsNotifier.on('settings.changed', onSettingsChanged);
-
-  window.addEventListener('unload', () => {
-    removeSyncListeners();
-  });
 }());

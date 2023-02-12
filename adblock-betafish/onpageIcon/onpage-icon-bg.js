@@ -19,7 +19,8 @@
 /* global browser, log,
  */
 
-import { getSettings } from '../settings';
+import { getSettings } from '../prefs/settings';
+import { log } from '../utilities/background/bg-functions';
 
 const OnPageIconManager = (function initialize() {
   const MAX_MSG_TEXT_LENGTH = 280;
@@ -79,6 +80,7 @@ const OnPageIconManager = (function initialize() {
     //                         (the extension will add the 'gab.com' prefix for security reasons)
     showOnPageIcon(tabId, tabUrl, iconData) {
       if (!getSettings().onpageMessages) {
+        log('OnPageIconManager:: settings.onpageMessages is false');
         return;
       }
       if (!isIconDataValid(iconData)) {

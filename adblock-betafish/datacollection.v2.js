@@ -16,20 +16,21 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global browser, chromeStorageSetHelper, adblockIsPaused,
-   adblockIsDomainPaused, parseUri, log,
-   getUserFilters, */
+/* global browser, adblockIsPaused,
+   adblockIsDomainPaused, getUserFilters, */
 
 import * as info from 'info';
 import * as ewe from '../vendor/webext-sdk/dist/ewe-api';
 import SubscriptionAdapter from './subscriptionadapter';
 import postData from './fetch-util';
-import { getSettings, settings, setSetting } from './settings';
+import { getSettings, settings, setSetting } from './prefs/settings';
+import { parseUri, log, chromeStorageSetHelper } from './utilities/background/bg-functions';
 
 const DataCollectionV2 = (function getDataCollectionV2() {
   const HOUR_IN_MIN = 60;
   const TIME_LAST_PUSH_KEY = 'timeLastPush';
   const DATA_COLLECTION_ALARM_NAME = 'datacollectionalarm';
+  const STORAGE_KEY = 'ab:data.collection.storage.key';
   const REPORTING_OPTIONS = {
     filterType: 'all',
     includeElementHiding: false,
@@ -40,7 +41,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
   dataCollectionCache.filters = {};
   dataCollectionCache.domains = {};
 
-  const addFilterToCache = function (details, filter) {
+  const addFilterToCache = async function (details, filter) {
     const validFilterText = filter && filter.text && (typeof filter.text === 'string');
     if (validFilterText && details && details.url) {
       let domain = details.url.hostname;
@@ -71,14 +72,16 @@ const DataCollectionV2 = (function getDataCollectionV2() {
         }
         dataCollectionCache.filters[text].firstParty[domain].hits += 1;
       }
-      for (const sub of ewe.subscriptions.getForFilter(filter.text)) {
+      const subscriptions = await ewe.subscriptions.getForFilter(text);
+      subscriptions.forEach((sub) => {
         if (sub.enabled && sub.url && sub.downloadable) {
           const subURL = sub.url.substring(0, 256);
           if (!dataCollectionCache.filters[text].subscriptions.includes(subURL)) {
             dataCollectionCache.filters[text].subscriptions.push(subURL);
           }
         }
-      }
+      });
+      chromeStorageSetHelper(STORAGE_KEY, dataCollectionCache);
     }
   };
 
@@ -90,6 +93,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
         dataCollectionCache.domains[domain].pages = 0;
       }
       dataCollectionCache.domains[domain].pages += 1;
+      chromeStorageSetHelper(STORAGE_KEY, dataCollectionCache);
     }
   };
 
@@ -109,7 +113,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     }
     if (dataCollectionSetting && Object.keys(dataCollectionCache.filters).length > 0) {
       const subscribedSubs = [];
-      const subs = SubscriptionAdapter.getSubscriptionsMinusText();
+      const subs = await SubscriptionAdapter.getSubscriptionsMinusText();
       for (const subscription of Object.values(subs)) {
         if (subscription && subscription.url) {
           subscribedSubs.push(subscription.url.substring(0, 256));
@@ -177,6 +181,7 @@ const DataCollectionV2 = (function getDataCollectionV2() {
               dataCollectionCache = {};
               dataCollectionCache.filters = {};
               dataCollectionCache.domains = {};
+              browser.storage.local.remove(STORAGE_KEY);
               return;
             }
             log('bad response from log server', postResponse);
@@ -185,48 +190,66 @@ const DataCollectionV2 = (function getDataCollectionV2() {
     }
   };
 
+  const loadCache = async function () {
+    const response = await browser.storage.local.get(STORAGE_KEY);
+    if (response[STORAGE_KEY]) {
+      dataCollectionCache = response[STORAGE_KEY];
+    }
+  };
+
   const initializeAlarm = function () {
-    browser.alarms.onAlarm.addListener((alarm) => {
-      if (alarm && alarm.name === DATA_COLLECTION_ALARM_NAME) {
-        sendToServer();
+    const processAlarm = async function (alarm) {
+      if (!alarm && alarm.name !== DATA_COLLECTION_ALARM_NAME) {
+        return;
       }
-    });
-    browser.alarms.create(DATA_COLLECTION_ALARM_NAME, { periodInMinutes: HOUR_IN_MIN });
+      await settings.onload();
+      if (getSettings().data_collection_v2) {
+        await loadCache();
+        sendToServer();
+      } else {
+        browser.alarms.clear(DATA_COLLECTION_ALARM_NAME);
+        browser.alarms.onAlarm.removeListener(processAlarm);
+      }
+    };
+    browser.alarms.onAlarm.addListener(processAlarm);
   };
 
   // If enabled at startup periodic saving of memory cache &
   // sending of data to the log server
-  settings.onload().then(() => {
-    const dataCollectionEnabled = getSettings().data_collection_v2;
-    if (dataCollectionEnabled) {
-      initializeAlarm();
+  const initialize = function () {
+    initializeAlarm();
+    settings.onload().then(async () => {
+      if (!getSettings().data_collection_v2) {
+        return;
+      }
+      await loadCache();
       ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
       browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
         urls: ['http://*/*', 'https://*/*'],
         types: ['main_frame'],
       });
-    }
-  });// End of then
+      browser.alarms.create(DATA_COLLECTION_ALARM_NAME, { periodInMinutes: HOUR_IN_MIN });
+    });
+  };
+  initialize();
+
 
   const returnObj = {};
-  returnObj.start = function returnObjStart(callback) {
+  returnObj.start = function returnObjStart() {
     dataCollectionCache.filters = {};
     dataCollectionCache.domains = {};
-    ewe.reporting.onBlockableItem.addListener(filterListener, REPORTING_OPTIONS);
-    browser.webRequest.onBeforeRequest.addListener(webRequestListener, {
-      urls: ['http://*/*', 'https://*/*'],
-      types: ['main_frame'],
+    setSetting('data_collection_v2', true, () => {
+      initialize();
     });
-    initializeAlarm();
-    setSetting('data_collection_v2', true, callback);
   };
-  returnObj.end = function returnObjEnd(callback) {
+  returnObj.end = function returnObjEnd() {
     dataCollectionCache = {};
     ewe.reporting.onBlockableItem.removeListener(filterListener, REPORTING_OPTIONS);
     browser.webRequest.onBeforeRequest.removeListener(webRequestListener);
     browser.storage.local.remove(TIME_LAST_PUSH_KEY);
+    browser.storage.local.remove(STORAGE_KEY);
     browser.alarms.clear(DATA_COLLECTION_ALARM_NAME);
-    setSetting('data_collection_v2', false, callback);
+    setSetting('data_collection_v2', false);
   };
   returnObj.getCache = function returnObjGetCache() {
     return dataCollectionCache;

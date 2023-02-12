@@ -40,7 +40,9 @@ export default {
       './icon': '../../adblock-betafish/alias/icon.js',
       'subscriptionInit': '../../adblock-betafish/alias/subscriptionInit.js',
       uninstall: '../../adblock-betafish/alias/uninstall.js',
-      '../../vendor/webext-sdk/dist/ewe-api.js': path.resolve('', 'vendor/webext-sdk/dist/ewe-api.js')
+      '../vendor/webext-sdk/dist/ewe-api.js': path.resolve('', 'vendor/webext-sdk/dist/ewe-api.js'),
+      '../../vendor/webext-sdk/dist/ewe-api.js': path.resolve('', 'vendor/webext-sdk/dist/ewe-api.js'),
+      '../../../vendor/webext-sdk/dist/ewe-api.js': path.resolve('', 'vendor/webext-sdk/dist/ewe-api.js')
     },
     modules: [
       'vendor/adblockplusui/adblockpluschrome/lib',

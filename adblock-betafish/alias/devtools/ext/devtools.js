@@ -15,28 +15,13 @@
  * along with Adblock Plus.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+"use strict";
 
-import { promisify } from "util";
+{
+  let inspectedTabId = browser.devtools.inspectedWindow.tabId;
 
-import { exec } from "child_process";
+  let port = browser.runtime.connect({ name: "ui" });
 
-
-function createSnippetsBuild() {
-  return (promisify(exec))(
-    "bash -c \"npm run ab-snippet-build\"");
+  ext.onMessage = port.onMessage;
+  ext.devtools = browser.devtools;
 }
-
-
-export async function buildAdBlockSnippets(cb) {
-  try {
-    await createSnippetsBuild();
-  }
-  catch (error) {
-    if (error.stderr.match(/ENOENT/)) {
-      console.log("Skipping Snippets.");
-      return cb();
-    }
-  }
-  return cb();
-}
-

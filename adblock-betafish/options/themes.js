@@ -16,17 +16,19 @@
  */
 
 /* For ESLint: List any global identifiers used in this file below */
-/* global BG, translate, License, MABPayment, settingsNotifier, localizePage */
+/* global  translate, License, MABPayment, settingsNotifier, localizePage, settings,
+   browser, isValidTheme, initializeProxies, send
+ */
 
 (function onThemesLoaded() {
   const updateThemeSettings = ($newTheme) => {
     const key = $newTheme.data('key');
     const newTheme = $newTheme.data('theme');
     // get local copy of the Color Themes object
-    const colorThemes = JSON.parse(JSON.stringify(BG.getSettings().color_themes));
+    const colorThemes = JSON.parse(JSON.stringify(settings.color_themes));
 
     colorThemes[key] = newTheme;
-    BG.setSetting('color_themes', colorThemes);
+    settings.color_themes = colorThemes;
     window.location.reload();
   };
 
@@ -36,7 +38,7 @@
     }
     const $selectedTheme = $(changeEvent.target).closest('.theme-box');
     if ($selectedTheme.closest('.theme-wrapper').hasClass('locked')) {
-      BG.openTab(License.MAB_CONFIG.payURL);
+      send('openTab', { urlToOpen: License.MAB_CONFIG.payURL });
       return;
     }
     const $otherThemes = $selectedTheme.closest('section').find('.theme-box').not($selectedTheme);
@@ -47,9 +49,9 @@
     updateThemeSettings($selectedTheme);
   };
 
-  const selectCurrentThemes = (currentThemes) => {
-    const popupMenuTheme = BG.isValidTheme(currentThemes.popup_menu) ? currentThemes.popup_menu : 'default_theme';
-    const optionsPageTheme = BG.isValidTheme(currentThemes.options_page) ? currentThemes.options_page : 'default_theme';
+  const selectCurrentThemes = async (currentThemes) => {
+    const popupMenuTheme = await isValidTheme(currentThemes.popup_menu) ? currentThemes.popup_menu : 'default_theme';
+    const optionsPageTheme = await isValidTheme(currentThemes.options_page) ? currentThemes.options_page : 'default_theme';
 
     // reset selected theme
     $('.popup-menu-themes .selected').removeClass('selected');
@@ -66,6 +68,9 @@
     $optionsTheme.addClass('selected');
     $popupInput.prop('checked', true);
     $optionsInput.prop('checked', true);
+
+    $('.options-page-theme-preview').attr('src', `icons/${optionsPageTheme}/optionscard.svg`);
+    $('.options-page-theme-preview').attr('alt', translate('a_theme_preview', translate(`${optionsPageTheme}`), translate('options_page')));
   };
 
   const showHoveredPopupThemePreview = ($themeBox) => {
@@ -138,10 +143,11 @@
     $('input.invisible-radio-button').on('change', event => updateSelection(event));
   };
 
-  $(() => {
+  $(async () => {
+    await initializeProxies();
     let colorThemes = {};
-    if (BG && BG.getSettings()) {
-      colorThemes = BG.getSettings().color_themes;
+    if (settings) {
+      colorThemes = settings.color_themes;
     }
     $('.theme-wrapper:not(.locked) .overlay-icon').each(function i18nSupport() {
       const $preview = $(this);
@@ -152,7 +158,7 @@
         translate(`${component}`),
       ]));
     });
-    selectCurrentThemes(colorThemes);
+    await selectCurrentThemes(colorThemes);
     showSelectedOptionsThemePreview();
     showSelectedPopupThemePreview();
     if (!License || $.isEmptyObject(License) || !MABPayment) {
@@ -177,8 +183,4 @@
   };
 
   settingsNotifier.on('settings.changed', onSettingsChanged);
-
-  window.addEventListener('unload', () => {
-    settingsNotifier.off('settings.changed', onSettingsChanged);
-  });
 }());

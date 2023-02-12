@@ -2,6 +2,25 @@
 
 UNRELEASED:
 
+Version: 5.4.1, Date: 2023-02-12
+- Fixed the on click event handler for the "Upgrade your AdBlock" CTA in the AdBlock popup menu
+- Show the /update page to let users know about the AdBlock Premium
+
+Version: 5.4.0, Date: 2023-02-02
+- Modified or updated several JavaScript modules to work in a service worker environment in preparation for migration to manifest V3.
+  The modified modules include:
+  - survey & on page icon
+  - telemetry
+  - anonymous filter list data collection
+  - ad blocking statistics ('Stats')
+- We also updated the following in preparation for migration to manifest V3
+  - the AdBlock Options page to use message passing
+  - created a new common utilies module for use within a service worker
+- Updated several dependencies used within AdBlock:
+  - snippets to 0.6.0
+  - adblockplusui to 3.16
+  - web ext SDK to 0.7.2
+
 Version: 5.3.3, Date: 2022-12-19
 - Stop opening the /update page to let users know about the AdBlock Premium
 - Added the Crotian locale to update an old Chrome web store Crotian listing

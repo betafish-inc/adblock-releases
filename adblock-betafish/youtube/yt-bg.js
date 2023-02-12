@@ -229,10 +229,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({});
     }
   }
-  if (message.command === 'openYTManagedSubPage' && getSettings().youtube_manage_subscribed) {
-    openYTManagedSubPage();
-    sendResponse({});
-  }
   if (message.command === 'getAllAdsAllowedUserFilters') {
     /* eslint-disable consistent-return */
     return getAllAdsAllowedUserFilters();
@@ -273,7 +269,8 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-Object.assign(window, {
+// eslint-disable-next-line no-restricted-globals
+Object.assign(self, {
   addYTChannelListeners,
   removeYTChannelListeners,
   ytChannelNamePages,
